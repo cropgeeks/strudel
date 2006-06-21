@@ -22,6 +22,9 @@ public class ChromoMap implements Iterable<Feature>
 	public Iterator<Feature> iterator()
 		{ return features.iterator(); }
 	
+	public String toString()
+		{ return name; }
+	
 	public String getName()
 		{ return name; }
 	

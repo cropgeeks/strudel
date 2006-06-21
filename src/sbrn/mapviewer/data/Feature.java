@@ -21,6 +21,9 @@ public class Feature
 		this.name = name;
 	}
 	
+	public String toString()
+		{ return name; }
+	
 	public String getName()
 		{ return name; }
 	
@@ -29,4 +32,10 @@ public class Feature
 	
 	public float getStart()
 		{ return start; }
+	
+	public void setStop(float stop)
+		{ this.stop = stop; }
+	
+	public float getStop()
+		{ return stop; }
 }

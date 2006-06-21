@@ -1,0 +1,93 @@
+package sbrn.mapviewer.io;
+
+import java.io.*;
+import java.util.*;
+
+import sbrn.mapviewer.data.*;
+
+public class JoinMapImporter
+{
+	// The file we're trying to load from
+	private File filename;
+	
+	private MapSet mapset = new MapSet();
+	
+	public static void main(String[] args)
+		throws Exception
+	{
+		JoinMapImporter importer = new JoinMapImporter(new File(args[0]));
+		
+		MapSet mapset = importer.loadMapSet();
+		
+		
+		for (ChromoMap map: mapset)
+		{
+			System.out.println();
+			System.out.println(map.getName());
+			for (Feature feature: map)
+				System.out.println("  " + feature.getName() + "\t" + feature.getStart());
+		}
+	}
+	
+	public JoinMapImporter(File filename)
+	{
+		this.filename = filename;
+	}
+	
+	public MapSet loadMapSet()
+		throws Exception
+	{
+		BufferedReader in = new BufferedReader(new FileReader(filename));
+		
+		ChromoMap currentMap = null;
+		
+		String str = in.readLine();
+		while (str != null)
+		{
+			StringTokenizer st = new StringTokenizer(str);
+			
+			if (st.countTokens() == 2)
+			{
+				String s1 = st.nextToken();
+				String s2 = st.nextToken();
+				
+				// Stupid hack to ensure we know when a new group is beginning
+				if (s1.equals("group") || str.equals("[Chart Options]"))
+				{				
+					// Add the previous Map to the MapSet
+					if (currentMap != null)
+						mapset.addMap(currentMap);
+				
+					// Then create a new Map for the data to come
+					currentMap = new ChromoMap(s1 + " " + s2);
+					
+					// Quit scanning at this point
+					if (str.equals("[Chart Options]"))
+						break;
+				}
+				else
+				{
+					float distance = 0;
+				
+					try { distance = Float.parseFloat(s2); }
+					catch (NumberFormatException e)
+					{
+						throw new NumberFormatException("Marker " + s1 + " "
+							+ "does not appear to have a valid distance");
+					}
+					
+					Feature f = new Feature(s1);
+					f.setStart(distance);
+				
+					currentMap.addFeature(f);
+				}
+			}
+			
+			str = in.readLine();
+		}
+		
+		in.close();
+		
+		return mapset;
+	}
+}

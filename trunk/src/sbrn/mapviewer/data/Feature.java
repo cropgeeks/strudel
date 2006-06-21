@@ -13,7 +13,7 @@ public class Feature
 	
 	private String name;
 	
-	private int start, stop;
+	private float start, stop;
 	
 	
 	public Feature(String name)
@@ -23,4 +23,10 @@ public class Feature
 	
 	public String getName()
 		{ return name; }
+	
+	public void setStart(float start)
+		{ this.start = start; }
+	
+	public float getStart()
+		{ return start; }
 }

@@ -2,23 +2,23 @@ package sbrn.mapviewer.data;
 
 import java.util.*;
 
-public class Map implements Iterable
+public class ChromoMap implements Iterable<Feature>
 {
 	private String name;
 	private String taxon;
 	
 	private LinkedList<Feature> features = new LinkedList<Feature>();
 	
-	private int start, stop;
+	private float start, stop;
 	
 	
-	public Map(String name)
+	public ChromoMap(String name)
 	{
 		this.name = name;
 	}
 	
 	// Allows you to use MapSet in a J2SE1.5 for loop:
-	// for (Map map: myMapSet) {}
+	// for (Feature feature: myCMap) {}
 	public Iterator<Feature> iterator()
 		{ return features.iterator(); }
 	
@@ -28,8 +28,11 @@ public class Map implements Iterable
 	public void setName(String name)
 		{ this.name = name; }
 	
-	public LinkedList<Feature> getFeatures()
-		{ return features; }
+//	public LinkedList<Feature> getFeatures()
+//		{ return features; }
+
+	public void addFeature(Feature feature)
+		{ features.add(feature); }
 	
 	public Feature getFeature(int index)
 		{ return features.get(index); }

@@ -1,0 +1,28 @@
+<project name="MapViewer" default="compile" basedir=".">
+  <description>MapViewer Ant Build Script</description>
+  
+  <property name="src" location="src"/>
+  <property name="classes" location="classes"/>
+  <property name="lib" location="lib"/>
+
+
+  <!-- TOOD: This is screwing up SVN for now -->
+  <target name="init">
+    <!--<mkdir dir="${classes}"/>-->
+  </target>
+
+
+  <target name="compile" depends="init" description="compile the source " >
+    <javac srcdir="${src}" destdir="${classes}">
+    	<classpath>
+	      <pathelement path="${classpath}"/>
+	      <fileset dir="${lib}">
+	        <include name="**/*.jar"/>
+	      </fileset>
+        </classpath>
+    </javac>
+  </target>
+
+
+	
+</project>

@@ -1,5 +1,7 @@
 package sbrn.mapviewer.data;
 
+import java.util.*;
+
 public class Feature
 {
 	// Feature types
@@ -11,10 +13,16 @@ public class Feature
 	//etc
 	
 	
+	// The name of this feature
 	private String name;
+	// And any aliases
+	private LinkedList<String> aliases = new LinkedList<String>();
 	
+	// Its start and stop positions (in whatever distance format) on the map
 	private float start, stop;
 	
+	// Feature type
+	private int type = GENERIC;
 	
 	public Feature(String name)
 	{
@@ -38,4 +46,16 @@ public class Feature
 	
 	public float getStop()
 		{ return stop; }
+	
+	public int getType()
+		{ return type; }
+	
+	public void setType(int type)
+		{ this.type = type; }
+	
+	public LinkedList<String> getAliases()
+		{ return aliases; }
+	
+	public void addAlias(String alias)
+		{ aliases.add(alias); }
 }

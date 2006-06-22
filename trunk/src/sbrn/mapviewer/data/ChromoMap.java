@@ -31,6 +31,12 @@ public class ChromoMap implements Iterable<Feature>
 	public void setName(String name)
 		{ this.name = name; }
 	
+	public String getTaxon()
+		{ return taxon; }
+	
+	public void setTaxon(String taxon)
+		{ this.taxon = taxon; }
+	
 //	public LinkedList<Feature> getFeatures()
 //		{ return features; }
 
@@ -42,4 +48,16 @@ public class ChromoMap implements Iterable<Feature>
 	
 	public int countFeatures()
 		{ return features.size(); }
+	
+	public void setStart(float start)
+		{ this.start = start; }
+	
+	public float getStart()
+		{ return start; }
+	
+	public void setStop(float stop)
+		{ this.stop = stop; }
+	
+	public float getStop()
+		{ return stop; }
 }

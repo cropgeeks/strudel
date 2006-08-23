@@ -30,9 +30,7 @@ public class JoinMapImporter
 	}
 	
 	public JoinMapImporter(File filename)
-	{
-		this.filename = filename;
-	}
+		{ this.filename = filename;	}
 	
 	public MapSet loadMapSet()
 		throws Exception
@@ -72,7 +70,7 @@ public class JoinMapImporter
 					try { distance = Float.parseFloat(s2); }
 					catch (NumberFormatException e)
 					{
-						throw new NumberFormatException("Marker " + s1 + " "
+						throw new NumberFormatException("Feature " + s1 + " "
 							+ "does not appear to have a valid distance");
 					}
 					

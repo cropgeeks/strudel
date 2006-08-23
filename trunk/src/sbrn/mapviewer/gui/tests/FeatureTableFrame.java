@@ -22,6 +22,9 @@ public class FeatureTableFrame extends JFrame implements ListSelectionListener
 	public static void main(String[] args)
 		throws Exception
 	{ 
+		try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
+		catch (Exception e) {}
+		
 		MapSet mapset = new JoinMapImporter(new File(args[0])).loadMapSet();
 						
 		FeatureTableFrame frame = new FeatureTableFrame(mapset);

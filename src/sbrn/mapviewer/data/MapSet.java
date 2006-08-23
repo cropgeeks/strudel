@@ -2,8 +2,10 @@ package sbrn.mapviewer.data;
 
 import java.util.*;
 
-// So far this class is just a wrapper around a list (with a name). Overkill for
-// now but it may require more in the future.
+/**
+ * So far this class is just a wrapper around a list (with a name). Overkill for
+ * now but it may require more in the future.
+ */
 public class MapSet implements Iterable<ChromoMap>
 {
 	// The name of this MapSet
@@ -22,8 +24,7 @@ public class MapSet implements Iterable<ChromoMap>
 		this.name = name;
 	}
 	
-	// Allows you to use MapSet in a J2SE1.5 for loop:
-	// for (Map map: myMapSet) {}
+	/** Allows you to use MapSet in a 1.5 for loop. */
 	public Iterator<ChromoMap> iterator()
 		{ return maps.iterator(); }
 	
@@ -39,6 +40,20 @@ public class MapSet implements Iterable<ChromoMap>
 	public ChromoMap getMap(int index)
 		{ return maps.get(index); }
 	
+	/**
+	 * Searches this MapSet to see if a map exists with the given name. Returns
+	 * the ChromoMap if it does, or null if a matching map cannot be found.
+	 */
+	public ChromoMap getMapByName(String name)
+	{
+		for (ChromoMap map: maps)
+			if (map.getName().equals(name))
+				return map;
+		
+		return null;
+	}
+	
+	/** Returns the number of ChromoMap objects held by this MapSet. */
 	public int size()
 		{ return maps.size(); }
 }

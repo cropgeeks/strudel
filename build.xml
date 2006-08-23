@@ -13,7 +13,7 @@
 
 
   <target name="compile" depends="init" description="compile the source " >
-    <javac srcdir="${src}" destdir="${classes}">
+    <javac srcdir="${src}" destdir="${classes}">    	
     	<classpath>
 	      <pathelement path="${classpath}"/>
 	      <fileset dir="${lib}">
@@ -23,6 +23,11 @@
     </javac>
   </target>
 
-
+  <target name="javadoc">
+  	<javadoc destdir="docs/api" author="true" version="true" use="true">  	  
+      <fileset dir="${src}" defaultexcludes="yes">
+      </fileset>
+    </javadoc>
+  </target>
 	
 </project>

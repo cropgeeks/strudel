@@ -21,6 +21,8 @@ public class Feature
 	// Its start and stop positions (in whatever distance format) on the map
 	private float start, stop;
 	
+	public double rnd = Math.random();
+	
 	// Feature type
 	private int type = GENERIC;
 	

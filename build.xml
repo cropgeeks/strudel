@@ -6,14 +6,14 @@
   <property name="lib" location="lib"/>
 
 
-  <!-- TOOD: This is screwing up SVN for now -->
+  <!-- TODO: This is screwing up SVN for now -->
   <target name="init">
     <!--<mkdir dir="${classes}"/>-->
   </target>
 
 
   <target name="compile" depends="init" description="compile the source " >
-    <javac srcdir="${src}" destdir="${classes}">    	
+    <javac srcdir="${src}" destdir="${classes}">
     	<classpath>
 	      <pathelement path="${classpath}"/>
 	      <fileset dir="${lib}">
@@ -24,7 +24,7 @@
   </target>
 
   <target name="javadoc">
-  	<javadoc destdir="docs/api" author="true" version="true" use="true">  	  
+  	<javadoc destdir="docs/api" author="true" version="true" use="true">
       <fileset dir="${src}" defaultexcludes="yes">
       </fileset>
     </javadoc>

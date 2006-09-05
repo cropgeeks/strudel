@@ -5,6 +5,7 @@ import java.util.*;
 
 import sbrn.mapviewer.data.*;
 
+/** File handler class for dealing with CMap-formatted data files. */
 public class CMapImporter
 {
 	// The file we're trying to load from
@@ -40,6 +41,10 @@ public class CMapImporter
 		this.mapset = mapset;
 	}
 	
+	/**
+	 * Loads map and feature data from CMap, storing it within a MapSet object
+	 * that is returned when done.
+	 */
 	public MapSet loadMapSet()
 		throws Exception
 	{
@@ -68,6 +73,7 @@ public class CMapImporter
 					+ "does not appear to have a valid distance");
 			}			
 			f.setStart(distance);
+			f.setStop(distance);
 			
 			// Feature aliases (if any)
 			String[] aliases = st.nextToken().split(",");

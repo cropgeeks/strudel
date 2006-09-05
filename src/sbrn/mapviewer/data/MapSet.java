@@ -56,4 +56,12 @@ public class MapSet implements Iterable<ChromoMap>
 	/** Returns the number of ChromoMap objects held by this MapSet. */
 	public int size()
 		{ return maps.size(); }
+	
+	public void printSummary()
+	{
+		System.out.println("MapSet Summary:");
+		System.out.println("  Number of maps: " + maps.size());
+		for (ChromoMap map: maps)
+			System.out.println("    Map: " + map.getName() + " with " + map.countFeatures() + " feature(s)");
+	}
 }

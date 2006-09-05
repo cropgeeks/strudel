@@ -20,14 +20,20 @@ public class FeatureTableFrame extends JFrame implements ListSelectionListener
 	private JTable featureTable;
 	
 	public static void main(String[] args)
-		throws Exception
 	{ 
 		try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
 		catch (Exception e) {}
 		
-		MapSet mapset = new JoinMapImporter(new File(args[0])).loadMapSet();
+		try
+		{
+			MapSet mapset = new CMapImporter(new File(args[0])).loadMapSet();
 						
-		FeatureTableFrame frame = new FeatureTableFrame(mapset);
+			FeatureTableFrame frame = new FeatureTableFrame(mapset);
+		}
+		catch (Exception e)
+		{
+			System.out.println(e);
+		}
 	}
 	
 	public FeatureTableFrame(MapSet mapset)

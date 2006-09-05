@@ -5,6 +5,7 @@ import java.util.*;
 
 import sbrn.mapviewer.data.*;
 
+/** File handler class for dealing with JoinMap-formatted data files. */
 public class JoinMapImporter
 {
 	// The file we're trying to load from
@@ -32,6 +33,13 @@ public class JoinMapImporter
 	public JoinMapImporter(File filename)
 		{ this.filename = filename;	}
 	
+	/** Alternative constructor to force loading into an existing MapSet. */
+	public JoinMapImporter(File filename, MapSet mapset)
+	{
+		this.filename = filename;
+		this.mapset = mapset;
+	}
+	
 	public MapSet loadMapSet()
 		throws Exception
 	{
@@ -42,6 +50,8 @@ public class JoinMapImporter
 		String str = in.readLine();
 		while (str != null)
 		{
+			System.out.println(str);
+			
 			StringTokenizer st = new StringTokenizer(str);
 			
 			if (st.countTokens() == 2)
@@ -76,6 +86,7 @@ public class JoinMapImporter
 					
 					Feature f = new Feature(s1);
 					f.setStart(distance);
+					f.setStop(distance);
 				
 					currentMap.addFeature(f);
 				}

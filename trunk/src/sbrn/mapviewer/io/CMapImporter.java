@@ -81,6 +81,7 @@ public class CMapImporter
 				f.addAlias(s);
 			
 			map.addFeature(f);
+			f.setOwningMap(map);
 			
 			str = in.readLine();
 		}

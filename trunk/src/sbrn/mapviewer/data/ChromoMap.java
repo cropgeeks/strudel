@@ -53,7 +53,7 @@ public class ChromoMap implements Iterable<Feature>
 	public Feature getFeature(int index)
 		{ return features.get(index); }
 	
-	/** Returns the Feature with the given name. */
+	/** Returns the Feature with the given name or null if it is not found. */
 	public Feature getFeature(String name)
 		{ return lookup.get(name); }
 	

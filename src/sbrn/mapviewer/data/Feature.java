@@ -12,6 +12,8 @@ public class Feature
 	public final static int SNP = 3;
 	//etc
 	
+	// Owning ChromoMap for this Feature
+	private ChromoMap cMap;
 	
 	// The name of this feature
 	private String name;
@@ -60,4 +62,10 @@ public class Feature
 	
 	public void addAlias(String alias)
 		{ aliases.add(alias); }
+	
+	public ChromoMap getOwningMap()
+		{ return cMap; }
+	
+	public void setOwningMap(ChromoMap cMap)
+		{ this.cMap = cMap; }
 }

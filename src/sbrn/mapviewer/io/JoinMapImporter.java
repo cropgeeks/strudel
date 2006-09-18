@@ -89,6 +89,7 @@ public class JoinMapImporter
 					f.setStop(distance);
 				
 					currentMap.addFeature(f);
+					f.setOwningMap(currentMap);
 				}
 			}
 			

@@ -3,8 +3,7 @@ package sbrn.mapviewer.data;
 import java.util.*;
 
 /**
- * So far this class is just a wrapper around a list (with a name). Overkill for
- * now but it may require more in the future.
+ * A MapSet holds a collection of chromosome map (ChromoMap) objects.
  */
 public class MapSet implements Iterable<ChromoMap>
 {
@@ -14,11 +13,18 @@ public class MapSet implements Iterable<ChromoMap>
 	// Holds a list of all the maps in this set
 	private LinkedList<ChromoMap> maps = new LinkedList<ChromoMap>();
 	
+	/**
+	 * Constructs a new map set.
+	 */
 	public MapSet()
 	{
 		name = "";
 	}
-		
+	
+	/**
+	 * Constructs a new map set with the given name.
+	 * @param name the name of this map set.
+	 */	
 	public MapSet(String name)
 	{
 		this.name = name;
@@ -28,21 +34,36 @@ public class MapSet implements Iterable<ChromoMap>
 	public Iterator<ChromoMap> iterator()
 		{ return maps.iterator(); }
 	
+	/**
+	 * Returns the name of this feature.
+	 * @return the name of this feature
+	 */
 	public String getName()
 		{ return name; }
 	
 	public void setName(String name)
 		{ this.name = name; }
 	
+	/**
+	 * Adds another chromosome map to this map set.
+	 * @param map the chromosome map to add
+	 */
 	public void addMap(ChromoMap map)
 		{ maps.add(map); }
 	
+	/**
+	 * Returns the chromosome map held at the given index position.
+	 * @return the chromosome map held at the given index position
+	 */
 	public ChromoMap getMap(int index)
 		{ return maps.get(index); }
 	
 	/**
-	 * Searches this MapSet to see if a map exists with the given name. Returns
-	 * the ChromoMap if it does, or null if a matching map cannot be found.
+	 * Returns the first instance of a chromosome map whose name matches that
+	 * given.
+	 * @param name the name of the chromosome map to search for
+	 * @return the first instance of a chromosome map whose name matches that
+	 * given, or null if one cannot be found 
 	 */
 	public ChromoMap getMapByName(String name)
 	{
@@ -53,7 +74,10 @@ public class MapSet implements Iterable<ChromoMap>
 		return null;
 	}
 	
-	/** Returns the number of ChromoMap objects held by this MapSet. */
+	/**
+	 * Returns the number of chromosome maps held in this map set.
+	 * @return the number of chromosome maps held in this map set
+	 */
 	public int size()
 		{ return maps.size(); }
 	

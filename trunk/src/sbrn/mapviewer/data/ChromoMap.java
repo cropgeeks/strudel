@@ -2,6 +2,13 @@ package sbrn.mapviewer.data;
 
 import java.util.*;
 
+/**
+ * A ChromoMap is an object designed to hold LinkageMap/Chromosome data, which
+ * in this case is a list of features (markers, qtl positions, etc). Each
+ * feature holds an internal start and stop position - there is no guarantee
+ * that the order the features are held in by a ChromoMap will correspond to
+ * their start/stop positions.
+ */
 public class ChromoMap implements Iterable<Feature>
 {
 	private String name;
@@ -12,22 +19,35 @@ public class ChromoMap implements Iterable<Feature>
 	
 	private float start, stop;
 	
-	
+	/**
+	 * Constructs a new chromosome map with the given name.
+	 * @param name the name of this chromosome map
+	 */
 	public ChromoMap(String name)
 	{
 		this.name = name;
 	}
 	
-	// Allows you to use MapSet in a J2SE1.5 for loop. Will be slow for large
-	// maps - if you know the feature you're after - do a search by name instead
-	// with the getFeature(String) method.
-	// for (Feature feature: myCMap) {}
+	/**
+	 * Allows you to use ChromoMap in a 1.5 for loop. Will be slow for large
+	 * maps - if you know the feature you're after - do a search by name instead
+	 * with the getFeature(String) method.
+	 */
 	public Iterator<Feature> iterator()
 		{ return features.iterator(); }
 	
+	/**
+	 * Returns a string representation of this chromosome map. Currently its
+	 * name.
+	 * @return a string representation of this chromosome map.
+	 */
 	public String toString()
 		{ return name; }
 	
+	/**
+	 * Returns the name of this feature.
+	 * @return the name of this feature
+	 */
 	public String getName()
 		{ return name; }
 	
@@ -43,20 +63,34 @@ public class ChromoMap implements Iterable<Feature>
 //	public LinkedList<Feature> getFeatures()
 //		{ return features; }
 
+	/**
+	 * Adds another feature to this chromosome map.
+	 * @param feature the feature to add
+	 */
 	public void addFeature(Feature feature)
 	{ 
 		features.add(feature);
 		lookup.put(feature.getName(), feature);
 	}
 	
-	/** Returns the Feature at the given index position. */
+	/**
+	 * Returns the feature at the given index position.
+	 * @return the feature at the given index position
+	 */
 	public Feature getFeature(int index)
 		{ return features.get(index); }
 	
-	/** Returns the Feature with the given name or null if it is not found. */
+	/**
+	 * Returns the feature with the given name.
+	 * @return the feature with the given name, or null if it is not found
+	 */
 	public Feature getFeature(String name)
 		{ return lookup.get(name); }
 	
+	/**
+	 * Returns the number of features held by this chromosome map.
+	 * @return the number of features held by this chromosome map
+	 */
 	public int countFeatures()
 		{ return features.size(); }
 	
@@ -72,6 +106,11 @@ public class ChromoMap implements Iterable<Feature>
 	public float getStop()
 		{ return stop; }
 	
+	/**
+	 * Returns true if this chromosome map holds a feature with the given name.
+	 * @param name the name of a feature to search for
+	 * @return true if this chromosome map holds a feature with the given name
+	 */
 	public boolean containsFeature(String name)
 	{
 		return lookup.containsKey(name);

@@ -18,6 +18,7 @@ public class ChromoMap implements Iterable<Feature>
 	private Hashtable<String,Feature> lookup = new Hashtable<String,Feature>();
 	
 	private float start, stop;
+	private float maxStart, maxStop;
 	
 	/**
 	 * Constructs a new chromosome map with the given name.
@@ -71,6 +72,14 @@ public class ChromoMap implements Iterable<Feature>
 	{ 
 		features.add(feature);
 		lookup.put(feature.getName(), feature);
+		
+		// Find out if this feature has a greater start/stop position
+		if (feature.getStart() >= maxStart)
+			maxStart = feature.getStart();
+		if (feature.getStop() >= maxStop)
+			maxStop = feature.getStop();
+		
+//		Collections.sort(features);
 	}
 	
 	/**
@@ -100,11 +109,29 @@ public class ChromoMap implements Iterable<Feature>
 	public float getStart()
 		{ return start; }
 	
+	/**
+	 * Returns the maximum start position (on the chromosome map) where a
+	 * feature begins.
+	 * @return the maximum start position (on the chromosome map) where a
+	 * feature begins
+	 */
+	public float getMaxStart()
+		{ return maxStart; }
+	
 	public void setStop(float stop)
 		{ this.stop = stop; }
 	
 	public float getStop()
 		{ return stop; }
+	
+	/**
+	 * Returns the maximum stop position (on the chromosome map) where a
+	 * feature ends.
+	 * @return the maximum stop position (on the chromosome map) where a
+	 * feature ends
+	 */
+	public float getMaxStop()
+		{ return maxStop; }
 	
 	/**
 	 * Returns true if this chromosome map holds a feature with the given name.

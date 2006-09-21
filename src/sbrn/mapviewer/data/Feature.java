@@ -7,7 +7,7 @@ import java.util.*;
  * so a Feature object can literally correspond to whatever "feature" is
  * required for a given task - marker, qtl, annotation, etc.
  */
-public class Feature
+public class Feature //implements Comparable
 {
 	// Feature types
 	public final static int GENERIC = 0;
@@ -110,4 +110,17 @@ public class Feature
 	 */
 	public LinkedList<Link> getLinks()
 		{ return links; }
+	
+/*	public int compareTo(Object other)
+	{
+		Feature f2 = (Feature) other;
+		
+		if (this.start < f2.start)
+			return -1;
+		if (this.start > f2.start)
+			return 1;
+		
+		return 0;
+	}
+*/
 }

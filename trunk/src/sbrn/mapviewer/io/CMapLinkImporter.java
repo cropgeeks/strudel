@@ -21,6 +21,9 @@ public class CMapLinkImporter
 		{
 			long s = System.currentTimeMillis();
 			
+			Runtime rt = Runtime.getRuntime();
+			System.out.println("Mem = " + (rt.totalMemory() - rt.freeMemory()));
+			
 			importer = new CMapImporter(new File("D:\\Projects\\MapViewer\\cmap formatted files\\new_mxb_edited.maps"));			
 			MapSet mapSet1 = importer.loadMapSet();
 			mapSet1.printSummary();
@@ -36,10 +39,14 @@ public class CMapLinkImporter
 			mapSet3.printSummary();
 			links.addMapSet(mapSet3);
 			
+			System.out.println("Mem = " + (rt.totalMemory() - rt.freeMemory()));
+			
 			importer = new CMapImporter(new File("D:\\Projects\\MapViewer\\cmap formatted files\\rice_pseudo4_os.maps"));			
 			MapSet mapSet4 = importer.loadMapSet();
 			mapSet4.printSummary();
 			links.addMapSet(mapSet4);
+			
+			System.out.println("Mem = " + (rt.totalMemory() - rt.freeMemory()));
 			
 			long e = System.currentTimeMillis();
 			System.out.println("Time to load data: " + (e-s) + "ms");
@@ -51,7 +58,12 @@ public class CMapLinkImporter
 			
 			System.out.println(linkSet);
 			
+			System.out.println("Mem = " + (rt.totalMemory() - rt.freeMemory()));
+			
 			System.out.println("LinkSet contains " + linkSet.getLinks().size() + " links");
+		
+			
+			
 		}
 		catch (Exception e) { System.out.println(e); }
 	}
@@ -91,6 +103,11 @@ public class CMapLinkImporter
 				{
 					Link link = new Link(f1, f2);
 					linkSet.addLink(link);
+					
+					// We also add the Link to each Feature so the Feature
+					// itself knows about the links it has with others
+					f1.getLinks().add(link);
+					f2.getLinks().add(link);
 										
 					// TODO: Do we want to add a list of references Features to
 					// the Feature object itself, so it knows who it links to?

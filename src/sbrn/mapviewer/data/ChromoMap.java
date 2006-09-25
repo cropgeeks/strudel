@@ -17,8 +17,7 @@ public class ChromoMap implements Iterable<Feature>
 	private LinkedList<Feature> features = new LinkedList<Feature>();
 	private Hashtable<String,Feature> lookup = new Hashtable<String,Feature>();
 	
-	private float start, stop;
-	private float maxStart, maxStop;
+	private float start = Integer.MAX_VALUE, stop = Integer.MIN_VALUE;
 	
 	/**
 	 * Constructs a new chromosome map with the given name.
@@ -74,10 +73,10 @@ public class ChromoMap implements Iterable<Feature>
 		lookup.put(feature.getName(), feature);
 		
 		// Find out if this feature has a greater start/stop position
-		if (feature.getStart() >= maxStart)
-			maxStart = feature.getStart();
-		if (feature.getStop() >= maxStop)
-			maxStop = feature.getStop();
+		if (feature.getStart() <= start)
+			start = feature.getStart();
+		if (feature.getStop() >= stop)
+			stop = feature.getStop();
 		
 //		Collections.sort(features);
 	}
@@ -106,32 +105,26 @@ public class ChromoMap implements Iterable<Feature>
 	public void setStart(float start)
 		{ this.start = start; }
 	
+	/**
+	 * Returns the position on the map of the lowest numerical starting
+	 * position for a feature.
+	 * @return the position on the map of the lowest numerical starting
+	 * position for a feature
+	 */
 	public float getStart()
 		{ return start; }
-	
-	/**
-	 * Returns the maximum start position (on the chromosome map) where a
-	 * feature begins.
-	 * @return the maximum start position (on the chromosome map) where a
-	 * feature begins
-	 */
-	public float getMaxStart()
-		{ return maxStart; }
 	
 	public void setStop(float stop)
 		{ this.stop = stop; }
 	
+	/**
+	 * Returns the position on the map of the highest numerical stop position
+	 * for a feature.
+	 * @return the position on the map of the highest numerical stop position
+	 * for a feature
+	 */
 	public float getStop()
 		{ return stop; }
-	
-	/**
-	 * Returns the maximum stop position (on the chromosome map) where a
-	 * feature ends.
-	 * @return the maximum stop position (on the chromosome map) where a
-	 * feature ends
-	 */
-	public float getMaxStop()
-		{ return maxStop; }
 	
 	/**
 	 * Returns true if this chromosome map holds a feature with the given name.

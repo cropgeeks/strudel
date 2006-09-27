@@ -19,4 +19,7 @@ public class Link
 	
 	public Feature getFeature2()
 		{ return feature2; }
+	
+	public String toString()
+		{ return feature1 + " and " + feature2; }
 }

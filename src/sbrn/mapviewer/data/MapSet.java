@@ -52,6 +52,14 @@ public class MapSet implements Iterable<ChromoMap>
 		{ maps.add(map); }
 	
 	/**
+	 * Returns true if this map set holds a copy of the given chromosome map.
+	 * @param map the map to search for
+	 * @return true if this map set holds a copy of the given chromosome map
+	 */
+	public boolean contains(ChromoMap map)
+		{ return maps.contains(map); }
+	
+	/**
 	 * Returns the chromosome map held at the given index position.
 	 * @return the chromosome map held at the given index position
 	 */

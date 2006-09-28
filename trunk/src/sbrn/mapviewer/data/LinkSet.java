@@ -159,6 +159,37 @@ public class LinkSet implements Iterable<Link>
 		return newSet;
 	}
 	
+	/**
+	 * Returns a new link set that only contains links between the two given
+	 * map sets.
+	 * @param mapset1 the first map set to use
+	 * @param mapset2 the second map set to use
+	 * @return a new link set that only contains links between the two given
+	 * map sets.
+	 */
+	public LinkSet getLinksBetweenMapSets(MapSet mapset1, MapSet mapset2)
+	{
+		LinkSet newSet = new LinkSet();
+		
+		for (Link link: links)
+		{
+			ChromoMap map1 = link.getFeature1().getOwningMap();
+			MapSet owner1 = map1.getOwningMapSet();
+			ChromoMap map2 = link.getFeature2().getOwningMap();
+			MapSet owner2 = map2.getOwningMapSet();			
+			
+			if ((mapset1.equals(owner1) || mapset1.equals(owner2)) &&
+				(mapset2.equals(owner1) || mapset2.equals(owner2)))
+			{
+				newSet.addLink(link);
+				newSet.addMapSet(owner1);
+				newSet.addMapSet(owner2);
+			}
+		}
+		
+		return newSet;
+	}
+	
 	public LinkSet getLinksBetweenMapandMapSet(ChromoMap map, MapSet mapset)
 	{
 		return null;
@@ -168,7 +199,7 @@ public class LinkSet implements Iterable<Link>
 	 * Adds another map set to this link set.
 	 * @param mapset the map set to add
 	 */
-	public void addMapSet(MapSet mapset)
+	private void addMapSet(MapSet mapset)
 	{
 		if (mapSets.contains(mapset) == false)
 			mapSets.add(mapset);
@@ -181,6 +212,10 @@ public class LinkSet implements Iterable<Link>
 	public void addLink(Link link)
 	{
 		links.add(link);
+		
+		// When we add a link, make sure we track the MapSets too
+		addMapSet(link.getFeature1().getOwningMap().getOwningMapSet());
+		addMapSet(link.getFeature2().getOwningMap().getOwningMapSet());
 	}
 	
 	/**

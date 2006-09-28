@@ -4,8 +4,9 @@ import java.util.*;
 
 /**
  * Holds a list of links between features. The link set does not concern itself
- * with where the features are actually located, but it can contain a list of
- * one or more MapSet objects that relate to where its feature links are valid.
+ * with where the features are actually located, but it can (and should) contain
+ * a list of one or more MapSet objects that relate to where its feature links
+ * are valid.
  */
 public class LinkSet implements Iterable<Link>
 {
@@ -70,7 +71,7 @@ public class LinkSet implements Iterable<Link>
 	 * ignored and not added to the new set. If the original link set only
 	 * contains a single map set, the new link set object will be empty.
 	 */
-	public LinkSet getBetweenMapSetLinks()
+	public LinkSet getLinksBetweenAllMapSets()
 	{
 		LinkSet newSet = new LinkSet();
 		
@@ -97,6 +98,70 @@ public class LinkSet implements Iterable<Link>
 		}
 		
 		return newSet;
+	}
+	
+	/**
+	 * Returns a new link set that only contains links that originate/terminate
+	 * from the given chromosome map. If the map is not held within any of the
+	 * map sets referenced by this link set, or if the map does not have any
+	 * links, then the returned link set will be empty.
+	 * @param map the chromosome map to use
+	 * @return a new link set that only contains links that originate/terminate
+	 * from the given chromosome map
+	 */
+	public LinkSet getLinksByMap(ChromoMap map)
+	{
+		LinkSet newSet = new LinkSet();
+		
+		for (Link link: links)
+		{
+			ChromoMap map1 = link.getFeature1().getOwningMap();
+			ChromoMap map2 = link.getFeature2().getOwningMap();
+			
+			if (map1.equals(map) || map2.equals(map))
+			{
+				newSet.addLink(link);
+				newSet.addMapSet(getMapSet(map));
+			}
+		}
+		
+		return newSet;
+	}
+	
+	/**
+	 * Returns a new link set that only contains links between the two given
+	 * chromosome maps. If either map is not held within any of the map sets
+	 * referenced by this link set, or if a map does not have any links, then
+	 * the returned link set will be empty.
+	 * @param map1 the first chromosome map to use
+	 * @param map2 the second chromosome map to use
+	 * @return a new link set that only contains links between the two given
+	 * chromosome maps
+	 */
+	public LinkSet getLinksBetweenMaps(ChromoMap map1, ChromoMap map2)
+	{
+		LinkSet newSet = new LinkSet();
+		
+		for (Link link: links)
+		{
+			ChromoMap owner1 = link.getFeature1().getOwningMap();
+			ChromoMap owner2 = link.getFeature2().getOwningMap();
+			
+			if ((map1.equals(owner1) || map1.equals(owner2)) &&
+				(map2.equals(owner1) || map2.equals(owner2)))
+			{
+				newSet.addLink(link);
+				newSet.addMapSet(getMapSet(map1));
+				newSet.addMapSet(getMapSet(map2));
+			}
+		}
+		
+		return newSet;
+	}
+	
+	public LinkSet getLinksBetweenMapandMapSet(ChromoMap map, MapSet mapset)
+	{
+		return null;
 	}
 	
 	// Returns the map set that holds the given map

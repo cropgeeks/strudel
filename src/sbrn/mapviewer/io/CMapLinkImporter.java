@@ -81,13 +81,7 @@ public class CMapLinkImporter
 				// TODO: Should this be a case-insensitive search?
 				feature = map.getFeature(name);
 				if (feature != null)
-				{
 					list.add(feature);
-					
-					// We also need to remember to track the MapSet where
-					// this Feature was found
-					linkSet.addMapSet(mapset);
-				}
 			}
 		}
 		

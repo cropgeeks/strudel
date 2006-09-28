@@ -16,7 +16,7 @@ public class CMapLinkImporterTest
 		try
 		{
 			long s = System.currentTimeMillis();
-						
+									
 			importer = new CMapImporter(new File("D:\\Projects\\MapViewer\\cmap formatted files\\simple-map12.txt"));			
 			MapSet mapSet1 = importer.loadMapSet();
 			mapSet1.printSummary();
@@ -48,7 +48,7 @@ public class CMapLinkImporterTest
 			
 			System.out.println();
 			
-			LinkSet newSet = linkSet.getBetweenMapSetLinks();
+			LinkSet newSet = linkSet.getLinksBetweenAllMapSets();
 			for (Link link: newSet)
 			{
 				System.out.println(link);

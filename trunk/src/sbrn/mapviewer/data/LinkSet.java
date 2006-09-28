@@ -22,8 +22,8 @@ public class LinkSet implements Iterable<Link>
 	}
 	
 	/**
-	 * Returns the list of links held by this object.
-	 * @return the list of links held by this object
+	 * Returns a list of all links held by this object.
+	 * @return a list of all links held by this object
 	 */
 	public LinkedList<Link> getLinks()
 		{ return links; }
@@ -92,8 +92,8 @@ public class LinkSet implements Iterable<Link>
 				ChromoMap map2 = link.getFeature2().getOwningMap();
 				
 				// And add them to the link set too
-				newSet.addMapSet(getMapSet(map1));
-				newSet.addMapSet(getMapSet(map2));
+				newSet.addMapSet(map1.getOwningMapSet());
+				newSet.addMapSet(map2.getOwningMapSet());
 			}
 		}
 		
@@ -121,7 +121,7 @@ public class LinkSet implements Iterable<Link>
 			if (map1.equals(map) || map2.equals(map))
 			{
 				newSet.addLink(link);
-				newSet.addMapSet(getMapSet(map));
+				newSet.addMapSet(map.getOwningMapSet());
 			}
 		}
 		
@@ -151,8 +151,8 @@ public class LinkSet implements Iterable<Link>
 				(map2.equals(owner1) || map2.equals(owner2)))
 			{
 				newSet.addLink(link);
-				newSet.addMapSet(getMapSet(map1));
-				newSet.addMapSet(getMapSet(map2));
+				newSet.addMapSet(owner1.getOwningMapSet());
+				newSet.addMapSet(owner2.getOwningMapSet());
 			}
 		}
 		
@@ -161,16 +161,6 @@ public class LinkSet implements Iterable<Link>
 	
 	public LinkSet getLinksBetweenMapandMapSet(ChromoMap map, MapSet mapset)
 	{
-		return null;
-	}
-	
-	// Returns the map set that holds the given map
-	private MapSet getMapSet(ChromoMap map)
-	{
-		for (MapSet mapset: mapSets)
-			if (mapset.contains(map))
-				return mapset;
-		
 		return null;
 	}
 	

@@ -14,6 +14,9 @@ public class ChromoMap implements Iterable<Feature>
 	private String name;
 	private String taxon;
 	
+	// A reference to the MapSet that owns this object
+	private MapSet owner;
+	
 	private LinkedList<Feature> features = new LinkedList<Feature>();
 	private Hashtable<String,Feature> lookup = new Hashtable<String,Feature>();
 	
@@ -32,6 +35,7 @@ public class ChromoMap implements Iterable<Feature>
 	 * Allows you to use ChromoMap in a 1.5 for loop. Will be slow for large
 	 * maps - if you know the feature you're after - do a search by name instead
 	 * with the getFeature(String) method.
+	 * @see sbrn.mapviewer.data.ChromoMap#getFeature(String) getFeature(String) 
 	 */
 	public Iterator<Feature> iterator()
 		{ return features.iterator(); }
@@ -45,8 +49,8 @@ public class ChromoMap implements Iterable<Feature>
 		{ return name; }
 	
 	/**
-	 * Returns the name of this feature.
-	 * @return the name of this feature
+	 * Returns the name of this map.
+	 * @return the name of this map
 	 */
 	public String getName()
 		{ return name; }
@@ -59,6 +63,21 @@ public class ChromoMap implements Iterable<Feature>
 	
 	public void setTaxon(String taxon)
 		{ this.taxon = taxon; }
+	
+	/**
+	 * Returns a reference to the MapSet object that contains this map.
+	 * @return a reference to the MapSet object that contains this map, or null
+	 * if this map is not part of a set
+	 */
+	public MapSet getOwningMapSet()
+		{ return owner; }
+
+	/**
+	 * Sets the owning MapSet object for this map.
+	 * @param owner the new owning MapSet object for this map
+	 */
+	void setOwningMapSet(MapSet owner)
+		{ this.owner = owner; }
 	
 //	public LinkedList<Feature> getFeatures()
 //		{ return features; }
@@ -79,6 +98,9 @@ public class ChromoMap implements Iterable<Feature>
 			stop = feature.getStop();
 		
 //		Collections.sort(features);
+
+		// Also let the feature track the map
+		feature.setOwningMap(this);
 	}
 	
 	/**

@@ -3,9 +3,9 @@ package sbrn.mapviewer.data;
 import java.util.*;
 
 /**
- * Class that represents a "feature" on a map. This is rather abstract for now,
- * so a Feature object can literally correspond to whatever "feature" is
- * required for a given task - marker, qtl, annotation, etc.
+ * Class that represents a feature on a map. This is rather abstract for now, so
+ * a Feature can literally correspond to whatever "feature" is required for a
+ * given task - marker, qtl, annotation, etc.
  */
 public class Feature //implements Comparable
 {
@@ -18,7 +18,7 @@ public class Feature //implements Comparable
 	//etc
 	
 	// Owning ChromoMap for this Feature
-	private ChromoMap cMap;
+	private ChromoMap owner;
 	
 	// The name of this Feature
 	private String name;
@@ -90,17 +90,17 @@ public class Feature //implements Comparable
 	
 	/**
 	 * Returns a reference to the ChromoMap object that contains this feature.
-	 * @return a reference to the ChromoMap object that contains this feature.
+	 * @return a reference to the ChromoMap object that contains this feature
 	 */
 	public ChromoMap getOwningMap()
-		{ return cMap; }
+		{ return owner; }
 	
 	/**
 	 * Sets the owning ChromoMap object for this feature.
-	 * @param cMap the new owning ChromoMap object for this feature
+	 * @param owner the new owning ChromoMap object for this feature
 	 */
-	public void setOwningMap(ChromoMap cMap)
-		{ this.cMap = cMap; }
+	void setOwningMap(ChromoMap owner)
+		{ this.owner = owner; }
 	
 	/**
 	 * Returns a list of links that correspond to this feature. Each Link will

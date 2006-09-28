@@ -45,11 +45,18 @@ public class MapSet implements Iterable<ChromoMap>
 		{ this.name = name; }
 	
 	/**
-	 * Adds another chromosome map to this map set.
+	 * Adds another chromosome map to this map set. If the map already exists in
+	 * this set, it will not be added again.
 	 * @param map the chromosome map to add
 	 */
 	public void addMap(ChromoMap map)
-		{ maps.add(map); }
+	{
+		if (maps.contains(map) == false)
+		{
+			maps.add(map);
+			map.setOwningMapSet(this);
+		}
+	}
 	
 	/**
 	 * Returns true if this map set holds a copy of the given chromosome map.

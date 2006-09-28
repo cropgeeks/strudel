@@ -53,6 +53,14 @@ public class CMapLinkImporterTest
 			{
 				System.out.println(link);
 			}
+			
+			System.out.println();
+			
+			newSet = linkSet.getLinksBetweenMaps(mapSet1.getMap(0), mapSet2.getMap(1));
+			for (Link link: newSet)
+			{
+				System.out.println(link);
+			}
 		
 		}
 		catch (Exception e) { System.out.println(e); }

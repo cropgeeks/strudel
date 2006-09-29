@@ -96,6 +96,18 @@ public class Feature //implements Comparable
 		{ return owner; }
 	
 	/**
+	 * Returns a reference to the MapSet object that contains the ChromoMap that
+	 * contains this feature. This is just a utility method to avoid having to
+	 * call Feature.getOwningMap().getOwningMapSet() which has the same result.
+	 * @return a reference to the MapSet object that contains the map that
+	 * contains this feature
+	 * @see sbrn.mapviewer.data.ChromoMap#getOwningMapSet()
+	 *  ChromoMap.getOwningMapSet()
+	 */
+	public MapSet getOwningMapSet()
+		{ return owner.getOwningMapSet(); }
+	
+	/**
 	 * Sets the owning ChromoMap object for this feature.
 	 * @param owner the new owning ChromoMap object for this feature
 	 */

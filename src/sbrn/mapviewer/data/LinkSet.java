@@ -42,6 +42,13 @@ public class LinkSet implements Iterable<Link>
 		{ return mapSets; }
 	
 	/**
+	 * Returns the number of links held by this link set.
+	 * @return the number of links held by this link set
+	 */
+	public int size()
+		{ return links.size(); }
+	
+	/**
 	 * Returns true if the given link represents a link between two features
 	 * held by maps that are contained within the same map set.
 	 * @param link the link to query

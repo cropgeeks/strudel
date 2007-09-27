@@ -8,51 +8,30 @@ public class Canvas extends JPanel
 {
 
 	/* size of the frame */
-	int frameHeight = 800;
-	int frameWidth = 400;
+	int frameHeight;
+	int frameWidth;
 
 	// bars represent chromosomes
 	/* height of chromosomes */
-	int barHeight = 30;
+	int chromoHeight;
 
 	/* width of chromosomes */
-	int barWidth = 8;
+	int chromoWidth;
 
-	/* the size of the genome 1 -- hard coded for now */
+	/* the size of the genomes -- hard coded for now */
 	int numChromos1 = 7;
-
-	/* the size of the genome 2 -- hard coded for now */
 	int numChromos2 = 12;
-
-	/* leave this amount of space top and bottom */
-	int bufferSpace = 20;
-
-	/* leave this amount of space either side of the columns of chromosomes */
-	int sideSpace = 100;
-
-	/* leave this amount of space between columns of chromosomes */
-	int colSpacing = 200;
+	
+	/*the names of the genomes - hard coded for now */
+	String genomeName1 = "Barley";
+	String genomeName2 = "Rice";
 
 	/* space between chromosomes vertically */
-	int chromoSpacing = barHeight;
+	int chromoSpacing;
 
 	/* colors for lines */
-	Color[] colours = new Color[]
-	{ Color.CYAN, Color.YELLOW, Color.RED, Color.BLACK, Color.MAGENTA, Color.ORANGE, Color.PINK, Color.GREEN,
-					Color.CYAN, Color.YELLOW, Color.RED, Color.BLACK, Color.MAGENTA, Color.ORANGE,
-					Color.PINK, Color.GREEN, };
+	Color[] colours = null;
 
-	/* chromosome x positions -- genome 1 */
-	int genome1Xposition = sideSpace;
-
-	/* chromosome y positions -- genome 1 */
-	int[] genome1Ypositions = null;
-
-	/* chromosome x positions -- genome 2 */
-	int genome2Xposition = sideSpace + colSpacing;
-
-	/* chromosome y positions -- genome 2 */
-	int[] genome2Ypositions = null;
 
 	/* indicates whether the mouse is in an area that should trigger lines to be drawn */
 	boolean inTriggerArea = false;
@@ -65,13 +44,25 @@ public class Canvas extends JPanel
 
 	/* number of chromosome in the reference genome that was triggered to have its relationships drawn */
 	int triggeredChromo = -1;
+	
+	int chromoUnit;
+	int maxChromos = 0;
+	
+	SyntenyViewer2DFrame frame;
+	
+	//genome objects
+	Genome genome1 = new Genome(numChromos1, genomeName1, Color.red);
+	Genome genome2 = new Genome(numChromos2, genomeName2, Color.blue);	
+	Genome [] genomes = new Genome[]{genome1,genome2};
 
 	// =========================================c'tor============================================
 
-	public Canvas()
+	public Canvas(SyntenyViewer2DFrame frame)
 	{
+		this.frame = frame;	
 		setBackground(Color.black);
 		calcChromosomePositions();
+		makeColours();
 		MouseHandler mouseHandler = new MouseHandler(this);
 		addMouseListener(mouseHandler);
 		addMouseMotionListener(mouseHandler);
@@ -79,24 +70,33 @@ public class Canvas extends JPanel
 
 	// ---------------------------------------------------------------------------------------------------------------------------------
 
-	public void paint(Graphics g)
+	public void paintComponent(Graphics g)
 	{
-
+		super.paintComponent(g);
+		System.out.println("painting");			
 		Graphics2D g2 = (Graphics2D) g;
-		super.paintComponents(g);
 
-		// draw genome 1
-		g2.setColor(Color.RED);
-		for (int i = 0; i < numChromos1; i++)
+		calcChromosomePositions();
+		
+		//draw genomes now
+		Color offWhite = new Color(200,200,200);	
+		for (int i = 0; i < genomes.length; i++)
 		{
-			g2.fillRoundRect(genome1Xposition, genome1Ypositions[i], barWidth, barHeight, 5, 5);
-		}
-
-		// draw genome 2
-		g2.setColor(Color.BLUE);
-		for (int i = 0; i < numChromos2; i++)
-		{
-			g2.fillRoundRect(genome2Xposition, genome2Ypositions[i], barWidth, barHeight, 5, 5);
+			//g2.setColor(genomes[i].colour);
+			for (int j = 0; j < genomes[i].numChromos; j++)
+			{
+				//draw first half of chromo
+				GradientPaint gradient = new GradientPaint( genomes[i].xPosition,   genomes[i].yPositions[j], 
+								genomes[i].colour,  genomes[i].xPosition + chromoWidth,  genomes[i].yPositions[j], offWhite);
+				g2.setPaint(gradient);
+				g2.fillRect( genomes[i].xPosition,  genomes[i].yPositions[j], chromoWidth, chromoHeight);
+				
+				//draw second half of chromo
+				GradientPaint whiteGradient = new GradientPaint(genomes[i].xPosition+chromoWidth,  genomes[i].yPositions[j], offWhite, 
+								genomes[i].xPosition+chromoWidth + chromoWidth, genomes[i].yPositions[j], genomes[i].colour);
+				g2.setPaint(whiteGradient);
+				g2.fillRect(genomes[i].xPosition+chromoWidth, genomes[i].yPositions[j], chromoWidth, chromoHeight);	
+			}
 		}
 
 		// optionally draw lines between chromos if mouse over has been detected
@@ -104,6 +104,9 @@ public class Canvas extends JPanel
 		{
 			drawLines(g2);
 		}
+		
+		//labels
+		drawLabels(g2);
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------------
@@ -112,24 +115,56 @@ public class Canvas extends JPanel
 	 */
 	private void calcChromosomePositions()
 	{
-		int currentY = (frameHeight - (numChromos1 * barHeight * 2)) / 2;
-
-		// genome 1
-		genome1Ypositions = new int[numChromos1];
-		for (int i = 0; i < numChromos1; i++)
+		//get current size of frame
+		frameHeight = frame.getHeight();
+		frameWidth = frame.getWidth();
+		
+		//check whether genome 1 or 2 has more chromosomes
+		if(numChromos1>numChromos2)
 		{
-			genome1Ypositions[i] = currentY;
-			currentY += chromoSpacing * 2;
+			maxChromos = numChromos1;
 		}
-
-		// genome 2
-		currentY = (frameHeight - (numChromos2 * barHeight * 2)) / 2 + bufferSpace;
-		genome2Ypositions = new int[numChromos2];
-		for (int i = 0; i < numChromos2; i++)
+		else
 		{
-			genome2Ypositions[i] = currentY;
-			currentY += chromoSpacing * 2;
+			maxChromos = numChromos2;
 		}
+		
+		//work out other coords accordingly:
+		
+		//the combined height of a chromosome and the space below it extending to the next chromosome in the column
+		chromoUnit = frameHeight/(maxChromos+1); //adding 1 gives us a buffer space
+	
+		// height of chromosomes 
+		chromoHeight = (int)(chromoUnit*0.8);
+		//space between chromosomes vertically = remainder of whatever in the unit is not chromo
+		chromoSpacing = chromoUnit- chromoHeight;
+		// width of chromosomes 
+		chromoWidth = frameWidth/100;
+
+		// leave this amount of space to the left of the first columns of chromosomes 
+		int oneTenthWidth = frameWidth/10;
+		//position of genome 1 i.e. first column of chromos
+		genome1.xPosition = oneTenthWidth*4;
+		//position of genome 2 (second column of chromos)
+		genome2.xPosition = oneTenthWidth*6;
+
+		//now work out the y positions for each chromosome in each genome
+		for (int i = 0; i < genomes.length; i++)
+		{
+			//first set the distance from the top of the frame to the top of the first chromo
+			int spacer = (frameHeight - (genomes[i].numChromos*chromoUnit))/2;
+			int currentY = spacer;
+			System.out.println("currentY = " + currentY);
+			
+			//then place the chromos from there
+			for (int j = 0; j < genomes[i].numChromos; j++)
+			{
+				genomes[i].yPositions[j] = currentY;
+				currentY += chromoUnit;
+			}
+		}
+		
+		
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -144,13 +179,14 @@ public class Canvas extends JPanel
 			int numLines = (int) (Math.random() * 10);
 			numLines = numLines - 2;
 
+			//g2.setStroke(new BasicStroke(2));
 			for (int j = 0; j < numLines; j++)
 			{
 				g2.drawLine(
-								genome1Xposition + barWidth,
-								genome1Ypositions[triggeredChromo] + getRandomInt(barHeight),
-								genome2Xposition,
-								genome2Ypositions[i] + getRandomInt(barHeight));
+								genome1.xPosition + chromoWidth*2,
+								genome1.yPositions[triggeredChromo] + getRandomInt(chromoHeight),
+								genome2.xPosition,
+								genome2.yPositions[i] + getRandomInt(chromoHeight));
 			}
 		}
 	}
@@ -177,4 +213,59 @@ public class Canvas extends JPanel
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
+	
+	/*
+	 * Makes an array of colours that can be used to draw the lines between chromosomes.
+	 * Uses some random numbers but also restricts the range of colours so the overall pallette is not too garish.
+	 */
+	private void makeColours()
+	{
+		colours = new Color[maxChromos];
+		
+		int currentTone = 50;
+		int maxGrey = 255;
+		float interval = (maxGrey - currentTone)/colours.length;
+		
+		for (int i = 0; i < colours.length; i++)
+		{	
+			System.out.println("currentTone = " + currentTone);	
+			colours[i] = new Color(currentTone,getRandomInt(255),getRandomInt(255));
+			currentTone = currentTone+ (int)interval;
+		}
+	}
+	
+	
+//	 --------------------------------------------------------------------------------------------------------------------------------
+	
+	private void drawLabels(Graphics2D g2)
+	{
+		//draw a label above each of the genomes
+		int genomeLabelY = chromoUnit/3;
+		g2.setColor(Color.white);
+		g2.drawString(genomeName1, genome1.xPosition, genomeLabelY);
+		g2.drawString(genomeName2, genome2.xPosition, genomeLabelY);
+		
+		//draw a label next to each chromosome
+		//genome 1
+		for (int i = 0; i < genome1.yPositions.length; i++)
+		{
+			g2.drawString("chr " + (i+1), genome1.xPosition - chromoWidth*4, genome1.yPositions[i]+chromoHeight/2);
+		}
+		//genome 2
+		for (int i = 0; i < genome2.yPositions.length; i++)
+		{
+			g2.drawString("chr " + (i+1), genome2.xPosition + chromoWidth*4, genome2.yPositions[i]+chromoHeight/2);
+		}
+	}
+	
+//	 --------------------------------------------------------------------------------------------------------------------------------
 }// end class
+
+
+
+
+
+
+
+
+

@@ -9,9 +9,10 @@ public class SyntenyViewer2DFrame extends JFrame
 	public static void main(String[] args)
 	{
 		SyntenyViewer2DFrame comp = new SyntenyViewer2DFrame();
-		Canvas canvas = new Canvas();
+		Canvas canvas = new Canvas(comp);
 		comp.add(canvas);
-		comp.setSize(400, 800);
+		comp.setSize(800, 600);
+		comp.setLocationRelativeTo(null);
 		comp.setBackground(Color.BLACK);
 		comp.setVisible(true);
 		comp.setTitle("Synteny Viewer 2D");

@@ -208,6 +208,9 @@ public class SyntenyViewer2D extends JFrame implements MouseInputListener
 
 		int x = arg0.getX();
 		int y = arg0.getY();
+		
+		System.out.println("previousAreaWasTrigger = " + previousAreaWasTrigger);
+		System.out.println("previousAreaWasNonTrigger = " + previousAreaWasNonTrigger);
 
 		// check if mouse is now in area to the right of one of
 		// the

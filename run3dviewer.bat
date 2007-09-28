@@ -1,0 +1,1 @@
+java -Djava.ext.dirs=lib -cp classes;. sbrn.mapviewer.gui.tests.syntenyviewer3d.SyntenyViewer3D

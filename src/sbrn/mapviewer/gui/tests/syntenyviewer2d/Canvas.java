@@ -1,6 +1,7 @@
 package sbrn.mapviewer.gui.tests.syntenyviewer2d;
 
 import java.awt.*;
+import java.awt.font.*;
 
 import javax.swing.*;
 
@@ -8,8 +9,8 @@ public class Canvas extends JPanel
 {
 
 	/* size of the frame */
-	int frameHeight;
-	int frameWidth;
+	int canvasHeight;
+	int canvasWidth;
 
 	// bars represent chromosomes
 	/* height of chromosomes */
@@ -116,8 +117,8 @@ public class Canvas extends JPanel
 	private void calcChromosomePositions()
 	{
 		//get current size of frame
-		frameHeight = frame.getHeight();
-		frameWidth = frame.getWidth();
+		canvasHeight = getHeight();
+		canvasWidth = getWidth();
 		
 		//check whether genome 1 or 2 has more chromosomes
 		if(numChromos1>numChromos2)
@@ -132,27 +133,24 @@ public class Canvas extends JPanel
 		//work out other coords accordingly:
 		
 		//the combined height of a chromosome and the space below it extending to the next chromosome in the column
-		chromoUnit = frameHeight/(maxChromos+1); //adding 1 gives us a buffer space
-	
+		chromoUnit = canvasHeight/(maxChromos+1); //adding 1 gives us a buffer space	
 		// height of chromosomes 
 		chromoHeight = (int)(chromoUnit*0.8);
 		//space between chromosomes vertically = remainder of whatever in the unit is not chromo
 		chromoSpacing = chromoUnit- chromoHeight;
 		// width of chromosomes 
-		chromoWidth = frameWidth/100;
+		chromoWidth = canvasWidth/150;
 
-		// leave this amount of space to the left of the first columns of chromosomes 
-		int oneTenthWidth = frameWidth/10;
 		//position of genome 1 i.e. first column of chromos
-		genome1.xPosition = oneTenthWidth*4;
+		genome1.xPosition = (int)(canvasWidth*0.4);
 		//position of genome 2 (second column of chromos)
-		genome2.xPosition = oneTenthWidth*6;
+		genome2.xPosition = (int)(canvasWidth*0.6);
 
 		//now work out the y positions for each chromosome in each genome
 		for (int i = 0; i < genomes.length; i++)
 		{
 			//first set the distance from the top of the frame to the top of the first chromo
-			int spacer = (frameHeight - (genomes[i].numChromos*chromoUnit))/2;
+			int spacer = (canvasHeight - (genomes[i].numChromos*chromoUnit))/2;
 			int currentY = spacer;
 			System.out.println("currentY = " + currentY);
 			
@@ -163,8 +161,6 @@ public class Canvas extends JPanel
 				currentY += chromoUnit;
 			}
 		}
-		
-		
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -239,22 +235,26 @@ public class Canvas extends JPanel
 	
 	private void drawLabels(Graphics2D g2)
 	{
-		//draw a label above each of the genomes
-		int genomeLabelY = chromoUnit/3;
+		//sort out the font and its size
+		int fontSize = canvasWidth/70;
+		Font font = new Font("Arial",Font.PLAIN, fontSize);
+		g2.setFont(font);
+
+		//draw a label next to each of the genomes, half way down the screen
 		g2.setColor(Color.white);
-		g2.drawString(genomeName1, genome1.xPosition, genomeLabelY);
-		g2.drawString(genomeName2, genome2.xPosition, genomeLabelY);
+		g2.drawString(genomeName1, (int)(canvasWidth*0.3), canvasHeight/2);
+		g2.drawString(genomeName2, (int)(canvasWidth*0.7), canvasHeight/2);
 		
 		//draw a label next to each chromosome
 		//genome 1
 		for (int i = 0; i < genome1.yPositions.length; i++)
 		{
-			g2.drawString("chr " + (i+1), genome1.xPosition - chromoWidth*4, genome1.yPositions[i]+chromoHeight/2);
+			g2.drawString("" + (i+1), genome1.xPosition - chromoWidth*3, genome1.yPositions[i]+chromoHeight/2);
 		}
 		//genome 2
 		for (int i = 0; i < genome2.yPositions.length; i++)
 		{
-			g2.drawString("chr " + (i+1), genome2.xPosition + chromoWidth*4, genome2.yPositions[i]+chromoHeight/2);
+			g2.drawString("" + (i+1), genome2.xPosition + chromoWidth*4, genome2.yPositions[i]+chromoHeight/2);
 		}
 	}
 	

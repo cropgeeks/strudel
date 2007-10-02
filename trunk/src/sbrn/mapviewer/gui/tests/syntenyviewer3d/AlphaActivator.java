@@ -1,6 +1,7 @@
 package sbrn.mapviewer.gui.tests.syntenyviewer3d;
 
 import javax.media.j3d.Alpha;
+import javax.media.j3d.Canvas3D;
 import javax.media.j3d.LineArray;
 import javax.media.j3d.Shape3D;
 
@@ -18,7 +19,7 @@ public class AlphaActivator extends Thread
 	private Alpha alpha = null;
 	
 	//the SyntenyViewer3D object the Alpha belongs to
-	private SyntenyViewer3D sv3d = null;
+	private SyntenyViewer3DCanvas sv3d = null;
 	
 	//the index of the TransformGroup that the target object hangs off from
 	private int tgIndex = -1;
@@ -26,7 +27,7 @@ public class AlphaActivator extends Thread
 //=======================================c'tor===============================
 	
 	
-	public AlphaActivator(SyntenyViewer3D _sv3d, Alpha _alpha, int _tgIndex)
+	public AlphaActivator(SyntenyViewer3DCanvas _sv3d, Alpha _alpha, int _tgIndex)
 	{
 		this.alpha = _alpha;
 		this.sv3d = _sv3d;

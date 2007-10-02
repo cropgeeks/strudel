@@ -34,12 +34,12 @@ public class InvertRequestDetector extends Behavior
 	private RotationInterpolator[] interpolators = null;
 	private TransformGroup[] transformGroups = null;
 	int tgIndex = -1; 
-	private SyntenyViewer3D sv3d = null;
+	private SyntenyViewer3DCanvas canvas;
 
 //===================================c'tor========================================
 	
-	public InvertRequestDetector(SyntenyViewer3D _sv3d, 
-					Canvas3D canvas,
+	public InvertRequestDetector(
+					SyntenyViewer3DCanvas canvas,
 					BranchGroup _objRoot,
 					RotationInterpolator[] _interpolators, 
 					TransformGroup[] _transformGroups)
@@ -47,7 +47,7 @@ public class InvertRequestDetector extends Behavior
 		this.objRoot = _objRoot;
 		this.interpolators = _interpolators;
 		this.transformGroups = _transformGroups;
-		this.sv3d = _sv3d;
+		this.canvas = canvas;
 
 		pickCanvas = new PickCanvas(canvas, objRoot);
 		pickCanvas.setTolerance(1.0f);
@@ -123,7 +123,7 @@ public class InvertRequestDetector extends Behavior
 								//the following resumes the Alpha object, which was paused straight after its creation
 								//it then checks for the actual alpha value of the object and pauses it again when this is 1
 								Alpha alpha = interpolators[tgIndex].getAlpha();
-								AlphaActivator aa = new AlphaActivator(sv3d,alpha,tgIndex);
+								AlphaActivator aa = new AlphaActivator(canvas,alpha,tgIndex);
 								aa.start();
 							}
 							catch (CapabilityNotSetException e)

@@ -51,17 +51,16 @@ public class MouseOverBehavior extends Behavior
 	private Shape3D [] linkArrays = null;
 	boolean [] linksInverted = null;
 	private TransformGroup[] transformGroups = null;
-	private SyntenyViewer3D sv3d = null;
+	SyntenyViewer3DCanvas canvas;
 	
 //========================================c'tor============================	
 	
-	public MouseOverBehavior(Canvas3D canvas, 
+	public MouseOverBehavior(SyntenyViewer3DCanvas canvas, 
 					Hashtable _namesHashT, 
 					Hashtable _positionsHashT, 
 					TransformGroup _wholeObj,
 					BranchGroup _objRoot,
-					TransformGroup[] _transformGroups,
-					SyntenyViewer3D _sv3d)
+					TransformGroup[] _transformGroups)
 	{
 
 		this.namesHashT = _namesHashT;
@@ -69,8 +68,7 @@ public class MouseOverBehavior extends Behavior
 		this.wholeObj = _wholeObj;
 		this.positionsHashT = _positionsHashT;
 		this.transformGroups = _transformGroups;
-		this.sv3d = _sv3d;
-		
+		this.canvas = canvas;
 		
 		pickCanvas = new PickCanvas(canvas,objRoot);
 		pickCanvas.setTolerance(1.0f);
@@ -85,8 +83,8 @@ public class MouseOverBehavior extends Behavior
 		cyanApp.setMaterial(new Material(objColor, black, objColor, white, 10.0f));
 		cyanApp.setTransparencyAttributes(new TransparencyAttributes(TransparencyAttributes.NICEST, 0.3f));
 		
-		linkArrays = sv3d.getLinkArrays();
-		linksInverted = sv3d.getLinksInverted();
+		linkArrays = canvas.getLinkArrays();
+		linksInverted = canvas.getLinksInverted();
 		
 	}
 	
@@ -185,7 +183,7 @@ public class MouseOverBehavior extends Behavior
 									TransformGroup centralChromoTG = (TransformGroup)cyl.getParent().getParent().getParent();	
 
 									//check whether we have selected a marker on the central chromosome
-									if(!centralChromoTG.equals(sv3d.getCentralChromoTG()))
+									if(!centralChromoTG.equals(canvas.getCentralChromoTG()))
 									{
 										//find the index of this transform group in the array passed in
 										int tgIndex = -1;

@@ -32,7 +32,7 @@ public class TestObjectInverter extends Applet
 {
 	
 	private SimpleUniverse u = null;
-	private Canvas3D c = null;
+	private SyntenyViewer3DCanvas c = null;
 	private static RotationInterpolator [] interpolators = new RotationInterpolator [2];
 	private TransformGroup [] transFormGroups = new TransformGroup [2];
 	private Alpha [] alphas = new Alpha [2];
@@ -125,7 +125,7 @@ public class TestObjectInverter extends Applet
 		objTrans.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
 		objTrans.setCapability(TransformGroup.ALLOW_CHILDREN_EXTEND);
 		
-		InvertRequestDetector ird = new InvertRequestDetector(null,c,objRoot,interpolators,transFormGroups);
+		InvertRequestDetector ird = new InvertRequestDetector(c,objRoot,interpolators,transFormGroups);
 
 		ird.setSchedulingBounds(new BoundingSphere(new Point3d(), 1000));
 		objRoot.addChild(ird);
@@ -141,7 +141,7 @@ public class TestObjectInverter extends Applet
 		setLayout(new BorderLayout());
 		GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
 		
-		c = new Canvas3D(config);
+		c = new SyntenyViewer3DCanvas(config);
 		add("Center", c);
 		
 		// Create a simple scene and attach it to the virtual universe

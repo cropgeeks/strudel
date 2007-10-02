@@ -26,10 +26,10 @@ public class MouseHandler implements MouseInputListener
 		int x = arg0.getX();
 		int y = arg0.getY();
 		
-		System.out.println("previousAreaWasTrigger = " + canvas.previousAreaWasTrigger);
-		System.out.println("previousAreaWasNonTrigger = " + canvas.previousAreaWasNonTrigger);
-		System.out.println("canvas.inTriggerArea = " + canvas.inTriggerArea);
-		System.out.println("canvas.triggeredChromo = " + canvas.triggeredChromo);
+		//System.out.println("previousAreaWasTrigger = " + canvas.previousAreaWasTrigger);
+		//System.out.println("previousAreaWasNonTrigger = " + canvas.previousAreaWasNonTrigger);
+		//System.out.println("canvas.inTriggerArea = " + canvas.inTriggerArea);
+		//System.out.println("canvas.triggeredChromo = " + canvas.triggeredChromo);
 
 		// check if mouse is now in area to the right of one of the reference chromosomes
 		for (int i = 0; i < canvas.numChromos1; i++)
@@ -57,7 +57,7 @@ public class MouseHandler implements MouseInputListener
 		// just entered trigger area
 		if (canvas.inTriggerArea && !canvas.previousAreaWasTrigger)
 		{
-			System.out.println("repainting");
+			//System.out.println("repainting");
 			canvas.repaint();
 			canvas.previousAreaWasTrigger = true;
 			canvas.previousAreaWasNonTrigger = false;
@@ -65,7 +65,7 @@ public class MouseHandler implements MouseInputListener
 		// just entered non-trigger area
 		if (!canvas.inTriggerArea && canvas.previousAreaWasTrigger)
 		{
-			System.out.println("repainting");
+			//System.out.println("repainting");
 			canvas.repaint();
 			canvas.previousAreaWasTrigger = false;
 			canvas.previousAreaWasNonTrigger = true;

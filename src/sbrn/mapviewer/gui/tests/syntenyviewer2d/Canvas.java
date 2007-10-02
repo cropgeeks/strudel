@@ -68,13 +68,23 @@ public class Canvas extends JPanel
 		addMouseListener(mouseHandler);
 		addMouseMotionListener(mouseHandler);
 	}
+	
+	public Canvas()
+	{
+		setBackground(Color.black);
+		calcChromosomePositions();
+		makeColours();
+		MouseHandler mouseHandler = new MouseHandler(this);
+		addMouseListener(mouseHandler);
+		addMouseMotionListener(mouseHandler);
+	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------------
 
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
-		System.out.println("painting");			
+		//System.out.println("painting");			
 		Graphics2D g2 = (Graphics2D) g;
 
 		calcChromosomePositions();
@@ -152,7 +162,7 @@ public class Canvas extends JPanel
 			//first set the distance from the top of the frame to the top of the first chromo
 			int spacer = (canvasHeight - (genomes[i].numChromos*chromoUnit))/2;
 			int currentY = spacer;
-			System.out.println("currentY = " + currentY);
+			//System.out.println("currentY = " + currentY);
 			
 			//then place the chromos from there
 			for (int j = 0; j < genomes[i].numChromos; j++)
@@ -224,7 +234,7 @@ public class Canvas extends JPanel
 		
 		for (int i = 0; i < colours.length; i++)
 		{	
-			System.out.println("currentTone = " + currentTone);	
+			//System.out.println("currentTone = " + currentTone);	
 			colours[i] = new Color(currentTone,getRandomInt(255),getRandomInt(255));
 			currentTone = currentTone+ (int)interval;
 		}

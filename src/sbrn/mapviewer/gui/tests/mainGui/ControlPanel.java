@@ -15,8 +15,6 @@ public class ControlPanel extends JPanel
 		
 		ViewChooserPanel viewChooserPanel = new ViewChooserPanel(tabbedPane);
 		this.add(viewChooserPanel);
-
-		//viewChooserPanel.setMaximumSize(new Dimension(200,150));
 	}
 
 }

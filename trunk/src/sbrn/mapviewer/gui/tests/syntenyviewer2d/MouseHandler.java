@@ -9,11 +9,11 @@ public class MouseHandler implements MouseInputListener
 
 //========================================vars=============================================	
 	
-	Canvas canvas = null;
+	Canvas2D canvas = null;
 	
 //========================================c'tor=============================================
 	
-	public MouseHandler(Canvas canvas)
+	public MouseHandler(Canvas2D canvas)
 	{
 		this.canvas = canvas;
 	}
@@ -25,31 +25,31 @@ public class MouseHandler implements MouseInputListener
 
 		int x = arg0.getX();
 		int y = arg0.getY();
-		
-		//System.out.println("previousAreaWasTrigger = " + canvas.previousAreaWasTrigger);
-		//System.out.println("previousAreaWasNonTrigger = " + canvas.previousAreaWasNonTrigger);
-		//System.out.println("canvas.inTriggerArea = " + canvas.inTriggerArea);
-		//System.out.println("canvas.triggeredChromo = " + canvas.triggeredChromo);
+
+//		System.out.println("previousAreaWasTrigger = " + canvas.previousAreaWasTrigger);
+//		System.out.println("previousAreaWasNonTrigger = " + canvas.previousAreaWasNonTrigger);
+//		System.out.println("canvas.inTriggerArea = " + canvas.inTriggerArea);
+//		System.out.println("canvas.selectedChromo = " + canvas.selectedChromo);
 
 		// check if mouse is now in area to the right of one of the reference chromosomes
-		for (int i = 0; i < canvas.numChromos1; i++)
+		for (int i = 0; i < canvas.genomes[0].chromosomes.length; i++)
 		{
 			// work out the trigger area for each chromosome
-			int triggerXMin = canvas.genome1.xPosition;
-			int triggerXMax = canvas.genome2.xPosition;
-			int triggerYMin = canvas.genome1.yPositions[i];
-			int triggerYMax = canvas.genome1.yPositions[i] + canvas.chromoHeight;
+			int triggerXMin = canvas.genomes[0].xPosition;
+			int triggerXMax = canvas.genomes[1].xPosition;
+			int triggerYMin = canvas.genomes[0].chromosomes[i].yPosition;
+			int triggerYMax = canvas.genomes[0].chromosomes[i].yPosition + canvas.chromoHeight;
 			
 			if (x > triggerXMin && x < triggerXMax && y > triggerYMin && y < triggerYMax)
 			{
-				canvas.triggeredChromo = i;
+				canvas.selectedChromo = i;
 				canvas.inTriggerArea = true;
 				break;
 			}
 			else
 			{
 				canvas.inTriggerArea = false;
-				canvas.triggeredChromo = -1;
+				canvas.selectedChromo = -1;
 			}
 		}
 		

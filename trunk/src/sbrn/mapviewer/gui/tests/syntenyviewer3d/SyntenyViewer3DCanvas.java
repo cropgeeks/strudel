@@ -1,37 +1,17 @@
 package sbrn.mapviewer.gui.tests.syntenyviewer3d;
 
-import java.applet.Applet;
 import java.awt.*;
-import java.io.File;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.io.*;
+import java.util.*;
 
-import javax.media.j3d.BoundingSphere;
-import javax.media.j3d.BranchGroup;
-import javax.media.j3d.Canvas3D;
-import javax.media.j3d.GraphicsConfigTemplate3D;
-import javax.media.j3d.Group;
-import javax.media.j3d.LineArray;
-import javax.media.j3d.RotationInterpolator;
-import javax.media.j3d.Shape3D;
-import javax.media.j3d.Transform3D;
-import javax.media.j3d.TransformGroup;
-import javax.vecmath.Color3f;
-import javax.vecmath.Point3d;
-import javax.vecmath.Point3f;
-import javax.vecmath.Vector3f;
+import javax.media.j3d.*;
+import javax.vecmath.*;
 
-import sbrn.mapviewer.data.ChromoMap;
-import sbrn.mapviewer.data.LinkSet;
-import sbrn.mapviewer.data.MapSet;
-import sbrn.mapviewer.io.CMapLinkImporter;
+import sbrn.mapviewer.data.*;
 
-import com.sun.j3d.utils.applet.MainFrame;
-import com.sun.j3d.utils.geometry.Cylinder;
-import com.sun.j3d.utils.pickfast.behaviors.PickRotateBehavior;
-import com.sun.j3d.utils.pickfast.behaviors.PickTranslateBehavior;
-import com.sun.j3d.utils.pickfast.behaviors.PickZoomBehavior;
-import com.sun.j3d.utils.universe.SimpleUniverse;
+import com.sun.j3d.utils.geometry.*;
+import com.sun.j3d.utils.pickfast.behaviors.*;
+import com.sun.j3d.utils.universe.*;
 
 
 /**
@@ -63,13 +43,16 @@ public class SyntenyViewer3DCanvas extends Canvas3D
 	private MapSet targetMapset = null;
 	//this link set holds the all the possible links between all chromos in the tagret set and all chromos in the reference set
 	private LinkSet links = null;
-	
+	//a subset of all links which contains only those links that involve the central chromosome
+	private LinkSet centralChromoLinkSet = null;
+	//this array holds subsets of the centralChromoLinkSet which represent the sets of links between
+	//the central chromo and each of the peripheral chromos
+	private LinkSet [] linkSubsets = null;	
 	//the central chromosome in the standing stone circle arrangement
-	private ChromoMap centralChromo = null;
-	
+	private ChromoMap centralChromo = null;	
 	//the index of the central chromosome in the target data map set
 	//hard code the central chromo for now
-	private int centralChromoIndex = 5;
+	private int centralChromoIndex = 0;
 	
 	//cylinder metrics
 	private final float cylinderRadius = 0.05f;
@@ -108,15 +91,12 @@ public class SyntenyViewer3DCanvas extends Canvas3D
 	//indicates whether the link arrays are inverted or not
 	private boolean [] linksInverted = null;
 
-	//a subset of all links which contains only those links that involve the central chromosome
-	private LinkSet centralChromoLinkSet = null;
-	//this array holds subsets of the centralChromoLinkSet which represent the sets of links between
-	//the central chromo and each of the peripheral chromos
-	private LinkSet [] linkSubsets = null;
+
 	
 //==================================c'tor=============================	
 	
-	public SyntenyViewer3DCanvas( File referenceData, File targetData,File compData,File [] otherMapFiles)
+	public SyntenyViewer3DCanvas( File referenceData, File targetData,File compData,File [] otherMapFiles,
+					MapSet referenceMapset, MapSet targetMapset, int centralChromoIndex, LinkSet links)
 	{
 		super(getGraphicsConfig());
 		
@@ -124,8 +104,13 @@ public class SyntenyViewer3DCanvas extends Canvas3D
 		this.targetData = targetData;
 		this.compData = compData;
 		this.otherMapFiles = otherMapFiles;
+		this.referenceMapset = referenceMapset;
+		this.targetMapset = targetMapset;
+		this.centralChromoIndex = centralChromoIndex;
+		this.links = links;
 		
 		loadData();
+		
 		int numChromos = referenceMapset.size();
 		//holds the arrays of links between the central chromo and each peripheral one
 		linkArrays = new Shape3D [numChromos];
@@ -149,34 +134,10 @@ public class SyntenyViewer3DCanvas extends Canvas3D
 	{
 		try
 		{
-			DataLoader dLoader = new DataLoader();
-			referenceMapset =  dLoader.loadMapData(referenceData);
-			targetMapset =  dLoader.loadMapData(targetData);
-			
-			CMapLinkImporter limp = new CMapLinkImporter(compData);
-			limp.addMapSet(referenceMapset);
-			limp.addMapSet(targetMapset);
-			
-			MapSet [] otherMapSets = dLoader.loadOtherMapSets(otherMapFiles);
-			for(int i = 0; i< otherMapSets.length; i++)
-			{
-				limp.addMapSet(otherMapSets[i]);
-			}
-			
-			try
-			{
-				links = limp.loadLinkSet();
-			}
-			catch (ArrayIndexOutOfBoundsException e)
-			{
-				e.printStackTrace();
-			}
-
-			centralChromo = targetMapset.getMap(centralChromoIndex);
-			
+			//the chromosome positioned in the centre of the stone circle arrangement
+			centralChromo = targetMapset.getMap(centralChromoIndex);			
 			//now work out which of the links we actually need for this particular central chromo
-			centralChromoLinkSet = LinkSetManager.makeCentralChromoLinkSet(links,centralChromo);
-			
+			centralChromoLinkSet = LinkSetManager.makeCentralChromoLinkSet(links,centralChromo);			
 			//make a new array for the sets of links between the central chromo and the peripheral ones
 			linkSubsets = new LinkSet [referenceMapset.size()];
 			
@@ -275,7 +236,7 @@ public class SyntenyViewer3DCanvas extends Canvas3D
 	// ---------------------------------------------------------------------------------------------------------------------
 	
 	/**
-	 * Makes a LineArray object that corresponds to teh set of links between thre central chromo and the 
+	 * Makes a LineArray object that corresponds to the set of links between the central chromo and the 
 	 * peripheral chromo at index chromosomeIndex in the array of peripheral chromos
 	 */
 	public LineArray makeLineArray(int chromosomeIndex, boolean invert)

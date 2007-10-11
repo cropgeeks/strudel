@@ -40,15 +40,15 @@ public class Label2D
 			TransparencyAttributes.FASTEST, 0.7f);
 			
 		m_transApp.setTransparencyAttributes(ta);
-		updateFont();
+		updateFont(10);
 	}
 	
 //------------------------------------------------------------------------------------------------------------------------------------	
 	
-	public static void updateFont()
+	public static void updateFont(int size)
 	{
 		labelFont = new Font("Helvetica", Font.PLAIN,
-			10);
+			size);
 		
 		fm = new java.awt.image.BufferedImage(1,1,
 			java.awt.image.BufferedImage.TYPE_INT_RGB).getGraphics().getFontMetrics(labelFont);

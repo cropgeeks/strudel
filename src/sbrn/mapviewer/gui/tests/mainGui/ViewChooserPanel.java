@@ -17,10 +17,10 @@ public class ViewChooserPanel extends JPanel implements ActionListener
 
 	JTabbedPane tabbedPane;
 	
-	public ViewChooserPanel(JTabbedPane tabbedPane)
+	public ViewChooserPanel(MapViewerFrame frame)
 	{
 		init();
-		this.tabbedPane = tabbedPane;
+		this.tabbedPane = frame.getTabbedPane();
 	}
 
 	private void init()
@@ -85,12 +85,12 @@ public class ViewChooserPanel extends JPanel implements ActionListener
 	{
 		if ("show2DView".equals(e.getActionCommand()))
 		{
-			System.out.println("2d selected");
+			//System.out.println("2d selected");
 			tabbedPane.setSelectedIndex(0);
 		}
 		if ("show3DView".equals(e.getActionCommand()))
 		{
-			System.out.println("3d selected");
+			//System.out.println("3d selected");
 			tabbedPane.setSelectedIndex(1);
 		}		
 	}

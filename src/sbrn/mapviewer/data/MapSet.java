@@ -103,4 +103,12 @@ public class MapSet implements Iterable<ChromoMap>
 		for (ChromoMap map: maps)
 			System.out.println("    Map: " + map.getName() + " with " + map.countFeatures() + " feature(s) " + map.getStop());
 	}
+	
+	/**
+	 * Returns a LinkedList which contains the ChromoMap objects held in this mapset
+	 */
+	public LinkedList getMaps()
+	{
+		return maps;
+	}
 }

@@ -12,6 +12,7 @@ import com.sun.j3d.utils.geometry.*;
 
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.data.Link;
+import sbrn.mapviewer.gui.tests.mainGui.*;
 
 public class Canvas2D extends JPanel
 {
@@ -41,12 +42,9 @@ public class Canvas2D extends JPanel
 	boolean previousAreaWasNonTrigger = false;
 
 	/* number of chromosome in the target genome that was triggered to have its relationships drawn */
-	int selectedChromo = -1;
+	int selectedChromoIndex = -1;
 
 	int chromoUnit;
-
-
-	SyntenyViewer2DFrame frame;
 
 	// genome objects
 	Genome[] genomes;
@@ -55,18 +53,21 @@ public class Canvas2D extends JPanel
 	private static LinkSet links = null;
 	
 	LinkedList<LinkSet> linkSubSets;
+	
+	MapViewerFrame frame;
 
 	// =========================================c'tor============================================
 
-	public Canvas2D(LinkSet links)
+	public Canvas2D(MapViewerFrame frame, LinkSet links)
 	{
+		this.frame = frame;
 		this.links = links;
 		loadData();
 		makeLinkSubSets();
 		setBackground(Color.black);
 		calcChromosomePositions();
 		makeColours();
-		MouseHandler mouseHandler = new MouseHandler(this);
+		MouseHandler mouseHandler = new MouseHandler(frame);
 		addMouseListener(mouseHandler);
 		addMouseMotionListener(mouseHandler);
 	}
@@ -116,7 +117,7 @@ public class Canvas2D extends JPanel
 		}
 
 		// optionally draw lines between chromos if mouse over has been detected
-		if (inTriggerArea && selectedChromo != -1)
+		if (inTriggerArea && selectedChromoIndex != -1)
 		{
 			drawLines(g2);
 		}
@@ -184,20 +185,20 @@ public class Canvas2D extends JPanel
 	 */
 	public void drawLines(Graphics2D g2)
 	{
-		//System.out.println("drawing lines for selected chromosome " + selectedChromo);
+		//System.out.println("drawing lines for selected chromosome " + selectedChromoIndex);
 			
 		//get the map for the currently selected chromosome
 		MapSet targetMapSet = links.getMapSets().get(0);
-		ChromoMap selectedMap = targetMapSet.getMap(selectedChromo);
+		ChromoMap selectedMap = targetMapSet.getMap(selectedChromoIndex);
 		
 		//get all the links between the selected chromosome and the reference mapset
-		LinkSet selectedLinks = linkSubSets.get(selectedChromo);
+		LinkSet selectedLinks = linkSubSets.get(selectedChromoIndex);
 		
 		float targetMapStop = selectedMap.getStop();
 		
 		//get the real coordinates for the selected chromo and the reference chromo
-		int selectedChromoX = genomes[0].xPosition;
-		int selectedChromoY = genomes[0].chromosomes[selectedChromo].yPosition;
+		int selectedChromoX = genomes[0].xPosition + chromoWidth*2;
+		int selectedChromoY = genomes[0].chromosomes[selectedChromoIndex].yPosition;
 		int referenceChromoX = genomes[1].xPosition;
 			
 		//for each link in the linkset

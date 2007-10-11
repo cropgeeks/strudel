@@ -2,10 +2,7 @@ package sbrn.mapviewer.gui.tests.syntenyviewer3d;
 
 import java.util.Hashtable;
 
-import javax.media.j3d.Appearance;
-import javax.media.j3d.ColoringAttributes;
-import javax.media.j3d.Transform3D;
-import javax.media.j3d.TransformGroup;
+import javax.media.j3d.*;
 import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
 
@@ -188,7 +185,8 @@ public class MarkerRingCreator
 		//need to recreate the structure of this branch of the scene graph
 		TransformGroup rotateTG = (TransformGroup)peripheralCylTGs[chromoIndex].getChild(0);
 		//this group has a set of other TGs as its child which in turn hold the cylinder objects for the markers
-		TransformGroup markersTG = (TransformGroup)rotateTG.getChild(1);
+		BranchGroup bg = (BranchGroup)rotateTG.getChild(1);
+		TransformGroup markersTG = (TransformGroup)bg.getChild(0);
 		//iterate over all the children
 		for(int i=0; i< markersTG.numChildren(); i++)
 		{

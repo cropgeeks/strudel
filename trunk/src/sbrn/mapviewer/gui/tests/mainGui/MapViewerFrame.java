@@ -13,17 +13,31 @@ public class MapViewerFrame extends JFrame
 {
 	// ===================================================vars=================================================
 	// data files
-	private static File referenceData;
-	private static File targetData;
-	private static File compData;
-	private static File[] otherMapFiles;
+	private File referenceData;
+	private File targetData;
+	private File compData;
+	private File[] otherMapFiles;
 
-	// this Mapset holds all the data we wanst to compare against
-	private static MapSet referenceMapset = null;
+	// this Mapset holds all the data we want to compare against
+	private MapSet referenceMapset = null;
 	// this Mapset holds the data we want to find out about
-	private static MapSet targetMapset = null;
+	private MapSet targetMapset = null;
 	// this link set holds the all the possible links between all chromos in the target set and all chromos in the reference set
-	private static LinkSet links = null;
+	private LinkSet links = null;
+	//the index of the currently selected chromosome in the target mapset
+	int selectedChromoIndex = 0;
+	//this tabbed pane holds the views
+	JTabbedPane tabbedPane;
+	//the canvas for drawing 2D overviews of the genomes
+	Canvas2D canvas2D;
+	//the canvas for drawing the 3D view
+	SyntenyViewer3DCanvas canvas3D;
+	
+	
+	public MapViewerFrame()
+	{
+		setupComponents();
+	}
 
 	// ============================================methods====================================================
 
@@ -36,7 +50,6 @@ public class MapViewerFrame extends JFrame
 
 			// get the GUI set up
 			MapViewerFrame frame = new MapViewerFrame();
-			setupComponents(frame);
 			frame.setVisible(true);
 			frame.setTitle("Map Viewer");
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -48,23 +61,25 @@ public class MapViewerFrame extends JFrame
 			e.printStackTrace();
 		}
 	}
+	
+	
 
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	private static void setupComponents(MapViewerFrame frame)
+	private void setupComponents()
 	{
 		loadData();
 
 		// make a tabbed pane and add the 2D and 3D panels to it
-		JTabbedPane tabbedPane = new JTabbedPane();
+		tabbedPane = new JTabbedPane();
 		tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
-		SyntenyViewer3DCanvas canvas = new SyntenyViewer3DCanvas(referenceData, targetData, compData, otherMapFiles, referenceMapset, targetMapset, 0, links);
-		Canvas2D canvas2D = new Canvas2D(links);
+		makeNew3DCanvas();
+		canvas2D = new Canvas2D(this,links);
 		tabbedPane.addTab("   2D   ", canvas2D);
-		tabbedPane.addTab("   3D   ", canvas);
+		tabbedPane.addTab("   3D   ", canvas3D);
 
 		// side panel
-		ControlPanel controlPanel = new ControlPanel(tabbedPane);
+		ControlPanel controlPanel = new ControlPanel(this);
 
 		// Create a split pane with the two components in it
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, controlPanel, tabbedPane);
@@ -72,10 +87,19 @@ public class MapViewerFrame extends JFrame
 		splitPane.setResizeWeight(0.0);
 		tabbedPane.setPreferredSize(new Dimension(600, 600));
 		controlPanel.setPreferredSize(new Dimension(150, 600));
-		frame.getContentPane().add(splitPane);
+		this.getContentPane().add(splitPane);
 
 		// menu bar
-		frame.setJMenuBar(new MapViewerMenuBar(frame));
+		this.setJMenuBar(new MapViewerMenuBar(this));
+	}
+	
+	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	public void makeNew3DCanvas()
+	{
+		System.out.println("making new 3d canvas");
+		System.out.println("selectedChromoIndex = " + selectedChromoIndex);
+		canvas3D = new SyntenyViewer3DCanvas(this, referenceData, targetData, compData, otherMapFiles, referenceMapset, targetMapset, selectedChromoIndex, links);
 	}
 
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -83,7 +107,7 @@ public class MapViewerFrame extends JFrame
 	/**
 	 * Loads data from file using the object data model; this will populate all the relevant MapSet and LinkSet objects.
 	 */
-	private static void loadData()
+	private void loadData()
 	{
 		try
 		{
@@ -140,6 +164,36 @@ public class MapViewerFrame extends JFrame
 
 			e.printStackTrace();
 		}
+	}
+
+	public int getSelectedChromoIndex()
+	{
+		return selectedChromoIndex;
+	}
+
+	public void setSelectedChromoIndex(int selectedChromoIndex)
+	{
+		this.selectedChromoIndex = selectedChromoIndex;
+	}
+
+	public JTabbedPane getTabbedPane()
+	{
+		return tabbedPane;
+	}
+
+	public void setTabbedPane(JTabbedPane tabbedPane)
+	{
+		this.tabbedPane = tabbedPane;
+	}
+	
+	public Canvas2D getCanvas2D()
+	{
+		return canvas2D;
+	}
+
+	public SyntenyViewer3DCanvas getCanvas3D()
+	{
+		return canvas3D;
 	}
 
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

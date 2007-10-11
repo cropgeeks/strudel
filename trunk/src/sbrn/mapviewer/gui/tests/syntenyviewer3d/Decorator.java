@@ -53,31 +53,40 @@ public class Decorator
 	// ---------------------------------------------------------------------------------------------------------------------	
 
 	/**
-	 * Returns an array of colours
+	 * Returns an array of colours the length of numColours
 	 */
-	public Color3f [] generateColours()
+	public Color3f [] generateColours(int numColours)
 	{
-		Color3f [] colours = new Color3f []{
-						new Color3f(Color.CYAN),
-						new Color3f(Color.YELLOW),
-						new Color3f(Color.RED),
-						new Color3f(Color.WHITE),
-						new Color3f(Color.MAGENTA),
-						new Color3f(Color.ORANGE),
-						new Color3f(Color.PINK),
-						new Color3f(Color.GREEN),
-						new Color3f(Color.BLUE),
-						new Color3f(0.5f,0.9f,0.2f),						
-						new Color3f(0.2f,0.5f,0.9f),
-						new Color3f(0.0f,0.5f,0.5f),
-						new Color3f(0.5f,0.5f,0.0f),
-						new Color3f(0.5f,0.0f,0.5f),
-						new Color3f(0.1f,0.3f,0.6f),
-						new Color3f(0.6f,0.3f,0.1f),
-						new Color3f(0.3f,0.6f,0.1f),
-						new Color3f(0.6f,0.8f,1.0f),
-						new Color3f(1.0f,0.8f,0.6f)
-						};
+		int red=0;
+		int green = 0;
+		int blue =0;
+		
+		//the amount by which we want to increment the values for each colour channel 
+		int increment = 255/(numColours/3);
+		
+		Color3f [] colours = new Color3f[numColours];
+		//make a colour gradient by initially ramping up the red only, then the green and then the blue
+		for (int i = 0; i < colours.length; i++)
+		{
+		
+			if(i<colours.length/3)
+			{
+				red+= increment;
+			}
+			if(i>= colours.length/3 && i<((colours.length/3)*2))
+			{
+				red = 0;
+				green+=increment;
+			}
+			if(i>=((colours.length/3)*2))
+			{
+				red = 0;
+				green = 0;
+				blue+= increment;
+			}
+			
+			colours[i] = new Color3f(new Color(red,green,blue));
+		}	
 
 		return colours;
 	}
@@ -88,11 +97,9 @@ public class Decorator
 	/**
 	 * Creates a 2d label that is always readable from whatever angle 
 	 */
-	public void createFlagLabel(String text, BranchGroup bg, TransformGroup m_tg, Vector3f vec)
+	public void createFlagLabel(String text, TransformGroup targetTransformGroup, Vector3f vec)
 	{
-		if (bg != null)
-			bg.detach();
-		
+
 		LineArray line = new LineArray(2, LineArray.COORDINATES);
 		line.setCoordinate(0, new Point3f(0.0f, 0.0f, 0.0f));
 		line.setCoordinate(1, new Point3f(0.0f, 0.0f, 0.0f));
@@ -109,10 +116,33 @@ public class Decorator
 		tg.addChild(line3D);
 		tg.addChild(labelTG);
 
-		bg = new BranchGroup();
+		BranchGroup bg = new BranchGroup();
 		bg.setCapability(BranchGroup.ALLOW_DETACH);
+		bg.setCapability(BranchGroup.ALLOW_CHILDREN_EXTEND);
+		bg.setCapability(BranchGroup.ALLOW_CHILDREN_WRITE);
 		bg.addChild(tg);
-		m_tg.addChild(bg);
+		targetTransformGroup.addChild(bg);
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns a random int that is less than a certain value
+	 * 
+	 * @param max --
+	 *                the maximum to be returned
+	 * @return the random int
+	 */
+	private int getRandomInt(int max)
+	{
+		int rand = -1;
+
+		while (rand > max || rand < 0)
+		{
+			rand = (int) (Math.random() * 100);
+		}
+
+		return rand;
 	}
 // 	---------------------------------------------------------------------------------------------------------------------	
 	

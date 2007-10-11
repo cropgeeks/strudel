@@ -172,15 +172,16 @@ public class MouseOverBehavior extends Behavior
 									
 									//first find out which marker ring (cylinder) has been picked
 									Cylinder cyl = (Cylinder)pickedNode;	
-									//need to get the TG that it belongs to , 4 levels up
+									//need to get the TG that it belongs to , 5 levels up
 									//this is ugly as hell but there is probably no other way
-									TransformGroup tg = (TransformGroup)cyl.getParent().getParent().getParent().getParent();	
+									TransformGroup tg = (TransformGroup)cyl.getParent().getParent().getParent().getParent().getParent();	
 									
 									//work out where to place the label
 									Point3f p = (Point3f)positionsHashT.get(cyl);
 									Vector3f vec = null;
-									
-									TransformGroup centralChromoTG = (TransformGroup)cyl.getParent().getParent().getParent();	
+									//need to get the TG that it belongs to , 5 levels up
+									//this is ugly as hell but there is probably no other way									
+									TransformGroup centralChromoTG = (TransformGroup)cyl.getParent().getParent().getParent().getParent();	
 
 									//check whether we have selected a marker on the central chromosome
 									if(!centralChromoTG.equals(canvas.getCentralChromoTG()))
@@ -216,7 +217,7 @@ public class MouseOverBehavior extends Behavior
 									}
 									
 									String mName = (String)namesHashT.get(cyl);
-									createFlagLabel(mName, wholeObj, vec);
+									createMarkerLabel(mName, wholeObj, vec);
 								}
 								catch (CapabilityNotSetException e)
 								{
@@ -259,7 +260,7 @@ public class MouseOverBehavior extends Behavior
 	
 	//----------------------------------------------------------------------------------------------------------------------------
 	
-	protected void createFlagLabel(String text, TransformGroup m_tg, Vector3f vec)
+	protected void createMarkerLabel(String text, TransformGroup m_tg, Vector3f vec)
 	{
 		LineArray line = new LineArray(2, LineArray.COORDINATES);
 		line.setCoordinate(0, new Point3f(0.0f, 0.0f, 0.0f));

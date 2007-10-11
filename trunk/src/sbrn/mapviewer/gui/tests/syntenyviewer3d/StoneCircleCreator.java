@@ -48,6 +48,10 @@ public class StoneCircleCreator
 				TransformGroup cylRotateTG = new TransformGroup();
 				cylRotateTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);	
 
+				//set capabilities
+				Utils.setChildRelatedCapabilities(cylRotateTG);
+				Utils.setChildRelatedCapabilities(translateTG);
+				
 				//put things together
 				translateTG.addChild(cylRotateTG);
 				cylRotateTG.addChild(cyl);	

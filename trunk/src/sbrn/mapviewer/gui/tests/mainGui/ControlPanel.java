@@ -10,10 +10,10 @@ import javax.swing.JTabbedPane;
 public class ControlPanel extends JPanel
 {
 
-	public ControlPanel(JTabbedPane tabbedPane)
+	public ControlPanel(MapViewerFrame frame)
 	{
 		
-		ViewChooserPanel viewChooserPanel = new ViewChooserPanel(tabbedPane);
+		ViewChooserPanel viewChooserPanel = new ViewChooserPanel(frame);
 		this.add(viewChooserPanel);
 	}
 

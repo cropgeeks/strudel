@@ -17,33 +17,30 @@ import sbrn.mapviewer.gui.tests.mainGui.*;
 public class Canvas2D extends JPanel
 {
 
-	/* size of the frame */
+	// size of the frame
 	int canvasHeight;
 	int canvasWidth;
 
+	// size of the chromos
 	int chromoHeight;
 	int chromoWidth;
-	
+
+	// the maximum nuber of chromos in any one of the genomes involved
 	int maxChromos;
-	
-	/* space between chromosomes vertically */
+
+	// space between chromosomes vertically
 	int chromoSpacing;
 
-	/* colors for lines */
+	// colors for line
 	Color[] colours = null;
 
-	/* indicates whether the mouse is in an area that should trigger lines to be drawn */
+	// indicates whether the mouse is in an area that should trigger lines to be drawn
 	boolean inTriggerArea = false;
 
-	/* indicates that the mouse was last in an area that should trigger lines to be drawn */
-	boolean previousAreaWasTrigger = false;
-
-	/* indicates that the mouse was last outside any area that should trigger lines to be drawn */
-	boolean previousAreaWasNonTrigger = false;
-
-	/* number of chromosome in the target genome that was triggered to have its relationships drawn */
+	// number of chromosome in the target genome that was triggered to have its relationships drawn
 	int selectedChromoIndex = -1;
 
+	// the height of a chromosome and a vertical spacer interval combined
 	int chromoUnit;
 
 	// genome objects
@@ -51,9 +48,11 @@ public class Canvas2D extends JPanel
 
 	// this link set holds the all the possible links between all chromos in the target set and all chromos in the reference set
 	private static LinkSet links = null;
-	
+
+	// this is a list of all the link subsets from the target genome to the reference genome, i.e. one subset per target chromosome
 	LinkedList<LinkSet> linkSubSets;
-	
+
+	// the frame we are displaying the canvas in
 	MapViewerFrame frame;
 
 	// =========================================c'tor============================================
@@ -72,17 +71,18 @@ public class Canvas2D extends JPanel
 		addMouseMotionListener(mouseHandler);
 	}
 
+	// =========================================methods===============================================
+
 	private void loadData()
 	{
 		LinkedList<MapSet> mapSets = links.getMapSets();
 		MapSet targetData = mapSets.get(0);
 		MapSet referenceData = mapSets.get(1);
-		
-		//set up both genomes appropriately
-		genomes = new Genome[] { new Genome(targetData.size(), targetData.getName(), Color.red), 
-						new Genome(referenceData.size(), referenceData.getName(), Color.blue) };
-		//System.out.println("referenceData.getName() = "+ referenceData.getName());
 
+		// set up both genomes appropriately
+		genomes = new Genome[]
+		{ new Genome(targetData.size(), targetData.getName(), Color.red),
+						new Genome(referenceData.size(), referenceData.getName(), Color.blue) };
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------------
@@ -106,13 +106,14 @@ public class Canvas2D extends JPanel
 				// draw first half of chromo
 				GradientPaint gradient = new GradientPaint(genomes[i].xPosition, genomes[i].chromosomes[j].yPosition, genomes[i].colour, genomes[i].xPosition + chromoWidth, genomes[i].chromosomes[j].yPosition, offWhite);
 				g2.setPaint(gradient);
-				g2.fillRect(genomes[i].xPosition, genomes[i].chromosomes[j].yPosition, chromoWidth, chromoHeight);
+				g2.fillRect(genomes[i].xPosition, genomes[i].chromosomes[j].yPosition, chromoWidth,
+								chromoHeight);
 
 				// draw second half of chromo
 				GradientPaint whiteGradient = new GradientPaint(genomes[i].xPosition + chromoWidth, genomes[i].chromosomes[j].yPosition, offWhite, genomes[i].xPosition + chromoWidth + chromoWidth, genomes[i].chromosomes[j].yPosition, genomes[i].colour);
 				g2.setPaint(whiteGradient);
-				g2.fillRect(genomes[i].xPosition + chromoWidth, genomes[i].chromosomes[j].yPosition, chromoWidth,
-								chromoHeight);
+				g2.fillRect(genomes[i].xPosition + chromoWidth, genomes[i].chromosomes[j].yPosition,
+								chromoWidth, chromoHeight);
 			}
 		}
 
@@ -158,9 +159,9 @@ public class Canvas2D extends JPanel
 		// width of chromosomes
 		chromoWidth = canvasWidth / 150;
 
-		//x position of genome 1 i.e. first column of chromos
+		// x position of genome 1 i.e. first column of chromos
 		genomes[0].xPosition = (int) (canvasWidth * 0.4);
-		//x position of genome 2 (second column of chromos)
+		// x position of genome 2 (second column of chromos)
 		genomes[1].xPosition = (int) (canvasWidth * 0.6);
 
 		// now work out the y positions for each chromosome in each genome
@@ -185,83 +186,74 @@ public class Canvas2D extends JPanel
 	 */
 	public void drawLines(Graphics2D g2)
 	{
-		//System.out.println("drawing lines for selected chromosome " + selectedChromoIndex);
-			
-		//get the map for the currently selected chromosome
+		// System.out.println("drawing lines for selected chromosome " + selectedChromoIndex);
+
+		// get the map for the currently selected chromosome
 		MapSet targetMapSet = links.getMapSets().get(0);
 		ChromoMap selectedMap = targetMapSet.getMap(selectedChromoIndex);
-		
-		//get all the links between the selected chromosome and the reference mapset
+
+		// get all the links between the selected chromosome and the reference mapset
 		LinkSet selectedLinks = linkSubSets.get(selectedChromoIndex);
-		
+
 		float targetMapStop = selectedMap.getStop();
-		
-		//get the real coordinates for the selected chromo and the reference chromo
-		int selectedChromoX = genomes[0].xPosition + chromoWidth*2;
+
+		// get the real coordinates for the selected chromo and the reference chromo
+		int selectedChromoX = genomes[0].xPosition + chromoWidth * 2;
 		int selectedChromoY = genomes[0].chromosomes[selectedChromoIndex].yPosition;
 		int referenceChromoX = genomes[1].xPosition;
-			
-		//for each link in the linkset
+
+		// for each link in the linkset
 		for (Link link : selectedLinks)
 		{
-			//get the positional data of feature1 (which is on the selected chromo) and the end point of the map
-			float feat1Start = link.getFeature1().getStart();
 			
-			//get the owning map, positional data of feature 2 (which is on a reference chromosome) and the end point of the map
+			long start = System.currentTimeMillis();
+			
+			// get the positional data of feature1 (which is on the selected chromo) and the end point of the map
+			float feat1Start = link.getFeature1().getStart();
+
+			// get the owning map, positional data of feature 2 (which is on a reference chromosome) and the end point of the map
 			float feat2Start = link.getFeature2().getStart();
 			ChromoMap owningMap = link.getFeature2().getOwningMap();
-			float referenceMapStop = owningMap.getStop();			
+			float referenceMapStop = owningMap.getStop();
 			int refChromoIndex = owningMap.getOwningMapSet().getMaps().indexOf(owningMap);
 			int referenceChromoY = genomes[1].chromosomes[refChromoIndex].yPosition;
-						
-			//convert these to coordinates by obtaining the coords of the appropriate chromosome object and scaling them appropriately
-			int targetY = (int)(feat1Start/(targetMapStop/chromoHeight))+selectedChromoY;
-			int referenceY = (int)(feat2Start/(referenceMapStop/chromoHeight))+referenceChromoY;
-			
-			//draw the line 
-			g2.drawLine(selectedChromoX, targetY, referenceChromoX, referenceY);
-		}
-	}
 
-	// --------------------------------------------------------------------------------------------------------------------------------	
-	
-	/**
-	 * This method precomputes subsets of links between each target chromosome and the reference genome so that
-	 * drawing them is quicker. 
-	 */
-	private void makeLinkSubSets()
-	{
-		linkSubSets = new LinkedList<LinkSet>();
-		//for each chromosome in the target mapset
-		MapSet targetMapSet = links.getMapSets().get(0);
-		MapSet referenceMapSet = links.getMapSets().get(1);
-		for (ChromoMap map : targetMapSet)
-		{
-			//make a new subset of the overall linkset containing only its links with the reference genome
-			LinkSet selectedLinks = links.getLinksBetweenMapandMapSet(map, referenceMapSet);
-			linkSubSets.add(selectedLinks);
+			// convert these to coordinates by obtaining the coords of the appropriate chromosome object and scaling them appropriately
+			int targetY = (int) (feat1Start / (targetMapStop / chromoHeight)) + selectedChromoY;
+			int referenceY = (int) (feat2Start / (referenceMapStop / chromoHeight)) + referenceChromoY;
+			
+			long end = System.currentTimeMillis();
+			System.out.println("time taken for calculating links = " + (end-start));
+
+			long start2 = System.currentTimeMillis();
+			
+			// draw the line
+			g2.drawLine(selectedChromoX, targetY, referenceChromoX, referenceY);
+			
+			long end2 = System.currentTimeMillis();
+			System.out.println("time taken for drawing line = " + (end2-start2));
 		}
+		
+
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns a random int that is less than a certain value
-	 * 
-	 * @param max --
-	 *                the maximum to be returned
-	 * @return the random int
+	 * This method precomputes subsets of links between each target chromosome and the reference genome so that drawing them is quicker.
 	 */
-	private int getRandomInt(int max)
+	private void makeLinkSubSets()
 	{
-		int rand = -1;
-
-		while (rand > max || rand < 0)
+		linkSubSets = new LinkedList<LinkSet>();
+		// for each chromosome in the target mapset
+		MapSet targetMapSet = links.getMapSets().get(0);
+		MapSet referenceMapSet = links.getMapSets().get(1);
+		for (ChromoMap map : targetMapSet)
 		{
-			rand = (int) (Math.random() * 100);
+			// make a new subset of the overall linkset containing only its links with the reference genome
+			LinkSet selectedLinks = links.getLinksBetweenMapandMapSet(map, referenceMapSet);
+			linkSubSets.add(selectedLinks);
 		}
-
-		return rand;
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -273,16 +265,37 @@ public class Canvas2D extends JPanel
 	{
 		colours = new Color[maxChromos];
 
-		int currentTone = 50;
-		int maxGrey = 255;
-		float interval = (maxGrey - currentTone) / colours.length;
+		// the colour channels
+		int red = 0;
+		int green = 0;
+		int blue = 0;
 
+		// the amount by which we want to increment the values for each colour channel
+		int increment = 255 / (maxChromos / 3);
+
+		// make a colour gradient by initially ramping up the red only, then the green and then the blue
 		for (int i = 0; i < colours.length; i++)
 		{
-			// System.out.println("currentTone = " + currentTone);
-			colours[i] = new Color(currentTone, getRandomInt(255), getRandomInt(255));
-			currentTone = currentTone + (int) interval;
+
+			if (i < colours.length / 3)
+			{
+				red += increment;
+			}
+			if (i >= colours.length / 3 && i < ((colours.length / 3) * 2))
+			{
+				red = 0;
+				green += increment;
+			}
+			if (i >= ((colours.length / 3) * 2))
+			{
+				red = 0;
+				green = 0;
+				blue += increment;
+			}
+
+			colours[i] = new Color(red, green, blue);
 		}
+
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -296,7 +309,7 @@ public class Canvas2D extends JPanel
 
 		// draw a label next to each of the genomes, half way down the screen
 		g2.setColor(Color.white);
-		//System.out.println("genomes[0].name = "  +genomes[0].name);
+		// System.out.println("genomes[0].name = " +genomes[0].name);
 		g2.drawString(genomes[0].name, (int) (canvasWidth * 0.3), canvasHeight / 2);
 		g2.drawString(genomes[1].name, (int) (canvasWidth * 0.7), canvasHeight / 2);
 

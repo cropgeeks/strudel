@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.*;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -36,11 +37,11 @@ public class ViewChooserPanel extends JPanel implements ActionListener
 		// add labels and buttons for choosing a view:
 		
 		//labels
-		ImageIcon icon2D = new ImageIcon(workingDir + "/trunk/images/2dview_icon_48px.gif");
+		ImageIcon icon2D = new ImageIcon(this.getClass().getResource("/images/2dview_icon_48px.gif"));
 		JLabel label2d = new JLabel("2D",JLabel.CENTER);
 		label2d.setVerticalTextPosition(JLabel.BOTTOM);
 		label2d.setHorizontalTextPosition(JLabel.CENTER);
-		ImageIcon icon3D = new ImageIcon(workingDir + "/trunk/images/3dview_icon_48px.gif");
+		ImageIcon icon3D = new ImageIcon(this.getClass().getResource("/images/3dview_icon_48px.gif"));
 		JLabel label3d = new JLabel("3D",JLabel.CENTER);
 		label3d.setVerticalTextPosition(JLabel.BOTTOM);
 		label3d.setHorizontalTextPosition(JLabel.CENTER);

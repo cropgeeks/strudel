@@ -2,6 +2,8 @@ package sbrn.mapviewer.gui.tests.mainGui;
 
 import java.awt.*;
 import java.io.*;
+import java.net.*;
+
 import javax.swing.*;
 
 import sbrn.mapviewer.data.*;
@@ -112,13 +114,18 @@ public class MapViewerFrame extends JFrame
 		try
 		{
 			// data files - hard coded for now
-			//System.out.println("working dir = " + System.getProperty("user.dir"));
-			String dataDir = "trunk/data/";
-			referenceData = new File(dataDir + "rice_pseudo4_os.maps");
-			targetData = new File(dataDir + "new_sxm_edited.maps");
-			compData = new File(dataDir + "barley_SNPS_vs_rice4_corr.data");
+			System.out.println("loading data");
+			System.out.println("working dir = " + System.getProperty("user.dir"));
+			referenceData = new File( (this.getClass().getResource( "/data/rice_pseudo4_os.maps")).toURI());
+			targetData = new File((this.getClass().getResource( "/data/new_sxm_edited.maps")).toURI());
+			compData = new File((this.getClass().getResource( "/data/barley_SNPS_vs_rice4_corr.data")).toURI());
 			otherMapFiles = new File[]
-			{ new File(dataDir + "new_owb_edited.maps"), new File(dataDir + "new_mxb_edited.maps") };
+			                         	{ 
+								new File((this.getClass().getResource( "/data/new_owb_edited.maps")).toURI()),
+								new File((this.getClass().getResource( "/data/new_mxb_edited.maps")).toURI())
+			                         	};
+			
+			System.out.println("referenceData = " + referenceData);
 
 			// load data
 			DataLoader dLoader = new DataLoader();

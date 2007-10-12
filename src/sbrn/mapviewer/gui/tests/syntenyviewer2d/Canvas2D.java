@@ -49,11 +49,13 @@ public class Canvas2D extends JPanel
 	// this link set holds the all the possible links between all chromos in the target set and all chromos in the reference set
 	private static LinkSet links = null;
 
-	// this is a list of all the link subsets from the target genome to the reference genome, i.e. one subset per target chromosome
-	LinkedList<LinkSet> linkSubSets;
-
 	// the frame we are displaying the canvas in
 	MapViewerFrame frame;
+
+	// a hashtable that contains chromomaps from the target genome as keys and LinkedList objects as values which in
+	// turn hold a list of LinkSet objects each, where each Linkset represents the links between the chromomap and a chromomap in the reference
+	// genome
+	Hashtable<ChromoMap, LinkedList> linkSetLookup;
 
 	// =========================================c'tor============================================
 
@@ -193,48 +195,41 @@ public class Canvas2D extends JPanel
 		ChromoMap selectedMap = targetMapSet.getMap(selectedChromoIndex);
 
 		// get all the links between the selected chromosome and the reference mapset
-		LinkSet selectedLinks = linkSubSets.get(selectedChromoIndex);
+		LinkedList linkSets = linkSetLookup.get(selectedMap);
 
 		float targetMapStop = selectedMap.getStop();
-
 		// get the real coordinates for the selected chromo and the reference chromo
 		int selectedChromoX = genomes[0].xPosition + chromoWidth * 2;
 		int selectedChromoY = genomes[0].chromosomes[selectedChromoIndex].yPosition;
 		int referenceChromoX = genomes[1].xPosition;
 
-		// for each link in the linkset
-		for (Link link : selectedLinks)
+		for (Object selectedLinks : linkSets)
 		{
+			//change the colour of the graphics object so that each link subset is colour coded
+			int index = linkSets.indexOf(selectedLinks);
+			g2.setColor(colours[index]);
 			
-			long start = System.currentTimeMillis();
-			
-			// get the positional data of feature1 (which is on the selected chromo) and the end point of the map
-			float feat1Start = link.getFeature1().getStart();
+			// for each link in the linkset
+			for (Link link : (LinkSet)selectedLinks)
+			{
+				// get the positional data of feature1 (which is on the selected chromo) and the end point of the map
+				float feat1Start = link.getFeature1().getStart();
 
-			// get the owning map, positional data of feature 2 (which is on a reference chromosome) and the end point of the map
-			float feat2Start = link.getFeature2().getStart();
-			ChromoMap owningMap = link.getFeature2().getOwningMap();
-			float referenceMapStop = owningMap.getStop();
-			int refChromoIndex = owningMap.getOwningMapSet().getMaps().indexOf(owningMap);
-			int referenceChromoY = genomes[1].chromosomes[refChromoIndex].yPosition;
+				// get the owning map, positional data of feature 2 (which is on a reference chromosome) and the end point of the map
+				float feat2Start = link.getFeature2().getStart();
+				ChromoMap owningMap = link.getFeature2().getOwningMap();
+				float referenceMapStop = owningMap.getStop();
+				int refChromoIndex = owningMap.getOwningMapSet().getMaps().indexOf(owningMap);
+				int referenceChromoY = genomes[1].chromosomes[refChromoIndex].yPosition;
 
-			// convert these to coordinates by obtaining the coords of the appropriate chromosome object and scaling them appropriately
-			int targetY = (int) (feat1Start / (targetMapStop / chromoHeight)) + selectedChromoY;
-			int referenceY = (int) (feat2Start / (referenceMapStop / chromoHeight)) + referenceChromoY;
-			
-			long end = System.currentTimeMillis();
-			System.out.println("time taken for calculating links = " + (end-start));
+				// convert these to coordinates by obtaining the coords of the appropriate chromosome object and scaling them appropriately
+				int targetY = (int) (feat1Start / (targetMapStop / chromoHeight)) + selectedChromoY;
+				int referenceY = (int) (feat2Start / (referenceMapStop / chromoHeight)) + referenceChromoY;
 
-			long start2 = System.currentTimeMillis();
-			
-			// draw the line
-			g2.drawLine(selectedChromoX, targetY, referenceChromoX, referenceY);
-			
-			long end2 = System.currentTimeMillis();
-			System.out.println("time taken for drawing line = " + (end2-start2));
+				// draw the line
+				g2.drawLine(selectedChromoX, targetY, referenceChromoX, referenceY);
+			}
 		}
-		
-
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -244,15 +239,27 @@ public class Canvas2D extends JPanel
 	 */
 	private void makeLinkSubSets()
 	{
-		linkSubSets = new LinkedList<LinkSet>();
-		// for each chromosome in the target mapset
+		linkSetLookup = new Hashtable<ChromoMap, LinkedList>();
+
 		MapSet targetMapSet = links.getMapSets().get(0);
 		MapSet referenceMapSet = links.getMapSets().get(1);
-		for (ChromoMap map : targetMapSet)
+
+		// for each chromosome in the target mapset
+		for (ChromoMap targetMap : targetMapSet)
 		{
-			// make a new subset of the overall linkset containing only its links with the reference genome
-			LinkSet selectedLinks = links.getLinksBetweenMapandMapSet(map, referenceMapSet);
-			linkSubSets.add(selectedLinks);
+			// create a new LinkedList which holds all the linksets of links between this chromosome and the reference chromosomes
+			LinkedList<LinkSet> linkSets = new LinkedList<LinkSet>();
+			// for each reference chromosome
+			for (ChromoMap refMap : referenceMapSet)
+			{
+				// make a linkset that contains only the links between this chromo and the target chromo
+				LinkSet linkSubset = links.getLinksBetweenMaps(targetMap, refMap);
+				// add the linkset to the list
+				linkSets.add(linkSubset);
+			}
+
+			// then add the list to the hashtable
+			linkSetLookup.put(targetMap, linkSets);
 		}
 	}
 
@@ -265,13 +272,15 @@ public class Canvas2D extends JPanel
 	{
 		colours = new Color[maxChromos];
 
+		int lowerLimit = 50;
+		
 		// the colour channels
-		int red = 0;
-		int green = 0;
-		int blue = 0;
+		int red = lowerLimit;
+		int green = lowerLimit;
+		int blue =lowerLimit;
 
 		// the amount by which we want to increment the values for each colour channel
-		int increment = 255 / (maxChromos / 3);
+		int increment = (255-lowerLimit) / (maxChromos / 3);
 
 		// make a colour gradient by initially ramping up the red only, then the green and then the blue
 		for (int i = 0; i < colours.length; i++)

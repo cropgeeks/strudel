@@ -13,8 +13,6 @@ public class ControlPanel extends JPanel
 	public ControlPanel(MapViewerFrame frame)
 	{
 		
-		ViewChooserPanel viewChooserPanel = new ViewChooserPanel(frame);
-		this.add(viewChooserPanel);
 	}
 
 }

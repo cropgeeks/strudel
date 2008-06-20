@@ -29,7 +29,7 @@ public class MapViewerFrame extends JFrame
 	//the index of the currently selected chromosome in the target mapset
 	int selectedChromoIndex = 0;
 	//this tabbed pane holds the views
-	JTabbedPane tabbedPane;
+	public JPanel mainPanel;
 	//the canvas for drawing 2D overviews of the genomes
 	Canvas2D canvas2D;
 	//the canvas for drawing the 3D view
@@ -57,6 +57,7 @@ public class MapViewerFrame extends JFrame
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.pack();
 			frame.setLocationRelativeTo(null);
+			//frame.setExtendedState(frame.MAXIMIZED_BOTH);
 		}
 		catch (Exception e)
 		{
@@ -72,38 +73,24 @@ public class MapViewerFrame extends JFrame
 	{
 		loadData();
 
-		// make a tabbed pane and add the 2D and 3D panels to it
-		tabbedPane = new JTabbedPane();
-		tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
-		makeNew3DCanvas();
 		canvas2D = new Canvas2D(this,links);
-		tabbedPane.addTab("   2D   ", canvas2D);
-		tabbedPane.addTab("   3D   ", canvas3D);
+		canvas2D.setPreferredSize(new Dimension(600, 600));
 
 		// side panel
-		ControlPanel controlPanel = new ControlPanel(this);
+//		ControlPanel controlPanel = new ControlPanel(this);
+//		controlPanel.setPreferredSize(new Dimension(200, 600));
 
-		// Create a split pane with the two components in it
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, controlPanel, tabbedPane);
-		splitPane.setOneTouchExpandable(true);
-		splitPane.setResizeWeight(0.0);
-		tabbedPane.setPreferredSize(new Dimension(600, 600));
-		controlPanel.setPreferredSize(new Dimension(150, 600));
-		this.getContentPane().add(splitPane);
+		//top level container panel
+		//JPanel topPanel = new JPanel();
+		//topPanel.add(controlPanel,BorderLayout.EAST);
+		//topPanel.add(canvas2D,BorderLayout.CENTER);
+
+		this.getContentPane().add(canvas2D);
 
 		// menu bar
 		this.setJMenuBar(new MapViewerMenuBar(this));
 	}
 	
-	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
-	public void makeNew3DCanvas()
-	{
-		System.out.println("making new 3d canvas");
-		System.out.println("selectedChromoIndex = " + selectedChromoIndex);
-		canvas3D = new SyntenyViewer3DCanvas(this, referenceData, targetData, compData, otherMapFiles, referenceMapset, targetMapset, selectedChromoIndex, links);
-	}
-
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -183,15 +170,6 @@ public class MapViewerFrame extends JFrame
 		this.selectedChromoIndex = selectedChromoIndex;
 	}
 
-	public JTabbedPane getTabbedPane()
-	{
-		return tabbedPane;
-	}
-
-	public void setTabbedPane(JTabbedPane tabbedPane)
-	{
-		this.tabbedPane = tabbedPane;
-	}
 	
 	public Canvas2D getCanvas2D()
 	{

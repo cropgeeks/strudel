@@ -45,24 +45,13 @@ public class MouseHandler implements MouseInputListener
 			if (x > triggerXMin && x < triggerXMax && y > triggerYMin && y < triggerYMax)
 			{
 				// a single click means we want to repaint the 2D view with the links from the selected chromosome displayed
-				if (arg0.getClickCount() == 1)
+				if (arg0.getClickCount() == 1 || arg0.getClickCount() == 2)
 				{
 					// set the selected chromo index and update the 2d view
 					canvas.selectedChromoIndex = i;
 					canvas.inTriggerArea = true;
 					canvas.repaint();
-				}
-
-				// a double click means we want to switch to the 3D view with the selected chromosome as the new central chromo for the 3D view
-				if (arg0.getClickCount() == 2)
-				{
-					// set the selected chromo index and update the 3d view
-					frame.setSelectedChromoIndex(i);
-					frame.getCanvas3D().setCentralChromoIndex(i);
-					frame.getCanvas3D().updateView();
-
-					// switch the view to the 3D view
-					frame.getTabbedPane().setSelectedIndex(1);
+					System.out.println("canvas.selectedChromoIndex = " + canvas.selectedChromoIndex);
 				}
 
 				break;
@@ -75,9 +64,10 @@ public class MouseHandler implements MouseInputListener
 				canvas.inTriggerArea = false;
 				canvas.selectedChromoIndex = -1;
 				canvas.repaint();
+				System.out.println("nothing selected");
 			}
 		}
-		System.out.println("frame.selectedChromoIndex = " + frame.getSelectedChromoIndex());
+		
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------

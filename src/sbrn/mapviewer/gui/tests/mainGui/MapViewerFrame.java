@@ -31,9 +31,8 @@ public class MapViewerFrame extends JFrame
 	//this tabbed pane holds the views
 	public JPanel mainPanel;
 	//the canvas for drawing 2D overviews of the genomes
-	Canvas2D canvas2D;
-	//the canvas for drawing the 3D view
-	SyntenyViewer3DCanvas canvas3D;
+	public Canvas2D canvas2D;
+
 	
 	
 	public MapViewerFrame()
@@ -74,7 +73,7 @@ public class MapViewerFrame extends JFrame
 		loadData();
 
 		canvas2D = new Canvas2D(this,links);
-		canvas2D.setPreferredSize(new Dimension(600, 600));
+		canvas2D.setPreferredSize(new Dimension(900, 700));
 
 		// side panel
 //		ControlPanel controlPanel = new ControlPanel(this);
@@ -170,16 +169,6 @@ public class MapViewerFrame extends JFrame
 		this.selectedChromoIndex = selectedChromoIndex;
 	}
 
-	
-	public Canvas2D getCanvas2D()
-	{
-		return canvas2D;
-	}
-
-	public SyntenyViewer3DCanvas getCanvas3D()
-	{
-		return canvas3D;
-	}
 
 	// -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

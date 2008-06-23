@@ -1,18 +1,23 @@
 package sbrn.mapviewer.gui.tests.syntenyviewer2d;
 
-import java.awt.*;
-import java.awt.font.*;
-import java.util.*;
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Polygon;
+import java.awt.RenderingHints;
+import java.util.Hashtable;
+import java.util.LinkedList;
 
-import javax.media.j3d.*;
-import javax.swing.*;
-import javax.vecmath.*;
+import javax.swing.JPanel;
 
-import com.sun.j3d.utils.geometry.*;
-
-import sbrn.mapviewer.data.*;
+import sbrn.mapviewer.data.ChromoMap;
 import sbrn.mapviewer.data.Link;
-import sbrn.mapviewer.gui.tests.mainGui.*;
+import sbrn.mapviewer.data.LinkSet;
+import sbrn.mapviewer.data.MapSet;
+import sbrn.mapviewer.gui.tests.mainGui.MapViewerFrame;
 
 public class Canvas2D extends JPanel
 {
@@ -57,6 +62,16 @@ public class Canvas2D extends JPanel
 	// genome
 	Hashtable<ChromoMap, LinkedList> linkSetLookup;
 	
+	// zoom factors
+	float zoomFactorTargetGenome = 1;
+	float zoomFactorRefGenome = 1;
+	
+	// the total vertical distance in pixels on the canvas we want to allow to be drawn on
+	int totalVerticalSpace = -1;
+	
+	// a value for a minimum space in pixels between the topmost and bottommost chromosomes and the edge of the canvas
+	int minVertBuffer = 50;
+	
 	// =========================================c'tor============================================
 	
 	public Canvas2D(MapViewerFrame frame, LinkSet links)
@@ -98,29 +113,11 @@ public class Canvas2D extends JPanel
 		// antialiasing
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
+		// work out where we have to place the chromosomes
 		calcChromosomePositions();
 		
-		// draw genomes now
-		// this colour is the lightest in the double gradient which produces the ambient light effect
-		// i.e. this is the colour one will see in the centre of the chromosome (= the topmost part of the simulated cylinder)
-		Color offWhite = new Color(200, 200, 200);
-		for (int i = 0; i < genomes.length; i++)
-		{
-			for (int j = 0; j < genomes[i].chromosomes.length; j++)
-			{
-				// draw first half of chromo
-				GradientPaint gradient = new GradientPaint(genomes[i].xPosition, genomes[i].chromosomes[j].yPosition, genomes[i].colour, genomes[i].xPosition + chromoWidth, genomes[i].chromosomes[j].yPosition, offWhite);
-				g2.setPaint(gradient);
-				g2.fillRect(genomes[i].xPosition, genomes[i].chromosomes[j].yPosition, chromoWidth,
-								chromoHeight);
-				
-				// draw second half of chromo
-				GradientPaint whiteGradient = new GradientPaint(genomes[i].xPosition + chromoWidth, genomes[i].chromosomes[j].yPosition, offWhite, genomes[i].xPosition + chromoWidth + chromoWidth, genomes[i].chromosomes[j].yPosition, genomes[i].colour);
-				g2.setPaint(whiteGradient);
-				g2.fillRect(genomes[i].xPosition + chromoWidth, genomes[i].chromosomes[j].yPosition,
-								chromoWidth, chromoHeight);
-			}
-		}
+		// draw the chromosomes in both genomes
+		drawGenomes(g2);
 		
 		// optionally draw lines between chromos if mouse over has been detected
 		if (inTriggerArea && selectedChromoIndex != -1)
@@ -130,6 +127,10 @@ public class Canvas2D extends JPanel
 		
 		// labels
 		drawLabels(g2);
+		
+		// scroll controls
+		drawScrollControls(g2);
+		
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------------------
@@ -141,6 +142,9 @@ public class Canvas2D extends JPanel
 		// get current size of frame
 		canvasHeight = getHeight();
 		canvasWidth = getWidth();
+		
+		// work out what we can draw on vertically
+		totalVerticalSpace = canvasHeight - minVertBuffer * 2;
 		
 		// check whether genome 1 or 2 has more chromosomes
 		maxChromos = 0;
@@ -162,12 +166,12 @@ public class Canvas2D extends JPanel
 		// space between chromosomes vertically = remainder of whatever in the unit is not chromo
 		chromoSpacing = chromoUnit - chromoHeight;
 		// width of chromosomes
-		chromoWidth = canvasWidth / 150;
+		chromoWidth = canvasWidth / 80;
 		
 		// x position of genome 1 i.e. first column of chromos
-		genomes[0].xPosition = (int) (canvasWidth * 0.3);
+		genomes[0].xPosition = (int) (canvasWidth * 0.35);
 		// x position of genome 2 (second column of chromos)
-		genomes[1].xPosition = (int) (canvasWidth * 0.7);
+		genomes[1].xPosition = (int) (canvasWidth * 0.65);
 		
 		// now work out the y positions for each chromosome in each genome
 		for (int i = 0; i < genomes.length; i++)
@@ -181,6 +185,58 @@ public class Canvas2D extends JPanel
 			{
 				genomes[i].chromosomes[j] = new Chromosome(chromoHeight, chromoWidth, genomes[i].xPosition, currentY);
 				currentY += chromoUnit;
+			}
+			genomes[i].currentVerticalExtent = currentY;
+			// System.out.println("currentVerticalExtent of genome " + genomes[i].name + " = " + genomes[i].currentVerticalExtent );
+		}
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
+	
+	// draws columns of chromosomes onto the canvas, or a detailed continuous section of genome
+	private void drawGenomes(Graphics2D g2)
+	{
+		// this colour is the lightest in the double gradient which produces the ambient light effect
+		// i.e. this is the colour one will see in the centre of the chromosome (= the topmost part of the simulated cylinder)
+		Color offWhite = new Color(200, 200, 200);
+		
+		// draw the chromosomes
+		for (int i = 0; i < genomes.length; i++)
+		{
+			// draw all the chromosomes individually
+			if (genomes[i].drawChromos)
+			{
+				for (int j = 0; j < genomes[i].chromosomes.length; j++)
+				{
+					// draw first half of chromo
+					GradientPaint gradient = new GradientPaint(genomes[i].xPosition, genomes[i].chromosomes[j].yPosition, genomes[i].colour, genomes[i].xPosition + chromoWidth, genomes[i].chromosomes[j].yPosition, offWhite);
+					g2.setPaint(gradient);
+					g2.fillRect(genomes[i].xPosition, genomes[i].chromosomes[j].yPosition,
+									chromoWidth, chromoHeight);
+					
+					// draw second half of chromo
+					GradientPaint whiteGradient = new GradientPaint(genomes[i].xPosition + chromoWidth, genomes[i].chromosomes[j].yPosition, offWhite, genomes[i].xPosition + chromoWidth + chromoWidth, genomes[i].chromosomes[j].yPosition, genomes[i].colour);
+					g2.setPaint(whiteGradient);
+					g2.fillRect(genomes[i].xPosition + chromoWidth,
+									genomes[i].chromosomes[j].yPosition,
+									chromoWidth, chromoHeight);
+				}
+			}
+			
+			// draw a zoomed in detail section only
+			else
+			{
+				// this time fill the whole canvas vertically, as allowed anyway
+				// draw first half of chromo
+				GradientPaint gradient = new GradientPaint(genomes[i].xPosition, minVertBuffer, genomes[i].colour, genomes[i].xPosition + chromoWidth, minVertBuffer, offWhite);
+				g2.setPaint(gradient);
+				g2.fillRect(genomes[i].xPosition, minVertBuffer, chromoWidth, totalVerticalSpace);
+				
+				// draw second half of chromo
+				GradientPaint whiteGradient = new GradientPaint(genomes[i].xPosition + chromoWidth, minVertBuffer, offWhite, genomes[i].xPosition + chromoWidth + chromoWidth, minVertBuffer, genomes[i].colour);
+				g2.setPaint(whiteGradient);
+				g2.fillRect(genomes[i].xPosition + chromoWidth, minVertBuffer, chromoWidth,
+								totalVerticalSpace);
 			}
 		}
 	}
@@ -213,7 +269,7 @@ public class Canvas2D extends JPanel
 			g2.setColor(colours[index]);
 			
 			// transparency
-			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+			// g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 			
 			// for each link in the linkset
 			for (Link link : (LinkSet) selectedLinks)
@@ -236,8 +292,8 @@ public class Canvas2D extends JPanel
 				g2.drawLine(selectedChromoX, targetY, referenceChromoX, referenceY);
 			}
 			
-			//restore normal opacity for drawing
-			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+			// restore normal opacity for drawing
+			// g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 		}
 	}
 	
@@ -279,41 +335,6 @@ public class Canvas2D extends JPanel
 	 */
 	private void makeColours()
 	{
-		// colours = new Color[maxChromos];
-		//
-		// int lowerLimit = 50;
-		//		
-		// // the colour channels
-		// int red = lowerLimit;
-		// int green = lowerLimit;
-		// int blue =lowerLimit;
-		//
-		// // the amount by which we want to increment the values for each colour channel
-		// int increment = (255-lowerLimit) / (maxChromos / 3);
-		//
-		// // make a colour gradient by initially ramping up the red only, then the green and then the blue
-		// for (int i = 0; i < colours.length; i++)
-		// {
-		//
-		// if (i < colours.length / 3)
-		// {
-		// red += increment;
-		// }
-		// if (i >= colours.length / 3 && i < ((colours.length / 3) * 2))
-		// {
-		// red = 0;
-		// green += increment;
-		// }
-		// if (i >= ((colours.length / 3) * 2))
-		// {
-		// red = 0;
-		// green = 0;
-		// blue += increment;
-		// }
-		//
-		// colours[i] = new Color(red, green, blue);
-		// }
-		
 		colours = new Color[maxChromos];
 		float increment = 1 / (float) maxChromos;
 		float currentHue = 0;
@@ -336,9 +357,13 @@ public class Canvas2D extends JPanel
 		
 		// draw a label next to each of the genomes, half way down the screen
 		g2.setColor(Color.white);
-		// System.out.println("genomes[0].name = " +genomes[0].name);
-		g2.drawString(genomes[0].name, (int) (canvasWidth * 0.2), canvasHeight / 2);
-		g2.drawString(genomes[1].name, (int) (canvasWidth * 0.8), canvasHeight / 2);
+		
+		// antialiasing
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		
+		// genome names appear next to the column of chromosomes
+		// g2.drawString(genomes[0].name, (int) (canvasWidth * 0.2), canvasHeight / 2);
+		// g2.drawString(genomes[1].name, (int) (canvasWidth * 0.8), canvasHeight / 2);
 		
 		// draw a label next to each chromosome
 		// target genome
@@ -356,5 +381,118 @@ public class Canvas2D extends JPanel
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
+	
+	private void drawTriangle(Graphics2D g2, int x, int y, boolean pointUpwards, int size)
+	{
+		
+		int sides = 3;
+		int[] xpoints = new int[sides];
+		int[] ypoints = new int[sides];
+		
+		if (pointUpwards)
+		{
+			xpoints[0] = x;
+			xpoints[1] = x + size;
+			xpoints[2] = x - size;
+			
+			ypoints[0] = y - size * 2;
+			ypoints[1] = y - size;
+			ypoints[2] = y - size;
+		}
+		else
+		{
+			xpoints[0] = x;
+			xpoints[1] = x + size;
+			xpoints[2] = x - size;
+			
+			ypoints[0] = y;
+			ypoints[1] = y - size;
+			ypoints[2] = y - size;
+		}
+		
+		Polygon triangle = new Polygon(xpoints, ypoints, sides);
+		g2.draw(triangle);
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
+	
+	private void drawScrollControls(Graphics2D g2)
+	{
+		// get current size of frame
+		canvasHeight = getHeight();
+		canvasWidth = getWidth();
+		
+		// color (dark green)
+		g2.setColor(new Color(0, 160, 0));
+		
+		// size
+		int size = 20;
+		
+		// positioning
+		int xLeft = (int) (canvasWidth * 0.05);
+		int y = (int) (canvasHeight / 2);
+		int xRight = (int) (canvasWidth * 0.95);
+		int spacer = 5;
+		
+		// left hand controls
+		drawTriangle(g2, xLeft, y + size - spacer, true, size);
+		drawTriangle(g2, xLeft, y + size + spacer, false, size);
+		
+		// right hand controls
+		drawTriangle(g2, xRight, y + size - spacer, true, size);
+		drawTriangle(g2, xRight, y + size + spacer, false, size);
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
+	
+	public void zoomTo(int mousePressedX, int mousePressedY, int mouseReleasedX, int mouseReleasedY)
+	{
+		// System.out.println("zooming into area delimited by " + mouseReleasedX +"," + mouseReleasedY);
+		
+		// work out the size of the selected area
+		int selectedYDistance = mouseReleasedY - mousePressedY;
+		// System.out.println("selectedYDistance = "+ selectedYDistance);
+		
+		// find out whether the zoom was in the target or the reference genome
+		boolean tgSelected = false;
+		boolean rgSelected = false;
+		if (mousePressedX < genomes[0].xPosition && mouseReleasedX > genomes[0].xPosition)
+		{
+			// we have selected an area of the target genome
+			System.out.println("target genome selected");
+			tgSelected = true;
+		}
+		else
+			if (mousePressedX < genomes[1].xPosition && mouseReleasedX > genomes[1].xPosition)
+			{
+				// we have selected an area of the reference genome
+				System.out.println("reference genome selected");
+				rgSelected = true;
+			}
+		
+		// work out new zoom factor from the selected area
+		if (tgSelected)
+		{
+			zoomFactorTargetGenome += genomes[0].currentVerticalExtent / selectedYDistance;
+			genomes[0].currentVerticalExtent = totalVerticalSpace;
+			genomes[0].drawChromos = false;
+		}
+		else
+			if (rgSelected)
+			{
+				zoomFactorRefGenome += genomes[1].currentVerticalExtent / selectedYDistance;
+				genomes[1].currentVerticalExtent = totalVerticalSpace;
+				genomes[1].drawChromos = false;
+			}
+		
+		System.out.println("new zoom factors  = " + zoomFactorTargetGenome + ", " + zoomFactorRefGenome);
+		
+		// repaint the canvas
+		repaint();
+		
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
+	
 }// end class
 

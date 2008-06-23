@@ -12,6 +12,12 @@ public class MouseHandler implements MouseInputListener
 	// ========================================vars=============================================
 
 	MapViewerFrame frame;
+	
+	//variables for recording zoom requests
+	int mousePressedX = -1;
+	int mousePressedY = -1;
+	int mouseReleasedX = -1;
+	int mouseReleasedY = -1;
 
 	// ========================================c'tor=============================================
 
@@ -25,7 +31,7 @@ public class MouseHandler implements MouseInputListener
 	public void mouseClicked(MouseEvent arg0)
 	{
 
-		Canvas2D canvas = frame.getCanvas2D();
+		Canvas2D canvas = frame.canvas2D;
 
 		int x = arg0.getX();
 		int y = arg0.getY();
@@ -64,7 +70,7 @@ public class MouseHandler implements MouseInputListener
 				canvas.inTriggerArea = false;
 				canvas.selectedChromoIndex = -1;
 				canvas.repaint();
-				System.out.println("nothing selected");
+				//System.out.println("nothing selected");
 			}
 		}
 		
@@ -83,10 +89,19 @@ public class MouseHandler implements MouseInputListener
 
 	public void mousePressed(MouseEvent arg0)
 	{
+		mousePressedX = arg0.getX();
+		mousePressedY = arg0.getY();
+//		System.out.println("mouse pressed at " + mousePressedX + "," + mousePressedY);
 	}
 
 	public void mouseReleased(MouseEvent arg0)
-	{
+	{	
+		mouseReleasedX = arg0.getX();
+		mouseReleasedY = arg0.getY();
+//		System.out.println("mouse released at " + mouseReleasedX + "," + mouseReleasedY);
+		
+		//take this as a cue to zoom
+		frame.canvas2D.zoomTo(mousePressedX,mousePressedY,mouseReleasedX,mouseReleasedY);
 	}
 
 	public void mouseDragged(MouseEvent arg0)

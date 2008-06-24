@@ -12,7 +12,7 @@ public class ControlPanel extends JPanel
 
 	public ControlPanel(MapViewerFrame frame)
 	{
-		
+		this.add(new GUIWidgetPanel(frame));
 	}
 
 }

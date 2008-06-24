@@ -1,7 +1,7 @@
 package sbrn.mapviewer.gui.tests.syntenyviewer2d;
 
 /**
- * Class representing a graphical representation of a chromsomes. Assumes all chromosomes in a genome laid out vertically in a column.
+ * Class representing a graphical representation of a chromosomes. Assumes all chromosomes in a genome laid out vertically in a column.
  */
 public class Chromosome
 {
@@ -14,13 +14,16 @@ public class Chromosome
 	int xPosition;
 	// chromosome y position -- upper left corner
 	int yPosition;
+	//the index of the chromosome in the genome, starting at 0
+	int genomeIndex;
 	
-	public Chromosome(int length, int width, int xPosition, int yPosition)
+	public Chromosome(int length, int width, int xPosition, int yPosition,int genomeIndex)
 	{
 		this.length = length;
 		this.width = width;
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;
+		this.genomeIndex = genomeIndex;
 	}
 
 }

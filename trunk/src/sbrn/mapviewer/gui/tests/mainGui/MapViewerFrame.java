@@ -73,18 +73,14 @@ public class MapViewerFrame extends JFrame
 		loadData();
 
 		canvas2D = new Canvas2D(this,links);
-		canvas2D.setPreferredSize(new Dimension(900, 700));
+		canvas2D.setPreferredSize(new Dimension(800, 700));
 
 		// side panel
-//		ControlPanel controlPanel = new ControlPanel(this);
-//		controlPanel.setPreferredSize(new Dimension(200, 600));
+		ControlPanel controlPanel = new ControlPanel(this);
+		controlPanel.setPreferredSize(new Dimension(180, 700));
 
-		//top level container panel
-		//JPanel topPanel = new JPanel();
-		//topPanel.add(controlPanel,BorderLayout.EAST);
-		//topPanel.add(canvas2D,BorderLayout.CENTER);
-
-		this.getContentPane().add(canvas2D);
+		add(controlPanel,BorderLayout.EAST);
+		add(canvas2D,BorderLayout.CENTER);
 
 		// menu bar
 		this.setJMenuBar(new MapViewerMenuBar(this));

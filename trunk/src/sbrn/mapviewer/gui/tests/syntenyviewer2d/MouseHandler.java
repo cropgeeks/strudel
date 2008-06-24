@@ -37,13 +37,13 @@ public class MouseHandler implements MouseInputListener
 		int y = arg0.getY();
 		System.out.println("mouse clicked at " + x + "," + y);
 
-		// check if mouse is now in area to the right of one of the reference chromosomes
+		// check if mouse is now in area of one of the target chromosomes
 		for (int i = 0; i < canvas.genomes[0].chromosomes.length; i++)
 		{
 			// work out the trigger area for each chromosome
 			// add a little space either side of chromo to make selecting it easier
-			int triggerXMin = canvas.genomes[0].xPosition - canvas.chromoWidth * 5;
-			int triggerXMax = canvas.genomes[0].xPosition + canvas.chromoWidth * 5;
+			int triggerXMin = canvas.genomes[0].xPosition - canvas.genomes[0].chromoWidth * 5;
+			int triggerXMax = canvas.genomes[0].xPosition + canvas.genomes[0].chromoWidth * 5;
 			int triggerYMin = canvas.genomes[0].chromosomes[i].yPosition;
 			int triggerYMax = canvas.genomes[0].chromosomes[i].yPosition + canvas.chromoHeight;
 

@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.Vector;
@@ -184,7 +185,12 @@ public class Canvas2D extends JPanel
 			// then place the chromos from there
 			for (int j = 0; j < genomes[i].chromosomes.length; j++)
 			{
-				genomes[i].chromosomes[j] = new Chromosome(chromoHeight, genomes[i].chromoWidth, genomes[i].xPosition, currentY, j);
+				// get the map for the currently selected chromosome
+				MapSet targetMapSet = links.getMapSets().get(i);
+				ChromoMap chromoMap = targetMapSet.getMap(j);
+				
+				genomes[i].chromosomes[j] = new Chromosome(chromoHeight, genomes[i].chromoWidth, genomes[i].xPosition,
+								currentY, j,chromoMap);
 				currentY += chromoUnit;
 			}
 			genomes[i].currentVerticalExtent = currentY;
@@ -232,7 +238,7 @@ public class Canvas2D extends JPanel
 					chromosomes.add(genomes[i].chromosomes[j]);
 				}
 				// now update the visible genome area
-				genomes[i].visibleGenomeArea.updateChromoAreaMap(rectangles, chromosomes);
+				genomes[i].visibleGenomeArea.makeChromoAreaMap(rectangles, chromosomes);
 			}
 			
 			// draw a zoomed in detail section only
@@ -464,13 +470,13 @@ public class Canvas2D extends JPanel
 		int xRight = (int) (canvasWidth * 0.95);
 		int spacer = 5;
 		
-		// left hand controls
-		drawTriangle(g2, xLeft, y + size - spacer, true, size);
-		drawTriangle(g2, xLeft, y + size + spacer, false, size);
-		
-		// right hand controls
-		drawTriangle(g2, xRight, y + size - spacer, true, size);
-		drawTriangle(g2, xRight, y + size + spacer, false, size);
+//		// left hand controls
+//		drawTriangle(g2, xLeft, y + size - spacer, true, size);
+//		drawTriangle(g2, xLeft, y + size + spacer, false, size);
+//		
+//		// right hand controls
+//		drawTriangle(g2, xRight, y + size - spacer, true, size);
+//		drawTriangle(g2, xRight, y + size + spacer, false, size);
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -530,8 +536,12 @@ public class Canvas2D extends JPanel
 		//check whether we have any selected chromosomes in our selected area
 		Rectangle selectedRect = new Rectangle(mousePressedX, mousePressedY, 
 						mouseReleasedX-mousePressedX, mouseReleasedY-mousePressedY);
-		selectedGenome.visibleGenomeArea.checkForIntersections(selectedRect);
 		
+		//get the map with intersecting rectangles
+		HashMap<Rectangle, Chromosome> selectedChromos = selectedGenome.visibleGenomeArea.getIntersectingChromos(selectedRect);
+		//update the existing one
+		selectedGenome.visibleGenomeArea.chromosomeAreas = selectedChromos;
+
 		// repaint the canvas
 		repaint();
 		

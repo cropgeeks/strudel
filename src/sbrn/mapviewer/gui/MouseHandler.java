@@ -6,11 +6,16 @@ import javax.swing.event.MouseInputListener;
 
 public class MouseHandler implements MouseInputListener
 {
+	WinMain winMain;
+	
+	public MouseHandler(WinMain winMain)
+	{
+		this.winMain = winMain;
+	}
 	
 	public void mouseClicked(MouseEvent e)
 	{
-		// TODO Auto-generated method stub
-		
+		winMain.mainCanvas.processClickZoomRequest(e.getX(), e.getY());
 	}
 	
 	public void mouseEntered(MouseEvent e)

@@ -40,6 +40,9 @@ public class GMapSet
 	// i.e. an x coordinate in pixels which denotes the left most edge of the genome drawn
 	public int xPosition;
 	
+	//these control whether we draw chromosome markers and  labels
+	public boolean paintMarkers = false;
+	public boolean paintLabels = false;
 	
 	// ====================================c'tors========================================
 	

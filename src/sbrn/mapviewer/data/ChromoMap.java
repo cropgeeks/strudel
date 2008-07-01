@@ -18,7 +18,7 @@ public class ChromoMap implements Iterable<Feature>
 	private MapSet owner;
 	
 	private LinkedList<Feature> features = new LinkedList<Feature>();
-	private Hashtable<String,Feature> lookup = new Hashtable<String,Feature>();
+	private Hashtable<String,Feature> nameLookup = new Hashtable<String,Feature>();
 	
 	private float start = Integer.MAX_VALUE, stop = Integer.MIN_VALUE;
 	
@@ -89,7 +89,7 @@ public class ChromoMap implements Iterable<Feature>
 	public void addFeature(Feature feature)
 	{ 
 		features.add(feature);
-		lookup.put(feature.getName(), feature);
+		nameLookup.put(feature.getName(), feature);
 		
 		// Find out if this feature has a greater start/stop position
 		if (feature.getStart() <= start)
@@ -115,7 +115,7 @@ public class ChromoMap implements Iterable<Feature>
 	 * @return the feature with the given name, or null if it is not found
 	 */
 	public Feature getFeature(String name)
-		{ return lookup.get(name); }
+		{ return nameLookup.get(name); }
 	
 	/**
 	 * Returns the number of features held by this chromosome map.
@@ -155,8 +155,12 @@ public class ChromoMap implements Iterable<Feature>
 	 */
 	public boolean containsFeature(String name)
 	{
-		return lookup.containsKey(name);
+		return nameLookup.containsKey(name);
 	}
 	
+	public LinkedList<Feature> getFeatureList()
+	{
+		return this.features;
+	}
 	
 }

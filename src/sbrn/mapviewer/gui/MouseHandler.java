@@ -15,7 +15,10 @@ public class MouseHandler implements MouseInputListener
 	
 	public void mouseClicked(MouseEvent e)
 	{
-		winMain.mainCanvas.processClickZoomRequest(e.getX(), e.getY());
+		if (e.getClickCount() == 1)
+		{
+			winMain.mainCanvas.processClickZoomRequest(e.getX(), e.getY());
+		}
 	}
 	
 	public void mouseEntered(MouseEvent e)

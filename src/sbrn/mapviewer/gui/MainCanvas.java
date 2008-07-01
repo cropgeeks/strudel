@@ -14,6 +14,9 @@ public class MainCanvas extends JPanel
 	
 	// ============================vars==================================
 	
+	//the parent component
+	WinMain winMain;
+	
 	// the map sets we need to draw
 	GMapSet targetGMapSet;
 	GMapSet referenceGMapSet;
@@ -31,26 +34,29 @@ public class MainCanvas extends JPanel
 	// the maximum nuber of chromos in any one of the genomes involved
 	int maxChromos;
 	
-	// space between chromosomes vertically
-	int chromoSpacing;
+	// space the chromosomes vertically by this fixed amount
+	int chromoSpacing = 15;
 	
 	// the height of a chromosome and a vertical spacer interval combined
 	int chromoUnit;
 	
-	// the total vertical distance in pixels on the canvas we want to allow to be drawn on
-	int totalVerticalSpace = -1;
-	
 	// a value for a minimum space in pixels between the topmost and bottommost chromosomes and the edge of the canvas
 	int minVertBuffer = 50;
 	
-	// a hashmap containing bounding rectangles of chromosomes as keys and GChromoMaps as values
-	// this is for looking up rectangles/chromosomes selected by the user by clicking on them
-	// HashMap<Rectangle, GChromoMap> chromoLookup;
+	// these variables determine where the genomes appear on the canvas on the x axis (scaled to 0-1)
+	// position is relative to frame size
+	float leftGenomeX = 0.35f;
+	float rightGenomeX = 0.65f;
+	
+	//threshold values for the zoom factor above which we want to display markers and labels
+	float thresholdMarkerPainting = 6;
+	float thresholdLabelPainting = 6;
 	
 	// ============================c'tors==================================
 	
-	public MainCanvas(MapSet targetMapset, MapSet referenceMapSet)
+	public MainCanvas(MapSet targetMapset, MapSet referenceMapSet,WinMain winMain)
 	{
+		this.winMain = winMain;
 		setUpGenomes(targetMapset, referenceMapSet);
 		setBackground(Color.black);
 	}
@@ -94,13 +100,10 @@ public class MainCanvas extends JPanel
 		canvasHeight = getHeight();
 		canvasWidth = getWidth();
 		
-		// work out what we can draw on vertically
-		totalVerticalSpace = canvasHeight - minVertBuffer * 2;
-		
 		// x position of genome 1 i.e. first column of chromos
-		targetGMapSet.xPosition = (int) (canvasWidth * 0.35);
+		targetGMapSet.xPosition = (int) (canvasWidth * leftGenomeX);
 		// x position of genome 2 (second column of chromos)
-		referenceGMapSet.xPosition = (int) (canvasWidth * 0.65);
+		referenceGMapSet.xPosition = (int) (canvasWidth * rightGenomeX);
 		
 		// work out the other coords accordingly:
 		// these are genome specific because we can have a different zoom factor for each genome
@@ -109,13 +112,11 @@ public class MainCanvas extends JPanel
 			// the combined height of a chromosome and the space below it extending to the next chromosome in the column
 			chromoUnit = canvasHeight / (maxChromos + 1); // adding 1 gives us a buffer space
 			
-			//zoom
+			// zoom
 			chromoUnit = (int) (chromoUnit * gMapSet.zoomFactor);
 			
 			// height of chromosomes
-			chromoHeight = (int) ((chromoUnit * 0.8));
-			// space between chromosomes vertically = remainder of whatever in the unit is not chromo
-			chromoSpacing = chromoUnit - chromoHeight;
+			chromoHeight = chromoUnit - chromoSpacing;
 			
 			// now work out the y positions for each chromosome in each genome
 			
@@ -136,19 +137,17 @@ public class MainCanvas extends JPanel
 				int totalY = gMapSet.numMaps * chromoUnit;
 				
 				// testing only: center the genome in the center of the canvas each time we zoom in
-				currentY = -((int) (totalY / 2)) + canvasHeight/2;
-				System.out.println("currentY = " + currentY);
+				currentY = -(totalY / 2) + canvasHeight / 2;
+				// System.out.println("currentY = " + currentY);
 			}
 			
-			// width of chromosomes
-			int chromoWidth = (int) (canvasWidth / 150);
-			// int chromoWidth = -1;
-			// if (gMapSet.zoomFactor == 1)
-			// chromoWidth = (int) (canvasWidth / 150);
-			// else
-			// chromoWidth = (int) ((canvasWidth / 150) * gMapSet.zoomFactor);
+			// width of chromosomes -- set this to a fixed fraction of the screen width initially
+			int chromoWidth = canvasWidth / 150;
+			// increase the width very slightly as the zoom factor increases -- log works best here
+			if (gMapSet.zoomFactor > 1)
+				chromoWidth = (int) (chromoWidth + (Math.log(gMapSet.zoomFactor)*3));
 			
-			System.out.println("current chromo width and height = " + chromoWidth + "," + chromoHeight);
+			// System.out.println("current chromo width and height = " + chromoWidth + "," + chromoHeight);
 			
 			// now paint the chromosomes
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
@@ -178,18 +177,34 @@ public class MainCanvas extends JPanel
 				
 				// increment the y position so we can draw the next one
 				currentY += chromoUnit;
-				
-				// System.out.println("coords for bounding rect of map " + gChromoMap.name + " = " + gChromoMap.boundingRectangle.getX() + "," + gChromoMap.boundingRectangle.getY() +
-				// "," + gChromoMap.boundingRectangle.getWidth() + "," + gChromoMap.boundingRectangle.getHeight());
-				// System.out.println("rectangle object is " + gChromoMap.boundingRectangle);
 			}
 		}
+	}
+	
+	// -----------------------------------------------------------------------------------------------------------------------------------
+	
+	public void processSliderZoomRequest(int zoomFactor, int genomeIndex)
+	{	
+		GMapSet selectedSet = gMapSetList.get(genomeIndex);
+		selectedSet.zoomFactor = zoomFactor;
+		if(zoomFactor > thresholdMarkerPainting)
+		{
+			selectedSet.paintMarkers = true;
+		}
+		else
+		{
+			selectedSet.paintMarkers = false;
+		}
 		
-		// if the lookup for the bounding rectangles has not been inited, do it now
-		// if (chromoLookup == null)
-		// {
-		// initChromoLookup();
-		// }
+		if(zoomFactor > thresholdLabelPainting)
+		{
+			selectedSet.paintLabels = true;
+		}
+		else
+		{
+			selectedSet.paintLabels = false;
+		}
+		repaint();
 	}
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------
@@ -201,7 +216,7 @@ public class MainCanvas extends JPanel
 		// check whether the point x,y lies within one of the bounding rectangles of our chromosomes
 		// for each chromosome in each genome
 		for (GMapSet gMapSet : gMapSetList)
-		{
+		{	
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
 			{
 				// check whether the hit falls within its current bounding rectangle
@@ -221,6 +236,19 @@ public class MainCanvas extends JPanel
 			// figure out the genome it belongs to and increase that genome's zoom factor
 			selectedMap.owningSet.zoomFactor = selectedMap.owningSet.zoomFactor * 2;
 			System.out.println("new zoom factor for genome " + selectedMap.owningSet.name + " = " + selectedMap.owningSet.zoomFactor);
+			
+			//check whether we need to display markers and labels
+			if(selectedMap.owningSet.zoomFactor > thresholdMarkerPainting)
+			{
+				selectedMap.owningSet.paintMarkers = true;
+			}
+			if(selectedMap.owningSet.zoomFactor > thresholdLabelPainting)
+			{
+				selectedMap.owningSet.paintLabels = true;
+			}
+			
+			//make sure the zoom factor currently displayed is up to date
+			winMain.zoomControlPanel.updateZoomInfo();
 			
 			// repaint the canvas
 			repaint();

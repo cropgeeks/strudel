@@ -1,5 +1,7 @@
 package sbrn.mapviewer.gui;
 
+import javax.swing.*;
+
 public class MapViewer
 {
 	
@@ -7,7 +9,17 @@ public class MapViewer
 	
 	public static void main(String[] args)
 	{
-		winMain = new WinMain();
-		winMain.setVisible(true);
+		try
+		{
+			// Set System L&F
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			
+			winMain = new WinMain();
+			winMain.setVisible(true);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 }

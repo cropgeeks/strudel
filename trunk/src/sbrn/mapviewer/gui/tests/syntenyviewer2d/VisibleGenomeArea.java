@@ -36,8 +36,8 @@ public class VisibleGenomeArea
 			ChromoMap chromoMap = chromosome.chromoMap;
 			
 			//we now need to work out how the drawn region relates to an actual region on the chromosome
-			int start = ;
-			int end;
+			int start = -1;
+			int end = -1;
 			
 			MapArea mapArea = new MapArea(chromosome, start,  end, chromoMap);
 		}

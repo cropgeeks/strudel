@@ -13,6 +13,8 @@ public class WinMain extends JFrame
 	//this is where we hold the genome data
 	public DataContainer dataContainer;
 	
+	public ZoomControlPanel zoomControlPanel;
+	
 	public WinMain()
 	{
 		//load the data for testing
@@ -32,11 +34,18 @@ public class WinMain extends JFrame
 	
 	private void setupComponents()
 	{
-		mainCanvas = new MainCanvas(dataContainer.targetMapset, dataContainer.referenceMapset);
+		//this is the main canvas which we render the genomes on
+		mainCanvas = new MainCanvas(dataContainer.targetMapset, dataContainer.referenceMapset, this);
 		MouseHandler mouseHandler = new MouseHandler(this);
 		mainCanvas.addMouseListener(mouseHandler);
 		mainCanvas.addMouseMotionListener(mouseHandler);
-		add(mainCanvas, BorderLayout.NORTH);
+		add(mainCanvas, BorderLayout.CENTER);
 		mainCanvas.setPreferredSize(new Dimension(800, 600));
+		
+		//the panel with the zoom control sliders
+		zoomControlPanel = new ZoomControlPanel(this);
+		//zoomControlPanel.setPreferredSize(new Dimension(800, 100));
+		add(zoomControlPanel,BorderLayout.SOUTH);
+
 	}
 }

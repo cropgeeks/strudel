@@ -54,7 +54,7 @@ public class Canvas2D extends JPanel
 	Genome[] genomes;
 	
 	// this link set holds the all the possible links between all chromos in the target set and all chromos in the reference set
-	private static LinkSet links = null;
+	LinkSet links = null;
 	
 	// the frame we are displaying the canvas in
 	MapViewerFrame frame;
@@ -378,8 +378,7 @@ public class Canvas2D extends JPanel
 		{
 			colours[i] = Color.getHSBColor(currentHue, 1, 1);
 			currentHue += increment;
-		}
-		
+		}	
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------

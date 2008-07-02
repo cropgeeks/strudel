@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.*;
 
 import sbrn.mapviewer.data.*;
+import sbrn.mapviewer.gui.WinMain;
 
 public class GChromoMap
 {
@@ -23,7 +24,7 @@ public class GChromoMap
 	
 	// the index of the chromosome in the genome
 	// starts at 1
-	int index;
+	public int index;
 	
 	// the owning map set
 	public GMapSet owningSet;
@@ -38,6 +39,9 @@ public class GChromoMap
 	// arrays with Feature names and positions for fast access during drawing operations
 	String[] featureNames;
 	float[] featurePositions;
+	
+	// indicates whether this map or part thereof is currently drawn on the canvas
+	public boolean isShowingOnCanvas = true;
 	
 	// ============================c'tors==================================
 	
@@ -74,12 +78,26 @@ public class GChromoMap
 		// draw second half of chromosome
 		GradientPaint whiteGradient = new GradientPaint(width, 0, offWhite, width * 2, 0, colour);
 		g2.setPaint(whiteGradient);
-		g2.fillRect(width, 0, width, height);
+		g2.fillRect(width, 0, width+1, height);
 		
 		// draw the index of the map in the genome
-		g2.drawString(String.valueOf(index + 1), -20, 20);
+		int fontSize = WinMain.mainCanvas.getHeight()/70;
+		Font mapLabelFont = new Font("Arial", Font.BOLD, fontSize);
+		g2.setFont(mapLabelFont);
+		g2.setColor(Color.WHITE);
 		
-		if (owningSet.paintMarkers)
+		// decide where to place the label
+		// on the left hand genome we want the label on the left, right hand genome on the right
+		if (!owningSet.isTargetGenome)
+		{
+			g2.drawString(String.valueOf(index + 1), width*2 + 20, height/2);
+		}
+		else
+		{				
+			g2.drawString(String.valueOf(index + 1), -20, height/2);
+		}
+		
+		if (owningSet.paintMarkers && isShowingOnCanvas)
 		{
 			drawFeatures(g2);
 		}
@@ -90,10 +108,15 @@ public class GChromoMap
 	// draw the markers and labels
 	private void drawFeatures(Graphics2D g2)
 	{
+		// set font to smaller font size
+		g2.setFont(new Font("Arial", Font.PLAIN, 12));
 		g2.setColor(Color.GREEN);
+		
+		FontMetrics fm = g2.getFontMetrics();
 		
 		float mapEnd = chromoMap.getStop();
 		float scalingFactor = height / mapEnd;
+		int labelSpacer = 2;
 		
 		for (int i = 0; i < featurePositions.length; i++)
 		{
@@ -111,45 +134,19 @@ public class GChromoMap
 			
 			if (owningSet.paintLabels)
 			{
-				g2.drawString(featureNames[i], width * 2 + 5, (int) yPos + 5);
+				// decide where to place the label
+				// on the left hand genome we want the label on the left, right hand genome on the right
+				if (!owningSet.isTargetGenome)
+				{
+					g2.drawString(featureNames[i], width * 2 + labelSpacer, (int) yPos + 5);
+				}
+				else
+				{
+					int stringWidth = fm.stringWidth(featureNames[i]);
+					g2.drawString(featureNames[i], -stringWidth - labelSpacer, (int) yPos + 5);
+				}
 			}
 		}
-		
-//		Iterator iter = chromoMap.iterator();
-//		float mapEnd = chromoMap.getStop();
-//		float scalingFactor = height / mapEnd;
-//		System.out.println("====================================");
-//		System.out.println("drawing features for chromo " + name + " -- total " + chromoMap.countFeatures());
-//		while (iter.hasNext())
-//		{
-//			Feature f = (Feature) iter.next();
-//			String featureName = f.getName();
-//			
-//			// now work out where we need to draw the line for the feature
-//			float featStart = f.getStart();
-//			System.out.println("featStart = " + featStart);
-//			System.out.println("mapEnd = " + mapEnd);
-//			System.out.println("feature name = " + featureName);
-//			float yPos;
-//			if (featStart == 0.0f)
-//			{
-//				yPos = 0.0f;
-//			}
-//			else
-//			{
-//				yPos = featStart * scalingFactor;
-//				System.out.println("height = " + height);
-//				System.out.println("yPos = " + yPos);
-//			}
-//			
-//			// draw a line for the marker
-//			g2.drawLine(0, (int) yPos, width * 2, (int) yPos);
-//			
-//			if (owningSet.paintLabels)
-//			{
-//				g2.drawString(featureName, width * 2 + 5, (int) yPos + 5);
-//			}
-//		}
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------
@@ -163,7 +160,7 @@ public class GChromoMap
 		
 		LinkedList<Feature> featureList = chromoMap.getFeatureList();
 		for (int i = 0; i < featureList.size(); i++)
-		{		
+		{
 			Feature f = featureList.get(i);
 			featureNames[i] = f.getName();
 			featurePositions[i] = f.getStart();

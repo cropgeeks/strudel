@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 public class WinMain extends JFrame
 {
 	//this is where we paint the genomes
-	public MainCanvas mainCanvas;
+	public static MainCanvas mainCanvas;
 	
 	//this is where we hold the genome data
 	public DataContainer dataContainer;
@@ -30,12 +30,13 @@ public class WinMain extends JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack();
 		setLocationRelativeTo(null);
+		//setExtendedState(this.MAXIMIZED_BOTH);
 	}
 	
 	private void setupComponents()
 	{
 		//this is the main canvas which we render the genomes on
-		mainCanvas = new MainCanvas(dataContainer.targetMapset, dataContainer.referenceMapset, this);
+		mainCanvas = new MainCanvas(dataContainer.targetMapset, dataContainer.referenceMapset, this, dataContainer.links);
 		MouseHandler mouseHandler = new MouseHandler(this);
 		mainCanvas.addMouseListener(mouseHandler);
 		mainCanvas.addMouseMotionListener(mouseHandler);

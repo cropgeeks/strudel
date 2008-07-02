@@ -44,14 +44,17 @@ public class GMapSet
 	public boolean paintMarkers = false;
 	public boolean paintLabels = false;
 	
+	public boolean isTargetGenome= false;
+	
 	// ====================================c'tors========================================
 	
-	public GMapSet(Color mapSetColour, MapSet mapSet, int type, String name)
+	public GMapSet(Color mapSetColour, MapSet mapSet, int type, String name,boolean isTargetGenome)
 	{
 		this.colour = mapSetColour;
 		this.mapSet = mapSet;
 		this.type = type;
 		this.name = name;
+		this.isTargetGenome = isTargetGenome;
 		numMaps = mapSet.size();
 		
 		// init the list of maps

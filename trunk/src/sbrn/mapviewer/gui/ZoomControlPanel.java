@@ -91,8 +91,8 @@ public class ZoomControlPanel extends JPanel implements ChangeListener
 	public void stateChanged(ChangeEvent e)
 	{
 		JSlider source = (JSlider) e.getSource();
-		if (!source.getValueIsAdjusting())
-		{
+//		if (!source.getValueIsAdjusting())
+//		{
 			if (source.equals(leftZoomSlider))
 			{
 				winMain.mainCanvas.processSliderZoomRequest(source.getValue(), 0);
@@ -104,7 +104,7 @@ public class ZoomControlPanel extends JPanel implements ChangeListener
 					
 				}
 			updateZoomInfo();
-		}
+//		}
 	}
 	
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.*;
 
 import sbrn.mapviewer.data.*;
+import sbrn.mapviewer.gui.Scroller;
 
 /**
  * Class representing a genome graphically. Holds a list of GChromoMap objects, which are graphical representations of chromosomes.
@@ -44,17 +45,29 @@ public class GMapSet
 	public boolean paintMarkers = false;
 	public boolean paintLabels = false;
 	
+	//true if this is the target genome, false if it the reference genome
 	public boolean isTargetGenome= false;
+	
+	//the percent offset from the top of the genome that represents the topmost point of the genome visible on the canvas
+	public int drawingOffset = 0;
+	
+	//the scrollbar which controls the viewable area in this map set
+	public Scroller scroller;
+	
+	public int centerPoint = 0;
+	
+	public int totalY;
 	
 	// ====================================c'tors========================================
 	
-	public GMapSet(Color mapSetColour, MapSet mapSet, int type, String name,boolean isTargetGenome)
+	public GMapSet(Color mapSetColour, MapSet mapSet, int type, String name,boolean isTargetGenome,Scroller scroller)
 	{
 		this.colour = mapSetColour;
 		this.mapSet = mapSet;
 		this.type = type;
 		this.name = name;
 		this.isTargetGenome = isTargetGenome;
+		this.scroller = scroller;
 		numMaps = mapSet.size();
 		
 		// init the list of maps

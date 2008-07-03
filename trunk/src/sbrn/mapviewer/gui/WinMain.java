@@ -15,6 +15,10 @@ public class WinMain extends JFrame
 	
 	public ZoomControlPanel zoomControlPanel;
 	
+	//scroll bars for the canvas
+	Scroller leftCanvasScroller;
+	Scroller rightCanvasScroller;
+	
 	public WinMain()
 	{
 		//load the data for testing
@@ -35,6 +39,12 @@ public class WinMain extends JFrame
 	
 	private void setupComponents()
 	{
+		//scroll bars for the canvas
+		leftCanvasScroller = new Scroller(this);
+		rightCanvasScroller = new Scroller(this);
+		add(leftCanvasScroller,BorderLayout.WEST);
+		add(rightCanvasScroller,BorderLayout.EAST);
+		
 		//this is the main canvas which we render the genomes on
 		mainCanvas = new MainCanvas(dataContainer.targetMapset, dataContainer.referenceMapset, this, dataContainer.links);
 		MouseHandler mouseHandler = new MouseHandler(this);

@@ -16,7 +16,7 @@ public class Utils
 		float currentHue = 0;
 		for (int i = 0; i < colours.length; i++)
 		{
-			colours[i] = Color.getHSBColor(currentHue, 1, 1);
+			colours[i] = Color.getHSBColor(currentHue, 0.75f, 0.75f);
 			currentHue += increment;
 		}
 		return colours;

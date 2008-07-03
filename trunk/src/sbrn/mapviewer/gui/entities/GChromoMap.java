@@ -78,23 +78,39 @@ public class GChromoMap
 		// draw second half of chromosome
 		GradientPaint whiteGradient = new GradientPaint(width, 0, offWhite, width * 2, 0, colour);
 		g2.setPaint(whiteGradient);
-		g2.fillRect(width, 0, width+1, height);
+		g2.fillRect(width, 0, width + 1, height);
 		
 		// draw the index of the map in the genome
-		int fontSize = WinMain.mainCanvas.getHeight()/70;
+		int fontSize = WinMain.mainCanvas.getHeight() / 70;
 		Font mapLabelFont = new Font("Arial", Font.BOLD, fontSize);
 		g2.setFont(mapLabelFont);
 		g2.setColor(Color.WHITE);
 		
-		// decide where to place the label
+		// decide where to place the label with the chromosome number
 		// on the left hand genome we want the label on the left, right hand genome on the right
+		// reference genome (right):
 		if (!owningSet.isTargetGenome)
 		{
-			g2.drawString(String.valueOf(index + 1), width*2 + 20, height/2);
+			if (owningSet.paintLabels)
+			{
+				g2.drawString(String.valueOf(index + 1), width * 10, height / 2);
+			}
+			else
+			{
+				g2.drawString(String.valueOf(index + 1), width * 2 + 20, height / 2);
+			}
 		}
+		// target genome (left):
 		else
-		{				
-			g2.drawString(String.valueOf(index + 1), -20, height/2);
+		{
+			if (owningSet.paintLabels)
+			{
+				g2.drawString(String.valueOf(index + 1), -width*10, height / 2);
+			}
+			else
+			{
+				g2.drawString(String.valueOf(index + 1), -20, height / 2);
+			}
 		}
 		
 		if (owningSet.paintMarkers && isShowingOnCanvas)
@@ -109,7 +125,7 @@ public class GChromoMap
 	private void drawFeatures(Graphics2D g2)
 	{
 		// set font to smaller font size
-		g2.setFont(new Font("Arial", Font.PLAIN, 12));
+		g2.setFont(new Font("Arial", Font.PLAIN, 10));
 		g2.setColor(Color.GREEN);
 		
 		FontMetrics fm = g2.getFontMetrics();

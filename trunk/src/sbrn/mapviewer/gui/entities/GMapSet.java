@@ -60,7 +60,7 @@ public class GMapSet
 	
 	// ====================================c'tors========================================
 	
-	public GMapSet(Color mapSetColour, MapSet mapSet, int type, String name,boolean isTargetGenome,Scroller scroller)
+	public GMapSet(Color mapSetColour, MapSet mapSet, int type, String name,boolean isTargetGenome,Scroller scroller, Hashtable<ChromoMap, GChromoMap> gMapLookup)
 	{
 		this.colour = mapSetColour;
 		this.mapSet = mapSet;
@@ -71,13 +71,13 @@ public class GMapSet
 		numMaps = mapSet.size();
 		
 		// init the list of maps
-		initialise();
+		initialise(gMapLookup);
 	}
 	
 	// ========================================methods==================================
 	
 	// init the list of maps
-	public void initialise()
+	public void initialise(Hashtable<ChromoMap, GChromoMap> gMapLookup)
 	{
 		gMaps = new LinkedList<GChromoMap>();
 		
@@ -86,6 +86,8 @@ public class GMapSet
 			ChromoMap cMap = (ChromoMap) mapSet.getMaps().get(i);
 			GChromoMap gMap = new GChromoMap(colour, cMap.getName(), i, this);
 			gMaps.add(gMap);
+			
+			gMapLookup.put(cMap, gMap);
 		}
 	}
 	

@@ -31,8 +31,8 @@ public class DataContainer
 		try
 		{
 			// data files - hard coded for now
-			System.out.println("loading data");
-			System.out.println("working dir = " + System.getProperty("user.dir"));
+//			System.out.println("loading data");
+//			System.out.println("working dir = " + System.getProperty("user.dir"));
 			
 			String workingDir = System.getProperty("user.dir");
 			String fileSep = System.getProperty("file.separator");
@@ -44,7 +44,7 @@ public class DataContainer
 			{ new File(workingDir + fileSep + "data/new_owb_edited.maps"),
 							new File(workingDir + fileSep + "data/new_mxb_edited.maps") };
 			
-			System.out.println("referenceData = " + referenceData);
+//			System.out.println("referenceData = " + referenceData);
 			
 			// load data
 			DataLoader dLoader = new DataLoader();

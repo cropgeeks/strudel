@@ -37,9 +37,14 @@ public class GChromoMap
 	ChromoMap chromoMap;
 	
 	// arrays with Feature names and positions for fast access during drawing operations
-	String[] featureNames;
-	float[] featurePositions;
+	String[] allFeatureNames;
+	float[] allFeaturePositions;
 	
+	//these are corresponding arrays and lists which only pertain to the features which are linked to from somewhere
+	public LinkedList<Feature> linkedFeatureList = new LinkedList<Feature>();
+	String[] linkedFeatureNames;
+	float[] linkedFeaturePositions;
+
 	// indicates whether this map or part thereof is currently drawn on the canvas
 	public boolean isShowingOnCanvas = true;
 	
@@ -81,7 +86,7 @@ public class GChromoMap
 		g2.fillRect(width, 0, width + 1, height);
 		
 		// draw the index of the map in the genome
-		int fontSize = WinMain.mainCanvas.getHeight() / 70;
+		int fontSize = WinMain.mainCanvas.getHeight() / 40;
 		Font mapLabelFont = new Font("Arial", Font.BOLD, fontSize);
 		g2.setFont(mapLabelFont);
 		g2.setColor(Color.WHITE);
@@ -134,16 +139,16 @@ public class GChromoMap
 		float scalingFactor = height / mapEnd;
 		int labelSpacer = 2;
 		
-		for (int i = 0; i < featurePositions.length; i++)
+		for (int i = 0; i < linkedFeaturePositions.length; i++)
 		{
 			float yPos;
-			if (featurePositions[i] == 0.0f)
+			if (linkedFeaturePositions[i] == 0.0f)
 			{
 				yPos = 0.0f;
 			}
 			else
 			{
-				yPos = featurePositions[i] * scalingFactor;
+				yPos = linkedFeaturePositions[i] * scalingFactor;
 			}
 			// draw a line for the marker
 			g2.drawLine(0, (int) yPos, width * 2, (int) yPos);
@@ -154,12 +159,12 @@ public class GChromoMap
 				// on the left hand genome we want the label on the left, right hand genome on the right
 				if (!owningSet.isTargetGenome)
 				{
-					g2.drawString(featureNames[i], width * 2 + labelSpacer, (int) yPos + 5);
+					g2.drawString(linkedFeatureNames[i], width * 2 + labelSpacer, (int) yPos + 5);
 				}
 				else
 				{
-					int stringWidth = fm.stringWidth(featureNames[i]);
-					g2.drawString(featureNames[i], -stringWidth - labelSpacer, (int) yPos + 5);
+					int stringWidth = fm.stringWidth(linkedFeatureNames[i]);
+					g2.drawString(linkedFeatureNames[i], -stringWidth - labelSpacer, (int) yPos + 5);
 				}
 			}
 		}
@@ -170,17 +175,36 @@ public class GChromoMap
 	// initialises the arrays we need for fast drawing
 	private void initArrays()
 	{
+		//init the arrays that hold ALL the features for this map
 		int numFeatures = chromoMap.countFeatures();
-		featureNames = new String[numFeatures];
-		featurePositions = new float[numFeatures];
-		
+		allFeatureNames = new String[numFeatures];
+		allFeaturePositions = new float[numFeatures];		
 		LinkedList<Feature> featureList = chromoMap.getFeatureList();
 		for (int i = 0; i < featureList.size(); i++)
 		{
 			Feature f = featureList.get(i);
-			featureNames[i] = f.getName();
-			featurePositions[i] = f.getStart();
+			allFeatureNames[i] = f.getName();
+			allFeaturePositions[i] = f.getStart();
 		}
 	}
+	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------
-}
+	
+	public void initLinkedFeatureArrays()
+	{
+		
+		//init the arrays that hold only the linked to subset of features
+		int numLinkedToFeatures = linkedFeatureList.size();
+		linkedFeatureNames = new String[numLinkedToFeatures];
+		linkedFeaturePositions = new float[numLinkedToFeatures];
+		for (int i = 0; i <linkedFeatureList.size(); i++)
+		{
+			Feature f = linkedFeatureList.get(i);
+			linkedFeatureNames[i] = f.getName();
+			linkedFeaturePositions[i] = f.getStart();
+		}
+	}
+	
+	// ----------------------------------------------------------------------------------------------------------------------------------------------
+	
+}//end class

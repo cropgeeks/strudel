@@ -50,6 +50,7 @@ public class WinMain extends JFrame
 		MouseHandler mouseHandler = new MouseHandler(this);
 		mainCanvas.addMouseListener(mouseHandler);
 		mainCanvas.addMouseMotionListener(mouseHandler);
+		mainCanvas.addMouseWheelListener(mouseHandler);
 		add(mainCanvas, BorderLayout.CENTER);
 		mainCanvas.setPreferredSize(new Dimension(800, 600));
 		

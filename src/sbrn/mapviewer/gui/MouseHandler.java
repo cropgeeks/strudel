@@ -1,17 +1,16 @@
 package sbrn.mapviewer.gui;
 
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 
 import javax.swing.event.MouseInputListener;
 
 import sbrn.mapviewer.gui.entities.GMapSet;
 
-public class MouseHandler implements MouseInputListener
+public class MouseHandler implements MouseInputListener, MouseWheelListener
 {
 	WinMain winMain;
 	
 	int mouseDragPosY = 0;
-
 	
 	public MouseHandler(WinMain winMain)
 	{
@@ -25,6 +24,11 @@ public class MouseHandler implements MouseInputListener
 			System.out.println("mouse clicked");
 			winMain.mainCanvas.processLinkDisplayRequest(e.getX(), e.getY());
 		}
+		else
+			if (e.getClickCount() == 2)
+			{
+				winMain.mainCanvas.processClickZoomRequest(e.getX(), e.getY());
+			}
 	}
 	
 	public void mouseEntered(MouseEvent e)
@@ -52,49 +56,76 @@ public class MouseHandler implements MouseInputListener
 	
 	public void mouseDragged(MouseEvent e)
 	{
-		//figure out whether the user is zooming the left or right genome
-		//simply divide the canvas in two halves for this and figure out where on the x axis the hit has occurred
-		GMapSet selectedSet = null;
-		int index = -1;
-		if(e.getX() < winMain.mainCanvas.getWidth()/2)
-		{
-			//left hand side hit
-			selectedSet = winMain.mainCanvas.targetGMapSet;
-			index = 0;
-		}
-		else
-		{
-			//right hand side hit
-			selectedSet = winMain.mainCanvas.referenceGMapSet;
-			index = 1;
-		}
+		// figure out whether the user is zooming the left or right genome
+		// simply divide the canvas in two halves for this and figure out where on the x axis the hit has occurred
+		int index = getSelectedSet(e);
+		GMapSet selectedSet = winMain.mainCanvas.gMapSetList.get(index);
 		
-		
-		//mouse is getting dragged down -- zoom in
+		// mouse is getting dragged down -- zoom in
 		if (e.getY() > mouseDragPosY)
 		{
-			float newZoomFactor = selectedSet.zoomFactor *1.1f;
-			//don't let the zoom factor fall below 1
-			if(newZoomFactor < 1)
+			float newZoomFactor = selectedSet.zoomFactor * 1.1f;
+			// don't let the zoom factor fall below 1
+			if (newZoomFactor < 1)
 				newZoomFactor = 1;
 			winMain.mainCanvas.processSliderZoomRequest(newZoomFactor, index);
 		}
-		//mouse is getting dragged up -- zoom out
-		if(e.getY() < mouseDragPosY)
+		// mouse is getting dragged up -- zoom out
+		if (e.getY() < mouseDragPosY)
 		{
-			float newZoomFactor = selectedSet.zoomFactor *0.9f;
-			//don't let the zoom factor fall below 1
-			if(newZoomFactor < 1)
+			float newZoomFactor = selectedSet.zoomFactor * 0.9f;
+			// don't let the zoom factor fall below 1
+			if (newZoomFactor < 1)
 				newZoomFactor = 1;
 			winMain.mainCanvas.processSliderZoomRequest(newZoomFactor, index);
 		}
-		mouseDragPosY = e.getY();		
+		mouseDragPosY = e.getY();
 	}
 	
 	public void mouseMoved(MouseEvent e)
 	{
 		// TODO Auto-generated method stub
 		
+	}
+	
+	//mouse scrolling of canvas
+	public void mouseWheelMoved(MouseWheelEvent e)
+	{
+		// figure out whether the user is zooming the left or right genome
+		// simply divide the canvas in two halves for this and figure out where on the x axis the hit has occurred
+		int index = getSelectedSet(e);
+		GMapSet selectedSet = winMain.mainCanvas.gMapSetList.get(index);
+
+		int notches = e.getWheelRotation();
+		int differential = 0;
+		if (notches < 0)
+		{
+			differential = 1;
+		}
+		else
+		{
+			differential = -1;
+		}
+		
+		winMain.mainCanvas.moveGenomeViewPort(selectedSet, selectedSet.centerPoint + differential);
+	}
+	
+	private int getSelectedSet(MouseEvent e)
+	{
+		// figure out whether the user is zooming the left or right genome
+		// simply divide the canvas in two halves for this and figure out where on the x axis the hit has occurred
+		int index  = -1;
+		if (e.getX() < winMain.mainCanvas.getWidth() / 2)
+		{
+			// left hand side hit
+			index = 0;
+		}
+		else
+		{
+			// right hand side hit
+			index = 1;
+		}
+		return index;
 	}
 	
 }

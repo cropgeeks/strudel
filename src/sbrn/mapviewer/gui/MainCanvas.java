@@ -27,9 +27,7 @@ public class MainCanvas extends JPanel
 	// size of the frame
 	int canvasHeight;
 	int canvasWidth;
-	
-	// size of the chromos
-	int chromoHeight;
+
 	
 	// the maximum nuber of chromos in any one of the genomes involved
 	int maxChromos;
@@ -49,8 +47,8 @@ public class MainCanvas extends JPanel
 	float rightGenomeX = 0.7f;
 	
 	// threshold values for the zoom factor above which we want to display markers and labels
-	float thresholdMarkerPainting = 8;
-	float thresholdLabelPainting = 1000;
+	float thresholdMarkerPainting = 3;
+	float thresholdLabelPainting = 3;
 	
 	// index of a chromosome in the target map set that we want to see links from
 	int selectedChromoIndex = -1;
@@ -58,7 +56,10 @@ public class MainCanvas extends JPanel
 	// a hashtable that contains chromomaps from the target genome as keys and LinkedList objects as values which in
 	// turn hold a list of LinkSet objects each, where each Linkset represents the links between the chromomap and a chromomap in the reference
 	// genome
-	Hashtable<ChromoMap, LinkedList> linkSetLookup;
+	Hashtable<ChromoMap, LinkedList<LinkSet>> linkSetLookup;
+	
+	// a hashtable that holds ChromoMap objects as keys and their corresponding GChromoMap objects as values
+	Hashtable<ChromoMap, GChromoMap> gMapLookup = new Hashtable<ChromoMap, GChromoMap>();
 	
 	// this link set holds the all the possible links between all chromos in the target set and all chromos in the reference set
 	private static LinkSet links = null;
@@ -72,7 +73,6 @@ public class MainCanvas extends JPanel
 		setUpGenomes(targetMapset, referenceMapSet);
 		makeLinkSubSets();
 		setBackground(Color.black);
-
 	}
 	
 	// ============================methods==================================
@@ -82,8 +82,8 @@ public class MainCanvas extends JPanel
 	{
 		// make new GMapSets from the map sets passed in
 		// TODO remove hardcoding
-		targetGMapSet = new GMapSet(Color.RED, targetMapset, Constants.TARGET_GENOME, "Barley", true, winMain.leftCanvasScroller);
-		referenceGMapSet = new GMapSet(Color.BLUE, referenceMapSet, Constants.REFERENCE_GENOME, "Rice", false, winMain.rightCanvasScroller);
+		targetGMapSet = new GMapSet(Color.RED, targetMapset, Constants.TARGET_GENOME, "Barley", true, winMain.leftCanvasScroller, gMapLookup);
+		referenceGMapSet = new GMapSet(Color.BLUE, referenceMapSet, Constants.REFERENCE_GENOME, "Rice", false, winMain.rightCanvasScroller, gMapLookup);
 		
 		// add the genomes to the list
 		gMapSetList = new LinkedList<GMapSet>();
@@ -100,7 +100,7 @@ public class MainCanvas extends JPanel
 		{
 			maxChromos = referenceGMapSet.numMaps;
 		}
-
+		
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------------------
@@ -137,7 +137,7 @@ public class MainCanvas extends JPanel
 			chromoUnit = (int) (chromoUnit * gMapSet.zoomFactor);
 			
 			// height of chromosomes
-			chromoHeight = chromoUnit - chromoSpacing;
+			int chromoHeight = chromoUnit - chromoSpacing;
 			
 			// now need to work out where we start painting
 			// this can be a negative value
@@ -152,24 +152,24 @@ public class MainCanvas extends JPanel
 			// currentY is the y position at which we start drawing the genome, chromo by chromo, top to bottom
 			// this may be off the visible canvas in a northerly direction
 			int currentY = 0;
-
+			
 			// this is what we do at a zoom factor of 1 (e.g. at startup)
 			if (gMapSet.zoomFactor == 1)
 			{
 				// we want to fit all the chromosomes on at a zoom factor of 1 so we only use the top spacer when this is the case
-				currentY = spacer;	
-
-				//set the scrollers to the correct position
+				currentY = spacer;
+				
+				// set the scrollers to the correct position
 				gMapSet.scroller.setValue(50);
 				gMapSet.centerPoint = 50;
 			}
 			// this is what we do when we are zoomed in
 			else
 			{
-				//need to convert the stored value for the offset (%) to pixels
-				//this is because we may have a different zoomfactor each time we draw
+				// need to convert the stored value for the offset (%) to pixels
+				// this is because we may have a different zoomfactor each time we draw
 				int offset = 50 - gMapSet.centerPoint;
-				int offsetPixels = (int) ((offset/100.0f) * gMapSet.totalY);
+				int offsetPixels = (int) ((offset / 100.0f) * gMapSet.totalY);
 				
 				// start drawing at minus half the total height of the entire genome plus half the canvasheight and
 				// plus the offset which can be positive or negative
@@ -177,7 +177,7 @@ public class MainCanvas extends JPanel
 				// if the scrollbar has not been touched the offset will be zero
 				currentY = -(gMapSet.totalY / 2) + canvasHeight / 2 + offsetPixels;
 			}
-
+			
 			// width of chromosomes -- set this to a fixed fraction of the screen width for now
 			int chromoWidth = canvasWidth / 120;
 			
@@ -303,6 +303,7 @@ public class MainCanvas extends JPanel
 	public void processClickZoomRequest(int x, int y)
 	{
 		GChromoMap selectedMap = null;
+		GMapSet selectedSet = null;
 		
 		// check whether the point x,y lies within one of the bounding rectangles of our chromosomes
 		// for each chromosome in each genome
@@ -314,6 +315,7 @@ public class MainCanvas extends JPanel
 				if (gChromoMap.boundingRectangle.contains(x, y))
 				{
 					selectedMap = gChromoMap;
+					selectedSet = gMapSet;
 					break;
 				}
 			}
@@ -324,22 +326,51 @@ public class MainCanvas extends JPanel
 		{
 			
 			// set the selected chromo index if the selected chromo is in the target map set
-			if (selectedMap.owningSet.equals(gMapSetList.get(0)))
+			if (selectedSet.equals(gMapSetList.get(0)))
 			{
 				this.selectedChromoIndex = selectedMap.index;
 			}
 			
-			// figure out the genome it belongs to and increase that genome's zoom factor
-			selectedMap.owningSet.zoomFactor = selectedMap.owningSet.zoomFactor * 2;
+			
+			
+			
+			
+			
+			// figure out the genome it belongs to and increase that genome's zoom factor so that we can just fit an entire 
+			selectedSet.zoomFactor = maxChromos;
 
+			// update the centerpoint to the new percentage
+			selectedSet.centerPoint = 100/(selectedSet.numMaps) * (selectedSet.gMaps.indexOf(selectedMap));
+			System.out.println("selectedSet.centerPoint uncorrected = "+ selectedSet.centerPoint );
+			
+			//convert half the canvas height to a percentage of the total and add this
+			int combinedSpacers = chromoSpacing*selectedSet.numMaps-1;
+			int newTotalY = ((selectedSet.totalY - combinedSpacers)*maxChromos) + combinedSpacers;
+			
+			int halfCanvasHeightPercent = (int) (((float)(getHeight()/2)/newTotalY) * 100);
+			//int halfChromoHeightPercent = (int) (((float)selectedSet.gMaps.get(0).height/newTotalY) * 100);
+			
+			selectedSet.centerPoint = selectedSet.centerPoint + halfCanvasHeightPercent;
+			
+			selectedSet.scroller.setValue(selectedSet.centerPoint);
+			
+			System.out.println("getHeight() = " + getHeight());
+			System.out.println("newTotalY = "+newTotalY);
+			System.out.println("halfCanvasHeightPercent =" + halfCanvasHeightPercent);
+			System.out.println("selectedSet.centerPoint = "+ selectedSet.centerPoint );
+			
+			
+			
+			
+			
 			// check whether we need to display markers and labels
-			if (selectedMap.owningSet.zoomFactor > thresholdMarkerPainting && selectedMap.isShowingOnCanvas)
+			if (selectedSet.zoomFactor > thresholdMarkerPainting && selectedMap.isShowingOnCanvas)
 			{
-				selectedMap.owningSet.paintMarkers = true;
+				selectedSet.paintMarkers = true;
 			}
-			if (selectedMap.owningSet.zoomFactor > thresholdLabelPainting && selectedMap.isShowingOnCanvas)
+			if (selectedSet.zoomFactor > thresholdLabelPainting && selectedMap.isShowingOnCanvas)
 			{
-				selectedMap.owningSet.paintLabels = true;
+				selectedSet.paintLabels = true;
 			}
 			
 			// make sure the zoom factor currently displayed is up to date
@@ -437,7 +468,7 @@ public class MainCanvas extends JPanel
 	 */
 	private void makeLinkSubSets()
 	{
-		linkSetLookup = new Hashtable<ChromoMap, LinkedList>();
+		linkSetLookup = new Hashtable<ChromoMap, LinkedList<LinkSet>>();
 		
 		MapSet targetMapSet = links.getMapSets().get(0);
 		MapSet referenceMapSet = links.getMapSets().get(1);
@@ -459,6 +490,50 @@ public class MainCanvas extends JPanel
 			// then add the list to the hashtable
 			linkSetLookup.put(targetMap, linkSets);
 		}
+		
+		// now set up the lists of linked-to features for each of the gchromomaps
+		initLinkedFeatureLists();
+	}
+	
+	// -----------------------------------------------------------------------------------------------------------------------------------
+	
+	private void initLinkedFeatureLists()
+	{
+		// this link set holds the all the possible links between all chromos in the target set and
+		// all chromos in the reference set
+		// private static LinkSet links = null;
+		
+		// for each link in the overall link set
+		for (Link link : links)
+		{
+			// get both features and add them to a list
+			LinkedList<Feature> features = new LinkedList<Feature>();
+			features.add(link.getFeature1());
+			if (link.getFeature2() != null)
+				features.add(link.getFeature2());
+			// for each feature
+			for (Feature feature : features)
+			{
+				// get its owning map
+				ChromoMap cMap = feature.getOwningMap();
+				// get the corresponding GChromoMap object
+				GChromoMap gMap = gMapLookup.get(cMap);
+				// add the feature to its list of linked features
+				if (gMap != null)
+					gMap.linkedFeatureList.add(feature);
+//				else
+//					System.out.println("unassigned feature found");
+			}
+		}
+		
+		// now need to update the GChromoMap objects and init their arrays for drawing
+		for (GMapSet gMapSet : gMapSetList)
+		{
+			for (GChromoMap gChromoMap : gMapSet.gMaps)
+			{
+				gChromoMap.initLinkedFeatureArrays();
+			}
+		}
 	}
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------
@@ -466,15 +541,8 @@ public class MainCanvas extends JPanel
 	// used to scroll up and down the canvas
 	public void moveGenomeViewPort(GMapSet gMapSet, int newCenterPoint)
 	{
-		// calculate the offset
-		// this is the difference between the old and the new centerpoint
-		int offset = gMapSet.centerPoint - newCenterPoint;
-		if (offset != 0)
-			gMapSet.drawingOffset = offset;
-		
-		// update the centerpoint now
+		// update the centerpoint to the new percentage
 		gMapSet.centerPoint = newCenterPoint;
-		
 		repaint();
 	}
 	// -----------------------------------------------------------------------------------------------------------------------------------

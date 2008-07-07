@@ -12,6 +12,7 @@ public class Scroller extends JScrollBar implements AdjustmentListener
 	
 	public Scroller(WinMain winMain)
 	{
+		setVisibleAmount(0);
 		this.winMain = winMain;
 		addAdjustmentListener(this);
 	}

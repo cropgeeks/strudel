@@ -47,8 +47,8 @@ public class MainCanvas extends JPanel
 	float rightGenomeX = 0.7f;
 	
 	// threshold values for the zoom factor above which we want to display markers and labels
-	float thresholdMarkerPainting = 1;
-	float thresholdLabelPainting = 1;
+	float thresholdMarkerPainting = 3;
+	float thresholdLabelPainting = 3;
 	
 	// index of a chromosome in the target map set that we want to see links from
 	int selectedChromoIndex = -1;
@@ -179,7 +179,7 @@ public class MainCanvas extends JPanel
 			}
 			
 			// width of chromosomes -- set this to a fixed fraction of the screen width for now
-			int chromoWidth = canvasWidth / 50;
+			int chromoWidth = canvasWidth / 60;
 			
 			// now paint the chromosomes in this genome
 			// for each chromosome in the genome
@@ -427,6 +427,7 @@ public class MainCanvas extends JPanel
 				g2.drawLine(selectedChromoX, targetY, referenceChromoX, referenceY);
 			}
 		}
+		repaint();
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------

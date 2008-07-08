@@ -166,14 +166,14 @@ public class GChromoMap
 				{
 					labelX = width + labelSpacer;
 					lineStartX = width;
-					labelLineEnd = labelX;
+					labelLineEnd = labelX - 3;
 				}
 				//left hand genome (target)
 				else
 				{
 					labelX = -stringWidth - labelSpacer;
 					lineStartX = 0;
-					labelLineEnd = - labelSpacer;
+					labelLineEnd = - labelSpacer + 3;
 				}
 				
 				// adjust positioning of labels
@@ -211,7 +211,7 @@ public class GChromoMap
 				g2.drawString(featureName, labelX, labelY);
 				
 				// draw a line from the marker to the label
-				g2.drawLine(lineStartX, featureY, labelLineEnd, labelY);
+				g2.drawLine(lineStartX, featureY, labelLineEnd, labelY - fontHeight/2);
 				
 				index++;
 			}
@@ -240,7 +240,7 @@ public class GChromoMap
 				yPos = linkedFeaturePositions[i] * scalingFactor;
 			}
 			// draw a line for the marker
-			g2.drawLine(0, (int) yPos, width, (int) yPos);
+			g2.drawLine(0, (int) yPos, width-1, (int) yPos);
 		}
 	}
 	

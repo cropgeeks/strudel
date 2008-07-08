@@ -34,7 +34,7 @@ public class WinMain extends JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack();
 		setLocationRelativeTo(null);
-		//setExtendedState(this.MAXIMIZED_BOTH);
+//		setExtendedState(this.MAXIMIZED_BOTH);
 	}
 	
 	private void setupComponents()

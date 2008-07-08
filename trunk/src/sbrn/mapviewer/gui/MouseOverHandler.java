@@ -2,6 +2,7 @@ package sbrn.mapviewer.gui;
 
 import java.util.*;
 
+import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.entities.*;
 
 public class MouseOverHandler
@@ -11,7 +12,6 @@ public class MouseOverHandler
 	WinMain winMain;
 	GChromoMap selectedMap;
 	GChromoMap previousMap;
-
 	
 	// =========================================c'tors=======================================
 	
@@ -24,45 +24,57 @@ public class MouseOverHandler
 	
 	public void detectMouseOver(int x, int y)
 	{
-		// first figure which chromosome we are in
+		// first figure out which chromosome we are in
 		selectedMap = Utils.getSelectedMap(winMain.mainCanvas.gMapSetList, x, y);
 		if (selectedMap != null)
 		{
+			clearPreviousMap();
 			previousMap = selectedMap;
-//			//System.out.println("mouseover detected in chromo " + selectedMap.name + " of genome " + selectedMap.owningSet.name);
+			// System.out.println("mouseover detected in chromo " + selectedMap.name + " of genome " + selectedMap.owningSet.name);
 			
-			// figure out where on the chromosome the hit has occurred, in percent of the total height		
-			//the distance from the top of the chromosome to the hit y location, in percent of the chromosome height
+			// figure out where on the chromosome the hit has occurred, in percent of the total height
+			// the distance from the top of the chromosome to the hit y location, in percent of the chromosome height
 			int percentDistanceFromTop = (int) (((y - selectedMap.boundingRectangle.getY()) / selectedMap.height) * 100);
-			//System.out.println("percentDistanceFromTop = " + percentDistanceFromTop);
 			
-			//now look up this value in the lookup table of the map
-			String match = selectedMap.linkedFeaturePosLookup.get(percentDistanceFromTop);
-			if(match != null)
+			// now look up this value in the lookup table of the map
+			Feature match = selectedMap.linkedFeaturePosLookup.get(percentDistanceFromTop);
+			// we have a match
+			if (match != null)
 			{
+				// add this feature and the next two in either direction (up and down) to the hash table
+				Vector<Feature> highlightedFeatures = new Vector<Feature>();
+				// get the two before and after from the list maintained by the map object and add them too
+				LinkedList<Feature> fList = selectedMap.chromoMap.getFeatureList();
+				int index = fList.indexOf(match);
+				highlightedFeatures.add(fList.get(index - 2));
+				highlightedFeatures.add(fList.get(index - 1));
+				highlightedFeatures.add(match);
+				highlightedFeatures.add(fList.get(index + 1));
+				highlightedFeatures.add(fList.get(index + 2));
 				
-				TreeMap<Integer,String> highlightedFeatures = new TreeMap<Integer, String>();
-				//System.out.println("MATCH FOUND: " + match);				
-				//add this feature and the next two in either direction to the hash table
-				highlightedFeatures.put(percentDistanceFromTop, match);
+				// set this object on the selected map and repaint
 				selectedMap.highlightedFeatures = highlightedFeatures;
 				winMain.mainCanvas.repaint();
 			}
 		}
 		else
 		{
-			//System.out.println("no map under mouse");
-			//reset the selected map if the mouse is not over it
-			if(previousMap != null)
-			{
-				//System.out.println("clearing selected map");
-				previousMap.highlightedFeatures = null;
-				previousMap  = null;
-				winMain.mainCanvas.repaint();
-			}
+			clearPreviousMap();
 		}
-			
-
+		
+	}
+	
+	// ------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	private void clearPreviousMap()
+	{
+		// reset the selected map if the mouse is not over it
+		if (previousMap != null)
+		{
+			previousMap.highlightedFeatures = null;
+			previousMap = null;
+			winMain.mainCanvas.repaint();
+		}
 	}
 	
 	// ------------------------------------------------------------------------------------------------------------------------------------------------

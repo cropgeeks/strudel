@@ -1,12 +1,14 @@
 package sbrn.mapviewer.gui;
 
 import java.awt.*;
+import java.awt.event.*;
+import java.text.*;
 import java.util.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
 
-public class ZoomControlPanel extends JPanel implements ChangeListener
+public class ZoomControlPanel extends JPanel implements ChangeListener, ActionListener
 {
 	// ===============================================vars=======================================
 	
@@ -17,6 +19,8 @@ public class ZoomControlPanel extends JPanel implements ChangeListener
 	public JLabel rightZoomFactorLabel;
 	JSlider leftZoomSlider;
 	JSlider rightZoomSlider;
+	JButton resetLeftButton;
+	JButton resetRightButton;
 	
 	// ===================================================c'tor====================================
 	
@@ -34,13 +38,18 @@ public class ZoomControlPanel extends JPanel implements ChangeListener
 		this.setLayout(new GridLayout(1, 2));
 		
 		int sliderMin = 1;
-		int sliderMax = 1000;
+		int sliderMax = 100;
 		int sliderInitialVal = 1;
-		int minorTickSpacing = 100;
-		int majorTickSpacing = 250;
+		int minorTickSpacing = 10;
+		int majorTickSpacing = 25;
 		
 		// left hand control
 		JPanel leftPanel = new JPanel();
+		//reset button
+		resetLeftButton = new JButton("Reset");
+		resetLeftButton.addActionListener(this);
+		leftPanel.add(resetLeftButton);
+		//label
 		leftLabel = new JLabel();
 		leftLabel.setText("left zoom:");
 		leftPanel.add(leftLabel);
@@ -64,6 +73,7 @@ public class ZoomControlPanel extends JPanel implements ChangeListener
 		
 		// right hand control
 		JPanel rightPanel = new JPanel();
+		//label
 		rightLabel = new JLabel();
 		rightLabel.setText("right zoom:");
 		rightPanel.add(rightLabel);
@@ -82,6 +92,10 @@ public class ZoomControlPanel extends JPanel implements ChangeListener
 		// add another label to print out the current zoom factor
 		rightZoomFactorLabel = new JLabel(" x 1.0");
 		rightPanel.add(rightZoomFactorLabel);
+		//reset button
+		resetRightButton = new JButton("Reset");
+		resetRightButton.addActionListener(this);
+		rightPanel.add(resetRightButton);
 		// add the panel
 		this.add(rightPanel);
 	}
@@ -100,8 +114,7 @@ public class ZoomControlPanel extends JPanel implements ChangeListener
 			else
 				if (source.equals(rightZoomSlider))
 				{
-					winMain.mainCanvas.processSliderZoomRequest(source.getValue(), 1);
-					
+					winMain.mainCanvas.processSliderZoomRequest(source.getValue(), 1);					
 				}
 			updateZoomInfo();
 //		}
@@ -116,8 +129,25 @@ public class ZoomControlPanel extends JPanel implements ChangeListener
 		rightZoomSlider.setValue((int) winMain.mainCanvas.referenceGMapSet.zoomFactor);
 		
 		//update the labels
-		leftZoomFactorLabel.setText(" x " + winMain.mainCanvas.targetGMapSet.zoomFactor);
-		rightZoomFactorLabel.setText(" x " +winMain.mainCanvas.referenceGMapSet.zoomFactor);
+		NumberFormat nf = NumberFormat.getInstance();
+		nf.setMinimumFractionDigits(1);
+		nf.setMaximumFractionDigits(1);
+		leftZoomFactorLabel.setText(" x " + nf.format(winMain.mainCanvas.targetGMapSet.zoomFactor));
+		rightZoomFactorLabel.setText(" x " +nf.format(winMain.mainCanvas.referenceGMapSet.zoomFactor));
+	}
+	
+	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------	
+
+	public void actionPerformed(ActionEvent e)
+	{
+		if(e.getSource()==resetLeftButton)
+		{
+			winMain.mainCanvas.processSliderZoomRequest(1, 0);
+		}
+		if(e.getSource()==resetRightButton)
+		{
+			winMain.mainCanvas.processSliderZoomRequest(1, 1);		
+		}		
 	}
 	
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------

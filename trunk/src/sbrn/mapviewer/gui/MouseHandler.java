@@ -24,18 +24,20 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	
 	// =================================================methods=======================================
 	
+	//used for selecting chromosomes for display of links and for zooming
 	public void mouseClicked(MouseEvent e)
 	{
+		if (e.getClickCount() == 1 && e.isControlDown())
+		{
+			winMain.mainCanvas.processClickZoomRequest(e.getX(), e.getY());
+			return;
+		}
+		
 		if (e.getClickCount() == 1)
 		{
-			System.out.println("mouse clicked");
 			winMain.mainCanvas.processLinkDisplayRequest(e.getX(), e.getY());
 		}
-		else
-			if (e.getClickCount() == 2)
-			{
-				winMain.mainCanvas.processClickZoomRequest(e.getX(), e.getY());
-			}
+
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -70,7 +72,8 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
+	//used for zooming for now
 	public void mouseDragged(MouseEvent e)
 	{
 		// figure out whether the user is zooming the left or right genome
@@ -132,6 +135,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
+	//finds out which of the two genomes the current selection relates to
 	private int getSelectedSet(MouseEvent e)
 	{
 		// figure out whether the user is zooming the left or right genome

@@ -1,6 +1,9 @@
 package sbrn.mapviewer.gui;
 
 import java.awt.Color;
+import java.util.*;
+
+import sbrn.mapviewer.gui.entities.*;
 
 public class Utils
 {
@@ -21,4 +24,29 @@ public class Utils
 		}
 		return colours;
 	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
+	
+	public static GChromoMap getSelectedMap(LinkedList<GMapSet> gMapSetList, int x, int y)
+	{
+		GChromoMap selectedMap = null;
+		
+		// check whether the point x,y lies within one of the bounding rectangles of our chromosomes
+		// for each chromosome in each genome
+		for (GMapSet gMapSet : gMapSetList)
+		{
+			for (GChromoMap gChromoMap : gMapSet.gMaps)
+			{
+				// check whether the hit falls within its current bounding rectangle
+				if (gChromoMap.boundingRectangle.contains(x, y))
+				{
+					selectedMap = gChromoMap;
+					break;
+				}
+			}
+		}		
+		return selectedMap;
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
 }

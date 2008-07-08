@@ -22,7 +22,7 @@ public class MainCanvas extends JPanel
 	GMapSet referenceGMapSet;
 	
 	// for convenience purposes, a list that holds these
-	LinkedList<GMapSet> gMapSetList;
+	public LinkedList<GMapSet> gMapSetList;
 	
 	// size of the frame
 	int canvasHeight;
@@ -47,8 +47,8 @@ public class MainCanvas extends JPanel
 	float rightGenomeX = 0.7f;
 	
 	// threshold values for the zoom factor above which we want to display markers and labels
-	float thresholdMarkerPainting = 3;
-	float thresholdLabelPainting = 3;
+	float thresholdMarkerPainting = 1;
+	float thresholdLabelPainting = 1;
 	
 	// index of a chromosome in the target map set that we want to see links from
 	int selectedChromoIndex = -1;
@@ -179,7 +179,7 @@ public class MainCanvas extends JPanel
 			}
 			
 			// width of chromosomes -- set this to a fixed fraction of the screen width for now
-			int chromoWidth = canvasWidth / 120;
+			int chromoWidth = canvasWidth / 50;
 			
 			// now paint the chromosomes in this genome
 			// for each chromosome in the genome
@@ -302,39 +302,18 @@ public class MainCanvas extends JPanel
 	// zooms in by a fixed amount on a chromosome the user clicked on
 	public void processClickZoomRequest(int x, int y)
 	{
-		GChromoMap selectedMap = null;
-		GMapSet selectedSet = null;
-		
-		// check whether the point x,y lies within one of the bounding rectangles of our chromosomes
-		// for each chromosome in each genome
-		for (GMapSet gMapSet : gMapSetList)
-		{
-			for (GChromoMap gChromoMap : gMapSet.gMaps)
-			{
-				// check whether the hit falls within its current bounding rectangle
-				if (gChromoMap.boundingRectangle.contains(x, y))
-				{
-					selectedMap = gChromoMap;
-					selectedSet = gMapSet;
-					break;
-				}
-			}
-		}
+		GChromoMap selectedMap = Utils.getSelectedMap( gMapSetList, x, y);
 		
 		// the click has hit a chromosome
 		if (selectedMap != null)
-		{
+		{		
+			GMapSet selectedSet = selectedMap.owningSet;
 			
 			// set the selected chromo index if the selected chromo is in the target map set
 			if (selectedSet.equals(gMapSetList.get(0)))
 			{
 				this.selectedChromoIndex = selectedMap.index;
 			}
-			
-			
-			
-			
-			
 			
 			// figure out the genome it belongs to and increase that genome's zoom factor so that we can just fit an entire 
 			selectedSet.zoomFactor = maxChromos;
@@ -345,24 +324,13 @@ public class MainCanvas extends JPanel
 			
 			//convert half the canvas height to a percentage of the total and add this
 			int combinedSpacers = chromoSpacing*selectedSet.numMaps-1;
-			int newTotalY = ((selectedSet.totalY - combinedSpacers)*maxChromos) + combinedSpacers;
-			
+			int newTotalY = ((selectedSet.totalY - combinedSpacers)*maxChromos) + combinedSpacers;			
 			int halfCanvasHeightPercent = (int) (((float)(getHeight()/2)/newTotalY) * 100);
-			//int halfChromoHeightPercent = (int) (((float)selectedSet.gMaps.get(0).height/newTotalY) * 100);
-			
-			selectedSet.centerPoint = selectedSet.centerPoint + halfCanvasHeightPercent;
-			
+
+			//now set the new centerpoint for the genome
+			selectedSet.centerPoint = selectedSet.centerPoint + halfCanvasHeightPercent;			
 			selectedSet.scroller.setValue(selectedSet.centerPoint);
-			
-			System.out.println("getHeight() = " + getHeight());
-			System.out.println("newTotalY = "+newTotalY);
-			System.out.println("halfCanvasHeightPercent =" + halfCanvasHeightPercent);
-			System.out.println("selectedSet.centerPoint = "+ selectedSet.centerPoint );
-			
-			
-			
-			
-			
+		
 			// check whether we need to display markers and labels
 			if (selectedSet.zoomFactor > thresholdMarkerPainting && selectedMap.isShowingOnCanvas)
 			{
@@ -426,7 +394,7 @@ public class MainCanvas extends JPanel
 		
 		float targetMapStop = selectedMap.getStop();
 		// get the real coordinates for the selected chromo and the reference chromo
-		int selectedChromoX = targetGMapSet.xPosition + targetGMapSet.gMaps.get(0).width * 2;
+		int selectedChromoX = targetGMapSet.xPosition + targetGMapSet.gMaps.get(0).width;
 		int selectedChromoY = targetGMapSet.gMaps.get(selectedChromoIndex).y;
 		int referenceChromoX = referenceGMapSet.xPosition;
 		
@@ -543,6 +511,7 @@ public class MainCanvas extends JPanel
 	{
 		// update the centerpoint to the new percentage
 		gMapSet.centerPoint = newCenterPoint;
+		gMapSet.scroller.setValue(newCenterPoint);
 		repaint();
 	}
 	// -----------------------------------------------------------------------------------------------------------------------------------

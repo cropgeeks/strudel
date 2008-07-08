@@ -40,13 +40,16 @@ public class GChromoMap
 	String[] allFeatureNames;
 	float[] allFeaturePositions;
 	
-	//these are corresponding arrays and lists which only pertain to the features which are linked to from somewhere
+	// these are corresponding arrays and lists which only pertain to the features which are linked to from somewhere
 	public LinkedList<Feature> linkedFeatureList = new LinkedList<Feature>();
 	String[] linkedFeatureNames;
 	float[] linkedFeaturePositions;
-
+	public TreeMap<Integer, String> linkedFeaturePosLookup = new TreeMap<Integer, String>();
+	
 	// indicates whether this map or part thereof is currently drawn on the canvas
 	public boolean isShowingOnCanvas = true;
+	
+	public TreeMap<Integer, String> highlightedFeatures;
 	
 	// ============================c'tors==================================
 	
@@ -76,14 +79,14 @@ public class GChromoMap
 		Color offWhite = new Color(200, 200, 200);
 		
 		// draw first half of chromosome
-		GradientPaint gradient = new GradientPaint(0, 0, colour, width, 0, offWhite);
+		GradientPaint gradient = new GradientPaint(0, 0, colour, width/2, 0, offWhite);
 		g2.setPaint(gradient);
-		g2.fillRect(0, 0, width, height);
+		g2.fillRect(0, 0, width/2, height);
 		
 		// draw second half of chromosome
-		GradientPaint whiteGradient = new GradientPaint(width, 0, offWhite, width * 2, 0, colour);
+		GradientPaint whiteGradient = new GradientPaint(width/2, 0, offWhite, width/2 * 2, 0, colour);
 		g2.setPaint(whiteGradient);
-		g2.fillRect(width, 0, width + 1, height);
+		g2.fillRect(width/2, 0, width/2 + 1, height);
 		
 		// draw the index of the map in the genome
 		int fontSize = WinMain.mainCanvas.getHeight() / 40;
@@ -96,48 +99,72 @@ public class GChromoMap
 		// reference genome (right):
 		if (!owningSet.isTargetGenome)
 		{
-			if (owningSet.paintLabels)
-			{
-				g2.drawString(String.valueOf(index + 1), width * 10, height / 2);
-			}
-			else
-			{
-				g2.drawString(String.valueOf(index + 1), width * 2 + 20, height / 2);
-			}
+			g2.drawString(String.valueOf(index + 1), width * 6, height / 2);
 		}
 		// target genome (left):
 		else
 		{
-			if (owningSet.paintLabels)
-			{
-				g2.drawString(String.valueOf(index + 1), -width*10, height / 2);
-			}
-			else
-			{
-				g2.drawString(String.valueOf(index + 1), -20, height / 2);
-			}
+			g2.drawString(String.valueOf(index + 1), -width * 6, height / 2);
 		}
 		
 		if (owningSet.paintMarkers && isShowingOnCanvas)
 		{
-			drawFeatures(g2);
+			drawLinkedFeatures(g2);
+			drawHighlightedFeatureLabels(g2);
+		}
+	}
+	
+	// -----------------------------------------------------------------------------------------------------------------------------------------
+	
+	private void drawHighlightedFeatureLabels(Graphics2D g2)
+	{
+		if (highlightedFeatures != null)
+		{
+			
+			// now draw the selected features
+			int count = 0;
+			int labelSpacer = 4;
+			for (Integer i : highlightedFeatures.keySet())
+			{
+				// first convert the percent distance from the top of the chromosome into an actual y coordinate
+				int y = (int) (height * (i / 100.0));
+				
+				// decide where to place the label on x
+				// on the left hand genome we want the label on the left, right hand genome on the right
+				int labelX = 0;
+				if (!owningSet.isTargetGenome)
+				{
+					labelX = width + labelSpacer;
+				}
+				else
+				{
+					FontMetrics fm = g2.getFontMetrics();
+					int width = fm.stringWidth(highlightedFeatures.get(i));
+					labelX = -width - labelSpacer;
+				}
+				
+				// draw the label
+				g2.drawString(highlightedFeatures.get(i), labelX, y);
+				
+				// draw a line from the marker to the label
+				// g2.drawLine(0, y, labelX, y);
+				
+				count++;
+			}
 		}
 	}
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------------
 	
 	// draw the markers and labels
-	private void drawFeatures(Graphics2D g2)
+	private void drawLinkedFeatures(Graphics2D g2)
 	{
 		// set font to smaller font size
-		g2.setFont(new Font("Arial", Font.PLAIN, 10));
+		g2.setFont(new Font("Arial", Font.PLAIN, 11));
 		g2.setColor(Color.GREEN);
-		
-		FontMetrics fm = g2.getFontMetrics();
 		
 		float mapEnd = chromoMap.getStop();
 		float scalingFactor = height / mapEnd;
-		int labelSpacer = 2;
 		
 		for (int i = 0; i < linkedFeaturePositions.length; i++)
 		{
@@ -151,22 +178,7 @@ public class GChromoMap
 				yPos = linkedFeaturePositions[i] * scalingFactor;
 			}
 			// draw a line for the marker
-			g2.drawLine(0, (int) yPos, width * 2, (int) yPos);
-			
-			if (owningSet.paintLabels)
-			{
-				// decide where to place the label
-				// on the left hand genome we want the label on the left, right hand genome on the right
-				if (!owningSet.isTargetGenome)
-				{
-					g2.drawString(linkedFeatureNames[i], width * 2 + labelSpacer, (int) yPos + 5);
-				}
-				else
-				{
-					int stringWidth = fm.stringWidth(linkedFeatureNames[i]);
-					g2.drawString(linkedFeatureNames[i], -stringWidth - labelSpacer, (int) yPos + 5);
-				}
-			}
+			g2.drawLine(0, (int) yPos, width, (int) yPos);			
 		}
 	}
 	
@@ -175,10 +187,10 @@ public class GChromoMap
 	// initialises the arrays we need for fast drawing
 	private void initArrays()
 	{
-		//init the arrays that hold ALL the features for this map
+		// init the arrays that hold ALL the features for this map
 		int numFeatures = chromoMap.countFeatures();
 		allFeatureNames = new String[numFeatures];
-		allFeaturePositions = new float[numFeatures];		
+		allFeaturePositions = new float[numFeatures];
 		LinkedList<Feature> featureList = chromoMap.getFeatureList();
 		for (int i = 0; i < featureList.size(); i++)
 		{
@@ -192,19 +204,23 @@ public class GChromoMap
 	
 	public void initLinkedFeatureArrays()
 	{
-		
-		//init the arrays that hold only the linked to subset of features
+		// init the arrays that hold only the linked to subset of features
 		int numLinkedToFeatures = linkedFeatureList.size();
 		linkedFeatureNames = new String[numLinkedToFeatures];
 		linkedFeaturePositions = new float[numLinkedToFeatures];
-		for (int i = 0; i <linkedFeatureList.size(); i++)
+		for (int i = 0; i < linkedFeatureList.size(); i++)
 		{
 			Feature f = linkedFeatureList.get(i);
 			linkedFeatureNames[i] = f.getName();
 			linkedFeaturePositions[i] = f.getStart();
+			
+			// also add this to a lookup table that we can use to look up features by location
+			// the percent distance from the top of the chromosome to the location of this feature
+			int percentDistToFeat = (int) (f.getStart() * (100 / chromoMap.getStop()));
+			linkedFeaturePosLookup.put(percentDistToFeat, f.getName());
 		}
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------
 	
-}//end class
+}// end class

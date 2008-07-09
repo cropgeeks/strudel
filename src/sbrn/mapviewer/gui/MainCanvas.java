@@ -427,7 +427,6 @@ public class MainCanvas extends JPanel
 				g2.drawLine(selectedChromoX, targetY, referenceChromoX, referenceY);
 			}
 		}
-		repaint();
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------

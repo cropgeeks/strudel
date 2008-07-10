@@ -60,15 +60,18 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	
 	public void mousePressed(MouseEvent e)
 	{
-		// TODO Auto-generated method stub
-		
+		System.out.println("mouse pressed");
+		winMain.mainCanvas.antiAliasOn = false;
+//		winMain.mainCanvas.repaint();		
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	public void mouseReleased(MouseEvent e)
 	{
-		// TODO Auto-generated method stub
+		System.out.println("mouse released");
+		winMain.mainCanvas.antiAliasOn = true;
+		winMain.mainCanvas.repaint();
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -130,7 +133,10 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			differential = 1;
 		}
 		
-		winMain.mainCanvas.moveGenomeViewPort(selectedSet, selectedSet.centerPoint + differential);
+//		winMain.mainCanvas.antiAliasOn = false;
+		winMain.mainCanvas.moveGenomeViewPort(selectedSet, selectedSet.centerPoint + differential);	
+//		winMain.mainCanvas.antiAliasOn = true;
+//		winMain.mainCanvas.repaint();
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------

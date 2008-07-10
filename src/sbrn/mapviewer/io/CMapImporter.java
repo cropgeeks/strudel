@@ -19,16 +19,6 @@ public class CMapImporter
 		CMapImporter importer = new CMapImporter(new File(args[0]));
 		
 		MapSet mapset = importer.loadMapSet();
-		
-		
-/*		for (ChromoMap map: mapset)
-		{
-			System.out.println();
-			System.out.println(map.getName());
-			for (Feature feature: map)
-				System.out.println("  " + feature.getName() + "\t" + feature.getStart());
-		}
-*/
 	}
 	
 	public CMapImporter(File filename)
@@ -52,8 +42,8 @@ public class CMapImporter
 		
 		// Ignore the first line of the file
 		in.readLine();
-		String str = in.readLine();		
-		
+		String str = in.readLine();	
+				
 		while (str != null)
 		{
 			StringTokenizer st = new StringTokenizer(str, "\t");
@@ -76,9 +66,9 @@ public class CMapImporter
 			f.setStop(distance);
 			
 			// Feature aliases (if any)
-			String[] aliases = st.nextToken().split(",");
-			for (String s: aliases)
-				f.addAlias(s);
+//			String[] aliases = st.nextToken().split(",");
+//			for (String s: aliases)
+//				f.addAlias(s);
 			
 			map.addFeature(f);
 			

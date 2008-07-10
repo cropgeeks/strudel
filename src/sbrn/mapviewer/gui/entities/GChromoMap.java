@@ -154,7 +154,7 @@ public class GChromoMap
 				}
 				
 				//the y position of the feature label
-				int labelY = featureY;
+				int labelY = featureY + fontHeight/2;
 				
 				// decide where to place the label on x
 				// on the left hand genome we want the label on the left, right hand genome on the right
@@ -184,7 +184,7 @@ public class GChromoMap
 						// this needs to decrease from the center outwards, i.e. the middle label (index 2) is biggest,
 						// the next ones (index 1 and 3) are smaller, index 0 and 4 are smallest						
 //						labelX = labelX + stringWidth*2;
-						labelY = labelY - fontHeight * 2;
+//						labelY = labelY - fontHeight * 2;
 //						g2.setFont(new Font("Arial", Font.PLAIN, 10));
 						break;
 					case 1:

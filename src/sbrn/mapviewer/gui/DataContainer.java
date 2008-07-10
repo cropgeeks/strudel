@@ -12,7 +12,7 @@ public class DataContainer
 	public File referenceData;
 	public File targetData;
 	public File compData;
-	public File[] otherMapFiles;
+//	public File[] otherMapFiles;
 	
 	// this Mapset holds all the data we want to compare against
 	public MapSet referenceMapset = null;
@@ -31,20 +31,20 @@ public class DataContainer
 		try
 		{
 			// data files - hard coded for now
-//			System.out.println("loading data");
-//			System.out.println("working dir = " + System.getProperty("user.dir"));
+			// System.out.println("loading data");
+			// System.out.println("working dir = " + System.getProperty("user.dir"));
 			
 			String workingDir = System.getProperty("user.dir");
 			String fileSep = System.getProperty("file.separator");
 			
 			referenceData = new File(workingDir + fileSep + "data/rice_pseudo4_os.maps");
-			targetData = new File(workingDir + fileSep + "data/new_sxm_edited.maps");
-			compData = new File(workingDir + fileSep + "data/barley_SNPS_vs_rice4_corr.data");
-			otherMapFiles = new File[]
-			{ new File(workingDir + fileSep + "data/new_owb_edited.maps"),
-							new File(workingDir + fileSep + "data/new_mxb_edited.maps") };
+			targetData = new File(workingDir + fileSep + "data/Barley_Map(UCR_20080416-2)_barley.txt");
+			compData = new File(workingDir + fileSep + "data/Barley_Map(UCR_20080416-2)_homology_data.txt");
+//			otherMapFiles = new File[]
+//			{ new File(workingDir + fileSep + "data/new_owb_edited.maps"),
+//							new File(workingDir + fileSep + "data/new_mxb_edited.maps") };
 			
-//			System.out.println("referenceData = " + referenceData);
+			// System.out.println("referenceData = " + referenceData);
 			
 			// load data
 			DataLoader dLoader = new DataLoader();
@@ -52,31 +52,21 @@ public class DataContainer
 			targetMapset = dLoader.loadMapData(targetData);
 			
 			// need to set the names of the mapsets
-			// for now, extract them from the name of the first map in the set
-			// the first token in the map name will be the taxon name
-			// TODO: check that CMAP data always comes in this same format i.e. the map name starts with the taxon name
-			// might want to change this later -- not a very good solution for now
-			String targetSetName = targetMapset.getMap(0).getName();
-			// chop off everything after the first space
-			targetSetName = targetSetName.substring(0, targetSetName.indexOf(","));
-			targetMapset.setName(targetSetName);
-			String referenceSetName = referenceMapset.getMap(0).getName();
-			// chop off everything after the first space
-			referenceSetName = referenceSetName.substring(0, referenceSetName.indexOf(","));
-			referenceMapset.setName(referenceSetName);
+			// for now, set them to the names of the files they were read in from
+			targetMapset.setName(targetData.getName());
+			referenceMapset.setName(referenceData.getName());
 			
 			// load links
-			CMapLinkImporter limp = new CMapLinkImporter(compData);
-			limp.addMapSet(referenceMapset);
-			limp.addMapSet(targetMapset);
-			MapSet[] otherMapSets = dLoader.loadOtherMapSets(otherMapFiles);
-			for (int i = 0; i < otherMapSets.length; i++)
-			{
-				limp.addMapSet(otherMapSets[i]);
-			}
-			
 			try
 			{
+				CMapLinkImporter limp = new CMapLinkImporter(compData);
+				limp.addMapSet(referenceMapset);
+				limp.addMapSet(targetMapset);
+//				MapSet[] otherMapSets = dLoader.loadOtherMapSets(otherMapFiles);
+//				for (int i = 0; i < otherMapSets.length; i++)
+//				{
+//					limp.addMapSet(otherMapSets[i]);
+//				}
 				links = limp.loadLinkSet();
 			}
 			catch (ArrayIndexOutOfBoundsException e)

@@ -26,63 +26,80 @@ public class CMapLinkImporter
 	public LinkSet loadLinkSet()
 		throws IOException, ArrayIndexOutOfBoundsException
 	{ 
-		// We load feature links by scanning the data file. Other than the first
-		// line, expect to see one link (pair of features) per line
-		
-		BufferedReader in = new BufferedReader(new FileReader(filename));		
-		in.readLine();
-		
-		String str = in.readLine();		
-		while (str != null && str.length() > 0)
+		try
 		{
-			String[] t = str.split("\\t");
+			// We load feature links by scanning the data file. Other than the first
+			// line, expect to see one link (pair of features) per line
 			
-			// Find all features with the first name and all with the second
-			LinkedList<Feature> f1List = getFeaturesByName(t[0]);
-			LinkedList<Feature> f2List = getFeaturesByName(t[1]);
+			BufferedReader in = new BufferedReader(new FileReader(filename));		
+			in.readLine();
 			
-			// Pair up every instance of f1 with f2
-			for (Feature f1: f1List)
-				for (Feature f2: f2List)
-				{
-					Link link = new Link(f1, f2);
-					linkSet.addLink(link);
-					
-					// We also add the Link to each Feature so the Feature
-					// itself knows about the links it has with others
-					f1.getLinks().add(link);
-					f2.getLinks().add(link);
-										
-					// TODO: Do we want to add a list of references Features to
-					// the Feature object itself, so it knows who it links to?
-					// If so, how do we deal with, eg removing MapSets and
-					// keeping these lists (and the LinkSet!) up to date.
-				}
+			String str = in.readLine();		
+			while (str != null && str.length() > 0)
+			{		
+				String[] t = str.split("\\t");
+
+				// Find all features with the first name and all with the second
+				LinkedList<Feature> f1List = getFeaturesByName(t[0]);
+				LinkedList<Feature> f2List = getFeaturesByName(t[1]);
+				
+				// Pair up every instance of f1 with f2
+				for (Feature f1: f1List)
+					for (Feature f2: f2List)
+					{
+						Link link = new Link(f1, f2);
+						linkSet.addLink(link);
+						
+						// We also add the Link to each Feature so the Feature
+						// itself knows about the links it has with others
+						f1.getLinks().add(link);
+						f2.getLinks().add(link);
+											
+						// TODO: Do we want to add a list of references Features to
+						// the Feature object itself, so it knows who it links to?
+						// If so, how do we deal with, eg removing MapSets and
+						// keeping these lists (and the LinkSet!) up to date.
+					}
+				
+				str = in.readLine();
+			}
 			
-			str = in.readLine();
+			in.close();
 		}
-		
-		in.close();
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 		
 		return linkSet;
 	}
 	
 	// Searches over all MapSets to find every feature whose name matches the
 	// one given.
-	private LinkedList<Feature> getFeaturesByName(String name)
-	{
+	private LinkedList<Feature> getFeaturesByName(String name) throws Exception
+	{		
 		LinkedList<Feature> list = new LinkedList<Feature>();
 		Feature feature = null;
 				
-		for (MapSet mapset: mapSets)
+		try
 		{
-			for (ChromoMap map: mapset)
-			{ 
-				// TODO: Should this be a case-insensitive search?
-				feature = map.getFeature(name);
-				if (feature != null)
-					list.add(feature);
+			for (MapSet mapset: mapSets)
+			{
+				for (ChromoMap map: mapset)
+				{ 
+					// TODO: Should this be a case-insensitive search?
+					feature = map.getFeature(name);
+					if (feature != null)
+					{
+						list.add(feature);
+					}
+				}
 			}
+		}
+		catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		return list;

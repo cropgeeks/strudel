@@ -47,12 +47,16 @@ public class WinMain extends JFrame
 		
 		//this is the main canvas which we render the genomes on
 		mainCanvas = new MainCanvas(dataContainer.targetMapset, dataContainer.referenceMapset, this, dataContainer.links);
+		add(mainCanvas, BorderLayout.CENTER);
+		mainCanvas.setPreferredSize(new Dimension(800, 600));
+		
+		//add mousehandler
 		MouseHandler mouseHandler = new MouseHandler(this);
 		mainCanvas.addMouseListener(mouseHandler);
 		mainCanvas.addMouseMotionListener(mouseHandler);
 		mainCanvas.addMouseWheelListener(mouseHandler);
-		add(mainCanvas, BorderLayout.CENTER);
-		mainCanvas.setPreferredSize(new Dimension(800, 600));
+		leftCanvasScroller.addMouseListener(mouseHandler);
+		rightCanvasScroller.addMouseListener(mouseHandler);
 		
 		//the panel with the zoom control sliders
 		zoomControlPanel = new ZoomControlPanel(this);

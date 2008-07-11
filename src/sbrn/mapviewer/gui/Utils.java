@@ -19,7 +19,7 @@ public class Utils
 		float currentHue = 0;
 		for (int i = 0; i < colours.length; i++)
 		{
-			colours[i] = Color.getHSBColor(currentHue, 0.6f, 0.6f);
+			colours[i] = Color.getHSBColor(currentHue, 0.4f, 0.8f);
 			currentHue += increment;
 		}
 		return colours;

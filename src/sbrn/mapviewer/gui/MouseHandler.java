@@ -4,14 +4,15 @@ import java.awt.event.*;
 
 import javax.swing.event.MouseInputListener;
 
+import sbrn.mapviewer.gui.entities.GChromoMap;
 import sbrn.mapviewer.gui.entities.GMapSet;
 
 public class MouseHandler implements MouseInputListener, MouseWheelListener
 {
 	// =================================================vars========================================
 	
-	WinMain winMain;	
-	int mouseDragPosY = 0;	
+	WinMain winMain;
+	int mouseDragPosY = 0;
 	MouseOverHandler mouseOverHandler;
 	
 	// ===============================================c'tors===========================================
@@ -24,20 +25,25 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	
 	// =================================================methods=======================================
 	
-	//used for selecting chromosomes for display of links and for zooming
+	// used for selecting chromosomes for display of links and for zooming
 	public void mouseClicked(MouseEvent e)
 	{
-		if (e.getClickCount() == 1 && e.isControlDown())
+		if (e.getClickCount() == 1 && !e.isControlDown())
+		{
+			System.out.println("mouse clicked once");
+			winMain.mainCanvas.processLinkDisplayRequest(e.getX(), e.getY(), false);
+		}
+		
+		else if (e.getClickCount() == 1 && e.isControlDown())
+		{
+			winMain.mainCanvas.processLinkDisplayRequest(e.getX(), e.getY(), true);
+		}
+		
+		else if (e.getClickCount() == 2 && e.isControlDown())
 		{
 			winMain.mainCanvas.processClickZoomRequest(e.getX(), e.getY());
 			return;
 		}
-		
-		if (e.getClickCount() == 1)
-		{
-			winMain.mainCanvas.processLinkDisplayRequest(e.getX(), e.getY());
-		}
-
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -60,23 +66,19 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	
 	public void mousePressed(MouseEvent e)
 	{
-		System.out.println("mouse pressed");
-		winMain.mainCanvas.antiAliasOn = false;
-//		winMain.mainCanvas.repaint();		
+		
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	public void mouseReleased(MouseEvent e)
 	{
-		System.out.println("mouse released");
-		winMain.mainCanvas.antiAliasOn = true;
-		winMain.mainCanvas.repaint();
+		
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-	//used for zooming for now
+	
+	// used for zooming for now
 	public void mouseDragged(MouseEvent e)
 	{
 		// figure out whether the user is zooming the left or right genome
@@ -109,7 +111,16 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	
 	public void mouseMoved(MouseEvent e)
 	{
-		mouseOverHandler.detectMouseOver(e.getX(), e.getY());		
+//		if (winMain.mainCanvas.overviewMode)
+//		{
+//			winMain.mainCanvas.processLinkDisplayRequest(e.getX(), e.getY(), false);
+//		}
+//		else
+//		{
+//			mouseOverHandler.detectMouseOver(e.getX(), e.getY());
+//		}
+		
+		 mouseOverHandler.detectMouseOver(e.getX(), e.getY());
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -133,15 +144,13 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			differential = 1;
 		}
 		
-//		winMain.mainCanvas.antiAliasOn = false;
-		winMain.mainCanvas.moveGenomeViewPort(selectedSet, selectedSet.centerPoint + differential);	
-//		winMain.mainCanvas.antiAliasOn = true;
-//		winMain.mainCanvas.repaint();
+		winMain.mainCanvas.moveGenomeViewPort(selectedSet, selectedSet.centerPoint + differential);
+		winMain.mainCanvas.repaint();
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	//finds out which of the two genomes the current selection relates to
+	// finds out which of the two genomes the current selection relates to
 	private int getSelectedSet(MouseEvent e)
 	{
 		// figure out whether the user is zooming the left or right genome
@@ -158,6 +167,39 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			index = 1;
 		}
 		return index;
+	}
+	
+	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	private GChromoMap getSelectedMap(MouseEvent e)
+	{
+		GChromoMap selectedMap = null;
+		
+		// check whether the point x,y lies within one of the bounding rectangles of our chromosomes
+		// for each chromosome in each genome
+		for (GMapSet gMapSet : winMain.mainCanvas.gMapSetList)
+		{
+			for (GChromoMap gChromoMap : gMapSet.gMaps)
+			{
+				// check whether the hit falls within its current bounding rectangle
+				if (gChromoMap.boundingRectangle.contains(e.getX(), e.getY()))
+				{
+					selectedMap = gChromoMap;
+					break;
+				}
+			}
+		}
+		
+		// the click has hit a chromosome
+		if (selectedMap != null)
+		{
+			return selectedMap;
+		}
+		// no hit detected
+		else
+		{
+			return null;
+		}
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------

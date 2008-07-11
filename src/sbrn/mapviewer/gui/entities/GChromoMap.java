@@ -49,7 +49,11 @@ public class GChromoMap
 	// indicates whether this map or part thereof is currently drawn on the canvas
 	public boolean isShowingOnCanvas = true;
 	
+	//a vector containgin features whose lables are to be displayed when the chromosome is drawn
 	public Vector<Feature> highlightedFeatures;
+	
+	//do we have to draw a highlighted outline for this map
+	public boolean drawHighlightOutline = false;
 	
 	// ============================c'tors==================================
 	
@@ -111,6 +115,11 @@ public class GChromoMap
 		{
 			drawLinkedFeatures(g2);
 			drawHighlightedFeatureLabels(g2);
+		}
+		
+		if(drawHighlightOutline)
+		{
+			highlightMapOutline(g2);
 		}
 	}
 	
@@ -242,6 +251,15 @@ public class GChromoMap
 			// draw a line for the marker
 			g2.drawLine(0, (int) yPos, width-1, (int) yPos);
 		}
+	}
+	
+	// ----------------------------------------------------------------------------------------------------------------------------------------------
+	
+	//draw a coloured outline using the bounding rectangle of this map
+	public void highlightMapOutline(Graphics2D g2)
+	{
+		g2.setColor(Color.YELLOW);
+		g2.drawRect(0, 0, (int)boundingRectangle.getWidth(), (int)boundingRectangle.getHeight());
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------

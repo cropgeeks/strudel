@@ -50,11 +50,11 @@ public class MainCanvas extends JPanel
 	float thresholdLabelPainting = 3;
 	
 	// index of a chromosome in the target map set that we want to see links from
-	int selectedChromoIndex = -1;
+//	int selectedChromoIndex = -1;
 	
-	// a hashtable that contains chromomaps from the target genome as keys and LinkedList objects as values which in
-	// turn hold a list of LinkSet objects each, where each Linkset represents the links between the chromomap and a chromomap in the reference
-	// genome
+	// a hashtable that contains chromomaps from both genomes as keys and LinkedList objects as values, which in
+	// turn hold a list of LinkSet objects each, where each Linkset represents the links between the chromomap and a
+	// chromomap in the respectively other genome
 	Hashtable<ChromoMap, LinkedList<LinkSet>> linkSetLookup;
 	
 	// a hashtable that holds ChromoMap objects as keys and their corresponding GChromoMap objects as values
@@ -63,7 +63,19 @@ public class MainCanvas extends JPanel
 	// this link set holds the all the possible links between all chromos in the target set and all chromos in the reference set
 	static LinkSet links = null;
 	
+	// indicates whether features drawn are to be antialiased
 	public boolean antiAliasOn = false;
+	
+	// true when both genomes are viewed at zoom factor of 1
+	// gives an overview of both genomes
+	public boolean overviewMode = true;
+	
+	public boolean drawAllLinks = true;
+	
+	boolean drawLinks = false;
+	
+	GChromoMap selectedMap;
+	GChromoMap previousSelectedMap;
 	
 	// ============================c'tors==================================
 	
@@ -72,7 +84,7 @@ public class MainCanvas extends JPanel
 		this.winMain = winMain;
 		this.links = links;
 		setUpGenomes(targetMapset, referenceMapSet);
-		makeLinkSubSets();
+		makeTargetLinkSubSets();
 		setBackground(Color.black);
 	}
 	
@@ -82,9 +94,8 @@ public class MainCanvas extends JPanel
 	private void setUpGenomes(MapSet targetMapset, MapSet referenceMapSet)
 	{
 		// make new GMapSets from the map sets passed in
-		// TODO remove hardcoding
-		targetGMapSet = new GMapSet(Color.RED, targetMapset, Constants.TARGET_GENOME, "Barley", true, winMain.leftCanvasScroller, gMapLookup);
-		referenceGMapSet = new GMapSet(Color.BLUE, referenceMapSet, Constants.REFERENCE_GENOME, "Rice", false, winMain.rightCanvasScroller, gMapLookup);
+		targetGMapSet = new GMapSet(Color.RED, targetMapset, Constants.TARGET_GENOME, true, winMain.leftCanvasScroller, gMapLookup);
+		referenceGMapSet = new GMapSet(Color.BLUE, referenceMapSet, Constants.REFERENCE_GENOME, false, winMain.rightCanvasScroller, gMapLookup);
 		
 		// add the genomes to the list
 		gMapSetList = new LinkedList<GMapSet>();
@@ -109,8 +120,7 @@ public class MainCanvas extends JPanel
 	// paint the genomes or portions thereof onto this canvas
 	public void paintComponent(Graphics g)
 	{
-		System.out.println("repainting " + System.currentTimeMillis());
-		
+
 		// need to clear the canvas before we draw
 		clear(g);
 		
@@ -199,7 +209,7 @@ public class MainCanvas extends JPanel
 				gChromoMap.height = chromoHeight;
 				gChromoMap.width = chromoWidth;
 				// update its bounding rectangle (used for hit detection)
-				gChromoMap.boundingRectangle.setBounds(x, currentY, chromoWidth * 2, chromoHeight);
+				gChromoMap.boundingRectangle.setBounds(gChromoMap.x, gChromoMap.y, gChromoMap.width, gChromoMap.height);
 				
 				// make sure we only draw the maps we need to (i.e. those that are at least partially visible)
 				selectVisibleMaps();
@@ -213,9 +223,9 @@ public class MainCanvas extends JPanel
 				// increment the y position so we can draw the next one
 				currentY += chromoUnit;
 			}
-			
+						
 			// optionally draw lines between chromos
-			if (selectedChromoIndex != -1)
+			if (drawLinks)
 			{
 				drawLinks(g2);
 			}
@@ -254,16 +264,22 @@ public class MainCanvas extends JPanel
 		// make sure the zoom factor currently displayed is up to date
 		winMain.zoomControlPanel.updateZoomInfo();
 		
-		antiAliasOn = false;
+		// check the zoom factor and determine whether we are in overview mode or not
+		if(gMapSetList.get(0).zoomFactor == 1 && gMapSetList.get(1).zoomFactor == 1)
+			overviewMode = true;
+		else
+			overviewMode = false;
+		
 		repaint();
 	}
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------
 	
 	// display the homologies between chromosomes as lines
-	public void processLinkDisplayRequest(int x, int y)
+	public void processLinkDisplayRequest(int x, int y, boolean isCtrlClickSelection)
 	{
-		GChromoMap selectedMap = null;
+	
+		selectedMap = null;
 		
 		// check whether the point x,y lies within one of the bounding rectangles of our chromosomes
 		// for each chromosome in each genome
@@ -282,17 +298,52 @@ public class MainCanvas extends JPanel
 		
 		// the click has hit a chromosome
 		if (selectedMap != null)
-		{
-			// set the selected chromo index if the selected chromo is in the target map set
-			if (selectedMap.owningSet.equals(gMapSetList.get(0)))
+		{						
+			previousSelectedMap = selectedMap;
+			
+			if(isCtrlClickSelection)
 			{
-				this.selectedChromoIndex = selectedMap.index;
-			}
+					// if the map is already added we need to remove it (this is toggle-style functionality)
+					if (selectedMap.owningSet.selectedMaps.contains(selectedMap))
+					{
+						selectedMap.owningSet.removeSelectedMap(selectedMap);
+					}
+					// otherwise we add it
+					else
+					{
+						selectedMap.owningSet.addSelectedMap(selectedMap);
+					}
+			}	
+			
+			drawLinks = true;
 		}
+		// no hit detected
 		else
 		{
-			// no map selected -- reset index of selected map to -1
-			selectedChromoIndex = -1;
+			selectedMap = null;
+			if(previousSelectedMap !=null)
+				previousSelectedMap = null;
+			drawLinks = false;
+		}
+
+		// optionally draw lines between chromos
+		// only draw all the links when we have exactly one chromosome selected
+		// if we have a single chromosome selected in each of the genomes we do NOT want to draw all the links
+		// but a subset only
+		drawAllLinks = (gMapSetList.get(0).selectedMaps.size() == 1 || 
+								gMapSetList.get(1).selectedMaps.size() == 1) &&
+		!(gMapSetList.get(0).selectedMaps.size() == 1 && gMapSetList.get(1).selectedMaps.size() == 1);
+		
+		System.out.println("drawAllLinks = " + drawAllLinks);
+		System.out.println("selectedMap = "+ selectedMap.name);
+		
+		for(GMapSet mapSet : this.gMapSetList)
+		{
+			System.out.println("selected maps : ");
+			for(GChromoMap gMap : mapSet.selectedMaps)
+			{
+				System.out.println(gMap.name);
+			}
 		}
 		
 		repaint();
@@ -303,19 +354,13 @@ public class MainCanvas extends JPanel
 	// zooms in by a fixed amount on a chromosome the user clicked on
 	public void processClickZoomRequest(int x, int y)
 	{
-		GChromoMap selectedMap = Utils.getSelectedMap(gMapSetList, x, y);
+		selectedMap = Utils.getSelectedMap(gMapSetList, x, y);
 		
 		// the click has hit a chromosome
 		if (selectedMap != null)
 		{
 			GMapSet selectedSet = selectedMap.owningSet;
-			
-			// set the selected chromo index if the selected chromo is in the target map set
-			if (selectedSet.equals(gMapSetList.get(0)))
-			{
-				this.selectedChromoIndex = selectedMap.index;
-			}
-			
+						
 			// figure out the genome it belongs to and increase that genome's zoom factor so that we can just fit an entire
 			selectedSet.zoomFactor = maxChromos;
 			
@@ -383,61 +428,88 @@ public class MainCanvas extends JPanel
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
 	
+// public void drawSelectedLinks(Graphics2D g2)
+// {
+// for(GMapSet mapSet : gMapSetList)
+// {
+// for(GChromoMap gMap : mapSet.selectedMaps)
+// {
+//				
+// }
+// }
+// }
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
+	
 	// Draws the lines between a chromosome of the reference genome and all potential homologues in the compared genome
 	public void drawLinks(Graphics2D g2)
-	{
-		System.out.println("antiAliasOn = " + antiAliasOn);		
-		// antialiasing  -- only have it on when we are not scrolling or zooming though (massive performance difference)
-		if (antiAliasOn)
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		else
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+	{	
 		
-		// get the map for the currently selected chromosome
-		MapSet targetMapSet = this.targetGMapSet.mapSet;
-		ChromoMap selectedMap = targetMapSet.getMap(selectedChromoIndex);
+		// antialiasing -- only have it on when we are not zoomed in on either genome
+// if (overviewMode)
+// g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+// else
+// g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+		
+		// get the ChromoMap for the currently selected chromosome
+		ChromoMap selectedChromoMap = selectedMap.chromoMap;
 		
 		// get all the links between the selected chromosome and the reference mapset
 		LinkedList<LinkSet> linkSets = linkSetLookup.get(selectedMap);
 		
-		float targetMapStop = selectedMap.getStop();
+		float targetMapStop = selectedChromoMap.getStop();
 		// get the real coordinates for the selected chromo and the reference chromo
 		int selectedChromoX = targetGMapSet.xPosition + targetGMapSet.gMaps.get(0).width;
-		int selectedChromoY = targetGMapSet.gMaps.get(selectedChromoIndex).y;
+		int selectedChromoY = selectedMap.y;
 		int referenceChromoX = referenceGMapSet.xPosition;
 		
 		Color[] colours = Utils.makeColours(maxChromos);
 		
-		for (Object selectedLinks : linkSets)
+		for (LinkSet selectedLinks : linkSets)
 		{
-			// change the colour of the graphics object so that each link subset is colour coded
-			int index = linkSets.indexOf(selectedLinks);
-			g2.setColor(colours[index]);
-			
-			// for each link in the linkset
-			for (Link link : (LinkSet) selectedLinks)
+			// check whether this is a linkset we want to draw
+			// this depends on which chromosome in the reference genome it points to
+			// the linksets are ordered by chromosome index
+			int linkSetIndex = linkSets.indexOf(selectedLinks);
+			// check whether this index matches one of the ones in the vector of selected maps in the reference genome
+			boolean draw = false;
+			for(GChromoMap gMap : referenceGMapSet.selectedMaps)
 			{
-				// get the positional data of feature1 (which is on the selected chromo) and the end point of the map
-				float feat1Start = link.getFeature1().getStart();
+				if(gMap.index == linkSetIndex)
+					draw = true;
+			}
+
+			if (draw || drawAllLinks)
+			{
+				// change the colour of the graphics object so that each link subset is colour coded
+				// g2.setColor(colours[linkSetIndex]);
+				g2.setColor(new Color(200, 200, 200));
 				
-				// get the owning map, positional data of feature 2 (which is on a reference chromosome) and the end point of the map
-				float feat2Start = link.getFeature2().getStart();
-				ChromoMap owningMap = link.getFeature2().getOwningMap();
-				float referenceMapStop = owningMap.getStop();
-				int refChromoIndex = owningMap.getOwningMapSet().getMaps().indexOf(owningMap);
-				int referenceChromoY = referenceGMapSet.gMaps.get(refChromoIndex).y;
-				
-				// convert these to coordinates by obtaining the coords of the appropriate chromosome object and scaling them appropriately
-				int targetY = (int) (feat1Start / (targetMapStop / targetGMapSet.gMaps.get(0).height)) + selectedChromoY;
-				int referenceY = (int) (feat2Start / (referenceMapStop / referenceGMapSet.gMaps.get(0).height)) + referenceChromoY;
-				
-				// draw the line
-				g2.drawLine(selectedChromoX, targetY, referenceChromoX, referenceY);
+				// for each link in the linkset
+				for (Link link : (LinkSet) selectedLinks)
+				{
+					// get the positional data of feature1 (which is on the selected chromo) and the end point of the map
+					float feat1Start = link.getFeature1().getStart();
+					
+					// get the owning map, positional data of feature 2 (which is on a reference chromosome) and the end point of the map
+					float feat2Start = link.getFeature2().getStart();
+					ChromoMap owningMap = link.getFeature2().getOwningMap();
+					float referenceMapStop = owningMap.getStop();
+					int refChromoIndex = owningMap.getOwningMapSet().getMaps().indexOf(owningMap);
+					int referenceChromoY = referenceGMapSet.gMaps.get(refChromoIndex).y;
+					
+					// convert these to coordinates by obtaining the coords of the appropriate chromosome object and scaling them appropriately
+					int targetY = (int) (feat1Start / (targetMapStop / targetGMapSet.gMaps.get(0).height)) + selectedChromoY;
+					int referenceY = (int) (feat2Start / (referenceMapStop / referenceGMapSet.gMaps.get(0).height)) + referenceChromoY;
+					
+					// draw the line
+					g2.drawLine(selectedChromoX, targetY, referenceChromoX, referenceY);
+				}
 			}
 		}
 		
-		//now turn antialiasing off again
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+// //now turn antialiasing off again
+// g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -445,7 +517,7 @@ public class MainCanvas extends JPanel
 	/**
 	 * This method precomputes subsets of links between each target chromosome and the reference genome so that drawing them is quicker.
 	 */
-	private void makeLinkSubSets()
+	private void makeTargetLinkSubSets()
 	{
 		try
 		{
@@ -470,6 +542,65 @@ public class MainCanvas extends JPanel
 				
 				// then add the list to the hashtable
 				linkSetLookup.put(targetMap, linkSets);
+			}
+			
+			// now set up the lists of linked-to features for each of the gchromomaps
+			initLinkedFeatureLists();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
+	
+	/**
+	 * This method precomputes subsets of links between each target chromosome and the reference genome so that drawing them is quicker.
+	 */
+	private void makeAllLinkSubSets()
+	{
+		try
+		{
+			// a hashtable that contains chromomaps from both genomes as keys and LinkedList objects as values, which in
+			// turn hold a list of LinkSet objects each, where each Linkset represents the links between the chromomap and a
+			// chromomap in the respectively other genome
+			linkSetLookup = new Hashtable<ChromoMap, LinkedList<LinkSet>>();
+			
+			// for each mapset
+			for(GMapSet mapSet : gMapSetList)
+			{
+				// for each chromosome in the mapset
+				for (GChromoMap gMap : mapSet.gMaps)
+				{
+					// get the chromoMap first
+					ChromoMap targetMap = gMap.chromoMap;
+					
+					// create a new LinkedList which holds all the linksets of links between this chromosome and the chromosomes from the other genome
+					LinkedList<LinkSet> linkSets = new LinkedList<LinkSet>();
+					
+					// figure out the identity of the other map set
+					int index = gMapSetList.indexOf(mapSet);
+					int otherIndex;
+					if(index == 0)
+						otherIndex = 1;
+					else
+						otherIndex = 0;
+					GMapSet otherMapSet = 	gMapSetList.get(otherIndex);		
+					
+					// for each chromosome in the other map set
+					for (GChromoMap otherGMap : otherMapSet.gMaps)
+					{
+						ChromoMap refMap = otherGMap.chromoMap;
+						// make a linkset that contains only the links between this chromo and the other one
+						LinkSet linkSubset = links.getLinksBetweenMaps(targetMap, refMap);
+						// add the linkset to the list
+						linkSets.add(linkSubset);
+					}
+					
+					// then add the list to the hashtable
+					linkSetLookup.put(targetMap, linkSets);
+				}
 			}
 			
 			// now set up the lists of linked-to features for each of the gchromomaps

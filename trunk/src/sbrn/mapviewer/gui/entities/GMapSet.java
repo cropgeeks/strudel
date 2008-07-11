@@ -54,29 +54,34 @@ public class GMapSet
 	//the scrollbar which controls the viewable area in this map set
 	public Scroller scroller;
 	
+	//the point on the genome that is currently seen in the center of the canvas
 	public int centerPoint = 0;
 	
+	//the total current height of the genome as drawn on the canvas, in pixels
 	public int totalY;
+	
+	//a vector containing GChromoMap objects that have been selected by the user through mouse clicks
+	public Vector<GChromoMap> selectedMaps = new Vector<GChromoMap>();
 	
 	// ====================================c'tors========================================
 	
-	public GMapSet(Color mapSetColour, MapSet mapSet, int type, String name,boolean isTargetGenome,Scroller scroller, Hashtable<ChromoMap, GChromoMap> gMapLookup)
+	public GMapSet(Color mapSetColour, MapSet mapSet, int type, boolean isTargetGenome,Scroller scroller, Hashtable<ChromoMap, GChromoMap> gMapLookup)
 	{
 		this.colour = mapSetColour;
 		this.mapSet = mapSet;
 		this.type = type;
-		this.name = name;
+		this.name = mapSet.getName();
 		this.isTargetGenome = isTargetGenome;
 		this.scroller = scroller;
 		numMaps = mapSet.size();
 		
-		// init the list of maps
+		// init the list of maps contained in this genome
 		initialise(gMapLookup);
 	}
 	
 	// ========================================methods==================================
 	
-	// init the list of maps
+	// init the list of maps contained in this genome
 	public void initialise(Hashtable<ChromoMap, GChromoMap> gMapLookup)
 	{
 		gMaps = new LinkedList<GChromoMap>();
@@ -89,6 +94,25 @@ public class GMapSet
 			
 			gMapLookup.put(cMap, gMap);
 		}
+	}
+	
+	// ---------------------------------------------------------------------------------------------------------------------------
+	
+	public void addSelectedMap(GChromoMap map)
+	{
+		if (!selectedMaps.contains(map))
+		{
+			selectedMaps.add(map);
+			map.drawHighlightOutline = true;
+		}
+	}
+	
+	// ---------------------------------------------------------------------------------------------------------------------------
+	
+	public void removeSelectedMap(GChromoMap map)
+	{
+		selectedMaps.remove(map);
+		map.drawHighlightOutline = false;
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------------

@@ -46,15 +46,27 @@ public class MouseOverHandler
 				// get the two before and after from the list maintained by the map object and add them too
 				LinkedList<Feature> fList = selectedMap.chromoMap.getFeatureList();
 				int index = fList.indexOf(match);
-//				highlightedFeatures.add(fList.get(index - 2));
-//				highlightedFeatures.add(fList.get(index - 1));
+				// highlightedFeatures.add(fList.get(index - 2));
+				// highlightedFeatures.add(fList.get(index - 1));
 				highlightedFeatures.add(match);
-//				highlightedFeatures.add(fList.get(index + 1));
-//				highlightedFeatures.add(fList.get(index + 2));
+				// highlightedFeatures.add(fList.get(index + 1));
+				// highlightedFeatures.add(fList.get(index + 2));
 				
 				// set this object on the selected map and repaint
 				selectedMap.highlightedFeatures = highlightedFeatures;
 				winMain.mainCanvas.repaint();
+				
+				// also set the label text in the annotation window unless we are fully zoomed out
+				if (selectedMap.owningSet.equals(winMain.mainCanvas.targetGMapSet)  && winMain.mainCanvas.targetGMapSet.paintMarkers)
+				{
+					winMain.targetAnnotationPanel.getLocusInfo().setText(match.getName());
+					winMain.targetAnnotationPanel.getAnnotationTextArea().setText(match.getAnnotation());
+				}
+				else if(winMain.mainCanvas.referenceGMapSet.paintMarkers)
+				{
+					winMain.referenceAnnotationPanel.getLocusInfo().setText(match.getName());
+					winMain.referenceAnnotationPanel.getAnnotationTextArea().setText(match.getAnnotation());
+				}
 			}
 		}
 		else

@@ -2,7 +2,7 @@ package sbrn.mapviewer.gui;
 
 import java.awt.*;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 
 
 public class WinMain extends JFrame
@@ -14,6 +14,9 @@ public class WinMain extends JFrame
 	public DataContainer dataContainer;
 	
 	public ZoomControlPanel zoomControlPanel;
+	
+	public AnnotationPanel targetAnnotationPanel;
+	public AnnotationPanel referenceAnnotationPanel;
 	
 	//scroll bars for the canvas
 	Scroller leftCanvasScroller;
@@ -61,7 +64,18 @@ public class WinMain extends JFrame
 		//the panel with the zoom control sliders
 		zoomControlPanel = new ZoomControlPanel(this);
 		//zoomControlPanel.setPreferredSize(new Dimension(800, 100));
-		add(zoomControlPanel,BorderLayout.SOUTH);
+//		add(zoomControlPanel,BorderLayout.SOUTH);
+		
+		//the panels for displaying annotation info
+		targetAnnotationPanel = new AnnotationPanel(this,dataContainer.targetMapset);
+		referenceAnnotationPanel = new AnnotationPanel(this,dataContainer.referenceMapset);
+//		targetAnnotationPanel.setBackground(Color.green);
+//		referenceAnnotationPanel.setBackground(Color.red);
+		JPanel annotationPanelContainer = new JPanel(new GridLayout(1,2));
+		annotationPanelContainer.add(targetAnnotationPanel);
+		annotationPanelContainer.add(referenceAnnotationPanel);		
+		annotationPanelContainer.setPreferredSize(new Dimension(800, 150));
+		add(annotationPanelContainer,BorderLayout.SOUTH);
 
 	}
 }

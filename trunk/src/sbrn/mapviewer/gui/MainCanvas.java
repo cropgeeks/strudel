@@ -178,7 +178,7 @@ public class MainCanvas extends JPanel
 			}
 			
 			// width of chromosomes -- set this to a fixed fraction of the screen width for now
-			int chromoWidth = canvasWidth / 60;
+			int chromoWidth = canvasWidth / 30;
 			
 			// now paint the chromosomes in this genome
 			// for each chromosome in the genome

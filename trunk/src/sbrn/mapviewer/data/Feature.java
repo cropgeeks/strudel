@@ -29,6 +29,9 @@ public class Feature //implements Comparable
 	
 	// Its start and stop positions (in whatever distance format) on the map
 	private float start, stop;
+	
+	//annotation info
+	private String annotation;
 		
 	// Feature type
 	private int type = GENERIC;
@@ -122,6 +125,16 @@ public class Feature //implements Comparable
 	 */
 	public LinkedList<Link> getLinks()
 		{ return links; }
+
+	public String getAnnotation()
+	{
+		return annotation;
+	}
+
+	public void setAnnotation(String annotation)
+	{
+		this.annotation = annotation;
+	}
 	
 /*	public int compareTo(Object other)
 	{

@@ -13,8 +13,7 @@ public class CMapImporter
 	
 	private MapSet mapset = new MapSet();
 	
-	public static void main(String[] args)
-		throws Exception
+	public static void main(String[] args) throws Exception
 	{
 		CMapImporter importer = new CMapImporter(new File(args[0]));
 		
@@ -22,7 +21,9 @@ public class CMapImporter
 	}
 	
 	public CMapImporter(File filename)
-		{ this.filename = filename;	}
+	{
+		this.filename = filename;
+	}
 	
 	/** Alternative constructor to force loading into an existing MapSet. */
 	public CMapImporter(File filename, MapSet mapset)
@@ -32,18 +33,16 @@ public class CMapImporter
 	}
 	
 	/**
-	 * Loads map and feature data from CMap, storing it within a MapSet object
-	 * that is returned when done.
+	 * Loads map and feature data from CMap, storing it within a MapSet object that is returned when done.
 	 */
-	public MapSet loadMapSet()
-		throws Exception
+	public MapSet loadMapSet() throws Exception
 	{
 		BufferedReader in = new BufferedReader(new FileReader(filename));
 		
 		// Ignore the first line of the file
 		in.readLine();
-		String str = in.readLine();	
-				
+		String str = in.readLine();
+		
 		while (str != null)
 		{
 			StringTokenizer st = new StringTokenizer(str, "\t");
@@ -53,22 +52,51 @@ public class CMapImporter
 			
 			// Read (and create) the Feature
 			Feature f = new Feature(st.nextToken());
-							
+			
 			// And its distance value
 			float distance = 0;
-			try { distance = Float.parseFloat(st.nextToken()); }
+			try
+			{
+				distance = Float.parseFloat(st.nextToken());
+			}
 			catch (NumberFormatException e)
 			{
-				throw new NumberFormatException("Feature " + f.getName() + " "
-					+ "does not appear to have a valid distance");
-			}			
+				throw new NumberFormatException("Feature " + f.getName() + " " + "does not appear to have a valid distance");
+			}
 			f.setStart(distance);
 			f.setStop(distance);
 			
-			// Feature aliases (if any)
-//			String[] aliases = st.nextToken().split(",");
-//			for (String s: aliases)
-//				f.addAlias(s);
+			try
+			{
+				// Feature aliases (if any)
+				String aliases = st.nextToken();
+				if (aliases != null && !aliases.equals(""))
+				{
+					String[] aliasArr = aliases.split(",");
+					if (aliases != null && aliasArr.length != 0)
+					{
+						for (String s : aliasArr)
+							f.addAlias(s);
+					}
+				}
+				
+			}
+			catch (NoSuchElementException e)
+			{
+			}
+			
+			try
+			{
+				// annotation (if any)
+				String annotation = st.nextToken();
+				if (annotation != null && !annotation.equals(""))
+				{
+					f.setAnnotation(annotation);
+				}
+			}
+			catch (NoSuchElementException e)
+			{
+			}
 			
 			map.addFeature(f);
 			

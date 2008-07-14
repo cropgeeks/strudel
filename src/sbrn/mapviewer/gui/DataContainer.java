@@ -37,7 +37,7 @@ public class DataContainer
 			String workingDir = System.getProperty("user.dir");
 			String fileSep = System.getProperty("file.separator");
 			
-			referenceData = new File(workingDir + fileSep + "data/rice_pseudo4_os.maps");
+			referenceData = new File(workingDir + fileSep + "data/riceU35data.txt");
 			targetData = new File(workingDir + fileSep + "data/Barley_Map(UCR_20080416-2)_barley.txt");
 			compData = new File(workingDir + fileSep + "data/Barley_Map(UCR_20080416-2)_homology_data.txt");
 //			otherMapFiles = new File[]
@@ -53,8 +53,8 @@ public class DataContainer
 			
 			// need to set the names of the mapsets
 			// for now, set them to the names of the files they were read in from
-			targetMapset.setName(targetData.getName());
-			referenceMapset.setName(referenceData.getName());
+			targetMapset.setName(targetData.getName().substring(0, targetData.getName().indexOf(".")));
+			referenceMapset.setName(referenceData.getName().substring(0, referenceData.getName().indexOf(".")));
 			
 			// load links
 			try

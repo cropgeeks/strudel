@@ -28,22 +28,26 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	// used for selecting chromosomes for display of links and for zooming
 	public void mouseClicked(MouseEvent e)
 	{
-		if (e.getClickCount() == 1 && !e.isControlDown())
+		if (e.isAltDown())
+		{
+			System.out.println("mouse clicked once with ALT down");
+			winMain.mainCanvas.processClickZoomRequest(e.getX(), e.getY());
+			return;
+		}
+		
+		else if (!e.isControlDown())
 		{
 			System.out.println("mouse clicked once");
 			winMain.mainCanvas.processLinkDisplayRequest(e.getX(), e.getY(), false);
 		}
 		
-		else if (e.getClickCount() == 1 && e.isControlDown())
+		else if (e.isControlDown())
 		{
+			System.out.println("mouse clicked once with CTRL down");
 			winMain.mainCanvas.processLinkDisplayRequest(e.getX(), e.getY(), true);
 		}
 		
-		else if (e.getClickCount() == 2 && e.isControlDown())
-		{
-			winMain.mainCanvas.processClickZoomRequest(e.getX(), e.getY());
-			return;
-		}
+
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------

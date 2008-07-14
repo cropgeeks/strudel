@@ -41,31 +41,32 @@ public class GMapSet
 	// i.e. an x coordinate in pixels which denotes the left most edge of the genome drawn
 	public int xPosition;
 	
-	//these control whether we draw chromosome markers and  labels
+	// these control whether we draw chromosome markers and labels
 	public boolean paintMarkers = false;
 	public boolean paintLabels = false;
 	
-	//true if this is the target genome, false if it the reference genome
-	public boolean isTargetGenome= false;
+	// true if this is the target genome, false if it the reference genome
+	public boolean isTargetGenome = false;
 	
-	//the percent offset from the top of the genome that represents the topmost point of the genome visible on the canvas
+	// the percent offset from the top of the genome that represents the topmost point of the genome visible on the canvas
 	public int drawingOffset = 0;
 	
-	//the scrollbar which controls the viewable area in this map set
+	// the scrollbar which controls the viewable area in this map set
 	public Scroller scroller;
 	
-	//the point on the genome that is currently seen in the center of the canvas
+	// the point on the genome that is currently seen in the center of the canvas
 	public int centerPoint = 0;
 	
-	//the total current height of the genome as drawn on the canvas, in pixels
+	// the total current height of the genome as drawn on the canvas, in pixels
 	public int totalY;
 	
-	//a vector containing GChromoMap objects that have been selected by the user through mouse clicks
+	// a vector containing GChromoMap objects that have been selected by the user through mouse clicks
 	public Vector<GChromoMap> selectedMaps = new Vector<GChromoMap>();
 	
 	// ====================================c'tors========================================
 	
-	public GMapSet(Color mapSetColour, MapSet mapSet, int type, boolean isTargetGenome,Scroller scroller, Hashtable<ChromoMap, GChromoMap> gMapLookup)
+	public GMapSet(Color mapSetColour, MapSet mapSet, int type, boolean isTargetGenome, Scroller scroller,
+					Hashtable<ChromoMap, GChromoMap> gMapLookup)
 	{
 		this.colour = mapSetColour;
 		this.mapSet = mapSet;
@@ -111,8 +112,31 @@ public class GMapSet
 	
 	public void removeSelectedMap(GChromoMap map)
 	{
-		selectedMaps.remove(map);
-		map.drawHighlightOutline = false;
+		if (selectedMaps.contains(map))
+		{
+			selectedMaps.remove(map);
+			map.drawHighlightOutline = false;
+		}
+	}
+	
+	// ---------------------------------------------------------------------------------------------------------------------------
+	
+	public void selectAllMaps()
+	{
+		for (GChromoMap gMap : gMaps)
+		{
+			addSelectedMap(gMap);
+		}
+	}
+	
+	// ---------------------------------------------------------------------------------------------------------------------------
+	
+	public void deselectAllMaps()
+	{
+		for (GChromoMap gMap : gMaps)
+		{
+			removeSelectedMap(gMap);
+		}
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------------

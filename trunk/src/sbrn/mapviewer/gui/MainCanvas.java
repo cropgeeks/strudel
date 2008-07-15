@@ -110,7 +110,7 @@ public class MainCanvas extends JPanel
 	// paint the genomes or portions thereof onto this canvas
 	public void paintComponent(Graphics g)
 	{
-		
+		System.out.println("repainting main canvas");
 		// need to clear the canvas before we draw
 		clear(g);
 		
@@ -471,6 +471,7 @@ public class MainCanvas extends JPanel
 					
 					if (draw)
 					{
+						
 						// change the colour of the graphics object so that each link subset is colour coded
 						// g2.setColor(colours[linkSetIndex]);
 						g2.setColor(new Color(200, 200, 200));
@@ -543,65 +544,7 @@ public class MainCanvas extends JPanel
 			e.printStackTrace();
 		}
 	}
-	
-	// --------------------------------------------------------------------------------------------------------------------------------
-	
-	/**
-	 * This method precomputes subsets of links between each target chromosome and the reference genome so that drawing them is quicker.
-	 */
-	private void makeAllLinkSubSets()
-	{
-		try
-		{
-			// a hashtable that contains chromomaps from both genomes as keys and LinkedList objects as values, which in
-			// turn hold a list of LinkSet objects each, where each Linkset represents the links between the chromomap and a
-			// chromomap in the respectively other genome
-			linkSetLookup = new Hashtable<ChromoMap, LinkedList<LinkSet>>();
-			
-			// for each mapset
-			for (GMapSet mapSet : gMapSetList)
-			{
-				// for each chromosome in the mapset
-				for (GChromoMap gMap : mapSet.gMaps)
-				{
-					// get the chromoMap first
-					ChromoMap targetMap = gMap.chromoMap;
-					
-					// create a new LinkedList which holds all the linksets of links between this chromosome and the chromosomes from the other genome
-					LinkedList<LinkSet> linkSets = new LinkedList<LinkSet>();
-					
-					// figure out the identity of the other map set
-					int index = gMapSetList.indexOf(mapSet);
-					int otherIndex;
-					if (index == 0)
-						otherIndex = 1;
-					else
-						otherIndex = 0;
-					GMapSet otherMapSet = gMapSetList.get(otherIndex);
-					
-					// for each chromosome in the other map set
-					for (GChromoMap otherGMap : otherMapSet.gMaps)
-					{
-						ChromoMap refMap = otherGMap.chromoMap;
-						// make a linkset that contains only the links between this chromo and the other one
-						LinkSet linkSubset = links.getLinksBetweenMaps(targetMap, refMap);
-						// add the linkset to the list
-						linkSets.add(linkSubset);
-					}
-					
-					// then add the list to the hashtable
-					linkSetLookup.put(targetMap, linkSets);
-				}
-			}
-			
-			// now set up the lists of linked-to features for each of the gchromomaps
-			initLinkedFeatureLists();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
+
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------
 	
@@ -609,7 +552,6 @@ public class MainCanvas extends JPanel
 	{
 		// this link set holds the all the possible links between all chromos in the target set and
 		// all chromos in the reference set
-		// private static LinkSet links = null;
 		
 		// for each link in the overall link set
 		for (Link link : links)
@@ -629,8 +571,6 @@ public class MainCanvas extends JPanel
 				// add the feature to its list of linked features
 				if (gMap != null)
 					gMap.linkedFeatureList.add(feature);
-				// else
-				// System.out.println("unassigned feature found");
 			}
 		}
 		
@@ -649,6 +589,7 @@ public class MainCanvas extends JPanel
 	// used to scroll up and down the canvas
 	public void moveGenomeViewPort(GMapSet gMapSet, int newCenterPoint)
 	{
+		System.out.println("moving genome viewport");
 		// update the centerpoint to the new percentage
 		gMapSet.centerPoint = newCenterPoint;
 		gMapSet.scroller.setValue(newCenterPoint);

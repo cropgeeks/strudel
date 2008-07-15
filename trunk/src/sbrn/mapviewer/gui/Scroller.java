@@ -18,18 +18,22 @@ public class Scroller extends JScrollBar implements AdjustmentListener
 	}
 	
 	public void adjustmentValueChanged(AdjustmentEvent e)
-	{		
-		// if(e.getValueIsAdjusting())
-		// return;
+	{
+//		 if(e.getValueIsAdjusting())
+//		 return;
+		
+		System.out.println("scroller adjustmentValueChanged called");
 		
 		if (e.getSource().equals(winMain.leftCanvasScroller))
 		{
+			System.out.println("left scroller");
 			winMain.mainCanvas.moveGenomeViewPort(winMain.mainCanvas.targetGMapSet, e.getValue());
 		}
-		if (e.getSource().equals(winMain.rightCanvasScroller))
+		else if (e.getSource().equals(winMain.rightCanvasScroller))
 		{
+			System.out.println("right scroller");
 			winMain.mainCanvas.moveGenomeViewPort(winMain.mainCanvas.referenceGMapSet, e.getValue());
-		}	
+		}
 	}
 	
 }

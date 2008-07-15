@@ -91,13 +91,13 @@ public class WinMain extends JFrame
 
 		//the control panel 
 		ControlPanel controlPanel = new ControlPanel(this);
-		controlPanel.setPreferredSize(new Dimension(250,400));
+		controlPanel.setPreferredSize(new Dimension(230,400));
 		
 		//the overviews for the two genomes
 		targetOverviewCanvas = new OverviewCanvas(this,mainCanvas.targetGMapSet);
 		referenceOverviewCanvas = new OverviewCanvas(this,mainCanvas.referenceGMapSet);
-		targetOverviewCanvas.setPreferredSize(new Dimension(125,250));
-		referenceOverviewCanvas.setPreferredSize(new Dimension(125,250));
+		targetOverviewCanvas.setPreferredSize(new Dimension(100,250));
+		referenceOverviewCanvas.setPreferredSize(new Dimension(100,250));
 		overViewsContainer.add(targetOverviewCanvas);
 		overViewsContainer.add(referenceOverviewCanvas);		
 		

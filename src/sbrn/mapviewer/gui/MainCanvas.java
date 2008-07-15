@@ -75,6 +75,7 @@ public class MainCanvas extends JPanel
 		setUpGenomes(targetMapset, referenceMapSet);
 		makeTargetLinkSubSets();
 		setBackground(Color.black);
+		repaint();
 	}
 	
 	// ============================methods==================================
@@ -178,7 +179,7 @@ public class MainCanvas extends JPanel
 			}
 			
 			// width of chromosomes -- set this to a fixed fraction of the screen width for now
-			int chromoWidth = canvasWidth / 30;
+			int chromoWidth = canvasWidth / 40;
 			
 			// now paint the chromosomes in this genome
 			// for each chromosome in the genome
@@ -205,7 +206,7 @@ public class MainCanvas extends JPanel
 				selectVisibleMaps();
 				
 				// get the map to draw itself (from 0,0 always)
-				gChromoMap.paintMap(g2);
+				gChromoMap.paintMap(g2,false);
 				
 				// now move the graphics object's origin back to 0,0 to preserve the overall coordinate system
 				g2.translate(-x, -currentY);
@@ -652,6 +653,10 @@ public class MainCanvas extends JPanel
 		gMapSet.centerPoint = newCenterPoint;
 		gMapSet.scroller.setValue(newCenterPoint);
 		repaint();
+		
+		//also repaint the overview canvases
+		winMain.targetOverviewCanvas.repaint();
+		winMain.referenceOverviewCanvas.repaint();
 	}
 	// -----------------------------------------------------------------------------------------------------------------------------------
 }// end class

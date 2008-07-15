@@ -102,7 +102,7 @@ public class AnnotationPanel extends javax.swing.JPanel
 														org.jdesktop.layout.GroupLayout.LEADING).add(
 														annotationTextArea,
 														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-														90,
+														40,
 														Short.MAX_VALUE).add(
 														infoLabel)).addContainerGap()));
 	}// </editor-fold>

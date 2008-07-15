@@ -72,7 +72,7 @@ public class GChromoMap
 	/**
 	 * Draws the map from coordinate 0,0 given the current position of the Graphics object
 	 */
-	public void paintMap(Graphics g)
+	public void paintMap(Graphics g, boolean isOverview)
 	{
 		Graphics2D g2 = (Graphics2D) g;
 		
@@ -96,31 +96,46 @@ public class GChromoMap
 		int fontSize = WinMain.mainCanvas.getHeight() / 40;
 		Font mapLabelFont = new Font("Arial", Font.BOLD, fontSize);
 		g2.setFont(mapLabelFont);
-		g2.setColor(Color.WHITE);
-		
-		// decide where to place the label with the chromosome number
-		// on the left hand genome we want the label on the left, right hand genome on the right
-		// reference genome (right):
-		if (!owningSet.isTargetGenome)
+		g2.setColor(new Color(200, 200, 200));		
+		//for normal views (i.e. the main canvas)
+		if (!isOverview)
 		{
-			g2.drawString(String.valueOf(index + 1), width * 6, height / 2);
+			// decide where to place the label with the chromosome number
+			// on the left hand genome we want the label on the left, right hand genome on the right
+			// reference genome (right):
+			if (!owningSet.isTargetGenome)
+			{
+				g2.drawString(String.valueOf(index + 1), width * 6, height / 2);
+			}
+			// target genome (left):
+			else
+			{
+				g2.drawString(String.valueOf(index + 1), -width * 6, height / 2);
+			}
+			
+			
+			if (owningSet.paintMarkers && isShowingOnCanvas)
+			{
+				drawLinkedFeatures(g2);
+				drawHighlightedFeatureLabels(g2);
+			}
+			
+			if(drawHighlightOutline)
+			{
+				highlightMapOutline(g2);
+			}
 		}
-		// target genome (left):
+		
+		//for overviews we want to do things slightly differently
 		else
 		{
-			g2.drawString(String.valueOf(index + 1), -width * 6, height / 2);
+			int smallFontSize = WinMain.mainCanvas.getHeight() / 60;
+			Font overviewLabelFont = new Font("Arial", Font.BOLD, smallFontSize);
+			g2.setFont(overviewLabelFont);
+			g2.setColor(Color.BLACK);
+			g2.drawString(String.valueOf(index + 1), width * 2 + smallFontSize, height / 2);
 		}
-		
-		if (owningSet.paintMarkers && isShowingOnCanvas)
-		{
-			drawLinkedFeatures(g2);
-			drawHighlightedFeatureLabels(g2);
-		}
-		
-		if(drawHighlightOutline)
-		{
-			highlightMapOutline(g2);
-		}
+
 	}
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------------

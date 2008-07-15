@@ -132,11 +132,13 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	// mouse scrolling of canvas
 	public void mouseWheelMoved(MouseWheelEvent e)
 	{
+		System.out.println("mousewheelmove starting");
+		
 		// figure out whether the user is zooming the left or right genome
-		// simply divide the canvas in two halves for this and figure out where on the x axis the hit has occurred
 		int index = getSelectedSet(e);
 		GMapSet selectedSet = winMain.mainCanvas.gMapSetList.get(index);
 		
+		//work out by how much we have moved the mouse and in which direction
 		int notches = e.getWheelRotation();
 		int differential = 0;
 		if (notches < 0)
@@ -149,7 +151,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		}
 		
 		winMain.mainCanvas.moveGenomeViewPort(selectedSet, selectedSet.centerPoint + differential);
-		winMain.mainCanvas.repaint();
+		System.out.println("mousewheelmove complete");
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------

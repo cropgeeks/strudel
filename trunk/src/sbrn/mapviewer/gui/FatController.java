@@ -5,34 +5,41 @@ import java.awt.*;
 public class FatController
 {
 	
-	static WinMain winMain;
-	
-	
-	
+	private WinMain winMain;
+
 	public FatController(WinMain winMain)
 	{
 		this.winMain = winMain;
 	}
 
 
-	public static void changeBackgroundColour(String newColour)
+	public void changeBackgroundColour(String newColour)
 	{
+		Color colour = null;
+		
 		if(newColour.equals("black"))
 		{
-			winMain.mainCanvas.setBackground(Color.black);
+			colour = Color.BLACK;			
 		}
 		else if(newColour.equals("light grey"))
 		{
-			winMain.mainCanvas.setBackground(Color.LIGHT_GRAY);
+			colour = Color.LIGHT_GRAY;
 		}
 		else if(newColour.equals("dark grey"))
 		{
-			winMain.mainCanvas.setBackground(Color.DARK_GRAY);
+			colour = Color.DARK_GRAY;
 		}
 		else if(newColour.equals("white"))
 		{
-			winMain.mainCanvas.setBackground(Color.white);
+			colour = Color.white;
 		}
+		
+		//set all canvas backgrounds to the same colour
+		winMain.mainCanvas.setBackground(colour);
+		winMain.targetOverviewCanvas.setBackground(colour);
+		winMain.referenceOverviewCanvas.setBackground(colour);
+		
+		//update the display
 		winMain.mainCanvas.repaint();
 	}
 }

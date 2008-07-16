@@ -30,20 +30,20 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	{
 		if (e.isAltDown())
 		{
-			System.out.println("mouse clicked once with ALT down");
+//			System.out.println("mouse clicked once with ALT down");
 			winMain.mainCanvas.processClickZoomRequest(e.getX(), e.getY());
 			return;
 		}
 		
 		else if (!e.isControlDown())
 		{
-			System.out.println("mouse clicked once");
+//			System.out.println("mouse clicked once");
 			winMain.mainCanvas.processLinkDisplayRequest(e.getX(), e.getY(), false);
 		}
 		
 		else if (e.isControlDown())
 		{
-			System.out.println("mouse clicked once with CTRL down");
+//			System.out.println("mouse clicked once with CTRL down");
 			winMain.mainCanvas.processLinkDisplayRequest(e.getX(), e.getY(), true);
 		}
 		
@@ -54,7 +54,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	
 	public void mouseEntered(MouseEvent e)
 	{
-		// TODO Auto-generated method stub
+
 		
 	}
 	
@@ -62,7 +62,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	
 	public void mouseExited(MouseEvent e)
 	{
-		// TODO Auto-generated method stub
+
 		
 	}
 	
@@ -108,6 +108,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 				newZoomFactor = 1;
 			winMain.mainCanvas.processSliderZoomRequest(newZoomFactor, index);
 		}
+		
 		mouseDragPosY = e.getY();
 	}
 	
@@ -115,15 +116,6 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	
 	public void mouseMoved(MouseEvent e)
 	{
-//		if (winMain.mainCanvas.overviewMode)
-//		{
-//			winMain.mainCanvas.processLinkDisplayRequest(e.getX(), e.getY(), false);
-//		}
-//		else
-//		{
-//			mouseOverHandler.detectMouseOver(e.getX(), e.getY());
-//		}
-		
 		 mouseOverHandler.detectMouseOver(e.getX(), e.getY());
 	}
 	
@@ -132,8 +124,6 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	// mouse scrolling of canvas
 	public void mouseWheelMoved(MouseWheelEvent e)
 	{
-		System.out.println("mousewheelmove starting");
-		
 		// figure out whether the user is zooming the left or right genome
 		int index = getSelectedSet(e);
 		GMapSet selectedSet = winMain.mainCanvas.gMapSetList.get(index);
@@ -151,7 +141,6 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		}
 		
 		winMain.mainCanvas.moveGenomeViewPort(selectedSet, selectedSet.centerPoint + differential);
-		System.out.println("mousewheelmove complete");
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -6,11 +6,16 @@
 
 package sbrn.mapviewer.gui;
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
+import javax.swing.JCheckBox;
+
 /**
  *
  * @author  __USER__
  */
-public class ControlPanel extends javax.swing.JPanel
+public class ControlPanel extends javax.swing.JPanel implements ItemListener
 {
 	
 	WinMain winMain;
@@ -37,7 +42,7 @@ public class ControlPanel extends javax.swing.JPanel
 		resetLeftButton = new javax.swing.JButton();
 		resetRightButton = new javax.swing.JButton();
 		jLabel1 = new javax.swing.JLabel();
-		jCheckBox1 = new javax.swing.JCheckBox();
+		antialiasCheckbox = new javax.swing.JCheckBox();
 		jLabel2 = new javax.swing.JLabel();
 		jSlider1 = new javax.swing.JSlider();
 		jSeparator1 = new javax.swing.JSeparator();
@@ -69,7 +74,14 @@ public class ControlPanel extends javax.swing.JPanel
 		
 		jLabel1.setText("Zoom reset:");
 		
-		jCheckBox1.setText("antialiased drawing");
+		antialiasCheckbox.setText("antialiased drawing");
+		antialiasCheckbox.addItemListener(new java.awt.event.ItemListener()
+		{
+			public void itemStateChanged(java.awt.event.ItemEvent evt)
+			{
+				ControlPanel.this.itemStateChanged(evt);
+			}
+		});
 		
 		jLabel2.setText("BLAST e-value cut-off (1.00E-):");
 		
@@ -103,7 +115,7 @@ public class ControlPanel extends javax.swing.JPanel
 																		176,
 																		Short.MAX_VALUE).addContainerGap()).add(
 														jPanel1Layout.createSequentialGroup().add(
-																		jCheckBox1).addContainerGap()).add(
+																		antialiasCheckbox).addContainerGap()).add(
 														jPanel1Layout.createSequentialGroup().add(
 																		jPanel1Layout.createParallelGroup(
 																						org.jdesktop.layout.GroupLayout.LEADING).add(
@@ -167,7 +179,7 @@ public class ControlPanel extends javax.swing.JPanel
 										10,
 										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(
 										org.jdesktop.layout.LayoutStyle.RELATED).add(
-										jCheckBox1).addPreferredGap(
+										antialiasCheckbox).addPreferredGap(
 										org.jdesktop.layout.LayoutStyle.UNRELATED).add(
 										jSeparator3,
 										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
@@ -230,14 +242,30 @@ public class ControlPanel extends javax.swing.JPanel
 		}
 		if (e.getSource() == backgroundCombo)
 		{
-			FatController.changeBackgroundColour((String) backgroundCombo.getSelectedItem());
+			winMain.fatController.changeBackgroundColour((String) backgroundCombo.getSelectedItem());
+		}
+	}
+	
+	public void itemStateChanged(ItemEvent e)
+	{
+		if (e.getItemSelectable() == antialiasCheckbox)
+		{
+			if (e.getStateChange() == ItemEvent.SELECTED)
+			{
+				winMain.mainCanvas.antiAlias = true;
+			}
+			else
+			{
+				winMain.mainCanvas.antiAlias = false;
+			}
+			winMain.mainCanvas.repaint();
 		}
 	}
 	
 	//GEN-BEGIN:variables
 	// Variables declaration - do not modify
+	private javax.swing.JCheckBox antialiasCheckbox;
 	private javax.swing.JComboBox backgroundCombo;
-	private javax.swing.JCheckBox jCheckBox1;
 	private javax.swing.JLabel jLabel1;
 	private javax.swing.JLabel jLabel2;
 	private javax.swing.JLabel jLabel3;

@@ -25,7 +25,8 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener
 		this.mainCanvas = winMain.mainCanvas;
 		this.gMapSet = gMapSet;
 		setBorder(BorderFactory.createLineBorder(new Color(180, 180, 180), 1));
-		setBackground(new Color(240, 240, 240));
+//		setBackground(new Color(240, 240, 240));
+		setBackground(Color.BLACK);
 		this.addMouseMotionListener(this);
 	}
 	
@@ -89,7 +90,7 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener
 			gChromoMap.width = chromoWidth;
 			
 			// get the map to draw itself (from 0,0 always)
-			gChromoMap.paintMap(g2, true);
+			gChromoMap.paintOverViewMap(g);
 			
 			// now move the graphics object's origin back to 0,0 to preserve the overall coordinate system
 			g2.translate(-x, -currentY);

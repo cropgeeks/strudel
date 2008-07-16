@@ -85,6 +85,13 @@ public class MouseOverHandler
 		{
 			previousMap.highlightedFeatures = null;
 			previousMap = null;
+			
+			//reset all the annotation labels so they show nothing
+			winMain.targetAnnotationPanel.getLocusInfo().setText("");
+			winMain.targetAnnotationPanel.getAnnotationTextArea().setText("");
+			winMain.referenceAnnotationPanel.getLocusInfo().setText("");
+			winMain.referenceAnnotationPanel.getAnnotationTextArea().setText("");
+			
 			winMain.mainCanvas.repaint();
 		}
 	}

@@ -52,19 +52,23 @@ public class AnnotationPanel extends javax.swing.JPanel
 		locusInfo = new javax.swing.JLabel();
 		annotationTextArea = new javax.swing.JTextArea();
 		
-		genomeLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+		genomeLabel.setFont(new java.awt.Font("Tahoma", 1, 13));
 		genomeLabel.setText("Genome:");
 		
+		locusLabel.setFont(new java.awt.Font("Tahoma", 0, 13));
 		locusLabel.setText("Locus:");
 		
+		infoLabel.setFont(new java.awt.Font("Tahoma", 0, 13));
 		infoLabel.setText("Info:");
 		
-		genomeInfo.setFont(new java.awt.Font("Tahoma", 1, 12));
+		genomeInfo.setFont(new java.awt.Font("Tahoma", 1, 13));
+		
+		locusInfo.setFont(new java.awt.Font("Tahoma", 0, 13));
 		
 		annotationTextArea.setBackground(new java.awt.Color(224, 223, 227));
 		annotationTextArea.setColumns(20);
 		annotationTextArea.setEditable(false);
-		annotationTextArea.setFont(new java.awt.Font("Tahoma", 0, 11));
+		annotationTextArea.setFont(new java.awt.Font("Tahoma", 0, 13));
 		annotationTextArea.setLineWrap(true);
 		annotationTextArea.setRows(5);
 		annotationTextArea.setWrapStyleWord(true);
@@ -85,7 +89,10 @@ public class AnnotationPanel extends javax.swing.JPanel
 														org.jdesktop.layout.GroupLayout.LEADING).add(
 														locusInfo).add(
 														genomeInfo).add(
-														annotationTextArea)).addContainerGap()));
+														annotationTextArea,
+														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+														166,
+														Short.MAX_VALUE)).addContainerGap()));
 		layout.setVerticalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
 						layout.createSequentialGroup().addContainerGap().add(
 										layout.createParallelGroup(
@@ -102,7 +109,7 @@ public class AnnotationPanel extends javax.swing.JPanel
 														org.jdesktop.layout.GroupLayout.LEADING).add(
 														annotationTextArea,
 														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-														40,
+														37,
 														Short.MAX_VALUE).add(
 														infoLabel)).addContainerGap()));
 	}// </editor-fold>

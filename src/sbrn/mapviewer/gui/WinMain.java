@@ -21,6 +21,7 @@ public class WinMain extends JFrame
 	public OverviewCanvas targetOverviewCanvas;
 	public OverviewCanvas referenceOverviewCanvas;
 	
+	FatController fatController;
 	
 	//scroll bars for the canvas
 	Scroller leftCanvasScroller;
@@ -46,6 +47,9 @@ public class WinMain extends JFrame
 	
 	private void setupComponents()
 	{
+		//the fat controller
+		fatController = new FatController(this);		
+		
 		//this panel contains everything else in a borderlayout
 		JPanel topContainerPanel =  new JPanel(new BorderLayout());		
 		//this panel contains the main canvas, the annotation panel below it, and 

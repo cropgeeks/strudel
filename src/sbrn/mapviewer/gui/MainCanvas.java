@@ -64,7 +64,9 @@ public class MainCanvas extends JPanel
 	static LinkSet links = null;
 	
 	// do we need to draw links?
-	boolean drawLinks = false;
+	boolean linksToDraw = false;
+	
+	public boolean antiAlias = false;
 	
 	// ============================c'tors==================================
 	
@@ -110,11 +112,22 @@ public class MainCanvas extends JPanel
 	// paint the genomes or portions thereof onto this canvas
 	public void paintComponent(Graphics g)
 	{
-		System.out.println("repainting main canvas");
+		Graphics2D g2 = (Graphics2D) g;
+		
 		// need to clear the canvas before we draw
 		clear(g);
 		
-		Graphics2D g2 = (Graphics2D) g;
+		// check whether the user wants antialiasing on
+		if (antiAlias)
+		{
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		}
+		else
+		{
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+			g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+		}
 		
 		// get current size of frame
 		canvasHeight = getHeight();
@@ -206,7 +219,7 @@ public class MainCanvas extends JPanel
 				selectVisibleMaps();
 				
 				// get the map to draw itself (from 0,0 always)
-				gChromoMap.paintMap(g2,false);
+				gChromoMap.paintMap(g2);
 				
 				// now move the graphics object's origin back to 0,0 to preserve the overall coordinate system
 				g2.translate(-x, -currentY);
@@ -214,13 +227,12 @@ public class MainCanvas extends JPanel
 				// increment the y position so we can draw the next one
 				currentY += chromoUnit;
 			}
-			
-			// optionally draw lines between chromos
-			if (drawLinks)
-			{
-				drawLinks(g2);
-			}
-			
+		}
+		
+		// optionally draw lines between chromos
+		if (linksToDraw == true)
+		{
+			drawLinks(g2);
 		}
 	}
 	
@@ -263,7 +275,6 @@ public class MainCanvas extends JPanel
 	// display the homologies between chromosomes as lines
 	public void processLinkDisplayRequest(int x, int y, boolean isCtrlClickSelection)
 	{
-		
 		GChromoMap selectedMap = null;
 		
 		// check whether the point x,y lies within one of the bounding rectangles of our chromosomes
@@ -276,7 +287,6 @@ public class MainCanvas extends JPanel
 				if (gChromoMap.boundingRectangle.contains(x, y))
 				{
 					selectedMap = gChromoMap;
-					System.out.println("selectedMap = " + selectedMap.name);
 					break;
 				}
 			}
@@ -304,28 +314,28 @@ public class MainCanvas extends JPanel
 			else
 			{
 				// only do this if the selected map belongs to the target genome
-				//if the single click was on a reference chromo we don't want any action taken
+				// if the single click was on a reference chromo we don't want any action taken
 				if (selectedMap.owningSet.equals(targetGMapSet))
 				{
 					// in that case we first clear out the existing vector of selected maps in the target genome
 					targetGMapSet.deselectAllMaps();
 					// then we add the selected map only
 					targetGMapSet.addSelectedMap(selectedMap);
-					// now add ALL maps into the vector of selected elements for the reference genome so the links can be drawn					
-					referenceGMapSet.selectAllMaps();					
-					drawLinks = true;
+					// now add ALL maps into the vector of selected elements for the reference genome so the links can be drawn
+					referenceGMapSet.selectAllMaps();
+					linksToDraw = true;
 				}
 			}
 			
 			// now check whether we have selected chromosomes in the target genome
 			if (targetGMapSet.selectedMaps.size() > 0)
 			{
-				drawLinks = true;
+				linksToDraw = true;
 			}
 			// if not, we don't want to draw links, just display the selected outlines of the reference genome chromsomes
 			else
 			{
-				drawLinks = false;
+				linksToDraw = false;
 			}
 			
 		}
@@ -333,22 +343,13 @@ public class MainCanvas extends JPanel
 		else
 		{
 			// don't draw links
-			drawLinks = false;
+			linksToDraw = false;
 			// reset the selectedMaps vectors in both genomes -- this removes the highlight frames from the chromosomes
 			for (GMapSet mapSet : gMapSetList)
 			{
 				mapSet.deselectAllMaps();
 			}
 		}
-		
-//		for (GMapSet mapSet : this.gMapSetList)
-//		{
-//			System.out.println("selected maps in map set " + mapSet.name + " : ");
-//			for (GChromoMap gMap : mapSet.selectedMaps)
-//			{
-//				System.out.println(gMap.name);
-//			}
-//		}
 		
 		repaint();
 	}
@@ -370,7 +371,6 @@ public class MainCanvas extends JPanel
 			
 			// update the centerpoint to the new percentage
 			selectedSet.centerPoint = 100 / (selectedSet.numMaps) * (selectedSet.gMaps.indexOf(selectedMap));
-			System.out.println("selectedSet.centerPoint uncorrected = " + selectedSet.centerPoint);
 			
 			// convert half the canvas height to a percentage of the total and add this
 			int combinedSpacers = chromoSpacing * selectedSet.numMaps - 1;
@@ -443,7 +443,6 @@ public class MainCanvas extends JPanel
 			for (int i = 0; i < targetGMapSet.selectedMaps.size(); i++)
 			{
 				GChromoMap selectedMap = targetGMapSet.selectedMaps.get(i);
-				
 				// get the ChromoMap for the currently selected chromosome
 				ChromoMap selectedChromoMap = selectedMap.chromoMap;
 				// get all the links between the selected chromosome and the reference mapset
@@ -471,9 +470,9 @@ public class MainCanvas extends JPanel
 					
 					if (draw)
 					{
-						
 						// change the colour of the graphics object so that each link subset is colour coded
 						// g2.setColor(colours[linkSetIndex]);
+						// for now just set the colour to a light grey
 						g2.setColor(new Color(200, 200, 200));
 						
 						// for each link in the linkset
@@ -485,6 +484,7 @@ public class MainCanvas extends JPanel
 							// get the owning map, positional data of feature 2 (which is on a reference chromosome) and the end point of the map
 							float feat2Start = link.getFeature2().getStart();
 							ChromoMap owningMap = link.getFeature2().getOwningMap();
+							
 							float referenceMapStop = owningMap.getStop();
 							int refChromoIndex = owningMap.getOwningMapSet().getMaps().indexOf(
 											owningMap);
@@ -544,7 +544,6 @@ public class MainCanvas extends JPanel
 			e.printStackTrace();
 		}
 	}
-
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------
 	
@@ -589,13 +588,12 @@ public class MainCanvas extends JPanel
 	// used to scroll up and down the canvas
 	public void moveGenomeViewPort(GMapSet gMapSet, int newCenterPoint)
 	{
-		System.out.println("moving genome viewport");
 		// update the centerpoint to the new percentage
 		gMapSet.centerPoint = newCenterPoint;
 		gMapSet.scroller.setValue(newCenterPoint);
 		repaint();
 		
-		//also repaint the overview canvases
+		// also repaint the overview canvases
 		winMain.targetOverviewCanvas.repaint();
 		winMain.referenceOverviewCanvas.repaint();
 	}

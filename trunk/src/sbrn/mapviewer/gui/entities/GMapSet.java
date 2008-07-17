@@ -54,11 +54,14 @@ public class GMapSet
 	// the scrollbar which controls the viewable area in this map set
 	public Scroller scroller;
 	
-	// the point on the genome that is currently seen in the center of the canvas, as a percentage of its total height
+	// the point on the genome that is currently seen in the center of the canvas, as a percentage of the genome's total height
 	public int centerPoint = 50;
 	
 	// the total current height of the genome as drawn on the canvas, in pixels
 	public int totalY;
+	
+	//the height of a chromosome in this genome, in pixels (all chromos are the same height, always)
+	public int chromoHeight;
 	
 	// a vector containing GChromoMap objects that have been selected by the user through mouse clicks
 	public Vector<GChromoMap> selectedMaps = new Vector<GChromoMap>();

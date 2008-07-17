@@ -16,8 +16,9 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener
 	int lineY = 0;
 	int mouseDragPosY = 0;
 	int totalY = 0;
-	// the space we want at the top and bottom
-	int topBottomSpacer = 5;
+	// space between chromosomes, fixed
+	int chromoSpacing = 4;
+	int topBottomSpacer = 0;
 	
 	public OverviewCanvas(WinMain winMain, GMapSet gMapSet)
 	{
@@ -25,7 +26,7 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener
 		this.mainCanvas = winMain.mainCanvas;
 		this.gMapSet = gMapSet;
 		setBorder(BorderFactory.createLineBorder(new Color(180, 180, 180), 1));
-//		setBackground(new Color(240, 240, 240));
+		// setBackground(new Color(240, 240, 240));
 		setBackground(Color.BLACK);
 		this.addMouseMotionListener(this);
 	}
@@ -47,23 +48,17 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener
 		// x position of genome
 		int x = canvasWidth / 2;
 		
-		// space between chromosomes, fixed
-		int chromoSpacing = 4;
+		int chromoSpacing = (int) ((canvasHeight / gMapSet.numMaps) * 0.20f);
 		
-		// height of chromosomes
-		int chromoUnit = (canvasHeight - (topBottomSpacer * 2)) / gMapSet.numMaps;
-		
-		// work out the other coordinates needed
-		// chromoUnit is the combined height of a chromosome and the space
-		// below it extending to the next chromosome in the column
-		int chromoHeight = chromoUnit - chromoSpacing;
-		
-		// now need to work out where we start painting
-		// this can be a negative value
-		// need to multiply the current chromosome height with the number of chromos
-		// this plus the spaces between the chromosomes gives us the total number of pixels we draw
-		// regardless of whether this is on the canvas or off
-		totalY = gMapSet.numMaps * chromoUnit;
+		// the total amount of space we have for drawing on vertically, in pixels
+		int availableSpaceVertically = canvasHeight - (chromoSpacing * 2);
+		// the combined height of all the vertical spaces between chromosomes
+		int allSpacers = chromoSpacing * (gMapSet.numMaps - 1);
+		// the height of a chromosome
+		int chromoHeight = Math.round((availableSpaceVertically - allSpacers) / gMapSet.numMaps);
+		// the total vertical extent of the genome, excluding top and bottom spacers
+		totalY = (gMapSet.numMaps * chromoHeight) + ((gMapSet.numMaps - 1) * chromoSpacing);
+		topBottomSpacer = (canvasHeight - totalY) / 2;
 		
 		// currentY is the y position at which we start drawing the genome, chromo by chromo, top to bottom
 		// this may be off the visible canvas in a northerly direction
@@ -96,20 +91,26 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener
 			g2.translate(-x, -currentY);
 			
 			// increment the y position so we can draw the next one
-			currentY += chromoUnit;
+			currentY += chromoHeight + chromoSpacing;
 			
 		}
 		
 		// now draw a line indicating where in the main canvas we are currently zoomed in to
-		int centerPoint = gMapSet.centerPoint;
-
 		if (gMapSet.zoomFactor == 1)
+		{
 			lineY = canvasHeight / 2;
+		}
 		else
-			lineY = (int) (totalY * (centerPoint / 100.0f));
-
+		{
+			System.out.println("gMapSet " + gMapSet.name + " centerPoint = " + gMapSet.centerPoint);
+			lineY = Math.round(totalY * (gMapSet.centerPoint / 100.0f) + topBottomSpacer);
+		}
+		
 		g2.setColor(Color.red);
 		g2.drawLine(0, lineY, canvasWidth, lineY);
+		System.out.println("totalY = " + totalY);
+		System.out.println("canvasHeight = " + canvasHeight);
+		System.out.println("drawing line at " + lineY);
 	}
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------
@@ -124,11 +125,11 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener
 	
 	private void processLineDragRequest(int newY)
 	{
-		//work out what percentage offset from the top of the topmost chromosome this y position is equal to
-		int percentOffset = (int) (((newY - topBottomSpacer)/(float)totalY)*100);
-
-		//move the genome viewport on the main canvas
-		winMain.mainCanvas.moveGenomeViewPort(gMapSet, percentOffset);	
+		// work out what percentage offset from the top of the topmost chromosome this y position is equal to
+		int percentOffset = (int) (((newY - topBottomSpacer) / (float) totalY) * 100);
+		
+		// move the genome viewport on the main canvas
+		winMain.mainCanvas.moveGenomeViewPort(gMapSet, percentOffset);
 		
 		repaint();
 	}
@@ -159,13 +160,13 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener
 	{
 		
 	}
-
+	
 	public void mouseDragged(MouseEvent e)
 	{
 		processLineDragRequest(e.getY());
 		
 	}
-
+	
 	public void mouseMoved(MouseEvent e)
 	{
 		// TODO Auto-generated method stub

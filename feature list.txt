@@ -1,85 +1,30 @@
-Visible controls in control panel:
+================================
 
-- reset zoom button left
-- reset zoom button right
-- check box "Show QTL homologies only"
-- slider "BLAST e-value cut-off"
-- background colour selector?
+zooming:
+
+- zooming a la Photoshop -- click and drag panning over area (with the area being outlined at the same time) which then is zoomed in full screen height when user releases mouse
 
 ================================
 
-User interaction:
-
-zooming:
-- zooming a la Photoshop -- click and drag panning over area (with the area being outlined at the same time) which then is zoomed in full screen height when user releases mouse
-- selecting zoom icon and then single clicking on chromosome will center the clicked-on locus in the middle of the screen and zoom in by a predetermined amount (need to decide how much); applies to both genomes
-- locus labels only display above a certain zoom factor
-
 other:
-- single click on chromosome in target genome shows all homologies with reference genome
-- mouseover on a locus will display annotation information about the locus in text areas in the bottom panel (both genomes)
+
 - option to show homologies only that fall within a given QTL
 - user can set BLAST e-value cut-off which allows subsets of the links to be displayed that fall below a certain value (slider best here, needs to be continuous)
 - need option (dialog?) for user defining new QTL manually
 - mouseover on QTL displays tool tip with info about the QTL
+- separate data loading for left and right
+- list panel on right showing links (names, e-values)
+- links filter options below that on right
 
 ================================
 
 Data:
+
 - have annotation data for reference genome (e.g. rice) kep locally for fast access but perhaps include some kind of option for updating this if possible (manually? automatically?)
 - need option for reading in QTL data
 
 ================================
 
-Other:
-- display genome names 
-- separate data loading for left and right
-- no menu bar
-- list panel on right showing links (names, e-values)
-- links filter options below that on right
-
-========================================
-
-class design:
-
-application class (MapViewer)
-main frame (WinMain)
-main canvas (panel)
-drawable objects become classes (chromosome, genome, etc) -- link to data objects
-panels for overviews, control panel, status bar, annotation info, zoom control
-[notation: e.g. GLine for graphical rep of Line class]
-mouse handling stuff
-QTL track (panel)
-
-existing packages:
-
-sbrn.mapviewer.data
-sbrn.mapviewer.io
-
-new packages:
-
-sbrn.mapviewer.gui:
-MapViewer (contains main method)
-WinMain extends JFrame
-MainCanvas extends JPanel
-OverviewCanvas extends JPanel
-ControlPanel extends JPanel
-StatusBar extends JPanel
-AnnotationPanel extends JPanel
-ZoomControlPanel extends JPanel
-LinkListPanel extends JPanel
-LinkControlPanel extends JPanel
-QTLPanel extends JPanel
-GenomeInfoPanel extends JPanel
-Scroller extends JScrollBar/JPanel?
-MouseHandler implements MouseInputListener
-FatController
-
-sbrn.mapviewer.gui.entities:
-GMapSet 	(=genome)
-GLink		(=homology)
-GFeature 	(=marker)
-GChromoMap 	(=chromosome)
 
 
 

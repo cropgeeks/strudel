@@ -30,7 +30,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	{
 		if (e.isAltDown())
 		{
-//			System.out.println("mouse clicked once with ALT down");
+//			System.out.println("mouse clicked with ALT down");
 			winMain.mainCanvas.processClickZoomRequest(e.getX(), e.getY());
 			return;
 		}
@@ -43,7 +43,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		
 		else if (e.isControlDown())
 		{
-//			System.out.println("mouse clicked once with CTRL down");
+//			System.out.println("mouse clicked  with CTRL down");
 			winMain.mainCanvas.processLinkDisplayRequest(e.getX(), e.getY(), true);
 		}
 		

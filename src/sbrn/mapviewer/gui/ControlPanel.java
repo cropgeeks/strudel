@@ -225,21 +225,17 @@ public class ControlPanel extends javax.swing.JPanel implements ItemListener
 	
 	private void actionPerformed(java.awt.event.ActionEvent e)
 	{
+		//these two actions reset the left and right zoom respectively
 		if (e.getSource() == resetLeftButton)
 		{
 			winMain.mainCanvas.processSliderZoomRequest(1, 0);
-			System.out.println("resetLeftButton pressed");
 		}
 		if (e.getSource() == resetRightButton)
 		{
 			winMain.mainCanvas.processSliderZoomRequest(1, 1);
-			System.out.println("resetRightButton pressed");
 		}
-		if (e.getSource() == resetRightButton)
-		{
-			winMain.mainCanvas.processSliderZoomRequest(1, 1);
-			System.out.println("resetRightButton pressed");
-		}
+
+		//change the background colour to the value selected by the user from the combo
 		if (e.getSource() == backgroundCombo)
 		{
 			winMain.fatController.changeBackgroundColour((String) backgroundCombo.getSelectedItem());

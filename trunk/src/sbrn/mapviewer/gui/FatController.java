@@ -12,6 +12,12 @@ public class FatController
 		this.winMain = winMain;
 	}
 
+	// repaint the overview canvases
+	public void updateOverviewCanvases()
+	{
+		winMain.targetOverviewCanvas.repaint();
+		winMain.referenceOverviewCanvas.repaint();
+	}
 
 	public void changeBackgroundColour(String newColour)
 	{

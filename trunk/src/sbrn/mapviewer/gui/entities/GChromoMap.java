@@ -80,7 +80,7 @@ public class GChromoMap
 		
 		// this colour is the lightest in the double gradient which produces the ambient light effect
 		// i.e. this is the colour one will see in the centre of the chromosome (= the topmost part of the simulated cylinder)
-		Color offWhite = new Color(200, 200, 200);
+		Color offWhite = new Color(170, 170, 170);
 		
 		// draw first half of chromosome
 		GradientPaint gradient = new GradientPaint(0, 0, colour, width / 2, 0, offWhite);
@@ -96,7 +96,7 @@ public class GChromoMap
 		int fontSize = WinMain.mainCanvas.getHeight() / 40;
 		Font mapLabelFont = new Font("Arial", Font.BOLD, fontSize);
 		g2.setFont(mapLabelFont);
-		g2.setColor(new Color(200, 200, 200));
+		g2.setColor(new Color(150, 150, 150));
 		
 		// decide where to place the label with the chromosome number
 		// on the left hand genome we want the label on the left, right hand genome on the right
@@ -133,7 +133,7 @@ public class GChromoMap
 		
 		// this colour is the lightest in the double gradient which produces the ambient light effect
 		// i.e. this is the colour one will see in the centre of the chromosome (= the topmost part of the simulated cylinder)
-		Color offWhite = new Color(200, 200, 200);
+		Color offWhite = new Color(180, 180, 180);
 		
 		// draw first half of chromosome
 		GradientPaint gradient = new GradientPaint(0, 0, colour, width / 2, 0, offWhite);
@@ -149,8 +149,16 @@ public class GChromoMap
 		int smallFontSize = 9;
 		Font overviewLabelFont = new Font("Arial", Font.BOLD, smallFontSize);
 		g2.setFont(overviewLabelFont);
-		g2.setColor(new Color(200, 200, 200));
+		g2.setColor(new Color(150, 150, 150));
 		g2.drawString(String.valueOf(index + 1), width *2, height / 2);
+		
+		// update the bounding rectangle 
+//		boundingRectangle.setBounds(x, y, width,height);
+		
+		if (drawHighlightOutline)
+		{
+			highlightMapOutline(g2);
+		}
 
 	}
 	

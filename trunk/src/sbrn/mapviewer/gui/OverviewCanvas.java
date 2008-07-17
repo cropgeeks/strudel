@@ -83,6 +83,9 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener
 			gChromoMap.y = currentY;
 			gChromoMap.height = chromoHeight;
 			gChromoMap.width = chromoWidth;
+			// update its bounding rectangle (used for hit detection)
+			gChromoMap.boundingRectangle.setBounds(gChromoMap.x, gChromoMap.y, gChromoMap.width-1,
+							gChromoMap.height);
 			
 			// get the map to draw itself (from 0,0 always)
 			gChromoMap.paintOverViewMap(g);
@@ -91,8 +94,7 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener
 			g2.translate(-x, -currentY);
 			
 			// increment the y position so we can draw the next one
-			currentY += chromoHeight + chromoSpacing;
-			
+			currentY += chromoHeight + chromoSpacing;			
 		}
 		
 		// now draw a line indicating where in the main canvas we are currently zoomed in to
@@ -102,15 +104,11 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener
 		}
 		else
 		{
-			System.out.println("gMapSet " + gMapSet.name + " centerPoint = " + gMapSet.centerPoint);
 			lineY = Math.round(totalY * (gMapSet.centerPoint / 100.0f) + topBottomSpacer);
 		}
 		
 		g2.setColor(Color.red);
 		g2.drawLine(0, lineY, canvasWidth, lineY);
-		System.out.println("totalY = " + totalY);
-		System.out.println("canvasHeight = " + canvasHeight);
-		System.out.println("drawing line at " + lineY);
 	}
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------

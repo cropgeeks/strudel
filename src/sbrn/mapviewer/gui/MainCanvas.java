@@ -220,10 +220,7 @@ public class MainCanvas extends JPanel
 		{
 			drawLinks(g2);
 		}
-		
-		//testing only -- draw line through center of canvas
-		g2.setColor(Color.green);
-		g2.drawLine(0, getHeight()/2, getWidth(), getHeight()/2);
+
 	}
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------
@@ -342,6 +339,9 @@ public class MainCanvas extends JPanel
 		}
 		
 		repaint();
+		
+		//update overviews
+		winMain.fatController.updateOverviewCanvases();
 	}
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------
@@ -396,6 +396,9 @@ public class MainCanvas extends JPanel
 			
 			// repaint the canvas
 			repaint();
+			
+			//update overviews
+			winMain.fatController.updateOverviewCanvases();
 		}
 	}
 	
@@ -472,8 +475,8 @@ public class MainCanvas extends JPanel
 					{
 						// change the colour of the graphics object so that each link subset is colour coded
 						// g2.setColor(colours[linkSetIndex]);
-						// for now just set the colour to a light grey
-						g2.setColor(new Color(200, 200, 200));
+						// for now just set the colour to grey
+						g2.setColor(new Color(150, 150, 150));
 						
 						// for each link in the linkset
 						for (Link link : (LinkSet) selectedLinks)
@@ -592,10 +595,7 @@ public class MainCanvas extends JPanel
 		gMapSet.centerPoint = newCenterPoint;
 		gMapSet.scroller.setValue(newCenterPoint);
 		repaint();
-		
-		// also repaint the overview canvases
-		winMain.targetOverviewCanvas.repaint();
-		winMain.referenceOverviewCanvas.repaint();
+
 	}
 	// -----------------------------------------------------------------------------------------------------------------------------------
 }// end class

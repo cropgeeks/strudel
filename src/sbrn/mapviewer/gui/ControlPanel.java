@@ -93,7 +93,7 @@ public class ControlPanel extends javax.swing.JPanel implements ItemListener
 		jLabel3.setText("Background colour:");
 		
 		backgroundCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[]
-		{ "black", "dark grey", "white" }));
+		{ "black", "dark grey", "light grey", "white" }));
 		backgroundCombo.addActionListener(new java.awt.event.ActionListener()
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -234,12 +234,15 @@ public class ControlPanel extends javax.swing.JPanel implements ItemListener
 		{
 			winMain.mainCanvas.processSliderZoomRequest(1, 1);
 		}
-
+		
 		//change the background colour to the value selected by the user from the combo
 		if (e.getSource() == backgroundCombo)
 		{
 			winMain.fatController.changeBackgroundColour((String) backgroundCombo.getSelectedItem());
 		}
+		
+		//update overviews
+		winMain.fatController.updateOverviewCanvases();
 	}
 	
 	public void itemStateChanged(ItemEvent e)

@@ -90,7 +90,7 @@ public class WinMain extends JFrame
 		JPanel annotationPanelContainer = new JPanel(new GridLayout(1,2));
 		annotationPanelContainer.add(targetAnnotationPanel);
 		annotationPanelContainer.add(referenceAnnotationPanel);	
-		annotationPanelContainer.setPreferredSize(new Dimension(800, 100));
+		annotationPanelContainer.setPreferredSize(new Dimension(800, 150));
 		mainPanel.add(annotationPanelContainer,BorderLayout.SOUTH);
 
 		//the control panel 
@@ -101,7 +101,7 @@ public class WinMain extends JFrame
 		targetOverviewCanvas = new OverviewCanvas(this,mainCanvas.targetGMapSet);
 		referenceOverviewCanvas = new OverviewCanvas(this,mainCanvas.referenceGMapSet);
 		targetOverviewCanvas.setPreferredSize(new Dimension(100,250));
-		referenceOverviewCanvas.setPreferredSize(new Dimension(100,250));
+		referenceOverviewCanvas.setPreferredSize(new Dimension(100,220));
 		overViewsContainer.add(targetOverviewCanvas);
 		overViewsContainer.add(referenceOverviewCanvas);		
 		

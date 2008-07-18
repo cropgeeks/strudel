@@ -7,6 +7,7 @@ public class Link
 {
 	private Feature feature1;
 	private Feature feature2;	
+	private double blastScore;
 	
 	public Link(Feature feature1, Feature feature2)
 	{
@@ -19,7 +20,17 @@ public class Link
 	
 	public Feature getFeature2()
 		{ return feature2; }
-	
+
 	public String toString()
 		{ return feature1 + " and " + feature2; }
+
+	public double getBlastScore()
+	{
+		return blastScore;
+	}
+
+	public void setBlastScore(double blastScore)
+	{
+		this.blastScore = blastScore;
+	}
 }

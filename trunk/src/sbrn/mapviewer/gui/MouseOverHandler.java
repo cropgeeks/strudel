@@ -37,7 +37,7 @@ public class MouseOverHandler
 			int percentDistanceFromTop = (int) (((y - selectedMap.boundingRectangle.getY()) / selectedMap.height) * 100);
 			
 			// now look up this value in the lookup table of the map
-			Feature match = selectedMap.linkedFeaturePosLookup.get(percentDistanceFromTop);
+			Feature match = selectedMap.allFeaturesPosLookup.get(percentDistanceFromTop);
 			// we have a match
 			if (match != null)
 			{
@@ -46,23 +46,19 @@ public class MouseOverHandler
 				// get the two before and after from the list maintained by the map object and add them too
 				LinkedList<Feature> fList = selectedMap.chromoMap.getFeatureList();
 				int index = fList.indexOf(match);
-				// highlightedFeatures.add(fList.get(index - 2));
-				// highlightedFeatures.add(fList.get(index - 1));
 				highlightedFeatures.add(match);
-				// highlightedFeatures.add(fList.get(index + 1));
-				// highlightedFeatures.add(fList.get(index + 2));
 				
 				// set this object on the selected map and repaint
 				selectedMap.highlightedFeatures = highlightedFeatures;
 				winMain.mainCanvas.repaint();
 				
 				// also set the label text in the annotation window unless we are fully zoomed out
-				if (selectedMap.owningSet.equals(winMain.mainCanvas.targetGMapSet)  && winMain.mainCanvas.targetGMapSet.paintMarkers)
+				if (selectedMap.owningSet.equals(winMain.mainCanvas.targetGMapSet)  && winMain.mainCanvas.targetGMapSet.paintLinkedMarkers)
 				{
 					winMain.targetAnnotationPanel.getLocusInfo().setText(match.getName());
 					winMain.targetAnnotationPanel.getAnnotationTextArea().setText(match.getAnnotation());
 				}
-				else if(winMain.mainCanvas.referenceGMapSet.paintMarkers)
+				else if(winMain.mainCanvas.referenceGMapSet.paintLinkedMarkers)
 				{
 					winMain.referenceAnnotationPanel.getLocusInfo().setText(match.getName());
 					winMain.referenceAnnotationPanel.getAnnotationTextArea().setText(match.getAnnotation());

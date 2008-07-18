@@ -9,7 +9,6 @@ zooming:
 other:
 
 - option to show homologies only that fall within a given QTL
-- user can set BLAST e-value cut-off which allows subsets of the links to be displayed that fall below a certain value (slider best here, needs to be continuous)
 - need option (dialog?) for user defining new QTL manually
 - mouseover on QTL displays tool tip with info about the QTL
 - separate data loading for left and right
@@ -20,13 +19,33 @@ other:
 
 Data:
 
-- have annotation data for reference genome (e.g. rice) kep locally for fast access but perhaps include some kind of option for updating this if possible (manually? automatically?)
+- have annotation data for reference genome (e.g. rice) kept locally for fast access but perhaps include some kind of option for updating this if possible (manually? automatically?)
 - need option for reading in QTL data
 
 ================================
 
 
+Luke Ramsay's shopping list (in descending order of priority):
 
+- view full detail of reference genome at high/highest zoom level
+- second reference genome (e.g. for Brachiopodium)
+- show centromere positions
+- flip entire chromosomes and portions thereof
+- highlight conflicts in conserved synteny, i.e. cases where the ordering of features differs between genomes
+- selective highlighting of region of interest by a) Photoshop-style pan-and-zoom and b) pan and select at same zoom level to display only markers and labels in selected region
+- filter link display by clicking
+- screen dumps
+- highlight gaps in reference genome sequence (i.e. regions for which there is no physical map)
+- move markers manually in GUI, at least in target genome
+- parallel homology systems, based on e.g. blastn vs blastx, user chooses which one to see
+
+
+================================
+
+FIXES:
+
+- scroll speed needs to be reduced at higher zoom levels
+- chromosome width varies with frame width by +/- 1 pixel, causing markers to go beyond chromosome
 
 
 

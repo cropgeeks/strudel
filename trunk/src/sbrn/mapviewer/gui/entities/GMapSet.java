@@ -41,10 +41,6 @@ public class GMapSet
 	// i.e. an x coordinate in pixels which denotes the left most edge of the genome drawn
 	public int xPosition;
 	
-	// these control whether we draw chromosome markers and labels
-	public boolean paintMarkers = false;
-	public boolean paintLabels = false;
-	
 	// true if this is the target genome, false if it the reference genome
 	public boolean isTargetGenome = false;
 	
@@ -65,6 +61,20 @@ public class GMapSet
 	
 	// a vector containing GChromoMap objects that have been selected by the user through mouse clicks
 	public Vector<GChromoMap> selectedMaps = new Vector<GChromoMap>();
+	
+	
+	// these control whether we draw chromosome markers and labels
+	public boolean paintLinkedMarkers = false;
+	public boolean paintAllMarkers = false;
+	public boolean paintLabels = false;
+	
+	//a zoom factor value above which we can draw all  features
+	//this is to reduce the amount of clutter on screen
+	public float thresholdAllMarkerPainting;
+	//the same for drawing only features that are involved in links
+	public float thresholdLinkedMarkerPainting;
+	//the same for drawing labels
+	public float thresholdLabelPainting;
 	
 	// ====================================c'tors========================================
 	

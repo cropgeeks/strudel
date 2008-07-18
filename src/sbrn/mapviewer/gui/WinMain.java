@@ -7,25 +7,23 @@ import javax.swing.*;
 
 public class WinMain extends JFrame
 {
-	//this is where we paint the genomes
-	public static MainCanvas mainCanvas;
-	
 	//this is where we hold the genome data
 	public DataContainer dataContainer;
 	
+	//Swing components that make up the GUI
+	//this is where we paint the genomes
+	public static MainCanvas mainCanvas;
 	public ZoomControlPanel zoomControlPanel;
-	
+	public ControlPanel controlPanel;
 	public AnnotationPanel targetAnnotationPanel;
-	public AnnotationPanel referenceAnnotationPanel;
-	
+	public AnnotationPanel referenceAnnotationPanel;	
 	public OverviewCanvas targetOverviewCanvas;
 	public OverviewCanvas referenceOverviewCanvas;
+	public Scroller leftCanvasScroller;
+	public Scroller rightCanvasScroller;
 	
+	//the controller for the whole application
 	FatController fatController;
-	
-	//scroll bars for the canvas
-	Scroller leftCanvasScroller;
-	Scroller rightCanvasScroller;
 	
 	public WinMain()
 	{
@@ -90,11 +88,11 @@ public class WinMain extends JFrame
 		JPanel annotationPanelContainer = new JPanel(new GridLayout(1,2));
 		annotationPanelContainer.add(targetAnnotationPanel);
 		annotationPanelContainer.add(referenceAnnotationPanel);	
-		annotationPanelContainer.setPreferredSize(new Dimension(800, 150));
+		annotationPanelContainer.setPreferredSize(new Dimension(800, 100));
 		mainPanel.add(annotationPanelContainer,BorderLayout.SOUTH);
 
 		//the control panel 
-		ControlPanel controlPanel = new ControlPanel(this);
+		controlPanel = new ControlPanel(this);
 		controlPanel.setPreferredSize(new Dimension(230,400));
 		
 		//the overviews for the two genomes

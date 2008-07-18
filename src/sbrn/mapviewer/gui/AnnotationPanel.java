@@ -53,7 +53,9 @@ public class AnnotationPanel extends javax.swing.JPanel
 		locusInfo = new javax.swing.JLabel();
 		annotationTextArea = new javax.swing.JTextArea();
 		
-		jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Info:"));
+		setBackground(new java.awt.Color(255, 255, 255));
+		
+		jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 		
 		genomeLabel.setFont(new java.awt.Font("Tahoma", 1, 13));
 		genomeLabel.setText("Genome:");
@@ -68,7 +70,6 @@ public class AnnotationPanel extends javax.swing.JPanel
 		
 		locusInfo.setFont(new java.awt.Font("Tahoma", 0, 13));
 		
-		annotationTextArea.setBackground(new java.awt.Color(224, 223, 227));
 		annotationTextArea.setColumns(20);
 		annotationTextArea.setEditable(false);
 		annotationTextArea.setFont(new java.awt.Font("Tahoma", 0, 13));
@@ -97,11 +98,11 @@ public class AnnotationPanel extends javax.swing.JPanel
 																						annotationTextArea).add(
 																						locusInfo,
 																						org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																						294,
+																						223,
 																						Short.MAX_VALUE).add(
 																						genomeInfo,
 																						org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																						294,
+																						223,
 																						Short.MAX_VALUE))).add(
 														locusLabel)).addContainerGap()));
 		jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(
@@ -128,7 +129,7 @@ public class AnnotationPanel extends javax.swing.JPanel
 														infoLabel).add(
 														annotationTextArea,
 														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-														37,
+														25,
 														Short.MAX_VALUE)).addContainerGap()));
 		
 		org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
@@ -136,15 +137,17 @@ public class AnnotationPanel extends javax.swing.JPanel
 		layout.setHorizontalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
 						layout.createSequentialGroup().addContainerGap().add(
 										jPanel1,
-										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 										Short.MAX_VALUE).addContainerGap()));
 		layout.setVerticalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
-						layout.createSequentialGroup().add(
+						layout.createSequentialGroup().addContainerGap().add(
 										jPanel1,
+										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
 										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addContainerGap(
 										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE).addContainerGap()));
+										Short.MAX_VALUE)));
 	}// </editor-fold>
 	//GEN-END:initComponents
 	

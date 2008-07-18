@@ -38,6 +38,7 @@ public class DataContainer
 			String fileSep = System.getProperty("file.separator");
 			
 			referenceData = new File(workingDir + fileSep + "data/riceU35data.txt");
+//			referenceData = new File(workingDir + fileSep + "data/rice_pseudo4_os.maps");
 			targetData = new File(workingDir + fileSep + "data/Barley_Map(UCR_20080416-2)_barley.txt");
 			compData = new File(workingDir + fileSep + "data/Barley_Map(UCR_20080416-2)_homology_data.txt");
 //			otherMapFiles = new File[]

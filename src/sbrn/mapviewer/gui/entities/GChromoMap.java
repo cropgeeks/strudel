@@ -39,6 +39,7 @@ public class GChromoMap
 	// arrays with Feature names and positions for fast access during drawing operations
 	String[] allFeatureNames;
 	float[] allFeaturePositions;
+	public Hashtable<Integer, Feature> allFeaturesPosLookup = new Hashtable<Integer, Feature>();
 	
 	// these are corresponding arrays and lists which only pertain to the features which are linked to from somewhere
 	public LinkedList<Feature> linkedFeatureList = new LinkedList<Feature>();
@@ -49,7 +50,7 @@ public class GChromoMap
 	// indicates whether this map or part thereof is currently drawn on the canvas
 	public boolean isShowingOnCanvas = true;
 	
-	// a vector containgin features whose lables are to be displayed when the chromosome is drawn
+	// a vector containing features whose lables are to be displayed when the chromosome is drawn
 	public Vector<Feature> highlightedFeatures;
 	
 	// do we have to draw a highlighted outline for this map
@@ -88,7 +89,7 @@ public class GChromoMap
 		g2.fillRect(0, 0, width / 2, height);
 		
 		// draw second half of chromosome
-		GradientPaint whiteGradient = new GradientPaint(width / 2, 0, offWhite, width / 2 * 2, 0, colour);
+		GradientPaint whiteGradient = new GradientPaint(width / 2, 0, offWhite, width, 0, colour);
 		g2.setPaint(whiteGradient);
 		g2.fillRect(width / 2, 0, width / 2 , height);
 		
@@ -111,9 +112,14 @@ public class GChromoMap
 			g2.drawString(String.valueOf(index + 1), -width * 6, height / 2);
 		}
 		
-		if (owningSet.paintMarkers && isShowingOnCanvas)
+		if (owningSet.paintLinkedMarkers && isShowingOnCanvas)
 		{
 			drawLinkedFeatures(g2);
+			drawHighlightedFeatureLabels(g2);
+		}
+		else if(owningSet.paintAllMarkers && isShowingOnCanvas)
+		{
+			drawAllFeatures(g2);
 			drawHighlightedFeatureLabels(g2);
 		}
 		
@@ -127,7 +133,7 @@ public class GChromoMap
 	// -----------------------------------------------------------------------------------------------------------------------------------------
 	
 	// draw the chromosome/map for the purpose of an overview only
-	public void paintOverViewMap(Graphics g)
+	public void paintOverViewMap(Graphics g, int x, int y, int width, int height)
 	{
 		Graphics2D g2 = (Graphics2D) g;
 		
@@ -151,13 +157,11 @@ public class GChromoMap
 		g2.setFont(overviewLabelFont);
 		g2.setColor(new Color(150, 150, 150));
 		g2.drawString(String.valueOf(index + 1), width *2, height / 2);
-		
-		// update the bounding rectangle 
-//		boundingRectangle.setBounds(x, y, width,height);
-		
+
 		if (drawHighlightOutline)
 		{
-			highlightMapOutline(g2);
+			g2.setColor(Color.YELLOW);
+			g2.drawRect(0, 0, width-1, height);
 		}
 
 	}
@@ -223,37 +227,7 @@ public class GChromoMap
 					lineStartX = 0;
 					labelLineEnd = -labelSpacer + 3;
 				}
-				
-				// adjust positioning of labels
-				switch (index)
-				{
-					case 0:
-						// determine the font size
-						// this needs to decrease from the center outwards, i.e. the middle label (index 2) is biggest,
-						// the next ones (index 1 and 3) are smaller, index 0 and 4 are smallest
-						// labelX = labelX + stringWidth*2;
-						// labelY = labelY - fontHeight * 2;
-						// g2.setFont(new Font("Arial", Font.PLAIN, 10));
-						break;
-					case 1:
-						// labelX = labelX + stringWidth;
-						labelY = labelY - fontHeight;
-						// g2.setFont(new Font("Arial", Font.PLAIN, 12));
-						break;
-					case 2:
-						// g2.setFont(new Font("Arial", Font.PLAIN, 14));
-						break;
-					case 3:
-						// labelX = labelX + stringWidth;
-						labelY = labelY + fontHeight;
-						// g2.setFont(new Font("Arial", Font.PLAIN, 12));
-						break;
-					case 4:
-						// labelX = labelX + stringWidth*2;
-						labelY = labelY + fontHeight * 2;
-						// g2.setFont(new Font("Arial", Font.PLAIN, 10));
-						break;
-				}
+
 				
 				// draw the label
 				g2.drawString(featureName, labelX, labelY);
@@ -266,31 +240,6 @@ public class GChromoMap
 		}
 	}
 	
-	// -----------------------------------------------------------------------------------------------------------------------------------------
-	
-	// draw the markers and labels
-	private void drawLinkedFeatures(Graphics2D g2)
-	{
-		g2.setColor(Color.GREEN);
-		
-		float mapEnd = chromoMap.getStop();
-		float scalingFactor = height / mapEnd;
-		
-		for (int i = 0; i < linkedFeaturePositions.length; i++)
-		{
-			float yPos;
-			if (linkedFeaturePositions[i] == 0.0f)
-			{
-				yPos = 0.0f;
-			}
-			else
-			{
-				yPos = linkedFeaturePositions[i] * scalingFactor;
-			}
-			// draw a line for the marker
-			g2.drawLine(0, (int) yPos, width - 1, (int) yPos);
-		}
-	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------
 	
@@ -316,7 +265,14 @@ public class GChromoMap
 			Feature f = featureList.get(i);
 			allFeatureNames[i] = f.getName();
 			allFeaturePositions[i] = f.getStart();
+			
+			// also add this to a lookup table that we can use to look up features by location
+			// the percent distance from the top of the chromosome to the location of this feature
+			int percentDistToFeat = (int) (f.getStart() * (100 / chromoMap.getStop()));
+			allFeaturesPosLookup.put(new Integer(percentDistToFeat), f);
 		}
+		System.out.println("allFeatureNames.length = " + allFeatureNames.length);
+		System.out.println("inited arrays for map " + name + " , " + allFeaturesPosLookup.size() + " features found");
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------
@@ -337,6 +293,60 @@ public class GChromoMap
 			// the percent distance from the top of the chromosome to the location of this feature
 			int percentDistToFeat = (int) (f.getStart() * (100 / chromoMap.getStop()));
 			linkedFeaturePosLookup.put(percentDistToFeat, f);
+		}
+	}
+	
+	
+	// -----------------------------------------------------------------------------------------------------------------------------------------
+	
+	// draw the markers and labels
+	private void drawAllFeatures(Graphics2D g2)
+	{	
+		g2.setColor(Color.WHITE);
+		
+		float mapEnd = chromoMap.getStop();
+		float scalingFactor = height / mapEnd;
+		
+		for (int i = 0; i < allFeaturePositions.length; i++)
+		{
+			float yPos;
+			if (allFeaturePositions[i] == 0.0f)
+			{
+				yPos = 0.0f;
+			}
+			else
+			{
+				yPos = allFeaturePositions[i] * scalingFactor;
+			}
+			// draw a line for the marker
+			g2.drawLine(0, (int) yPos, width-1, (int) yPos);
+		}
+	}
+	
+	// -----------------------------------------------------------------------------------------------------------------------------------------
+	
+	// draw the markers and labels
+	private void drawLinkedFeatures(Graphics2D g2)
+	{
+		g2.setColor(Color.GREEN);
+		
+		float mapEnd = chromoMap.getStop();
+		float scalingFactor = height / mapEnd;
+
+		for (int i = 0; i < linkedFeaturePositions.length; i++)
+		{
+			float yPos;
+			if (linkedFeaturePositions[i] == 0.0f)
+			{
+				yPos = 0.0f;
+			}
+			else
+			{
+				yPos = linkedFeaturePositions[i] * scalingFactor;
+			}
+			// draw a line for the marker
+			g2.drawLine(0, (int) yPos, width-1, (int) yPos);
+
 		}
 	}
 	

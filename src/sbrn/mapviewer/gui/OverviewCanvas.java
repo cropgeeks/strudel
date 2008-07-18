@@ -46,7 +46,7 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener
 		int canvasWidth = getWidth();
 		
 		// x position of genome
-		int x = canvasWidth / 2;
+		int genomeX = canvasWidth / 2;
 		
 		int chromoSpacing = (int) ((canvasHeight / gMapSet.numMaps) * 0.20f);
 		
@@ -75,23 +75,23 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener
 			
 			// the map draws itself from 0,0 always but we need move the origin of the graphics object to the actual
 			// coordinates where we want things drawn
-			g2.translate(x, currentY);
+			g2.translate(genomeX, currentY);
 			
 			// need to set the current height and width and coords on the chromomap before we draw it
 			// this is purely so we have it stored somewhere
-			gChromoMap.x = x;
+			gChromoMap.x = genomeX;
 			gChromoMap.y = currentY;
 			gChromoMap.height = chromoHeight;
 			gChromoMap.width = chromoWidth;
 			// update its bounding rectangle (used for hit detection)
-			gChromoMap.boundingRectangle.setBounds(gChromoMap.x, gChromoMap.y, gChromoMap.width-1,
-							gChromoMap.height);
+//			gChromoMap.boundingRectangle.setBounds(gChromoMap.x, gChromoMap.y, gChromoMap.width-1,
+//							gChromoMap.height);
 			
 			// get the map to draw itself (from 0,0 always)
-			gChromoMap.paintOverViewMap(g);
+			gChromoMap.paintOverViewMap(g, genomeX, currentY, chromoWidth, chromoHeight);
 			
 			// now move the graphics object's origin back to 0,0 to preserve the overall coordinate system
-			g2.translate(-x, -currentY);
+			g2.translate(-genomeX, -currentY);
 			
 			// increment the y position so we can draw the next one
 			currentY += chromoHeight + chromoSpacing;			

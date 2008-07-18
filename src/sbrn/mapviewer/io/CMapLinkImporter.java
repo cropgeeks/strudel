@@ -1,6 +1,7 @@
 package sbrn.mapviewer.io;
 
 import java.io.*;
+import java.text.*;
 import java.util.*;
 
 import sbrn.mapviewer.data.*;
@@ -54,6 +55,13 @@ public class CMapLinkImporter
 						// itself knows about the links it has with others
 						f1.getLinks().add(link);
 						f2.getLinks().add(link);
+						
+						//add the BLAST score as evidence
+						 DecimalFormat df = new DecimalFormat("0.###E0");
+						Number blastScore = df.parse(t[2]);
+//						System.out.println("link between " + f1.getName() + " and " + f2.getName());
+//						 System.out.println("blastScore = "+ blastScore.toString());
+						link.setBlastScore(blastScore.doubleValue());
 											
 						// TODO: Do we want to add a list of references Features to
 						// the Feature object itself, so it knows who it links to?

@@ -40,9 +40,9 @@ public class MainCanvas extends JPanel
 	float rightGenomeX = 0.7f;
 	
 	// threshold values for the zoom factor above which we want to display markers and labels
-	float thresholdMarkerPainting = 3;
-	float thresholdLabelPainting = 3;
-
+	// float thresholdMarkerPainting = 3;
+	// float thresholdLabelPainting = 3;
+	
 	// a hashtable that contains chromomaps from both genomes as keys and LinkedList objects as values, which in
 	// turn hold a list of LinkSet objects each, where each Linkset represents the links between the chromomap and a
 	// chromomap in the respectively other genome
@@ -57,7 +57,7 @@ public class MainCanvas extends JPanel
 	// do we need to draw links?
 	boolean linksToDraw = false;
 	
-	//if true, antialias everything
+	// if true, antialias everything
 	public boolean antiAlias = false;
 	
 	// ============================c'tors==================================
@@ -97,6 +97,12 @@ public class MainCanvas extends JPanel
 			maxChromos = referenceGMapSet.numMaps;
 		}
 		
+		// set the thresholds for marker painting here for now
+		// TODO add method for calculating thresholds for marker painting automatically
+		targetGMapSet.thresholdLinkedMarkerPainting = 4;
+		referenceGMapSet.thresholdLinkedMarkerPainting = 4;
+		targetGMapSet.thresholdAllMarkerPainting = 50;
+		referenceGMapSet.thresholdAllMarkerPainting = 100;
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------------------
@@ -113,12 +119,14 @@ public class MainCanvas extends JPanel
 		if (antiAlias)
 		{
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+							RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		}
 		else
 		{
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-			g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+			g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+							RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
 		}
 		
 		// get current size of frame
@@ -136,17 +144,17 @@ public class MainCanvas extends JPanel
 		// these are genome specific because we can have a different zoom factor for each genome
 		// for each genome
 		for (GMapSet gMapSet : gMapSetList)
-		{		
-			//the total amount of space we have for drawing on vertically, in pixels
-			int availableSpaceVertically = canvasHeight - (chromoSpacing*2);
-			//the combined height of all the vertical spaces between chromosomes
-			int allSpacers = chromoSpacing*(maxChromos-1);
-			//the height of a chromosome
-			gMapSet.chromoHeight = (int) (((availableSpaceVertically - allSpacers)/maxChromos) * gMapSet.zoomFactor);
-			//the total vertical extent of the genome, excluding top and bottom spacers
-			gMapSet.totalY = (gMapSet.numMaps * gMapSet.chromoHeight) + ((gMapSet.numMaps-1)*chromoSpacing);
-			//the space at the top and bottom -- should be equal 
-			int topBottomSpacer = (canvasHeight - gMapSet.totalY)/2;
+		{
+			// the total amount of space we have for drawing on vertically, in pixels
+			int availableSpaceVertically = canvasHeight - (chromoSpacing * 2);
+			// the combined height of all the vertical spaces between chromosomes
+			int allSpacers = chromoSpacing * (maxChromos - 1);
+			// the height of a chromosome
+			gMapSet.chromoHeight = (int) (((availableSpaceVertically - allSpacers) / maxChromos) * gMapSet.zoomFactor);
+			// the total vertical extent of the genome, excluding top and bottom spacers
+			gMapSet.totalY = (gMapSet.numMaps * gMapSet.chromoHeight) + ((gMapSet.numMaps - 1) * chromoSpacing);
+			// the space at the top and bottom -- should be equal
+			int topBottomSpacer = (canvasHeight - gMapSet.totalY) / 2;
 			
 			// currentY is the y position at which we start drawing the genome, chromo by chromo, top to bottom
 			// this may be off the visible canvas in a northerly direction
@@ -178,7 +186,7 @@ public class MainCanvas extends JPanel
 			}
 			
 			// width of chromosomes -- set this to a fixed fraction of the screen width for now
-			int chromoWidth = canvasWidth / 40;
+			int chromoWidth = Math.round(canvasWidth / 40);
 			
 			// now paint the chromosomes in this genome
 			// for each chromosome in the genome
@@ -220,7 +228,7 @@ public class MainCanvas extends JPanel
 		{
 			drawLinks(g2);
 		}
-
+		
 	}
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------
@@ -232,24 +240,8 @@ public class MainCanvas extends JPanel
 		GMapSet selectedSet = gMapSetList.get(genomeIndex);
 		selectedSet.zoomFactor = zoomFactor;
 		
-		// determine whether we need to draw markers and labels
-		if (zoomFactor > thresholdMarkerPainting)
-		{
-			selectedSet.paintMarkers = true;
-		}
-		else
-		{
-			selectedSet.paintMarkers = false;
-		}
-		
-		if (zoomFactor > thresholdLabelPainting)
-		{
-			selectedSet.paintLabels = true;
-		}
-		else
-		{
-			selectedSet.paintLabels = false;
-		}
+		// check whether we need to display markers and labels
+		checkMarkerPaintingThresholds(selectedSet);
 		
 		// make sure the zoom factor currently displayed is up to date
 		winMain.zoomControlPanel.updateZoomInfo();
@@ -340,7 +332,7 @@ public class MainCanvas extends JPanel
 		
 		repaint();
 		
-		//update overviews
+		// update overviews
 		winMain.fatController.updateOverviewCanvases();
 	}
 	
@@ -351,53 +343,46 @@ public class MainCanvas extends JPanel
 	{
 		GChromoMap selectedMap = Utils.getSelectedMap(gMapSetList, x, y);
 		
-		//if the click has hit a chromosome
+		// if the click has hit a chromosome
 		if (selectedMap != null)
 		{
 			// figure out the genome it belongs to and increase that genome's zoom factor so that we can
-			//just fit it on screen the next time it is painted		
+			// just fit it on screen the next time it is painted
 			GMapSet selectedSet = selectedMap.owningSet;
 			selectedSet.zoomFactor = maxChromos;
-
-			//this is the combined height of all spacers -- this does not change with the zoom factor
+			
+			// this is the combined height of all spacers -- this does not change with the zoom factor
 			int combinedSpacers = chromoSpacing * (selectedSet.numMaps - 1);
-			//work out the chromo height and total genome height for once the new zoom factor has been applied
+			// work out the chromo height and total genome height for once the new zoom factor has been applied
 			int newChromoHeight = (int) (selectedSet.chromoHeight * selectedSet.zoomFactor);
 			int newTotalY = (int) (((selectedSet.totalY - combinedSpacers) * selectedSet.zoomFactor) + combinedSpacers);
-
-			//now we need to work out the percent offset in the zoomed genome of the center of the chromo that
-			// we want to zoom in on
-			//the index of the selected chromo in the genome, starting at 1
-			int chromoIndex = selectedSet.gMaps.indexOf(selectedMap)+1;	
-			//the distance from the top of the genome to the end of the selected chromo, in pixels
-			int chromoOffset = chromoIndex*newChromoHeight;
-			//the combined distance of all spacers between the top of the genome and our selected chromo
-			int spacingOffset = chromoIndex*chromoSpacing - chromoSpacing;
-			float halfChromoHeight = newChromoHeight/2;
-			//the new centerpoint should be a proportion of the total genome height and is defined as 
-			//the sum of all chromosome heights and the spacer heights minus half the height of a chromo
-			float newCenterPoint = ((chromoOffset + spacingOffset - halfChromoHeight)/newTotalY)*100;	
+			
+			// now we need to work out the percent offset from the top of the center of the chromo that
+			// we want to zoom in on in the zoomed genome
+			// the index of the selected chromo in the genome, starting at 1 rather than zero
+			int chromoIndex = selectedSet.gMaps.indexOf(selectedMap) + 1;
+			// the distance from the top of the genome to the end of the selected chromo, in pixels
+			int chromoOffset = chromoIndex * newChromoHeight;
+			// the combined distance of all spacers between the top of the genome and our selected chromo
+			int spacingOffset = chromoIndex * chromoSpacing - chromoSpacing;
+			float halfChromoHeight = newChromoHeight / 2;
+			// the new centerpoint should be a proportion of the total genome height and is defined as
+			// the sum of all chromosome heights and the spacer heights minus half the height of a chromo
+			float newCenterPoint = ((chromoOffset + spacingOffset - halfChromoHeight) / newTotalY) * 100;
 			// update the genome centerpoint to the new percentage and update the scroller position
 			selectedSet.centerPoint = Math.round(newCenterPoint);
 			selectedSet.scroller.setValue(selectedSet.centerPoint);
 			
 			// check whether we need to display markers and labels
-			if (selectedSet.zoomFactor > thresholdMarkerPainting && selectedMap.isShowingOnCanvas)
+			if (selectedMap.isShowingOnCanvas)
 			{
-				selectedSet.paintMarkers = true;
+				checkMarkerPaintingThresholds(selectedSet);
 			}
-			if (selectedSet.zoomFactor > thresholdLabelPainting && selectedMap.isShowingOnCanvas)
-			{
-				selectedSet.paintLabels = true;
-			}
-			
-			// make sure the zoom factor currently displayed is up to date
-			winMain.zoomControlPanel.updateZoomInfo();
 			
 			// repaint the canvas
 			repaint();
 			
-			//update overviews
+			// update overviews
 			winMain.fatController.updateOverviewCanvases();
 		}
 	}
@@ -481,25 +466,30 @@ public class MainCanvas extends JPanel
 						// for each link in the linkset
 						for (Link link : (LinkSet) selectedLinks)
 						{
-							// get the positional data of feature1 (which is on the selected chromo) and the end point of the map
-							float feat1Start = link.getFeature1().getStart();
-							
-							// get the owning map, positional data of feature 2 (which is on a reference chromosome) and the end point of the map
-							float feat2Start = link.getFeature2().getStart();
-							ChromoMap owningMap = link.getFeature2().getOwningMap();
-							
-							float referenceMapStop = owningMap.getStop();
-							int refChromoIndex = owningMap.getOwningMapSet().getMaps().indexOf(
-											owningMap);
-							int referenceChromoY = referenceGMapSet.gMaps.get(refChromoIndex).y;
-							
-							// convert these to coordinates by obtaining the coords of the appropriate chromosome object and scaling them appropriately
-							int targetY = (int) (feat1Start / (targetMapStop / targetGMapSet.gMaps.get(0).height)) + selectedChromoY;
-							int referenceY = (int) (feat2Start / (referenceMapStop / referenceGMapSet.gMaps.get(0).height)) + referenceChromoY;
-							
-							// draw the line
-							g2.drawLine(selectedChromoX, targetY, referenceChromoX,
-											referenceY);
+							// we only want to draw this link if it has a BLAST e-value smaller than the cut-off currently selected by the user
+							if (link.getBlastScore() <= winMain.controlPanel.blastThreshold)
+							{
+								
+								// get the positional data of feature1 (which is on the selected chromo) and the end point of the map
+								float feat1Start = link.getFeature1().getStart();
+								
+								// get the owning map, positional data of feature 2 (which is on a reference chromosome) and the end point of the map
+								float feat2Start = link.getFeature2().getStart();
+								ChromoMap owningMap = link.getFeature2().getOwningMap();
+								
+								float referenceMapStop = owningMap.getStop();
+								int refChromoIndex = owningMap.getOwningMapSet().getMaps().indexOf(
+												owningMap);
+								int referenceChromoY = referenceGMapSet.gMaps.get(refChromoIndex).y;
+								
+								// convert these to coordinates by obtaining the coords of the appropriate chromosome object and scaling them appropriately
+								int targetY = (int) (feat1Start / (targetMapStop / targetGMapSet.gMaps.get(0).height)) + selectedChromoY;
+								int referenceY = (int) (feat2Start / (referenceMapStop / referenceGMapSet.gMaps.get(0).height)) + referenceChromoY;
+								
+								// draw the line
+								g2.drawLine(selectedChromoX, targetY, referenceChromoX,
+												referenceY);
+							}
 						}
 					}
 				}
@@ -595,7 +585,34 @@ public class MainCanvas extends JPanel
 		gMapSet.centerPoint = newCenterPoint;
 		gMapSet.scroller.setValue(newCenterPoint);
 		repaint();
-
+		
 	}
+	
 	// -----------------------------------------------------------------------------------------------------------------------------------
+	
+	private void checkMarkerPaintingThresholds(GMapSet selectedSet)
+	{
+		// check whether we need to display markers and labels
+		if(selectedSet.zoomFactor > selectedSet.thresholdAllMarkerPainting)
+		{
+			selectedSet.paintAllMarkers = true;
+			selectedSet.paintLabels = true;
+		}
+		else if (selectedSet.zoomFactor > selectedSet.thresholdLinkedMarkerPainting  && 
+			selectedSet.zoomFactor < selectedSet.thresholdAllMarkerPainting)
+		{
+			selectedSet.paintAllMarkers = false;
+			selectedSet.paintLinkedMarkers = true;
+			selectedSet.paintLabels = true;
+		}
+		else
+		{
+			selectedSet.paintAllMarkers = false;
+			selectedSet.paintLinkedMarkers = false;
+			selectedSet.paintLabels = false;
+		}
+	}
+	
+	// -----------------------------------------------------------------------------------------------------------------------------------
+	
 }// end class

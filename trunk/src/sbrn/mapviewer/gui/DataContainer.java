@@ -3,7 +3,6 @@ package sbrn.mapviewer.gui;
 import java.io.*;
 
 import sbrn.mapviewer.data.*;
-import sbrn.mapviewer.gui.tests.syntenyviewer3d.*;
 import sbrn.mapviewer.io.*;
 
 public class DataContainer

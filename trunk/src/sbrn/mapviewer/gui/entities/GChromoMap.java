@@ -97,8 +97,7 @@ public class GChromoMap
 		int fontSize = WinMain.mainCanvas.getHeight() / 40;
 		Font mapLabelFont = new Font("Arial", Font.BOLD, fontSize);
 		g2.setFont(mapLabelFont);
-		g2.setColor(new Color(150, 150, 150));
-		
+		g2.setColor(new Color(150, 150, 150));		
 		// decide where to place the label with the chromosome number
 		// on the left hand genome we want the label on the left, right hand genome on the right
 		// reference genome (right):
@@ -112,6 +111,7 @@ public class GChromoMap
 			g2.drawString(String.valueOf(index + 1), -width * 6, height / 2);
 		}
 		
+		//now draw features and labels as required
 		if (owningSet.paintLinkedMarkers && isShowingOnCanvas)
 		{
 			drawLinkedFeatures(g2);
@@ -123,6 +123,7 @@ public class GChromoMap
 			drawHighlightedFeatureLabels(g2);
 		}
 		
+		//this draws a yellow outline round the map if it is selected
 		if (drawHighlightOutline)
 		{
 			highlightMapOutline(g2);
@@ -271,8 +272,6 @@ public class GChromoMap
 			int percentDistToFeat = (int) (f.getStart() * (100 / chromoMap.getStop()));
 			allFeaturesPosLookup.put(new Integer(percentDistToFeat), f);
 		}
-		System.out.println("allFeatureNames.length = " + allFeatureNames.length);
-		System.out.println("inited arrays for map " + name + " , " + allFeaturesPosLookup.size() + " features found");
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------
@@ -302,6 +301,8 @@ public class GChromoMap
 	// draw the markers and labels
 	private void drawAllFeatures(Graphics2D g2)
 	{	
+		System.out.println("drawing ALL features for map " + name);
+		
 		g2.setColor(Color.WHITE);
 		
 		float mapEnd = chromoMap.getStop();
@@ -328,6 +329,8 @@ public class GChromoMap
 	// draw the markers and labels
 	private void drawLinkedFeatures(Graphics2D g2)
 	{
+		System.out.println("drawing LINKED features for map " + name);
+		
 		g2.setColor(Color.GREEN);
 		
 		float mapEnd = chromoMap.getStop();

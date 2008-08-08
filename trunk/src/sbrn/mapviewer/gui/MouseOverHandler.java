@@ -37,18 +37,18 @@ public class MouseOverHandler
 			int percentDistanceFromTop = (int) (((y - selectedMap.boundingRectangle.getY()) / selectedMap.height) * 100);
 			
 			// now look up this value in the lookup table of the map
-			Feature match = selectedMap.allFeaturesPosLookup.get(percentDistanceFromTop);
+			Feature match = selectedMap.linkedFeaturePosLookup.get(percentDistanceFromTop);
 			// we have a match
 			if (match != null)
 			{
-				// add this feature and the next two in either direction (up and down) to the hash table
+
+				// add this feature to the hash table
 				Vector<Feature> highlightedFeatures = new Vector<Feature>();
-				// get the two before and after from the list maintained by the map object and add them too
 				LinkedList<Feature> fList = selectedMap.chromoMap.getFeatureList();
 				int index = fList.indexOf(match);
 				highlightedFeatures.add(match);
 				
-				// set this object on the selected map and repaint
+				// set the vector object of  the selected map and repaint
 				selectedMap.highlightedFeatures = highlightedFeatures;
 				winMain.mainCanvas.repaint();
 				

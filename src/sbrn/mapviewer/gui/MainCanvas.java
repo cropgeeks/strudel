@@ -424,7 +424,7 @@ public class MainCanvas extends JPanel
 	public void drawLinks(Graphics2D g2)
 	{
 		// check whether we have selected chromosomes in the target genome
-		// if not, we do not want to draw
+		// if not, we do not want to draw any links at all
 		if (targetGMapSet.selectedMaps.size() > 0)
 		{
 			// for each map in the selectedMaps vector of the target genome
@@ -458,9 +458,7 @@ public class MainCanvas extends JPanel
 					
 					if (draw)
 					{
-						// change the colour of the graphics object so that each link subset is colour coded
-						// g2.setColor(colours[linkSetIndex]);
-						// for now just set the colour to grey
+						// set the colour to grey
 						g2.setColor(new Color(150, 150, 150));
 						
 						// for each link in the linkset
@@ -487,7 +485,7 @@ public class MainCanvas extends JPanel
 								int referenceY = (int) (feat2Start / (referenceMapStop / referenceGMapSet.gMaps.get(0).height)) + referenceChromoY;
 								
 								// draw the line
-								g2.drawLine(selectedChromoX, targetY, referenceChromoX,
+								g2.drawLine(selectedChromoX+1, targetY, referenceChromoX-1,
 												referenceY);
 							}
 						}
@@ -593,13 +591,12 @@ public class MainCanvas extends JPanel
 	private void checkMarkerPaintingThresholds(GMapSet selectedSet)
 	{
 		// check whether we need to display markers and labels
-		if(selectedSet.zoomFactor > selectedSet.thresholdAllMarkerPainting)
+		if (selectedSet.zoomFactor > selectedSet.thresholdAllMarkerPainting)
 		{
 			selectedSet.paintAllMarkers = true;
 			selectedSet.paintLabels = true;
 		}
-		else if (selectedSet.zoomFactor > selectedSet.thresholdLinkedMarkerPainting  && 
-			selectedSet.zoomFactor < selectedSet.thresholdAllMarkerPainting)
+		else if (selectedSet.zoomFactor > selectedSet.thresholdLinkedMarkerPainting && selectedSet.zoomFactor < selectedSet.thresholdAllMarkerPainting)
 		{
 			selectedSet.paintAllMarkers = false;
 			selectedSet.paintLinkedMarkers = true;

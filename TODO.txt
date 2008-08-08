@@ -25,7 +25,7 @@ Data:
 ================================
 
 
-Luke Ramsay's shopping list (in descending order of priority):
+Luke Ramsay's list (in descending order of priority):
 
 - view full detail of reference genome at high/highest zoom level
 - second reference genome (e.g. for Brachiopodium)
@@ -39,6 +39,13 @@ Luke Ramsay's shopping list (in descending order of priority):
 - move markers manually in GUI, at least in target genome
 - parallel homology systems, based on e.g. blastn vs blastx, user chooses which one to see
 
+================================
+
+David's List:
+
+- x-y plots of marker positions in both genomes (Oxford grid) for a given combination of chromosomes
+-
+
 
 ================================
 
@@ -46,6 +53,8 @@ FIXES:
 
 - scroll speed needs to be reduced at higher zoom levels
 - chromosome width varies with frame width by +/- 1 pixel, causing markers to go beyond chromosome
+- dynamic antialiasing -- only have it switched on when there is no scrolling (even if user selected it as on)
+- fix label and marker drawing
 
 
 

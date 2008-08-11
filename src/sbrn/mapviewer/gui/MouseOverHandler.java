@@ -1,5 +1,6 @@
 package sbrn.mapviewer.gui;
 
+import java.text.*;
 import java.util.*;
 
 import sbrn.mapviewer.data.*;
@@ -30,39 +31,39 @@ public class MouseOverHandler
 		{
 			clearPreviousMap();
 			previousMap = selectedMap;
-			// System.out.println("mouseover detected in chromo " + selectedMap.name + " of genome " + selectedMap.owningSet.name);
-			
+
 			// figure out where on the chromosome the hit has occurred, in percent of the total height
 			// the distance from the top of the chromosome to the hit y location, in percent of the chromosome height
-			int percentDistanceFromTop = (int) (((y - selectedMap.boundingRectangle.getY()) / selectedMap.height) * 100);
+			float percentDistanceFromTop = (float) (((y - selectedMap.boundingRectangle.getY()) / selectedMap.height) * 100);
+			//now round this number to two decimals so we can compare it reliably to the lookup
+			percentDistanceFromTop = Float.parseFloat(new DecimalFormat("0.##").format(percentDistanceFromTop));
+			
+			System.out.println("percentDistanceFromTop = " + percentDistanceFromTop);
 			
 			// now look up this value in the lookup table of the map
-			Feature match = selectedMap.linkedFeaturePosLookup.get(percentDistanceFromTop);
+			LinkedList<Feature> match = selectedMap.allFeaturesPosLookup.get(percentDistanceFromTop);
 			// we have a match
 			if (match != null)
 			{
-
-				// add this feature to the hash table
-				Vector<Feature> highlightedFeatures = new Vector<Feature>();
-				LinkedList<Feature> fList = selectedMap.chromoMap.getFeatureList();
-				int index = fList.indexOf(match);
-				highlightedFeatures.add(match);
+				System.out.println("match found: " + match.toString());
 				
-				// set the vector object of  the selected map and repaint
-				selectedMap.highlightedFeatures = highlightedFeatures;
+				// set the vector object of the selected map and repaint
+				selectedMap.highlightedFeatures = match;
 				winMain.mainCanvas.repaint();
 				
-				// also set the label text in the annotation window unless we are fully zoomed out
-				if (selectedMap.owningSet.equals(winMain.mainCanvas.targetGMapSet)  && winMain.mainCanvas.targetGMapSet.paintLinkedMarkers)
-				{
-					winMain.targetAnnotationPanel.getLocusInfo().setText(match.getName());
-					winMain.targetAnnotationPanel.getAnnotationTextArea().setText(match.getAnnotation());
-				}
-				else if(winMain.mainCanvas.referenceGMapSet.paintLinkedMarkers)
-				{
-					winMain.referenceAnnotationPanel.getLocusInfo().setText(match.getName());
-					winMain.referenceAnnotationPanel.getAnnotationTextArea().setText(match.getAnnotation());
-				}
+//				// also set the label text in the annotation window unless we are fully zoomed out
+//				if (selectedMap.owningSet.equals(winMain.mainCanvas.targetGMapSet) && winMain.mainCanvas.targetGMapSet.paintLinkedMarkers)
+//				{
+//					winMain.targetAnnotationPanel.getLocusInfo().setText(match.getName());
+//					winMain.targetAnnotationPanel.getAnnotationTextArea().setText(
+//									match.getAnnotation());
+//				}
+//				else if (winMain.mainCanvas.referenceGMapSet.paintLinkedMarkers)
+//				{
+//					winMain.referenceAnnotationPanel.getLocusInfo().setText(match.getName());
+//					winMain.referenceAnnotationPanel.getAnnotationTextArea().setText(
+//									match.getAnnotation());
+//				}
 			}
 		}
 		else
@@ -82,7 +83,7 @@ public class MouseOverHandler
 			previousMap.highlightedFeatures = null;
 			previousMap = null;
 			
-			//reset all the annotation labels so they show nothing
+			// reset all the annotation labels so they show nothing
 			winMain.targetAnnotationPanel.getLocusInfo().setText("");
 			winMain.targetAnnotationPanel.getAnnotationTextArea().setText("");
 			winMain.referenceAnnotationPanel.getLocusInfo().setText("");

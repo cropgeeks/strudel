@@ -101,8 +101,8 @@ public class MainCanvas extends JPanel
 		// TODO add method for calculating thresholds for marker painting automatically
 		targetGMapSet.thresholdLinkedMarkerPainting = 4;
 		referenceGMapSet.thresholdLinkedMarkerPainting = 4;
-		targetGMapSet.thresholdAllMarkerPainting = 50;
-		referenceGMapSet.thresholdAllMarkerPainting = 100;
+		targetGMapSet.thresholdAllMarkerPainting = 10;
+		referenceGMapSet.thresholdAllMarkerPainting = 10;
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------------------

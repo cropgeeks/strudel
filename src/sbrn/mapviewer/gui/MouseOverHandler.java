@@ -38,14 +38,14 @@ public class MouseOverHandler
 			//now round this number to two decimals so we can compare it reliably to the lookup
 			percentDistanceFromTop = Float.parseFloat(new DecimalFormat("0.##").format(percentDistanceFromTop));
 			
-			System.out.println("percentDistanceFromTop = " + percentDistanceFromTop);
+//			System.out.println("percentDistanceFromTop = " + percentDistanceFromTop);
 			
 			// now look up this value in the lookup table of the map
 			LinkedList<Feature> match = selectedMap.allFeaturesPosLookup.get(percentDistanceFromTop);
 			// we have a match
 			if (match != null)
 			{
-				System.out.println("match found: " + match.toString());
+//				System.out.println("match found: " + match.toString());
 				
 				// set the vector object of the selected map and repaint
 				selectedMap.highlightedFeatures = match;

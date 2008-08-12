@@ -176,8 +176,6 @@ public class GChromoMap
 	{
 		if (highlightedFeatures != null)
 		{
-			// the index of the feature in the vector of features to be labeled
-			int index = 0;
 			// the amount by which we want to move the label away from the chromosome (in pixels)
 			int labelSpacer = 20;
 			
@@ -185,7 +183,7 @@ public class GChromoMap
 			for (Feature f : highlightedFeatures)
 			{
 				// get the name of the feature
-				String featureName = highlightedFeatures.get(index).getName();
+				String featureName = f.getName();
 				
 				// font stuff
 				int fontHeight = 14;
@@ -208,9 +206,75 @@ public class GChromoMap
 				{
 					featureY = (int) (f.getStart() * scalingFactor);
 				}
-				
-				// the y position of the feature label
-				int labelY = featureY - fontHeight / 2 + fontHeight*(highlightedFeatures.indexOf(f)+1);
+
+				//now work out  the y position of the feature label				
+				//size and half size of our feature list
+				int listSize = highlightedFeatures.size();
+				float halfListSize = listSize/2.0f;
+				//this is where the label goes
+				int labelY = 0;
+				//the index of the feature in the list
+				int index = highlightedFeatures.indexOf(f);
+				System.out.println("====================");
+				System.out.println("list size = " + listSize);
+				System.out.println("halfListSize = " + halfListSize);
+				System.out.println("index = " + index);
+				float correction = 0;
+				//if the list contains only a single feature
+				if(listSize ==1)
+				{
+					System.out.println("single feature only");
+					correction = fontHeight/2;
+				}
+				else //more than 1 feature in the list
+				{
+					//work out whether the list size is an even or odd number
+					boolean evenNumber = listSize % 2 == 0;
+					if(evenNumber)
+					{
+						System.out.println("even number");
+						//if the index is smaller than half the list size, subtract a multiple of the fontHeight from the y
+						if((index+1) <= halfListSize)
+						{
+							System.out.println("index less than half");
+							correction =  - (fontHeight*(halfListSize - index - 1));
+						}
+						//if it is bigger, add it instead
+						else
+						{
+							System.out.println("index more than half");
+							correction = fontHeight*((index + 1) - halfListSize);
+						}
+					}
+					else //odd number
+					{
+						System.out.println("odd number");
+						//this should give us the number half way between the first and last index
+						int midPoint = (int)halfListSize;
+						
+						//if the index is the midpoint
+						if(index == midPoint)
+						{
+							System.out.println("index at midPoint");
+							correction = fontHeight/2;
+						}
+						//index is less than the midpoint -- subtract a multiple of the font height
+						else if(index < midPoint)
+						{
+							System.out.println("index less than half");
+							correction =  - (fontHeight*(halfListSize - index - 1));
+						}
+						//index is greater than the midpoint
+						else
+						{
+							System.out.println("index more than half");
+							correction =  fontHeight*((index+1) -halfListSize);
+						}						
+					}	
+				}
+				System.out.println("fontHeight = " + fontHeight);
+				System.out.println("correction = " + correction);
+				labelY = featureY + (int)correction;
 				
 				// decide where to place the label on x
 				// on the left hand genome we want the label on the left, right hand genome on the right
@@ -237,8 +301,6 @@ public class GChromoMap
 				
 				// draw a line from the marker to the label
 				g2.drawLine(lineStartX, featureY, labelLineEnd, labelY - fontHeight / 2);
-				
-				index++;
 			}
 		}
 	}
@@ -292,14 +354,14 @@ public class GChromoMap
 			}
 		}
 		
-		System.out.println("calculating relative feature starts for map " + name);
-		System.out.println("size of this map = " + allFeaturesPosLookup.keySet().size());
-		for (Float f : allFeaturesPosLookup.keySet())
-		{
-			LinkedList list = allFeaturesPosLookup.get(f);
-			// now round this number to two decimals so we can compare it reliably to input values
-			System.out.println(new DecimalFormat("0.##").format(f) + " = " + allFeaturesPosLookup.get(f).toString());
-		}
+//		System.out.println("calculating relative feature starts for map " + name);
+//		System.out.println("size of this map = " + allFeaturesPosLookup.keySet().size());
+//		for (Float f : allFeaturesPosLookup.keySet())
+//		{
+//			LinkedList list = allFeaturesPosLookup.get(f);
+//			// now round this number to two decimals so we can compare it reliably to input values
+//			System.out.println(new DecimalFormat("0.##").format(f) + " = " + allFeaturesPosLookup.get(f).toString());
+//		}
 		
 	}
 	
@@ -322,7 +384,7 @@ public class GChromoMap
 			float percentDistToFeat = f.getStart() * (100 / chromoMap.getStop());
 			// now round this number to two decimals so we can compare it reliably to input values
 			percentDistToFeat = Float.parseFloat(new DecimalFormat("0.##").format(percentDistToFeat));
-			System.out.println("percentDistToFeat = " + percentDistToFeat);
+//			System.out.println("percentDistToFeat = " + percentDistToFeat);
 			
 			linkedFeaturePosLookup.put(percentDistToFeat, f);
 		}

@@ -40,7 +40,7 @@ public class GChromoMap
 	// arrays with Feature names and positions for fast access during drawing operations
 	String[] allFeatureNames;
 	float[] allFeaturePositions;
-	public TreeMap<Float, LinkedList<Feature>> allFeaturesPosLookup = new TreeMap<Float, LinkedList<Feature>>();
+	public TreeMap<Integer, LinkedList<Feature>> allFeaturesPosLookup = new TreeMap<Integer, LinkedList<Feature>>();
 	
 	// these are corresponding arrays and lists which only pertain to the features which are linked to from somewhere
 	public LinkedList<Feature> linkedFeatureList = new LinkedList<Feature>();
@@ -113,12 +113,6 @@ public class GChromoMap
 		}
 		
 		// now draw features and labels as required
-//		if (owningSet.paintLinkedMarkers && isShowingOnCanvas)
-//		{
-//			drawLinkedFeatures(g2);
-//			drawHighlightedFeatureLabels(g2);
-//		}
-//		else 
 		if (owningSet.paintAllMarkers && isShowingOnCanvas)
 		{
 			drawAllFeatures(g2);
@@ -206,75 +200,65 @@ public class GChromoMap
 				{
 					featureY = (int) (f.getStart() * scalingFactor);
 				}
-
-				//now work out  the y position of the feature label				
-				//size and half size of our feature list
+				
+				// now work out the y position of the feature label
+				// size and half size of our feature list
 				int listSize = highlightedFeatures.size();
-				float halfListSize = listSize/2.0f;
-				//this is where the label goes
+				float halfListSize = listSize / 2.0f;
+				// this is where the label goes
 				int labelY = 0;
-				//the index of the feature in the list
+				// the index of the feature in the list
 				int index = highlightedFeatures.indexOf(f);
-				System.out.println("====================");
-				System.out.println("list size = " + listSize);
-				System.out.println("halfListSize = " + halfListSize);
-				System.out.println("index = " + index);
+				
 				float correction = 0;
-				//if the list contains only a single feature
-				if(listSize ==1)
+				// if the list contains only a single feature
+				if (listSize == 1)
 				{
-					System.out.println("single feature only");
-					correction = fontHeight/2;
+					correction = fontHeight / 2;
 				}
-				else //more than 1 feature in the list
+				else
+				// more than 1 feature in the list
 				{
-					//work out whether the list size is an even or odd number
+					// work out whether the list size is an even or odd number
 					boolean evenNumber = listSize % 2 == 0;
-					if(evenNumber)
+					if (evenNumber)
 					{
-						System.out.println("even number");
-						//if the index is smaller than half the list size, subtract a multiple of the fontHeight from the y
-						if((index+1) <= halfListSize)
+						// if the index is smaller than half the list size, subtract a multiple of the fontHeight from the y
+						if ((index + 1) <= halfListSize)
 						{
-							System.out.println("index less than half");
-							correction =  - (fontHeight*(halfListSize - index - 1));
+							correction = -(fontHeight * (halfListSize - index - 1));
 						}
-						//if it is bigger, add it instead
+						// if it is bigger, add it instead
 						else
 						{
-							System.out.println("index more than half");
-							correction = fontHeight*((index + 1) - halfListSize);
+							correction = fontHeight * ((index + 1) - halfListSize);
 						}
 					}
-					else //odd number
+					else
+					// odd number
 					{
-						System.out.println("odd number");
-						//this should give us the number half way between the first and last index
-						int midPoint = (int)halfListSize;
+						// this should give us the number half way between the first and last index
+						int midPoint = (int) halfListSize;
 						
-						//if the index is the midpoint
-						if(index == midPoint)
+						// if the index is the midpoint
+						if (index == midPoint)
 						{
-							System.out.println("index at midPoint");
-							correction = fontHeight/2;
+							correction = fontHeight / 2;
 						}
-						//index is less than the midpoint -- subtract a multiple of the font height
-						else if(index < midPoint)
+						// index is less than the midpoint -- subtract a multiple of the font height
+						else if (index < midPoint)
 						{
-							System.out.println("index less than half");
-							correction =  - (fontHeight*(halfListSize - index - 1));
+							correction = -(fontHeight * (halfListSize - index - 1));
 						}
-						//index is greater than the midpoint
+						// index is greater than the midpoint
 						else
 						{
-							System.out.println("index more than half");
-							correction =  fontHeight*((index+1) -halfListSize);
-						}						
-					}	
+							correction = fontHeight * ((index + 1) - halfListSize);
+						}
+					}
 				}
-				System.out.println("fontHeight = " + fontHeight);
-				System.out.println("correction = " + correction);
-				labelY = featureY + (int)correction;
+				
+				labelY = featureY + (int) correction;
 				
 				// decide where to place the label on x
 				// on the left hand genome we want the label on the left, right hand genome on the right
@@ -333,35 +317,41 @@ public class GChromoMap
 			
 			// also add this to a lookup table that we can use to look up features by location
 			// the percent distance from the top of the chromosome to the location of this feature
-			float percentDistToFeat = f.getStart() * (100 / chromoMap.getStop());
-			// now round this number to two decimals so we can compare it reliably to input values
-			percentDistToFeat = Float.parseFloat(new DecimalFormat("0.##").format(percentDistToFeat));
-
+			// float percentDistToFeat = f.getStart() * (100 / chromoMap.getStop());
+			// // now round this number to two decimals so we can compare it reliably to input values
+			// percentDistToFeat = Float.parseFloat(new DecimalFormat("0").format(percentDistToFeat));
+			int percentDistToFeat = (int) (f.getStart() * (100 / chromoMap.getStop()));
+			
 			// check whether we have an entry in the map with this key already
-			// we do often have features mapped to the same location, especially on genetic maps			
+			// we do often have features mapped to the same location, especially on genetic maps
 			// if the map does contain this key
 			if (allFeaturesPosLookup.containsKey(percentDistToFeat))
 			{
 				// add the feature to the linked list that forms the value to this key
 				allFeaturesPosLookup.get(percentDistToFeat).add(f);
 			}
-			else// we do not have this key in the map yet
+			else
+			// we do not have this key in the map yet
 			{
-				//make a new list and add it with this float as a key
+				// make a new list and add it with this float as a key
 				LinkedList<Feature> list = new LinkedList<Feature>();
 				list.add(f);
-				allFeaturesPosLookup.put(new Float(percentDistToFeat), list);
+				allFeaturesPosLookup.put(new Integer(percentDistToFeat), list);
 			}
 		}
 		
+//		System.out.println("==========================================");
 //		System.out.println("calculating relative feature starts for map " + name);
 //		System.out.println("size of this map = " + allFeaturesPosLookup.keySet().size());
-//		for (Float f : allFeaturesPosLookup.keySet())
+//		int count = 0;
+//		for (Integer it : allFeaturesPosLookup.keySet())
 //		{
-//			LinkedList list = allFeaturesPosLookup.get(f);
+//			LinkedList list = allFeaturesPosLookup.get(it);
 //			// now round this number to two decimals so we can compare it reliably to input values
-//			System.out.println(new DecimalFormat("0.##").format(f) + " = " + allFeaturesPosLookup.get(f).toString());
+//			System.out.println(it + " = " + allFeaturesPosLookup.get(it).toString());
+//			count += list.size();
 //		}
+//		System.out.println("count = " + count);
 		
 	}
 	
@@ -384,7 +374,7 @@ public class GChromoMap
 			float percentDistToFeat = f.getStart() * (100 / chromoMap.getStop());
 			// now round this number to two decimals so we can compare it reliably to input values
 			percentDistToFeat = Float.parseFloat(new DecimalFormat("0.##").format(percentDistToFeat));
-//			System.out.println("percentDistToFeat = " + percentDistToFeat);
+			// System.out.println("percentDistToFeat = " + percentDistToFeat);
 			
 			linkedFeaturePosLookup.put(percentDistToFeat, f);
 		}
@@ -415,35 +405,6 @@ public class GChromoMap
 			g2.drawLine(0, (int) yPos, width - 1, (int) yPos);
 		}
 	}
-	
-	// -----------------------------------------------------------------------------------------------------------------------------------------
-	
-//	// draw the markers and labels
-//	private void drawLinkedFeatures(Graphics2D g2)
-//	{
-//		// System.out.println("drawing LINKED features for map " + name);
-//		
-//		g2.setColor(Color.GREEN);
-//		
-//		float mapEnd = chromoMap.getStop();
-//		float scalingFactor = height / mapEnd;
-//		
-//		for (int i = 0; i < linkedFeaturePositions.length; i++)
-//		{
-//			float yPos;
-//			if (linkedFeaturePositions[i] == 0.0f)
-//			{
-//				yPos = 0.0f;
-//			}
-//			else
-//			{
-//				yPos = linkedFeaturePositions[i] * scalingFactor;
-//			}
-//			// draw a line for the marker
-//			g2.drawLine(0, (int) yPos, width - 1, (int) yPos);
-//			
-//		}
-//	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------
 	

@@ -10,9 +10,15 @@
   <target name="init">
     <!--<mkdir dir="${classes}"/>-->
   </target>
+	
+	<target name="clean" depends="init" >
+		<delete>
+			<fileset dir="${classes}" includes="**/*.class"/>
+		</delete>	
+	</target>
 
 
-  <target name="compile" depends="init" description="compile the source " >
+  <target name="compile" depends="clean" description="compile the source " >
     <javac srcdir="${src}" destdir="${classes}" debug="yes">
     	<classpath>
 	      <pathelement path="${classpath}"/>

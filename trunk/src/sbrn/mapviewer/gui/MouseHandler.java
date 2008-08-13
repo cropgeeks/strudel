@@ -7,10 +7,12 @@ import javax.swing.event.MouseInputListener;
 import sbrn.mapviewer.gui.entities.GChromoMap;
 import sbrn.mapviewer.gui.entities.GMapSet;
 
+import scri.commons.gui.*;
+
 public class MouseHandler implements MouseInputListener, MouseWheelListener
 {
 	// =================================================vars========================================
-	
+
 	WinMain winMain;
 	int mouseDragPosY = 0;
 	int mouseDragPosX = 0;
@@ -19,73 +21,82 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	int mouseDraggedX = -1;
 	int mouseDraggedY = -1;
 	MouseOverHandler mouseOverHandler;
-	
+
+	private boolean isOSX = SystemUtils.isMacOS();
+
 	// ===============================================c'tors===========================================
-	
+
 	public MouseHandler(WinMain winMain)
 	{
 		this.winMain = winMain;
 		mouseOverHandler = new MouseOverHandler(winMain);
 	}
-	
+
 	// =================================================methods=======================================
-	
+
+	private boolean isMetaClick(MouseEvent e)
+	{
+		return isOSX && e.isMetaDown() || !isOSX && e.isControlDown();
+	}
+
 	// used for selecting chromosomes for display of links and for zooming
 	public void mouseClicked(MouseEvent e)
 	{
+
+
 		if (e.isAltDown())
 		{
 			// System.out.println("mouse clicked with ALT down");
 			winMain.mainCanvas.zoomHandler.processClickZoomRequest(e.getX(), e.getY());
 			return;
 		}
-		
-		else if (!e.isControlDown())
+
+		else if (!isMetaClick(e))
 		{
 			// System.out.println("mouse clicked once");
 			winMain.mainCanvas.processLinkDisplayRequest(e.getX(), e.getY(), false);
 		}
-		
-		else if (e.isControlDown())
+
+		else if (isMetaClick(e))
 		{
 			// System.out.println("mouse clicked with CTRL down");
 			winMain.mainCanvas.processLinkDisplayRequest(e.getX(), e.getY(), true);
 		}
-		
+
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	public void mouseEntered(MouseEvent e)
 	{
-		
+
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	public void mouseExited(MouseEvent e)
 	{
-		
+
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	public void mousePressed(MouseEvent e)
 	{
 		winMain.mainCanvas.mousePressedX = e.getX();
 		winMain.mainCanvas.mousePressedY = e.getY();
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	public void mouseReleased(MouseEvent e)
 	{
 		winMain.mainCanvas.drawSelectionRect = false;
 		winMain.mainCanvas.repaint();
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	// used for zooming for now
 	public void mouseDragged(MouseEvent e)
 	{
@@ -93,7 +104,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		// simply divide the canvas in two halves for this and figure out where on the x axis the hit has occurred
 		int index = getSelectedSet(e);
 		GMapSet selectedSet = winMain.mainCanvas.gMapSetList.get(index);
-		
+
 		// mouse is getting dragged down -- zoom in
 		if (e.getY() > mouseDragPosY && !e.isControlDown())
 		{
@@ -103,7 +114,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 				newZoomFactor = 1;
 			winMain.mainCanvas.zoomHandler.processSliderZoomRequest(newZoomFactor, index);
 		}
-		
+
 		// mouse is getting dragged up -- zoom out
 		if (e.getY() < mouseDragPosY && !e.isControlDown())
 		{
@@ -113,36 +124,36 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 				newZoomFactor = 1;
 			winMain.mainCanvas.zoomHandler.processSliderZoomRequest(newZoomFactor, index);
 		}
-		
+
 		// mouse is getting dragged horizontally with CTRL down -- draw a rectangle for zoom selection
 		if (e.getX() > mouseDragPosX && e.isControlDown())
 		{
 			winMain.mainCanvas.mouseDraggedX = e.getX();
-			winMain.mainCanvas.mouseDraggedY = e.getY();		
+			winMain.mainCanvas.mouseDraggedY = e.getY();
 			winMain.mainCanvas.drawSelectionRect = true;
 			winMain.mainCanvas.repaint();
 		}
-		
+
 		mouseDragPosX = e.getX();
 		mouseDragPosY = e.getY();
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	public void mouseMoved(MouseEvent e)
 	{
 		mouseOverHandler.detectMouseOver(e.getX(), e.getY());
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	// mouse scrolling of canvas
 	public void mouseWheelMoved(MouseWheelEvent e)
 	{
 		// figure out whether the user is zooming the left or right genome
 		int index = getSelectedSet(e);
 		GMapSet selectedSet = winMain.mainCanvas.gMapSetList.get(index);
-		
+
 		// work out by how much we have moved the mouse and in which direction
 		int notches = e.getWheelRotation();
 		int differential = 0;
@@ -154,12 +165,12 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		{
 			differential = 1;
 		}
-		
+
 		winMain.mainCanvas.moveGenomeViewPort(selectedSet, selectedSet.centerPoint + differential);
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	// finds out which of the two genomes the current selection relates to
 	private int getSelectedSet(MouseEvent e)
 	{
@@ -178,13 +189,13 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		}
 		return index;
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	private GChromoMap getSelectedMap(MouseEvent e)
 	{
 		GChromoMap selectedMap = null;
-		
+
 		// check whether the point x,y lies within one of the bounding rectangles of our chromosomes
 		// for each chromosome in each genome
 		for (GMapSet gMapSet : winMain.mainCanvas.gMapSetList)
@@ -199,7 +210,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 				}
 			}
 		}
-		
+
 		// the click has hit a chromosome
 		if (selectedMap != null)
 		{
@@ -211,7 +222,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			return null;
 		}
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 }// end class

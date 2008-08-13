@@ -1,0 +1,1 @@
+java -cp .:classes -Djava.ext.dirs=lib sbrn.mapviewer.gui.MapViewer

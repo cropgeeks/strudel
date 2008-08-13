@@ -1,39 +1,54 @@
 <project name="MapViewer" default="compile" basedir=".">
-  <description>MapViewer Ant Build Script</description>
+	<description>MapViewer Ant Build Script</description>
   
-  <property name="src" location="src"/>
-  <property name="classes" location="classes"/>
-  <property name="lib" location="lib"/>
-
-
-  <!-- TODO: This is screwing up SVN for now -->
-  <target name="init">
-    <!--<mkdir dir="${classes}"/>-->
-  </target>
+	<property name="src" location="src"/>
+	<property name="classes" location="classes"/>
+	<property name="lib" location="lib"/>
 	
-	<target name="clean" depends="init" >
-		<delete>
-			<fileset dir="${classes}" includes="**/*.class"/>
-		</delete>	
+	<property name="mapviewer.jar" value="${lib}/mapviewer.jar"/>
+
+
+	<path id="project.classpath">
+		<fileset dir="${lib}">
+			<include name="**/*.jar"/>
+			<exclude name="**/${mapviewer.jar}"/>
+		</fileset>
+	</path>
+	
+	<target name="clean">
+		<delete includeemptydirs="true">
+			<fileset dir="${classes}" includes="**/*"/>
+			<fileset file="${mapviewer.jar}"/>
+		</delete>
 	</target>
 
+	<target name="compile">
+		<javac srcdir="${src}" destdir="${classes}" target="1.5">
+			<classpath refid="project.classpath"/>
+			<exclude name="**/package-info.java"/>
+		</javac>
+	</target>
+	
+	<target name="jar" depends="clean, compile">
+		<jar jarfile="${mapviewer.jar}">
+			<fileset dir="${classes}"/>
+			<manifest>
+				<attribute name="Main-Class" value="sbrn.mapviewer.gui.MapViewer"/>
+				<attribute name="Class-Path"
+					value="osxadapter.jar
+						scri-commons.jar
+						swing-layout-1.0.3.jar"/>
+			</manifest>
+		</jar>
+	</target>
 
-  <target name="compile" depends="clean" description="compile the source " >
-    <javac srcdir="${src}" destdir="${classes}" debug="yes">
-    	<classpath>
-	      <pathelement path="${classpath}"/>
-	      <fileset dir="${lib}">
-	        <include name="**/*.jar"/>
-	      </fileset>
-        </classpath>
-    </javac>
-  </target>
-
-  <target name="javadoc">
-  	<javadoc destdir="docs/api" author="true" version="true" use="true">
-      <fileset dir="${src}" defaultexcludes="yes">
-      </fileset>
-    </javadoc>
-  </target>
+	<target name="javadoc">
+		<javadoc destdir="docs/api" author="true" version="true" use="true">
+			<fileset dir="${src}" defaultexcludes="yes">
+				<include name="**/*.java"/>
+			</fileset>
+			<classpath refid="project.classpath"/>
+		</javadoc>
+	</target>
 	
 </project>

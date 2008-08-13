@@ -52,9 +52,10 @@ David's List:
 FIXES:
 
 - scroll speed needs to be reduced at higher zoom levels
-- chromosome width varies with frame width by +/- 1 pixel, causing markers to go beyond chromosome
 - dynamic antialiasing -- only have it switched on when there is no scrolling (even if user selected it as on)
-- fix label and marker drawing
+- fix hit detection of feature mouseover at lower zoom levels
+- mouse controls need to be sorted out; clicking sometimes zooms instead
+- overview canvas does not get updated when scrolling on the main canvas
 
 
 

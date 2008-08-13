@@ -34,9 +34,7 @@ public class MouseOverHandler
 
 			// figure out where on the chromosome the hit has occurred, in percent of the total height
 			// the distance from the top of the chromosome to the hit y location, in percent of the chromosome height
-			float percentDistanceFromTop = (float) (((y - selectedMap.boundingRectangle.getY()) / selectedMap.height) * 100);
-			//now round this number to two decimals so we can compare it reliably to the lookup
-			percentDistanceFromTop = Float.parseFloat(new DecimalFormat("0.##").format(percentDistanceFromTop));
+			int percentDistanceFromTop = (int) (((y - selectedMap.boundingRectangle.getY()) / selectedMap.height) * 100);
 			
 //			System.out.println("percentDistanceFromTop = " + percentDistanceFromTop);
 			

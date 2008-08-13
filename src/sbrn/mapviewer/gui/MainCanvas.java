@@ -60,11 +60,23 @@ public class MainCanvas extends JPanel
 	// if true, antialias everything
 	public boolean antiAlias = false;
 	
+	// if true, paint a rectangle to indicate the fact that we are panning over a region we want to select for zooming in to
+	public boolean drawSelectionRect = false;
+	//these are the relevant coordinates for this
+	public int mousePressedX = -1;
+	public int mousePressedY = -1;
+	public int mouseDraggedX = -1;
+	public int mouseDraggedY = -1;
+	
+	//the handler for all zooming related events
+	public CanvasZoomHandler zoomHandler;
+	
 	// ============================c'tors==================================
 	
 	public MainCanvas(MapSet targetMapset, MapSet referenceMapSet, WinMain winMain, LinkSet links)
 	{
 		this.winMain = winMain;
+		zoomHandler = new CanvasZoomHandler(this);
 		this.links = links;
 		setUpGenomes(targetMapset, referenceMapSet);
 		makeTargetLinkSubSets();
@@ -101,8 +113,8 @@ public class MainCanvas extends JPanel
 		// TODO add method for calculating thresholds for marker painting automatically
 		targetGMapSet.thresholdLinkedMarkerPainting = 4;
 		referenceGMapSet.thresholdLinkedMarkerPainting = 4;
-		targetGMapSet.thresholdAllMarkerPainting = 10;
-		referenceGMapSet.thresholdAllMarkerPainting = 10;
+		targetGMapSet.thresholdAllMarkerPainting = 4;
+		referenceGMapSet.thresholdAllMarkerPainting = 4;
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------------------
@@ -133,7 +145,7 @@ public class MainCanvas extends JPanel
 		canvasHeight = getHeight();
 		canvasWidth = getWidth();
 		
-		chromoSpacing = (int) ((canvasHeight / maxChromos) * 0.20f);
+		chromoSpacing = (int) ((canvasHeight / maxChromos) * 0.25f);
 		
 		// x position of genome 1 i.e. first column of chromos
 		targetGMapSet.xPosition = (int) (canvasWidth * leftGenomeX);
@@ -187,6 +199,11 @@ public class MainCanvas extends JPanel
 			
 			// width of chromosomes -- set this to a fixed fraction of the screen width for now
 			int chromoWidth = Math.round(canvasWidth / 40);
+			// check that this number is even
+			boolean evenNumber = chromoWidth % 2 == 0;
+			// if it isn't just add 1 -- otherwise we get into trouble with feature line widths exceeding the width of the chromosome
+			if (!evenNumber)
+				chromoWidth += 1;
 			
 			// now paint the chromosomes in this genome
 			// for each chromosome in the genome
@@ -229,25 +246,24 @@ public class MainCanvas extends JPanel
 			drawLinks(g2);
 		}
 		
+		// this optionally draws a rectangle delimiting a region we want to zoom in on
+		if (drawSelectionRect)
+		{
+			g2.setColor(Color.red);
+			// draw rectangle
+			g2.drawRect(mousePressedX, mousePressedY, mouseDraggedX - mousePressedX,
+							mouseDraggedY - mousePressedY);
+			System.out.println("last selection rect coords: " + mousePressedX + "," 
+														+ mousePressedY + ","
+														+ mouseDraggedX + ","
+														+ mouseDraggedY + ","
+														);
+		}
+		
+		// also need to update the overview canvases from here
+//		winMain.fatController.updateOverviewCanvases();
 	}
-	
-	// -----------------------------------------------------------------------------------------------------------------------------------
-	
-	// gets invoked when the zoom is adjusted by using the sliders or the drag-and-zoom functionality
-	// adjusts the zoom factor and checks whether we need to now display markers and labels
-	public void processSliderZoomRequest(float zoomFactor, int genomeIndex)
-	{
-		GMapSet selectedSet = gMapSetList.get(genomeIndex);
-		selectedSet.zoomFactor = zoomFactor;
-		
-		// check whether we need to display markers and labels
-		checkMarkerPaintingThresholds(selectedSet);
-		
-		// make sure the zoom factor currently displayed is up to date
-		winMain.zoomControlPanel.updateZoomInfo();
-		
-		repaint();
-	}
+
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------
 	
@@ -336,56 +352,6 @@ public class MainCanvas extends JPanel
 		winMain.fatController.updateOverviewCanvases();
 	}
 	
-	// -----------------------------------------------------------------------------------------------------------------------------------
-	
-	// zooms in by a fixed amount on a chromosome the user clicked on
-	public void processClickZoomRequest(int x, int y)
-	{
-		GChromoMap selectedMap = Utils.getSelectedMap(gMapSetList, x, y);
-		
-		// if the click has hit a chromosome
-		if (selectedMap != null)
-		{
-			// figure out the genome it belongs to and increase that genome's zoom factor so that we can
-			// just fit it on screen the next time it is painted
-			GMapSet selectedSet = selectedMap.owningSet;
-			selectedSet.zoomFactor = maxChromos;
-			
-			// this is the combined height of all spacers -- this does not change with the zoom factor
-			int combinedSpacers = chromoSpacing * (selectedSet.numMaps - 1);
-			// work out the chromo height and total genome height for once the new zoom factor has been applied
-			int newChromoHeight = (int) (selectedSet.chromoHeight * selectedSet.zoomFactor);
-			int newTotalY = (int) (((selectedSet.totalY - combinedSpacers) * selectedSet.zoomFactor) + combinedSpacers);
-			
-			// now we need to work out the percent offset from the top of the center of the chromo that
-			// we want to zoom in on in the zoomed genome
-			// the index of the selected chromo in the genome, starting at 1 rather than zero
-			int chromoIndex = selectedSet.gMaps.indexOf(selectedMap) + 1;
-			// the distance from the top of the genome to the end of the selected chromo, in pixels
-			int chromoOffset = chromoIndex * newChromoHeight;
-			// the combined distance of all spacers between the top of the genome and our selected chromo
-			int spacingOffset = chromoIndex * chromoSpacing - chromoSpacing;
-			float halfChromoHeight = newChromoHeight / 2;
-			// the new centerpoint should be a proportion of the total genome height and is defined as
-			// the sum of all chromosome heights and the spacer heights minus half the height of a chromo
-			float newCenterPoint = ((chromoOffset + spacingOffset - halfChromoHeight) / newTotalY) * 100;
-			// update the genome centerpoint to the new percentage and update the scroller position
-			selectedSet.centerPoint = Math.round(newCenterPoint);
-			selectedSet.scroller.setValue(selectedSet.centerPoint);
-			
-			// check whether we need to display markers and labels
-			if (selectedMap.isShowingOnCanvas)
-			{
-				checkMarkerPaintingThresholds(selectedSet);
-			}
-			
-			// repaint the canvas
-			repaint();
-			
-			// update overviews
-			winMain.fatController.updateOverviewCanvases();
-		}
-	}
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------
 	
@@ -485,7 +451,8 @@ public class MainCanvas extends JPanel
 								int referenceY = (int) (feat2Start / (referenceMapStop / referenceGMapSet.gMaps.get(0).height)) + referenceChromoY;
 								
 								// draw the line
-								g2.drawLine(selectedChromoX+1, targetY, referenceChromoX-1,
+								g2.drawLine(selectedChromoX + 1, targetY,
+												referenceChromoX - 1,
 												referenceY);
 							}
 						}
@@ -588,7 +555,7 @@ public class MainCanvas extends JPanel
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------
 	
-	private void checkMarkerPaintingThresholds(GMapSet selectedSet)
+	public void checkMarkerPaintingThresholds(GMapSet selectedSet)
 	{
 		// check whether we need to display markers and labels
 		if (selectedSet.zoomFactor > selectedSet.thresholdAllMarkerPainting)

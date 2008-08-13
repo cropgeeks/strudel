@@ -13,6 +13,11 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	
 	WinMain winMain;
 	int mouseDragPosY = 0;
+	int mouseDragPosX = 0;
+	int mousePressedX = -1;
+	int mousePressedY = -1;
+	int mouseDraggedX = -1;
+	int mouseDraggedY = -1;
 	MouseOverHandler mouseOverHandler;
 	
 	// ===============================================c'tors===========================================
@@ -30,31 +35,29 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	{
 		if (e.isAltDown())
 		{
-//			System.out.println("mouse clicked with ALT down");
-			winMain.mainCanvas.processClickZoomRequest(e.getX(), e.getY());
+			// System.out.println("mouse clicked with ALT down");
+			winMain.mainCanvas.zoomHandler.processClickZoomRequest(e.getX(), e.getY());
 			return;
 		}
 		
 		else if (!e.isControlDown())
 		{
-//			System.out.println("mouse clicked once");
+			// System.out.println("mouse clicked once");
 			winMain.mainCanvas.processLinkDisplayRequest(e.getX(), e.getY(), false);
 		}
 		
 		else if (e.isControlDown())
 		{
-//			System.out.println("mouse clicked  with CTRL down");
+			// System.out.println("mouse clicked with CTRL down");
 			winMain.mainCanvas.processLinkDisplayRequest(e.getX(), e.getY(), true);
 		}
 		
-
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	public void mouseEntered(MouseEvent e)
 	{
-
 		
 	}
 	
@@ -62,7 +65,6 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	
 	public void mouseExited(MouseEvent e)
 	{
-
 		
 	}
 	
@@ -70,14 +72,16 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	
 	public void mousePressed(MouseEvent e)
 	{
-		
+		winMain.mainCanvas.mousePressedX = e.getX();
+		winMain.mainCanvas.mousePressedY = e.getY();
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	public void mouseReleased(MouseEvent e)
 	{
-		
+		winMain.mainCanvas.drawSelectionRect = false;
+		winMain.mainCanvas.repaint();
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -91,24 +95,35 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		GMapSet selectedSet = winMain.mainCanvas.gMapSetList.get(index);
 		
 		// mouse is getting dragged down -- zoom in
-		if (e.getY() > mouseDragPosY)
+		if (e.getY() > mouseDragPosY && !e.isControlDown())
 		{
 			float newZoomFactor = selectedSet.zoomFactor * 1.1f;
 			// don't let the zoom factor fall below 1
 			if (newZoomFactor < 1)
 				newZoomFactor = 1;
-			winMain.mainCanvas.processSliderZoomRequest(newZoomFactor, index);
+			winMain.mainCanvas.zoomHandler.processSliderZoomRequest(newZoomFactor, index);
 		}
+		
 		// mouse is getting dragged up -- zoom out
-		if (e.getY() < mouseDragPosY)
+		if (e.getY() < mouseDragPosY && !e.isControlDown())
 		{
 			float newZoomFactor = selectedSet.zoomFactor * 0.9f;
 			// don't let the zoom factor fall below 1
 			if (newZoomFactor < 1)
 				newZoomFactor = 1;
-			winMain.mainCanvas.processSliderZoomRequest(newZoomFactor, index);
+			winMain.mainCanvas.zoomHandler.processSliderZoomRequest(newZoomFactor, index);
 		}
 		
+		// mouse is getting dragged horizontally with CTRL down -- draw a rectangle for zoom selection
+		if (e.getX() > mouseDragPosX && e.isControlDown())
+		{
+			winMain.mainCanvas.mouseDraggedX = e.getX();
+			winMain.mainCanvas.mouseDraggedY = e.getY();		
+			winMain.mainCanvas.drawSelectionRect = true;
+			winMain.mainCanvas.repaint();
+		}
+		
+		mouseDragPosX = e.getX();
 		mouseDragPosY = e.getY();
 	}
 	
@@ -116,7 +131,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	
 	public void mouseMoved(MouseEvent e)
 	{
-		 mouseOverHandler.detectMouseOver(e.getX(), e.getY());
+		mouseOverHandler.detectMouseOver(e.getX(), e.getY());
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -128,7 +143,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		int index = getSelectedSet(e);
 		GMapSet selectedSet = winMain.mainCanvas.gMapSetList.get(index);
 		
-		//work out by how much we have moved the mouse and in which direction
+		// work out by how much we have moved the mouse and in which direction
 		int notches = e.getWheelRotation();
 		int differential = 0;
 		if (notches < 0)

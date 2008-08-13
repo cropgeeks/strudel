@@ -1,1 +1,9 @@
-java -cp .;classes -Djava.ext.dirs=lib sbrn.mapviewer.gui.MapViewer
+@ECHO OFF
+
+SET lib=lib
+
+SET mvcp=%lib%\
+SET mvcp=%mvcp%;%lib%\scri-commons.jar
+SET mvcp=%mvcp%;%lib%\swing-layout-1.0.3.jar
+
+java -Xmx512m -cp .;classes;%mvcp% sbrn.mapviewer.gui.MapViewer %1

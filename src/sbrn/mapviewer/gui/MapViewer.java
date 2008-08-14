@@ -1,5 +1,7 @@
 package sbrn.mapviewer.gui;
 
+import java.awt.event.*;
+import java.io.*;
 import javax.swing.*;
 
 import scri.commons.gui.*;
@@ -8,6 +10,9 @@ import apple.dts.samplecode.osxadapter.*;
 
 public class MapViewer
 {
+	private static File prefsFile = new File(System.getProperty("user.home"), ".mapviewer.xml");
+	private static Prefs prefs = new Prefs();
+
 	public static WinMain winMain;
 
 	public static void main(String[] args)
@@ -15,6 +20,7 @@ public class MapViewer
 		// OS X: This has to be set before anything else
 		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Map Viewer");
 
+		prefs.loadPreferences(prefsFile, Prefs.class);
 		Install4j.pingServer();
 
 		new MapViewer();
@@ -38,6 +44,16 @@ public class MapViewer
 		try
 		{
 			winMain = new WinMain();
+
+			winMain.addWindowListener(new WindowAdapter()
+			{
+				public void windowClosing(WindowEvent e)
+				{
+					prefs.savePreferences(prefsFile, Prefs.class);
+					System.exit(0);
+				}
+			});
+
 			winMain.setVisible(true);
 		}
 		catch (Exception e)

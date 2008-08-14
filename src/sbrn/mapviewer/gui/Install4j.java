@@ -9,7 +9,6 @@ import scri.commons.gui.*;
 class Install4j
 {
 	public static String VERSION = "0.0";
-	public static String ID = SystemUtils.createGUID(32);
 
 	static void pingServer()
 	{
@@ -19,7 +18,7 @@ class Install4j
 				try
 				{
 					// Safely encode the URL's parameters
-					String id = URLEncoder.encode(ID, "UTF-8");
+					String id = URLEncoder.encode(Prefs.ID, "UTF-8");
 					String version = URLEncoder.encode(VERSION, "UTF-8");
 					String locale = URLEncoder.encode("" + Locale.getDefault(), "UTF-8");
 					String os = URLEncoder.encode(System.getProperty("os.name"), "UTF-8");

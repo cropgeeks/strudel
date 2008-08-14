@@ -124,7 +124,7 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener
 	private void processLineDragRequest(int newY)
 	{
 		// work out what percentage offset from the top of the topmost chromosome this y position is equal to
-		int percentOffset = (int) (((newY - topBottomSpacer) / (float) totalY) * 100);
+		int percentOffset = (int) (((newY - topBottomSpacer) / (float) totalY) * 1000);
 		
 		// move the genome viewport on the main canvas
 		winMain.mainCanvas.moveGenomeViewPort(gMapSet, percentOffset);

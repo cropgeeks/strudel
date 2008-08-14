@@ -13,13 +13,14 @@ public class Scroller extends JScrollBar implements AdjustmentListener
 	public Scroller(WinMain winMain)
 	{
 		setVisibleAmount(0);
+//		setMaximum(1000);
 		this.winMain = winMain;
 		addAdjustmentListener(this);
 	}
 	
 	public void adjustmentValueChanged(AdjustmentEvent e)
 	{
-//		System.out.println("scroller adjustmentValueChanged");
+		System.out.println("scroller adjustmentValueChanged to " + e.getValue());
 		
 //		 if(e.getValueIsAdjusting())
 //		 return;

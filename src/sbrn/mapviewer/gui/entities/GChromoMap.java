@@ -3,7 +3,6 @@ package sbrn.mapviewer.gui.entities;
 import java.awt.*;
 import java.text.*;
 import java.util.*;
-
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.WinMain;
 
@@ -123,6 +122,30 @@ public class GChromoMap
 		if (drawHighlightOutline)
 		{
 			highlightMapOutline(g2);
+		}
+		
+//		if (owningSet.zoomFactor > 1)
+//			drawDistanceMarkers(g2);
+	}
+	
+	// -----------------------------------------------------------------------------------------------------------------------------------------
+	
+	private void drawDistanceMarkers(Graphics2D g2)
+	{
+		float numMarkers = 100;
+		float interval = owningSet.chromoHeight / numMarkers;
+		float currentY = 0;
+		
+		// set the colour to grey
+		g2.setColor(new Color(130, 130, 130));
+		Font font = new Font("Arial", Font.PLAIN, 10);
+		g2.setFont(font);
+		
+		for (int i = 0; i <= numMarkers; i++)
+		{
+			g2.drawLine(-2, (int) currentY, -width / 4, (int) currentY);
+			g2.drawString(String.valueOf(i), -25, currentY + 5);
+			currentY += interval;
 		}
 		
 	}
@@ -317,9 +340,6 @@ public class GChromoMap
 			
 			// also add this to a lookup table that we can use to look up features by location
 			// the percent distance from the top of the chromosome to the location of this feature
-			// float percentDistToFeat = f.getStart() * (100 / chromoMap.getStop());
-			// // now round this number to two decimals so we can compare it reliably to input values
-			// percentDistToFeat = Float.parseFloat(new DecimalFormat("0").format(percentDistToFeat));
 			int percentDistToFeat = (int) (f.getStart() * (100 / chromoMap.getStop()));
 			
 			// check whether we have an entry in the map with this key already
@@ -340,18 +360,18 @@ public class GChromoMap
 			}
 		}
 		
-//		System.out.println("==========================================");
-//		System.out.println("calculating relative feature starts for map " + name);
-//		System.out.println("size of this map = " + allFeaturesPosLookup.keySet().size());
-//		int count = 0;
-//		for (Integer it : allFeaturesPosLookup.keySet())
-//		{
-//			LinkedList list = allFeaturesPosLookup.get(it);
-//			// now round this number to two decimals so we can compare it reliably to input values
-//			System.out.println(it + " = " + allFeaturesPosLookup.get(it).toString());
-//			count += list.size();
-//		}
-//		System.out.println("count = " + count);
+		// System.out.println("==========================================");
+		// System.out.println("calculating relative feature starts for map " + name);
+		// System.out.println("size of this map = " + allFeaturesPosLookup.keySet().size());
+		// int count = 0;
+		// for (Integer it : allFeaturesPosLookup.keySet())
+		// {
+		// LinkedList list = allFeaturesPosLookup.get(it);
+		// // now round this number to two decimals so we can compare it reliably to input values
+		// System.out.println(it + " = " + allFeaturesPosLookup.get(it).toString());
+		// count += list.size();
+		// }
+		// System.out.println("count = " + count);
 		
 	}
 	

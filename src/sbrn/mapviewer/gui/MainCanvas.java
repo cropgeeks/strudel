@@ -75,12 +75,14 @@ public class MainCanvas extends JPanel
 	
 	public MainCanvas(MapSet targetMapset, MapSet referenceMapSet, WinMain winMain, LinkSet links)
 	{
+
 		this.winMain = winMain;
 		zoomHandler = new CanvasZoomHandler(this);
 		this.links = links;
 		setUpGenomes(targetMapset, referenceMapSet);
 		makeTargetLinkSubSets();
 		setBackground(Color.black);
+
 		repaint();
 	}
 	
@@ -140,7 +142,7 @@ public class MainCanvas extends JPanel
 			g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
 							RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
 		}
-		
+
 		// get current size of frame
 		canvasHeight = getHeight();
 		canvasWidth = getWidth();
@@ -187,7 +189,7 @@ public class MainCanvas extends JPanel
 			{
 				// need to convert the stored value for the offset (%) to pixels
 				// this is because we may have a different zoomfactor each time we draw
-				int offset = 50 - gMapSet.centerPoint;
+				int offset = (int) (50 - gMapSet.centerPoint);
 				int offsetPixels = (int) ((offset / 100.0f) * gMapSet.totalY);
 				
 				// start drawing at minus half the total height of the entire genome plus half the canvasheight and
@@ -253,11 +255,6 @@ public class MainCanvas extends JPanel
 			// draw rectangle
 			g2.drawRect(mousePressedX, mousePressedY, mouseDraggedX - mousePressedX,
 							mouseDraggedY - mousePressedY);
-			System.out.println("last selection rect coords: " + mousePressedX + "," 
-														+ mousePressedY + ","
-														+ mouseDraggedX + ","
-														+ mouseDraggedY + ","
-														);
 		}
 		
 		// also need to update the overview canvases from here
@@ -549,6 +546,7 @@ public class MainCanvas extends JPanel
 		// update the centerpoint to the new percentage
 		gMapSet.centerPoint = newCenterPoint;
 		gMapSet.scroller.setValue(newCenterPoint);
+		System.out.println("new centerpoint = " + newCenterPoint);
 		repaint();
 		
 	}

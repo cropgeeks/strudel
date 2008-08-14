@@ -204,12 +204,10 @@ public class ControlPanel extends javax.swing.JPanel implements ItemListener
 		//convert the value selected to the exponent of a small decimal and set this as
 		//the new BLAST threshold (which is a double)
 		int exponent = source.getValue();
-		System.out.println("new exponent value from e-Value slider: " + exponent);
 		DecimalFormat df = new DecimalFormat("0.##E0");
 		try
 		{
 			Number score = df.parse("1.00E-" + exponent);
-			System.out.println("setting BLAST threshold to new value of " + score.toString());
 			blastThreshold = score.doubleValue();
 			blastScoreLabel.setText("Current value: " + blastThreshold);
 //			blastScoreLabel.setText("Current value: " + Math.random());
@@ -227,11 +225,11 @@ public class ControlPanel extends javax.swing.JPanel implements ItemListener
 		//these two actions reset the left and right zoom respectively
 		if (e.getSource() == resetLeftButton)
 		{
-			winMain.mainCanvas.zoomHandler.processSliderZoomRequest(1, 0);
+			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(1, 0);
 		}
 		if (e.getSource() == resetRightButton)
 		{
-			winMain.mainCanvas.zoomHandler.processSliderZoomRequest(1, 1);
+			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(1, 1);
 		}
 
 		//change the background colour to the value selected by the user from the combo

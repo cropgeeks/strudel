@@ -15,6 +15,8 @@ public class MapViewer
 		// OS X: This has to be set before anything else
 		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Map Viewer");
 
+		Install4j.pingServer();
+
 		new MapViewer();
 	}
 

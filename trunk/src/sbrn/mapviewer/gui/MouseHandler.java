@@ -44,8 +44,10 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 
 		if (e.isAltDown())
 		{
+			GChromoMap selectedMap = Utils.getSelectedMap(winMain.mainCanvas.gMapSetList, e.getX(), e.getY());
 			// System.out.println("mouse clicked with ALT down");
-			winMain.mainCanvas.zoomHandler.processClickZoomRequest(e.getX(), e.getY());
+			if(selectedMap != null)
+				winMain.mainCanvas.zoomHandler.processClickZoomRequest(selectedMap);
 			return;
 		}
 
@@ -115,26 +117,19 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		// figure out whether the user is zooming the left or right genome
 		// simply divide the canvas in two halves for this and figure out where on the x axis the hit has occurred
 		int index = getSelectedSet(e);
-		GMapSet selectedSet = winMain.mainCanvas.gMapSetList.get(index);
 
 		// mouse is getting dragged down -- zoom in
 		if (e.getY() > mouseDragPosY && !e.isControlDown())
 		{
-			float newZoomFactor = selectedSet.zoomFactor * 1.1f;
-			// don't let the zoom factor fall below 1
-			if (newZoomFactor < 1)
-				newZoomFactor = 1;
-			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(newZoomFactor, index);
+			float multiplier = 1.2f;
+			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(-1, multiplier, index);
 		}
 
 		// mouse is getting dragged up -- zoom out
 		if (e.getY() < mouseDragPosY && !e.isControlDown())
 		{
-			float newZoomFactor = selectedSet.zoomFactor * 0.9f;
-			// don't let the zoom factor fall below 1
-			if (newZoomFactor < 1)
-				newZoomFactor = 1;
-			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(newZoomFactor, index);
+			float multiplier = 0.8f;
+			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(-1,multiplier, index);
 		}
 
 		// mouse is getting dragged horizontally with CTRL down -- draw a rectangle for zoom selection
@@ -172,17 +167,12 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		float differential = 0;
 		if (notches < 0)
 		{
-//			differential = -(1/selectedSet.zoomFactor);
-			differential = -1;
+			differential = -(selectedSet.totalY/selectedSet.zoomFactor)*0.3f;
 		}
 		else
 		{
-//			differential = 1/selectedSet.zoomFactor;
-			differential = 1;
+			differential = (selectedSet.totalY/selectedSet.zoomFactor)*0.3f;
 		}
-
-		System.out.println("differential = " + differential);
-		System.out.println("moving to centerpoint = " + (int)(selectedSet.centerPoint + differential));
 		
 		winMain.mainCanvas.moveGenomeViewPort(selectedSet, (int)(selectedSet.centerPoint + differential));
 	}

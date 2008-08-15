@@ -111,6 +111,10 @@ public class GChromoMap
 			g2.drawString(String.valueOf(index + 1), -width * 6, height / 2);
 		}
 		
+		//draw a set of distance markers
+		if (owningSet.zoomFactor > 12)
+			drawDistanceMarkers(g2);
+		
 		// now draw features and labels as required
 		if (owningSet.paintAllMarkers && isShowingOnCanvas)
 		{
@@ -123,9 +127,6 @@ public class GChromoMap
 		{
 			highlightMapOutline(g2);
 		}
-		
-//		if (owningSet.zoomFactor > 1)
-//			drawDistanceMarkers(g2);
 	}
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------------
@@ -137,13 +138,13 @@ public class GChromoMap
 		float currentY = 0;
 		
 		// set the colour to grey
-		g2.setColor(new Color(130, 130, 130));
+		g2.setColor(new Color(50, 50, 50));
 		Font font = new Font("Arial", Font.PLAIN, 10);
 		g2.setFont(font);
 		
 		for (int i = 0; i <= numMarkers; i++)
 		{
-			g2.drawLine(-2, (int) currentY, -width / 4, (int) currentY);
+			g2.drawLine(-2, (int) currentY, -width / 3, (int) currentY);
 			g2.drawString(String.valueOf(i), -25, currentY + 5);
 			currentY += interval;
 		}

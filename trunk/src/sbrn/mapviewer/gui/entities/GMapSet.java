@@ -50,8 +50,8 @@ public class GMapSet
 	// the scrollbar which controls the viewable area in this map set
 	public Scroller scroller;
 	
-	// the point on the genome that is currently seen in the center of the canvas, as a percentage of the genome's total height
-	public float centerPoint = 50;
+	// the point on the genome that is currently seen in the center of the canvas, in pixels, measured from the top of the genome
+	public int centerPoint = 0;
 	
 	// the total current height of the genome as drawn on the canvas, in pixels
 	public int totalY;

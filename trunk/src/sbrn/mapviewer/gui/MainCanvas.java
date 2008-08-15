@@ -32,7 +32,7 @@ public class MainCanvas extends JPanel
 	int maxChromos;
 	
 	// space the chromosomes vertically by this fixed amount
-	int chromoSpacing = 0;
+	int chromoSpacing = 15;
 	
 	// these variables determine where the genomes appear on the canvas on the x axis (scaled to 0-1)
 	// position is relative to frame size
@@ -70,6 +70,8 @@ public class MainCanvas extends JPanel
 	
 	//the handler for all zooming related events
 	public CanvasZoomHandler zoomHandler;
+	
+	int initialChromoHeight = 0;
 	
 	// ============================c'tors==================================
 	
@@ -146,9 +148,7 @@ public class MainCanvas extends JPanel
 		// get current size of frame
 		canvasHeight = getHeight();
 		canvasWidth = getWidth();
-		
-		chromoSpacing = (int) ((canvasHeight / maxChromos) * 0.25f);
-		
+				
 		// x position of genome 1 i.e. first column of chromos
 		targetGMapSet.xPosition = (int) (canvasWidth * leftGenomeX);
 		// x position of genome 2 (second column of chromos)
@@ -159,44 +159,46 @@ public class MainCanvas extends JPanel
 		// for each genome
 		for (GMapSet gMapSet : gMapSetList)
 		{
+
 			// the total amount of space we have for drawing on vertically, in pixels
 			int availableSpaceVertically = canvasHeight - (chromoSpacing * 2);
 			// the combined height of all the vertical spaces between chromosomes
 			int allSpacers = chromoSpacing * (maxChromos - 1);
-			// the height of a chromosome
-			gMapSet.chromoHeight = (int) (((availableSpaceVertically - allSpacers) / maxChromos) * gMapSet.zoomFactor);
-			// the total vertical extent of the genome, excluding top and bottom spacers
-			gMapSet.totalY = (gMapSet.numMaps * gMapSet.chromoHeight) + ((gMapSet.numMaps - 1) * chromoSpacing);
-			// the space at the top and bottom -- should be equal
-			int topBottomSpacer = (canvasHeight - gMapSet.totalY) / 2;
+
+//			System.out.println("MAINCANVAS: chromoHeight for mapset " + gMapSet.name + " = " + gMapSet.chromoHeight);
+//			System.out.println("MAINCANVAS: gMapSet.zoomFactor = " + gMapSet.zoomFactor);
 			
 			// currentY is the y position at which we start drawing the genome, chromo by chromo, top to bottom
 			// this may be off the visible canvas in a northerly direction
 			int currentY = 0;
 			
-			// this is what we do at a zoom factor of 1 (e.g. at startup)
+			// this is what we do at a zoom factor of 1 (at startup but also after zoom reset)
 			if (gMapSet.zoomFactor == 1)
 			{
+				// the height of a chromosome
+				gMapSet.chromoHeight = (availableSpaceVertically - allSpacers) / maxChromos;
+				initialChromoHeight = gMapSet.chromoHeight;
+				
+				// the total vertical extent of the genome, excluding top and bottom spacers
+				gMapSet.totalY = (gMapSet.numMaps * gMapSet.chromoHeight) + ((gMapSet.numMaps - 1) * chromoSpacing);
+				// the space at the top and bottom -- should be equal
+				int topBottomSpacer = (canvasHeight - gMapSet.totalY) / 2;
+				
 				// we want to fit all the chromosomes on at a zoom factor of 1 so we only use the top spacer when this is the case
 				currentY = topBottomSpacer;
 				
 				// set the scrollers to the correct position
-				gMapSet.scroller.setValue(50);
-				gMapSet.centerPoint = 50;
+				gMapSet.centerPoint = Math.round(gMapSet.totalY/2.0f);
+				gMapSet.scroller.setValue(gMapSet.centerPoint);
+				gMapSet.scroller.setMaximum(gMapSet.totalY);
+				gMapSet.scroller.setVisibleAmount(gMapSet.totalY/gMapSet.centerPoint);
+
 			}
 			// this is what we do when we are zoomed in
 			else
-			{
-				// need to convert the stored value for the offset (%) to pixels
-				// this is because we may have a different zoomfactor each time we draw
-				int offset = (int) (50 - gMapSet.centerPoint);
-				int offsetPixels = (int) ((offset / 100.0f) * gMapSet.totalY);
-				
-				// start drawing at minus half the total height of the entire genome plus half the canvasheight and
-				// plus the offset which can be positive or negative
-				// the offset is the amount by which the user has moved the scrollbar
-				// if the scrollbar has not been touched the offset will be zero
-				currentY = -(gMapSet.totalY / 2) + canvasHeight / 2 + offsetPixels;
+			{			
+				// start drawing at minus half the total height of the entire genome plus half the canvasheight 
+				currentY = -(gMapSet.totalY / 2) + canvasHeight / 2 - (gMapSet.centerPoint -(gMapSet.totalY / 2));
 			}
 			
 			// width of chromosomes -- set this to a fixed fraction of the screen width for now
@@ -543,10 +545,14 @@ public class MainCanvas extends JPanel
 	// used to scroll up and down the canvas
 	public void moveGenomeViewPort(GMapSet gMapSet, int newCenterPoint)
 	{
+		//the center point is an absolute value in pixels which is the offset from the top of the genome to the current
+		//point in the center of the screen on y
+		//for the purpose of the scroller we need to 
+		
 		// update the centerpoint to the new percentage
 		gMapSet.centerPoint = newCenterPoint;
 		gMapSet.scroller.setValue(newCenterPoint);
-		System.out.println("new centerpoint = " + newCenterPoint);
+//		System.out.println("MAINCANVAS: moving genome view port to centerpoint " + newCenterPoint);
 		repaint();
 		
 	}

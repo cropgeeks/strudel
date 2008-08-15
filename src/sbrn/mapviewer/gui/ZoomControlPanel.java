@@ -109,12 +109,12 @@ public class ZoomControlPanel extends JPanel implements ChangeListener, ActionLi
 //		{
 			if (source.equals(leftZoomSlider))
 			{
-				winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(source.getValue(), 0);
+				winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(source.getValue(), 0, 0);
 			}
 			else
 				if (source.equals(rightZoomSlider))
 				{
-					winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(source.getValue(), 1);					
+					winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(source.getValue(), 0, 1);					
 				}
 			updateZoomInfo();
 //		}
@@ -142,11 +142,11 @@ public class ZoomControlPanel extends JPanel implements ChangeListener, ActionLi
 	{
 		if(e.getSource()==resetLeftButton)
 		{
-			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(1, 0);
+			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(1, 0, 0);
 		}
 		if(e.getSource()==resetRightButton)
 		{
-			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(1, 1);		
+			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(1, 0, 1);		
 		}		
 	}
 	

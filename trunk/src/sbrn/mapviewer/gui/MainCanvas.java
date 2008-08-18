@@ -296,11 +296,13 @@ public class MainCanvas extends JPanel
 				// if the map is already added we need to remove it (this is toggle-style functionality)
 				if (selectedMap.owningSet.selectedMaps.contains(selectedMap))
 				{
+					System.out.println("removing selected map");
 					selectedMap.owningSet.removeSelectedMap(selectedMap);
 				}
 				// otherwise we add it
 				else
 				{
+					System.out.println("adding selected map");
 					selectedMap.owningSet.addSelectedMap(selectedMap);
 				}
 			}
@@ -348,7 +350,7 @@ public class MainCanvas extends JPanel
 		repaint();
 		
 		// update overviews
-		winMain.fatController.updateOverviewCanvases();
+//		winMain.fatController.updateOverviewCanvases();
 	}
 	
 	

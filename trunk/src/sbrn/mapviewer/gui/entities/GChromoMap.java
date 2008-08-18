@@ -3,6 +3,7 @@ package sbrn.mapviewer.gui.entities;
 import java.awt.*;
 import java.text.*;
 import java.util.*;
+
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.WinMain;
 
@@ -112,7 +113,7 @@ public class GChromoMap
 		}
 		
 		//draw a set of distance markers
-		if (owningSet.zoomFactor > 12)
+		if (owningSet.zoomFactor > 22)
 			drawDistanceMarkers(g2);
 		
 		// now draw features and labels as required
@@ -134,22 +135,75 @@ public class GChromoMap
 	private void drawDistanceMarkers(Graphics2D g2)
 	{
 		float numMarkers = 100;
+		//this is the number of pixels by which the markers get spaced
 		float interval = owningSet.chromoHeight / numMarkers;
 		float currentY = 0;
+		//this is the numerical amount by which we want to separate the marker values
+		//this gets scaled by the maximum value at the chromosome end and can be in 
+		//centiMorgan or in base pairs
+		float increment = chromoMap.getStop()/numMarkers;
+		//the current marker value we want to print
+		float currentVal = 0;
+		
+		//need to format the number appropriately
+		NumberFormat nf = NumberFormat.getInstance();
+		//check first whether we are dealing with ints or floating point numbers for the chromosome distances
+		if(chromoMap.getStop() % 1 == 0) //this is an int
+		{
+			nf.setMaximumFractionDigits(0);
+		}
+		else //it's a float
+		{
+			//we want no more than two decimals here
+			nf.setMaximumFractionDigits(2);
+		}
 		
 		// set the colour to grey
 		g2.setColor(new Color(50, 50, 50));
-		Font font = new Font("Arial", Font.PLAIN, 10);
-		g2.setFont(font);
+		
+		// font stuff
+		int fontHeight = 10;
+		g2.setFont(new Font("Sans-serif", Font.PLAIN, fontHeight));
+		FontMetrics fm = g2.getFontMetrics();
+		
+		// decide where to place the label on x
+		// on the left hand genome we want the label on the left, right hand genome on the right
+		int labelX = 0; // this is where the label is drawn from
+		int lineStartX = 0; // this is where the line to the label is drawn from
+		int labelLineEnd = 0; // the label connects to the line here
+		// the amount by which we want to move the label away from the chromosome (in pixels)
+		int labelSpacer = 10;
+		//the amount we want to separate the label and the line by, in pixels
+		int gap = 5;
 		
 		for (int i = 0; i <= numMarkers; i++)
 		{
-			g2.drawLine(-2, (int) currentY, -width / 3, (int) currentY);
-			g2.drawString(String.valueOf(i), -25, currentY + 5);
+			int stringWidth = fm.stringWidth(String.valueOf(nf.format(currentVal)));
+			
+			// right hand genome (reference)
+			if (!owningSet.isTargetGenome)
+			{
+				labelX = width + labelSpacer;
+				lineStartX = width;
+				labelLineEnd = labelX - gap;
+			}
+			// left hand genome (target)
+			else
+			{
+				labelX = -stringWidth - labelSpacer;
+				lineStartX = -1;
+				labelLineEnd = -labelSpacer + gap;
+			}
+			
+			// draw a line from the marker to the label
+			g2.drawLine(lineStartX, (int)currentY, labelLineEnd, (int)currentY);
+			g2.drawString(String.valueOf(nf.format(currentVal)), labelX, currentY + fontHeight/2);
 			currentY += interval;
+			currentVal += increment;
 		}
 		
 	}
+	
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------------
 	
@@ -196,6 +250,9 @@ public class GChromoMap
 		{
 			// the amount by which we want to move the label away from the chromosome (in pixels)
 			int labelSpacer = 20;
+			
+			//sort the feature list by the start position so the labels draw in the correct order
+			Collections.sort(highlightedFeatures);	
 			
 			// for all features in our list
 			for (Feature f : highlightedFeatures)
@@ -304,6 +361,9 @@ public class GChromoMap
 					labelLineEnd = -labelSpacer + 3;
 				}
 				
+				// set the colour to grey
+				g2.setColor(new Color(150, 150, 150));
+				
 				// draw the label
 				g2.drawString(featureName, labelX, labelY);
 				
@@ -373,7 +433,6 @@ public class GChromoMap
 		// count += list.size();
 		// }
 		// System.out.println("count = " + count);
-		
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------

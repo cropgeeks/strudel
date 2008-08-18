@@ -29,23 +29,13 @@ public class DataContainer
 	{
 		try
 		{
-			// data files - hard coded for now
-			// System.out.println("loading data");
-			// System.out.println("working dir = " + System.getProperty("user.dir"));
-			
+			// data files - hard coded for now			
 			String workingDir = System.getProperty("user.dir");
-			String fileSep = System.getProperty("file.separator");
-			
+			String fileSep = System.getProperty("file.separator");	
 			referenceData = new File(workingDir + fileSep + "data/riceU35data.txt");
-//			referenceData = new File(workingDir + fileSep + "data/rice_pseudo4_os.maps");
 			targetData = new File(workingDir + fileSep + "data/Barley_Map(UCR_20080416-2)_barley.txt");
 			compData = new File(workingDir + fileSep + "data/Barley_Map(UCR_20080416-2)_homology_data.txt");
-//			otherMapFiles = new File[]
-//			{ new File(workingDir + fileSep + "data/new_owb_edited.maps"),
-//							new File(workingDir + fileSep + "data/new_mxb_edited.maps") };
-			
-			// System.out.println("referenceData = " + referenceData);
-			
+
 			// load data
 			DataLoader dLoader = new DataLoader();
 			referenceMapset = dLoader.loadMapData(referenceData);
@@ -62,11 +52,6 @@ public class DataContainer
 				CMapLinkImporter limp = new CMapLinkImporter(compData);
 				limp.addMapSet(referenceMapset);
 				limp.addMapSet(targetMapset);
-//				MapSet[] otherMapSets = dLoader.loadOtherMapSets(otherMapFiles);
-//				for (int i = 0; i < otherMapSets.length; i++)
-//				{
-//					limp.addMapSet(otherMapSets[i]);
-//				}
 				links = limp.loadLinkSet();
 			}
 			catch (ArrayIndexOutOfBoundsException e)

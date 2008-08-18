@@ -1,7 +1,6 @@
 package sbrn.mapviewer.gui;
 
 import java.awt.event.*;
-import java.util.*;
 import javax.swing.event.*;
 import sbrn.mapviewer.gui.entities.*;
 
@@ -36,16 +35,16 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	{
 		return isOSX && e.isMetaDown() || !isOSX && e.isControlDown();
 	}
+	
+	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	// used for selecting chromosomes for display of links and for zooming
 	public void mouseClicked(MouseEvent e)
 	{
-
-
 		if (e.isAltDown())
 		{
 			GChromoMap selectedMap = Utils.getSelectedMap(winMain.mainCanvas.gMapSetList, e.getX(), e.getY());
-			// System.out.println("mouse clicked with ALT down");
+			 System.out.println("mouse clicked with ALT down");
 			if(selectedMap != null)
 				winMain.mainCanvas.zoomHandler.processClickZoomRequest(selectedMap);
 			return;
@@ -53,13 +52,13 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 
 		else if (!isMetaClick(e))
 		{
-			// System.out.println("mouse clicked once");
+			 System.out.println("mouse clicked once");
 			winMain.mainCanvas.processLinkDisplayRequest(e.getX(), e.getY(), false);
 		}
 
 		else if (isMetaClick(e))
 		{
-			// System.out.println("mouse clicked with CTRL down");
+			 System.out.println("mouse clicked with CTRL down");
 			winMain.mainCanvas.processLinkDisplayRequest(e.getX(), e.getY(), true);
 		}
 
@@ -95,7 +94,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	//in that case we want to trigger a zoom event which zooms into the selected region
 	public void mouseReleased(MouseEvent e)
 	{
-		if (e.isControlDown())
+		if (e.isShiftDown())
 		{
 			//first repaint without the rectangle showing
 			winMain.mainCanvas.drawSelectionRect = false;
@@ -119,21 +118,21 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		int index = getSelectedSet(e);
 
 		// mouse is getting dragged down -- zoom in
-		if (e.getY() > mouseDragPosY && !e.isControlDown())
+		if (e.getY() > mouseDragPosY && !e.isShiftDown())
 		{
 			float multiplier = 1.2f;
 			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(-1, multiplier, index);
 		}
 
 		// mouse is getting dragged up -- zoom out
-		if (e.getY() < mouseDragPosY && !e.isControlDown())
+		if (e.getY() < mouseDragPosY && !e.isShiftDown())
 		{
 			float multiplier = 0.8f;
 			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(-1,multiplier, index);
 		}
 
-		// mouse is getting dragged horizontally with CTRL down -- draw a rectangle for zoom selection
-		if (e.getX() > mouseDragPosX && e.isControlDown())
+		// mouse is getting dragged horizontally with SHIFT down -- draw a rectangle for zoom selection
+		if (e.getX() > mouseDragPosX && e.isShiftDown())
 		{
 			winMain.mainCanvas.mouseDraggedX = e.getX();
 			winMain.mainCanvas.mouseDraggedY = e.getY();

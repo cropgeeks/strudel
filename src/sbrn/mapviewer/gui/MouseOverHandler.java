@@ -43,8 +43,6 @@ public class MouseOverHandler
 			// we have a match
 			if (match != null)
 			{
-//				System.out.println("match found: " + match.toString());
-				
 				// set the vector object of the selected map and repaint
 				selectedMap.highlightedFeatures = match;
 				winMain.mainCanvas.repaint();

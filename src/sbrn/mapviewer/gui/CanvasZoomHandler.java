@@ -24,8 +24,8 @@ public class CanvasZoomHandler
 	// adjusts the zoom factor and checks whether we need to now display markers and labels
 	public void processContinuousZoomRequest(float newZoomFactor, float multiplier,  int genomeIndex)
 	{
-		System.out.println("===========================");
-		System.out.println("processContinuousZoomRequest ");
+//		System.out.println("===========================");
+//		System.out.println("processContinuousZoomRequest ");
 		
 		GMapSet selectedSet = mainCanvas.gMapSetList.get(genomeIndex);
 		
@@ -45,16 +45,15 @@ public class CanvasZoomHandler
 		float newCenterPoint  = newTotalY*proportion;
 		int newChromoHeight = Math.round(selectedSet.chromoHeight  * multiplier);
 					
-		System.out.println("selectedSet.name = " + selectedSet.name);
-		System.out.println("zoomFactor passed in = " + newZoomFactor);
-		System.out.println("newTotalY = " + newTotalY);
-		System.out.println("proportion = " + proportion); 
-		System.out.println("newCenterPoint = " + newCenterPoint);
-		System.out.println("newChromoHeight = " + newChromoHeight);
+//		System.out.println("selectedSet.name = " + selectedSet.name);
+//		System.out.println("zoomFactor passed in = " + newZoomFactor);
+//		System.out.println("newTotalY = " + newTotalY);
+//		System.out.println("proportion = " + proportion); 
+//		System.out.println("newCenterPoint = " + newCenterPoint);
+//		System.out.println("newChromoHeight = " + newChromoHeight);
 		
 		// update the genome centerpoint to the new percentage and update the scroller position
 		selectedSet.zoomFactor = newZoomFactor;
-		System.out.println("selectedSet.zoomFactor = " + selectedSet.zoomFactor);
 		selectedSet.totalY = newTotalY;
 		selectedSet.centerPoint = Math.round(newCenterPoint);
 		selectedSet.chromoHeight = newChromoHeight;
@@ -71,15 +70,14 @@ public class CanvasZoomHandler
 	
 	public void processPanZoomRequest(GChromoMap selectedMap, int mousePressedY, int mouseReleasedY)
 	{
-		System.out.println("===========================");
-		System.out.println("processPanZoomRequest -- zooming in");
+//		System.out.println("===========================");
+//		System.out.println("processPanZoomRequest -- zooming in");
 		
 		// figure out the genome it belongs to and increase that genome's zoom factor so that we can
 		// just fit the chromosome on screen the next time it is painted
 		GMapSet selectedSet = selectedMap.owningSet;		
 		int selectedYDist = mouseReleasedY - mousePressedY;
 		float scalingFactor = mainCanvas.getHeight() / (float) selectedYDist;
-		System.out.println("old zoom factor = " + selectedSet.zoomFactor);
 		selectedSet.zoomFactor *= scalingFactor;
 		
 		// work out the chromo height and total genome height for when the new zoom factor will have been applied
@@ -90,10 +88,10 @@ public class CanvasZoomHandler
 		// the same from the bottom of the chromosome
 		float distFromBottom = newChromoHeight - (distFromTop * scalingFactor);
 
-		System.out.println("scalingFactor = " + scalingFactor);
-		System.out.println("new zoom factor = " + selectedSet.zoomFactor);
-		System.out.println("selectedYDist = " + selectedYDist);
-		System.out.println("distFromBottom = " + distFromBottom);
+//		System.out.println("scalingFactor = " + scalingFactor);
+//		System.out.println("new zoom factor = " + selectedSet.zoomFactor);
+//		System.out.println("selectedYDist = " + selectedYDist);
+//		System.out.println("distFromBottom = " + distFromBottom);
 		
 		// this is the combined height of all spacers -- does not change with the zoom factor
 		int combinedSpacers = mainCanvas.chromoSpacing * (selectedSet.numMaps - 1);
@@ -109,8 +107,8 @@ public class CanvasZoomHandler
 	// zooms in by a fixed amount on a chromosome the user clicked on
 	public void processClickZoomRequest(GChromoMap selectedMap)
 	{		
-		System.out.println("===========================");
-		System.out.println("processClickZoomRequest -- zooming in");
+//		System.out.println("===========================");
+//		System.out.println("processClickZoomRequest -- zooming in");
 		
 		// figure out the genome it belongs to and increase that genome's zoom factor so that we can
 		// just fit the chromosome on screen the next time it is painted
@@ -170,15 +168,15 @@ public class CanvasZoomHandler
 		// update overviews
 		// mainCanvas.winMain.fatController.updateOverviewCanvases();
 		
-		
-		System.out.println("selected Map is " + selectedMap.name);
-		System.out.println("selectedSet.name = " + selectedSet.name);
-		System.out.println("selectedSet.zoomFactor = " + selectedSet.zoomFactor);
-		System.out.println("spacingOffset = " + spacingOffset);
-		System.out.println("chromoOffset = " + chromoOffset);
-		System.out.println("newTotalY = " + newTotalY);
-		System.out.println("newCenterPoint = " + newCenterPoint);
-		System.out.println("newChromoHeight = " + newChromoHeight);
+//		
+//		System.out.println("selected Map is " + selectedMap.name);
+//		System.out.println("selectedSet.name = " + selectedSet.name);
+//		System.out.println("selectedSet.zoomFactor = " + selectedSet.zoomFactor);
+//		System.out.println("spacingOffset = " + spacingOffset);
+//		System.out.println("chromoOffset = " + chromoOffset);
+//		System.out.println("newTotalY = " + newTotalY);
+//		System.out.println("newCenterPoint = " + newCenterPoint);
+//		System.out.println("newChromoHeight = " + newChromoHeight);
 		
 	}
 	

@@ -44,7 +44,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		if (e.isAltDown())
 		{
 			GChromoMap selectedMap = Utils.getSelectedMap(winMain.mainCanvas.gMapSetList, e.getX(), e.getY());
-			 System.out.println("mouse clicked with ALT down");
+//			 System.out.println("mouse clicked with ALT down");
 			if(selectedMap != null)
 				winMain.mainCanvas.zoomHandler.processClickZoomRequest(selectedMap);
 			return;
@@ -52,13 +52,13 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 
 		else if (!isMetaClick(e))
 		{
-			 System.out.println("mouse clicked once");
+//			 System.out.println("mouse clicked once");
 			winMain.mainCanvas.processLinkDisplayRequest(e.getX(), e.getY(), false);
 		}
 
 		else if (isMetaClick(e))
 		{
-			 System.out.println("mouse clicked with CTRL down");
+//			 System.out.println("mouse clicked with CTRL down");
 			winMain.mainCanvas.processLinkDisplayRequest(e.getX(), e.getY(), true);
 		}
 

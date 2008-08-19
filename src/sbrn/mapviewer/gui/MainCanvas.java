@@ -37,7 +37,7 @@ public class MainCanvas extends JPanel
 	// these variables determine where the genomes appear on the canvas on the x axis (scaled to 0-1)
 	// position is relative to frame size
 	float leftGenomeX = 0.3f;
-	float rightGenomeX = 0.7f;
+	float rightGenomeX = 0.65f;
 	
 	// threshold values for the zoom factor above which we want to display markers and labels
 	// float thresholdMarkerPainting = 3;
@@ -72,19 +72,20 @@ public class MainCanvas extends JPanel
 	public CanvasZoomHandler zoomHandler;
 	
 	int initialChromoHeight = 0;
+
 	
 	// ============================c'tors==================================
 	
 	public MainCanvas(MapSet targetMapset, MapSet referenceMapSet, WinMain winMain, LinkSet links)
 	{
-
+		
 		this.winMain = winMain;
 		zoomHandler = new CanvasZoomHandler(this);
 		this.links = links;
 		setUpGenomes(targetMapset, referenceMapSet);
 		makeTargetLinkSubSets();
 		setBackground(Color.black);
-
+		
 		repaint();
 	}
 	
@@ -144,11 +145,11 @@ public class MainCanvas extends JPanel
 			g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
 							RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
 		}
-
+		
 		// get current size of frame
 		canvasHeight = getHeight();
 		canvasWidth = getWidth();
-				
+		
 		// x position of genome 1 i.e. first column of chromos
 		targetGMapSet.xPosition = (int) (canvasWidth * leftGenomeX);
 		// x position of genome 2 (second column of chromos)
@@ -159,14 +160,11 @@ public class MainCanvas extends JPanel
 		// for each genome
 		for (GMapSet gMapSet : gMapSetList)
 		{
-
+			
 			// the total amount of space we have for drawing on vertically, in pixels
 			int availableSpaceVertically = canvasHeight - (chromoSpacing * 2);
 			// the combined height of all the vertical spaces between chromosomes
 			int allSpacers = chromoSpacing * (maxChromos - 1);
-
-//			System.out.println("MAINCANVAS: chromoHeight for mapset " + gMapSet.name + " = " + gMapSet.chromoHeight);
-//			System.out.println("MAINCANVAS: gMapSet.zoomFactor = " + gMapSet.zoomFactor);
 			
 			// currentY is the y position at which we start drawing the genome, chromo by chromo, top to bottom
 			// this may be off the visible canvas in a northerly direction
@@ -192,7 +190,7 @@ public class MainCanvas extends JPanel
 				gMapSet.scroller.setValue(gMapSet.centerPoint);
 				gMapSet.scroller.setMaximum(gMapSet.totalY);
 				gMapSet.scroller.setVisibleAmount(gMapSet.totalY/gMapSet.centerPoint);
-
+				
 			}
 			// this is what we do when we are zoomed in
 			else
@@ -233,11 +231,51 @@ public class MainCanvas extends JPanel
 				// make sure we only draw the maps we need to (i.e. those that are at least partially visible)
 				selectVisibleMaps();
 				
-				// get the map to draw itself (from 0,0 always)
-				gChromoMap.paintMap(g2);
+				//if the map is meant to be visible on the canvas at this time
+				if(gChromoMap.isShowingOnCanvas)
+				{
+					// get the map to draw itself (from 0,0 always)
+					gChromoMap.paintMap(g2);
+				}	
 				
 				// now move the graphics object's origin back to 0,0 to preserve the overall coordinate system
-				g2.translate(-x, -currentY);
+				g2.translate(-x, -currentY);				
+
+				//if the map is meant to be visible on the canvas at this time
+				if(gChromoMap.isShowingOnCanvas && gMapSet.visibleMaps.size() <=2)
+				{
+					// draw the index of the map in the genome
+					int mapIndex = gChromoMap.index;
+					int fontSize = WinMain.mainCanvas.getHeight() / 40;
+					Font mapLabelFont = new Font("Arial", Font.BOLD, fontSize);
+					g2.setFont(mapLabelFont);
+					g2.setColor(new Color(150, 150, 150));
+					// decide where to place the label with the chromosome number
+					// on the left hand genome we want the label on the left, right hand genome on the right
+					// reference genome (right):
+					int selectedIndex = gMapSet.visibleMaps.indexOf(gChromoMap);
+					int labelY = 0;
+					if (gMapSet.visibleMaps.size() == 1)
+					{
+						labelY = Math.round(0.5f * getHeight());
+					}
+					else if (gMapSet.visibleMaps.size() == 2)
+					{
+						if (selectedIndex == 0)
+							labelY = Math.round(0.15f * getHeight());
+						else if (selectedIndex == 1)
+							labelY = Math.round(0.85f * getHeight());
+					}
+					if (!gMapSet.isTargetGenome)
+					{
+						g2.drawString(String.valueOf(mapIndex + 1), referenceGMapSet.xPosition + chromoWidth*8, labelY);
+					}
+					// target genome (left):
+					else
+					{
+						g2.drawString(String.valueOf(mapIndex + 1),targetGMapSet.xPosition  - chromoWidth*8, labelY);
+					}
+				}
 				
 				// increment the y position so we can draw the next one
 				currentY += gMapSet.chromoHeight + chromoSpacing;
@@ -260,9 +298,9 @@ public class MainCanvas extends JPanel
 		}
 		
 		// also need to update the overview canvases from here
-//		winMain.fatController.updateOverviewCanvases();
+		winMain.fatController.updateOverviewCanvases();
 	}
-
+	
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------
 	
@@ -296,13 +334,11 @@ public class MainCanvas extends JPanel
 				// if the map is already added we need to remove it (this is toggle-style functionality)
 				if (selectedMap.owningSet.selectedMaps.contains(selectedMap))
 				{
-					System.out.println("removing selected map");
 					selectedMap.owningSet.removeSelectedMap(selectedMap);
 				}
 				// otherwise we add it
 				else
 				{
-					System.out.println("adding selected map");
 					selectedMap.owningSet.addSelectedMap(selectedMap);
 				}
 			}
@@ -372,17 +408,23 @@ public class MainCanvas extends JPanel
 		// for all gmapsets
 		for (GMapSet gMapSet : gMapSetList)
 		{
+			gMapSet.visibleMaps.clear();
 			// for all gchromomaps within each mapset
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
 			{
 				// check whether the bounding rectangle of the map intersects with the canvas bounding rectangle or whether it is contained in it
 				// set the boolean accordingly
 				if (canvasBounds.contains(gChromoMap.boundingRectangle) || canvasBounds.intersects(gChromoMap.boundingRectangle))
+				{
 					gChromoMap.isShowingOnCanvas = true;
+					gMapSet.visibleMaps.add(gChromoMap);
+				}
 				else
+				{
 					gChromoMap.isShowingOnCanvas = false;
+				}
 			}
-		}
+		}	
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -554,9 +596,10 @@ public class MainCanvas extends JPanel
 		// update the centerpoint to the new percentage
 		gMapSet.centerPoint = newCenterPoint;
 		gMapSet.scroller.setValue(newCenterPoint);
-//		System.out.println("MAINCANVAS: moving genome view port to centerpoint " + newCenterPoint);
 		repaint();
 		
+		//update overviews
+		winMain.fatController.updateOverviewCanvases();
 	}
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------

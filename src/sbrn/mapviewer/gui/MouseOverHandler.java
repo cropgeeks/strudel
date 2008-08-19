@@ -36,13 +36,13 @@ public class MouseOverHandler
 			// the distance from the top of the chromosome to the hit y location, in percent of the chromosome height
 			int percentDistanceFromTop = (int) (((y - selectedMap.boundingRectangle.getY()) / selectedMap.height) * 100);
 			
-//			System.out.println("percentDistanceFromTop = " + percentDistanceFromTop);
-			
 			// now look up this value in the lookup table of the map
 			LinkedList<Feature> match = selectedMap.allFeaturesPosLookup.get(percentDistanceFromTop);
 			// we have a match
 			if (match != null)
 			{
+//				System.out.println("match found: "  + match.toString());
+				
 				// set the vector object of the selected map and repaint
 				selectedMap.highlightedFeatures = match;
 				winMain.mainCanvas.repaint();

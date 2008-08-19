@@ -63,6 +63,9 @@ public class CanvasZoomHandler
 		mainCanvas.checkMarkerPaintingThresholds(selectedSet);
 		
 		mainCanvas.repaint();
+		
+		//update the overviews
+		mainCanvas.winMain.fatController.updateOverviewCanvases();
 	}
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------

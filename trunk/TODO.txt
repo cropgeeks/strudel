@@ -1,13 +1,9 @@
 ================================
 
-zooming:
+features to implement:
 
-- zooming a la Photoshop -- click and drag panning over area (with the area being outlined at the same time) which then is zoomed in full screen height when user releases mouse
-
-================================
-
-other:
-
+- chromosome numbers always visible
+- colour selector for user 
 - option to show homologies only that fall within a given QTL
 - need option (dialog?) for user defining new QTL manually
 - mouseover on QTL displays tool tip with info about the QTL
@@ -51,11 +47,8 @@ David's List:
 
 FIXES:
 
-- scroll speed needs to be reduced at higher zoom levels
 - dynamic antialiasing -- only have it switched on when there is no scrolling (even if user selected it as on)
-- fix hit detection of feature mouseover at lower zoom levels
 - mouse controls need to be sorted out; clicking sometimes zooms instead
-- overview canvas does not get updated when scrolling on the main canvas
 
 
 

@@ -5,7 +5,7 @@ import java.text.*;
 import java.util.*;
 
 import sbrn.mapviewer.data.*;
-import sbrn.mapviewer.gui.WinMain;
+import sbrn.mapviewer.gui.*;
 
 public class GChromoMap
 {
@@ -95,25 +95,28 @@ public class GChromoMap
 		g2.fillRect(width / 2, 0, width / 2, height);
 		
 		// draw the index of the map in the genome
-		int fontSize = WinMain.mainCanvas.getHeight() / 40;
-		Font mapLabelFont = new Font("Arial", Font.BOLD, fontSize);
-		g2.setFont(mapLabelFont);
-		g2.setColor(new Color(150, 150, 150));
-		// decide where to place the label with the chromosome number
-		// on the left hand genome we want the label on the left, right hand genome on the right
-		// reference genome (right):
-		if (!owningSet.isTargetGenome)
+		if (owningSet.visibleMaps.size() > 2)
 		{
-			g2.drawString(String.valueOf(index + 1), width * 6, height / 2);
-		}
-		// target genome (left):
-		else
-		{
-			g2.drawString(String.valueOf(index + 1), -width * 6, height / 2);
+			int fontSize = WinMain.mainCanvas.getHeight() / 40;
+			Font mapLabelFont = new Font("Arial", Font.BOLD, fontSize);
+			g2.setFont(mapLabelFont);
+			g2.setColor(new Color(150, 150, 150));
+			// decide where to place the label with the chromosome number
+			// on the left hand genome we want the label on the left, right hand genome on the right
+			// reference genome (right):
+			if (!owningSet.isTargetGenome)
+			{
+				g2.drawString(String.valueOf(index + 1), width * 8, Math.round(height / 2));
+			}
+			// target genome (left):
+			else
+			{
+				g2.drawString(String.valueOf(index + 1), -width * 8, Math.round(height / 2));
+			}
 		}
 		
-		//draw a set of distance markers
-		if (owningSet.zoomFactor > 22)
+		// draw a set of distance markers
+		if (owningSet.zoomFactor > 25)
 			drawDistanceMarkers(g2);
 		
 		// now draw features and labels as required
@@ -135,31 +138,33 @@ public class GChromoMap
 	private void drawDistanceMarkers(Graphics2D g2)
 	{
 		float numMarkers = 100;
-		//this is the number of pixels by which the markers get spaced
+		// this is the number of pixels by which the markers get spaced
 		float interval = owningSet.chromoHeight / numMarkers;
 		float currentY = 0;
-		//this is the numerical amount by which we want to separate the marker values
-		//this gets scaled by the maximum value at the chromosome end and can be in 
-		//centiMorgan or in base pairs
-		float increment = chromoMap.getStop()/numMarkers;
-		//the current marker value we want to print
+		// this is the numerical amount by which we want to separate the marker values
+		// this gets scaled by the maximum value at the chromosome end and can be in
+		// centiMorgan or in base pairs
+		float increment = chromoMap.getStop() / numMarkers;
+		// the current marker value we want to print
 		float currentVal = 0;
 		
-		//need to format the number appropriately
+		// need to format the number appropriately
 		NumberFormat nf = NumberFormat.getInstance();
-		//check first whether we are dealing with ints or floating point numbers for the chromosome distances
-		if(chromoMap.getStop() % 1 == 0) //this is an int
+		// check first whether we are dealing with ints or floating point numbers for the chromosome distances
+		if (chromoMap.getStop() % 1 == 0) // this is an int
 		{
 			nf.setMaximumFractionDigits(0);
 		}
-		else //it's a float
+		else
+		// it's a float
 		{
-			//we want no more than two decimals here
+			// we want two decimals here
 			nf.setMaximumFractionDigits(2);
+			nf.setMinimumFractionDigits(2);
 		}
 		
 		// set the colour to grey
-		g2.setColor(new Color(50, 50, 50));
+		g2.setColor(new Color(100, 100, 100));
 		
 		// font stuff
 		int fontHeight = 10;
@@ -172,38 +177,39 @@ public class GChromoMap
 		int lineStartX = 0; // this is where the line to the label is drawn from
 		int labelLineEnd = 0; // the label connects to the line here
 		// the amount by which we want to move the label away from the chromosome (in pixels)
-		int labelSpacer = 10;
-		//the amount we want to separate the label and the line by, in pixels
+		int lineLength = 8;
+		// the amount we want to separate the label and the line by, in pixels
 		int gap = 5;
 		
 		for (int i = 0; i <= numMarkers; i++)
 		{
 			int stringWidth = fm.stringWidth(String.valueOf(nf.format(currentVal)));
 			
-			// right hand genome (reference)
-			if (!owningSet.isTargetGenome)
-			{
-				labelX = width + labelSpacer;
-				lineStartX = width;
-				labelLineEnd = labelX - gap;
-			}
 			// left hand genome (target)
+			if (owningSet.isTargetGenome)
+			{
+				labelX = -x + gap;
+				lineStartX = -1;
+				labelLineEnd = -lineLength;
+			}
+			// right hand genome (reference)
 			else
 			{
-				labelX = -stringWidth - labelSpacer;
-				lineStartX = -1;
-				labelLineEnd = -labelSpacer + gap;
+				labelX = WinMain.mainCanvas.getWidth()-x - stringWidth - gap;
+				lineStartX = width;
+				labelLineEnd = width + lineLength;
 			}
 			
 			// draw a line from the marker to the label
-			g2.drawLine(lineStartX, (int)currentY, labelLineEnd, (int)currentY);
-			g2.drawString(String.valueOf(nf.format(currentVal)), labelX, currentY + fontHeight/2);
+			g2.drawLine(lineStartX, (int) currentY, labelLineEnd, (int) currentY);
+			g2.drawString(String.valueOf(nf.format(currentVal)), labelX, currentY + fontHeight / 2);
+			
+			// increment as necessary
 			currentY += interval;
 			currentVal += increment;
 		}
 		
 	}
-	
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------------
 	
@@ -248,11 +254,8 @@ public class GChromoMap
 	{
 		if (highlightedFeatures != null)
 		{
-			// the amount by which we want to move the label away from the chromosome (in pixels)
-			int labelSpacer = 20;
-			
-			//sort the feature list by the start position so the labels draw in the correct order
-			Collections.sort(highlightedFeatures);	
+			// sort the feature list by the start position so the labels draw in the correct order
+			Collections.sort(highlightedFeatures);
 			
 			// for all features in our list
 			for (Feature f : highlightedFeatures)
@@ -260,7 +263,7 @@ public class GChromoMap
 				// get the name of the feature
 				String featureName = f.getName();
 				
-				// font stuff
+				// the usual font stuff
 				int fontHeight = 14;
 				g2.setFont(new Font("Sans-serif", Font.PLAIN, fontHeight));
 				FontMetrics fm = g2.getFontMetrics();
@@ -291,14 +294,15 @@ public class GChromoMap
 				// the index of the feature in the list
 				int index = highlightedFeatures.indexOf(f);
 				
-				float correction = 0;
+				// the offset is the amount (in px) by which we need to move the label up or down relative to the feature itself
+				float offset = 0;
 				// if the list contains only a single feature
 				if (listSize == 1)
 				{
-					correction = fontHeight / 2;
+					offset = fontHeight / 2;
 				}
-				else
 				// more than 1 feature in the list
+				else
 				{
 					// work out whether the list size is an even or odd number
 					boolean evenNumber = listSize % 2 == 0;
@@ -307,16 +311,16 @@ public class GChromoMap
 						// if the index is smaller than half the list size, subtract a multiple of the fontHeight from the y
 						if ((index + 1) <= halfListSize)
 						{
-							correction = -(fontHeight * (halfListSize - index - 1));
+							offset = -(fontHeight * (halfListSize - index - 1));
 						}
 						// if it is bigger, add it instead
 						else
 						{
-							correction = fontHeight * ((index + 1) - halfListSize);
+							offset = fontHeight * ((index + 1) - halfListSize);
 						}
 					}
-					else
 					// odd number
+					else
 					{
 						// this should give us the number half way between the first and last index
 						int midPoint = (int) halfListSize;
@@ -324,41 +328,45 @@ public class GChromoMap
 						// if the index is the midpoint
 						if (index == midPoint)
 						{
-							correction = fontHeight / 2;
+							offset = fontHeight / 2;
 						}
-						// index is less than the midpoint -- subtract a multiple of the font height
+						// index is less than the midpoint
 						else if (index < midPoint)
 						{
-							correction = -(fontHeight * (halfListSize - index - 1));
+							offset = -(fontHeight * (halfListSize - index - 1));
 						}
 						// index is greater than the midpoint
 						else
 						{
-							correction = fontHeight * ((index + 1) - halfListSize);
+							offset = fontHeight * ((index + 1) - halfListSize);
 						}
 					}
 				}
 				
-				labelY = featureY + (int) correction;
+				// now set the y position of the label
+				labelY = featureY + (int) offset;
 				
-				// decide where to place the label on x
+				// next decide where to place the label on x
 				// on the left hand genome we want the label on the left, right hand genome on the right
 				int labelX = 0; // this is where the label is drawn from
 				int lineStartX = 0; // this is where the line to the label is drawn from
 				int labelLineEnd = 0; // the label connects to the line here
+				int labelGap = 3; // the gap between the label and the line
+				// the amount by which we want to move the label away from the chromosome (in pixels)
+				int labelSpacer = 50;
 				// right hand genome (reference)
 				if (!owningSet.isTargetGenome)
 				{
 					labelX = width + labelSpacer;
 					lineStartX = width;
-					labelLineEnd = labelX - 3;
+					labelLineEnd = labelX - labelGap;
 				}
 				// left hand genome (target)
 				else
 				{
 					labelX = -stringWidth - labelSpacer;
 					lineStartX = 0;
-					labelLineEnd = -labelSpacer + 3;
+					labelLineEnd = -labelSpacer + labelGap;
 				}
 				
 				// set the colour to grey

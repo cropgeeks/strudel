@@ -75,6 +75,9 @@ public class GMapSet
 	public float thresholdLinkedMarkerPainting;
 	//the same for drawing labels
 	public float thresholdLabelPainting;
+
+	//a vector of maps in this mapset that are currently visible
+	public Vector<GChromoMap> visibleMaps = new Vector();
 	
 	// ====================================c'tors========================================
 	

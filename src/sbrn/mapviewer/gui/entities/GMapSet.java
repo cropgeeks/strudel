@@ -12,62 +12,62 @@ import sbrn.mapviewer.gui.Scroller;
 public class GMapSet
 {
 	// ====================================vars==============================================
-	
+
 	// the color we use for painting this genome
 	public Color colour;
-	
+
 	// a list with the maps (chromosomes) contained in this genome
 	public LinkedList<GChromoMap> gMaps;
-	
+
 	// the number of chromosomes in this genome
 	public int numMaps;
-	
+
 	// the map set that contains the data we want to show
 	public MapSet mapSet;
-	
+
 	// the type of genome for the purpose of this application
 	// can be either "target" i.e. the genome we have little info for and only a genetic map, or
 	// "reference", i.e. the genome we have a physical map and annotation for
 	// see Constants.java for options
 	public int type;
-	
+
 	// the name of the genome
 	public String name;
-	
+
 	// the current zoom factor for the display of this genome
 	public float zoomFactor = 1;
-	
+
 	// the x position of this genome on the canvas
 	// i.e. an x coordinate in pixels which denotes the left most edge of the genome drawn
 	public int xPosition;
-	
+
 	// true if this is the target genome, false if it the reference genome
 	public boolean isTargetGenome = false;
-	
+
 	// the percent offset from the top of the genome that represents the topmost point of the genome visible on the canvas
 	public int drawingOffset = 0;
-	
+
 	// the scrollbar which controls the viewable area in this map set
 	public Scroller scroller;
-	
+
 	// the point on the genome that is currently seen in the center of the canvas, in pixels, measured from the top of the genome
 	public int centerPoint = 0;
-	
+
 	// the total current height of the genome as drawn on the canvas, in pixels
 	public int totalY;
-	
+
 	//the height of a chromosome in this genome, in pixels (all chromos are the same height, always)
 	public int chromoHeight;
-	
+
 	// a vector containing GChromoMap objects that have been selected by the user through mouse clicks
 	public Vector<GChromoMap> selectedMaps = new Vector<GChromoMap>();
-	
-	
+
+
 	// these control whether we draw chromosome markers and labels
 	public boolean paintLinkedMarkers = false;
 	public boolean paintAllMarkers = false;
 	public boolean paintLabels = false;
-	
+
 	//a zoom factor value above which we can draw all  features
 	//this is to reduce the amount of clutter on screen
 	public float thresholdAllMarkerPainting;
@@ -77,10 +77,10 @@ public class GMapSet
 	public float thresholdLabelPainting;
 
 	//a vector of maps in this mapset that are currently visible
-	public Vector<GChromoMap> visibleMaps = new Vector();
-	
+	public Vector<GChromoMap> visibleMaps = new Vector<GChromoMap>();
+
 	// ====================================c'tors========================================
-	
+
 	public GMapSet(Color mapSetColour, MapSet mapSet, int type, boolean isTargetGenome, Scroller scroller,
 					Hashtable<ChromoMap, GChromoMap> gMapLookup)
 	{
@@ -91,30 +91,30 @@ public class GMapSet
 		this.isTargetGenome = isTargetGenome;
 		this.scroller = scroller;
 		numMaps = mapSet.size();
-		
+
 		// init the list of maps contained in this genome
 		initialise(gMapLookup);
 	}
-	
+
 	// ========================================methods==================================
-	
+
 	// init the list of maps contained in this genome
 	public void initialise(Hashtable<ChromoMap, GChromoMap> gMapLookup)
 	{
 		gMaps = new LinkedList<GChromoMap>();
-		
+
 		for (int i = 0; i < mapSet.size(); i++)
 		{
 			ChromoMap cMap = (ChromoMap) mapSet.getMaps().get(i);
 			GChromoMap gMap = new GChromoMap(colour, cMap.getName(), i, this);
 			gMaps.add(gMap);
-			
+
 			gMapLookup.put(cMap, gMap);
 		}
 	}
-	
+
 	// ---------------------------------------------------------------------------------------------------------------------------
-	
+
 	public void addSelectedMap(GChromoMap map)
 	{
 		if (!selectedMaps.contains(map))
@@ -123,9 +123,9 @@ public class GMapSet
 			map.drawHighlightOutline = true;
 		}
 	}
-	
+
 	// ---------------------------------------------------------------------------------------------------------------------------
-	
+
 	public void removeSelectedMap(GChromoMap map)
 	{
 		if (selectedMaps.contains(map))
@@ -134,9 +134,9 @@ public class GMapSet
 			map.drawHighlightOutline = false;
 		}
 	}
-	
+
 	// ---------------------------------------------------------------------------------------------------------------------------
-	
+
 	public void selectAllMaps()
 	{
 		for (GChromoMap gMap : gMaps)
@@ -144,9 +144,9 @@ public class GMapSet
 			addSelectedMap(gMap);
 		}
 	}
-	
+
 	// ---------------------------------------------------------------------------------------------------------------------------
-	
+
 	public void deselectAllMaps()
 	{
 		for (GChromoMap gMap : gMaps)
@@ -154,6 +154,6 @@ public class GMapSet
 			removeSelectedMap(gMap);
 		}
 	}
-	
+
 	// ---------------------------------------------------------------------------------------------------------------------------
 }

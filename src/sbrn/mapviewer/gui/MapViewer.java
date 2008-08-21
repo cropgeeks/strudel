@@ -49,7 +49,9 @@ public class MapViewer
 			{
 				public void windowClosing(WindowEvent e)
 				{
+					prefs.isFirstRun = false;
 					prefs.savePreferences(prefsFile, Prefs.class);
+
 					System.exit(0);
 				}
 			});

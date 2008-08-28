@@ -23,9 +23,9 @@ public class Feature implements Comparable<Feature>
 	// The name of this Feature
 	private String name;
 	// And any aliases
-	private LinkedList<String> aliases = new LinkedList<String>();
+	private Vector<String> aliases = new Vector<String>();
 	// And any links its involved in
-	private LinkedList<Link> links = new LinkedList<Link>();
+	private Vector<Link> links = new Vector<Link>();
 
 	// Its start and stop positions (in whatever distance format) on the map
 	private float start, stop;
@@ -81,7 +81,7 @@ public class Feature implements Comparable<Feature>
 	 * Returns a list of every alias that this feature is known by.
 	 * @return a list of every alias that this feature is known by
 	 */
-	public LinkedList<String> getAliases()
+	public Vector<String> getAliases()
 		{ return aliases; }
 
 	/**
@@ -123,7 +123,7 @@ public class Feature implements Comparable<Feature>
 	 * reference.
 	 * @return a list of links that correspond to this feature.
 	 */
-	public LinkedList<Link> getLinks()
+	public Vector<Link> getLinks()
 		{ return links; }
 
 	public String getAnnotation()

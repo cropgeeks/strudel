@@ -10,9 +10,9 @@ import java.util.*;
  */
 public class LinkSet implements Iterable<Link>
 {
-	private LinkedList<Link> links = new LinkedList<Link>();
+	private Vector<Link> links = new Vector<Link>();
 	
-	private LinkedList<MapSet> mapSets = new LinkedList<MapSet>();
+	private Vector<MapSet> mapSets = new Vector<MapSet>();
 	
 	/**
 	 * Constructs a new LinkSet.
@@ -25,7 +25,7 @@ public class LinkSet implements Iterable<Link>
 	 * Returns a list of all links held by this object.
 	 * @return a list of all links held by this object
 	 */
-	public LinkedList<Link> getLinks()
+	public Vector<Link> getLinks()
 		{ return links; }
 	
 	/**
@@ -38,7 +38,7 @@ public class LinkSet implements Iterable<Link>
 	 * Returns the list of map sets held by this object.
 	 * @return the list of map sets held by this object
 	 */
-	public LinkedList<MapSet> getMapSets()
+	public Vector<MapSet> getMapSets()
 		{ return mapSets; }
 	
 	/**

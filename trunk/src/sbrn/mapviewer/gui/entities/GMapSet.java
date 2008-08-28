@@ -17,7 +17,7 @@ public class GMapSet
 	public Color colour;
 
 	// a list with the maps (chromosomes) contained in this genome
-	public LinkedList<GChromoMap> gMaps;
+	public Vector<GChromoMap> gMaps;
 
 	// the number of chromosomes in this genome
 	public int numMaps;
@@ -101,7 +101,7 @@ public class GMapSet
 	// init the list of maps contained in this genome
 	public void initialise(Hashtable<ChromoMap, GChromoMap> gMapLookup)
 	{
-		gMaps = new LinkedList<GChromoMap>();
+		gMaps = new Vector<GChromoMap>();
 
 		for (int i = 0; i < mapSet.size(); i++)
 		{

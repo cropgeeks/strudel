@@ -27,7 +27,7 @@ public class Utils
 	// --------------------------------------------------------------------------------------------------------------------------------
 	
 	//check whether we have a map at the coordinates x and y 
-	public static GChromoMap getSelectedMap(LinkedList<GMapSet> gMapSetList, int x, int y)
+	public static GChromoMap getSelectedMap(Vector<GMapSet> gMapSetList, int x, int y)
 	{
 		GChromoMap selectedMap = null;
 		

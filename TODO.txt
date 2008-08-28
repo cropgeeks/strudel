@@ -2,7 +2,8 @@
 
 features to implement:
 
-- chromosome numbers always visible
+- annotation info for multiple hits at same locus
+- dynamic rescaling of mouseover detection values?
 - colour selector for user 
 - option to show homologies only that fall within a given QTL
 - need option (dialog?) for user defining new QTL manually
@@ -10,6 +11,7 @@ features to implement:
 - separate data loading for left and right
 - list panel on right showing links (names, e-values)
 - links filter options below that on right
+- x-y plots of marker positions in both genomes (Oxford grid) for a given combination of chromosomes
 
 ================================
 
@@ -34,13 +36,6 @@ Luke Ramsay's list (in descending order of priority):
 - highlight gaps in reference genome sequence (i.e. regions for which there is no physical map)
 - move markers manually in GUI, at least in target genome
 - parallel homology systems, based on e.g. blastn vs blastx, user chooses which one to see
-
-================================
-
-David's List:
-
-- x-y plots of marker positions in both genomes (Oxford grid) for a given combination of chromosomes
--
 
 
 ================================

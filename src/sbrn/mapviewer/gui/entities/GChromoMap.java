@@ -40,7 +40,7 @@ public class GChromoMap
 	// arrays with Feature names and positions for fast access during drawing operations
 	String[] allFeatureNames;
 	float[] allFeaturePositions;
-	public TreeMap<Integer, LinkedList<Feature>> allFeaturesPosLookup = new TreeMap<Integer, LinkedList<Feature>>();
+	public TreeMap<Integer, Vector<Feature>> allFeaturesPosLookup = new TreeMap<Integer, Vector<Feature>>();
 	
 	// these are corresponding arrays and lists which only pertain to the features which are linked to from somewhere
 	public LinkedList<Feature> linkedFeatureList = new LinkedList<Feature>();
@@ -51,11 +51,18 @@ public class GChromoMap
 	// indicates whether this map or part thereof is currently drawn on the canvas
 	public boolean isShowingOnCanvas = true;
 	
-	// a vector containing features whose lables are to be displayed when the chromosome is drawn
-	public LinkedList<Feature> highlightedFeatures;
+	// a vector containing features whose labels are to be displayed when the chromosome is drawn
+	public Vector<Feature> highlightedFeatures;
+	
+	//a boolean indicating whether we want to draw the highlighted features or not
+	public boolean drawHighlightedFeatures = false;
 	
 	// do we have to draw a highlighted outline for this map
 	public boolean drawHighlightOutline = false;
+	
+	//this gets set to true when we have selected a set of features for which we want annotation info to
+	//be displayed until we deselect it
+	public boolean persistHighlightedFeatures = false;
 	
 	// ============================c'tors==================================
 	
@@ -123,7 +130,8 @@ public class GChromoMap
 		if (owningSet.paintAllMarkers && isShowingOnCanvas)
 		{
 			drawAllFeatures(g2);
-			drawHighlightedFeatureLabels(g2);
+			if(drawHighlightedFeatures)
+				drawHighlightedFeatureLabels(g2);
 		}
 		
 		// this draws a yellow outline round the map if it is selected
@@ -156,7 +164,7 @@ public class GChromoMap
 			nf.setMaximumFractionDigits(0);
 		}
 		else
-		// it's a float
+			// it's a float
 		{
 			// we want two decimals here
 			nf.setMaximumFractionDigits(2);
@@ -420,10 +428,10 @@ public class GChromoMap
 				allFeaturesPosLookup.get(percentDistToFeat).add(f);
 			}
 			else
-			// we do not have this key in the map yet
+				// we do not have this key in the map yet
 			{
 				// make a new list and add it with this float as a key
-				LinkedList<Feature> list = new LinkedList<Feature>();
+				Vector<Feature> list = new Vector<Feature>();
 				list.add(f);
 				allFeaturesPosLookup.put(new Integer(percentDistToFeat), list);
 			}
@@ -473,7 +481,7 @@ public class GChromoMap
 	// draw the markers and labels
 	private void drawAllFeatures(Graphics2D g2)
 	{
-		g2.setColor(Color.WHITE);
+		g2.setColor(Color.GREEN);
 		
 		float mapEnd = chromoMap.getStop();
 		float scalingFactor = height / mapEnd;

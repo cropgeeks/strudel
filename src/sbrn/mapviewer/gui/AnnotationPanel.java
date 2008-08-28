@@ -6,10 +6,9 @@
 
 package sbrn.mapviewer.gui;
 
-import javax.swing.border.*;
+import javax.swing.*;
 
 import sbrn.mapviewer.data.*;
-import sbrn.mapviewer.gui.entities.*;
 
 /**
  *
@@ -27,12 +26,16 @@ public class AnnotationPanel extends javax.swing.JPanel
 		this.mapSet = mapSet;
 		initComponents();
 		setInitialText();
-		annotationTextArea.setBorder(new EmptyBorder(0, 0, 0, 0));
 	}
 	
 	private void setInitialText()
 	{
 		genomeInfo.setText(mapSet.getName());
+	}
+	
+	public JList getAnnotationList()
+	{
+		return annotationList;
 	}
 	
 	/** This method is called from within the constructor to
@@ -47,11 +50,9 @@ public class AnnotationPanel extends javax.swing.JPanel
 		
 		jPanel1 = new javax.swing.JPanel();
 		genomeLabel = new javax.swing.JLabel();
-		locusLabel = new javax.swing.JLabel();
-		infoLabel = new javax.swing.JLabel();
 		genomeInfo = new javax.swing.JLabel();
-		locusInfo = new javax.swing.JLabel();
-		annotationTextArea = new javax.swing.JTextArea();
+		jScrollPane1 = new javax.swing.JScrollPane();
+		annotationList = new javax.swing.JList();
 		
 		setBackground(new java.awt.Color(255, 255, 255));
 		
@@ -60,24 +61,9 @@ public class AnnotationPanel extends javax.swing.JPanel
 		genomeLabel.setFont(new java.awt.Font("Tahoma", 1, 13));
 		genomeLabel.setText("Genome:");
 		
-		locusLabel.setFont(new java.awt.Font("Tahoma", 0, 13));
-		locusLabel.setText("Locus:");
-		
-		infoLabel.setFont(new java.awt.Font("Tahoma", 0, 13));
-		infoLabel.setText("Info:");
-		
 		genomeInfo.setFont(new java.awt.Font("Tahoma", 1, 13));
 		
-		locusInfo.setFont(new java.awt.Font("Tahoma", 0, 13));
-		
-		annotationTextArea.setColumns(20);
-		annotationTextArea.setEditable(false);
-		annotationTextArea.setFont(new java.awt.Font("Tahoma", 0, 13));
-		annotationTextArea.setLineWrap(true);
-		annotationTextArea.setRows(5);
-		annotationTextArea.setWrapStyleWord(true);
-		annotationTextArea.setBorder(null);
-		annotationTextArea.setDisabledTextColor(new java.awt.Color(224, 223, 227));
+		jScrollPane1.setViewportView(annotationList);
 		
 		org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
 		jPanel1.setLayout(jPanel1Layout);
@@ -86,25 +72,19 @@ public class AnnotationPanel extends javax.swing.JPanel
 						org.jdesktop.layout.GroupLayout.TRAILING,
 						jPanel1Layout.createSequentialGroup().addContainerGap().add(
 										jPanel1Layout.createParallelGroup(
-														org.jdesktop.layout.GroupLayout.LEADING).add(
+														org.jdesktop.layout.GroupLayout.TRAILING).add(
+														org.jdesktop.layout.GroupLayout.LEADING,
+														jScrollPane1,
+														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+														293,
+														Short.MAX_VALUE).add(
 														jPanel1Layout.createSequentialGroup().add(
-																		jPanel1Layout.createParallelGroup(
-																						org.jdesktop.layout.GroupLayout.LEADING).add(
-																						infoLabel).add(
-																						genomeLabel)).addPreferredGap(
+																		genomeLabel).addPreferredGap(
 																		org.jdesktop.layout.LayoutStyle.RELATED).add(
-																		jPanel1Layout.createParallelGroup(
-																						org.jdesktop.layout.GroupLayout.LEADING).add(
-																						annotationTextArea).add(
-																						locusInfo,
-																						org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																						223,
-																						Short.MAX_VALUE).add(
-																						genomeInfo,
-																						org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																						223,
-																						Short.MAX_VALUE))).add(
-														locusLabel)).addContainerGap()));
+																		genomeInfo,
+																		org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+																		231,
+																		Short.MAX_VALUE))).addContainerGap()));
 		jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(
 						org.jdesktop.layout.GroupLayout.LEADING).add(
 						jPanel1Layout.createSequentialGroup().add(
@@ -115,22 +95,10 @@ public class AnnotationPanel extends javax.swing.JPanel
 														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
 														16,
 														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
-										org.jdesktop.layout.LayoutStyle.RELATED).add(
-										jPanel1Layout.createParallelGroup(
-														org.jdesktop.layout.GroupLayout.BASELINE).add(
-														locusLabel).add(
-														locusInfo,
-														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
-														17,
-														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
-										org.jdesktop.layout.LayoutStyle.RELATED).add(
-										jPanel1Layout.createParallelGroup(
-														org.jdesktop.layout.GroupLayout.LEADING).add(
-														infoLabel).add(
-														annotationTextArea,
-														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-														25,
-														Short.MAX_VALUE)).addContainerGap()));
+										org.jdesktop.layout.LayoutStyle.UNRELATED).add(
+										jScrollPane1,
+										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+										86, Short.MAX_VALUE)));
 		
 		org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
 		this.setLayout(layout);
@@ -153,29 +121,11 @@ public class AnnotationPanel extends javax.swing.JPanel
 	
 	//GEN-BEGIN:variables
 	// Variables declaration - do not modify
-	private javax.swing.JTextArea annotationTextArea;
+	private javax.swing.JList annotationList;
 	private javax.swing.JLabel genomeInfo;
 	private javax.swing.JLabel genomeLabel;
-	private javax.swing.JLabel infoLabel;
 	private javax.swing.JPanel jPanel1;
-	private javax.swing.JLabel locusInfo;
-	private javax.swing.JLabel locusLabel;
-	
+	private javax.swing.JScrollPane jScrollPane1;
 	// End of variables declaration//GEN-END:variables
-	
-	public javax.swing.JTextArea getAnnotationTextArea()
-	{
-		return annotationTextArea;
-	}
-	
-	public javax.swing.JLabel getGenomeInfo()
-	{
-		return genomeInfo;
-	}
-	
-	public javax.swing.JLabel getLocusInfo()
-	{
-		return locusInfo;
-	}
 	
 }

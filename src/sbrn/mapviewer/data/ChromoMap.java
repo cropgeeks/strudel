@@ -17,7 +17,7 @@ public class ChromoMap implements Iterable<Feature>
 	// A reference to the MapSet that owns this object
 	private MapSet owner;
 	
-	private LinkedList<Feature> features = new LinkedList<Feature>();
+	private Vector<Feature> features = new Vector<Feature>();
 	private Hashtable<String,Feature> nameLookup = new Hashtable<String,Feature>();
 	
 	private float start = Integer.MAX_VALUE, stop = Integer.MIN_VALUE;
@@ -158,7 +158,7 @@ public class ChromoMap implements Iterable<Feature>
 		return nameLookup.containsKey(name);
 	}
 	
-	public LinkedList<Feature> getFeatureList()
+	public Vector<Feature> getFeatureList()
 	{
 		return this.features;
 	}

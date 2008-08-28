@@ -22,7 +22,7 @@ public class MainCanvas extends JPanel
 	GMapSet referenceGMapSet;
 	
 	// for convenience purposes, a list that holds these
-	public LinkedList<GMapSet> gMapSetList;
+	public Vector<GMapSet> gMapSetList;
 	
 	// size of the frame
 	int canvasHeight;
@@ -43,10 +43,10 @@ public class MainCanvas extends JPanel
 	// float thresholdMarkerPainting = 3;
 	// float thresholdLabelPainting = 3;
 	
-	// a hashtable that contains chromomaps from both genomes as keys and LinkedList objects as values, which in
+	// a hashtable that contains chromomaps from both genomes as keys and Vector objects as values, which in
 	// turn hold a list of LinkSet objects each, where each Linkset represents the links between the chromomap and a
 	// chromomap in the respectively other genome
-	Hashtable<ChromoMap, LinkedList<LinkSet>> linkSetLookup;
+	Hashtable<ChromoMap, Vector<LinkSet>> linkSetLookup;
 	
 	// a hashtable that holds ChromoMap objects as keys and their corresponding GChromoMap objects as values
 	Hashtable<ChromoMap, GChromoMap> gMapLookup = new Hashtable<ChromoMap, GChromoMap>();
@@ -99,7 +99,7 @@ public class MainCanvas extends JPanel
 		referenceGMapSet = new GMapSet(Color.BLUE, referenceMapSet, Constants.REFERENCE_GENOME, false, winMain.rightCanvasScroller, gMapLookup);
 		
 		// add the genomes to the list
-		gMapSetList = new LinkedList<GMapSet>();
+		gMapSetList = new Vector<GMapSet>();
 		gMapSetList.add(targetGMapSet);
 		gMapSetList.add(referenceGMapSet);
 		
@@ -443,7 +443,7 @@ public class MainCanvas extends JPanel
 				// get the ChromoMap for the currently selected chromosome
 				ChromoMap selectedChromoMap = selectedMap.chromoMap;
 				// get all the links between the selected chromosome and the reference mapset
-				LinkedList<LinkSet> linkSets = linkSetLookup.get(selectedChromoMap);
+				Vector<LinkSet> linkSets = linkSetLookup.get(selectedChromoMap);
 				float targetMapStop = selectedChromoMap.getStop();
 				// get the real coordinates for the selected chromo and the reference chromo
 				int selectedChromoX = targetGMapSet.xPosition + targetGMapSet.gMaps.get(0).width;
@@ -514,7 +514,7 @@ public class MainCanvas extends JPanel
 	{
 		try
 		{
-			linkSetLookup = new Hashtable<ChromoMap, LinkedList<LinkSet>>();
+			linkSetLookup = new Hashtable<ChromoMap, Vector<LinkSet>>();
 			
 			MapSet targetMapSet = links.getMapSets().get(0);
 			MapSet referenceMapSet = links.getMapSets().get(1);
@@ -522,8 +522,8 @@ public class MainCanvas extends JPanel
 			// for each chromosome in the target mapset
 			for (ChromoMap targetMap : targetMapSet)
 			{
-				// create a new LinkedList which holds all the linksets of links between this chromosome and the reference chromosomes
-				LinkedList<LinkSet> linkSets = new LinkedList<LinkSet>();
+				// create a new Vector which holds all the linksets of links between this chromosome and the reference chromosomes
+				Vector<LinkSet> linkSets = new Vector<LinkSet>();
 				// for each reference chromosome
 				for (ChromoMap refMap : referenceMapSet)
 				{
@@ -557,7 +557,7 @@ public class MainCanvas extends JPanel
 		for (Link link : links)
 		{
 			// get both features and add them to a list
-			LinkedList<Feature> features = new LinkedList<Feature>();
+			Vector<Feature> features = new Vector<Feature>();
 			features.add(link.getFeature1());
 			if (link.getFeature2() != null)
 				features.add(link.getFeature2());

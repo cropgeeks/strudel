@@ -32,7 +32,7 @@ public class DataContainer
 			// data files - hard coded for now			
 			String workingDir = System.getProperty("user.dir");
 			String fileSep = System.getProperty("file.separator");	
-			referenceData = new File(workingDir + fileSep + "data/riceHomologs_TIGR5.txt");
+			referenceData = new File(workingDir + fileSep + "data/rice_TIGR_5_all.txt");
 			targetData = new File(workingDir + fileSep + "data/Barley_Map(UCR_20080416-2)_barley.txt");
 			compData = new File(workingDir + fileSep + "data/Barley_Map(UCR_20080416-2)_homology_data.txt");
 

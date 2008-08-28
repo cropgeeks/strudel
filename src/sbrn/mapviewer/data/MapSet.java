@@ -11,7 +11,7 @@ public class MapSet implements Iterable<ChromoMap>
 	private String name;
 	
 	// Holds a list of all the maps in this set
-	private LinkedList<ChromoMap> maps = new LinkedList<ChromoMap>();
+	private Vector<ChromoMap> maps = new Vector<ChromoMap>();
 	
 	/**
 	 * Constructs a new map set.
@@ -107,7 +107,7 @@ public class MapSet implements Iterable<ChromoMap>
 	/**
 	 * Returns a LinkedList which contains the ChromoMap objects held in this mapset
 	 */
-	public LinkedList getMaps()
+	public Vector getMaps()
 	{
 		return maps;
 	}

@@ -43,7 +43,7 @@ public class GChromoMap
 	public TreeMap<Integer, Vector<Feature>> allFeaturesPosLookup = new TreeMap<Integer, Vector<Feature>>();
 	
 	// these are corresponding arrays and lists which only pertain to the features which are linked to from somewhere
-	public LinkedList<Feature> linkedFeatureList = new LinkedList<Feature>();
+	public Vector<Feature> linkedFeatureList = new Vector<Feature>();
 	String[] linkedFeatureNames;
 	float[] linkedFeaturePositions;
 	public TreeMap<Float, Feature> linkedFeaturePosLookup = new TreeMap<Float, Feature>();
@@ -407,7 +407,7 @@ public class GChromoMap
 		int numFeatures = chromoMap.countFeatures();
 		allFeatureNames = new String[numFeatures];
 		allFeaturePositions = new float[numFeatures];
-		LinkedList<Feature> featureList = chromoMap.getFeatureList();
+		Vector<Feature> featureList = chromoMap.getFeatureList();
 		
 		for (int i = 0; i < featureList.size(); i++)
 		{
@@ -443,7 +443,7 @@ public class GChromoMap
 		// int count = 0;
 		// for (Integer it : allFeaturesPosLookup.keySet())
 		// {
-		// LinkedList list = allFeaturesPosLookup.get(it);
+		// Vector list = allFeaturesPosLookup.get(it);
 		// // now round this number to two decimals so we can compare it reliably to input values
 		// System.out.println(it + " = " + allFeaturesPosLookup.get(it).toString());
 		// count += list.size();

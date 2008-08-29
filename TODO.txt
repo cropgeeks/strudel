@@ -1,9 +1,7 @@
 ================================
 
-features to implement:
+features to implement -- general:
 
-- annotation info for multiple hits at same locus
-- dynamic rescaling of mouseover detection values?
 - colour selector for user 
 - option to show homologies only that fall within a given QTL
 - need option (dialog?) for user defining new QTL manually
@@ -44,6 +42,7 @@ FIXES:
 
 - dynamic antialiasing -- only have it switched on when there is no scrolling (even if user selected it as on)
 - mouse controls need to be sorted out; clicking sometimes zooms instead
+- dynamic rescaling of mouseover detection values?
 
 
 

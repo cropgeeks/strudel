@@ -2,6 +2,7 @@
 
 features to implement -- general:
 
+- show loci as filled rectangles rather than lines at higher zoom levels
 - colour selector for user 
 - option to show homologies only that fall within a given QTL
 - need option (dialog?) for user defining new QTL manually
@@ -24,7 +25,7 @@ Data:
 Luke Ramsay's list (in descending order of priority):
 
 - view full detail of reference genome at high/highest zoom level
-- second reference genome (e.g. for Brachiopodium)
+- second reference genome (e.g. for Brachypodium)
 - show centromere positions
 - flip entire chromosomes and portions thereof
 - highlight conflicts in conserved synteny, i.e. cases where the ordering of features differs between genomes
@@ -39,7 +40,7 @@ Luke Ramsay's list (in descending order of priority):
 ================================
 
 FIXES:
-
+	
 - dynamic antialiasing -- only have it switched on when there is no scrolling (even if user selected it as on)
 - mouse controls need to be sorted out; clicking sometimes zooms instead
 - dynamic rescaling of mouseover detection values?

@@ -7,15 +7,15 @@ import javax.swing.JScrollBar;
 
 public class Scroller extends JScrollBar implements AdjustmentListener
 {
-	
+
 	WinMain winMain;
-	
+
 	public Scroller(WinMain winMain)
 	{
 		this.winMain = winMain;
 		addAdjustmentListener(this);
 	}
-	
+
 	public void adjustmentValueChanged(AdjustmentEvent e)
 	{
 //		 if(e.getValueIsAdjusting())
@@ -30,5 +30,5 @@ public class Scroller extends JScrollBar implements AdjustmentListener
 			winMain.mainCanvas.moveGenomeViewPort(winMain.mainCanvas.referenceGMapSet, e.getValue());
 		}
 	}
-	
+
 }

@@ -72,6 +72,12 @@ public class ClickZoomAnimator extends Thread
 			// this call includes the redraw of the main canvas
 			zoomHandler.adjustZoom(selectedMap, newTotalY, newChromoHeight, distFromBottom);
 		}
+
+		//update overviews
+		mainCanvas.winMain.fatController.updateOverviewCanvases();
+
+		//now update the arrays with the position data
+		mainCanvas.winMain.fatController.initialisePositionArrays();
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------

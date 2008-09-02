@@ -1,10 +1,10 @@
 <project name="MapViewer" default="compile" basedir=".">
 	<description>MapViewer Ant Build Script</description>
-  
+
 	<property name="src" location="src"/>
 	<property name="classes" location="classes"/>
 	<property name="lib" location="lib"/>
-	
+
 	<property name="mapviewer.jar" value="${lib}/mapviewer.jar"/>
 
 
@@ -14,7 +14,7 @@
 			<exclude name="**/${mapviewer.jar}"/>
 		</fileset>
 	</path>
-	
+
 	<target name="clean">
 		<delete includeemptydirs="true">
 			<fileset dir="${classes}" includes="**/*"/>
@@ -22,13 +22,13 @@
 		</delete>
 	</target>
 
-	<target name="compile">
+	<target name="compile" depends="clean">
 		<javac srcdir="${src}" destdir="${classes}" target="1.5">
 			<classpath refid="project.classpath"/>
 			<exclude name="**/package-info.java"/>
 		</javac>
 	</target>
-	
+
 	<target name="jar" depends="clean, compile">
 		<jar jarfile="${mapviewer.jar}">
 			<fileset dir="${classes}"/>
@@ -50,5 +50,5 @@
 			<classpath refid="project.classpath"/>
 		</javadoc>
 	</target>
-	
+
 </project>

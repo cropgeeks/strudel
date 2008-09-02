@@ -51,7 +51,8 @@ public class CanvasZoomHandler
 		// check whether we need to display markers and labels
 		mainCanvas.checkMarkerPaintingThresholds(selectedSet);
 
-		mainCanvas.repaint();
+		//update the position lookup arrays for mouseover
+		mainCanvas.winMain.fatController.initialisePositionArrays();
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------------------------

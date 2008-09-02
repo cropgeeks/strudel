@@ -61,4 +61,22 @@ public class FatController
 
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
 
+	public void initialisePositionArrays()
+	{
+		// for all gmapsets
+		for (GMapSet gMapSet : winMain.mainCanvas.gMapSetList)
+		{
+			// for all gchromomaps within each mapset
+			for (GChromoMap gChromoMap : gMapSet.gMaps)
+			{
+				gChromoMap.initArrays();
+			}
+		}
+
+		// update the display
+		winMain.mainCanvas.repaint();
+	}
+
+	// --------------------------------------------------------------------------------------------------------------------------------------------------------
+
 }// end class

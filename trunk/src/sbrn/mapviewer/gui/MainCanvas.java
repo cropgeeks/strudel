@@ -78,14 +78,12 @@ public class MainCanvas extends JPanel
 
 	public MainCanvas(MapSet targetMapset, MapSet referenceMapSet, WinMain winMain, LinkSet links)
 	{
-
 		this.winMain = winMain;
 		zoomHandler = new CanvasZoomHandler(this);
 		this.links = links;
 		setUpGenomes(targetMapset, referenceMapSet);
 		makeTargetLinkSubSets();
 		setBackground(Color.black);
-
 		repaint();
 	}
 
@@ -227,6 +225,11 @@ public class MainCanvas extends JPanel
 				// update its bounding rectangle (used for hit detection)
 				gChromoMap.boundingRectangle.setBounds(gChromoMap.x, gChromoMap.y, gChromoMap.width,
 								gChromoMap.height);
+
+				//check whether the arrays that hold the data for drawing features etc have been inited
+				//if not, do it now (only needs to be done here once, at startup)
+				if(!gChromoMap.arraysInitialized)
+					gChromoMap.initArrays();
 
 				// make sure we only draw the maps we need to (i.e. those that are at least partially visible)
 				selectVisibleMaps();
@@ -595,11 +598,13 @@ public class MainCanvas extends JPanel
 
 		// update the centerpoint to the new percentage
 		gMapSet.centerPoint = newCenterPoint;
-		gMapSet.scroller.setValue(newCenterPoint);
 		repaint();
 
 		//update overviews
 		winMain.fatController.updateOverviewCanvases();
+
+		//update drawing indices
+		winMain.fatController.initialisePositionArrays();
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------------------------

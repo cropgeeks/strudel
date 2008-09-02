@@ -97,6 +97,8 @@ public class PanZoomAnimator extends Thread
 			currentScalingFactor += increment;
 		}
 
+		//now update the arrays with the position data
+		mainCanvas.winMain.fatController.initialisePositionArrays();
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------

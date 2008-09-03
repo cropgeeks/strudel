@@ -95,10 +95,14 @@ public class PanZoomAnimator extends Thread
 			// this call includes the redraw of the main canvas
 			zoomHandler.adjustZoom(selectedMap, newTotalY, newChromoHeight, distFromBottom);
 			currentScalingFactor += increment;
+
+			//update visible zoom info
+			mainCanvas.winMain.zoomControlPanel.updateZoomInfo();
 		}
 
 		//now update the arrays with the position data
 		mainCanvas.winMain.fatController.initialisePositionArrays();
+
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------

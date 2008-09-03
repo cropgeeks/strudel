@@ -132,7 +132,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		{
 			//the multiplier is the amount by which we multiply the current zoom factor to increase it
 			float multiplier = 1.2f;
-			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(-1, multiplier, index);
+			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(-1, multiplier, index, false);
 		}
 
 		// mouse is getting dragged up -- zoom out
@@ -140,7 +140,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		{
 			//the multiplier is the amount by which we multiply the current zoom factor to decrease it
 			float multiplier = 0.8f;
-			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(-1,multiplier, index);
+			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(-1,multiplier, index, false);
 		}
 
 		// mouse is getting dragged horizontally with SHIFT down -- draw a rectangle for zoom selection

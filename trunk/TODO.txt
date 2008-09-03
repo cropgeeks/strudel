@@ -2,6 +2,7 @@
 
 features to implement -- general:
 
+- animate zoom reset
 - show loci as filled rectangles rather than lines at higher zoom levels
 - colour selector for user 
 - option to show homologies only that fall within a given QTL

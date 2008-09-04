@@ -7,6 +7,7 @@ import java.util.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
+import sbrn.mapviewer.gui.entities.*;
 
 public class ZoomControlPanel extends JPanel implements ChangeListener, ActionListener
 {
@@ -38,10 +39,8 @@ public class ZoomControlPanel extends JPanel implements ChangeListener, ActionLi
 		this.setLayout(new GridLayout(1, 2));
 
 		int sliderMin = 1;
-		int sliderMax = 1000;
+		int sliderMax = 500;
 		int sliderInitialVal = 1;
-		int minorTickSpacing = 100;
-		int majorTickSpacing = 250;
 
 		// left hand control
 		JPanel leftPanel = new JPanel();
@@ -50,21 +49,9 @@ public class ZoomControlPanel extends JPanel implements ChangeListener, ActionLi
 		leftLabel.setText("Zoom:");
 		leftPanel.add(leftLabel);
 		leftZoomSlider = new JSlider(sliderMin, sliderMax, sliderInitialVal);
-		// tick marks
-		leftZoomSlider.setMajorTickSpacing(majorTickSpacing);
-		leftZoomSlider.setMinorTickSpacing(minorTickSpacing);
-		leftZoomSlider.setPaintTicks(true);
-		// labels
-		Hashtable leftLabels = leftZoomSlider.createStandardLabels(majorTickSpacing, majorTickSpacing);
-		leftZoomSlider.setLabelTable(leftLabels);
-		leftZoomSlider.setPaintLabels(true);
 		// add it
 		leftZoomSlider.addChangeListener(this);
 		leftPanel.add(leftZoomSlider);
-		// add another label to print out the current zoom factor
-		leftZoomFactorLabel = new JLabel(" x 1");
-		leftZoomFactorLabel.setPreferredSize(new Dimension(60,10));
-		leftPanel.add(leftZoomFactorLabel);
 		//reset button
 		resetLeftButton = new JButton("Reset");
 		resetLeftButton.addActionListener(this);
@@ -79,21 +66,9 @@ public class ZoomControlPanel extends JPanel implements ChangeListener, ActionLi
 		rightLabel.setText("Zoom:");
 		rightPanel.add(rightLabel);
 		rightZoomSlider = new JSlider(sliderMin, sliderMax, sliderInitialVal);
-		// tick marks
-		rightZoomSlider.setMajorTickSpacing(majorTickSpacing);
-		rightZoomSlider.setMinorTickSpacing(minorTickSpacing);
-		rightZoomSlider.setPaintTicks(true);
-		// labels
-		Hashtable rightLabels = rightZoomSlider.createStandardLabels(majorTickSpacing, majorTickSpacing);
-		rightZoomSlider.setLabelTable(rightLabels);
-		rightZoomSlider.setPaintLabels(true);
 		// add it
 		rightZoomSlider.addChangeListener(this);
 		rightPanel.add(rightZoomSlider);
-		// add another label to print out the current zoom factor
-		rightZoomFactorLabel = new JLabel(" x 1");
-		rightZoomFactorLabel.setPreferredSize(new Dimension(60,10));
-		rightPanel.add(rightZoomFactorLabel);
 		//reset button
 		resetRightButton = new JButton("Reset");
 		resetRightButton.addActionListener(this);
@@ -115,24 +90,19 @@ public class ZoomControlPanel extends JPanel implements ChangeListener, ActionLi
 				if (source.equals(rightZoomSlider))
 				{
 					winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(source.getValue(), 0, 1, true);
+
 				}
-			updateZoomInfo();
+			updateSliders();
 //		}
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	public void updateZoomInfo()
+	public void updateSliders()
 	{
 		//update the sliders
 		leftZoomSlider.setValue((int) winMain.mainCanvas.targetGMapSet.zoomFactor);
 		rightZoomSlider.setValue((int) winMain.mainCanvas.referenceGMapSet.zoomFactor);
-
-		//update the labels
-		NumberFormat nf = NumberFormat.getInstance();
-		nf.setMaximumFractionDigits(0);
-		leftZoomFactorLabel.setText(" x " + nf.format(winMain.mainCanvas.targetGMapSet.zoomFactor));
-		rightZoomFactorLabel.setText(" x " +nf.format(winMain.mainCanvas.referenceGMapSet.zoomFactor));
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -141,13 +111,13 @@ public class ZoomControlPanel extends JPanel implements ChangeListener, ActionLi
 	{
 		if(e.getSource()==resetLeftButton)
 		{
-			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(1, 0, 0, true);
+			winMain.mainCanvas.zoomHandler.processZoomResetRequest(winMain.mainCanvas.targetGMapSet);
 		}
 		if(e.getSource()==resetRightButton)
 		{
-			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(1, 0, 1, true);
+			winMain.mainCanvas.zoomHandler.processZoomResetRequest(winMain.mainCanvas.referenceGMapSet);
 		}
-		updateZoomInfo();
+		updateSliders();
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------

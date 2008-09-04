@@ -59,6 +59,10 @@ public class ClickZoomAnimator extends Thread
 			// set the new zoom factor
 			selectedSet.zoomFactor += zoomFactorIncrement;
 
+			//don't let the zoom factor fall below 1
+			if(selectedSet.zoomFactor < 1)
+				selectedSet.zoomFactor = 1;
+
 			// work out the chromo height and total genome height for when the new zoom factor will have been applied
 			int newChromoHeight = Math.round(selectedSet.chromoHeight + chromoHeightIncrement);
 
@@ -73,7 +77,7 @@ public class ClickZoomAnimator extends Thread
 			zoomHandler.adjustZoom(selectedMap, newTotalY, newChromoHeight, distFromBottom);
 
 			//update visible zoom info
-			mainCanvas.winMain.zoomControlPanel.updateZoomInfo();
+			mainCanvas.winMain.zoomControlPanel.updateSliders();
 		}
 
 		//update overviews

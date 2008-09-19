@@ -18,14 +18,22 @@ public class CanvasZoomHandler
 	}
 
 	// =====================================methods===================================
-
+	
 	// gets invoked when the zoom is adjusted by using the sliders or the drag-and-zoom functionality
 	// adjusts the zoom factor and checks whether we need to display markers and labels
 	public void processContinuousZoomRequest(float newZoomFactor, float multiplier, int genomeIndex, boolean isSliderRequest)
 	{
-//		System.out.println("========processing continuous zoom request");
-
 		GMapSet selectedSet = mainCanvas.gMapSetList.get(genomeIndex);
+		processContinuousZoomRequest(newZoomFactor, multiplier, selectedSet, isSliderRequest);
+	
+	}
+	
+	// -----------------------------------------------------------------------------------------------------------------------------------
+
+	// gets invoked when the zoom is adjusted by using the sliders or the drag-and-zoom functionality
+	// adjusts the zoom factor and checks whether we need to display markers and labels
+	public void processContinuousZoomRequest(float newZoomFactor, float multiplier, GMapSet selectedSet, boolean isSliderRequest)
+	{
 
 		//for a request from the sliders we need to work out the multiplier but not the zoom factor
 		if(isSliderRequest)
@@ -58,7 +66,6 @@ public class CanvasZoomHandler
 		selectedSet.totalY = newTotalY;
 		selectedSet.centerPoint = Math.round(newCenterPoint);
 		selectedSet.chromoHeight = newChromoHeight;
-		selectedSet.scroller.setValues(Math.round(newCenterPoint), 0, 0, newTotalY);
 
 		// check whether we need to display markers and labels
 		mainCanvas.checkMarkerPaintingThresholds(selectedSet);
@@ -67,7 +74,8 @@ public class CanvasZoomHandler
 		mainCanvas.winMain.fatController.initialisePositionArrays();
 
 		//update visible zoom info
-		mainCanvas.winMain.zoomControlPanel.updateSliders();
+		mainCanvas.winMain.fatController.updateZoomControls();
+
 	}
 
 
@@ -137,7 +145,7 @@ public class CanvasZoomHandler
 		// the new total Y extent of the genome in pixels
 		int finalTotalY =  mainCanvas.initialChromoHeight*selectedSet.numMaps + combinedSpacers;
 
-		ClickZoomAnimator clickZoomAnimator = new ClickZoomAnimator(fps, millis, selectedSet.visibleMaps.get(0),
+		ClickZoomAnimator clickZoomAnimator = new ClickZoomAnimator(fps, millis, selectedSet.getVisibleMaps().get(0),
 						mainCanvas, finalZoomFactor, finalTotalY, finalChromoHeight, this);
 		clickZoomAnimator.start();
 	}
@@ -170,7 +178,6 @@ public class CanvasZoomHandler
 		// update the genome centerpoint to the new percentage and update the scroller position
 		selectedSet.centerPoint = Math.round(newCenterPoint);
 		selectedSet.chromoHeight = newChromoHeight;
-		selectedSet.scroller.setValues(Math.round(newCenterPoint), 0, 0, newTotalY);
 
 		// check whether we need to display markers and labels
 		if (selectedMap.isShowingOnCanvas)
@@ -181,6 +188,7 @@ public class CanvasZoomHandler
 		// repaint the canvas
 		mainCanvas.repaint();
 	}
+
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
 

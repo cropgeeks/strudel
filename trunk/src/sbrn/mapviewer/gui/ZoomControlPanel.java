@@ -2,11 +2,10 @@ package sbrn.mapviewer.gui;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.text.*;
-import java.util.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
+
 import sbrn.mapviewer.gui.entities.*;
 
 public class ZoomControlPanel extends JPanel implements ChangeListener, ActionListener
@@ -14,21 +13,19 @@ public class ZoomControlPanel extends JPanel implements ChangeListener, ActionLi
 	// ===============================================vars=======================================
 
 	WinMain winMain;
-	JLabel leftLabel;
-	JLabel rightLabel;
-	public JLabel leftZoomFactorLabel;
-	public JLabel rightZoomFactorLabel;
-	JSlider leftZoomSlider;
-	JSlider rightZoomSlider;
-	JButton resetLeftButton;
-	JButton resetRightButton;
+	JLabel label;
+	JSlider zoomSlider;
+	JButton resetButton;
+	GMapSet gMapSet;
+
 
 	// ===================================================c'tor====================================
 
-	public ZoomControlPanel(WinMain winMain)
+	public ZoomControlPanel(WinMain winMain,GMapSet gMapSet)
 	{
 		super();
 		this.winMain = winMain;
+		this.gMapSet = gMapSet;
 		setupComponents();
 	}
 
@@ -45,36 +42,20 @@ public class ZoomControlPanel extends JPanel implements ChangeListener, ActionLi
 		// left hand control
 		JPanel leftPanel = new JPanel();
 		//label
-		leftLabel = new JLabel();
-		leftLabel.setText("Zoom:");
-		leftPanel.add(leftLabel);
-		leftZoomSlider = new JSlider(sliderMin, sliderMax, sliderInitialVal);
+		label = new JLabel();
+		label.setText("Zoom:");
+		leftPanel.add(label);
+		zoomSlider = new JSlider(sliderMin, sliderMax, sliderInitialVal);
 		// add it
-		leftZoomSlider.addChangeListener(this);
-		leftPanel.add(leftZoomSlider);
+		zoomSlider.addChangeListener(this);
+		leftPanel.add(zoomSlider);
 		//reset button
-		resetLeftButton = new JButton("Reset");
-		resetLeftButton.addActionListener(this);
-		leftPanel.add(resetLeftButton);
+		resetButton = new JButton("Reset");
+		resetButton.addActionListener(this);
+		leftPanel.add(resetButton);
 		// add the panel
 		this.add(leftPanel);
 
-		// right hand control
-		JPanel rightPanel = new JPanel();
-		//label
-		rightLabel = new JLabel();
-		rightLabel.setText("Zoom:");
-		rightPanel.add(rightLabel);
-		rightZoomSlider = new JSlider(sliderMin, sliderMax, sliderInitialVal);
-		// add it
-		rightZoomSlider.addChangeListener(this);
-		rightPanel.add(rightZoomSlider);
-		//reset button
-		resetRightButton = new JButton("Reset");
-		resetRightButton.addActionListener(this);
-		rightPanel.add(resetRightButton);
-		// add the panel
-		this.add(rightPanel);
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -82,18 +63,11 @@ public class ZoomControlPanel extends JPanel implements ChangeListener, ActionLi
 	public void stateChanged(ChangeEvent e)
 	{
 		JSlider source = (JSlider) e.getSource();
-			if (source.equals(leftZoomSlider))
-			{
-				winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(source.getValue(), 0, 0, true);
-			}
-			else
-				if (source.equals(rightZoomSlider))
-				{
-					winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(source.getValue(), 0, 1, true);
-
-				}
-			updateSliders();
-//		}
+		if (source.equals(zoomSlider))
+		{
+			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(source.getValue(), 0, gMapSet, true);
+		}
+		updateSliders();
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -101,22 +75,18 @@ public class ZoomControlPanel extends JPanel implements ChangeListener, ActionLi
 	public void updateSliders()
 	{
 		//update the sliders
-		leftZoomSlider.setValue((int) winMain.mainCanvas.targetGMapSet.zoomFactor);
-		rightZoomSlider.setValue((int) winMain.mainCanvas.referenceGMapSet.zoomFactor);
+		zoomSlider.setValue((int) gMapSet.zoomFactor);
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void actionPerformed(ActionEvent e)
 	{
-		if(e.getSource()==resetLeftButton)
+		if(e.getSource()==resetButton)
 		{
-			winMain.mainCanvas.zoomHandler.processZoomResetRequest(winMain.mainCanvas.targetGMapSet);
+			winMain.mainCanvas.zoomHandler.processZoomResetRequest(gMapSet);
 		}
-		if(e.getSource()==resetRightButton)
-		{
-			winMain.mainCanvas.zoomHandler.processZoomResetRequest(winMain.mainCanvas.referenceGMapSet);
-		}
+
 		updateSliders();
 	}
 

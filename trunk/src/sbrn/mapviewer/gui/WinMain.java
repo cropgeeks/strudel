@@ -2,29 +2,33 @@ package sbrn.mapviewer.gui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
+
 import javax.swing.*;
 
+import sbrn.mapviewer.gui.entities.*;
 import scri.commons.gui.*;
 
 public class WinMain extends JFrame
 {
+	
+//=================================================vars=====================================	
+	
 	//this is where we hold the genome data
 	public DataContainer dataContainer;
 
 	//Swing components that make up the GUI
-	//this is where we paint the genomes
 	public static MainCanvas mainCanvas;
-	public ZoomControlPanel zoomControlPanel;
+	public LinkedList<ZoomControlPanel> zoomControlPanels = new LinkedList<ZoomControlPanel>();
 	public ControlPanel controlPanel;
 	public AnnotationPanel targetAnnotationPanel;
 	public AnnotationPanel referenceAnnotationPanel;
-	public OverviewCanvas targetOverviewCanvas;
-	public OverviewCanvas referenceOverviewCanvas;
-	public Scroller leftCanvasScroller;
-	public Scroller rightCanvasScroller;
+	public LinkedList<OverviewCanvas> overviewCanvases = new LinkedList<OverviewCanvas>();
 
 	//the controller for the whole application
 	FatController fatController;
+	
+//=================================================c'tor=====================================	
 
 	public WinMain()
 	{
@@ -40,7 +44,6 @@ public class WinMain extends JFrame
 		//GUI bits and pieces
 		setTitle("Map Viewer");
 		setSize(Prefs.guiWinMainWidth, Prefs.guiWinMainHeight);
-
 
 		// Work out the current screen's width and height
 		int scrnW = SwingUtils.getVirtualScreenDimension().width;
@@ -61,6 +64,8 @@ public class WinMain extends JFrame
 		addListeners();
 	}
 
+	//=================================================methods=====================================		
+	
 	private void addListeners()
 	{
 		addComponentListener(new ComponentAdapter() {
@@ -89,6 +94,8 @@ public class WinMain extends JFrame
 			}
 		});
 	}
+	
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private void setupComponents()
 	{
@@ -97,24 +104,20 @@ public class WinMain extends JFrame
 
 		//this panel contains everything else in a borderlayout
 		JPanel topContainerPanel = new JPanel(new BorderLayout());
-		//this panel contains the main canvas, the annotation panel below it, and
-		//the 2 scrollers left and right of the canvas
+		//this panel contains the main canvas and the annotation panel below it 
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		//this panel contains the two overview panels and the control panel
 		JPanel leftPanel = new JPanel(new BorderLayout());
+		//a panel for the  overview canvases
+		JPanel overViewsContainerPanel = new JPanel(new GridLayout(1,dataContainer.numRefGenomes+1));
 		//a panel for the two overview canvases
-		JPanel overViewsContainerPanel = new JPanel(new GridLayout(1,2));
+		JPanel zoomControlContainerPanel = new JPanel(new GridLayout(1,dataContainer.numRefGenomes+1));
 		//the panel at the bottom of the main canvas -- contains annotation and zoom control panels
 		JPanel bottomPanel = new JPanel(new BorderLayout());
 
-		//scroll bars for the canvas
-		leftCanvasScroller = new Scroller(this);
-		rightCanvasScroller = new Scroller(this);
-		mainPanel.add(leftCanvasScroller,BorderLayout.WEST);
-		mainPanel.add(rightCanvasScroller,BorderLayout.EAST);
 
 		//this is the main canvas which we render the genomes on
-		mainCanvas = new MainCanvas(dataContainer.targetMapset, dataContainer.referenceMapset, this, dataContainer.links);
+		mainCanvas = new MainCanvas(dataContainer.targetMapset, dataContainer.referenceMapsets, this, dataContainer.linkSets);
 		mainPanel.add(mainCanvas, BorderLayout.CENTER);
 
 		//add mousehandler
@@ -122,37 +125,41 @@ public class WinMain extends JFrame
 		mainCanvas.addMouseListener(mouseHandler);
 		mainCanvas.addMouseMotionListener(mouseHandler);
 		mainCanvas.addMouseWheelListener(mouseHandler);
-		leftCanvasScroller.addMouseListener(mouseHandler);
-		rightCanvasScroller.addMouseListener(mouseHandler);
 
-		//the panel with the zoom control sliders
-		zoomControlPanel = new ZoomControlPanel(this);
-//		zoomControlPanel.setPreferredSize(new Dimension(800, 100));
-//		add(zoomControlPanel,BorderLayout.SOUTH);
+
+		//the panels with the zoom control sliders
+		for (GMapSet gMapSet : mainCanvas.gMapSetList)
+		{
+			ZoomControlPanel zoomControlPanel = new ZoomControlPanel(this, gMapSet);
+			zoomControlContainerPanel.add(zoomControlPanel);
+			zoomControlPanel.setPreferredSize(new Dimension(800, 100));
+			zoomControlPanels.add(zoomControlPanel);
+		}
 
 		//the panels for displaying annotation info
-		targetAnnotationPanel = new AnnotationPanel(this,dataContainer.targetMapset);
-		referenceAnnotationPanel = new AnnotationPanel(this,dataContainer.referenceMapset);
-		JPanel annotationContainerPanel = new JPanel(new GridLayout(1,2));
-		annotationContainerPanel.add(targetAnnotationPanel);
-		annotationContainerPanel.add(referenceAnnotationPanel);
+//		targetAnnotationPanel = new AnnotationPanel(this,dataContainer.targetMapset);
+//		referenceAnnotationPanel = new AnnotationPanel(this,dataContainer.referenceMapset);
+//		JPanel annotationContainerPanel = new JPanel(new GridLayout(1,2));
+//		annotationContainerPanel.add(targetAnnotationPanel);
+//		annotationContainerPanel.add(referenceAnnotationPanel);
 
 		//now stick both the zoom controls and the annotation panels in the bottom panel and add it
-		bottomPanel.add(zoomControlPanel, BorderLayout.NORTH);
-		bottomPanel.add(annotationContainerPanel, BorderLayout.CENTER);
+		bottomPanel.add(zoomControlContainerPanel, BorderLayout.NORTH);
+//		bottomPanel.add(annotationContainerPanel, BorderLayout.CENTER);
 		mainPanel.add(bottomPanel,BorderLayout.SOUTH);
 
 		//the control panel
 		controlPanel = new ControlPanel(this);
 
-		//the overviews for the two genomes
-		targetOverviewCanvas = new OverviewCanvas(this,mainCanvas.targetGMapSet);
-		referenceOverviewCanvas = new OverviewCanvas(this,mainCanvas.referenceGMapSet);
-		targetOverviewCanvas.setPreferredSize(new Dimension(0,250));
-		referenceOverviewCanvas.setPreferredSize(new Dimension(0,220));
-		overViewsContainerPanel.add(targetOverviewCanvas);
-		overViewsContainerPanel.add(referenceOverviewCanvas);
-
+		//the overviews for the genomes		
+		for (GMapSet gMapSet : mainCanvas.gMapSetList)
+		{
+			OverviewCanvas overviewCanvas = new OverviewCanvas(this,gMapSet);
+			overviewCanvas.setPreferredSize(new Dimension(0,250));
+			overViewsContainerPanel.add(overviewCanvas);
+			overviewCanvases.add(overviewCanvas);
+		}
+		
 		//put it all together
 		leftPanel.add(overViewsContainerPanel,BorderLayout.NORTH);
 		leftPanel.add(controlPanel,BorderLayout.CENTER);
@@ -161,4 +168,7 @@ public class WinMain extends JFrame
 		topContainerPanel.add(mainPanel, BorderLayout.CENTER);
 		this.add(topContainerPanel);
 	}
-}
+	
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+}//end class

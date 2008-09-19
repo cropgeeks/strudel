@@ -24,6 +24,7 @@ public class MapViewer
 		Install4j.pingServer();
 
 		new MapViewer();
+
 	}
 
 	MapViewer()

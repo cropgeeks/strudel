@@ -77,7 +77,7 @@ public class ClickZoomAnimator extends Thread
 			zoomHandler.adjustZoom(selectedMap, newTotalY, newChromoHeight, distFromBottom);
 
 			//update visible zoom info
-			mainCanvas.winMain.zoomControlPanel.updateSliders();
+			mainCanvas.winMain.fatController.updateZoomControls();
 		}
 
 		//update overviews

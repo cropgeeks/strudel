@@ -54,7 +54,7 @@ public class Utils
 	public static GChromoMap getSelectedMap(WinMain winMain, int gMapSetIndex, int y)
 	{
 		GChromoMap selectedMap = null;
-
+		
 		// for each genome
 		for (GMapSet gMapSet : winMain.mainCanvas.gMapSetList)
 		{
@@ -64,16 +64,37 @@ public class Utils
 			
 			//we need to set the intersect line up so it extends only over the part of the screen we want to test for intersection in
 			//this depends on the index of the mapset in the list
-			//gMapSetList at 0 is target genome (left), at 1 is reference genome (right)
-			if(gMapSetIndex == 0)
+			//if we have two genomes
+			if(winMain.mainCanvas.gMapSetList.size() == 2)
 			{
-				intersectLine = new Rectangle(0,y,winMain.mainCanvas.getWidth()/2,1);
+				//gMapSetList at 0 is target genome (left), at 1 is reference genome (right)
+				if(gMapSetIndex == 0)
+				{
+					intersectLine = new Rectangle(0,y,winMain.mainCanvas.getWidth()/2,1);
+				}
+				else //index ==1
+				{
+					intersectLine = new Rectangle(winMain.mainCanvas.getWidth()/2,y,winMain.mainCanvas.getWidth(),1);
+				}
 			}
-			else //index ==1
+			//if we have three genomes
+			else if(winMain.mainCanvas.gMapSetList.size() == 3)
 			{
-				intersectLine = new Rectangle(winMain.mainCanvas.getWidth()/2,y,winMain.mainCanvas.getWidth(),1);
+				//gMapSetList at 0 is target genome (left), at 1 is reference genome (right)
+				if(gMapSetIndex == 0)
+				{
+					intersectLine = new Rectangle(0,y,winMain.mainCanvas.getWidth()/3,1);
+				}
+				else if(gMapSetIndex == 1)
+				{
+					intersectLine = new Rectangle(winMain.mainCanvas.getWidth()/3,y,winMain.mainCanvas.getWidth()/3,1);
+				}
+				else if(gMapSetIndex == 2)
+				{
+					intersectLine = new Rectangle((winMain.mainCanvas.getWidth()/3)*2,y,winMain.mainCanvas.getWidth()/3,1);
+				}
 			}
-
+			
 			//now check all the chromosomes' bounding rectangles in this mapset for intersection			
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
 			{

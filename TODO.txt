@@ -25,7 +25,6 @@ Data:
 Luke Ramsay's list (in descending order of priority):
 
 - view full detail of reference genome at high/highest zoom level
-- second reference genome (e.g. for Brachypodium)
 - show centromere positions
 - flip entire chromosomes and portions thereof
 - highlight conflicts in conserved synteny, i.e. cases where the ordering of features differs between genomes
@@ -39,12 +38,38 @@ Luke Ramsay's list (in descending order of priority):
 
 ================================
 
+Jordi's list:
+
+
+- load one sequence / snp id or a short list of sequences / snps, and have directly on the comparative map viewer the correspondent locations for the best hits in rice / brachypodium 
+
+- different line colors for the best BLAST hit, second best hit, third best hit… 
+
+- plot QTL profiles along the barley chromosomes
+
+- select an interval on the rice / brachypodium side and get a list with all the genes located within the interval
+
+- highlight your gene(s)/ loci of interest next to the chromosomes (either in rice / barley) 
+
+================================
+
+List from genetics barley users' meeting:
+
+Ability to flip chromosomes and parts of chromosomes/regions  - Luke.
+Highlight links on mouseover – Linda.
+Show annotation for both target and ref  - Linda.
+Ability to move markers around. - Luke
+Save project files including current state – Luke
+Menu bar support for new/infrequent users – Robbie
+
+
+================================
+
+
 FIXES:
 	
 - dynamic antialiasing -- only have it switched on when there is no scrolling (even if user selected it as on)
 - mouse controls need to be sorted out; clicking sometimes zooms instead
-- dynamic rescaling of mouseover detection values?
-
 
 
 

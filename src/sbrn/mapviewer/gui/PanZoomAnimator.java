@@ -97,7 +97,7 @@ public class PanZoomAnimator extends Thread
 			currentScalingFactor += increment;
 
 			//update visible zoom info
-			mainCanvas.winMain.zoomControlPanel.updateSliders();
+			mainCanvas.winMain.fatController.updateZoomControls();
 		}
 
 		//now update the arrays with the position data

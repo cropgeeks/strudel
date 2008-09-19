@@ -39,16 +39,13 @@ public class GMapSet
 
 	// the x position of this genome on the canvas
 	// i.e. an x coordinate in pixels which denotes the left most edge of the genome drawn
-	public int xPosition;
+	public float xPosition;
 
 	// true if this is the target genome, false if it the reference genome
 	public boolean isTargetGenome = false;
 
 	// the percent offset from the top of the genome that represents the topmost point of the genome visible on the canvas
 	public int drawingOffset = 0;
-
-	// the scrollbar which controls the viewable area in this map set
-	public Scroller scroller;
 
 	// the point on the genome that is currently seen in the center of the canvas, in pixels, measured from the top of the genome
 	public int centerPoint = 0;
@@ -77,11 +74,11 @@ public class GMapSet
 	public float thresholdLabelPainting;
 
 	//a vector of maps in this mapset that are currently visible
-	public Vector<GChromoMap> visibleMaps = new Vector<GChromoMap>();
+//	public Vector<GChromoMap> visibleMaps = new Vector<GChromoMap>();
 
 	// ====================================c'tors========================================
 
-	public GMapSet(Color mapSetColour, MapSet mapSet, int type, boolean isTargetGenome, Scroller scroller,
+	public GMapSet(Color mapSetColour, MapSet mapSet, int type, boolean isTargetGenome, 
 					Hashtable<ChromoMap, GChromoMap> gMapLookup)
 	{
 		this.colour = mapSetColour;
@@ -89,7 +86,6 @@ public class GMapSet
 		this.type = type;
 		this.name = mapSet.getName();
 		this.isTargetGenome = isTargetGenome;
-		this.scroller = scroller;
 		numMaps = mapSet.size();
 
 		// init the list of maps contained in this genome
@@ -153,6 +149,21 @@ public class GMapSet
 		{
 			removeSelectedMap(gMap);
 		}
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	public Vector<GChromoMap> getVisibleMaps()
+	{
+		Vector<GChromoMap> visibleMaps = new Vector<GChromoMap>();
+
+		// for all gchromomaps within each mapset
+		for (GChromoMap gChromoMap : gMaps)
+		{
+			if(gChromoMap.isShowingOnCanvas == true)
+				visibleMaps.add(gChromoMap);
+		}
+		return visibleMaps;
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------

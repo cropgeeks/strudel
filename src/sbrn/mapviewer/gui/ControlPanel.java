@@ -45,8 +45,6 @@ public class ControlPanel extends javax.swing.JPanel implements ItemListener
 		eValueSlider = new javax.swing.JSlider();
 		jSeparator3 = new javax.swing.JSeparator();
 		jSeparator4 = new javax.swing.JSeparator();
-		jLabel3 = new javax.swing.JLabel();
-		backgroundCombo = new javax.swing.JComboBox();
 		blastScoreLabel = new javax.swing.JLabel();
 		
 		jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Controls:"));
@@ -76,18 +74,6 @@ public class ControlPanel extends javax.swing.JPanel implements ItemListener
 			}
 		});
 		
-		jLabel3.setText("Background colour:");
-		
-		backgroundCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[]
-		{ "black", "dark grey", "light grey", "white" }));
-		backgroundCombo.addActionListener(new java.awt.event.ActionListener()
-		{
-			public void actionPerformed(java.awt.event.ActionEvent evt)
-			{
-				ControlPanel.this.actionPerformed(evt);
-			}
-		});
-		
 		blastScoreLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 		blastScoreLabel.setText("Current value:                             ");
 		
@@ -106,13 +92,8 @@ public class ControlPanel extends javax.swing.JPanel implements ItemListener
 														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 														177,
 														Short.MAX_VALUE).add(
-														jLabel3).add(
 														blastScoreLabel).add(
-														antialiasCheckbox).add(
-														backgroundCombo,
-														0,
-														177,
-														Short.MAX_VALUE)).addContainerGap()).add(
+														antialiasCheckbox)).addContainerGap()).add(
 						jPanel1Layout.createSequentialGroup().addContainerGap().add(
 										jSeparator3,
 										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
@@ -144,14 +125,8 @@ public class ControlPanel extends javax.swing.JPanel implements ItemListener
 										jSeparator4,
 										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
 										10,
-										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(
-										1, 1, 1).add(jLabel3).addPreferredGap(
-										org.jdesktop.layout.LayoutStyle.RELATED).add(
-										backgroundCombo,
-										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
-										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addContainerGap(
-										109, Short.MAX_VALUE)));
+										152, Short.MAX_VALUE)));
 		
 		org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
 		this.setLayout(layout);
@@ -193,19 +168,6 @@ public class ControlPanel extends javax.swing.JPanel implements ItemListener
 		
 	}
 	
-	private void actionPerformed(java.awt.event.ActionEvent e)
-	{
-		
-		//change the background colour to the value selected by the user from the combo
-		if (e.getSource() == backgroundCombo)
-		{
-			winMain.fatController.changeBackgroundColour((String) backgroundCombo.getSelectedItem());
-		}
-		
-		//update overviews
-		winMain.fatController.updateOverviewCanvases();
-	}
-	
 	public void itemStateChanged(ItemEvent e)
 	{
 		if (e.getItemSelectable() == antialiasCheckbox)
@@ -225,11 +187,9 @@ public class ControlPanel extends javax.swing.JPanel implements ItemListener
 	//GEN-BEGIN:variables
 	// Variables declaration - do not modify
 	private javax.swing.JCheckBox antialiasCheckbox;
-	private javax.swing.JComboBox backgroundCombo;
 	private javax.swing.JLabel blastScoreLabel;
 	private javax.swing.JSlider eValueSlider;
 	private javax.swing.JLabel jLabel2;
-	private javax.swing.JLabel jLabel3;
 	private javax.swing.JPanel jPanel1;
 	private javax.swing.JSeparator jSeparator2;
 	private javax.swing.JSeparator jSeparator3;

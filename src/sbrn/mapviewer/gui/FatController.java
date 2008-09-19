@@ -8,33 +8,46 @@ import sbrn.mapviewer.gui.entities.*;
 
 public class FatController
 {
-
+	
 	// ===============================================vars===================================
-
+	
 	private WinMain winMain;
-
+	
 	// ===============================================c'tors===================================
-
+	
 	public FatController(WinMain winMain)
 	{
 		this.winMain = winMain;
 	}
-
+	
 	// ===============================================methods===================================
-
+	
 	// repaint the overview canvases
 	public void updateOverviewCanvases()
 	{
-		winMain.targetOverviewCanvas.repaint();
-		winMain.referenceOverviewCanvas.repaint();
+		for(OverviewCanvas overviewCanvas : winMain.overviewCanvases)
+		{
+			overviewCanvas.repaint();
+		}
 	}
-
+	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
-
+	
+	//update visible zoom info
+	public void updateZoomControls()
+	{
+		for (ZoomControlPanel zoomControlPanel : winMain.zoomControlPanels)
+		{
+			zoomControlPanel.updateSliders();
+		}
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------------------------------
+	
 	public void changeBackgroundColour(String newColour)
 	{
 		Color colour = null;
-
+		
 		if (newColour.equals("black"))
 		{
 			colour = Color.BLACK;
@@ -51,16 +64,16 @@ public class FatController
 		{
 			colour = Color.white;
 		}
-
+		
 		// set all canvas backgrounds to the same colour
 		winMain.mainCanvas.setBackground(colour);
-
+		
 		// update the display
 		winMain.mainCanvas.repaint();
 	}
-
+	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
-
+	
 	public void initialisePositionArrays()
 	{
 		// for all gmapsets
@@ -72,11 +85,13 @@ public class FatController
 				gChromoMap.initArrays();
 			}
 		}
-
+		
 		// update the display
 		winMain.mainCanvas.repaint();
 	}
-
+	
+	
+	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
-
+	
 }// end class

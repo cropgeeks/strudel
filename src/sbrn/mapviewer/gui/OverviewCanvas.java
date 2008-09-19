@@ -43,7 +43,7 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener
 		regionRect = new Rectangle();
 
 		setBorder(BorderFactory.createLineBorder(new Color(180, 180, 180), 1));
-		setBackground(Color.WHITE);
+		setBackground(Colors.overviewCanvasBackgroundColour);
 
 		this.addMouseMotionListener(this);
 	}
@@ -130,10 +130,10 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener
 		//set this all up
 		regionRect.setBounds(rectX, rectY, rectWidth, rectHeight);
 		//draw the rectangle
-		g2.setColor(Color.red);
+		g2.setColor(Colors.overviewCanvasSelectionRectColour);
 		g2.draw(regionRect);
 		//fill it with a transparent paint
-		g2.setColor(new Color(0,0,0,0.1f));
+		g2.setColor(Colors.overviewCanvasTransparentPaint);
 		g2.fill(regionRect);
 
 	}
@@ -163,8 +163,6 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener
 		{
 			// move the genome viewport on the main canvas
 			winMain.mainCanvas.moveGenomeViewPort(gMapSet, newYCoord);
-			//also need to update the scroller position
-			gMapSet.scroller.setValue(newYCoord);
 		}
 
 		repaint();

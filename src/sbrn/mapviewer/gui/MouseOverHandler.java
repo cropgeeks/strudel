@@ -58,7 +58,7 @@ public class MouseOverHandler
 				}
 
 				// we have a match
-				if (match != null)
+				if (match != null && selectedMap.owningSet.paintAllMarkers)
 				{
 					// set the vector object of the selected map and repaint
 					selectedMap.highlightedFeatures = match;
@@ -102,14 +102,14 @@ public class MouseOverHandler
 			}
 
 			// now set this vector to be the new list data for the JList in the annotation panel
-			if (selectedMap.owningSet.equals(winMain.mainCanvas.targetGMapSet))
-			{
-				winMain.targetAnnotationPanel.getAnnotationList().setListData(formattedData);
-			}
-			else
-			{
-				winMain.referenceAnnotationPanel.getAnnotationList().setListData(formattedData);
-			}
+//			if (selectedMap.owningSet.equals(winMain.mainCanvas.targetGMapSet))
+//			{
+//				winMain.targetAnnotationPanel.getAnnotationList().setListData(formattedData);
+//			}
+//			else
+//			{
+//				winMain.referenceAnnotationPanel.getAnnotationList().setListData(formattedData);
+//			}
 		}
 		//if we got here by clicking on the background
 		else
@@ -121,8 +121,8 @@ public class MouseOverHandler
 			}
 
 			//clear the currently displayed data by just pointing it at the empty vector
-			winMain.targetAnnotationPanel.getAnnotationList().setListData(formattedData);
-			winMain.referenceAnnotationPanel.getAnnotationList().setListData(formattedData);
+//			winMain.targetAnnotationPanel.getAnnotationList().setListData(formattedData);
+//			winMain.referenceAnnotationPanel.getAnnotationList().setListData(formattedData);
 		}
 	}
 

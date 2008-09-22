@@ -91,7 +91,7 @@ public class ClickZoomAnimator extends Thread
 
 		//turn antialiasing on and repaint
 		mainCanvas.antiAlias = true;
-		mainCanvas.repaint();
+		mainCanvas.updateCanvas(true);
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------

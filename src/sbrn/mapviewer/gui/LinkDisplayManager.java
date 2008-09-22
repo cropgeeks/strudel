@@ -94,7 +94,7 @@ public class LinkDisplayManager
 			}
 		}
 
-		mainCanvas.repaint();
+		mainCanvas.updateCanvas(true);
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------

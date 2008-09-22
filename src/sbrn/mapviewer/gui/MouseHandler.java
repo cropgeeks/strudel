@@ -103,7 +103,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		{
 			// first repaint without the rectangle showing
 			winMain.mainCanvas.drawSelectionRect = false;
-			winMain.mainCanvas.repaint();
+			winMain.mainCanvas.updateCanvas(true);
 
 			// then request zooming for the selected map with the given set of coordinates
 			// get the selected set first
@@ -114,7 +114,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 
 		//turn antialiasing on and repaint
 		winMain.mainCanvas.antiAlias = true;
-		winMain.mainCanvas.repaint();
+		winMain.mainCanvas.updateCanvas(true);
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -143,12 +143,12 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		}
 
 		// mouse is getting dragged horizontally with SHIFT down -- draw a rectangle for zoom selection
-		if (e.getX() > mouseDragPosX && e.isShiftDown())
+		if (e.isShiftDown())
 		{
 			winMain.mainCanvas.mouseDraggedX = e.getX();
 			winMain.mainCanvas.mouseDraggedY = e.getY();
 			winMain.mainCanvas.drawSelectionRect = true;
-			winMain.mainCanvas.repaint();
+			winMain.mainCanvas.updateCanvas(false);
 		}
 
 		// update the current drag positions

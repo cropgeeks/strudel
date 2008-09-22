@@ -234,10 +234,12 @@ public class GChromoMap
 	// draws labels next to features
 	public void drawHighlightedFeatureLabels(Graphics2D g2)
 	{
+		FontMetrics fm = g2.getFontMetrics();
+
 		if (highlightedFeatures != null && 	drawHighlightedFeatures)
 		{
 			// sort the feature list by the start position so the labels draw in the correct order
-			Collections.sort(highlightedFeatures);
+//			Collections.sort(highlightedFeatures);
 
 			// for all features in our list
 			for (Feature f : highlightedFeatures)
@@ -248,7 +250,7 @@ public class GChromoMap
 				// the usual font stuff
 				int fontHeight = 12;
 				g2.setFont(new Font("Sans-serif", Font.PLAIN, fontHeight));
-				FontMetrics fm = g2.getFontMetrics();
+
 				int stringWidth = fm.stringWidth(featureName);
 
 				// we need these for working out the y positions

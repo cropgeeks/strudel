@@ -83,6 +83,11 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener
 		// width of chromosomes -- set this to a fixed fraction of the screen width for now
 		int chromoWidth = canvasWidth / 10;
 
+		//background gradient from top to bottom, dark to light, starts black
+		Color b1 = Colors.backgroundGradientStartColour;
+		Color b2 = Colors.backgroundGradientEndColour;
+		g2.setPaint(new GradientPaint(canvasWidth/2, 0, b1, canvasWidth/2, canvasHeight, b2)); g2.fillRect(0, 0, canvasWidth, canvasHeight);
+
 		// now paint the chromosomes in this genome
 		// for each chromosome in the genome
 		for (GChromoMap gChromoMap : gMapSet.gMaps)
@@ -127,15 +132,17 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener
 			//set the rect height accordingly
 			rectHeight = Math.round(getHeight() * offsetProportionVisibleArea);
 		}
+
 		//set this all up
 		regionRect.setBounds(rectX, rectY, rectWidth, rectHeight);
+
 		//draw the rectangle
 		g2.setColor(Colors.overviewCanvasSelectionRectColour);
 		g2.draw(regionRect);
+
 		//fill it with a transparent paint
 		g2.setColor(Colors.overviewCanvasTransparentPaint);
 		g2.fill(regionRect);
-
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------------------------

@@ -18,22 +18,25 @@ public class CanvasZoomHandler
 	}
 
 	// =====================================methods===================================
-	
+
 	// gets invoked when the zoom is adjusted by using the sliders or the drag-and-zoom functionality
 	// adjusts the zoom factor and checks whether we need to display markers and labels
 	public void processContinuousZoomRequest(float newZoomFactor, float multiplier, int genomeIndex, boolean isSliderRequest)
 	{
 		GMapSet selectedSet = mainCanvas.gMapSetList.get(genomeIndex);
 		processContinuousZoomRequest(newZoomFactor, multiplier, selectedSet, isSliderRequest);
-	
+
 	}
-	
+
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
 	// gets invoked when the zoom is adjusted by using the sliders or the drag-and-zoom functionality
 	// adjusts the zoom factor and checks whether we need to display markers and labels
 	public void processContinuousZoomRequest(float newZoomFactor, float multiplier, GMapSet selectedSet, boolean isSliderRequest)
 	{
+
+		//make sure antialiasing is off
+		mainCanvas.antiAlias = false;
 
 		//for a request from the sliders we need to work out the multiplier but not the zoom factor
 		if(isSliderRequest)

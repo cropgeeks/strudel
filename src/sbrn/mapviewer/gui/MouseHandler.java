@@ -13,35 +13,33 @@ import scri.commons.gui.*;
 public class MouseHandler implements MouseInputListener, MouseWheelListener
 {
 	// =================================================vars========================================
-	
+
 	WinMain winMain;
 	int mouseDragPosY = 0;
 	int mouseDragPosX = 0;
 	int mousePressedX = -1;
 	int mousePressedY = -1;
-	int mouseDraggedX = -1;
-	int mouseDraggedY = -1;
 	MouseOverHandler mouseOverHandler;
-	
+
 	private boolean isOSX = SystemUtils.isMacOS();
-	
+
 	// ===============================================c'tors===========================================
-	
+
 	public MouseHandler(WinMain winMain)
 	{
 		this.winMain = winMain;
 		mouseOverHandler = new MouseOverHandler(winMain);
 	}
-	
+
 	// =================================================methods=======================================
-	
+
 	private boolean isMetaClick(MouseEvent e)
 	{
 		return isOSX && e.isMetaDown() || !isOSX && e.isControlDown();
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	// used for selecting chromosomes for display of links and for zooming
 	public void mouseClicked(MouseEvent e)
 	{
@@ -49,58 +47,54 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		{
 			GChromoMap selectedMap = Utils.getSelectedMap(winMain.mainCanvas.gMapSetList, e.getX(),
 							e.getY());
-			// System.out.println("mouse clicked with ALT down");
+
 			if (selectedMap != null)
 				winMain.mainCanvas.zoomHandler.processClickZoomRequest(selectedMap);
 			return;
 		}
-		
+
 		else if (e.isShiftDown() && e.isControlDown())
 		{
 			Vector<Feature> selectedFeatures = mouseOverHandler.detectMouseOver(e.getX(), e.getY());
 			mouseOverHandler.updateAnnotationDisplay(selectedFeatures, e.getX(), e.getY());
 		}
-		
+
 		else if (!isMetaClick(e))
 		{
-			// System.out.println("mouse clicked once");
 			winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(e.getX(), e.getY(), false);
 		}
-		
+
 		else if (isMetaClick(e))
 		{
-			// System.out.println("mouse clicked with CTRL down");
 			winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(e.getX(), e.getY(), true);
 		}
-		
+
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	public void mouseEntered(MouseEvent e)
 	{
-		
+
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	public void mouseExited(MouseEvent e)
 	{
-		
+
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	public void mousePressed(MouseEvent e)
 	{
-		mousePressedX = e.getX();
-		mousePressedY = e.getY();
 		winMain.mainCanvas.mousePressedX = e.getX();
 		winMain.mainCanvas.mousePressedY = e.getY();
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	// currently the only use for this is when we do pan-and-zoom and we release the mouse at the end of the panning
 	// in that case we want to trigger a zoom event which zooms into the selected region
 	public void mouseReleased(MouseEvent e)
@@ -110,24 +104,28 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			// first repaint without the rectangle showing
 			winMain.mainCanvas.drawSelectionRect = false;
 			winMain.mainCanvas.repaint();
-			
+
 			// then request zooming for the selected map with the given set of coordinates
 			// get the selected set first
 			int gMapSetIndex = getSelectedSet(e);
 			GChromoMap selectedMap = Utils.getSelectedMap(winMain, gMapSetIndex, mousePressedY);
 			winMain.mainCanvas.zoomHandler.processPanZoomRequest(selectedMap, mousePressedY, e.getY());
 		}
+
+		//turn antialiasing on and repaint
+		winMain.mainCanvas.antiAlias = true;
+		winMain.mainCanvas.repaint();
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	// used for various ways of zooming for now
 	public void mouseDragged(MouseEvent e)
 	{
 		// figure out whether the user is zooming the left or right genome
 		// simply divide the canvas in two halves for this and figure out where on the x axis the hit has occurred
 		int index = getSelectedSet(e);
-		
+
 		// mouse is getting dragged down -- zoom in
 		if (e.getY() > mouseDragPosY && !e.isShiftDown())
 		{
@@ -135,7 +133,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			float multiplier = 1.2f;
 			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(-1, multiplier, index, false);
 		}
-		
+
 		// mouse is getting dragged up -- zoom out
 		if (e.getY() < mouseDragPosY && !e.isShiftDown())
 		{
@@ -143,7 +141,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			float multiplier = 0.8f;
 			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(-1, multiplier, index, false);
 		}
-		
+
 		// mouse is getting dragged horizontally with SHIFT down -- draw a rectangle for zoom selection
 		if (e.getX() > mouseDragPosX && e.isShiftDown())
 		{
@@ -152,28 +150,28 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			winMain.mainCanvas.drawSelectionRect = true;
 			winMain.mainCanvas.repaint();
 		}
-		
+
 		// update the current drag positions
 		mouseDragPosX = e.getX();
 		mouseDragPosY = e.getY();
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	public void mouseMoved(MouseEvent e)
 	{
 		mouseOverHandler.detectMouseOver(e.getX(), e.getY());
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	// mouse scrolling of canvas
 	public void mouseWheelMoved(MouseWheelEvent e)
 	{
 		// figure out whether the user is zooming the left or right genome
 		int index = getSelectedSet(e);
 		GMapSet selectedSet = winMain.mainCanvas.gMapSetList.get(index);
-		
+
 		// work out by how much we have moved the mouse and in which direction
 		int notches = e.getWheelRotation();
 		float differential = 0;
@@ -185,21 +183,21 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		{
 			differential = (selectedSet.totalY / selectedSet.zoomFactor) * 0.3f;
 		}
-		
+
 		int newCenterPoint = (int) (selectedSet.centerPoint + differential);
 		winMain.mainCanvas.moveGenomeViewPort(selectedSet, newCenterPoint);
-		
+
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	// finds out which of the two genomes the current selection relates to
 	private int getSelectedSet(MouseEvent e)
 	{
 		// figure out which genome the user is zooming
-		
+
 		int index = -1;
-		
+
 		// if we have two genomes only
 		if (winMain.mainCanvas.gMapSetList.size() == 2)
 		{
@@ -218,7 +216,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		else if (winMain.mainCanvas.gMapSetList.size() == 3)
 		{
 			int oneThirdCanvas = Math.round(winMain.mainCanvas.getWidth() / 3);
-			
+
 			// simply divide the canvas in two halves for this and figure out where on the x axis the hit has occurred
 			if (e.getX() <= oneThirdCanvas)
 			{
@@ -236,10 +234,10 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 				index = 2;
 			}
 		}
-		
+
 		return index;
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 }// end class

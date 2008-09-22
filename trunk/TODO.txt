@@ -67,8 +67,6 @@ Menu bar support for new/infrequent users – Robbie
 
 
 FIXES:
-	
-- dynamic antialiasing -- only have it switched on when there is no scrolling (even if user selected it as on)
 - mouse controls need to be sorted out; clicking sometimes zooms instead
 
 

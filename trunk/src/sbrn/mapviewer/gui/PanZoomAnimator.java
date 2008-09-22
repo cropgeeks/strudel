@@ -35,6 +35,11 @@ public class PanZoomAnimator extends Thread
 
 	public void run()
 	{
+		System.out.println("PanZoomAnimator run()");
+
+		//turn antialiasing off
+		mainCanvas.antiAlias = false;
+
 		float totalFrames = fps * (millis / 1000);
 
 		// divide the difference between a scaling factor of 1 and the final scaling factor by the number of frames we want to use for this
@@ -102,6 +107,10 @@ public class PanZoomAnimator extends Thread
 
 		//now update the arrays with the position data
 		mainCanvas.winMain.fatController.initialisePositionArrays();
+
+		//turn antialiasing on and repaint
+		mainCanvas.antiAlias = true;
+		mainCanvas.repaint();
 
 	}
 

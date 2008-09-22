@@ -34,6 +34,9 @@ public class ClickZoomAnimator extends Thread
 
 	public void run()
 	{
+		//turn antialiasing off
+		mainCanvas.antiAlias = false;
+
 		//the total number of frames we need to render
 		float totalFrames = fps * (millis / 1000);
 		GMapSet selectedSet = selectedMap.owningSet;
@@ -85,6 +88,10 @@ public class ClickZoomAnimator extends Thread
 
 		//now update the arrays with the position data
 		mainCanvas.winMain.fatController.initialisePositionArrays();
+
+		//turn antialiasing on and repaint
+		mainCanvas.antiAlias = true;
+		mainCanvas.repaint();
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------

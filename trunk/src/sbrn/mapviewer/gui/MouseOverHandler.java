@@ -63,7 +63,7 @@ public class MouseOverHandler
 					// set the vector object of the selected map and repaint
 					selectedMap.highlightedFeatures = match;
 					selectedMap.drawHighlightedFeatures = true;
-					winMain.mainCanvas.repaint();
+					winMain.mainCanvas.updateCanvas(false);
 				}
 
 				//remember this map for the next time
@@ -137,7 +137,7 @@ public class MouseOverHandler
 			previousMap.drawHighlightedFeatures = false;
 			previousMap = null;
 
-			winMain.mainCanvas.repaint();
+			winMain.mainCanvas.updateCanvas(false);
 		}
 	}
 

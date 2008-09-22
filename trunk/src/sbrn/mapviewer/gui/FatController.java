@@ -8,20 +8,20 @@ import sbrn.mapviewer.gui.entities.*;
 
 public class FatController
 {
-	
+
 	// ===============================================vars===================================
-	
+
 	private WinMain winMain;
-	
+
 	// ===============================================c'tors===================================
-	
+
 	public FatController(WinMain winMain)
 	{
 		this.winMain = winMain;
 	}
-	
+
 	// ===============================================methods===================================
-	
+
 	// repaint the overview canvases
 	public void updateOverviewCanvases()
 	{
@@ -30,9 +30,9 @@ public class FatController
 			overviewCanvas.repaint();
 		}
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	//update visible zoom info
 	public void updateZoomControls()
 	{
@@ -41,13 +41,13 @@ public class FatController
 			zoomControlPanel.updateSliders();
 		}
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	public void changeBackgroundColour(String newColour)
 	{
 		Color colour = null;
-		
+
 		if (newColour.equals("black"))
 		{
 			colour = Color.BLACK;
@@ -64,16 +64,16 @@ public class FatController
 		{
 			colour = Color.white;
 		}
-		
+
 		// set all canvas backgrounds to the same colour
 		winMain.mainCanvas.setBackground(colour);
-		
+
 		// update the display
-		winMain.mainCanvas.repaint();
+		winMain.mainCanvas.updateCanvas(true);
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	public void initialisePositionArrays()
 	{
 		// for all gmapsets
@@ -85,13 +85,13 @@ public class FatController
 				gChromoMap.initArrays();
 			}
 		}
-		
+
 		// update the display
-		winMain.mainCanvas.repaint();
+		winMain.mainCanvas.updateCanvas(true);
 	}
-	
-	
-	
+
+
+
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 }// end class

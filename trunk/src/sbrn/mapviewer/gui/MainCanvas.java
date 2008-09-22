@@ -1,6 +1,7 @@
 package sbrn.mapviewer.gui;
 
 import java.awt.*;
+import java.awt.image.*;
 import java.util.*;
 
 import javax.swing.*;
@@ -71,6 +72,11 @@ public class MainCanvas extends JPanel
 	//this object handles the display of homology links
 	public LinkDisplayManager linkDisplayManager;
 
+	// Back-buffer for rendering
+	private BufferedImage buffer;
+	// Does the buffer need redrawn before use?
+	private boolean redraw = true;
+
 
 	// ============================c'tors==================================
 
@@ -82,7 +88,6 @@ public class MainCanvas extends JPanel
 		setUpGenomes(targetMapset, referenceMapSets);
 		linkDisplayManager = new LinkDisplayManager(this);
 		setBackground(Colors.mainCanvasBackgroundColour);
-		repaint();
 	}
 
 	// ============================methods==================================
@@ -134,14 +139,77 @@ public class MainCanvas extends JPanel
 
 	// ---------------------------------------------------------------------------------------------------------------------------------
 
-	// paint the genomes or portions thereof onto this canvas
-	public void paintComponent(Graphics g)
+	void updateCanvas(boolean invalidate)
 	{
-		Graphics2D g2 = (Graphics2D) g;
+		redraw = invalidate;
+		repaint();
+	}
 
-		// need to clear the canvas before we draw
-		super.paintComponent(g);
+	// ---------------------------------------------------------------------------------------------------------------------------------
 
+
+	public void paintComponent(Graphics graphics)
+	{
+		super.paintComponent(graphics);
+
+		Graphics2D g = (Graphics2D) graphics;
+
+		// Does the back-buffer need to be re-created before use
+		if (redraw || buffer == null)
+		{
+			// Do we need to create a new buffer (if the screen size has changed)
+			if (buffer == null || buffer.getWidth() != getWidth() || buffer.getHeight() != getHeight())
+			{
+				System.out.println("Creating buffer of " + ((getWidth()*getHeight()*3)/1024) + " kB");
+				buffer = (BufferedImage) createImage(getWidth(), getHeight());
+			}
+
+			// Render an image to the buffer
+			Graphics2D bufferGraphics = buffer.createGraphics();
+			paintCanvas(bufferGraphics);
+			bufferGraphics.dispose();
+		}
+
+		// Render the back-buffer
+		g.drawImage(buffer, 0, 0, null);
+
+
+		// Render any additional overlay images (highlights, mouse-overs etc)
+		//
+
+		// this optionally draws a rectangle delimiting a region we want to zoom in on
+		if (drawSelectionRect)
+		{
+			g.setPaint(new Color(1f, 1f, 1f, 0.25f));
+			g.fillRect(mousePressedX, mousePressedY, mouseDraggedX - mousePressedX,
+				mouseDraggedY - mousePressedY);
+
+			g.setColor(Colors.selectionRectColour);
+			// draw rectangle
+			g.drawRect(mousePressedX, mousePressedY, mouseDraggedX - mousePressedX,
+				mouseDraggedY - mousePressedY);
+		}
+
+		//now we need to draw the rest of the things relating to the map
+		//this needs to be done after drawing the links so it is all visible on top of the links
+		for (GMapSet gMapSet : gMapSetList)
+		{
+			// for each chromosome in the genome
+			for (GChromoMap gChromoMap : gMapSet.gMaps)
+			{
+				if(gChromoMap.isShowingOnCanvas)
+				{
+					gChromoMap.drawDistanceMarkers(g);
+					gChromoMap.drawHighlightedFeatureLabels(g);
+					gChromoMap.drawHighlightOutline(g);
+				}
+			}
+		}
+	}
+
+	// paint the genomes or portions thereof onto this canvas
+	private void paintCanvas(Graphics2D g2)
+	{
 		// check whether the user wants antialiasing on
 		if (antiAlias)
 		{
@@ -294,32 +362,6 @@ public class MainCanvas extends JPanel
 			linkDisplayManager.drawLinks(g2);
 		}
 
-		//now we need to draw the rest of the things relating to the map
-		//this needs to be done after drawing the links so it is all visible on top of the links
-		for (GMapSet gMapSet : gMapSetList)
-		{
-			// for each chromosome in the genome
-			for (GChromoMap gChromoMap : gMapSet.gMaps)
-			{
-				if(gChromoMap.isShowingOnCanvas)
-				{
-					gChromoMap.drawDistanceMarkers(g2);
-					gChromoMap.drawHighlightedFeatureLabels(g2);
-					gChromoMap.drawHighlightOutline(g2);
-				}
-			}
-		}
-
-
-		// this optionally draws a rectangle delimiting a region we want to zoom in on
-		if (drawSelectionRect)
-		{
-			g2.setColor(Colors.selectionRectColour);
-			// draw rectangle
-			g2.drawRect(mousePressedX, mousePressedY, mouseDraggedX - mousePressedX,
-							mouseDraggedY - mousePressedY);
-		}
-
 		// also need to update the overview canvases from here
 		winMain.fatController.updateOverviewCanvases();
 	}
@@ -387,7 +429,7 @@ public class MainCanvas extends JPanel
 
 		// update the centerpoint to the new percentage
 		gMapSet.centerPoint = newCenterPoint;
-		repaint();
+		updateCanvas(true);
 
 		//update overviews
 		winMain.fatController.updateOverviewCanvases();
@@ -396,7 +438,7 @@ public class MainCanvas extends JPanel
 		winMain.fatController.initialisePositionArrays();
 
 		antiAlias = true;
-		repaint();
+		updateCanvas(true);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------------------------

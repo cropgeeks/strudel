@@ -189,7 +189,7 @@ public class CanvasZoomHandler
 		}
 
 		// repaint the canvas
-		mainCanvas.repaint();
+		mainCanvas.updateCanvas(true);
 	}
 
 

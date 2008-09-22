@@ -17,17 +17,17 @@ import javax.swing.*;
  */
 public class ControlPanel extends javax.swing.JPanel implements ItemListener
 {
-	
+
 	WinMain winMain;
 	public double blastThreshold = 1;
-	
+
 	/** Creates new form ControlPanel */
 	public ControlPanel(WinMain winMain)
 	{
 		this.winMain = winMain;
 		initComponents();
 	}
-	
+
 	/** This method is called from within the constructor to
 	 * initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is
@@ -37,7 +37,7 @@ public class ControlPanel extends javax.swing.JPanel implements ItemListener
 	// <editor-fold defaultstate="collapsed" desc="Generated Code">
 	private void initComponents()
 	{
-		
+
 		jSeparator2 = new javax.swing.JSeparator();
 		jPanel1 = new javax.swing.JPanel();
 		antialiasCheckbox = new javax.swing.JCheckBox();
@@ -46,9 +46,9 @@ public class ControlPanel extends javax.swing.JPanel implements ItemListener
 		jSeparator3 = new javax.swing.JSeparator();
 		jSeparator4 = new javax.swing.JSeparator();
 		blastScoreLabel = new javax.swing.JLabel();
-		
+
 		jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Controls:"));
-		
+
 		antialiasCheckbox.setText("Line smoothing");
 		antialiasCheckbox.addItemListener(new java.awt.event.ItemListener()
 		{
@@ -57,9 +57,9 @@ public class ControlPanel extends javax.swing.JPanel implements ItemListener
 				ControlPanel.this.itemStateChanged(evt);
 			}
 		});
-		
+
 		jLabel2.setText("BLAST e-value cut-off (1.00E-):");
-		
+
 		eValueSlider.setMajorTickSpacing(100);
 		eValueSlider.setMaximum(300);
 		eValueSlider.setMinorTickSpacing(50);
@@ -73,10 +73,10 @@ public class ControlPanel extends javax.swing.JPanel implements ItemListener
 				eValueSliderStateChanged(evt);
 			}
 		});
-		
+
 		blastScoreLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 		blastScoreLabel.setText("Current value:                             ");
-		
+
 		org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
 		jPanel1.setLayout(jPanel1Layout);
 		jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(
@@ -127,7 +127,7 @@ public class ControlPanel extends javax.swing.JPanel implements ItemListener
 										10,
 										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addContainerGap(
 										152, Short.MAX_VALUE)));
-		
+
 		org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
 		this.setLayout(layout);
 		layout.setHorizontalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
@@ -144,11 +144,11 @@ public class ControlPanel extends javax.swing.JPanel implements ItemListener
 										Short.MAX_VALUE).addContainerGap()));
 	}// </editor-fold>
 	//GEN-END:initComponents
-	
+
 	private void eValueSliderStateChanged(javax.swing.event.ChangeEvent e)
 	{
 		JSlider source = (JSlider) e.getSource();
-		
+
 		//convert the value selected to the exponent of a small decimal and set this as
 		//the new BLAST threshold (which is a double)
 		int exponent = source.getValue();
@@ -159,15 +159,15 @@ public class ControlPanel extends javax.swing.JPanel implements ItemListener
 			blastThreshold = score.doubleValue();
 			blastScoreLabel.setText("Current value: " + blastThreshold);
 			//			blastScoreLabel.setText("Current value: " + Math.random());
-			winMain.mainCanvas.repaint();
+			winMain.mainCanvas.updateCanvas(true);
 		}
 		catch (ParseException e1)
 		{
 			e1.printStackTrace();
 		}
-		
+
 	}
-	
+
 	public void itemStateChanged(ItemEvent e)
 	{
 		if (e.getItemSelectable() == antialiasCheckbox)
@@ -180,10 +180,10 @@ public class ControlPanel extends javax.swing.JPanel implements ItemListener
 			{
 				winMain.mainCanvas.antiAlias = false;
 			}
-			winMain.mainCanvas.repaint();
+			winMain.mainCanvas.updateCanvas(true);
 		}
 	}
-	
+
 	//GEN-BEGIN:variables
 	// Variables declaration - do not modify
 	private javax.swing.JCheckBox antialiasCheckbox;
@@ -195,5 +195,5 @@ public class ControlPanel extends javax.swing.JPanel implements ItemListener
 	private javax.swing.JSeparator jSeparator3;
 	private javax.swing.JSeparator jSeparator4;
 	// End of variables declaration//GEN-END:variables
-	
+
 }

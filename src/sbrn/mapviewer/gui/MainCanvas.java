@@ -55,10 +55,7 @@ public class MainCanvas extends JPanel
 	// if true, paint a rectangle to indicate the fact that we are panning over a region we want to select for zooming in to
 	public boolean drawSelectionRect = false;
 	//these are the relevant coordinates for this
-	public int mousePressedX = -1;
-	public int mousePressedY = -1;
-	public int mouseDraggedX = -1;
-	public int mouseDraggedY = -1;
+	Rectangle selectionRect = new Rectangle();
 
 	//the handler for all zooming related events
 	public CanvasZoomHandler zoomHandler;
@@ -181,14 +178,17 @@ public class MainCanvas extends JPanel
 		if (drawSelectionRect)
 		{
 			g.setPaint(new Color(1f, 1f, 1f, 0.25f));
-			g.fillRect(mousePressedX, mousePressedY, mouseDraggedX - mousePressedX,
-				mouseDraggedY - mousePressedY);
+//			g.fillRect(mousePressedX, mousePressedY, mouseDraggedX - mousePressedX,
+//				mouseDraggedY - mousePressedY);
+			g.fill(selectionRect);
 
 			g.setColor(Colors.selectionRectColour);
 			// draw rectangle
-			g.drawRect(mousePressedX, mousePressedY, mouseDraggedX - mousePressedX,
-				mouseDraggedY - mousePressedY);
+//			g.drawRect(mousePressedX, mousePressedY, mouseDraggedX - mousePressedX,
+//				mouseDraggedY - mousePressedY);
+			g.draw(selectionRect);
 		}
+
 
 		//now we need to draw the rest of the things relating to the map
 		//this needs to be done after drawing the links so it is all visible on top of the links

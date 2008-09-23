@@ -89,8 +89,8 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 
 	public void mousePressed(MouseEvent e)
 	{
-		winMain.mainCanvas.mousePressedX = e.getX();
-		winMain.mainCanvas.mousePressedY = e.getY();
+		mousePressedX = e.getX();
+		mousePressedY = e.getY();
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -122,12 +122,15 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	// used for various ways of zooming for now
 	public void mouseDragged(MouseEvent e)
 	{
+		int x = e.getX();
+		int y = e.getY();
+
 		// figure out whether the user is zooming the left or right genome
 		// simply divide the canvas in two halves for this and figure out where on the x axis the hit has occurred
 		int index = getSelectedSet(e);
 
 		// mouse is getting dragged down -- zoom in
-		if (e.getY() > mouseDragPosY && !e.isShiftDown())
+		if (y > mouseDragPosY && !e.isShiftDown())
 		{
 			// the multiplier is the amount by which we multiply the current zoom factor to increase it
 			float multiplier = 1.2f;
@@ -135,7 +138,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		}
 
 		// mouse is getting dragged up -- zoom out
-		if (e.getY() < mouseDragPosY && !e.isShiftDown())
+		if (y < mouseDragPosY && !e.isShiftDown())
 		{
 			// the multiplier is the amount by which we multiply the current zoom factor to decrease it
 			float multiplier = 0.8f;
@@ -145,8 +148,31 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		// mouse is getting dragged horizontally with SHIFT down -- draw a rectangle for zoom selection
 		if (e.isShiftDown())
 		{
-			winMain.mainCanvas.mouseDraggedX = e.getX();
-			winMain.mainCanvas.mouseDraggedY = e.getY();
+			// +ve x
+			if (x >= mousePressedX)
+			{
+				winMain.mainCanvas.selectionRect.x = mousePressedX;
+				winMain.mainCanvas.selectionRect.width = x - mousePressedX;
+			}
+			// -ve x
+			else if (x < mousePressedX)
+			{
+				winMain.mainCanvas.selectionRect.x = x;
+				winMain.mainCanvas.selectionRect.width = mousePressedX - x;
+			}
+			// +ve y
+			if (y >= mousePressedY)
+			{
+				winMain.mainCanvas.selectionRect.y = mousePressedY;
+				winMain.mainCanvas.selectionRect.height = y - mousePressedY;
+			}
+			// -ve y
+			else if (y < mousePressedY)
+			{
+				winMain.mainCanvas.selectionRect.y = y;
+				winMain.mainCanvas.selectionRect.height = mousePressedY - y;
+			}
+
 			winMain.mainCanvas.drawSelectionRect = true;
 			winMain.mainCanvas.updateCanvas(false);
 		}

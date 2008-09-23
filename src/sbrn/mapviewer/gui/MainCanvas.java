@@ -467,4 +467,9 @@ public class MainCanvas extends JPanel
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
+	BufferedImage getImageBuffer()
+	{
+		return buffer;
+	}
+
 }// end class

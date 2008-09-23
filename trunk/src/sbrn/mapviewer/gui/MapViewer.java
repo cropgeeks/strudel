@@ -46,6 +46,8 @@ public class MapViewer
 		{
 			winMain = new WinMain();
 
+			TaskDialog.initialize(winMain, "MapViewer");
+
 			winMain.addWindowListener(new WindowAdapter()
 			{
 				public void windowClosing(WindowEvent e)

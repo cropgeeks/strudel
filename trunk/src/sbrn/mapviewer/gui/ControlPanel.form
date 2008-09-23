@@ -54,15 +54,6 @@
                   <Component id="eValueSlider" pref="192" max="32767" attributes="2"/>
               </Group>
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jSeparator4" alignment="0" pref="177" max="32767" attributes="3"/>
-                      <Component id="blastScoreLabel" alignment="0" min="-2" max="-2" attributes="1"/>
-                      <Component id="antialiasCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jSeparator3" pref="172" max="32767" attributes="2"/>
                   <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
@@ -71,6 +62,16 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabel2" pref="172" max="32767" attributes="1"/>
                   <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+              </Group>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="bExport" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="jSeparator4" alignment="0" pref="177" max="32767" attributes="3"/>
+                      <Component id="blastScoreLabel" alignment="0" min="-2" max="-2" attributes="1"/>
+                      <Component id="antialiasCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -88,7 +89,9 @@
                   <Component id="blastScoreLabel" min="-2" pref="14" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                   <Component id="jSeparator4" min="-2" pref="10" max="-2" attributes="0"/>
-                  <EmptySpace pref="152" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="bExport" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="123" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -128,6 +131,11 @@
           <Properties>
             <Property name="horizontalAlignment" type="int" value="2"/>
             <Property name="text" type="java.lang.String" value="Current value:                             "/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="bExport">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Export image"/>
           </Properties>
         </Component>
       </SubComponents>

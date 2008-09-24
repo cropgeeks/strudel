@@ -48,6 +48,8 @@ public class MainCanvas extends JPanel
 
 	// do we need to draw links?
 	boolean linksToDraw = false;
+	// Do we need to draw blast scores?
+	boolean drawBlastScore = false;
 
 	// if true, antialias everything
 	public boolean antiAlias = false;
@@ -360,6 +362,15 @@ public class MainCanvas extends JPanel
 		if (linksToDraw == true)
 		{
 			linkDisplayManager.drawLinks(g2);
+		}
+
+		if (drawBlastScore)
+		{
+			int fontSize = canvasHeight / 40;
+			g2.setFont(new Font("Arial", Font.BOLD, fontSize));
+			g2.setColor(Colors.chromosomeIndexColour);
+
+			g2.drawString("BLAST e-value cut-off: " + LinkDisplayManager.blastThreshold, 50, 50);
 		}
 
 		// also need to update the overview canvases from here

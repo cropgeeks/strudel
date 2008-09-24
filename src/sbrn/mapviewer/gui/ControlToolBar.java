@@ -61,12 +61,26 @@ class ControlToolBar extends JToolBar implements ActionListener
 		eValueSlider.setMaximum(300);
 		eValueSlider.setMinorTickSpacing(50);
 //		eValueSlider.setPaintLabels(true);
-//		eValueSlider.setPaintTicks(true);
+		eValueSlider.setPaintTicks(true);
 		eValueSlider.setValue(0);
         eValueSlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 eValueSliderStateChanged(evt);
             }
+        });
+
+        eValueSlider.addMouseListener(new MouseAdapter() {
+        	public void mousePressed(MouseEvent e)
+        	{
+        		winMain.mainCanvas.drawBlastScore = true;
+        		winMain.mainCanvas.updateCanvas(true);
+        	}
+
+        	public void mouseReleased(MouseEvent e)
+        	{
+        		winMain.mainCanvas.drawBlastScore = false;
+        		winMain.mainCanvas.updateCanvas(true);
+        	}
         });
 
 		bOpen = (JButton) getButton(false, "", "Load data into Mapviewer", Icons.FILEOPEN);
@@ -144,7 +158,7 @@ class ControlToolBar extends JToolBar implements ActionListener
 			Number score = df.parse("1.00E-" + exponent);
 			LinkDisplayManager.blastThreshold = score.doubleValue();
 			blastScoreLabel.setText("" + LinkDisplayManager.blastThreshold);
-			//			blastScoreLabel.setText("Current value: " + Math.random());
+
 			winMain.mainCanvas.updateCanvas(true);
 		}
 		catch (ParseException e1)

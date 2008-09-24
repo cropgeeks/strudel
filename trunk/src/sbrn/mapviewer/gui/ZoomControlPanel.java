@@ -39,8 +39,6 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 
 	private void setupComponents()
 	{
-		this.setLayout(new GridLayout(1, 2));
-
 		int sliderMin = 1;
 		int sliderMax = 500;
 		int sliderInitialVal = 1;
@@ -48,20 +46,24 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		// left hand control
 		JPanel leftPanel = new JPanel();
 		//label
-		label = new JLabel();
-		label.setText("Zoom:");
-		leftPanel.add(label);
+		label = new JLabel(Icons.ZOOM);
 		zoomSlider = new JSlider(sliderMin, sliderMax, sliderInitialVal);
+		zoomSlider.setToolTipText("Zoom this genome in or out");
 		// add it
 		zoomSlider.addChangeListener(this);
-		leftPanel.add(zoomSlider);
 		//reset button
-		resetButton = new JButton("Reset");
+		resetButton = new JButton(Icons.RESET);
+		resetButton.setToolTipText("Reset zoom");
 		resetButton.addActionListener(this);
-		leftPanel.add(resetButton);
-		// add the panel
-		this.add(leftPanel);
+		if (scri.commons.gui.SystemUtils.isMacOS() == false)
+			resetButton.setMargin(new Insets(2, 1, 2, 1));
 
+		add(new JLabel("  "));
+		add(label);
+		add(new JLabel(" "));
+		add(zoomSlider);
+		add(resetButton);
+		add(new JLabel("  "));
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -109,22 +109,22 @@ public class WinMain extends JFrame
 		//the fat controller
 		fatController = new FatController(this);
 
-		//this panel contains everything else in a borderlayout
-		JPanel topContainerPanel = new JPanel(new BorderLayout());
 		//this panel contains the main canvas and the annotation panel below it
 		JPanel mainPanel = new JPanel(new BorderLayout());
-		//this panel contains the two overview panels and the control panel
-		JPanel leftPanel = new JPanel(new BorderLayout());
-		//a panel for the two overview canvases
+		//a panel for the zoom controls
 		JPanel zoomControlContainerPanel = new JPanel(new GridLayout(1,dataContainer.numRefGenomes+1));
-		//the panel at the bottom of the main canvas -- contains annotation and zoom control panels
-		JPanel bottomPanel = new JPanel(new BorderLayout());
 
 		overviewDialog.createLayout();
 
 		//this is the main canvas which we render the genomes on
 		mainCanvas = new MainCanvas(dataContainer.targetMapset, dataContainer.referenceMapsets, this, dataContainer.linkSets);
 		mainPanel.add(mainCanvas, BorderLayout.CENTER);
+
+//		mainPanel.setBorder(BorderFactory.createCompoundBorder(
+//			BorderFactory.createLineBorder(new Color(0, 45, 150)),
+//			BorderFactory.createLineBorder(new Color(125, 133, 151), 1)));
+
+		mainPanel.setBorder(BorderFactory.createLineBorder(new Color(125, 133, 151), 2));
 
 		//add mousehandler
 		MouseHandler mouseHandler = new MouseHandler(this);
@@ -138,7 +138,7 @@ public class WinMain extends JFrame
 		{
 			ZoomControlPanel zoomControlPanel = new ZoomControlPanel(this, gMapSet);
 			zoomControlContainerPanel.add(zoomControlPanel);
-			zoomControlPanel.setPreferredSize(new Dimension(800, 100));
+//			zoomControlPanel.setPreferredSize(new Dimension(800, 100));
 			zoomControlPanels.add(zoomControlPanel);
 		}
 
@@ -149,13 +149,7 @@ public class WinMain extends JFrame
 //		annotationContainerPanel.add(targetAnnotationPanel);
 //		annotationContainerPanel.add(referenceAnnotationPanel);
 
-		//now stick both the zoom controls and the annotation panels in the bottom panel and add it
-		bottomPanel.add(zoomControlContainerPanel, BorderLayout.NORTH);
-//		bottomPanel.add(annotationContainerPanel, BorderLayout.CENTER);
-		mainPanel.add(bottomPanel,BorderLayout.SOUTH);
-
 		//the control panel
-		controlPanel = new ControlPanel(this);
 		toolbar = new ControlToolBar(this);
 
 		//the overviews for the genomes
@@ -170,14 +164,9 @@ public class WinMain extends JFrame
 
 		overviewDialog.setVisible(Prefs.guiOverviewVisible);
 
-		//put it all together
-		leftPanel.add(controlPanel,BorderLayout.CENTER);
-
-//		topContainerPanel.add(leftPanel, BorderLayout.WEST);
-		topContainerPanel.add(mainPanel, BorderLayout.CENTER);
-		this.add(topContainerPanel);
-
 		add(toolbar, BorderLayout.NORTH);
+		add(mainPanel);
+		add(zoomControlContainerPanel, BorderLayout.SOUTH);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------

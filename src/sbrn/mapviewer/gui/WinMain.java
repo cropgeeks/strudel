@@ -11,9 +11,9 @@ import scri.commons.gui.*;
 
 public class WinMain extends JFrame
 {
-	
-//=================================================vars=====================================	
-	
+
+//=================================================vars=====================================
+
 	//this is where we hold the genome data
 	public DataContainer dataContainer;
 
@@ -21,14 +21,17 @@ public class WinMain extends JFrame
 	public static MainCanvas mainCanvas;
 	public LinkedList<ZoomControlPanel> zoomControlPanels = new LinkedList<ZoomControlPanel>();
 	public ControlPanel controlPanel;
+	public ControlToolBar toolbar;
 	public AnnotationPanel targetAnnotationPanel;
 	public AnnotationPanel referenceAnnotationPanel;
 	public LinkedList<OverviewCanvas> overviewCanvases = new LinkedList<OverviewCanvas>();
 
+	public OverviewDialog overviewDialog = new OverviewDialog(this);
+
 	//the controller for the whole application
 	FatController fatController;
-	
-//=================================================c'tor=====================================	
+
+//=================================================c'tor=====================================
 
 	public WinMain()
 	{
@@ -64,8 +67,8 @@ public class WinMain extends JFrame
 		addListeners();
 	}
 
-	//=================================================methods=====================================		
-	
+	//=================================================methods=====================================
+
 	private void addListeners()
 	{
 		addComponentListener(new ComponentAdapter() {
@@ -82,6 +85,8 @@ public class WinMain extends JFrame
 				}
 				else
 					Prefs.guiWinMainMaximized = true;
+
+				mainCanvas.redraw = true;
 			}
 
 			public void componentMoved(ComponentEvent e)
@@ -91,10 +96,12 @@ public class WinMain extends JFrame
 					Prefs.guiWinMainX = getLocation().x;
 					Prefs.guiWinMainY = getLocation().y;
 				}
+
+				mainCanvas.redraw = true;
 			}
 		});
 	}
-	
+
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private void setupComponents()
@@ -104,17 +111,16 @@ public class WinMain extends JFrame
 
 		//this panel contains everything else in a borderlayout
 		JPanel topContainerPanel = new JPanel(new BorderLayout());
-		//this panel contains the main canvas and the annotation panel below it 
+		//this panel contains the main canvas and the annotation panel below it
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		//this panel contains the two overview panels and the control panel
 		JPanel leftPanel = new JPanel(new BorderLayout());
-		//a panel for the  overview canvases
-		JPanel overViewsContainerPanel = new JPanel(new GridLayout(1,dataContainer.numRefGenomes+1));
 		//a panel for the two overview canvases
 		JPanel zoomControlContainerPanel = new JPanel(new GridLayout(1,dataContainer.numRefGenomes+1));
 		//the panel at the bottom of the main canvas -- contains annotation and zoom control panels
 		JPanel bottomPanel = new JPanel(new BorderLayout());
 
+		overviewDialog.createLayout();
 
 		//this is the main canvas which we render the genomes on
 		mainCanvas = new MainCanvas(dataContainer.targetMapset, dataContainer.referenceMapsets, this, dataContainer.linkSets);
@@ -150,25 +156,30 @@ public class WinMain extends JFrame
 
 		//the control panel
 		controlPanel = new ControlPanel(this);
+		toolbar = new ControlToolBar(this);
 
-		//the overviews for the genomes		
+		//the overviews for the genomes
 		for (GMapSet gMapSet : mainCanvas.gMapSetList)
 		{
 			OverviewCanvas overviewCanvas = new OverviewCanvas(this,gMapSet);
 			overviewCanvas.setPreferredSize(new Dimension(0,250));
-			overViewsContainerPanel.add(overviewCanvas);
+//			overViewsContainerPanel.add(overviewCanvas);
+			overviewDialog.addCanvas(overviewCanvas);
 			overviewCanvases.add(overviewCanvas);
 		}
-		
+
+		overviewDialog.setVisible(Prefs.guiOverviewVisible);
+
 		//put it all together
-		leftPanel.add(overViewsContainerPanel,BorderLayout.NORTH);
 		leftPanel.add(controlPanel,BorderLayout.CENTER);
 
-		topContainerPanel.add(leftPanel, BorderLayout.WEST);
+//		topContainerPanel.add(leftPanel, BorderLayout.WEST);
 		topContainerPanel.add(mainPanel, BorderLayout.CENTER);
 		this.add(topContainerPanel);
+
+		add(toolbar, BorderLayout.NORTH);
 	}
-	
+
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 }//end class

@@ -8,7 +8,7 @@ import javax.swing.event.*;
 
 import sbrn.mapviewer.gui.entities.*;
 
-public class ZoomControlPanel extends JPanel implements ChangeListener, ActionListener
+public class ZoomControlPanel extends JToolBar implements ChangeListener, ActionListener
 {
 	// ===============================================vars=======================================
 
@@ -24,8 +24,14 @@ public class ZoomControlPanel extends JPanel implements ChangeListener, ActionLi
 	public ZoomControlPanel(WinMain winMain,GMapSet gMapSet)
 	{
 		super();
+
 		this.winMain = winMain;
 		this.gMapSet = gMapSet;
+
+
+		setFloatable(false);
+		setBorderPainted(false);
+
 		setupComponents();
 	}
 

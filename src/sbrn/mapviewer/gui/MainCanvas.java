@@ -72,7 +72,7 @@ public class MainCanvas extends JPanel
 	// Back-buffer for rendering
 	private BufferedImage buffer;
 	// Does the buffer need redrawn before use?
-	private boolean redraw = true;
+	boolean redraw = true;
 
 
 	// ============================c'tors==================================

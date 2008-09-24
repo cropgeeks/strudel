@@ -42,7 +42,7 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener
 
 		regionRect = new Rectangle();
 
-		setBorder(BorderFactory.createLineBorder(new Color(180, 180, 180), 1));
+		setBorder(BorderFactory.createLineBorder(new Color(180, 180, 180)));
 		setBackground(Colors.overviewCanvasBackgroundColour);
 
 		this.addMouseMotionListener(this);

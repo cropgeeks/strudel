@@ -9,6 +9,8 @@ public class Icons
 	public static ImageIcon FILEOPEN;
 	public static ImageIcon HELP;
 	public static ImageIcon OVERVIEW;
+	public static ImageIcon RESET;
+	public static ImageIcon ZOOM;
 
 	private Icons()
 	{

@@ -40,6 +40,9 @@ public class MapViewer
 			if (SystemUtils.isWindows() && !SystemUtils.isWindowsVista())
 				UIManager.setLookAndFeel("org.fife.plaf.Office2003.Office2003LookAndFeel");
 
+			// TODO: Check whether this is needed on all OSs or not
+			UIManager.put("Slider.focus", new java.awt.Color(0, 0, 0, 0));
+
 			// Keep Apple happy...
 			if (SystemUtils.isMacOS())
 				handleOSXStupidities();

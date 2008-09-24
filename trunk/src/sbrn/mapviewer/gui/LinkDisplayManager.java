@@ -8,7 +8,7 @@ import sbrn.mapviewer.gui.entities.*;
 
 public class LinkDisplayManager
 {
-
+	static double blastThreshold = 1;
 //	====================================vars===============================================
 
 	MainCanvas mainCanvas;
@@ -186,7 +186,7 @@ public class LinkDisplayManager
 						for (Link link : selectedLinks)
 						{
 							// we only want to draw this link if it has a BLAST e-value smaller than the cut-off currently selected by the user
-							if (link.getBlastScore() <= mainCanvas.winMain.controlPanel.blastThreshold)
+							if (link.getBlastScore() <= blastThreshold)
 							{
 								// get the positional data of feature1 (which is on the selected chromo) and the end point of the map
 								float feat1Start = link.getFeature1().getStart();

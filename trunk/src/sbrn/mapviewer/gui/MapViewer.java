@@ -23,6 +23,8 @@ public class MapViewer
 		prefs.loadPreferences(prefsFile, Prefs.class);
 		Install4j.pingServer();
 
+		Icons.initialize();
+
 		new MapViewer();
 
 	}
@@ -33,6 +35,10 @@ public class MapViewer
 		{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			UIManager.put("TextArea.font", UIManager.get("TextField.font"));
+
+			// Use the office look for Windows (but not for Vista)
+			if (SystemUtils.isWindows() && !SystemUtils.isWindowsVista())
+				UIManager.setLookAndFeel("org.fife.plaf.Office2003.Office2003LookAndFeel");
 
 			// Keep Apple happy...
 			if (SystemUtils.isMacOS())

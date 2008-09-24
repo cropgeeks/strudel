@@ -18,4 +18,11 @@ public class Prefs extends XMLPreferences
 	public static int guiWinMainX = 0;
 	public static int guiWinMainY = 0;
 	public static boolean guiWinMainMaximized = false;
+
+	// The width, height, location and visibility of the overview dialog
+	public static int guiOverviewWidth = 300;
+	public static int guiOverviewHeight = 275;
+	public static int guiOverviewX = 0;
+	public static int guiOverviewY = 0;
+	public static boolean guiOverviewVisible = true;
 }

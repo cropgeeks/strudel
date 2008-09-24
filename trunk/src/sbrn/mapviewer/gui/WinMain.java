@@ -20,7 +20,6 @@ public class WinMain extends JFrame
 	//Swing components that make up the GUI
 	public static MainCanvas mainCanvas;
 	public LinkedList<ZoomControlPanel> zoomControlPanels = new LinkedList<ZoomControlPanel>();
-	public ControlPanel controlPanel;
 	public ControlToolBar toolbar;
 	public AnnotationPanel targetAnnotationPanel;
 	public AnnotationPanel referenceAnnotationPanel;

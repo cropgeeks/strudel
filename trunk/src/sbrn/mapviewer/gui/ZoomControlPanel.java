@@ -51,6 +51,9 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		zoomSlider.setToolTipText("Zoom this genome in or out");
 		// add it
 		zoomSlider.addChangeListener(this);
+		zoomSlider.setPaintTicks(true);
+		zoomSlider.setMinorTickSpacing(50);
+		zoomSlider.setMajorTickSpacing(100);
 		//reset button
 		resetButton = new JButton(Icons.RESET);
 		resetButton.setToolTipText("Reset zoom");

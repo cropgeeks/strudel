@@ -53,7 +53,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			return;
 		}
 
-		else if (e.isShiftDown() && e.isControlDown())
+		else if (e.isShiftDown() && isMetaClick(e))
 		{
 			Vector<Feature> selectedFeatures = mouseOverHandler.detectMouseOver(e.getX(), e.getY());
 			mouseOverHandler.updateAnnotationDisplay(selectedFeatures, e.getX(), e.getY());
@@ -99,7 +99,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	// in that case we want to trigger a zoom event which zooms into the selected region
 	public void mouseReleased(MouseEvent e)
 	{
-		if (e.isShiftDown() && !e.isControlDown())
+		if (e.isShiftDown() && !isMetaClick(e))
 		{
 			// first repaint without the rectangle showing
 			winMain.mainCanvas.drawSelectionRect = false;

@@ -23,7 +23,7 @@
 	</target>
 
 	<target name="compile" depends="clean">
-		<javac srcdir="${src}" destdir="${classes}" target="1.5">
+		<javac srcdir="${src}" destdir="${classes}" target="1.5" debug="yes">
 			<classpath refid="project.classpath"/>
 			<exclude name="**/package-info.java"/>
 		</javac>

@@ -194,6 +194,9 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	// mouse scrolling of canvas
 	public void mouseWheelMoved(MouseWheelEvent e)
 	{
+		//turn antialiasing off for faster scrolling
+		winMain.mainCanvas.antiAlias = false;
+
 		// figure out whether the user is zooming the left or right genome
 		int index = getSelectedSet(e);
 		GMapSet selectedSet = winMain.mainCanvas.gMapSetList.get(index);
@@ -212,6 +215,10 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 
 		int newCenterPoint = (int) (selectedSet.centerPoint + differential);
 		winMain.mainCanvas.moveGenomeViewPort(selectedSet, newCenterPoint);
+
+		//turn antialiasing back on and repaint
+		winMain.mainCanvas.antiAlias = true;
+		winMain.mainCanvas.updateCanvas(true);
 
 	}
 

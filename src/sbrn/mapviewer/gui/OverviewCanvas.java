@@ -4,10 +4,11 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
+import javax.swing.event.*;
 
 import sbrn.mapviewer.gui.entities.*;
 
-public class OverviewCanvas extends JPanel implements MouseMotionListener
+public class OverviewCanvas extends JPanel implements MouseMotionListener, MouseInputListener
 {
 //	===========================================vars================================
 
@@ -46,6 +47,7 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener
 		setBackground(Colors.overviewCanvasBackgroundColour);
 
 		this.addMouseMotionListener(this);
+		this.addMouseListener(this);
 	}
 
 	// ========================================methods=============================
@@ -199,15 +201,20 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener
 
 	public void mouseReleased(MouseEvent e)
 	{
-
+		//turn antialiasing on and repaint
+		//we do this so we can move the selection rectangle on the overview without antialias for better performance, and then
+		//we want to redraw when we are done moving it
+		winMain.mainCanvas.antiAlias = true;
+		winMain.mainCanvas.updateCanvas(true);
 	}
 
 	//used to move the genome viewport to a position in the genome equivalent to that the user just dragged
 	//the mouse to in the overview canvas
 	public void mouseDragged(MouseEvent e)
 	{
+		//turn off antialias on the main canvas while moving the selection rectangle
+		winMain.mainCanvas.antiAlias = false;
 		processLineDragRequest(e.getY());
-
 	}
 
 	public void mouseMoved(MouseEvent e)

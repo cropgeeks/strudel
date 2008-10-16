@@ -133,7 +133,7 @@ public class MouseOverHandler
 		// reset the selected map if the mouse is not over it
 		if (previousMap != null  && !previousMap.persistHighlightedFeatures)
 		{
-			previousMap.highlightedFeatures = null;
+			previousMap.highlightedFeatures.clear();
 			previousMap.drawHighlightedFeatures = false;
 			previousMap = null;
 

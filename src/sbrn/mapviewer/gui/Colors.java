@@ -19,6 +19,12 @@ public class Colors
 
 	public static Color featureColour = new Color(150,150,150);
 
+	public static Color highlightedFeatureColour = new Color(0,255,0);
+	
+	public static Color highlightedFeatureLabelColour = Color.black;
+	
+	public static Color highlightedFeatureLabelBackgroundColour = new Color(1,1,1,0.75f);
+
 	public static Color selectionRectColour = Color.red;
 
 	public static Color distanceMarkerColour = new Color(200,200,200);

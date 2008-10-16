@@ -53,7 +53,7 @@ public class GChromoMap
 	public boolean isShowingOnCanvas = true;
 
 	// a vector containing features whose labels are to be displayed when the chromosome is drawn
-	public Vector<Feature> highlightedFeatures;
+	public Vector<Feature> highlightedFeatures = new Vector<Feature>();
 
 	//a boolean indicating whether we want to draw the highlighted features or not
 	public boolean drawHighlightedFeatures = false;
@@ -68,6 +68,8 @@ public class GChromoMap
 	public boolean arraysInitialized = false;
 
 	Color centreColour;
+	
+	public Vector<Feature> foundFeatures = new Vector<Feature>();
 
 	// ============================c'tors==================================
 
@@ -79,6 +81,9 @@ public class GChromoMap
 		this.owningSet = owningSet;
 		this.chromoMap = (ChromoMap) owningSet.mapSet.getMaps().get(index);
 		centreColour = owningSet.colour.brighter().brighter().brighter().brighter();
+
+		//for convenience also set this object on the ChromoMap object so we can do lookups in either direction
+		chromoMap.setGChromoMap(this);
 	}
 
 	// ============================methods==================================
@@ -105,15 +110,14 @@ public class GChromoMap
 		g2.fillRect(width / 2, 0, width / 2, height);
 
 		//draw the bounding rectangle in the colour of the chromosome
-//		g2.setColor(colour);
-//		g2.drawRect(0, 0, width, height);
+		g2.setColor(colour);
+		g2.drawRect(0, 0, width, height);
 
 		// now draw features and labels as required
 		if (owningSet.paintAllMarkers && isShowingOnCanvas)
 		{
 			drawAllFeatures(g2);
 		}
-
 	}
 
 
@@ -232,15 +236,12 @@ public class GChromoMap
 	// -----------------------------------------------------------------------------------------------------------------------------------------
 
 	// draws labels next to features
-	public void drawHighlightedFeatureLabels(Graphics2D g2)
+	public void drawHighlightedFeatures(Graphics2D g2)
 	{
 		FontMetrics fm = g2.getFontMetrics();
 
-		if (highlightedFeatures != null && 	drawHighlightedFeatures)
+		if (highlightedFeatures.size() > 0 && 	drawHighlightedFeatures)
 		{
-			// sort the feature list by the start position so the labels draw in the correct order
-//			Collections.sort(highlightedFeatures);
-
 			// for all features in our list
 			for (Feature f : highlightedFeatures)
 			{
@@ -346,6 +347,11 @@ public class GChromoMap
 
 				// draw a line from the marker to the label
 				g2.drawLine(lineStartX, featureY, labelLineEnd, labelY - fontHeight / 2);
+
+				// draw a line for the marker on the chromosome itself
+				//first set the colour accordingly
+				g2.setColor(Colors.highlightedFeatureColour);
+				g2.drawLine(lineStartX, featureY, lineStartX + width - 1, featureY);
 			}
 		}
 	}

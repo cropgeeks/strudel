@@ -73,8 +73,10 @@ public class GMapSet
 	//the same for drawing labels
 	public float thresholdLabelPainting;
 
-	//a vector of maps in this mapset that are currently visible
-//	public Vector<GChromoMap> visibleMaps = new Vector<GChromoMap>();
+	//the zoom factor at which we would fit a single chromosome (but nothing else) on the visible portion of the canvas
+	public float singleChromoViewZoomFactor;
+	
+	public Vector<Feature> foundFeatures = new Vector<Feature>();
 
 	// ====================================c'tors========================================
 

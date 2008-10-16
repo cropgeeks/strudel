@@ -17,6 +17,7 @@ public class MapViewer
 
 	public static void main(String[] args)
 	{
+
 		// OS X: This has to be set before anything else
 		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Map Viewer");
 

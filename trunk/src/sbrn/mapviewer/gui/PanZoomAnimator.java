@@ -35,8 +35,6 @@ public class PanZoomAnimator extends Thread
 
 	public void run()
 	{
-		System.out.println("PanZoomAnimator run()");
-
 		//turn antialiasing off
 		mainCanvas.antiAlias = false;
 

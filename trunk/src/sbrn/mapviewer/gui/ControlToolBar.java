@@ -7,6 +7,7 @@ import java.text.*;
 import javax.imageio.*;
 import javax.swing.*;
 
+import sbrn.mapviewer.gui.dialog.*;
 import scri.commons.gui.*;
 
 class ControlToolBar extends JToolBar implements ActionListener
@@ -18,7 +19,11 @@ class ControlToolBar extends JToolBar implements ActionListener
 	private JToggleButton bOverview;
 	private JButton bHelp;
 	private JLabel blastLabel, blastScoreLabel;
-    private JSlider eValueSlider;
+	private JSlider eValueSlider;
+	private JButton bFindFeatures;
+	private JButton bResetAll;
+	public FindFeaturesDialog ffDialog = new FindFeaturesDialog();
+
 
 	ControlToolBar(WinMain winMain)
 	{
@@ -37,6 +42,12 @@ class ControlToolBar extends JToolBar implements ActionListener
 
 		add(bOverview);
 		add(bExport);
+
+		addSeparator(true);
+
+		//maybe keep this group of controls on a theme of "does something with the data"
+		add(bFindFeatures);
+		add(bResetAll);
 
 		addSeparator(true);
 
@@ -88,6 +99,8 @@ class ControlToolBar extends JToolBar implements ActionListener
 		bOverview = (JToggleButton) getButton(true, "", "Toggle the overview dialog on or off", Icons.OVERVIEW);
 		bOverview.setSelected(Prefs.guiOverviewVisible);
 		bHelp =  (JButton) getButton(false, "", "Help", Icons.HELP);
+		bFindFeatures = (JButton) getButton(false, "", "Find Features", Icons.FIND);
+		bResetAll =  (JButton) getButton(false, "", "Reset Display", Icons.RESET);
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -97,6 +110,17 @@ class ControlToolBar extends JToolBar implements ActionListener
 
 		else if (e.getSource() == bOverview)
 			toggleOverviewDialog();
+
+		//show the find features dialog
+		else if (e.getSource() == bFindFeatures)
+		{
+			ffDialog.ffPanel.getFFTextArea().setText("");
+			ffDialog.setVisible(true);
+		}
+		
+		//reset the main canvas view and deselect all features
+		else if (e.getSource() == bResetAll)
+			MapViewer.winMain.fatController.resetMainCanvasView();
 	}
 
 	private void addSeparator(boolean separator)
@@ -212,4 +236,7 @@ class ControlToolBar extends JToolBar implements ActionListener
 			return;
 		}
 	}
+
+
+
 }

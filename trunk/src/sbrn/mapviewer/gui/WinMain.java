@@ -28,7 +28,7 @@ public class WinMain extends JFrame
 	public OverviewDialog overviewDialog = new OverviewDialog(this);
 
 	//the controller for the whole application
-	FatController fatController;
+	public FatController fatController;
 
 //=================================================c'tor=====================================
 

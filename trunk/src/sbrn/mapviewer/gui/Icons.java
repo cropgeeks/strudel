@@ -11,6 +11,7 @@ public class Icons
 	public static ImageIcon OVERVIEW;
 	public static ImageIcon RESET;
 	public static ImageIcon ZOOM;
+	public static ImageIcon FIND;
 
 	private Icons()
 	{

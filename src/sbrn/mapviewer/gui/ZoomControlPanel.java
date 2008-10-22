@@ -46,7 +46,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		// left hand control
 		JPanel leftPanel = new JPanel();
 		//label
-		label = new JLabel(Icons.ZOOM);
+		label = new JLabel(Icons.getIcon("ZOOM"));
 		zoomSlider = new JSlider(sliderMin, sliderMax, sliderInitialVal);
 		zoomSlider.setToolTipText("Zoom this genome in or out");
 		// add it
@@ -55,7 +55,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		zoomSlider.setMinorTickSpacing(50);
 		zoomSlider.setMajorTickSpacing(100);
 		//reset button
-		resetButton = new JButton(Icons.RESET);
+		resetButton = new JButton(Icons.getIcon("RESET"));
 		resetButton.setToolTipText("Reset zoom");
 		resetButton.addActionListener(this);
 		if (scri.commons.gui.SystemUtils.isMacOS() == false)

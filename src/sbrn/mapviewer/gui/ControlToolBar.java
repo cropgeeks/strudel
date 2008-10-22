@@ -94,13 +94,13 @@ class ControlToolBar extends JToolBar implements ActionListener
         	}
         });
 
-		bOpen = (JButton) getButton(false, "", "Load data into Mapviewer", Icons.FILEOPEN);
-		bExport = (JButton) getButton(false, "", "Export the display as an image", Icons.EXPORTIMAGE);
-		bOverview = (JToggleButton) getButton(true, "", "Toggle the overview dialog on or off", Icons.OVERVIEW);
+		bOpen = (JButton) getButton(false, "", "Load data into Mapviewer", Icons.getIcon("FILEOPEN"));
+		bExport = (JButton) getButton(false, "", "Export the display as an image", Icons.getIcon("EXPORTIMAGE"));
+		bOverview = (JToggleButton) getButton(true, "", "Toggle the overview dialog on or off", Icons.getIcon("OVERVIEW"));
 		bOverview.setSelected(Prefs.guiOverviewVisible);
-		bHelp =  (JButton) getButton(false, "", "Help", Icons.HELP);
-		bFindFeatures = (JButton) getButton(false, "", "Find Features", Icons.FIND);
-		bResetAll =  (JButton) getButton(false, "", "Reset Display", Icons.RESET);
+		bHelp =  (JButton) getButton(false, "", "Help", Icons.getIcon("HELP"));
+		bFindFeatures = (JButton) getButton(false, "", "Find Features", Icons.getIcon("FIND"));
+		bResetAll =  (JButton) getButton(false, "", "Reset Display", Icons.getIcon("RESET"));
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -117,7 +117,7 @@ class ControlToolBar extends JToolBar implements ActionListener
 			ffDialog.ffPanel.getFFTextArea().setText("");
 			ffDialog.setVisible(true);
 		}
-		
+
 		//reset the main canvas view and deselect all features
 		else if (e.getSource() == bResetAll)
 			MapViewer.winMain.fatController.resetMainCanvasView();

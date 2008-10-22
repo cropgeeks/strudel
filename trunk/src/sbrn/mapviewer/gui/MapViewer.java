@@ -24,10 +24,7 @@ public class MapViewer
 		prefs.loadPreferences(prefsFile, Prefs.class);
 		Install4j.pingServer();
 
-		Icons.initialize();
-
 		new MapViewer();
-
 	}
 
 	MapViewer()

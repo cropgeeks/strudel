@@ -34,7 +34,8 @@ class ControlToolBar extends JToolBar implements ActionListener
 
 		createControls();
 
-		add(new JLabel("  "));
+		if (SystemUtils.isMacOS() == false)
+			add(new JLabel("  "));
 
 		add(bOpen);
 
@@ -152,9 +153,13 @@ class ControlToolBar extends JToolBar implements ActionListener
 		button.setFocusPainted(false);
 		button.setFocusable(false);
 		button.addActionListener(this);
+		button.setMargin(new Insets(2, 1, 2, 1));
 
-		if (SystemUtils.isMacOS() == false)
-			button.setMargin(new Insets(2, 1, 2, 1));
+		if (SystemUtils.isMacOS())
+		{
+			button.putClientProperty("JButton.buttonType", "bevel");
+			button.setMargin(new Insets(-2, -1, -2, -1));
+		}
 
 		return button;
 	}

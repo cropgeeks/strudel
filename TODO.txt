@@ -30,7 +30,6 @@ Luke Ramsay's list (in descending order of priority):
 - highlight conflicts in conserved synteny, i.e. cases where the ordering of features differs between genomes
 - selective highlighting of region of interest by a) Photoshop-style pan-and-zoom and b) pan and select at same zoom level to display only markers and labels in selected region
 - filter link display by clicking
-- screen dumps
 - highlight gaps in reference genome sequence (i.e. regions for which there is no physical map)
 - move markers manually in GUI, at least in target genome
 - parallel homology systems, based on e.g. blastn vs blastx, user chooses which one to see
@@ -39,17 +38,13 @@ Luke Ramsay's list (in descending order of priority):
 ================================
 
 Jordi's list:
-
-
-- load one sequence / snp id or a short list of sequences / snps, and have directly on the comparative map viewer the correspondent locations for the best hits in rice / brachypodium 
+ 
 
 - different line colors for the best BLAST hit, second best hit, third best hit… 
 
 - plot QTL profiles along the barley chromosomes
 
 - select an interval on the rice / brachypodium side and get a list with all the genes located within the interval
-
-- highlight your gene(s)/ loci of interest next to the chromosomes (either in rice / barley) 
 
 ================================
 

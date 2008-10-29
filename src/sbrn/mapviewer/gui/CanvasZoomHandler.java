@@ -116,7 +116,8 @@ public class CanvasZoomHandler
 		// the length of time we want the animation to last in milliseconds
 		int millis = 1000;
 
-		float finalZoomFactor = mainCanvas.getHeight() / selectedSet.chromoHeight;
+		float finalZoomFactor = mainCanvas.initialCanvasHeight / mainCanvas.initialChromoHeight;
+		System.out.println("finalZoomFactor = " + finalZoomFactor);
 		// work out the chromo height and total genome height for when the new zoom factor will have been applied
 		int finalChromoHeight = (int) (mainCanvas.initialChromoHeight * finalZoomFactor);
 		// this is the combined height of all spacers -- does not change with the zoom factor

@@ -15,7 +15,12 @@ public class FatController
 	// ===============================================vars===================================
 	
 	private WinMain winMain;
-
+	public Vector<Feature> foundFeatures = null;
+	public Vector<Feature> foundFeatureHomologs = null;
+	public Vector<String> requestedFeatures = null;
+	public static GChromoMap invertMap = null;
+	
+	
 	
 	// ===============================================c'tors===================================
 	
@@ -94,74 +99,57 @@ public class FatController
 		winMain.mainCanvas.updateCanvas(true);
 	}
 	
+	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	public void highlightFeaturesByNames(String namesStr)
+	public void highlightRequestedFeature(String featureName)
 	{
-		//parse the String -- could be one or more names separated by EOL chars
-		String [] names = namesStr.split("\n");
-		
 		boolean featuresFound = false;
 		
-		//for each feature in our list of search items
-		for (int i = 0; i < names.length; i++)
-		{
-			//we need to search all chromomaps in all mapsets for this
-			
-			// for all gmapsets
-			for (GMapSet gMapSet : winMain.mainCanvas.gMapSetList)
-			{
-				// for all gchromomaps within each mapset
-				for (GChromoMap gChromoMap : gMapSet.gMaps)
-				{
-					//get the ChromoMap object
-					//look up the name in this
-					Feature f = gChromoMap.chromoMap.getFeature(names[i].trim());
-					//if it is there, add the corresponding Feature to the vector of found features of the gMap
-					if(f != null)
-					{
-						featuresFound = true;
-						winMain.mainCanvas.drawFoundFeatures = true;
-						
-						for(Link link : f.getLinks())
-						{
-							//get both features from the link and put them into their respective found features vectors
-							
-							//get the features of this link
-							Feature f1 = link.getFeature1();
-							Feature f2 = link.getFeature2();
-							
-							GChromoMap gMap1 = f1.getOwningMap().getGChromoMap();
-							GChromoMap gMap2 = f2.getOwningMap().getGChromoMap();
-
-							//check whether either of the features for this link are included in the highlightedfeatures list for its map
-							if(!gMap1.foundFeatures.contains(f1))
-							{
-								gMap1.foundFeatures.add(f1);
-							}
-							if(!gMap2.foundFeatures.contains(f2))
-							{
-								gMap2.foundFeatures.add(f2);
-							}
-						}						
-					}				
-				}
-			}
-		}
-		
-		
-		//now sort the vector with the found features so that they are in the orer in which they 
-		//appear on the chromosome
+		//we need to search all chromomaps in all mapsets for this	
 		// for all gmapsets
 		for (GMapSet gMapSet : winMain.mainCanvas.gMapSetList)
 		{
 			// for all gchromomaps within each mapset
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
 			{
-				Collections.sort(gChromoMap.foundFeatures);
+				//get the ChromoMap object
+				//look up the name in this
+				Feature f = gChromoMap.chromoMap.getFeature(featureName);
+				//if it is there, add the corresponding Feature to the vector of found features of the gMap
+				if(f != null)
+				{
+					featuresFound = true;
+					winMain.mainCanvas.drawFoundFeatures = true;
+					
+					//make new vectors
+					foundFeatures = new Vector<Feature>();
+					foundFeatureHomologs = new Vector<Feature>();
+					
+					//add the feature itself to the found features vector
+					foundFeatures.add(f);
+					
+					for(Link link : f.getLinks())
+					{
+						//get both features from the link and put the homologue into the homologues vector
+						
+						//get the features of this link
+						Feature f1 = link.getFeature1();
+						Feature f2 = link.getFeature2();
+						
+						//check whether either of the features for this link are included in the highlightedfeatures list for its map
+						if(!foundFeatures.contains(f1) && f1 != f)
+						{
+							foundFeatureHomologs.add(f1);
+						}
+						if(!foundFeatures.contains(f2) && f2 != f)
+						{
+							foundFeatureHomologs.add(f2);
+						}
+					}								
+				}
 			}
 		}
-		
 		
 		//nothing found by this name
 		if(!featuresFound)
@@ -181,6 +169,12 @@ public class FatController
 	//restores the original view to what it looked like after loading the current dataset
 	public void resetMainCanvasView()
 	{	
+		//clear the found features
+		if(foundFeatures != null)
+			foundFeatures.clear();
+		if(foundFeatureHomologs != null)
+			foundFeatureHomologs.clear();
+		
 		for(GMapSet gMapSet : winMain.mainCanvas.gMapSetList)
 		{
 			//reset zoom on all mapsets
@@ -188,15 +182,12 @@ public class FatController
 			
 			//reset selected maps
 			gMapSet.selectedMaps.clear();
-			
+
 			//for all maps within mapset
 			for(GChromoMap gMap: gMapSet.gMaps)
 			{			
 				//clear the outline
 				gMap.drawHighlightOutline = false;
-				
-				//clear the found features
-				gMap.foundFeatures.clear();
 			}			
 		}	
 		

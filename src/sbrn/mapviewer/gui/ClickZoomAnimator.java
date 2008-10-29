@@ -82,6 +82,10 @@ public class ClickZoomAnimator extends Thread
 			//update visible zoom info
 			mainCanvas.winMain.fatController.updateZoomControls();
 		}
+		
+		//do a final zoom adjust to ensure that we are at the right zoom level
+		selectedSet.zoomFactor = finalZoomFactor;
+		zoomHandler.adjustZoom(selectedMap, finalTotalY, finalChromoHeight, finalChromoHeight/2);
 
 		//update overviews
 		mainCanvas.winMain.fatController.updateOverviewCanvases();

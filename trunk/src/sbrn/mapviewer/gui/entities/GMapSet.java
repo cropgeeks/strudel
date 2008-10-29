@@ -76,7 +76,7 @@ public class GMapSet
 	//the zoom factor at which we would fit a single chromosome (but nothing else) on the visible portion of the canvas
 	public float singleChromoViewZoomFactor;
 	
-	public Vector<Feature> foundFeatures = new Vector<Feature>();
+	public TreeMap<Feature, Integer> foundFeatures = new TreeMap<Feature, Integer>();
 
 	// ====================================c'tors========================================
 

@@ -65,19 +65,19 @@ public class LinkDisplayManager
 					{
 						referenceGMapSet.selectAllMaps();
 					}
-					mainCanvas.linksToDraw = true;
+					mainCanvas.drawLinks = true;
 				}
 			}
 			
 			// now check whether we have selected chromosomes in the target genome
 			if (mainCanvas.gMapSetList.get(mainCanvas.targetGMapSetIndex).selectedMaps.size() > 0)
 			{
-				mainCanvas.linksToDraw = true;
+				mainCanvas.drawLinks = true;
 			}
 			// if not, we don't want to draw links, just display the selected outlines of the reference genome chromsomes
 			else
 			{
-				mainCanvas.linksToDraw = false;
+				mainCanvas.drawLinks = false;
 			}
 			
 		}
@@ -85,7 +85,7 @@ public class LinkDisplayManager
 		else
 		{
 			// don't draw links
-			mainCanvas.linksToDraw = false;
+			mainCanvas.drawLinks = false;
 			
 			// reset the selectedMaps vectors in all genomes -- this removes the highlight frames from the chromosomes
 			for (GMapSet mapSet : mainCanvas.gMapSetList)
@@ -102,108 +102,127 @@ public class LinkDisplayManager
 	// Draws the lines between a chromosome of the reference genome and all potential homologues in the compared genome
 	public void drawAllLinks(Graphics2D g2)
 	{
-		// check whether we have selected chromosomes in the target genome
-		// if not, we do not want to draw any links at all
-		if (mainCanvas.gMapSetList.get(mainCanvas.targetGMapSetIndex).selectedMaps.size() > 0)
+		try
 		{
-			// for each map in the selectedMaps vector of the target genome
-			for (int i = 0; i < mainCanvas.gMapSetList.get(mainCanvas.targetGMapSetIndex).selectedMaps.size(); i++)
+			// check whether we have selected chromosomes in the target genome
+			// if not, we do not want to draw any links at all
+			if (mainCanvas.gMapSetList.get(mainCanvas.targetGMapSetIndex).selectedMaps.size() > 0)
 			{
-				// get the currently selected map
-				GChromoMap selectedMap = mainCanvas.gMapSetList.get(mainCanvas.targetGMapSetIndex).selectedMaps.get(i);
-				
-				// get the ChromoMap for the currently selected chromosome
-				ChromoMap selectedChromoMap = selectedMap.chromoMap;
-				
-				// get all the links between the selected chromosome and the reference mapset
-				Vector<LinkSet> linkSets = mainCanvas.linkSetLookup.get(selectedChromoMap);
-				
-				float targetMapStop = selectedChromoMap.getStop();
-				
-				// for all selected links
-				for (LinkSet selectedLinks : linkSets)
+				// for each map in the selectedMaps vector of the target genome
+				for (int i = 0; i < mainCanvas.gMapSetList.get(mainCanvas.targetGMapSetIndex).selectedMaps.size(); i++)
 				{
+					// get the currently selected map
+					GChromoMap selectedMap = mainCanvas.gMapSetList.get(mainCanvas.targetGMapSetIndex).selectedMaps.get(i);
 					
-					//find out which reference mapset we are dealing with here
-					GMapSet referenceGMapSet = null;
-					for (GMapSet gMapSet : mainCanvas.referenceGMapSets)
-					{
-						if(gMapSet.mapSet == selectedLinks.getMapSets().get(1))
-							referenceGMapSet = gMapSet;
-					}
-										
-					// get the real coordinates for the selected chromo and the reference chromo
-					int selectedChromoY = selectedMap.y;
-					// the x coordinates have to be worked out
-					int targetChromoX = -1;
-					int referenceChromoX = -1;
+					// get the ChromoMap for the currently selected chromosome
+					ChromoMap selectedChromoMap = selectedMap.chromoMap;
 					
-					// if we have only one reference genome we want the targetChromoX to be that chromo'sx plus its width and
-					// the referenceChromoX to be the reference chromo's x
-					if (mainCanvas.referenceGMapSets.size() == 1 || (mainCanvas.referenceGMapSets.size() == 2 && mainCanvas.referenceGMapSets.indexOf(referenceGMapSet) == 1))
-					{
-						targetChromoX = Math.round(mainCanvas.gMapSetList.get(mainCanvas.targetGMapSetIndex).xPosition + mainCanvas.gMapSetList.get(mainCanvas.targetGMapSetIndex).gMaps.get(0).width);
-						referenceChromoX = Math.round(referenceGMapSet.xPosition);
-					}
-					// if we have two reference genomes and this is the first reference genome
-					else if (mainCanvas.referenceGMapSets.size() == 2 && mainCanvas.referenceGMapSets.indexOf(referenceGMapSet) == 0)
-					{
-						// we want the referenceChromoX to be the mapsets x plus its width
-						referenceChromoX = Math.round(referenceGMapSet.xPosition + referenceGMapSet.gMaps.get(0).width);
-						// and we want the target genome's x to be the targetChromoX
-						targetChromoX = Math.round(mainCanvas.gMapSetList.get(mainCanvas.targetGMapSetIndex).xPosition);
-					}
+					// get all the links between the selected chromosome and the reference mapset
+					Vector<LinkSet> linkSets = mainCanvas.linkSetLookup.get(selectedChromoMap);
 					
-					// check whether this is a linkset we want to draw
-					// this depends on which chromosome in the reference genome it points to
-					// the linksets are ordered by chromosome index
-					// check whether this index matches one of the ones in the vector of selected maps in the reference genome
-					boolean draw = false;
-					for (GChromoMap gMap : referenceGMapSet.selectedMaps)
-					{
-						if (gMap.isShowingOnCanvas)
-							draw = true;
-					}
+					float targetMapStop = selectedChromoMap.getStop();
 					
-					if (draw)
+					// for all selected links
+					for (LinkSet selectedLinks : linkSets)
 					{
-						// set the colour
-						g2.setColor(Colors.linkColour);
 						
-						// for each link in the linkset
-						for (Link link : selectedLinks)
+						//find out which reference mapset we are dealing with here
+						GMapSet referenceGMapSet = null;
+						for (GMapSet gMapSet : mainCanvas.referenceGMapSets)
 						{
-							// we only want to draw this link if it has a BLAST e-value smaller than the cut-off currently selected by the user
-							if (link.getBlastScore() <= blastThreshold)
+							if(gMapSet.mapSet == selectedLinks.getMapSets().get(1))
+								referenceGMapSet = gMapSet;
+						}
+											
+						// get the real coordinates for the selected chromo and the reference chromo
+						int selectedChromoY = selectedMap.y;
+						// the x coordinates have to be worked out
+						int targetChromoX = -1;
+						int referenceChromoX = -1;
+						
+						// if we have only one reference genome we want the targetChromoX to be that chromo'sx plus its width and
+						// the referenceChromoX to be the reference chromo's x
+						if (mainCanvas.referenceGMapSets.size() == 1 || (mainCanvas.referenceGMapSets.size() == 2 && mainCanvas.referenceGMapSets.indexOf(referenceGMapSet) == 1))
+						{
+							targetChromoX = Math.round(mainCanvas.gMapSetList.get(mainCanvas.targetGMapSetIndex).xPosition + mainCanvas.gMapSetList.get(mainCanvas.targetGMapSetIndex).gMaps.get(0).width);
+							referenceChromoX = Math.round(referenceGMapSet.xPosition);
+						}
+						// if we have two reference genomes and this is the first reference genome
+						else if (mainCanvas.referenceGMapSets.size() == 2 && mainCanvas.referenceGMapSets.indexOf(referenceGMapSet) == 0)
+						{
+							// we want the referenceChromoX to be the mapsets x plus its width
+							referenceChromoX = Math.round(referenceGMapSet.xPosition + referenceGMapSet.gMaps.get(0).width);
+							// and we want the target genome's x to be the targetChromoX
+							targetChromoX = Math.round(mainCanvas.gMapSetList.get(mainCanvas.targetGMapSetIndex).xPosition);
+						}
+						
+						// check whether this is a linkset we want to draw
+						// this depends on which chromosome in the reference genome it points to
+						// the linksets are ordered by chromosome index
+						// check whether this index matches one of the ones in the vector of selected maps in the reference genome
+						boolean draw = false;
+						for (GChromoMap gMap : referenceGMapSet.selectedMaps)
+						{
+							if (gMap.isShowingOnCanvas)
+								draw = true;
+						}
+						
+						if (draw)
+						{
+							// set the colour
+							g2.setColor(Colors.linkColour);
+							
+							// for each link in the linkset
+							for (Link link : selectedLinks)
 							{
-								// get the positional data of feature1 (which is on the selected chromo) and the end point of the map
-								float feat1Start = link.getFeature1().getStart();
-								
-								// get the owning map, positional data of feature 2 (which is on a reference chromosome) and the end point of the map
-								float feat2Start = link.getFeature2().getStart();
-								ChromoMap owningMap = link.getFeature2().getOwningMap();
-								float referenceMapStop = owningMap.getStop();
-								int refChromoIndex = owningMap.getOwningMapSet().getMaps().indexOf(
-												owningMap);
-								GChromoMap referenceGMap = referenceGMapSet.gMaps.get(refChromoIndex);
-								int referenceChromoY = referenceGMap.y;
-								
-								// convert these to coordinates by obtaining the coords of the appropriate chromosome object and scaling them appropriately
-								int targetY = (int) (feat1Start / (targetMapStop / mainCanvas.gMapSetList.get(mainCanvas.targetGMapSetIndex).gMaps.get(0).height)) + selectedChromoY;
-								int referenceY = (int) (feat2Start / (referenceMapStop / referenceGMap.height)) + referenceChromoY;
-								
-								//this next condition ensures we only draw links to reference features that are showing on the canvas
-								if ((referenceY > 0  && referenceY < mainCanvas.getHeight()) &&
-												(targetY > 0  && targetY < mainCanvas.getHeight()))
+								// we only want to draw this link if it has a BLAST e-value smaller than the cut-off currently selected by the user
+								if (link.getBlastScore() <= blastThreshold)
 								{
-									// draw the line
-									g2.drawLine(targetChromoX + 1, targetY, referenceChromoX - 1, referenceY);
+									// get the positional data of feature1 (which is on the selected chromo) and the end point of the map
+									float feat1Start = link.getFeature1().getStart();
+									
+									// get the owning map, positional data of feature 2 (which is on a reference chromosome) and the end point of the map
+									float feat2Start = link.getFeature2().getStart();
+									ChromoMap referenceCMap = link.getFeature2().getOwningMap();
+									float referenceMapStop = referenceCMap.getStop();
+									int refChromoIndex = referenceCMap.getOwningMapSet().getMaps().indexOf(
+													referenceCMap);
+									GChromoMap referenceGMap = referenceGMapSet.gMaps.get(refChromoIndex);
+									int referenceChromoY = referenceGMap.y;
+									
+									GChromoMap targetGMap = link.getFeature1().getOwningMap().getGChromoMap();
+									
+									// convert these to coordinates by obtaining the coords of the appropriate chromosome object and scaling them appropriately
+									int targetY = (int) (feat1Start / (targetMapStop / mainCanvas.gMapSetList.get(mainCanvas.targetGMapSetIndex).gMaps.get(0).height)) + selectedChromoY;
+									int referenceY = (int) (feat2Start / (referenceMapStop / referenceGMap.height)) + referenceChromoY;
+									
+									//check for chromosome inversion and invert values if necessary
+									if(targetGMap.isInverted)
+									{
+										targetY = (int) ((targetMapStop - feat1Start) / (targetMapStop / mainCanvas.gMapSetList.get(mainCanvas.targetGMapSetIndex).gMaps.get(0).height)) + selectedChromoY;
+									}
+									if(referenceGMap.isInverted)
+									{
+										referenceY = (int) ((referenceMapStop - feat2Start) / (referenceMapStop / referenceGMap.height)) + referenceChromoY;
+									}
+
+									//this next condition ensures we only draw links to reference features that are showing on the canvas
+									if ((referenceY > 0  && referenceY < mainCanvas.getHeight()) &&
+													(targetY > 0  && targetY < mainCanvas.getHeight()))
+									{
+										// draw the line
+										g2.drawLine(targetChromoX + 1, targetY, referenceChromoX - 1, referenceY);
+									}
 								}
 							}
 						}
 					}
 				}
 			}
+		}
+		catch (RuntimeException e)
+		{
+			e.printStackTrace();
 		}
 	}
 	
@@ -283,9 +302,12 @@ public class LinkDisplayManager
 				Feature f1 = link.getFeature1();
 				Feature f2 = link.getFeature2();
 				
+				Vector<Feature> foundFeatures = MapViewer.winMain.fatController.foundFeatures;
+				Vector<Feature> foundFeatureHomologs = MapViewer.winMain.fatController.foundFeatureHomologs;
+				
 				//check whether either of the features for this link are included in the found features list of their maps
-				if(f1.getOwningMap().getGChromoMap().foundFeatures.contains(f1) && 
-								f2.getOwningMap().getGChromoMap().foundFeatures.contains(f2))
+				if((foundFeatures.contains(f1) && foundFeatureHomologs.contains(f2)) ||
+								(foundFeatures.contains(f2) && foundFeatureHomologs.contains(f1)))
 				{
 					//draw the link
 					drawHighlightedLink(g2, link);				

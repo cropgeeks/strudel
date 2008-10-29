@@ -102,6 +102,11 @@ public class PanZoomAnimator extends Thread
 			//update visible zoom info
 			mainCanvas.winMain.fatController.updateZoomControls();
 		}
+		
+		//one more zoom adjust  to be done explicitly here to make sure we have all the final intended values and have not fallen short
+		//of these due to rounding errors etc.
+		selectedSet.zoomFactor = finalZoomFactor;
+		zoomHandler.adjustZoom(selectedMap, finalTotalY, (int)finalChromoHeight, (int)(finalChromoHeight - (initialDistFromTopProportion * finalChromoHeight)));
 
 		//now update the arrays with the position data
 		mainCanvas.winMain.fatController.initialisePositionArrays();

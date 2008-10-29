@@ -47,7 +47,7 @@ public class MainCanvas extends JPanel
 	LinkedList<LinkSet> linkSets = null;
 	
 	// do we need to draw links?
-	boolean linksToDraw = false;
+	public boolean drawLinks = false;
 	// Do we need to draw blast scores?
 	boolean drawBlastScore = false;
 	
@@ -64,6 +64,9 @@ public class MainCanvas extends JPanel
 	
 	//the chromosome height in pixels that we first init the chromos to
 	int initialChromoHeight = 0;
+	
+	//the canvas height at a zoom factor of 1 
+	public int initialCanvasHeight = 0;
 	
 	//the index in the gMapSetList of the target gmapset
 	int targetGMapSetIndex = -1;
@@ -280,6 +283,7 @@ public class MainCanvas extends JPanel
 				// the height of a chromosome
 				gMapSet.chromoHeight = (availableSpaceVertically - allSpacers) / maxChromos;
 				initialChromoHeight = gMapSet.chromoHeight;
+				initialCanvasHeight = canvasHeight;
 				
 				//the zoom factor at which we would fit a single chromosome (but nothing else) on the visible portion of the canvas
 				gMapSet.singleChromoViewZoomFactor  = canvasHeight / gMapSet.chromoHeight;
@@ -359,7 +363,7 @@ public class MainCanvas extends JPanel
 		}
 		
 		// optionally draw all the currently selected links between chromos
-		if (linksToDraw == true)
+		if (drawLinks == true)
 		{
 			linkDisplayManager.drawAllLinks(g2);
 		}

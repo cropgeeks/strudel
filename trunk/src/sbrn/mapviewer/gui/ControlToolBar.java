@@ -115,7 +115,11 @@ class ControlToolBar extends JToolBar implements ActionListener
 		//show the find features dialog
 		else if (e.getSource() == bFindFeatures)
 		{
+			//clear and show the find dialog's text area
 			ffDialog.ffPanel.getFFTextArea().setText("");
+			ffDialog.tabbedPane.setSelectedIndex(0);
+			//clear the results list of the find dialog and show it
+			ffDialog.ffResultsPanel.getFFResultsList().setModel(new DefaultListModel());
 			ffDialog.setVisible(true);
 		}
 

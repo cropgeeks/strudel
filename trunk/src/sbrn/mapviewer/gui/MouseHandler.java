@@ -111,6 +111,14 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			GChromoMap selectedMap = Utils.getSelectedMap(winMain, gMapSetIndex, mousePressedY);
 			winMain.mainCanvas.zoomHandler.processPanZoomRequest(selectedMap, mousePressedY, e.getY());
 		}
+		
+		if(e.isPopupTrigger())
+		{
+			// get the selected set first
+			GChromoMap selectedMap = Utils.getSelectedMap(winMain, getSelectedSet(e), mousePressedY);
+			winMain.fatController.invertMap = selectedMap;
+			winMain.chromoContextPopupMenu.show(winMain.mainCanvas, e.getX(), e.getY());
+		}
 
 		//turn antialiasing on and repaint
 		winMain.mainCanvas.antiAlias = true;

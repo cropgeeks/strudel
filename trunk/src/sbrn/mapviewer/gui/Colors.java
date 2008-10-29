@@ -38,6 +38,8 @@ public class Colors
 	public static Color mainCanvasBackgroundColour = Color.black;
 
 	public static Color chromosomeCenterColour = new Color(130, 130, 130);
+	
+	public static Color chromosomeInversionColour = new Color(0,36,18);
 
 	public static Color backgroundGradientStartColour = Color.black;
 

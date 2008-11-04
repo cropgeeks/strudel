@@ -29,7 +29,7 @@ public class WinMain extends JFrame
 
 	//the controller for the whole application
 	public FatController fatController;
-	
+
 	public ChromoContextPopupMenu chromoContextPopupMenu;
 
 //=================================================c'tor=====================================
@@ -46,7 +46,7 @@ public class WinMain extends JFrame
 		pack();
 
 		//GUI bits and pieces
-		setTitle("Map Viewer");
+		setTitle("Map Viewer - " + Install4j.VERSION);
 		setSize(Prefs.guiWinMainWidth, Prefs.guiWinMainHeight);
 
 		// Work out the current screen's width and height
@@ -109,9 +109,9 @@ public class WinMain extends JFrame
 	{
 		//the fat controller
 		fatController = new FatController(this);
-		
+
 		//the popup menu we use when are over a chromosome
-		chromoContextPopupMenu  = new ChromoContextPopupMenu();		
+		chromoContextPopupMenu  = new ChromoContextPopupMenu();
 
 		//this panel contains the main canvas and the annotation panel below it
 		JPanel mainPanel = new JPanel(new BorderLayout());

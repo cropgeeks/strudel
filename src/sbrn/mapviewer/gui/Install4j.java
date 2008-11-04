@@ -4,11 +4,68 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
+import com.install4j.api.launcher.*;
+import com.install4j.api.update.*;
+
 import scri.commons.gui.*;
 
 class Install4j
 {
-	public static String VERSION = "0.0";
+	private static String URL = "http://bioinf.scri.ac.uk/mapviewer/installers/updates.xml";
+
+	public static String VERSION = "x.xx.xx.xx";
+
+	/**
+	 * install4j update check. This will only work when running under the full
+	 * install4j environment, so expect exceptions everywhere else
+	 */
+	static void doStartUpCheck()
+	{
+		getVersion();
+		pingServer();
+
+		try
+		{
+			UpdateScheduleRegistry.setUpdateSchedule(UpdateSchedule.ON_EVERY_START);
+
+			if (UpdateScheduleRegistry.checkAndReset() == false)
+				return;
+
+			UpdateDescriptor ud = UpdateChecker.getUpdateDescriptor(URL, ApplicationDisplayMode.GUI);
+
+			if (ud.getPossibleUpdateEntry() != null)
+				checkForUpdate(true);
+		}
+		catch (Exception e) {}
+	}
+
+	/**
+	 * Shows the install4j updater app to check for updates and download/install
+	 * any that are found.
+	 */
+	static void checkForUpdate(boolean block)
+	{
+		try
+		{
+			// 58 is the custom ID of the updater application in the associated
+			// install4j project file for MapViewer
+			ApplicationLauncher.launchApplication("58", null, block, null);
+		}
+		catch (IOException e) {}
+	}
+
+	private static void getVersion()
+	{
+		try
+		{
+			com.install4j.api.ApplicationRegistry.ApplicationInfo info =
+				com.install4j.api.ApplicationRegistry.getApplicationInfoByDir(new File("."));
+
+			VERSION = info.getVersion();
+		}
+		catch (Exception e) {}
+		catch (Throwable e) {}
+	}
 
 	static void pingServer()
 	{

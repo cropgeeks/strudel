@@ -22,7 +22,7 @@ public class MapViewer
 		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Map Viewer");
 
 		prefs.loadPreferences(prefsFile, Prefs.class);
-		Install4j.pingServer();
+		Install4j.doStartUpCheck();
 
 		new MapViewer();
 	}

@@ -2,6 +2,7 @@
 	<description>MapViewer Ant Build Script</description>
 
 	<property name="src" location="src"/>
+	<property name="res" location="res"/>
 	<property name="classes" location="classes"/>
 	<property name="lib" location="lib"/>
 
@@ -36,6 +37,7 @@
 	<target name="jar" depends="clean, compile">
 		<jar jarfile="${mapviewer.jar}">
 			<fileset dir="${classes}"/>
+			<zipfileset dir="${res}" prefix="res"/>
 			<manifest>
 				<attribute name="Main-Class" value="sbrn.mapviewer.gui.MapViewer"/>
 				<attribute name="Class-Path"

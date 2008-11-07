@@ -265,4 +265,14 @@ public class LinkSet implements Iterable<Link>
 		
 		return str.toString();
 	}
+	
+	/**
+	 * Adds all the links from the Linkset passed in to the current Linkset.
+	 * @param linkset -- the linkset to combine with is one
+	 */
+	public void combineWithLinkSet(LinkSet linkSet)
+	{
+		links.addAll(linkSet.getLinks());
+	}
+	
 }

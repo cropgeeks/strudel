@@ -62,11 +62,14 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		else if (!isMetaClick(e))
 		{
 			winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(e.getX(), e.getY(), false);
+			new AntiAliasRepaintThread().start();
+
 		}
 
 		else if (isMetaClick(e))
 		{
 			winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(e.getX(), e.getY(), true);
+			new AntiAliasRepaintThread().start();
 		}
 
 	}
@@ -110,6 +113,9 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			int gMapSetIndex = getSelectedSet(e);
 			GChromoMap selectedMap = Utils.getSelectedMap(winMain, gMapSetIndex, mousePressedY);
 			winMain.mainCanvas.zoomHandler.processPanZoomRequest(selectedMap, mousePressedY, e.getY());
+			//turn antialiasing on and repaint
+			winMain.mainCanvas.antiAlias = true;
+			winMain.mainCanvas.updateCanvas(true);
 		}
 		
 		if(e.isPopupTrigger())
@@ -118,11 +124,10 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			GChromoMap selectedMap = Utils.getSelectedMap(winMain, getSelectedSet(e), mousePressedY);
 			winMain.fatController.invertMap = selectedMap;
 			winMain.chromoContextPopupMenu.show(winMain.mainCanvas, e.getX(), e.getY());
+			//turn antialiasing on and repaint
+			winMain.mainCanvas.antiAlias = true;
+			winMain.mainCanvas.updateCanvas(true);
 		}
-
-		//turn antialiasing on and repaint
-		winMain.mainCanvas.antiAlias = true;
-		winMain.mainCanvas.updateCanvas(true);
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -133,8 +138,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		int x = e.getX();
 		int y = e.getY();
 
-		// figure out whether the user is zooming the left or right genome
-		// simply divide the canvas in two halves for this and figure out where on the x axis the hit has occurred
+		// figure out which genome the user is zooming 
 		int index = getSelectedSet(e);
 
 		// mouse is getting dragged down -- zoom in

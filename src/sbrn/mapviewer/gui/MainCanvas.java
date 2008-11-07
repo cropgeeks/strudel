@@ -33,11 +33,7 @@ public class MainCanvas extends JPanel
 	
 	// space the chromosomes vertically by this fixed amount
 	int chromoSpacing = 15;
-	
-	// a hashtable that contains chromomaps from both genomes as keys and Vector objects as values, which in
-	// turn hold a list of LinkSet objects each, where each Linkset represents the links between the chromomap and a
-	// chromomap in the respectively other genome
-	Hashtable<ChromoMap, Vector<LinkSet>> linkSetLookup;
+
 	
 	// a hashtable that holds ChromoMap objects as keys and their corresponding GChromoMap objects as values
 	Hashtable<ChromoMap, GChromoMap> gMapLookup = new Hashtable<ChromoMap, GChromoMap>();
@@ -136,8 +132,8 @@ public class MainCanvas extends JPanel
 				maxChromos = gMapSet.numMaps;
 			
 			// set the thresholds for marker painting here for now
-			gMapSet.thresholdLinkedMarkerPainting = 4;
-			gMapSet.thresholdAllMarkerPainting = 4;
+			gMapSet.thresholdLinkedMarkerPainting = 12;
+			gMapSet.thresholdAllMarkerPainting = 12;
 		}
 		
 	}
@@ -391,7 +387,7 @@ public class MainCanvas extends JPanel
 				//if the map is meant to be visible on the canvas at this time
 				if(gChromoMap.isShowingOnCanvas)
 				{
-					drawMapIndex(g2, gChromoMap, gMapSet);
+//					drawMapIndex(g2, gChromoMap, gMapSet);
 				}
 			}
 		}

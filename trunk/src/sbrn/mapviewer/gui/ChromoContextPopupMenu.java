@@ -29,7 +29,7 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 			int fps = 30;
 			// the length of time we want the animation to last in milliseconds
 			int millis = 1000;
-			ChromoInversionAnimator chromoInversionAnimator = new ChromoInversionAnimator(MapViewer.winMain.fatController.invertMap, fps, millis);
+			ChromoZAxisInversionAnimator chromoInversionAnimator = new ChromoZAxisInversionAnimator(MapViewer.winMain.fatController.invertMap, fps, millis);
 			chromoInversionAnimator.start();
 		}
 	}

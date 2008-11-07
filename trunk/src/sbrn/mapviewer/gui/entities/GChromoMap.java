@@ -72,12 +72,16 @@ public class GChromoMap
 	Color centreColour;
 	
 	//this is the angle at which we draw this map, measured from vertical and going clockwise
-	public float angleFromVertical = 0;
+	public float angleFromVertical = 90;
+	public float undersideBrightness;
 	
 	//true if this chromosome is shown inverted
 	public boolean isInverted = false;
 	
 	public boolean inversionInProgress = false;
+	
+	public int currentY = 0;
+	public float multiplier = 0;
 	
 	
 	// ============================c'tors==================================
@@ -116,32 +120,51 @@ public class GChromoMap
 				colour = owningSet.colour;
 				centreColour = owningSet.colour.brighter().brighter().brighter().brighter();
 			}
+			
+			//adjust the y in case we are inverting
+			multiplier = Math.abs(((Math.abs(angleFromVertical / 90.0f)) -1.0f) *0.5f);
+			currentY = Math.round(multiplier * owningSet.chromoHeight);
+			
+			//adjust the  height according to the angle if necessary
+			height = (int)(owningSet.chromoHeight * Math.abs(angleFromVertical / 90.0f));
+			
+			//don't let the height fall below the value of the width
+			//this is the diameter of the chromosome and this is the minimum size it would ever appear at
+			//even if we are looking at it from its bottom end
+			if(height < width)
+				height = width;
+			
+			//adjust the colours according to the angle if necessary to create a pseudo-3d effect when inverting
+			
+			//first get the main colour and extract its hsb values
+			float [] hsb = colour.RGBtoHSB(colour.getRed(), colour.getGreen(), colour.getBlue(), null);
+			//reduce the brightness value if necessary
+			float currentBrightness = hsb[2];
+			//scale by angle
+			float newBrightness = Math.abs(angleFromVertical / 90.0f) * currentBrightness;
+			//don't let this fall below a threshold
+			if(newBrightness < 0.3f)
+				newBrightness = 0.3f;
+			//set this as the new colour
+			colour = Color.getHSBColor(hsb[0], hsb[1], newBrightness);
+			
+			//next get the highlight center colour and extract its hsb values
+			float [] hsbCentreColour = centreColour.RGBtoHSB(centreColour.getRed(), centreColour.getGreen(), centreColour.getBlue(), null);
+			//reduce the brightness value if necessary
+			float currentCenterBrightness = hsbCentreColour[2];
+			//scale by angle
+			float newCenterBrightness = Math.abs(angleFromVertical / 90.0f) * currentCenterBrightness;
+			//don't let this fall below a threshold
+			if(newCenterBrightness < 0.3f)
+				newCenterBrightness = 0.3f;
+			//set this as the new centreColour
+			centreColour = Color.getHSBColor(hsbCentreColour[0], hsbCentreColour[1], newCenterBrightness);
+			
 			//draw the bounding rectangle in the colour of the chromosome
 			g2.setColor(colour);
 			
 			//now draw the rectangle 
-			Rectangle rect = new Rectangle(0, 0, width, height);
-
-			AffineTransform aT = null;
-//			System.out.println("angleFromVertical for map " + name + " = " + angleFromVertical);
-			//apply angle transform if applicable
-			if(angleFromVertical > 0)
-			{			
-				//get the current transform
-				aT = g2.getTransform();
-				
-				//move the transform to the rectangle's center
-				AffineTransform translateTF = AffineTransform.getTranslateInstance(width/2, height/2);
-				g2.transform(translateTF);	
-				
-				//rotate
-				AffineTransform rotateTF = AffineTransform.getRotateInstance(Math.toRadians(angleFromVertical));
-				g2.transform(rotateTF);
-				
-				//move the transform back to where it was
-				translateTF = AffineTransform.getTranslateInstance(-width/2, -height/2);
-				g2.transform(translateTF);
-			}
+			Rectangle rect = new Rectangle(0, currentY, width, height);
 			
 			//draw and then store the current transform
 			g2.draw(rect);
@@ -150,15 +173,27 @@ public class GChromoMap
 			// draw first half of chromosome		
 			GradientPaint gradient = new GradientPaint(0, 0, colour, width / 2, 0, centreColour);
 			g2.setPaint(gradient);
-			g2.fillRect(0, 0, width / 2, height);			
+			g2.fillRect(0, currentY, width / 2, height);			
 			// draw second half of chromosome
 			GradientPaint whiteGradient = new GradientPaint(width / 2, 0, centreColour, width, 0, colour);
 			g2.setPaint(whiteGradient);
-			g2.fillRect(width / 2, 0, width / 2, height);
+			g2.fillRect(width / 2, currentY, width / 2, height);
 			
-			//restore old transform
-			if(aT != null)
-				g2.setTransform(aT);
+			//now draw an ellipse if appropriate
+			//this represents the underside of the cylinder which may or may not visible depending on the angle and
+			//which also changes shape with the angle
+			float ellipseHeight = (float) (Math.cos(Math.toRadians(angleFromVertical)) * width);
+			float ellipseY = (((-0.0055f * angleFromVertical) + 0.5f) * owningSet.chromoHeight) - ellipseHeight/2.0f;	
+
+			if(angleFromVertical != 90 && angleFromVertical != -90)
+			{
+				Ellipse2D ellipse2D = new Ellipse2D.Float(0, ellipseY, width, ellipseHeight);
+				g2.setColor(colour);
+				g2.draw(ellipse2D);
+				undersideBrightness = (1.0f/(Math.abs(angleFromVertical / 90.0f))) * 0.1f;
+				g2.setColor(Color.getHSBColor(0, 0, undersideBrightness));
+				g2.fill(ellipse2D);
+			}
 			
 			// now draw features and labels as required
 			if (owningSet.paintAllMarkers && isShowingOnCanvas)
@@ -312,7 +347,7 @@ public class GChromoMap
 				
 				// the y position of the feature itself
 				int featureY = Math.round(y + (f.getStart() * scalingFactor));
-
+				
 				//if the map is inverted we need to use the inverse of this value i.e. the map end value minus the feature position
 				if(isInverted)
 				{

@@ -2,13 +2,13 @@ package sbrn.mapviewer.gui;
 
 import sbrn.mapviewer.gui.entities.*;
 
-public class ChromoInversionAnimator extends Thread
+public class ChromoZAxisInversionAnimator extends Thread
 {
 	GChromoMap invertMap;
 	int fps;
 	int millis;
 	
-	public ChromoInversionAnimator(GChromoMap invertMap, int fps, int millis)
+	public ChromoZAxisInversionAnimator(GChromoMap invertMap, int fps, int millis)
 	{
 		super();
 		this.invertMap = invertMap;
@@ -20,8 +20,6 @@ public class ChromoInversionAnimator extends Thread
 	{
 		try
 		{
-			System.out.println("inverting chromo " + invertMap.name);
-			
 			//turn antialiasing off
 			MapViewer.winMain.mainCanvas.antiAlias = false;		
 			//turn link drawing off
@@ -31,8 +29,8 @@ public class ChromoInversionAnimator extends Thread
 			float totalFrames = fps * (millis / 1000);
 			
 			//angle we want to draw at
-			float currentAngle = 0;
-			float endAngle = 180;
+			float currentAngle = 90;
+			float endAngle = -90;
 			float interval = (endAngle - currentAngle) / totalFrames;
 			
 			invertMap.inversionInProgress = true;
@@ -42,6 +40,9 @@ public class ChromoInversionAnimator extends Thread
 			{
 				//increment angle
 				currentAngle = currentAngle + interval;
+				
+				System.out.println("currentAngle = " + currentAngle);
+				System.out.println("invertMap.undersideBrightness = " + invertMap.undersideBrightness);
 				
 				//set the angle fro drawing the map on the map object itself
 				invertMap.angleFromVertical = currentAngle;

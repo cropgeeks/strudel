@@ -47,6 +47,7 @@ public class WinMain extends JFrame
 
 		//GUI bits and pieces
 		setTitle("Map Viewer - " + Install4j.VERSION);
+		setIconImage(Icons.getIcon("MAPVIEWER").getImage());
 		setSize(Prefs.guiWinMainWidth, Prefs.guiWinMainHeight);
 
 		// Work out the current screen's width and height

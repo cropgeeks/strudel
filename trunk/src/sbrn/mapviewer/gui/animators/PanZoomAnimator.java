@@ -1,5 +1,6 @@
-package sbrn.mapviewer.gui;
+package sbrn.mapviewer.gui.animators;
 
+import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.entities.*;
 
 public class PanZoomAnimator extends Thread
@@ -100,7 +101,7 @@ public class PanZoomAnimator extends Thread
 			currentScalingFactor += increment;
 
 			//update visible zoom info
-			mainCanvas.winMain.fatController.updateZoomControls();
+			MapViewer.winMain.fatController.updateZoomControls();
 		}
 		
 		//one more zoom adjust  to be done explicitly here to make sure we have all the final intended values and have not fallen short
@@ -109,7 +110,7 @@ public class PanZoomAnimator extends Thread
 		zoomHandler.adjustZoom(selectedMap, finalTotalY, (int)finalChromoHeight, (int)(finalChromoHeight - (initialDistFromTopProportion * finalChromoHeight)));
 
 		//now update the arrays with the position data
-		mainCanvas.winMain.fatController.initialisePositionArrays();
+		MapViewer.winMain.fatController.initialisePositionArrays();
 
 		//turn antialiasing on and repaint
 		mainCanvas.antiAlias = true;

@@ -67,9 +67,9 @@ public class GMapSet
 
 	//a zoom factor value above which we can draw all  features
 	//this is to reduce the amount of clutter on screen
-	public float thresholdAllMarkerPainting;
+	public float thresholdAllMarkerPainting = 4;
 	//the same for drawing only features that are involved in links
-	public float thresholdLinkedMarkerPainting;
+	public float thresholdLinkedMarkerPainting = 4;
 	//the same for drawing labels
 	public float thresholdLabelPainting;
 

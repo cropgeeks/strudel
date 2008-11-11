@@ -1,5 +1,6 @@
-package sbrn.mapviewer.gui;
+package sbrn.mapviewer.gui.animators;
 
+import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.entities.*;
 
 public class ChromoInversionAnimator extends Thread
@@ -61,10 +62,10 @@ public class ChromoInversionAnimator extends Thread
 			
 			//flag up the fact that this chromoMap is now inverted but check first whether it is already inverted
 			//in that case it will now be the right way up again
-			if(invertMap.isInverted)
-				invertMap.isInverted = false;
-			else
-				invertMap.isInverted = true;
+//			if(invertMap.isInverted)
+//				invertMap.isInverted = false;
+//			else
+//				invertMap.isInverted = true;
 			
 			invertMap.inversionInProgress = false;
 			

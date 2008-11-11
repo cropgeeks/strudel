@@ -4,6 +4,7 @@ package sbrn.mapviewer.gui;
 import java.awt.event.*;
 
 import javax.swing.*;
+import sbrn.mapviewer.gui.animators.*;
 
 
 public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
@@ -26,7 +27,7 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 		{
 			//invert the whole chromosome
 			// frame rate
-			int fps = 30;
+			int fps = 20;
 			// the length of time we want the animation to last in milliseconds
 			int millis = 1000;
 			ChromoZAxisInversionAnimator chromoInversionAnimator = new ChromoZAxisInversionAnimator(MapViewer.winMain.fatController.invertMap, fps, millis);

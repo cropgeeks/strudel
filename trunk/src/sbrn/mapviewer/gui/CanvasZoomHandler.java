@@ -1,5 +1,6 @@
 package sbrn.mapviewer.gui;
 
+import sbrn.mapviewer.gui.animators.*;
 import sbrn.mapviewer.gui.entities.GChromoMap;
 import sbrn.mapviewer.gui.entities.GMapSet;
 
@@ -94,7 +95,7 @@ public class CanvasZoomHandler
 
 		// animate this by zooming in gradually
 		// frame rate
-		int fps = 30;
+		int fps = 20;
 		// the length of time we want the animation to last in milliseconds
 		int millis = 1000;
 		PanZoomAnimator panZoomAnimator = new PanZoomAnimator(fps, millis, finalScalingFactor, selectedMap, mainCanvas, mousePressedY, mouseReleasedY, this);
@@ -112,12 +113,11 @@ public class CanvasZoomHandler
 
 		// animate this by zooming in gradually
 		// frame rate
-		int fps = 30;
+		int fps = 20;
 		// the length of time we want the animation to last in milliseconds
 		int millis = 1000;
 
 		float finalZoomFactor = mainCanvas.initialCanvasHeight / mainCanvas.initialChromoHeight;
-		System.out.println("finalZoomFactor = " + finalZoomFactor);
 		// work out the chromo height and total genome height for when the new zoom factor will have been applied
 		int finalChromoHeight = (int) (mainCanvas.initialChromoHeight * finalZoomFactor);
 		// this is the combined height of all spacers -- does not change with the zoom factor
@@ -137,7 +137,7 @@ public class CanvasZoomHandler
 	{
 		// animate this by zooming out gradually
 		// frame rate
-		int fps = 30;
+		int fps = 20;
 		// the length of time we want the animation to last in milliseconds
 		int millis = 1000;
 

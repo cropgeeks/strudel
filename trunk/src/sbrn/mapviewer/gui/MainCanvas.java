@@ -32,7 +32,7 @@ public class MainCanvas extends JPanel
 	int maxChromos;
 	
 	// space the chromosomes vertically by this fixed amount
-	int chromoSpacing = 15;
+	public int chromoSpacing = 15;
 
 	
 	// a hashtable that holds ChromoMap objects as keys and their corresponding GChromoMap objects as values
@@ -132,15 +132,15 @@ public class MainCanvas extends JPanel
 				maxChromos = gMapSet.numMaps;
 			
 			// set the thresholds for marker painting here for now
-			gMapSet.thresholdLinkedMarkerPainting = 12;
-			gMapSet.thresholdAllMarkerPainting = 12;
+//			gMapSet.thresholdLinkedMarkerPainting = 12;
+//			gMapSet.thresholdAllMarkerPainting = 12;
 		}
 		
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------------------
 	
-	void updateCanvas(boolean invalidate)
+	public void updateCanvas(boolean invalidate)
 	{
 		redraw = invalidate;
 		repaint();
@@ -201,7 +201,7 @@ public class MainCanvas extends JPanel
 			// for each chromosome in the genome
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
 			{
-				if(gChromoMap.isShowingOnCanvas)
+				if(gChromoMap.isShowingOnCanvas && !gChromoMap.inversionInProgress)
 				{
 					gChromoMap.drawDistanceMarkers(g);
 					gChromoMap.drawHighlightedFeatures(g);
@@ -385,9 +385,9 @@ public class MainCanvas extends JPanel
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
 			{
 				//if the map is meant to be visible on the canvas at this time
-				if(gChromoMap.isShowingOnCanvas)
+				if(gChromoMap.isShowingOnCanvas && !gChromoMap.inversionInProgress)
 				{
-//					drawMapIndex(g2, gChromoMap, gMapSet);
+					drawMapIndex(g2, gChromoMap, gMapSet);
 				}
 			}
 		}

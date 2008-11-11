@@ -1,5 +1,6 @@
-package sbrn.mapviewer.gui;
+package sbrn.mapviewer.gui.animators;
 
+import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.entities.*;
 
 public class ChromoZAxisInversionAnimator extends Thread
@@ -22,8 +23,6 @@ public class ChromoZAxisInversionAnimator extends Thread
 		{
 			//turn antialiasing off
 			MapViewer.winMain.mainCanvas.antiAlias = false;		
-			//turn link drawing off
-			MapViewer.winMain.mainCanvas.drawLinks = false;		
 			
 			//the total number of frames we need to render
 			float totalFrames = fps * (millis / 1000);
@@ -40,15 +39,26 @@ public class ChromoZAxisInversionAnimator extends Thread
 			{
 				//increment angle
 				currentAngle = currentAngle + interval;
-				
-				System.out.println("currentAngle = " + currentAngle);
-				System.out.println("invertMap.undersideBrightness = " + invertMap.undersideBrightness);
-				
-				//set the angle fro drawing the map on the map object itself
+				//set the angle for drawing the map on the map object itself
 				invertMap.angleFromVertical = currentAngle;
 				
+				if(invertMap.isFullyInverted)
+				{
+					if(currentAngle > 0)
+						invertMap.isPartlyInverted = true;
+					else
+						invertMap.isPartlyInverted = false;
+				}
+				else
+				{
+					if(currentAngle < 0)
+						invertMap.isPartlyInverted = true;
+					else
+						invertMap.isPartlyInverted = false;
+				}
+
 				//repaint
-				MapViewer.winMain.mainCanvas.repaint();
+				MapViewer.winMain.mainCanvas.updateCanvas(true);
 				
 				// sleep for the amount of animation time divided by the totalFrames value
 				try
@@ -62,21 +72,20 @@ public class ChromoZAxisInversionAnimator extends Thread
 			
 			//flag up the fact that this chromoMap is now inverted but check first whether it is already inverted
 			//in that case it will now be the right way up again
-			if(invertMap.isInverted)
-				invertMap.isInverted = false;
+			if(invertMap.isFullyInverted)
+				invertMap.isFullyInverted = false;
 			else
-				invertMap.isInverted = true;
-			
+				invertMap.isFullyInverted = true;
+
 			invertMap.inversionInProgress = false;
 			
 			//turn antialiasing back on
 			MapViewer.winMain.mainCanvas.antiAlias = true;		
-			//turn link drawing back on
-			MapViewer.winMain.mainCanvas.drawLinks = true;	
 			
 			//update the position lookup arrays for mouseover
 			MapViewer.winMain.fatController.initialisePositionArrays();
 			
+			//repaint
 			MapViewer.winMain.mainCanvas.updateCanvas(true);
 		}
 		catch (RuntimeException e)

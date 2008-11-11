@@ -9,7 +9,7 @@ public class MouseOverHandler
 	// =========================================vars=======================================
 
 	WinMain winMain;
-	GChromoMap selectedMap;
+	public GChromoMap selectedMap;
 	GChromoMap previousMap;
 
 	// =========================================c'tors=======================================
@@ -28,9 +28,10 @@ public class MouseOverHandler
 
 		// first figure out which chromosome we are in
 		selectedMap = Utils.getSelectedMap(winMain.mainCanvas.gMapSetList, x, y);
-
+		
 		if (selectedMap != null && selectedMap.arraysInitialized)
 		{
+
 			//some nasty logic to do with the persistent display of labels
 			if(previousMap == null || (previousMap != null && !previousMap.persistHighlightedFeatures))
 			{

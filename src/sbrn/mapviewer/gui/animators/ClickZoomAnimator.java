@@ -1,5 +1,6 @@
-package sbrn.mapviewer.gui;
+package sbrn.mapviewer.gui.animators;
 
+import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.entities.*;
 
 public class ClickZoomAnimator extends Thread
@@ -78,9 +79,10 @@ public class ClickZoomAnimator extends Thread
 			// adjust the zoom
 			// this call includes the redraw of the main canvas
 			zoomHandler.adjustZoom(selectedMap, newTotalY, newChromoHeight, distFromBottom);
+			
+			//now update the arrays with the position data
+			MapViewer.winMain.fatController.initialisePositionArrays();
 
-			//update visible zoom info
-			mainCanvas.winMain.fatController.updateZoomControls();
 		}
 		
 		//do a final zoom adjust to ensure that we are at the right zoom level
@@ -88,10 +90,10 @@ public class ClickZoomAnimator extends Thread
 		zoomHandler.adjustZoom(selectedMap, finalTotalY, finalChromoHeight, finalChromoHeight/2);
 
 		//update overviews
-		mainCanvas.winMain.fatController.updateOverviewCanvases();
+		MapViewer.winMain.fatController.updateOverviewCanvases();
 
 		//now update the arrays with the position data
-		mainCanvas.winMain.fatController.initialisePositionArrays();
+		MapViewer.winMain.fatController.initialisePositionArrays();
 
 		//turn antialiasing on and repaint
 		mainCanvas.antiAlias = true;

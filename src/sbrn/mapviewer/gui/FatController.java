@@ -85,6 +85,8 @@ public class FatController
 	
 	public void initialisePositionArrays()
 	{
+//		System.out.println("indexing position arrays");
+//		long startTime = System.nanoTime();
 		// for all gmapsets
 		for (GMapSet gMapSet : winMain.mainCanvas.gMapSetList)
 		{
@@ -97,6 +99,8 @@ public class FatController
 		
 		// update the display
 		winMain.mainCanvas.updateCanvas(true);
+//		System.out.println(" done indexing position arrays");
+//		System.out.println("time taken (nanos) = " + (System.nanoTime() - startTime));
 	}
 	
 	
@@ -188,8 +192,13 @@ public class FatController
 			{			
 				//clear the outline
 				gMap.drawHighlightOutline = false;
+				
+				//any inverted maps have to be flagged as non-inverted
+				gMap.isPartlyInverted = false;
 			}			
 		}	
+		
+		initialisePositionArrays();
 		
 		//repaint
 		winMain.mainCanvas.updateCanvas(true);

@@ -118,7 +118,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			winMain.mainCanvas.updateCanvas(true);
 		}
 		
-		if(e.isPopupTrigger())
+		if(e.isPopupTrigger() && mouseOverHandler.selectedMap != null)
 		{
 			// get the selected set first
 			GChromoMap selectedMap = Utils.getSelectedMap(winMain, getSelectedSet(e), mousePressedY);

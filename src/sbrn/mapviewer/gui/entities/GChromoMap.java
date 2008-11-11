@@ -75,13 +75,16 @@ public class GChromoMap
 	public float angleFromVertical = 90;
 	public float undersideBrightness;
 	
-	//true if this chromosome is shown inverted
-	public boolean isInverted = false;
+	//true if this chromosome is shown fully inverted
+	public boolean isFullyInverted = false;
+	//true if this chromosome is shown fully inverted
+	public boolean isPartlyInverted = false;
 	
 	public boolean inversionInProgress = false;
 	
 	public int currentY = 0;
 	public float multiplier = 0;
+
 	
 	
 	// ============================c'tors==================================
@@ -110,7 +113,7 @@ public class GChromoMap
 			Graphics2D g2 = (Graphics2D) g;		
 			
 			//determine the fill colour first
-			if(isInverted)
+			if(isPartlyInverted)
 			{
 				colour = Colors.chromosomeInversionColour;
 				centreColour = Colors.chromosomeInversionColour.brighter().brighter().brighter().brighter();
@@ -134,8 +137,7 @@ public class GChromoMap
 			if(height < width)
 				height = width;
 			
-			//adjust the colours according to the angle if necessary to create a pseudo-3d effect when inverting
-			
+			//adjust the colours according to the angle to create a pseudo-3d effect when inverting			
 			//first get the main colour and extract its hsb values
 			float [] hsb = colour.RGBtoHSB(colour.getRed(), colour.getGreen(), colour.getBlue(), null);
 			//reduce the brightness value if necessary
@@ -163,36 +165,70 @@ public class GChromoMap
 			//draw the bounding rectangle in the colour of the chromosome
 			g2.setColor(colour);
 			
+			//need another check here to make sure we are not drawing any rectangle parts below the ellipse
+			//this would stick out and destroy the illusion of a 3D inversion process
+			//very dirty hack but quickest solution and it works
+			int rectHeight = height;
+			//the length of the top half of the rectangle above a line representing the centerpoint of the chromosome
+			int topHalfLengthOfRect = (owningSet.chromoHeight/2) - currentY;
+			//same for the bottom half
+			int bottomHalfLengthOfRect = (currentY + height) - (owningSet.chromoHeight/2);
+			//if there is more chromo below the center line than there should be, just set the value of the bottom half to be 
+			//the same as the top half
+			if(bottomHalfLengthOfRect > topHalfLengthOfRect)
+				rectHeight = topHalfLengthOfRect * 2;
+			
 			//now draw the rectangle 
-			Rectangle rect = new Rectangle(0, currentY, width, height);
-			
-			//draw and then store the current transform
+			Rectangle rect = new Rectangle(0, currentY, width, rectHeight);
 			g2.draw(rect);
-			
 			//fill the rectangle with two different gradient fills
 			// draw first half of chromosome		
 			GradientPaint gradient = new GradientPaint(0, 0, colour, width / 2, 0, centreColour);
 			g2.setPaint(gradient);
-			g2.fillRect(0, currentY, width / 2, height);			
+			g2.fillRect(0, currentY, width / 2, rectHeight);
 			// draw second half of chromosome
 			GradientPaint whiteGradient = new GradientPaint(width / 2, 0, centreColour, width, 0, colour);
 			g2.setPaint(whiteGradient);
-			g2.fillRect(width / 2, currentY, width / 2, height);
+			g2.fillRect(width / 2, currentY, width / 2, rectHeight);
 			
-			//now draw an ellipse if appropriate
-			//this represents the underside of the cylinder which may or may not visible depending on the angle and
-			//which also changes shape with the angle
-			float ellipseHeight = (float) (Math.cos(Math.toRadians(angleFromVertical)) * width);
-			float ellipseY = (((-0.0055f * angleFromVertical) + 0.5f) * owningSet.chromoHeight) - ellipseHeight/2.0f;	
-
+			//if the chromosome is being inverted
 			if(angleFromVertical != 90 && angleFromVertical != -90)
 			{
-				Ellipse2D ellipse2D = new Ellipse2D.Float(0, ellipseY, width, ellipseHeight);
-				g2.setColor(colour);
-				g2.draw(ellipse2D);
+				//now draw two ellipses
+				//these represent the underside and the top of the cylinder which may or may not visible depending on the angle and
+				//which also changes shape with the angle
+				//the constant in the following equations (0.0055f) is derived from a linear function that describes the movement of
+				//the ellipse up and down the chromosome as a function of the angle
+				float ellipseHeight = (float) (Math.cos(Math.toRadians(angleFromVertical)) * width);
+				float bottomEllipseY = (((-0.0055f * angleFromVertical) + 0.5f) * owningSet.chromoHeight) - ellipseHeight/2.0f;	
+				float topEllipseY = (((0.0055f * angleFromVertical) + 0.5f) * owningSet.chromoHeight) - ellipseHeight/2.0f;
+				
+				//draw an ellipse representing the top of the chromosome
+				//needs to be drawn in two halves so we can add the gradient to create the illusion of a highlight			
+				Arc2D a1 = new Arc2D.Float(0,topEllipseY,width,ellipseHeight,90,180,Arc2D.PIE);
+				int gradientStart = 0;
+				int gradientEnd = width/2;
+				GradientPaint gp = new GradientPaint(gradientStart,width/2, colour, gradientEnd,width/2, centreColour, false);
+				// Fill with a gradient.
+				g2.setPaint(gp);
+				g2.fill(a1);
+				//second half
+				Arc2D a2 = new Arc2D.Float(0,topEllipseY,width,ellipseHeight,270,180,Arc2D.PIE);
+				gradientStart = width/2;
+				gradientEnd = width;
+				gp = new GradientPaint(gradientStart,width/2, centreColour, gradientEnd,width/2, colour, false);
+				// Fill with a gradient.
+				g2.setPaint(gp);
+				g2.fill(a2);
+				
+				//draw an ellipse representing the underside of the chromosome
+				Ellipse2D bottomEllipse2D = new Ellipse2D.Float(0, bottomEllipseY, width, ellipseHeight);
 				undersideBrightness = (1.0f/(Math.abs(angleFromVertical / 90.0f))) * 0.1f;
-				g2.setColor(Color.getHSBColor(0, 0, undersideBrightness));
-				g2.fill(ellipse2D);
+				//make sure this is not any brighter than the centreColour brightness
+				if(undersideBrightness > hsbCentreColour[2])
+					undersideBrightness = hsbCentreColour[2];
+				g2.setColor(Color.getHSBColor(hsbCentreColour[0], hsbCentreColour[1], undersideBrightness));
+				g2.fill(bottomEllipse2D);
 			}
 			
 			// now draw features and labels as required
@@ -238,8 +274,7 @@ public class GChromoMap
 			{
 				nf.setMaximumFractionDigits(0);
 			}
-			else
-				// it's a float
+			else// it's a float
 			{
 				// we want two decimals here
 				nf.setMaximumFractionDigits(2);
@@ -349,7 +384,7 @@ public class GChromoMap
 				int featureY = Math.round(y + (f.getStart() * scalingFactor));
 				
 				//if the map is inverted we need to use the inverse of this value i.e. the map end value minus the feature position
-				if(isInverted)
+				if(inversionInProgress || isFullyInverted)
 				{
 					featureY = Math.round(y + ((mapEnd - f.getStart()) * scalingFactor));
 				}
@@ -472,7 +507,7 @@ public class GChromoMap
 				//then store this value in the array we use for drawing
 				allFeaturePositions[i] = (int) ((owningSet.chromoHeight / chromoMap.getStop()) * start);
 				//if the map is inverted we need to store the inverse of this value i.e. the map end value minus the feature position
-				if(isInverted)
+				if(isFullyInverted || isPartlyInverted)
 				{
 					allFeaturePositions[i] = (int) ((owningSet.chromoHeight / chromoMap.getStop()) * (chromoMap.getStop() -start));
 				}
@@ -483,36 +518,13 @@ public class GChromoMap
 		}
 	}
 	
-	// ----------------------------------------------------------------------------------------------------------------------------------------------
-	
-	public void initLinkedFeatureArrays()
-	{
-		// init the arrays that hold only the linked to subset of features
-		int numLinkedToFeatures = linkedFeatureList.size();
-		linkedFeatureNames = new String[numLinkedToFeatures];
-		linkedFeaturePositions = new float[numLinkedToFeatures];
-		for (int i = 0; i < linkedFeatureList.size(); i++)
-		{
-			Feature f = linkedFeatureList.get(i);
-			linkedFeatureNames[i] = f.getName();
-			linkedFeaturePositions[i] = f.getStart();
-			
-			// also add this to a lookup table that we can use to look up features by location
-			// the percent distance from the top of the chromosome to the location of this feature
-			float percentDistToFeat = f.getStart() * (100 / chromoMap.getStop());
-			// now round this number to two decimals so we can compare it reliably to input values
-			percentDistToFeat = Float.parseFloat(new DecimalFormat("0.##").format(percentDistToFeat));
-			
-			linkedFeaturePosLookup.put(percentDistToFeat, f);
-		}
-	}
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------------
 	
-	// draw the markers and labels
+	// draw the markers for the features
 	private void drawAllFeatures(Graphics2D g2)
 	{
-		if (allFeaturePositions != null && !inversionInProgress)
+		if (allFeaturePositions != null)
 		{
 			g2.setColor(Colors.featureColour);
 			for (int i = 0; i < allFeaturePositions.length; i++)
@@ -526,6 +538,11 @@ public class GChromoMap
 				{
 					yPos = allFeaturePositions[i];
 				}
+				
+				//check whether inversion in progress
+				if(inversionInProgress)
+					yPos = (yPos * (height / (float)owningSet.chromoHeight)) + currentY;
+
 				// draw a line for the marker
 				g2.drawLine(0, (int) yPos, width - 1, (int) yPos);
 			}

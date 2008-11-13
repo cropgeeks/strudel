@@ -1,4 +1,4 @@
-package sbrn.mapviewer.gui;
+package sbrn.mapviewer.gui.components;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -7,10 +7,12 @@ import java.text.*;
 import javax.imageio.*;
 import javax.swing.*;
 
+import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.dialog.*;
+import sbrn.mapviewer.gui.handlers.*;
 import scri.commons.gui.*;
 
-class ControlToolBar extends JToolBar implements ActionListener
+public class ControlToolBar extends JToolBar implements ActionListener
 {
 	private WinMain winMain;
 

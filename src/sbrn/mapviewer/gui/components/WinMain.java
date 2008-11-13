@@ -1,4 +1,4 @@
-package sbrn.mapviewer.gui;
+package sbrn.mapviewer.gui.components;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -6,7 +6,9 @@ import java.util.*;
 
 import javax.swing.*;
 
+import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.entities.*;
+import sbrn.mapviewer.gui.handlers.*;
 import scri.commons.gui.*;
 
 public class WinMain extends JFrame

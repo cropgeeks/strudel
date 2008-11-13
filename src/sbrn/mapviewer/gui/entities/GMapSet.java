@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.*;
 
 import sbrn.mapviewer.data.*;
-import sbrn.mapviewer.gui.Scroller;
+import sbrn.mapviewer.gui.components.*;
 
 /**
  * Class representing a genome graphically. Holds a list of GChromoMap objects, which are graphical representations of chromosomes.

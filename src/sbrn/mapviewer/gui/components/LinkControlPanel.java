@@ -1,4 +1,4 @@
-package sbrn.mapviewer.gui;
+package sbrn.mapviewer.gui.components;
 
 import javax.swing.JPanel;
 

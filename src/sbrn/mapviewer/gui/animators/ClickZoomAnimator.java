@@ -1,7 +1,9 @@
 package sbrn.mapviewer.gui.animators;
 
 import sbrn.mapviewer.gui.*;
+import sbrn.mapviewer.gui.components.*;
 import sbrn.mapviewer.gui.entities.*;
+import sbrn.mapviewer.gui.handlers.*;
 
 public class ClickZoomAnimator extends Thread
 {

@@ -2,6 +2,7 @@ package sbrn.mapviewer.gui;
 
 import java.awt.*;
 import java.util.*;
+import sbrn.mapviewer.gui.components.*;
 import sbrn.mapviewer.gui.entities.*;
 
 public class Utils

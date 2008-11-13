@@ -1,4 +1,4 @@
-package sbrn.mapviewer.gui;
+package sbrn.mapviewer.gui.components;
 
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;

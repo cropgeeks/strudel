@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.logging.*;
 import javax.swing.*;
 
-import sbrn.mapviewer.*;
+import sbrn.mapviewer.gui.components.*;
 import scri.commons.gui.*;
 import scri.commons.*;
 
@@ -24,7 +24,7 @@ public class MapViewer
 	    * FINEST (lowest value) 
 	    * ALL
 	    */
-	private static Level logLevel = Level.ALL;
+	private static Level logLevel = Level.FINE;
 	public static Logger logger = Logger.getLogger("sbrn.mapviewer");
 	
 	private static File prefsFile = new File(System.getProperty("user.home"), ".mapviewer.xml");

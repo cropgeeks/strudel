@@ -16,7 +16,7 @@ public class DataContainer
 	//hard code the number of reference genomes for now
 	//later this needs tied into file load dialog
 	//TODO: remove hard coding
-	int numRefGenomes = 2;
+	public int numRefGenomes = 2;
 	// these Mapsets hold  the data we want to compare the target genome to
 	public LinkedList<MapSet> referenceMapsets = new LinkedList<MapSet>();
 

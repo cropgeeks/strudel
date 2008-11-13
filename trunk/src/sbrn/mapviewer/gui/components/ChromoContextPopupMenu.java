@@ -1,9 +1,10 @@
-package sbrn.mapviewer.gui;
+package sbrn.mapviewer.gui.components;
 
 
 import java.awt.event.*;
 
 import javax.swing.*;
+import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.animators.*;
 
 

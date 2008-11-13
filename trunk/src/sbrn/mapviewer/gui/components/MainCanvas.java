@@ -1,4 +1,4 @@
-package sbrn.mapviewer.gui;
+package sbrn.mapviewer.gui.components;
 
 import java.awt.*;
 import java.awt.image.*;
@@ -8,7 +8,9 @@ import javax.swing.*;
 
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
+import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.entities.*;
+import sbrn.mapviewer.gui.handlers.*;
 
 public class MainCanvas extends JPanel
 {
@@ -40,7 +42,7 @@ public class MainCanvas extends JPanel
 	
 	// these link sets hold the all the possible links between the chromos of the target mapset and the chromos in the reference mapset
 	//one linkset per reference genome
-	LinkedList<LinkSet> linkSets = null;
+	public LinkedList<LinkSet> linkSets = null;
 	
 	// do we need to draw links?
 	public boolean drawLinks = false;
@@ -53,19 +55,19 @@ public class MainCanvas extends JPanel
 	// if true, paint a rectangle to indicate the fact that we are panning over a region we want to select for zooming in to
 	public boolean drawSelectionRect = false;
 	//these are the relevant coordinates for this
-	Rectangle selectionRect = new Rectangle();
+	public Rectangle selectionRect = new Rectangle();
 	
 	//the handler for all zooming related events
 	public CanvasZoomHandler zoomHandler;
 	
 	//the chromosome height in pixels that we first init the chromos to
-	int initialChromoHeight = 0;
+	public int initialChromoHeight = 0;
 	
 	//the canvas height at a zoom factor of 1 
 	public int initialCanvasHeight = 0;
 	
 	//the index in the gMapSetList of the target gmapset
-	int targetGMapSetIndex = -1;
+	public int targetGMapSetIndex = -1;
 	
 	//this object handles the display of homology links
 	public LinkDisplayManager linkDisplayManager;

@@ -6,6 +6,7 @@ import java.util.*;
 import javax.swing.*;
 
 import sbrn.mapviewer.data.*;
+import sbrn.mapviewer.gui.components.*;
 import sbrn.mapviewer.gui.entities.*;
 import scri.commons.gui.*;
 

@@ -1,9 +1,10 @@
-package sbrn.mapviewer.gui;
+package sbrn.mapviewer.gui.components;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import sbrn.mapviewer.gui.*;
 import scri.commons.gui.*;
 
 class OverviewDialog extends JDialog

@@ -9,7 +9,7 @@ import com.install4j.api.update.*;
 
 import scri.commons.gui.*;
 
-class Install4j
+public class Install4j
 {
 	private static String URL = "http://bioinf.scri.ac.uk/mapviewer/installers/updates.xml";
 

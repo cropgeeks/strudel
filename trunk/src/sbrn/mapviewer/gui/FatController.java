@@ -85,8 +85,8 @@ public class FatController
 	
 	public void initialisePositionArrays()
 	{
-//		System.out.println("indexing position arrays");
-//		long startTime = System.nanoTime();
+		MapViewer.logger.finest("indexing position arrays");
+		long startTime = System.nanoTime();
 		// for all gmapsets
 		for (GMapSet gMapSet : winMain.mainCanvas.gMapSetList)
 		{
@@ -99,8 +99,8 @@ public class FatController
 		
 		// update the display
 		winMain.mainCanvas.updateCanvas(true);
-//		System.out.println(" done indexing position arrays");
-//		System.out.println("time taken (nanos) = " + (System.nanoTime() - startTime));
+		MapViewer.logger.finest(" done indexing position arrays");
+		MapViewer.logger.finest("time taken (nanos) = " + (System.nanoTime() - startTime));
 	}
 	
 	

@@ -21,8 +21,7 @@ public class ChromoInversionAnimator extends Thread
 	{
 		try
 		{
-			System.out.println("inverting chromo " + invertMap.name);
-			
+
 			//turn antialiasing off
 			MapViewer.winMain.mainCanvas.antiAlias = false;		
 			//turn link drawing off

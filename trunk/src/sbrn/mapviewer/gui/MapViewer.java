@@ -2,22 +2,45 @@ package sbrn.mapviewer.gui;
 
 import java.awt.event.*;
 import java.io.*;
+import java.util.logging.*;
 import javax.swing.*;
 
+import sbrn.mapviewer.*;
 import scri.commons.gui.*;
+import scri.commons.*;
 
 import apple.dts.samplecode.osxadapter.*;
 
 public class MapViewer
 {
+	
+	/*set logging level to one of     
+	    * SEVERE (highest value)
+	    * WARNING
+	    * INFO
+	    * CONFIG
+	    * FINE
+	    * FINER
+	    * FINEST (lowest value) 
+	    * ALL
+	    */
+	private static Level logLevel = Level.ALL;
+	public static Logger logger = Logger.getLogger("sbrn.mapviewer");
+	
 	private static File prefsFile = new File(System.getProperty("user.home"), ".mapviewer.xml");
 	private static Prefs prefs = new Prefs();
-
-	public static WinMain winMain;
+	public static WinMain winMain;	
 
 	public static void main(String[] args)
 	{
-
+		//logging stuff		
+		ConsoleHandler consoleHandler = new ConsoleHandler();
+		consoleHandler.setFormatter(FormatterFactory.getOneLineTabFormatter());
+		consoleHandler.setLevel(logLevel);
+		logger.setLevel(logLevel);
+		logger.addHandler(consoleHandler);
+		logger.setUseParentHandlers(false);
+		
 		// OS X: This has to be set before anything else
 		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Map Viewer");
 
@@ -25,6 +48,7 @@ public class MapViewer
 		Install4j.doStartUpCheck();
 
 		new MapViewer();
+
 	}
 
 	MapViewer()
@@ -67,6 +91,7 @@ public class MapViewer
 			});
 
 			winMain.setVisible(true);
+			
 		}
 		catch (Exception e)
 		{

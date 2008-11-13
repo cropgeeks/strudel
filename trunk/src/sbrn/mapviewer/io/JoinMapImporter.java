@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 
 import sbrn.mapviewer.data.*;
+import sbrn.mapviewer.gui.*;
 
 /** File handler class for dealing with JoinMap-formatted data files. */
 public class JoinMapImporter
@@ -23,10 +24,10 @@ public class JoinMapImporter
 		
 		for (ChromoMap map: mapset)
 		{
-			System.out.println();
-			System.out.println(map.getName());
+			MapViewer.logger.fine("\n");
+			MapViewer.logger.fine(map.getName());
 			for (Feature feature: map)
-				System.out.println("  " + feature.getName() + "\t" + feature.getStart());
+				MapViewer.logger.fine("  " + feature.getName() + "\t" + feature.getStart());
 		}
 	}
 	
@@ -50,7 +51,7 @@ public class JoinMapImporter
 		String str = in.readLine();
 		while (str != null)
 		{
-			System.out.println(str);
+			MapViewer.logger.fine(str);
 			
 			StringTokenizer st = new StringTokenizer(str);
 			

@@ -37,9 +37,12 @@ public class ClickZoomAnimator extends Thread
 	{
 		//turn antialiasing off
 		mainCanvas.antiAlias = false;
+		
+		//turn drawing of map index off
+		selectedMap.drawChromoIndex = false;
 
 		//the total number of frames we need to render
-		float totalFrames = fps * (millis / 1000);
+		int totalFrames = Math.round(fps * (millis / 1000.0f));
 		GMapSet selectedSet = selectedMap.owningSet;
 
 		// these are the amounts we need to increment things by
@@ -95,6 +98,9 @@ public class ClickZoomAnimator extends Thread
 		//now update the arrays with the position data
 		MapViewer.winMain.fatController.initialisePositionArrays();
 
+		//turn drawing of map index back on
+		selectedMap.drawChromoIndex = true;
+		
 		//turn antialiasing on and repaint
 		mainCanvas.antiAlias = true;
 		mainCanvas.updateCanvas(true);

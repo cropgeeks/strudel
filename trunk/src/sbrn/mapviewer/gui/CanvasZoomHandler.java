@@ -115,7 +115,7 @@ public class CanvasZoomHandler
 		// frame rate
 		int fps = 20;
 		// the length of time we want the animation to last in milliseconds
-		int millis = 1000;
+		int millis = 500;
 
 		float finalZoomFactor = mainCanvas.initialCanvasHeight / mainCanvas.initialChromoHeight;
 		// work out the chromo height and total genome height for when the new zoom factor will have been applied
@@ -139,7 +139,7 @@ public class CanvasZoomHandler
 		// frame rate
 		int fps = 20;
 		// the length of time we want the animation to last in milliseconds
-		int millis = 1000;
+		int millis = 500;
 
 		float finalZoomFactor = 1;
 		// work out the chromo height and total genome height for when the new zoom factor will have been applied

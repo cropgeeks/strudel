@@ -20,6 +20,8 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	int mousePressedX = -1;
 	int mousePressedY = -1;
 	MouseOverHandler mouseOverHandler;
+	
+	long timeOfLastDragRequest = 0;
 
 	private boolean isOSX = SystemUtils.isMacOS();
 
@@ -98,10 +100,11 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	// currently the only use for this is when we do pan-and-zoom and we release the mouse at the end of the panning
-	// in that case we want to trigger a zoom event which zooms into the selected region
+
 	public void mouseReleased(MouseEvent e)
 	{
+		//this is when we do pan-and-zoom and we release the mouse at the end of the panning
+		// in that case we want to trigger a zoom event which zooms into the selected region
 		if (e.isShiftDown() && !isMetaClick(e))
 		{
 			// first repaint without the rectangle showing
@@ -118,6 +121,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			winMain.mainCanvas.updateCanvas(true);
 		}
 		
+		//this is for bringing up a context menu when we the mouse is over a chromosome
 		if(e.isPopupTrigger() && mouseOverHandler.selectedMap != null)
 		{
 			// get the selected set first
@@ -137,26 +141,55 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	{
 		int x = e.getX();
 		int y = e.getY();
-
-		// figure out which genome the user is zooming 
-		int index = getSelectedSet(e);
-
-		// mouse is getting dragged down -- zoom in
-		if (y > mouseDragPosY && !e.isShiftDown())
+		
+		
+		//mouse is getting dragged without shift held down
+		if (!e.isShiftDown())
 		{
-			// the multiplier is the amount by which we multiply the current zoom factor to increase it
-			float multiplier = 1.2f;
-			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(-1, multiplier, index, false);
+			// figure out which genome the user is zooming 
+			int index = getSelectedSet(e);
+				
+			//this number is the maximum amount of time that can have elapsed between successive mouse drags in order for them to still count as mouse drags 
+			//this is to guard against single mouse clicks associated with a very small mouse drag being interpreted as mouse drag events when they
+			//are in fact intended to be mouse clicks
+			//if there are gaps between mouse drags longer than this cutoff, the first mousedrag is always ignored
+			int timeCutOff = 1000;			
+			long timeDifferential = System.currentTimeMillis() - timeOfLastDragRequest;
+	
+			if (timeDifferential < timeCutOff)
+			{
+				// mouse is getting dragged down -- zoom in
+				if (y > mouseDragPosY)
+				{
+					// the multiplier is the amount by which we multiply the current zoom factor to increase it
+					float multiplier = 1.2f;
+					winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(-1, multiplier,
+									index, false);
+					
+					// update the current drag positions
+					mouseDragPosX = e.getX();
+					mouseDragPosY = e.getY();
+				}
+				// mouse is getting dragged up -- zoom out
+				if (y < mouseDragPosY)
+				{
+					// the multiplier is the amount by which we multiply the current zoom factor to decrease it
+					float multiplier = 0.8f;
+					winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(-1, multiplier,
+									index, false);
+					
+					// update the current drag positions
+					mouseDragPosX = e.getX();
+					mouseDragPosY = e.getY();
+				}
+			}
+			
+			//update the timestamp
+			timeOfLastDragRequest = System.currentTimeMillis();
 		}
-
-		// mouse is getting dragged up -- zoom out
-		if (y < mouseDragPosY && !e.isShiftDown())
-		{
-			// the multiplier is the amount by which we multiply the current zoom factor to decrease it
-			float multiplier = 0.8f;
-			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(-1, multiplier, index, false);
-		}
-
+		
+		
+		
 		// mouse is getting dragged horizontally with SHIFT down -- draw a rectangle for zoom selection
 		if (e.isShiftDown())
 		{
@@ -187,6 +220,10 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 
 			winMain.mainCanvas.drawSelectionRect = true;
 			winMain.mainCanvas.updateCanvas(false);
+			
+			// update the current drag positions
+			mouseDragPosX = e.getX();
+			mouseDragPosY = e.getY();
 		}
 
 		// update the current drag positions

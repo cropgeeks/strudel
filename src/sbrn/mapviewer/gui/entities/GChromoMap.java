@@ -79,8 +79,11 @@ public class GChromoMap
 	public boolean isFullyInverted = false;
 	//true if this chromosome is shown fully inverted
 	public boolean isPartlyInverted = false;
-	
+	//true while the inversion of the chromosome is in progress
 	public boolean inversionInProgress = false;
+	
+	//true if we want to draw the number of the chromosome
+	public boolean drawChromoIndex = true;
 	
 	public int currentY = 0;
 	public float multiplier = 0;

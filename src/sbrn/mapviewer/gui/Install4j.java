@@ -98,7 +98,7 @@ class Install4j
 					c.getResponseCode();
 					c.disconnect();
 				}
-				catch (Exception e) { System.out.println(e);}
+				catch (Exception e) { MapViewer.logger.fine(e.toString());}
 			}
 		};
 

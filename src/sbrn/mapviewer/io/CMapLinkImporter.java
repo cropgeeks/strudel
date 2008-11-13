@@ -5,6 +5,7 @@ import java.text.*;
 import java.util.*;
 
 import sbrn.mapviewer.data.*;
+import sbrn.mapviewer.gui.*;
 
 public class CMapLinkImporter
 {
@@ -59,8 +60,8 @@ public class CMapLinkImporter
 						//add the BLAST score as evidence
 						 DecimalFormat df = new DecimalFormat("0.###E0");
 						Number blastScore = df.parse(t[2]);
-//						System.out.println("link between " + f1.getName() + " and " + f2.getName());
-//						 System.out.println("blastScore = "+ blastScore.toString());
+//						MapViewer.logger.finest("link between " + f1.getName() + " and " + f2.getName());
+//						 MapViewer.logger.finest("blastScore = "+ blastScore.toString());
 						link.setBlastScore(blastScore.doubleValue());
 											
 						// TODO: Do we want to add a list of references Features to

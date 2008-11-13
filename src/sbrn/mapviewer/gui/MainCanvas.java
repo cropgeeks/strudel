@@ -77,8 +77,7 @@ public class MainCanvas extends JPanel
 	
 	//true if we want to display features the user has searched for with the find dialog
 	public boolean drawFoundFeatures = false;
-	
-	
+
 	// ============================c'tors==================================
 	
 	public MainCanvas(MapSet targetMapset, LinkedList<MapSet> referenceMapSets, WinMain winMain, LinkedList<LinkSet> linkSets)
@@ -161,7 +160,7 @@ public class MainCanvas extends JPanel
 			// Do we need to create a new buffer (if the screen size has changed)
 			if (buffer == null || buffer.getWidth() != getWidth() || buffer.getHeight() != getHeight())
 			{
-				System.out.println("Creating buffer of " + ((getWidth()*getHeight()*3)/1024) + " kB");
+				MapViewer.logger.fine("Creating buffer of " + ((getWidth()*getHeight()*3)/1024) + " kB");
 				buffer = (BufferedImage) createImage(getWidth(), getHeight());
 			}
 			
@@ -378,6 +377,7 @@ public class MainCanvas extends JPanel
 			g2.drawString("BLAST e-value cut-off: " + LinkDisplayManager.blastThreshold, 50, 50);
 		}
 		
+
 		//last we want to draw the chromosome indexes so they are painted on top of all other stuff
 		for (GMapSet gMapSet : gMapSetList)
 		{
@@ -385,13 +385,13 @@ public class MainCanvas extends JPanel
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
 			{
 				//if the map is meant to be visible on the canvas at this time
-				if(gChromoMap.isShowingOnCanvas && !gChromoMap.inversionInProgress)
+				if (gChromoMap.isShowingOnCanvas && !gChromoMap.inversionInProgress && gChromoMap.drawChromoIndex)
 				{
 					drawMapIndex(g2, gChromoMap, gMapSet);
 				}
 			}
 		}
-		
+
 		// also need to update the overview canvases from here
 		winMain.fatController.updateOverviewCanvases();
 	}

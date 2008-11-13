@@ -72,7 +72,7 @@ public class DataContainer
 				String refDataName = referenceDataFiles.get(i).getName();
 				referenceMapsets.get(i).setName(refDataName.substring(0, refDataName.indexOf(".")));
 
-				System.out.println("Importing links for data set  " + referenceMapsets.get(i).getName());
+				MapViewer.logger.fine("Importing links for data set  " + referenceMapsets.get(i).getName());
 
 				// load links
 				try
@@ -89,10 +89,10 @@ public class DataContainer
 				}
 			}
 
-			System.out.println("linkSets.size() in DC  = " + linkSets.size());
+			MapViewer.logger.fine("linkSets.size() in DC  = " + linkSets.size());
 			for (LinkSet linkSet : linkSets)
 			{
-				System.out.println(linkSet.getMapSets().get(0).getName() + ", "
+				MapViewer.logger.fine(linkSet.getMapSets().get(0).getName() + ", "
 								+ linkSet.getMapSets().get(1).getName());
 			}
 

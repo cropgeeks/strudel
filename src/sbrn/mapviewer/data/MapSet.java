@@ -1,6 +1,7 @@
 package sbrn.mapviewer.data;
 
 import java.util.*;
+import sbrn.mapviewer.gui.*;
 
 /**
  * A MapSet holds a collection of chromosome map (ChromoMap) objects.
@@ -98,10 +99,10 @@ public class MapSet implements Iterable<ChromoMap>
 	
 	public void printSummary()
 	{
-		System.out.println("MapSet Summary:");
-		System.out.println("  Number of maps: " + maps.size());
+		MapViewer.logger.fine("MapSet Summary:");
+		MapViewer.logger.fine("  Number of maps: " + maps.size());
 		for (ChromoMap map: maps)
-			System.out.println("    Map: " + map.getName() + " with " + map.countFeatures() + " feature(s) " + map.getStop());
+			MapViewer.logger.fine("    Map: " + map.getName() + " with " + map.countFeatures() + " feature(s) " + map.getStop());
 	}
 	
 	/**

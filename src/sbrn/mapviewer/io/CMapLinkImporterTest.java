@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 
 import sbrn.mapviewer.data.*;
+import sbrn.mapviewer.gui.*;
 
 public class CMapLinkImporterTest
 {
@@ -28,42 +29,42 @@ public class CMapLinkImporterTest
 			links.addMapSet(mapSet2);
 			
 			long e = System.currentTimeMillis();
-			System.out.println("Time to load data: " + (e-s) + "ms");
+			MapViewer.logger.fine("Time to load data: " + (e-s) + "ms");
 			
 			s = System.currentTimeMillis();
 			LinkSet linkSet = links.loadLinkSet();
 			e = System.currentTimeMillis();
-			System.out.println("Time to associate links: " + (e-s) + "ms");
+			MapViewer.logger.fine("Time to associate links: " + (e-s) + "ms");
 			
-			System.out.println(linkSet);
+			MapViewer.logger.fine(linkSet.toString());
 						
-			System.out.println("LinkSet contains " + linkSet.getLinks().size() + " links");
+			MapViewer.logger.fine("LinkSet contains " + linkSet.getLinks().size() + " links");
 			
 			
 			for (Link link: linkSet)
 			{
-				System.out.println(link);
-				System.out.println("  " + linkSet.isLinkUniqueToMapSet(link));
+				MapViewer.logger.fine(link.toString());
+				MapViewer.logger.fine("  " + linkSet.isLinkUniqueToMapSet(link));
 			}
 			
-			System.out.println();
+			MapViewer.logger.fine("\n");
 			
 			LinkSet newSet = linkSet.getLinksBetweenAllMapSets();
 			for (Link link: newSet)
 			{
-				System.out.println(link);
+				MapViewer.logger.fine(link.toString());
 			}
 			
-			System.out.println();
+			MapViewer.logger.fine("\n");
 			
 			newSet = linkSet.getLinksBetweenMaps(mapSet1.getMap(0), mapSet2.getMap(1));
 			for (Link link: newSet)
 			{
-				System.out.println(link);
+				MapViewer.logger.fine(link.toString());
 			}
 		
 		}
-		catch (Exception e) { System.out.println(e); }
+		catch (Exception e) { MapViewer.logger.fine(e.toString()); }
 	}
 		
 	private static void cmapTest(String[] args)
@@ -76,7 +77,7 @@ public class CMapLinkImporterTest
 			long s = System.currentTimeMillis();
 			
 			Runtime rt = Runtime.getRuntime();
-			System.out.println("Mem = " + (rt.totalMemory() - rt.freeMemory()));
+			MapViewer.logger.fine("Mem = " + (rt.totalMemory() - rt.freeMemory()));
 			
 			importer = new CMapImporter(new File("D:\\Projects\\MapViewer\\cmap formatted files\\new_mxb_edited.maps"));			
 			MapSet mapSet1 = importer.loadMapSet();
@@ -93,32 +94,32 @@ public class CMapLinkImporterTest
 			mapSet3.printSummary();
 			links.addMapSet(mapSet3);
 			
-			System.out.println("Mem = " + (rt.totalMemory() - rt.freeMemory()));
+			MapViewer.logger.fine("Mem = " + (rt.totalMemory() - rt.freeMemory()));
 			
 			importer = new CMapImporter(new File("D:\\Projects\\MapViewer\\cmap formatted files\\rice_pseudo4_os.maps"));			
 			MapSet mapSet4 = importer.loadMapSet();
 			mapSet4.printSummary();
 			links.addMapSet(mapSet4);
 			
-			System.out.println("Mem = " + (rt.totalMemory() - rt.freeMemory()));
+			MapViewer.logger.fine("Mem = " + (rt.totalMemory() - rt.freeMemory()));
 			
 			long e = System.currentTimeMillis();
-			System.out.println("Time to load data: " + (e-s) + "ms");
+			MapViewer.logger.fine("Time to load data: " + (e-s) + "ms");
 			
 			s = System.currentTimeMillis();
 			LinkSet linkSet = links.loadLinkSet();
 			e = System.currentTimeMillis();
-			System.out.println("Time to associate links: " + (e-s) + "ms");
+			MapViewer.logger.fine("Time to associate links: " + (e-s) + "ms");
 			
-			System.out.println(linkSet);
+			MapViewer.logger.fine(linkSet.toString());
 			
-			System.out.println("Mem = " + (rt.totalMemory() - rt.freeMemory()));
+			MapViewer.logger.fine("Mem = " + (rt.totalMemory() - rt.freeMemory()));
 			
-			System.out.println("LinkSet contains " + linkSet.getLinks().size() + " links");
+			MapViewer.logger.fine("LinkSet contains " + linkSet.getLinks().size() + " links");
 		
 			
 			
 		}
-		catch (Exception e) { System.out.println(e); }
+		catch (Exception e) { MapViewer.logger.fine(e.toString()); }
 	}
 }

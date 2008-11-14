@@ -25,7 +25,7 @@ public class ChromoZAxisInversionAnimator extends Thread
 			MapViewer.winMain.mainCanvas.antiAlias = false;		
 			
 			//the total number of frames we need to render
-			float totalFrames = fps * (millis / 1000);
+			int totalFrames = Math.round(fps * (millis / 1000.0f));
 			
 			//angle we want to draw at
 			float currentAngle = 90;
@@ -39,6 +39,7 @@ public class ChromoZAxisInversionAnimator extends Thread
 			{
 				//increment angle
 				currentAngle = currentAngle + interval;
+				MapViewer.logger.finest("currentAngle = " + currentAngle);
 				//set the angle for drawing the map on the map object itself
 				invertMap.angleFromVertical = currentAngle;
 				

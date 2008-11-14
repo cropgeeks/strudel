@@ -14,8 +14,6 @@ public class FindFeaturesDialog extends JFrame implements ActionListener
 {
 
 	private JButton bFind, bCancel;
-	private boolean isOK = false;
-
 	public MTFindFeaturesPanel ffPanel = new MTFindFeaturesPanel();
 	public MTFindFeaturesResultsPanel ffResultsPanel = new MTFindFeaturesResultsPanel();
 	public JTabbedPane tabbedPane = new JTabbedPane();
@@ -70,8 +68,7 @@ public class FindFeaturesDialog extends JFrame implements ActionListener
 					MapViewer.winMain.fatController.foundFeatures.clear();
 				if(MapViewer.winMain.fatController.foundFeatureHomologs != null)
 					MapViewer.winMain.fatController.foundFeatureHomologs.clear();
-				
-				isOK = true;
+
 				String allNames =  ffPanel.getFFTextArea().getText();		
 				ffResultsPanel.getFFResultsList().setListData((allNames.split("\n")));
 

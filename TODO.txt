@@ -21,6 +21,13 @@ Data:
 
 ================================
 
+Dave's list:
+
+- scrollbar for moving entire canvas up and down (not individual genomes)
+
+
+================================
+
 
 Luke Ramsay's list (in descending order of priority):
 

@@ -87,7 +87,8 @@ public class ClickZoomAnimator extends Thread
 			
 			//now update the arrays with the position data
 			MapViewer.winMain.fatController.initialisePositionArrays();
-
+			
+			MapViewer.logger.finest("selectedSet.zoomFactor = " + selectedSet.zoomFactor);
 		}
 		
 		//do a final zoom adjust to ensure that we are at the right zoom level
@@ -106,6 +107,8 @@ public class ClickZoomAnimator extends Thread
 		//turn antialiasing on and repaint
 		mainCanvas.antiAlias = true;
 		mainCanvas.updateCanvas(true);
+		
+		MapViewer.logger.finest("selectedSet.zoomFactor final = " + selectedSet.zoomFactor);
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------

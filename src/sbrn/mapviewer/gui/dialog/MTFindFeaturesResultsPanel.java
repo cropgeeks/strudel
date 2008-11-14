@@ -7,7 +7,6 @@
 package sbrn.mapviewer.gui.dialog;
 
 import javax.swing.JList;
-
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
 
@@ -41,6 +40,7 @@ public class MTFindFeaturesResultsPanel extends javax.swing.JPanel
 		jLabel1.setText("<html>Matching features found -- click on name to highlight:</html>");
 		
 		ffResultsList.setBackground(new java.awt.Color(236, 233, 216));
+		ffResultsList.setForeground(new java.awt.Color(0, 0, 255));
 		ffResultsList.setModel(new javax.swing.AbstractListModel()
 		{
 			String[] strings =
@@ -88,7 +88,7 @@ public class MTFindFeaturesResultsPanel extends javax.swing.JPanel
 										org.jdesktop.layout.LayoutStyle.RELATED).add(
 										jScrollPane1,
 										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-										266, Short.MAX_VALUE).addContainerGap()));
+										250, Short.MAX_VALUE).addContainerGap()));
 	}// </editor-fold>
 	//GEN-END:initComponents
 	

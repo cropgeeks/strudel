@@ -30,9 +30,6 @@ public class LabelDisplayManager
 		featuresAndHomologs.addAll(MapViewer.winMain.fatController.foundFeatures);
 		featuresAndHomologs.addAll(MapViewer.winMain.fatController.foundFeatureHomologs);
 
-//		Vector<Feature> featuresAndHomologs = (Vector<Feature>)MapViewer.winMain.fatController.foundFeatures.clone();
-//		featuresAndHomologs.addAll(MapViewer.winMain.fatController.foundFeatureHomologs);
-
 		// for all features in our list
 		for (Feature f : featuresAndHomologs)
 		{
@@ -55,7 +52,12 @@ public class LabelDisplayManager
 			}
 			else
 			{
-				featureY = Math.round(gChromoMap.y + (f.getStart() * scalingFactor));
+				featureY = Math.round(gChromoMap.y + gChromoMap.currentY + (f.getStart() * scalingFactor));
+			}		
+			//check whether the map is inverted			
+			if(gChromoMap.isPartlyInverted)
+			{
+				featureY = (int) ((mapEnd - f.getStart()) / (mapEnd / gChromoMap.height)) + (gChromoMap.y + gChromoMap.currentY);
 			}
 
 			//the y position of the feature label

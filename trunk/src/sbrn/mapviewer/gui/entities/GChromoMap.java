@@ -85,7 +85,9 @@ public class GChromoMap
 	//true if we want to draw the number of the chromosome
 	public boolean drawChromoIndex = true;
 	
+	//the top left corner y position of the chromosome during an inversion event
 	public int currentY = 0;
+	//a factor used to calculate the currentY value from the angle during the inversion
 	public float multiplier = 0;
 
 	
@@ -133,12 +135,6 @@ public class GChromoMap
 			
 			//adjust the  height according to the angle if necessary
 			height = (int)(owningSet.chromoHeight * Math.abs(angleFromVertical / 90.0f));
-			
-			//don't let the height fall below the value of the width
-			//this is the diameter of the chromosome and this is the minimum size it would ever appear at
-			//even if we are looking at it from its bottom end
-			if(height < width)
-				height = width;
 			
 			//adjust the colours according to the angle to create a pseudo-3d effect when inverting			
 			//first get the main colour and extract its hsb values

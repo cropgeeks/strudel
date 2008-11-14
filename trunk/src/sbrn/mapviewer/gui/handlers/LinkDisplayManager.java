@@ -105,9 +105,6 @@ public class LinkDisplayManager
 				mapSet.deselectAllMaps();
 			}
 		}
-		
-//		mainCanvas.antiAlias = false;
-//		mainCanvas.updateCanvas(true);
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -203,13 +200,13 @@ public class LinkDisplayManager
 								GChromoMap targetGMap = link.getFeature1().getOwningMap().getGChromoMap();
 								
 								// convert these to coordinates by obtaining the coords of the appropriate chromosome object and scaling them appropriately
-								int targetY = (int) (feat1Start / (targetMapStop / mainCanvas.gMapSetList.get(mainCanvas.targetGMapSetIndex).gMaps.get(0).height)) + selectedChromoY;
+								int targetY = (int) (feat1Start / (targetMapStop / selectedMap.height)) + selectedChromoY;
 								int referenceY = (int) (feat2Start / (referenceMapStop / referenceGMap.height)) + referenceChromoY;
 								
 								//check for chromosome inversion and invert values if necessary
 								if(targetGMap.isPartlyInverted)
 								{
-									targetY = (int) ((targetMapStop - feat1Start) / (targetMapStop / mainCanvas.gMapSetList.get(mainCanvas.targetGMapSetIndex).gMaps.get(0).height)) + selectedChromoY;
+									targetY = (int) ((targetMapStop - feat1Start) / (targetMapStop / selectedMap.height)) + selectedChromoY;
 								}
 								if(referenceGMap.isPartlyInverted)
 								{
@@ -286,8 +283,18 @@ public class LinkDisplayManager
 			}
 			
 			//y coords
-			int y1 = (int) (f1.getStart() / (f1.getOwningMap().getStop() / gMap1.height)) + gMap1.y;
-			int y2 = (int) (f2.getStart() / (f2.getOwningMap().getStop() / gMap2.height)) + gMap2.y;
+			int y1 = Math.round(gMap1.y + gMap1.currentY + (f1.getStart() * (gMap1.height / gMap1.chromoMap.getStop())));
+			int y2 = Math.round(gMap2.y + gMap2.currentY + (f2.getStart() * (gMap2.height / gMap2.chromoMap.getStop())));
+			
+			//check for chromosome inversion and invert values if necessary
+			if(gMap1.isPartlyInverted)
+			{
+				y1 = (int) ((gMap1.chromoMap.getStop() - f1.getStart()) / (gMap1.chromoMap.getStop() / gMap1.height)) + (gMap1.y + gMap1.currentY);
+			}
+			if(gMap2.isPartlyInverted)
+			{
+				y2 = (int) ((gMap2.chromoMap.getStop() - f2.getStart()) / (gMap2.chromoMap.getStop() / gMap2.height)) + (gMap2.y + gMap2.currentY);
+			}
 			
 			// draw the link
 			g2.setColor(Colors.highlightedFeatureColour);

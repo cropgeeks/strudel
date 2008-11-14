@@ -360,7 +360,7 @@ public class MainCanvas extends JPanel
 		}
 		
 		// optionally draw all the currently selected links between chromos
-		if (drawLinks == true)
+		if (drawLinks)
 		{
 			linkDisplayManager.drawAllLinks(g2);
 		}
@@ -368,18 +368,19 @@ public class MainCanvas extends JPanel
 		//we also want to check whether there are any links to display that are to be highlighted after a name based search for
 		//features and links originating from them
 		if(drawFoundFeatures)
+		{
 			linkDisplayManager.drawHighlightedLinks(g2);
+		}
 		
+		//check whether we want to display a BLAST cutoff value
 		if (drawBlastScore)
 		{
 			int fontSize = canvasHeight / 40;
 			g2.setFont(new Font("Arial", Font.BOLD, fontSize));
-			g2.setColor(Colors.chromosomeIndexColour);
-			
+			g2.setColor(Colors.chromosomeIndexColour);			
 			g2.drawString("BLAST e-value cut-off: " + LinkDisplayManager.blastThreshold, 50, 50);
 		}
 		
-
 		//last we want to draw the chromosome indexes so they are painted on top of all other stuff
 		for (GMapSet gMapSet : gMapSetList)
 		{
@@ -480,7 +481,7 @@ public class MainCanvas extends JPanel
 			selectedSet.paintAllMarkers = true;
 			selectedSet.paintLabels = true;
 		}
-		else if (selectedSet.zoomFactor > selectedSet.thresholdLinkedMarkerPainting && selectedSet.zoomFactor < selectedSet.thresholdAllMarkerPainting)
+		else if (selectedSet.zoomFactor < selectedSet.thresholdAllMarkerPainting)
 		{
 			selectedSet.paintAllMarkers = false;
 			selectedSet.paintLinkedMarkers = true;

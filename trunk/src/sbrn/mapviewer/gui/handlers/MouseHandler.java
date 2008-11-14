@@ -3,6 +3,7 @@ package sbrn.mapviewer.gui.handlers;
 import java.awt.event.*;
 import java.util.*;
 
+import javax.swing.*;
 import javax.swing.event.*;
 
 import sbrn.mapviewer.data.*;
@@ -96,11 +97,28 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		
 		timeOfMouseDown = System.currentTimeMillis();
 		
-		if (!isMetaClick(e))
+		//check whether this is a popup request -- needs to be done both in mousePressed and in mouseReleased due to platform dependent nonsense
+		if (e.isPopupTrigger())
+		{
+			//this is for bringing up a context menu when the mouse is over a chromosome
+			if(mouseOverHandler.selectedMap != null)
+			{
+				// get the selected set first
+				GChromoMap selectedMap = Utils.getSelectedMap(winMain, getSelectedSet(e), mousePressedY);
+				winMain.fatController.invertMap = selectedMap;
+				winMain.chromoContextPopupMenu.show(winMain.mainCanvas, e.getX(), e.getY());		
+			}
+			return;
+		}		
+		else if (SwingUtilities.isRightMouseButton(e))
+			return;
+		
+		//simple click on a target genome chromosome means display all links between this and all the reference chromos
+		if (!isMetaClick(e) && !e.isAltDown() && !e.isShiftDown())
 		{
 			winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(e.getX(), e.getY(), false);			
 		}
-		
+		//CTRL+click on a chromosome means display all links between this and all other clicked chromos
 		else if (isMetaClick(e))
 		{
 			winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(e.getX(), e.getY(), true);
@@ -112,11 +130,27 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	
 	public void mouseReleased(MouseEvent e)
 	{
 		MapViewer.logger.finest("mouse released");
+
+		//check whether this is a popup request -- needs to be done both in mousePressed and in mouseReleased due to platform dependent nonsense
+		if (e.isPopupTrigger())
+		{
+			//this is for bringing up a context menu when the mouse is over a chromosome
+			if(mouseOverHandler.selectedMap != null)
+			{
+				// get the selected set first
+				GChromoMap selectedMap = Utils.getSelectedMap(winMain, getSelectedSet(e), mousePressedY);
+				winMain.fatController.invertMap = selectedMap;
+				winMain.chromoContextPopupMenu.show(winMain.mainCanvas, e.getX(), e.getY());		
+			}
+			return;
+		}		
+		else if (SwingUtilities.isRightMouseButton(e))
+			return;
 		
 		//this is when we do pan-and-zoom and we release the mouse at the end of the panning
 		// in that case we want to trigger a zoom event which zooms into the selected region
@@ -131,18 +165,9 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			int gMapSetIndex = getSelectedSet(e);
 			GChromoMap selectedMap = Utils.getSelectedMap(winMain, gMapSetIndex, mousePressedY);
 			winMain.mainCanvas.zoomHandler.processPanZoomRequest(selectedMap, mousePressedY, e.getY());
-
 		}
 		
-		//this is for bringing up a context menu when we the mouse is over a chromosome
-		if(e.isPopupTrigger() && mouseOverHandler.selectedMap != null)
-		{
-			// get the selected set first
-			GChromoMap selectedMap = Utils.getSelectedMap(winMain, getSelectedSet(e), mousePressedY);
-			winMain.fatController.invertMap = selectedMap;
-			winMain.chromoContextPopupMenu.show(winMain.mainCanvas, e.getX(), e.getY());
-		}
-		
+		MapViewer.logger.finest("repainting after mouse released");
 		//turn antialiasing on and repaint
 		winMain.mainCanvas.antiAlias = true;
 		winMain.mainCanvas.updateCanvas(true);
@@ -166,7 +191,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			
 			//include a time delay beofre dragging so we can prevent accidental drags that were in fact intended to be mouse clicks
 			long now = System.currentTimeMillis();
-			if (now - timeOfMouseDown < 100)
+			if (now - timeOfMouseDown < 200)
 				return;
 				
 			// mouse is getting dragged down -- zoom in
@@ -176,10 +201,6 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 				float multiplier = 1.2f;
 				winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(-1, multiplier,
 								index, false);
-				
-				// update the current drag positions
-				mouseDragPosX = e.getX();
-				mouseDragPosY = e.getY();
 			}
 			// mouse is getting dragged up -- zoom out
 			if (y < mouseDragPosY)
@@ -188,10 +209,6 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 				float multiplier = 0.8f;
 				winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(-1, multiplier,
 								index, false);
-				
-				// update the current drag positions
-				mouseDragPosX = e.getX();
-				mouseDragPosY = e.getY();
 			}
 		}
 
@@ -225,10 +242,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			
 			winMain.mainCanvas.drawSelectionRect = true;
 			winMain.mainCanvas.updateCanvas(false);
-			
-			// update the current drag positions
-			mouseDragPosX = e.getX();
-			mouseDragPosY = e.getY();
+
 		}
 		
 		// update the current drag positions

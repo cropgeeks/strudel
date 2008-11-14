@@ -24,7 +24,7 @@ public class MapViewer
 	    * FINEST (lowest value) 
 	    * ALL
 	    */
-	private static Level logLevel = Level.FINE;
+	private static Level logLevel = Level.FINEST;
 	public static Logger logger = Logger.getLogger("sbrn.mapviewer");
 	
 	private static File prefsFile = new File(System.getProperty("user.home"), ".mapviewer.xml");
@@ -35,7 +35,7 @@ public class MapViewer
 	{
 		//logging stuff		
 		ConsoleHandler consoleHandler = new ConsoleHandler();
-		consoleHandler.setFormatter(FormatterFactory.getOneLineTabFormatter());
+		consoleHandler.setFormatter(FormatterFactory.getBasicFormatter());
 		consoleHandler.setLevel(logLevel);
 		logger.setLevel(logLevel);
 		logger.addHandler(consoleHandler);

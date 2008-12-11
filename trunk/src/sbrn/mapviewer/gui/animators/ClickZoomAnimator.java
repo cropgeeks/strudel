@@ -17,6 +17,7 @@ public class ClickZoomAnimator extends Thread
 	int finalChromoHeight;
 	int finalTotalY;
 	CanvasZoomHandler zoomHandler;
+	public boolean done = false;
 
 	// ============================================c'tor============================================
 
@@ -107,6 +108,8 @@ public class ClickZoomAnimator extends Thread
 		//turn antialiasing on and repaint
 		mainCanvas.antiAlias = true;
 		mainCanvas.updateCanvas(true);
+		
+		done = true;
 		
 		MapViewer.logger.finest("selectedSet.zoomFactor final = " + selectedSet.zoomFactor);
 	}

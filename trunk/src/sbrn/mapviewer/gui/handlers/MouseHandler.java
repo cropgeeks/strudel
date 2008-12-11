@@ -57,7 +57,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 							e.getY());
 			
 			if (selectedMap != null)
-				winMain.mainCanvas.zoomHandler.processClickZoomRequest(selectedMap);
+				winMain.mainCanvas.zoomHandler.processClickZoomRequest(selectedMap, 1000);
 			return;
 		}
 		
@@ -134,7 +134,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	
 	public void mouseReleased(MouseEvent e)
 	{
-		MapViewer.logger.finest("mouse released");
+		MapViewer.logger.fine("mouse released at " + e.getY());
 
 		//check whether this is a popup request -- needs to be done both in mousePressed and in mouseReleased due to platform dependent nonsense
 		if (e.isPopupTrigger())

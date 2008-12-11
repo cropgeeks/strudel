@@ -235,7 +235,7 @@ public class LinkDisplayManager
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
 	
-	private void drawHighlightedLink(Graphics2D g2, Link link)
+	private void drawHighlightedLink(Graphics2D g2, Link link, Color linkColour, boolean thickerLine)
 	{
 		// we only want to draw this link if it has a BLAST e-value smaller than the cut-off currently selected by the user
 		if (link.getBlastScore() <= blastThreshold)
@@ -297,7 +297,11 @@ public class LinkDisplayManager
 			}
 			
 			// draw the link
-			g2.setColor(Colors.highlightedFeatureColour);
+			g2.setColor(linkColour);
+			if(thickerLine)
+				g2.setStroke(new BasicStroke(2.0f));
+			else
+				g2.setStroke(new BasicStroke());
 			g2.drawLine(targetChromoX, y1, referenceChromoX, y2);
 		}
 	}
@@ -306,7 +310,7 @@ public class LinkDisplayManager
 	
 	
 	// Draws the lines between a chromosome of the reference genome and all potential homologues in the compared genome
-	public void drawHighlightedLinks(Graphics2D g2)
+	public void drawSingleHighlightedLink(Graphics2D g2)
 	{
 		
 		// for all  links between the target genome and all reference genomes
@@ -321,21 +325,53 @@ public class LinkDisplayManager
 				
 				Vector<Feature> foundFeatures = MapViewer.winMain.fatController.foundFeatures;
 				Vector<Feature> foundFeatureHomologs = MapViewer.winMain.fatController.foundFeatureHomologs;
+				Color linkColour = Colors.strongEmphasisLinkColour;
 				
 				//check whether either of the features for this link are included in the found features list of their maps
 				if((foundFeatures.contains(f1) && foundFeatureHomologs.contains(f2)) ||
 								(foundFeatures.contains(f2) && foundFeatureHomologs.contains(f1)))
 				{
 					//draw the link
-					drawHighlightedLink(g2, link);				
+					drawHighlightedLink(g2, link,linkColour, true);				
 				}
 			}
 		}
 		
-		//draw labels
-		LabelDisplayManager.drawFoundFeatures(g2);
+		//draw labels for the feature and its homologs
+		LabelDisplayManager.drawHighlightedFeatureLabels(g2);
 	}
 	
+	
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
+	
+	
+	// Draws the lines between features in a certain range on a chromosome of the target genome and all potential homologues in the compared genome
+	public void drawHighlightedLinksInRange(Graphics2D g2)
+	{		
+		// for all  links between the target genome and all reference genomes
+		for (LinkSet selectedLinks : mainCanvas.linkSets)
+		{
+			// for each link in the linkset
+			for (Link link : selectedLinks)
+			{
+				//get the features of this link
+				Feature f1 = link.getFeature1();
+				Feature f2 = link.getFeature2();
+				
+				Vector<Feature> featuresInRange = MapViewer.winMain.fatController.featuresInRange;
+				
+				Color linkColour = Colors.mildEmphasisLinkColour;
+				
+				//check whether either of the features for this link are included in the found features list of their maps
+				if(featuresInRange.contains(f1) ||	featuresInRange.contains(f2))
+				{
+					//draw the link
+					drawHighlightedLink(g2, link,linkColour, false);	
+				}
+			}
+		}
+	}
 	// --------------------------------------------------------------------------------------------------------------------------------
 	
 	/**

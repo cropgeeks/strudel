@@ -6,6 +6,10 @@ public class Colors
 {
 
 	public static Color linkColour = new Color(120,120,120);
+	
+	public static Color strongEmphasisLinkColour = Color.red;
+	
+	public static Color mildEmphasisLinkColour =  Color.green;
 
 	public static Color targetGenomeColour = new Color(80,0,0);
 
@@ -17,13 +21,17 @@ public class Colors
 
 	public static Color featureLabelColour = Color.white;
 
-	public static Color featureColour = new Color(150,150,150);
+	public static Color featureColour = new Color(120,120,120);
 
-	public static Color highlightedFeatureColour = new Color(0,255,0);
+	public static Color highlightedFeatureColour = Color.green;
 	
 	public static Color highlightedFeatureLabelColour = Color.black;
 	
-	public static Color highlightedFeatureLabelBackgroundColour = new Color(1,1,1,0.75f);
+	public static Color foundFeatureLabelBackgroundColour = Color.lightGray;
+	
+	public static Color highlightedFeatureLabelBackgroundColour = Color.red;
+	
+	public static Color highlightedFeatureRegionColour = new Color(140,140,0);
 
 	public static Color selectionRectColour = Color.red;
 

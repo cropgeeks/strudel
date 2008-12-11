@@ -54,10 +54,10 @@ public class GChromoMap
 	public boolean isShowingOnCanvas = true;
 	
 	// a vector containing features whose labels are to be displayed when the chromosome is drawn
-	public Vector<Feature> highlightedFeatures = new Vector<Feature>();
+	public Vector<Feature> mouseOverFeatures = new Vector<Feature>();
 	
 	//a boolean indicating whether we want to draw the highlighted features or not
-	public boolean drawHighlightedFeatures = false;
+	public boolean drawMouseOverFeatures = false;
 	
 	// do we have to draw a highlighted outline for this map
 	public boolean drawHighlightOutline = false;
@@ -89,8 +89,10 @@ public class GChromoMap
 	public int currentY = 0;
 	//a factor used to calculate the currentY value from the angle during the inversion
 	public float multiplier = 0;
-
 	
+	//these vars allow us to selective colour in a region on the chromosome for highlighting
+	public boolean highlightChromomapRegion = false;
+	public float highlightedRegionStart, highlightedRegionEnd;	
 	
 	// ============================c'tors==================================
 	
@@ -190,6 +192,12 @@ public class GChromoMap
 			g2.setPaint(whiteGradient);
 			g2.fillRect(width / 2, currentY, width / 2, rectHeight);
 			
+			//if we have a selected region, colour it in with a different colour
+			if(highlightChromomapRegion)
+			{
+				highlightChromomapRegion(g2);
+			}
+			
 			//if the chromosome is being inverted
 			if(angleFromVertical != 90 && angleFromVertical != -90)
 			{
@@ -267,6 +275,11 @@ public class GChromoMap
 			
 			// need to format the number appropriately
 			NumberFormat nf = NumberFormat.getInstance();
+
+			//font stuff
+			int fontHeight = 9;
+			g2.setFont(new Font("Sans-serif", Font.PLAIN, fontHeight));
+			FontMetrics fm = g2.getFontMetrics();
 			
 			// check first whether we are dealing with ints or floating point numbers for the chromosome distances
 			if (chromoMap.getStop() % 1 == 0) // this is an int
@@ -282,11 +295,7 @@ public class GChromoMap
 			
 			// set the colour to white
 			g2.setColor(Colors.distanceMarkerColour);
-			
-			// font stuff
-			int fontHeight = 9;
-			g2.setFont(new Font("Sans-serif", Font.PLAIN, fontHeight));
-			
+
 			// decide where to place the label on x
 			// on the left hand genome we want the label on the left, right hand genome on the right
 			int labelX = 0; // this is where the label is drawn from
@@ -301,16 +310,19 @@ public class GChromoMap
 			//draw
 			for (int i = 0; i <= numMarkers; i++)
 			{
+				//the label we want to draw
+				String label = String.valueOf(nf.format(currentVal));
+				int stringWidth = fm.stringWidth(label); 
+				
 				//x coords
-				labelX = x+ width + lineLength + gap;
-				lineStartX =  x+ width;
-				lineEndX =  x+ width + lineLength;
+				labelX = x - lineLength - gap - stringWidth;
+				lineStartX =  x-1;
+				lineEndX =  x- lineLength;
 				
 				// draw a line from the marker to the label
 				g2.drawLine(lineStartX, Math.round(currentY), lineEndX, Math.round(currentY));
 				//draw the label
-				g2.drawString(String.valueOf(nf.format(currentVal)), labelX,
-								Math.round(currentY) + fontHeight / 2);
+				g2.drawString(label, labelX, Math.round(currentY) + fontHeight / 2);
 				
 				// increment
 				currentY += interval;
@@ -357,17 +369,17 @@ public class GChromoMap
 	// -----------------------------------------------------------------------------------------------------------------------------------------
 	
 	// draws labels next to features
-	public void drawHighlightedFeatures(Graphics2D g2)
+	public void drawMouseOverFeatures(Graphics2D g2)
 	{
 		// the usual font stuff
 		int fontHeight = 12;
 		g2.setFont(new Font("Sans-serif", Font.PLAIN, fontHeight));
 		FontMetrics fm = g2.getFontMetrics();
 		
-		if (highlightedFeatures.size() > 0 && 	drawHighlightedFeatures)
+		if (mouseOverFeatures.size() > 0 && drawMouseOverFeatures)
 		{
 			// for all features in our list
-			for (Feature f : highlightedFeatures)
+			for (Feature f : mouseOverFeatures)
 			{
 				// get the name of the feature
 				String featureName = f.getName();
@@ -390,12 +402,12 @@ public class GChromoMap
 				
 				// now work out the y position of the feature label
 				// size and half size of our feature list
-				int listSize = highlightedFeatures.size();
+				int listSize = mouseOverFeatures.size();
 				float halfListSize = listSize / 2.0f;
 				// this is where the label goes
 				int labelY = 0;
 				// the index of the feature in the list
-				int index = highlightedFeatures.indexOf(f);
+				int index = mouseOverFeatures.indexOf(f);
 				
 				// the offset is the amount (in px) by which we need to move the label up or down relative to the feature itself
 				float offset = 0;
@@ -543,9 +555,30 @@ public class GChromoMap
 					yPos = (yPos * (height / (float)owningSet.chromoHeight)) + currentY;
 
 				// draw a line for the marker
-				g2.drawLine(0, (int) yPos, width - 1, (int) yPos);
+				g2.drawLine(0, (int) yPos, width, (int) yPos);
 			}
 		}
+	}
+	
+	// ----------------------------------------------------------------------------------------------------------------------------------------------
+	
+	//colours a section of the chromosome 
+	public void highlightChromomapRegion(Graphics2D g2)
+	{
+		Color highlightColour = Colors.highlightedFeatureRegionColour;
+		Color centreHighlightColour = highlightColour.brighter().brighter().brighter().brighter();
+		
+		int start = (int) ((owningSet.chromoHeight / chromoMap.getStop()) * highlightedRegionStart);
+		int end =  (int) ((owningSet.chromoHeight / chromoMap.getStop()) * highlightedRegionEnd);
+		int rectHeight = end - start;
+		
+		GradientPaint gradient = new GradientPaint(0, 0, highlightColour, width / 2, 0, centreHighlightColour);
+		g2.setPaint(gradient);
+		g2.fillRect(0, currentY + start, width / 2, rectHeight);
+		// draw second half of chromosome
+		GradientPaint whiteGradient = new GradientPaint(width / 2, 0, centreHighlightColour, width, 0, highlightColour);
+		g2.setPaint(whiteGradient);
+		g2.fillRect(width / 2, currentY + start, (width / 2)+1, rectHeight);
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------

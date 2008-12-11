@@ -64,8 +64,8 @@ public class MouseOverHandler
 				if (match != null && selectedMap.owningSet.paintAllMarkers)
 				{
 					// set the vector object of the selected map and repaint
-					selectedMap.highlightedFeatures = match;
-					selectedMap.drawHighlightedFeatures = true;
+					selectedMap.mouseOverFeatures = match;
+					selectedMap.drawMouseOverFeatures = true;
 					winMain.mainCanvas.updateCanvas(false);
 				}
 
@@ -93,13 +93,13 @@ public class MouseOverHandler
 		if (selectedMap != null)
 		{
 			//set the vector of selected features for this map
-			selectedMap.highlightedFeatures = selectedFeatures;
+			selectedMap.mouseOverFeatures = selectedFeatures;
 			selectedMap.persistHighlightedFeatures = true;
 
 			// format the data for the JList
 			// we need the name of the feature and the annotation info strung together so
 			//that we can display it in a single column
-			for (Feature feature : selectedMap.highlightedFeatures)
+			for (Feature feature : selectedMap.mouseOverFeatures)
 			{
 				formattedData.add(feature.getName() + " : " + feature.getAnnotation());
 			}
@@ -136,8 +136,8 @@ public class MouseOverHandler
 		// reset the selected map if the mouse is not over it
 		if (previousMap != null  && !previousMap.persistHighlightedFeatures)
 		{
-			previousMap.highlightedFeatures.clear();
-			previousMap.drawHighlightedFeatures = false;
+			previousMap.mouseOverFeatures.clear();
+			previousMap.drawMouseOverFeatures = false;
 			previousMap = null;
 
 			winMain.mainCanvas.updateCanvas(false);

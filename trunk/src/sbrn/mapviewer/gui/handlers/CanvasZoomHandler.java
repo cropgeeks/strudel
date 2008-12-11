@@ -88,7 +88,7 @@ public class CanvasZoomHandler
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
 	//zooms in to a region determined by user by drawing a rectangle around it
-	public void processPanZoomRequest(GChromoMap selectedMap, int mousePressedY, int mouseReleasedY)
+	public synchronized void processPanZoomRequest(GChromoMap selectedMap, int mousePressedY, int mouseReleasedY)
 	{
 		// figure out the genome it belongs to and increase that genome's zoom factor so that we can
 		// just fit the chromosome on screen the next time it is painted
@@ -107,7 +107,7 @@ public class CanvasZoomHandler
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
 	// zooms in by a fixed amount on a chromosome the user clicked on (to fill screen with chromosome)
-	public void processClickZoomRequest(GChromoMap selectedMap)
+	public synchronized void processClickZoomRequest(GChromoMap selectedMap,int millis)
 	{
 		// figure out the genome it belongs to and increase that genome's zoom factor so that we can
 		// just fit the chromosome on screen the next time it is painted
@@ -116,8 +116,6 @@ public class CanvasZoomHandler
 		// animate this by zooming in gradually
 		// frame rate
 		int fps = 20;
-		// the length of time we want the animation to last in milliseconds
-		int millis = 600;
 
 		float finalZoomFactor = mainCanvas.initialCanvasHeight / mainCanvas.initialChromoHeight;
 		// work out the chromo height and total genome height for when the new zoom factor will have been applied
@@ -135,13 +133,11 @@ public class CanvasZoomHandler
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
 	// zooms out to restore original zoom factor of 1
-	public void processZoomResetRequest(GMapSet selectedSet)
+	public synchronized void processZoomResetRequest(GMapSet selectedSet,int millis)
 	{
 		// animate this by zooming out gradually
 		// frame rate
 		int fps = 20;
-		// the length of time we want the animation to last in milliseconds
-		int millis = 400;
 
 		float finalZoomFactor = 1;
 		// work out the chromo height and total genome height for when the new zoom factor will have been applied
@@ -154,6 +150,7 @@ public class CanvasZoomHandler
 		ClickZoomAnimator clickZoomAnimator = new ClickZoomAnimator(fps, millis, selectedSet.getVisibleMaps().get(0),
 						mainCanvas, finalZoomFactor, finalTotalY, finalChromoHeight, this);
 		clickZoomAnimator.start();
+
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------------------------

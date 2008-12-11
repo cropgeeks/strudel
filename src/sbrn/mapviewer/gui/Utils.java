@@ -2,11 +2,79 @@ package sbrn.mapviewer.gui;
 
 import java.awt.*;
 import java.util.*;
+
+import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.components.*;
 import sbrn.mapviewer.gui.entities.*;
 
 public class Utils
 {
+	// --------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	//finds a genome by name
+	public static GMapSet getGMapSetByName(String name)
+	{
+		GMapSet foundSet = null;
+
+		//we need to search all chromomaps in all mapsets for this	
+		// for all gmapsets
+		for (GMapSet gMapSet : MapViewer.winMain.mainCanvas.gMapSetList)
+		{
+			if(gMapSet.name.equals(name))
+				foundSet = gMapSet;
+		}
+		
+		return foundSet	;
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	//finds a Feature by name
+	public static GChromoMap getGMapByName(String gMapName, String gMapSetName)
+	{
+		GChromoMap foundMap = null;
+		
+		//we need to search all chromomaps in all mapsets for this	
+		// for all gmapsets
+		GMapSet gMapSet =  getGMapSetByName(gMapSetName);
+		System.out.println("gMapSet found =  " + gMapSet.name);
+		// for all gchromomaps within each mapset
+		for (GChromoMap gChromoMap : gMapSet.gMaps)
+		{
+			if(gChromoMap.name.equals(gMapName))
+				foundMap = gChromoMap;
+		}
+		
+		return foundMap;
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	//finds a Feature by name
+	public static Feature getFeatureByName(String featureName)
+	{
+		Feature f = null;
+
+		//we need to search all chromomaps in all mapsets for this	
+		// for all gmapsets
+		for (GMapSet gMapSet : MapViewer.winMain.mainCanvas.gMapSetList)
+		{
+			// for all gchromomaps within each mapset
+			for (GChromoMap gChromoMap : gMapSet.gMaps)
+			{
+				//get the ChromoMap object
+				//look up the name in this
+				f = gChromoMap.chromoMap.getFeature(featureName);
+				if(f!=null)
+				{
+					return f;
+				}
+			}
+		}
+		
+		return f;
+	}
+	
 	// --------------------------------------------------------------------------------------------------------------------------------
 	
 	/*

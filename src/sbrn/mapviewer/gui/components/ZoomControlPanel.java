@@ -96,7 +96,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 	{
 		if(e.getSource()==resetButton)
 		{
-			winMain.mainCanvas.zoomHandler.processZoomResetRequest(gMapSet);
+			winMain.mainCanvas.zoomHandler.processZoomResetRequest(gMapSet, 1000);
 		}
 
 		updateSliders();

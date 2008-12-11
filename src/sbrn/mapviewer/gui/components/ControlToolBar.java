@@ -27,6 +27,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 	public FindFeaturesDialog ffDialog = new FindFeaturesDialog();
 
 
+
 	ControlToolBar(WinMain winMain)
 	{
 		this.winMain = winMain;
@@ -104,7 +105,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		bHelp =  (JButton) getButton(false, "", "Help", Icons.getIcon("HELP"));
 		bFindFeatures = (JButton) getButton(false, "", "Find Features", Icons.getIcon("FIND"));
 		bResetAll =  (JButton) getButton(false, "", "Reset Display", Icons.getIcon("RESET"));
-	}
+}
 
 	public void actionPerformed(ActionEvent e)
 	{
@@ -119,10 +120,10 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		{
 			//clear and show the find dialog's text area
 			ffDialog.ffPanel.getFFTextArea().setText("");
-			ffDialog.tabbedPane.setSelectedIndex(0);
 			//clear the results list of the find dialog and show it
-			ffDialog.ffResultsPanel.getFFResultsList().setModel(new DefaultListModel());
+//			ffDialog.ffResultsPanel.getFFResultsList().setModel(new DefaultListModel());
 			ffDialog.setVisible(true);
+			ffDialog.setLocationRelativeTo(winMain);
 		}
 
 		//reset the main canvas view and deselect all features

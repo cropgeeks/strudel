@@ -3,12 +3,10 @@ package sbrn.mapviewer.gui;
 import java.awt.*;
 import java.util.*;
 
-import javax.swing.*;
-
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.components.*;
+import sbrn.mapviewer.gui.dialog.*;
 import sbrn.mapviewer.gui.entities.*;
-import scri.commons.gui.*;
 
 public class FatController
 {
@@ -16,9 +14,9 @@ public class FatController
 	// ===============================================vars===================================
 	
 	private WinMain winMain;
-	public Vector<Feature> foundFeatures = null;
-	public Vector<Feature> foundFeatureHomologs = null;
-	public Vector<String> requestedFeatures = null;
+	public Vector<Feature> foundFeatures = new Vector<Feature>();
+	public Vector<Feature> featuresInRange = new Vector<Feature>();
+	public Vector<Feature> foundFeatureHomologs = new Vector<Feature>();
 	public static GChromoMap invertMap = null;
 	
 	
@@ -104,90 +102,101 @@ public class FatController
 		MapViewer.logger.finest("time taken (nanos) = " + (System.nanoTime() - startTime));
 	}
 	
+
+	
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	public void highlightRequestedFeature(String featureName)
+	public FoundFeatureTableModel makeFoundFeaturesDataModel(String [] featureNames)
 	{
-		boolean featuresFound = false;
-		
-		//we need to search all chromomaps in all mapsets for this	
-		// for all gmapsets
-		for (GMapSet gMapSet : winMain.mainCanvas.gMapSetList)
+		LinkedList<Link> homologies = new LinkedList<Link>();
+
+		//parse the strings out into the table model and populate as appropriate
+		for (int i = 0; i < featureNames.length; i++)
 		{
-			// for all gchromomaps within each mapset
-			for (GChromoMap gChromoMap : gMapSet.gMaps)
+			//retrieve the Feature that corresponds to this name
+			Feature f = Utils.getFeatureByName(featureNames[i].trim());
+			if (f != null)
 			{
-				//get the ChromoMap object
-				//look up the name in this
-				Feature f = gChromoMap.chromoMap.getFeature(featureName);
-				//if it is there, add the corresponding Feature to the vector of found features of the gMap
-				if(f != null)
+				//get all the links this feature is involved in
+				//for each link
+				for (Link link : f.getLinks())
 				{
-					featuresFound = true;
-					winMain.mainCanvas.drawFoundFeatures = true;
-					
-					//make new vectors
-					foundFeatures = new Vector<Feature>();
-					foundFeatureHomologs = new Vector<Feature>();
-					
-					//add the feature itself to the found features vector
-					foundFeatures.add(f);
-					
-					for(Link link : f.getLinks())
-					{
-						//get both features from the link and put the homologue into the homologues vector
-						
-						//get the features of this link
-						Feature f1 = link.getFeature1();
-						Feature f2 = link.getFeature2();
-						
-						//check whether either of the features for this link are included in the highlightedfeatures list for its map
-						if(!foundFeatures.contains(f1) && f1 != f)
-						{
-							foundFeatureHomologs.add(f1);
-						}
-						if(!foundFeatures.contains(f2) && f2 != f)
-						{
-							foundFeatureHomologs.add(f2);
-						}
-					}								
+					//create a new entry in the homologies list
+					homologies.add(link);
 				}
 			}
 		}
 		
-		//nothing found by this name
-		if(!featuresFound)
-		{			
-			TaskDialog.initialize(MapViewer.winMain, "MapViewer Error");
-			TaskDialog.error("No matching features found", "Close");
-			winMain.toolbar.ffDialog.setVisible(true);
-		}
+		return new FoundFeatureTableModel(homologies);
+	}
+	
+	
+	// --------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	public void highlightRequestedFeature(Feature f)
+	{		
+		winMain.mainCanvas.drawFoundFeatures = true;
+		
+		//clear the found features
+		if(foundFeatures != null)
+			foundFeatures.clear();
+		if(foundFeatureHomologs != null)
+			foundFeatureHomologs.clear();
+
+		//add the feature itself to the found features vector
+		foundFeatures.add(f);
+		
+		for(Link link : f.getLinks())
+		{
+			//get both features from the link and put the homologue into the homologues vector
+			
+			//get the features of this link
+			Feature f1 = link.getFeature1();
+			Feature f2 = link.getFeature2();
+			
+			//check whether either of the features for this link are included in the highlightedfeatures list for its map
+			if(!foundFeatures.contains(f1) && f1 != f)
+			{
+				foundFeatureHomologs.add(f1);
+			}
+			if(!foundFeatures.contains(f2) && f2 != f)
+			{
+				foundFeatureHomologs.add(f2);
+			}
+		}								
 		
 		// update the display
 		winMain.mainCanvas.antiAlias = true;
 		winMain.mainCanvas.updateCanvas(true);
 	}
 	
-	// --------------------------------------------------------------------------------------------------------------------------------------------------------
+//	--------------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	//restores the original view to what it looked like after loading the current dataset
+//	restores the original view to what it looked like after loading the current dataset
 	public void resetMainCanvasView()
 	{	
+		//hide the found features part of the split pane
+		winMain.hideSplitPaneBottomHalf();
+		
 		//clear the found features
 		if(foundFeatures != null)
 			foundFeatures.clear();
 		if(foundFeatureHomologs != null)
 			foundFeatureHomologs.clear();
-		
+		if(featuresInRange != null)
+			featuresInRange.clear();		
+		winMain.mainCanvas.drawFoundFeatures = false;
+		winMain.mainCanvas.drawFoundFeaturesInRange = false;
+
 		for(GMapSet gMapSet : winMain.mainCanvas.gMapSetList)
 		{
 			//reset zoom on all mapsets
-			winMain.mainCanvas.zoomHandler.processZoomResetRequest(gMapSet);
+			winMain.mainCanvas.zoomHandler.processZoomResetRequest(gMapSet, 500);
 			
 			//reset selected maps
 			gMapSet.selectedMaps.clear();
-
+			
 			//for all maps within mapset
 			for(GChromoMap gMap: gMapSet.gMaps)
 			{			
@@ -196,6 +205,9 @@ public class FatController
 				
 				//any inverted maps have to be flagged as non-inverted
 				gMap.isPartlyInverted = false;
+				
+				//clear any highlighted regions
+				gMap.highlightChromomapRegion = false;
 			}			
 		}	
 		
@@ -207,7 +219,7 @@ public class FatController
 	
 	
 	
-	// --------------------------------------------------------------------------------------------------------------------------------------------------------
+//	--------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 }// end class
 

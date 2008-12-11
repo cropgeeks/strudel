@@ -77,8 +77,13 @@ public class MainCanvas extends JPanel
 	// Does the buffer need redrawn before use?
 	boolean redraw = true;
 	
-	//true if we want to display features the user has searched for with the find dialog
+	//true if we want to display individual features the user has searched for with the find dialog
 	public boolean drawFoundFeatures = false;
+	
+	//true if we want to display features within a certain range the user has searched for with the find dialog
+	public boolean drawFoundFeaturesInRange = false;
+	
+	
 
 	// ============================c'tors==================================
 	
@@ -205,7 +210,7 @@ public class MainCanvas extends JPanel
 				if(gChromoMap.isShowingOnCanvas && !gChromoMap.inversionInProgress)
 				{
 					gChromoMap.drawDistanceMarkers(g);
-					gChromoMap.drawHighlightedFeatures(g);
+					gChromoMap.drawMouseOverFeatures(g);
 					gChromoMap.drawHighlightOutline(g);
 				}
 			}
@@ -365,13 +370,30 @@ public class MainCanvas extends JPanel
 			linkDisplayManager.drawAllLinks(g2);
 		}
 		
+		//this draws homologies for features in a contiguous range on a chromosome
+		if(drawFoundFeaturesInRange)
+		{
+			if(MapViewer.winMain.toolbar.ffDialog.ffPanel.getDisplayHomologsCheckBox().isSelected())
+			{
+				linkDisplayManager.drawHighlightedLinksInRange(g2);
+				
+			}
+		}
+
 		//we also want to check whether there are any links to display that are to be highlighted after a name based search for
 		//features and links originating from them
 		if(drawFoundFeatures)
 		{
-			linkDisplayManager.drawHighlightedLinks(g2);
+			linkDisplayManager.drawSingleHighlightedLink(g2);
 		}
 		
+		//this draws labels of features in a contiguous range on a chromosome
+		//need to do this in this order so things are drawn on top of each other in the right sequence
+		if(drawFoundFeaturesInRange && MapViewer.winMain.toolbar.ffDialog.ffPanel.getDisplayLabelsCheckbox().isSelected())
+		{
+			LabelDisplayManager.drawFeatureLabelsInRange(g2);
+		}
+
 		//check whether we want to display a BLAST cutoff value
 		if (drawBlastScore)
 		{
@@ -388,7 +410,7 @@ public class MainCanvas extends JPanel
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
 			{
 				//if the map is meant to be visible on the canvas at this time
-				if (gChromoMap.isShowingOnCanvas && !gChromoMap.inversionInProgress && gChromoMap.drawChromoIndex)
+				if (gChromoMap.isShowingOnCanvas && !gChromoMap.inversionInProgress)
 				{
 					drawMapIndex(g2, gChromoMap, gMapSet);
 				}

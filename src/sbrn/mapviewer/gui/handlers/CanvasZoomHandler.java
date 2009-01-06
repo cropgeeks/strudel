@@ -76,9 +76,6 @@ public class CanvasZoomHandler
 		selectedSet.centerPoint = Math.round(newCenterPoint);
 		selectedSet.chromoHeight = newChromoHeight;
 
-		// check whether we need to display markers and labels
-//		mainCanvas.checkMarkerPaintingThresholds(selectedSet);
-
 		//update the position lookup arrays for mouseover
 		MapViewer.winMain.fatController.initialisePositionArrays();
 

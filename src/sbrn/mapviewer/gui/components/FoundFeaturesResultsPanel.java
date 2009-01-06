@@ -30,7 +30,7 @@ public class FoundFeaturesResultsPanel extends JPanel implements ListSelectionLi
 		
 		resultsTable = new HomologResultsTable();
 		JScrollPane scrollPane = new JScrollPane(resultsTable);
-		scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
+		scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 		resultsTable.setFillsViewportHeight(true);
 		this.add(scrollPane, BorderLayout.CENTER);
 		
@@ -94,59 +94,59 @@ public class FoundFeaturesResultsPanel extends JPanel implements ListSelectionLi
 		
 		try
 		{
-			
 			int selectedRow = resultsTable.getSelectionModel().getLeadSelectionIndex();
 			int selectedCol = resultsTable.getColumnModel().getSelectionModel().getLeadSelectionIndex();
 			
-			// user has clicked on homolog name -- fire up web browser with annotation info
-			if (selectedCol == 3)
+			if (resultsTable.getModel().getColumnCount() > 0)
 			{
-				// extract the value of the cell clicked on
-				String homologName = (String) resultsTable.getModel().getValueAt(selectedRow, selectedCol);
+				// get the feature name
+				String featureName = (String) resultsTable.getModel().getValueAt(
+								resultsTable.getSelectedRow(), 0);
+				// retrieve the Feature that corresponds to this name
+				Feature f = Utils.getFeatureByName(featureName);
+				// highlight it on the canvas
+				MapViewer.winMain.fatController.highlightRequestedFeature(f);
 				
-				String url = Prefs.refGenome2BaseURL + homologName;
-				Desktop desktop = null;
-				if (Desktop.isDesktopSupported()) 
-					desktop = Desktop.getDesktop();
+				// which map and mapset are we dealing with here
+				GMapSet owningSet = f.getOwningMap().getGChromoMap().owningSet;
+				GChromoMap gChromoMap = f.getOwningMap().getGChromoMap();
 				
-				if (desktop != null &&  desktop.isSupported(Desktop.Action.BROWSE))
-					desktop.browse(new URI(url));			
-				
-				if (resultsTable.getModel().getColumnCount() > 0)
+				// we have changed map
+				if (previousMap != null && !previousMap.equals(gChromoMap))
 				{
-					// get the feature name
-					String featureName = (String) resultsTable.getModel().getValueAt(
-									resultsTable.getSelectedRow(), 0);
-					// retrieve the Feature that corresponds to this name
-					Feature f = Utils.getFeatureByName(featureName);
-					// highlight it on the canvas
-					MapViewer.winMain.fatController.highlightRequestedFeature(f);
+					// zoom out first
+					// owningSet.zoomFactor = 1;
+					// owningSet.paintAllMarkers = false;
+					// MapViewer.winMain.mainCanvas.updateCanvas(true);
+				}
+				
+				// zoom into that chromosome so it fills the screen
+				if (owningSet.zoomFactor < owningSet.singleChromoViewZoomFactor || !gChromoMap.isShowingOnCanvas)
+				{
+					// zoom into the map
+					MapViewer.winMain.mainCanvas.zoomHandler.processClickZoomRequest(gChromoMap,
+									1000);
+				}
+				
+				// remember this map
+				previousMap = gChromoMap;
+				
+				// user has clicked on homolog name -- fire up web browser with annotation info
+				if (selectedCol == 3)
+				{
+					// extract the value of the cell clicked on
+					String homologName = (String) resultsTable.getModel().getValueAt(selectedRow, selectedCol);
 					
-					// which map and mapset are we dealing with here
-					GMapSet owningSet = f.getOwningMap().getGChromoMap().owningSet;
-					GChromoMap gChromoMap = f.getOwningMap().getGChromoMap();
+					String url = Prefs.refGenome2BaseURL + homologName;
+					Desktop desktop = null;
+					if (Desktop.isDesktopSupported()) 
+						desktop = Desktop.getDesktop();
 					
-					// we have changed map
-					if (previousMap != null && !previousMap.equals(gChromoMap))
-					{
-						// zoom out first
-						// owningSet.zoomFactor = 1;
-						// owningSet.paintAllMarkers = false;
-						// MapViewer.winMain.mainCanvas.updateCanvas(true);
-					}
-					
-					// zoom into that chromosome so it fills the screen
-					if (owningSet.zoomFactor < owningSet.singleChromoViewZoomFactor || !gChromoMap.isShowingOnCanvas)
-					{
-						// zoom into the map
-						MapViewer.winMain.mainCanvas.zoomHandler.processClickZoomRequest(gChromoMap,
-										1000);
-					}
-					
-					// remember this map
-					previousMap = gChromoMap;
+					if (desktop != null &&  desktop.isSupported(Desktop.Action.BROWSE))
+						desktop.browse(new URI(url));	
 				}
 			}
+			
 		}
 		catch (Exception e1)
 		{

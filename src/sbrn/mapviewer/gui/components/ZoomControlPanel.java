@@ -9,7 +9,7 @@ import javax.swing.event.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.entities.*;
 
-public class ZoomControlPanel extends JToolBar implements ChangeListener, ActionListener
+public class ZoomControlPanel extends JToolBar implements ChangeListener, ActionListener, MouseListener
 {
 	// ===============================================vars=======================================
 
@@ -28,7 +28,6 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 
 		this.winMain = winMain;
 		this.gMapSet = gMapSet;
-
 
 		setFloatable(false);
 		setBorderPainted(false);
@@ -52,6 +51,9 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		zoomSlider.setToolTipText("Zoom this genome in or out");
 		// add it
 		zoomSlider.addChangeListener(this);
+		//we need the mouse listener so we can have the canvas repainted with antialias on when the mouse button is released
+		//this is the way it happens for all other cases where we need a pretty repaint
+		zoomSlider.addMouseListener(this);
 		zoomSlider.setPaintTicks(true);
 		zoomSlider.setMinorTickSpacing(50);
 		zoomSlider.setMajorTickSpacing(100);
@@ -101,6 +103,20 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 
 		updateSliders();
 	}
+
+
+
+	public void mouseReleased(MouseEvent e)
+	{
+		MapViewer.winMain.mainCanvas.antiAlias = true;
+		MapViewer.winMain.mainCanvas.updateCanvas(true);		
+	}
+	
+	//theseare currently not needed
+	public void mouseClicked(MouseEvent e){}
+	public void mouseEntered(MouseEvent e){}
+	public void mouseExited(MouseEvent e){}
+	public void mousePressed(MouseEvent e){}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 }

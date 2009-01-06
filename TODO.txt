@@ -69,7 +69,7 @@ Menu bar support for new/infrequent users – Robbie
 
 
 FIXES:
-- mouse controls need to be sorted out; clicking sometimes zooms instead
+
 
 
 

@@ -25,4 +25,8 @@ public class Prefs extends XMLPreferences
 	public static int guiOverviewX = 0;
 	public static int guiOverviewY = 0;
 	public static boolean guiOverviewVisible = true;
+	
+	public static String refGenome1BaseURL = "http://rapdb.dna.affrc.go.jp/cgi-bin/gbrowse/IRGSP40/?name=";
+	public static String refGenome2BaseURL = "http://rapdb.dna.affrc.go.jp/cgi-bin/gbrowse/IRGSP40/?name=";
+		
 }

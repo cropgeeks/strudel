@@ -6,6 +6,8 @@
 
 package sbrn.mapviewer.gui.components;
 
+import sbrn.mapviewer.gui.*;
+
 /**
  *
  * @author  __USER__
@@ -29,42 +31,42 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 	private void initComponents()
 	{
 		
-		jLabel1 = new javax.swing.JLabel();
-		jLabel2 = new javax.swing.JLabel();
-		jLabel3 = new javax.swing.JLabel();
-		jLabel4 = new javax.swing.JLabel();
-		jLabel5 = new javax.swing.JLabel();
-		jLabel6 = new javax.swing.JLabel();
+		titleLabel = new javax.swing.JLabel();
+		genomeLabel = new javax.swing.JLabel();
+		chromoLabel = new javax.swing.JLabel();
+		regionStartLabel = new javax.swing.JLabel();
+		regionEndLabel = new javax.swing.JLabel();
+		numberFeaturesLabel = new javax.swing.JLabel();
 		showLabelsCheckbox = new javax.swing.JCheckBox();
 		showHomologsCheckbox = new javax.swing.JCheckBox();
 		
-		jLabel1.setText("<html><b>Highlighted region:</b></html>");
+		titleLabel.setText("<html><b>Highlighted region:</b></html>");
 		
-		jLabel2.setText("Genome:");
+		genomeLabel.setText("Genome:");
 		
-		jLabel3.setText("Chromosome:");
+		chromoLabel.setText("Chromosome:");
 		
-		jLabel4.setText("Region start:");
+		regionStartLabel.setText("Region start:");
 		
-		jLabel5.setText("Region end:");
+		regionEndLabel.setText("Region end:");
 		
-		jLabel6.setText("No. of features:");
+		numberFeaturesLabel.setText("No. of features:");
 		
 		showLabelsCheckbox.setText("Show labels");
-		showLabelsCheckbox.addActionListener(new java.awt.event.ActionListener()
+		showLabelsCheckbox.addChangeListener(new javax.swing.event.ChangeListener()
 		{
-			public void actionPerformed(java.awt.event.ActionEvent evt)
+			public void stateChanged(javax.swing.event.ChangeEvent evt)
 			{
-				showLabelsCheckboxActionPerformed(evt);
+				showLabelsCheckboxStateChanged(evt);
 			}
 		});
 		
 		showHomologsCheckbox.setText("Show homologs");
-		showHomologsCheckbox.addActionListener(new java.awt.event.ActionListener()
+		showHomologsCheckbox.addChangeListener(new javax.swing.event.ChangeListener()
 		{
-			public void actionPerformed(java.awt.event.ActionEvent evt)
+			public void stateChanged(javax.swing.event.ChangeEvent evt)
 			{
-				showHomologsCheckboxActionPerformed(evt);
+				showHomologsCheckboxStateChanged(evt);
 			}
 		});
 		
@@ -74,27 +76,28 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 						layout.createSequentialGroup().addContainerGap().add(
 										layout.createParallelGroup(
 														org.jdesktop.layout.GroupLayout.LEADING).add(
-														jLabel1).add(
-														jLabel2).add(
-														jLabel3).add(
-														jLabel4).add(
-														jLabel5).add(
-														jLabel6).add(
+														titleLabel).add(
+														genomeLabel).add(
+														chromoLabel).add(
+														regionStartLabel).add(
+														regionEndLabel).add(
+														numberFeaturesLabel).add(
 														showLabelsCheckbox).add(
 														showHomologsCheckbox)).addContainerGap(
-										65, Short.MAX_VALUE)));
+										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE)));
 		layout.setVerticalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
-						layout.createSequentialGroup().addContainerGap().add(jLabel1).addPreferredGap(
+						layout.createSequentialGroup().addContainerGap().add(titleLabel).addPreferredGap(
 										org.jdesktop.layout.LayoutStyle.UNRELATED).add(
-										jLabel2).addPreferredGap(
+										genomeLabel).addPreferredGap(
 										org.jdesktop.layout.LayoutStyle.RELATED).add(
-										jLabel3).addPreferredGap(
+										chromoLabel).addPreferredGap(
 										org.jdesktop.layout.LayoutStyle.RELATED).add(
-										jLabel4).addPreferredGap(
+										regionStartLabel).addPreferredGap(
 										org.jdesktop.layout.LayoutStyle.RELATED).add(
-										jLabel5).addPreferredGap(
+										regionEndLabel).addPreferredGap(
 										org.jdesktop.layout.LayoutStyle.RELATED).add(
-										jLabel6).addPreferredGap(
+										numberFeaturesLabel).addPreferredGap(
 										org.jdesktop.layout.LayoutStyle.RELATED).add(
 										showLabelsCheckbox).addPreferredGap(
 										org.jdesktop.layout.LayoutStyle.RELATED).add(
@@ -104,26 +107,61 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 	}// </editor-fold>
 	//GEN-END:initComponents
 	
-	private void showHomologsCheckboxActionPerformed(java.awt.event.ActionEvent evt)
+	private void showHomologsCheckboxStateChanged(javax.swing.event.ChangeEvent evt)
 	{
-		// TODO add your handling code here:
+		MapViewer.winMain.mainCanvas.updateCanvas(true);
 	}
 	
-	private void showLabelsCheckboxActionPerformed(java.awt.event.ActionEvent evt)
+	private void showLabelsCheckboxStateChanged(javax.swing.event.ChangeEvent evt)
 	{
-		// TODO add your handling code here:
+		MapViewer.winMain.mainCanvas.updateCanvas(true);
 	}
 	
 	//GEN-BEGIN:variables
 	// Variables declaration - do not modify
-	private javax.swing.JLabel jLabel1;
-	private javax.swing.JLabel jLabel2;
-	private javax.swing.JLabel jLabel3;
-	private javax.swing.JLabel jLabel4;
-	private javax.swing.JLabel jLabel5;
-	private javax.swing.JLabel jLabel6;
+	private javax.swing.JLabel chromoLabel;
+	private javax.swing.JLabel genomeLabel;
+	private javax.swing.JLabel numberFeaturesLabel;
+	private javax.swing.JLabel regionEndLabel;
+	private javax.swing.JLabel regionStartLabel;
 	private javax.swing.JCheckBox showHomologsCheckbox;
 	private javax.swing.JCheckBox showLabelsCheckbox;
+	private javax.swing.JLabel titleLabel;
+	
 	// End of variables declaration//GEN-END:variables
+	public javax.swing.JLabel getChromoLabel()
+	{
+		return chromoLabel;
+	}
+	
+	public javax.swing.JLabel getGenomeLabel()
+	{
+		return genomeLabel;
+	}
+	
+	public javax.swing.JLabel getNumberFeaturesLabel()
+	{
+		return numberFeaturesLabel;
+	}
+	
+	public javax.swing.JLabel getRegionEndLabel()
+	{
+		return regionEndLabel;
+	}
+	
+	public javax.swing.JLabel getRegionStartLabel()
+	{
+		return regionStartLabel;
+	}
+	
+	public javax.swing.JCheckBox getShowHomologsCheckbox()
+	{
+		return showHomologsCheckbox;
+	}
+	
+	public javax.swing.JCheckBox getShowLabelsCheckbox()
+	{
+		return showLabelsCheckbox;
+	}
 	
 }

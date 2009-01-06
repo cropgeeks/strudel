@@ -8,7 +8,6 @@ import javax.swing.*;
 
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
-import sbrn.mapviewer.gui.animators.*;
 import sbrn.mapviewer.gui.components.*;
 import sbrn.mapviewer.gui.entities.*;
 import scri.commons.gui.*;
@@ -21,7 +20,7 @@ public class FindFeaturesDialog extends JDialog implements ActionListener
 	
 	public FindFeaturesDialog()
 	{
-		super(MapViewer.winMain, "Find Features", false);
+		super(MapViewer.winMain, "Find Features", true);
 		
 		add(ffPanel);
 		add(createButtons(), BorderLayout.SOUTH);
@@ -29,8 +28,8 @@ public class FindFeaturesDialog extends JDialog implements ActionListener
 		getRootPane().setDefaultButton(bFind);
 		SwingUtils.addCloseHandler(this, bCancel);
 		
-		pack();
 		setLocationRelativeTo(MapViewer.winMain);
+		pack();
 		setResizable(true);
 	}
 	
@@ -74,10 +73,6 @@ public class FindFeaturesDialog extends JDialog implements ActionListener
 	{
 		try
 		{		
-			//clear the found features, if any
-			if(MapViewer.winMain.fatController.foundFeatures != null)
-				MapViewer.winMain.fatController.foundFeatures.clear();
-			
 			// establish whether the user wants to find a list of features or features in a given range
 			boolean findFeaturesInRange = false;
 			if(!ffPanel.getIntervalStartTextField().getText().equals(""))
@@ -131,7 +126,20 @@ public class FindFeaturesDialog extends JDialog implements ActionListener
 				int bottomY = relativeBottomY  + gChromoMap.y + buffer;
 				MapViewer.winMain.mainCanvas.zoomHandler.processPanZoomRequest(gChromoMap, topY, bottomY);
 				
-				//now draw all the labels for the features themselves (not their homologs)
+				//we also need to set the labels on the control panel for the results to have the appropriate text
+				FoundFeaturesTableControlPanel foundFeaturesTableControlPanel = MapViewer.winMain.foundFeaturesTableControlPanel;
+				foundFeaturesTableControlPanel.setVisible(true);
+				foundFeaturesTableControlPanel.getGenomeLabel().setText("<html><b>Genome: </b>" + genome + "</html>");
+				foundFeaturesTableControlPanel.getChromoLabel().setText("<html><b>Chromosome: </b>" + chromosome + "</html>");
+				foundFeaturesTableControlPanel.getRegionStartLabel().setText("<html><b>Region start: </b>" + intervalStart + "</html>");
+				foundFeaturesTableControlPanel.getRegionEndLabel().setText("<html><b>Region end: </b>" + intervalEnd + "</html>");
+				foundFeaturesTableControlPanel.getNumberFeaturesLabel().setText("<html><b>No. of features: </b>" + containedFeatureNames.size() + "</html>");
+				
+				//sync the checkboxes states with those in the find dialog itself to make sure they show the same value
+				foundFeaturesTableControlPanel.getShowLabelsCheckbox().setSelected(ffPanel.getDisplayLabelsCheckbox().isSelected());
+				foundFeaturesTableControlPanel.getShowHomologsCheckbox().setSelected(ffPanel.getDisplayHomologsCheckBox().isSelected());				
+				
+				//earmark the features for drawing on repaint
 				MapViewer.winMain.mainCanvas.drawFoundFeaturesInRange = true;
 				
 				//repaint the canvas so we can see the highlighted region which should then be coloured in differently
@@ -153,7 +161,15 @@ public class FindFeaturesDialog extends JDialog implements ActionListener
 			//set the results panel to be visible and hide the find dialog
 			this.setVisible(false);
 			MapViewer.winMain.splitPane.setDividerSize(5);
-			MapViewer.winMain.splitPane.setDividerLocation(0.75);
+			int newDividerLocation = (int) (MapViewer.winMain.mainCanvas.getHeight() - MapViewer.winMain.foundFeaturesTableControlPanel.getPreferredSize().getHeight());
+			MapViewer.winMain.splitPane.setDividerLocation(newDividerLocation);
+			
+			//we can hide the found features control panel if we are looking at a set of discontinuous features rather than a range
+			if(!findFeaturesInRange)
+			{
+				MapViewer.winMain.foundFeaturesTableControlPanel.setVisible(false);
+			}
+				
 			
 		}
 		catch (RuntimeException e1)

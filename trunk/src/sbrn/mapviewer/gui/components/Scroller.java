@@ -1,34 +1,30 @@
 package sbrn.mapviewer.gui.components;
 
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
+import java.awt.event.*;
 
-import javax.swing.JScrollBar;
+import javax.swing.*;
+
+import sbrn.mapviewer.gui.*;
+import sbrn.mapviewer.gui.entities.*;
 
 public class Scroller extends JScrollBar implements AdjustmentListener
 {
 
-	WinMain winMain;
-
-	public Scroller(WinMain winMain)
+	public Scroller()
 	{
-		this.winMain = winMain;
 		addAdjustmentListener(this);
+		this.setVisibleAmount(5);
+		this.setValue(50);
 	}
-
+	
 	public void adjustmentValueChanged(AdjustmentEvent e)
 	{
-//		 if(e.getValueIsAdjusting())
-//		 return;
+		for (GMapSet gMapSet : MapViewer.winMain.mainCanvas.gMapSetList)
+		{
+			//work out the new scroller position and the corresponding position on the mapset's genome in y
+			int newCenterPoint = (int) (gMapSet.totalY * (e.getValue()/100.0f));
+			MapViewer.winMain.mainCanvas.moveGenomeViewPort(gMapSet, newCenterPoint);
+		} 
 
-//		if (e.getSource().equals(winMain.leftCanvasScroller))
-//		{
-//			winMain.mainCanvas.moveGenomeViewPort(winMain.mainCanvas.targetGMapSet, e.getValue());
-//		}
-//		else if (e.getSource().equals(winMain.rightCanvasScroller))
-//		{
-//			winMain.mainCanvas.moveGenomeViewPort(winMain.mainCanvas.referenceGMapSet, e.getValue());
-//		}
 	}
-
 }

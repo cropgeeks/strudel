@@ -118,10 +118,18 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		//show the find features dialog
 		else if (e.getSource() == bFindFeatures)
 		{
-			//clear and show the find dialog's text area
+			//reset the main canvas view to all its defaults 
+			MapViewer.winMain.fatController.resetMainCanvasView();
+
+			//clear the find dialog
 			ffDialog.ffPanel.getFFTextArea().setText("");
-			//clear the results list of the find dialog and show it
-//			ffDialog.ffResultsPanel.getFFResultsList().setModel(new DefaultListModel());
+			ffDialog.ffPanel.getIntervalStartTextField().setText("");
+			ffDialog.ffPanel.getIntervalEndTextField().setText("");
+			ffDialog.ffPanel.getGenomeCombo().setSelectedIndex(0);
+			ffDialog.ffPanel.getChromoCombo().setSelectedIndex(0);
+			
+			
+			//show the find dialog
 			ffDialog.setVisible(true);
 			ffDialog.setLocationRelativeTo(winMain);
 		}

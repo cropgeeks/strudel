@@ -3,6 +3,8 @@ package sbrn.mapviewer.gui;
 import java.awt.*;
 import java.util.*;
 
+import javax.swing.table.*;
+
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.components.*;
 import sbrn.mapviewer.gui.dialog.*;
@@ -178,7 +180,11 @@ public class FatController
 	{	
 		//hide the found features part of the split pane
 		winMain.hideSplitPaneBottomHalf();
-		
+		winMain.splitPane.setDividerLocation(1.0);
+
+		//clear the table model for the found features
+		MapViewer.winMain.ffResultsPanel.getFFResultsTable().setModel(new DefaultTableModel());
+				
 		//clear the found features
 		if(foundFeatures != null)
 			foundFeatures.clear();

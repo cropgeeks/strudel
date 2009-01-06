@@ -136,10 +136,6 @@ public class MainCanvas extends JPanel
 			// check which genome has the most chromosomes
 			if(gMapSet.numMaps > maxChromos)
 				maxChromos = gMapSet.numMaps;
-			
-			// set the thresholds for marker painting here for now
-//			gMapSet.thresholdLinkedMarkerPainting = 12;
-//			gMapSet.thresholdAllMarkerPainting = 12;
 		}
 		
 	}
@@ -179,27 +175,19 @@ public class MainCanvas extends JPanel
 		
 		// Render the back-buffer
 		g.drawImage(buffer, 0, 0, null);
-		
-		
+
 		// Render any additional overlay images (highlights, mouse-overs etc)
-		//
-		
+
 		// this optionally draws a rectangle delimiting a region we want to zoom in on
 		if (drawSelectionRect)
 		{
 			g.setPaint(new Color(1f, 1f, 1f, 0.25f));
-//			g.fillRect(mousePressedX, mousePressedY, mouseDraggedX - mousePressedX,
-//			mouseDraggedY - mousePressedY);
-			g.fill(selectionRect);
-			
+			g.fill(selectionRect);			
 			g.setColor(Colors.selectionRectColour);
 			// draw rectangle
-//			g.drawRect(mousePressedX, mousePressedY, mouseDraggedX - mousePressedX,
-//			mouseDraggedY - mousePressedY);
 			g.draw(selectionRect);
 		}
-		
-		
+
 		//now we need to draw the rest of the things relating to the map
 		//this needs to be done after drawing the links so it is all visible on top of the links
 		for (GMapSet gMapSet : gMapSetList)
@@ -250,6 +238,8 @@ public class MainCanvas extends JPanel
 		float [] xPositions = null;
 		for (GMapSet gMapSet : gMapSetList)
 		{
+			checkMarkerPaintingThresholds(gMapSet);
+			
 			// these variables determine where the genomes appear on the canvas on the x axis (scaled to 0-1)
 			// position is relative to frame size
 			if(gMapSetList.size() == 2)
@@ -373,10 +363,10 @@ public class MainCanvas extends JPanel
 		//this draws homologies for features in a contiguous range on a chromosome
 		if(drawFoundFeaturesInRange)
 		{
-			if(MapViewer.winMain.toolbar.ffDialog.ffPanel.getDisplayHomologsCheckBox().isSelected())
+			if(MapViewer.winMain.toolbar.ffDialog.ffPanel.getDisplayHomologsCheckBox().isSelected() ||
+							MapViewer.winMain.foundFeaturesTableControlPanel.getShowHomologsCheckbox().isSelected())
 			{
-				linkDisplayManager.drawHighlightedLinksInRange(g2);
-				
+				linkDisplayManager.drawHighlightedLinksInRange(g2);				
 			}
 		}
 
@@ -389,7 +379,8 @@ public class MainCanvas extends JPanel
 		
 		//this draws labels of features in a contiguous range on a chromosome
 		//need to do this in this order so things are drawn on top of each other in the right sequence
-		if(drawFoundFeaturesInRange && MapViewer.winMain.toolbar.ffDialog.ffPanel.getDisplayLabelsCheckbox().isSelected())
+		if(drawFoundFeaturesInRange && (MapViewer.winMain.toolbar.ffDialog.ffPanel.getDisplayLabelsCheckbox().isSelected() ||
+						MapViewer.winMain.foundFeaturesTableControlPanel.getShowLabelsCheckbox().isSelected()))
 		{
 			LabelDisplayManager.drawFeatureLabelsInRange(g2);
 		}
@@ -430,7 +421,7 @@ public class MainCanvas extends JPanel
 		int mapIndex = gChromoMap.index;
 		
 		//font stuff
-		int fontSize = WinMain.mainCanvas.getHeight() / 40;
+		int fontSize = Math.round(WinMain.mainCanvas.getHeight() / 30);
 		Font mapLabelFont = new Font("Arial", Font.BOLD, fontSize);
 		g2.setFont(mapLabelFont);
 		g2.setColor(Colors.chromosomeIndexColour);

@@ -12,6 +12,9 @@ public class CanvasZoomHandler
 	// =====================================vars===================================
 
 	MainCanvas mainCanvas;
+	
+	// frame rate
+	int fps = 25;
 
 	// =====================================c'tors===================================
 
@@ -74,7 +77,7 @@ public class CanvasZoomHandler
 		selectedSet.chromoHeight = newChromoHeight;
 
 		// check whether we need to display markers and labels
-		mainCanvas.checkMarkerPaintingThresholds(selectedSet);
+//		mainCanvas.checkMarkerPaintingThresholds(selectedSet);
 
 		//update the position lookup arrays for mouseover
 		MapViewer.winMain.fatController.initialisePositionArrays();
@@ -96,8 +99,6 @@ public class CanvasZoomHandler
 		float finalScalingFactor = mainCanvas.getHeight() / (float) selectedYDist;
 
 		// animate this by zooming in gradually
-		// frame rate
-		int fps = 20;
 		// the length of time we want the animation to last in milliseconds
 		int millis = 1000;
 		PanZoomAnimator panZoomAnimator = new PanZoomAnimator(fps, millis, finalScalingFactor, selectedMap, mainCanvas, mousePressedY, mouseReleasedY, this);
@@ -107,16 +108,13 @@ public class CanvasZoomHandler
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
 	// zooms in by a fixed amount on a chromosome the user clicked on (to fill screen with chromosome)
-	public synchronized void processClickZoomRequest(GChromoMap selectedMap,int millis)
+	public  void processClickZoomRequest(GChromoMap selectedMap,int millis)
 	{
 		// figure out the genome it belongs to and increase that genome's zoom factor so that we can
 		// just fit the chromosome on screen the next time it is painted
 		GMapSet selectedSet = selectedMap.owningSet;
 
 		// animate this by zooming in gradually
-		// frame rate
-		int fps = 20;
-
 		float finalZoomFactor = mainCanvas.initialCanvasHeight / mainCanvas.initialChromoHeight;
 		// work out the chromo height and total genome height for when the new zoom factor will have been applied
 		int finalChromoHeight = (int) (mainCanvas.initialChromoHeight * finalZoomFactor);
@@ -133,12 +131,9 @@ public class CanvasZoomHandler
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
 	// zooms out to restore original zoom factor of 1
-	public synchronized void processZoomResetRequest(GMapSet selectedSet,int millis)
+	public  void processZoomResetRequest(GMapSet selectedSet,int millis)
 	{
 		// animate this by zooming out gradually
-		// frame rate
-		int fps = 20;
-
 		float finalZoomFactor = 1;
 		// work out the chromo height and total genome height for when the new zoom factor will have been applied
 		int finalChromoHeight = mainCanvas.initialChromoHeight;
@@ -150,7 +145,6 @@ public class CanvasZoomHandler
 		ClickZoomAnimator clickZoomAnimator = new ClickZoomAnimator(fps, millis, selectedSet.getVisibleMaps().get(0),
 						mainCanvas, finalZoomFactor, finalTotalY, finalChromoHeight, this);
 		clickZoomAnimator.start();
-
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------------------------

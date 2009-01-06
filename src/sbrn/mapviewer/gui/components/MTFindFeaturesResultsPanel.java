@@ -7,6 +7,8 @@
 package sbrn.mapviewer.gui.components;
 
 import java.awt.*;
+import java.io.*;
+import java.net.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -25,10 +27,19 @@ public class MTFindFeaturesResultsPanel extends javax.swing.JPanel implements Li
 	
 	GChromoMap previousMap = null;
 	
+	HomologResultsTable resultsTable = null;
+	
 	/** Creates new form MTFindFeaturesResultsPanel */
 	public MTFindFeaturesResultsPanel()
 	{
 		initComponents();
+		
+		resultsTable = new HomologResultsTable();
+		JScrollPane scrollPane = new JScrollPane(resultsTable);
+		resultsTable.setFillsViewportHeight(true);
+		//		scrollPane.setPreferredSize(this.getPreferredSize());
+		this.add(scrollPane, BorderLayout.CENTER);
+		//		scrollPane.setVisible(true);
 		
 		//settings for results table
 		resultsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -41,66 +52,31 @@ public class MTFindFeaturesResultsPanel extends javax.swing.JPanel implements Li
 	{
 		
 		resultsLabel = new javax.swing.JLabel();
-		jScrollPane1 = new javax.swing.JScrollPane();
-		resultsTable = new javax.swing.JTable();
 		
-		resultsLabel.setText("<html>Click on row to highlight feature and its homologs:</html>");
-		
-		jScrollPane1.setBorder(null);
-		
-		resultsTable.setModel(new javax.swing.table.DefaultTableModel(new Object[][]
-		{
-		{ null, null, null, null },
-		{ null, null, null, null },
-		{ null, null, null, null },
-		{ null, null, null, null } }, new String[]
-		{ "Title 1", "Title 2", "Title 3", "Title 4" }));
-		jScrollPane1.setViewportView(resultsTable);
+		resultsLabel.setText("<html>Click on row to highlight feature and homologs. Click on homolog name link to open web browser with feature info.</html>");
 		
 		org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
 		this.setLayout(layout);
 		layout.setHorizontalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
 						layout.createSequentialGroup().addContainerGap().add(
-										layout.createParallelGroup(
-														org.jdesktop.layout.GroupLayout.LEADING).add(
-														layout.createSequentialGroup().add(
-																		jScrollPane1,
-																		org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																		772,
-																		Short.MAX_VALUE).addContainerGap()).add(
-														layout.createSequentialGroup().add(
-																		resultsLabel,
-																		org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																		731,
-																		Short.MAX_VALUE).add(
-																		51,
-																		51,
-																		51)))));
-		layout.setVerticalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
-						layout.createSequentialGroup().addContainerGap().add(resultsLabel).addPreferredGap(
-										org.jdesktop.layout.LayoutStyle.UNRELATED).add(
-										jScrollPane1,
+										resultsLabel,
 										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-										93, Short.MAX_VALUE).addContainerGap()));
+										731, Short.MAX_VALUE).add(51, 51, 51)));
+		layout.setVerticalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
+						layout.createSequentialGroup().addContainerGap().add(resultsLabel).addContainerGap(
+										231, Short.MAX_VALUE)));
 	}// </editor-fold>
 	//GEN-END:initComponents
 	
 	//GEN-BEGIN:variables
 	// Variables declaration - do not modify
-	private javax.swing.JScrollPane jScrollPane1;
 	private javax.swing.JLabel resultsLabel;
-	private javax.swing.JTable resultsTable;
 	
 	// End of variables declaration//GEN-END:variables
 	
 	public JTable getFFResultsTable()
 	{
 		return resultsTable;
-	}
-	
-	public void setFFResultsTable(JTable table)
-	{
-		resultsTable = table;
 	}
 	
 	public int getTotalTableWidth()
@@ -151,25 +127,77 @@ public class MTFindFeaturesResultsPanel extends javax.swing.JPanel implements Li
 			return;
 		}
 		
-		//get the feature name
-		String featureName = (String) resultsTable.getModel().getValueAt(resultsTable.getSelectedRow(), 0);
+		int selectedRow = resultsTable.getSelectionModel().getLeadSelectionIndex();
+		int selectedCol = resultsTable.getColumnModel().getSelectionModel().getLeadSelectionIndex();
+		System.out.println("selected cell (row, col): " + selectedRow + "," + selectedCol);
 		
-		//retrieve the Feature that corresponds to this name
-		Feature f = Utils.getFeatureByName(featureName);
-		
-		//highlight it on the canvas
-		MapViewer.winMain.fatController.highlightRequestedFeature(f);
-		
-		//zoom into that chromosome so it fills the screen
-		GMapSet owningSet = f.getOwningMap().getGChromoMap().owningSet;
-		GChromoMap gChromoMap = f.getOwningMap().getGChromoMap();
-		if (owningSet.zoomFactor < owningSet.singleChromoViewZoomFactor || !gChromoMap.isShowingOnCanvas)
+		//user has clicked on homolog name -- fire up web browser with annotation info
+		if (selectedCol == 3)
 		{
-			//zoom into the map
-			MapViewer.winMain.mainCanvas.zoomHandler.processClickZoomRequest(gChromoMap, 1000);
+			//extract the value of the cell clicked on
+			String homologName = (String) resultsTable.getModel().getValueAt(selectedRow, selectedCol);
+			System.out.println("homologName selected = " + homologName);
+			
+			String url = Prefs.refGenome2BaseURL + homologName;
+			Desktop desktop = Desktop.getDesktop();
+			try
+			{
+				if (desktop != null)
+					desktop.browse(new URI(url));
+			}
+			catch (IOException e1)
+			{
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			catch (URISyntaxException e1)
+			{
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 		
-		previousMap = gChromoMap;
+		try
+		{
+			if (resultsTable.getModel().getColumnCount() > 0)
+			{
+				//get the feature name
+				String featureName = (String) resultsTable.getModel().getValueAt(
+								resultsTable.getSelectedRow(), 0);
+				//retrieve the Feature that corresponds to this name
+				Feature f = Utils.getFeatureByName(featureName);
+				//highlight it on the canvas
+				MapViewer.winMain.fatController.highlightRequestedFeature(f);
+				
+				//which map and mapset are we dealing with here
+				GMapSet owningSet = f.getOwningMap().getGChromoMap().owningSet;
+				GChromoMap gChromoMap = f.getOwningMap().getGChromoMap();
+				
+				//we have changed map
+				if (previousMap != null && !previousMap.equals(gChromoMap))
+				{
+					//zoom out first
+					//					owningSet.zoomFactor = 1;
+					//					owningSet.paintAllMarkers = false;
+					//					MapViewer.winMain.mainCanvas.updateCanvas(true);
+				}
+				
+				//zoom into that chromosome so it fills the screen
+				if (owningSet.zoomFactor < owningSet.singleChromoViewZoomFactor || !gChromoMap.isShowingOnCanvas)
+				{
+					//zoom into the map
+					MapViewer.winMain.mainCanvas.zoomHandler.processClickZoomRequest(gChromoMap,
+									1000);
+				}
+				
+				//remember this map
+				previousMap = gChromoMap;
+			}
+		}
+		catch (Exception e1)
+		{
+			e1.printStackTrace();
+		}
 	}
 	
 	public JLabel getResultsLabel()

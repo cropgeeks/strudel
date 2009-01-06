@@ -94,17 +94,17 @@ public class LinkDisplayManager
 			
 		}
 		// no hit detected
-		else
-		{
-			// don't draw links
-			mainCanvas.drawLinks = false;
-			
-			// reset the selectedMaps vectors in all genomes -- this removes the highlight frames from the chromosomes
-			for (GMapSet mapSet : mainCanvas.gMapSetList)
-			{
-				mapSet.deselectAllMaps();
-			}
-		}
+//		else
+//		{
+//			// don't draw links
+//			mainCanvas.drawLinks = false;
+//			
+//			// reset the selectedMaps vectors in all genomes -- this removes the highlight frames from the chromosomes
+//			for (GMapSet mapSet : mainCanvas.gMapSetList)
+//			{
+//				mapSet.deselectAllMaps();
+//			}
+//		}
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -298,10 +298,10 @@ public class LinkDisplayManager
 			
 			// draw the link
 			g2.setColor(linkColour);
-			if(thickerLine)
-				g2.setStroke(new BasicStroke(2.0f));
-			else
-				g2.setStroke(new BasicStroke());
+//			if(thickerLine)
+//				g2.setStroke(new BasicStroke(2.0f));
+//			else
+//				g2.setStroke(new BasicStroke());
 			g2.drawLine(targetChromoX, y1, referenceChromoX, y2);
 		}
 	}

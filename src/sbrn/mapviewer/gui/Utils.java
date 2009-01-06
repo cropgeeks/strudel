@@ -1,6 +1,8 @@
 package sbrn.mapviewer.gui;
 
 import java.awt.*;
+import java.awt.color.*;
+import java.awt.event.*;
 import java.util.*;
 
 import sbrn.mapviewer.data.*;
@@ -15,7 +17,7 @@ public class Utils
 	public static GMapSet getGMapSetByName(String name)
 	{
 		GMapSet foundSet = null;
-
+		
 		//we need to search all chromomaps in all mapsets for this	
 		// for all gmapsets
 		for (GMapSet gMapSet : MapViewer.winMain.mainCanvas.gMapSetList)
@@ -37,7 +39,7 @@ public class Utils
 		//we need to search all chromomaps in all mapsets for this	
 		// for all gmapsets
 		GMapSet gMapSet =  getGMapSetByName(gMapSetName);
-		System.out.println("gMapSet found =  " + gMapSet.name);
+
 		// for all gchromomaps within each mapset
 		for (GChromoMap gChromoMap : gMapSet.gMaps)
 		{
@@ -54,7 +56,7 @@ public class Utils
 	public static Feature getFeatureByName(String featureName)
 	{
 		Feature f = null;
-
+		
 		//we need to search all chromomaps in all mapsets for this	
 		// for all gmapsets
 		for (GMapSet gMapSet : MapViewer.winMain.mainCanvas.gMapSetList)
@@ -94,6 +96,45 @@ public class Utils
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
+	
+	//returns a toned down (strongly darkened) version of the Color colour, with the dominant 
+	//primary colour being picked out and then a dark version of this being returned
+	public static Color getTonedDownColour(Color colour)
+	{
+		Color darkenedColour = null;
+		int darkValue = 30;
+		
+		//extract the current RGB values
+		float maxValue = 0;
+		int maxChannel = -1;
+		float [] rgb = colour.getRGBColorComponents(null);
+		for (int i = 0; i < rgb.length; i++)
+		{
+			if(rgb[i] > maxValue)
+			{
+				maxValue = rgb[i];
+				maxChannel = i;
+			}
+		}
+
+		switch (maxChannel)
+		{
+			case 0:
+				darkenedColour =  new Color(darkValue, 0, 0);
+				break;
+			case 1:
+				darkenedColour = new Color(0, darkValue, 0);
+				break;
+			case 2: 
+				darkenedColour = new Color(0, 0, darkValue);
+				break;
+		}
+
+		return darkenedColour;
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
+	
 	
 	//check whether we have a map at the coordinates x and y 
 	public static GChromoMap getSelectedMap(Vector<GMapSet> gMapSetList, int x, int y)
@@ -176,6 +217,56 @@ public class Utils
 			}
 		}		
 		return selectedMap;
+	}
+	
+	
+	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	// finds out which of the two genomes the current selection relates to
+	public static int getSelectedSet(MouseEvent e)
+	{
+		// figure out which genome the user is zooming
+		
+		int index = -1;
+		
+		// if we have two genomes only
+		if (MapViewer.winMain.mainCanvas.gMapSetList.size() == 2)
+		{
+			// simply divide the canvas in two halves for this and figure out where on the x axis the hit has occurred
+			if (e.getX() < MapViewer.winMain.mainCanvas.getWidth() / 2)
+			{
+				// left hand side hit
+				index = 0;
+			}
+			else
+			{
+				// right hand side hit
+				index = 1;
+			}
+		}
+		else if (MapViewer.winMain.mainCanvas.gMapSetList.size() == 3)
+		{
+			int oneThirdCanvas = Math.round(MapViewer.winMain.mainCanvas.getWidth() / 3);
+			
+			// simply divide the canvas in two halves for this and figure out where on the x axis the hit has occurred
+			if (e.getX() <= oneThirdCanvas)
+			{
+				// left hand side hit
+				index = 0;
+			}
+			else if(e.getX() > oneThirdCanvas && e.getX() <= oneThirdCanvas*2)
+			{
+				// middle hit
+				index = 1;
+			}
+			else if(e.getX() > oneThirdCanvas*2)
+			{
+				//right hand side hit
+				index = 2;
+			}
+		}
+		
+		return index;
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------

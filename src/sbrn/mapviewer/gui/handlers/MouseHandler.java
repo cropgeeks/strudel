@@ -23,8 +23,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	int mousePressedX = -1;
 	int mousePressedY = -1;
 	MouseOverHandler mouseOverHandler;
-	
-//	long timeOfLastDragRequest = 0;
+
 	long timeOfMouseDown = 0;
 	
 	private boolean isOSX = SystemUtils.isMacOS();
@@ -104,7 +103,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			if(mouseOverHandler.selectedMap != null)
 			{
 				// get the selected set first
-				GChromoMap selectedMap = Utils.getSelectedMap(winMain, getSelectedSet(e), mousePressedY);
+				GChromoMap selectedMap = Utils.getSelectedMap(winMain, Utils.getSelectedSet(e), mousePressedY);
 				winMain.fatController.invertMap = selectedMap;
 				winMain.chromoContextPopupMenu.show(winMain.mainCanvas, e.getX(), e.getY());		
 			}
@@ -143,7 +142,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			if(mouseOverHandler.selectedMap != null)
 			{
 				// get the selected set first
-				GChromoMap selectedMap = Utils.getSelectedMap(winMain, getSelectedSet(e), mousePressedY);
+				GChromoMap selectedMap = Utils.getSelectedMap(winMain, Utils.getSelectedSet(e), mousePressedY);
 				winMain.fatController.invertMap = selectedMap;
 				winMain.chromoContextPopupMenu.show(winMain.mainCanvas, e.getX(), e.getY());		
 			}
@@ -162,7 +161,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			
 			// then request zooming for the selected map with the given set of coordinates
 			// get the selected set first
-			int gMapSetIndex = getSelectedSet(e);
+			int gMapSetIndex = Utils.getSelectedSet(e);
 			GChromoMap selectedMap = Utils.getSelectedMap(winMain, gMapSetIndex, mousePressedY);
 			winMain.mainCanvas.zoomHandler.processPanZoomRequest(selectedMap, mousePressedY, e.getY());
 		}
@@ -187,9 +186,10 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		if (!e.isShiftDown())
 		{
 			// figure out which genome the user is zooming 
-			int index = getSelectedSet(e);
+			int index = Utils.getSelectedSet(e);
+			GMapSet gMapSet = MapViewer.winMain.mainCanvas.gMapSetList.get(index);
 			
-			//include a time delay beofre dragging so we can prevent accidental drags that were in fact intended to be mouse clicks
+			//include a time delay before dragging so we can prevent accidental drags that were in fact intended to be mouse clicks
 			long now = System.currentTimeMillis();
 			if (now - timeOfMouseDown < 200)
 				return;
@@ -198,17 +198,15 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			if (y > mouseDragPosY)
 			{
 				// the multiplier is the amount by which we multiply the current zoom factor to increase it
-				float multiplier = 1.2f;
-				winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(-1, multiplier,
-								index, false);
+				float multiplier = 1.01f;
+				winMain.mainCanvas.moveGenomeViewPort(gMapSet, (int) (gMapSet.centerPoint * multiplier));
 			}
 			// mouse is getting dragged up -- zoom out
 			if (y < mouseDragPosY)
 			{
 				// the multiplier is the amount by which we multiply the current zoom factor to decrease it
-				float multiplier = 0.8f;
-				winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(-1, multiplier,
-								index, false);
+				float multiplier = 0.99f;
+				winMain.mainCanvas.moveGenomeViewPort(gMapSet, (int) (gMapSet.centerPoint * multiplier));
 			}
 		}
 
@@ -266,7 +264,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		winMain.mainCanvas.antiAlias = false;
 		
 		// figure out whether the user is zooming the left or right genome
-		int index = getSelectedSet(e);
+		int index = Utils.getSelectedSet(e);
 		GMapSet selectedSet = winMain.mainCanvas.gMapSetList.get(index);
 		
 		// work out by how much we have moved the mouse and in which direction
@@ -289,55 +287,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		winMain.mainCanvas.updateCanvas(true);
 		
 	}
-	
-	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
-	// finds out which of the two genomes the current selection relates to
-	private int getSelectedSet(MouseEvent e)
-	{
-		// figure out which genome the user is zooming
-		
-		int index = -1;
-		
-		// if we have two genomes only
-		if (winMain.mainCanvas.gMapSetList.size() == 2)
-		{
-			// simply divide the canvas in two halves for this and figure out where on the x axis the hit has occurred
-			if (e.getX() < winMain.mainCanvas.getWidth() / 2)
-			{
-				// left hand side hit
-				index = 0;
-			}
-			else
-			{
-				// right hand side hit
-				index = 1;
-			}
-		}
-		else if (winMain.mainCanvas.gMapSetList.size() == 3)
-		{
-			int oneThirdCanvas = Math.round(winMain.mainCanvas.getWidth() / 3);
-			
-			// simply divide the canvas in two halves for this and figure out where on the x axis the hit has occurred
-			if (e.getX() <= oneThirdCanvas)
-			{
-				// left hand side hit
-				index = 0;
-			}
-			else if(e.getX() > oneThirdCanvas && e.getX() <= oneThirdCanvas*2)
-			{
-				// middle hit
-				index = 1;
-			}
-			else if(e.getX() > oneThirdCanvas*2)
-			{
-				//right hand side hit
-				index = 2;
-			}
-		}
-		
-		return index;
-	}
+
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	

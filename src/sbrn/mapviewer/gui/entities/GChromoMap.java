@@ -66,6 +66,7 @@ public class GChromoMap
 	//be displayed until we deselect it
 	public boolean persistHighlightedFeatures = false;
 	
+	//boolean to show whether the arrays that hold features positions and names have been inited
 	public boolean arraysInitialized = false;
 	
 	//the colour in the centre of the chromosome
@@ -90,7 +91,7 @@ public class GChromoMap
 	//a factor used to calculate the currentY value from the angle during the inversion
 	public float multiplier = 0;
 	
-	//these vars allow us to selective colour in a region on the chromosome for highlighting
+	//these vars allow us to colour in a region on the chromosome for highlighting
 	public boolean highlightChromomapRegion = false;
 	public float highlightedRegionStart, highlightedRegionEnd;	
 	
@@ -462,7 +463,7 @@ public class GChromoMap
 				labelY = featureY + (int) offset;
 				
 				// next decide where to place the label on x			
-				int labelSpacer = 30; // the amount by which we want to move the label away from the chromosome (in pixels)
+				int labelSpacer = 60; // the amount by which we want to move the label away from the chromosome (in pixels)
 				int labelX = x - stringWidth - labelSpacer; // this is where the label is drawn from
 				int lineStartX = x; // this is where the line to the label is drawn from
 				int labelGap = 3; // the gap between the label and the line
@@ -562,10 +563,10 @@ public class GChromoMap
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------
 	
-	//colours a section of the chromosome 
+	//colours a section of the chromosome in a different colour
 	public void highlightChromomapRegion(Graphics2D g2)
 	{
-		Color highlightColour = Colors.highlightedFeatureRegionColour;
+		Color highlightColour = Utils.getTonedDownColour(colour);
 		Color centreHighlightColour = highlightColour.brighter().brighter().brighter().brighter();
 		
 		int start = (int) ((owningSet.chromoHeight / chromoMap.getStop()) * highlightedRegionStart);

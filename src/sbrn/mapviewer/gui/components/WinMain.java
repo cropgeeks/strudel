@@ -7,7 +7,6 @@ import java.util.*;
 import javax.swing.*;
 
 import sbrn.mapviewer.gui.*;
-import sbrn.mapviewer.gui.dialog.*;
 import sbrn.mapviewer.gui.entities.*;
 import sbrn.mapviewer.gui.handlers.*;
 import scri.commons.gui.*;
@@ -36,7 +35,7 @@ public class WinMain extends JFrame
 	public ChromoContextPopupMenu chromoContextPopupMenu;
 	
 	//this component shows the results of a feature search in a JTable
-	public MTFindFeaturesResultsPanel ffResultsPanel = new MTFindFeaturesResultsPanel();
+	public FoundFeaturesResultsPanel ffResultsPanel = new FoundFeaturesResultsPanel();
 	//this is a control panel for it, showing just to its left
 	public FoundFeaturesTableControlPanel foundFeaturesTableControlPanel = new FoundFeaturesTableControlPanel();
 	
@@ -44,6 +43,8 @@ public class WinMain extends JFrame
 	public JSplitPane splitPane = null;
 	JPanel bottomPanel = null;
 	
+	//whole canvas vertical scrollbar
+//	public Scroller scroller;
 	
 //	=================================================c'tor=====================================
 	
@@ -148,6 +149,10 @@ public class WinMain extends JFrame
 		mainCanvas.addMouseListener(mouseHandler);
 		mainCanvas.addMouseMotionListener(mouseHandler);
 		mainCanvas.addMouseWheelListener(mouseHandler);
+		
+		//a scroll bar which moves the entire canvas up and down
+//		scroller = new Scroller();
+//		mainPanel.add(scroller, BorderLayout.EAST);
 		
 		//the panels with the zoom control sliders
 		for (GMapSet gMapSet : mainCanvas.gMapSetList)

@@ -13,7 +13,7 @@ public class FoundFeatureTableModel extends AbstractTableModel
 	LinkedList<Link> homologies = new LinkedList<Link>();
 	
 	private String[] columnNames =
-	{ "Target name", "Target position", "Homolog", "Homolog genome", "Homolog chromosome",
+	{ "Target name", "Target position", "Target chromosome", "Homolog", "Homolog genome", "Homolog chromosome",
 					"Homolog position", "Homolog annotation"};
 	
 
@@ -25,7 +25,7 @@ public class FoundFeatureTableModel extends AbstractTableModel
 
 	public int getColumnCount()
 	{
-		return 7;
+		return columnNames.length;
 	}
 
 	public int getRowCount()
@@ -41,11 +41,12 @@ public class FoundFeatureTableModel extends AbstractTableModel
 		{
 		            case 0:  return link.getFeature1().getName();
 		            case 1:  return link.getFeature1().getStart();
-		            case 2:  return link.getFeature2().getName();
-		            case 3:  return link.getFeature2().getOwningMap().getOwningMapSet().getName();
-		            case 4:  return link.getFeature2().getOwningMap().getName();
-		            case 5:  return (int)(link.getFeature2().getStart());
-		            case 6:   return link.getFeature2().getAnnotation();
+		            case 2:  return link.getFeature1().getOwningMap().getName();
+		            case 3:  return link.getFeature2().getName();
+		            case 4:  return link.getFeature2().getOwningMap().getOwningMapSet().getName();
+		            case 5:  return link.getFeature2().getOwningMap().getName();
+		            case 6:  return (int)(link.getFeature2().getStart());
+		            case 7:   return link.getFeature2().getAnnotation();
 
 		            default: return null;
 		  }

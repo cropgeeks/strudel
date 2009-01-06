@@ -23,10 +23,10 @@ public class ControlToolBar extends JToolBar implements ActionListener
 	private JLabel blastLabel, blastScoreLabel;
 	private JSlider eValueSlider;
 	private JButton bFindFeatures;
+	private JButton bFindFeaturesinRange;
 	private JButton bResetAll;
 	public FindFeaturesDialog ffDialog = new FindFeaturesDialog();
-
-
+	public FindFeaturesInRangeDialog ffInRangeDialog = new FindFeaturesInRangeDialog();
 
 	ControlToolBar(WinMain winMain)
 	{
@@ -51,6 +51,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 
 		//maybe keep this group of controls on a theme of "does something with the data"
 		add(bFindFeatures);
+		add(bFindFeaturesinRange);
 		add(bResetAll);
 
 		addSeparator(true);
@@ -103,8 +104,9 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		bOverview = (JToggleButton) getButton(true, "", "Toggle the overview dialog on or off", Icons.getIcon("OVERVIEW"));
 		bOverview.setSelected(Prefs.guiOverviewVisible);
 		bHelp =  (JButton) getButton(false, "", "Help", Icons.getIcon("HELP"));
-		bFindFeatures = (JButton) getButton(false, "", "Find Features", Icons.getIcon("FIND"));
-		bResetAll =  (JButton) getButton(false, "", "Reset Display", Icons.getIcon("RESET"));
+		bFindFeatures = (JButton) getButton(false, "", "Find features by name", Icons.getIcon("FIND"));
+		bFindFeaturesinRange = (JButton) getButton(false, "", "List features in range", Icons.getIcon("RANGE"));
+		bResetAll =  (JButton) getButton(false, "", "Reset display", Icons.getIcon("RESET"));
 }
 
 	public void actionPerformed(ActionEvent e)
@@ -123,15 +125,27 @@ public class ControlToolBar extends JToolBar implements ActionListener
 
 			//clear the find dialog
 			ffDialog.ffPanel.getFFTextArea().setText("");
-			ffDialog.ffPanel.getIntervalStartTextField().setText("");
-			ffDialog.ffPanel.getIntervalEndTextField().setText("");
-			ffDialog.ffPanel.getGenomeCombo().setSelectedIndex(0);
-			ffDialog.ffPanel.getChromoCombo().setSelectedIndex(0);
-			
-			
+				
 			//show the find dialog
-			ffDialog.setVisible(true);
 			ffDialog.setLocationRelativeTo(winMain);
+			ffDialog.setVisible(true);
+		}
+		
+		//show the features in range dialog
+		else if (e.getSource() == bFindFeaturesinRange)
+		{
+			//reset the main canvas view to all its defaults 
+			MapViewer.winMain.fatController.resetMainCanvasView();
+
+			//clear the dialog
+			ffInRangeDialog.ffInRangePanel.getIntervalStartTextField().setText("");
+			ffInRangeDialog.ffInRangePanel.getIntervalEndTextField().setText("");
+			ffInRangeDialog.ffInRangePanel.getGenomeCombo().setSelectedIndex(0);
+			ffInRangeDialog.ffInRangePanel.getChromoCombo().setSelectedIndex(0);
+
+			//show the dialog
+			ffInRangeDialog.setLocationRelativeTo(winMain);
+			ffInRangeDialog.setVisible(true);
 		}
 
 		//reset the main canvas view and deselect all features

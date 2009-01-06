@@ -2,6 +2,7 @@ package sbrn.mapviewer.gui.components;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.*;
 import java.util.*;
 
 import javax.swing.*;
@@ -14,7 +15,7 @@ import scri.commons.gui.*;
 public class WinMain extends JFrame
 {
 	
-//	=================================================vars=====================================
+	//	=================================================vars=====================================
 	
 	//this is where we hold the genome data
 	public DataContainer dataContainer;
@@ -43,10 +44,7 @@ public class WinMain extends JFrame
 	public JSplitPane splitPane = null;
 	JPanel bottomPanel = null;
 	
-	//whole canvas vertical scrollbar
-//	public Scroller scroller;
-	
-//	=================================================c'tor=====================================
+	//	=================================================c'tor=====================================
 	
 	public WinMain()
 	{
@@ -149,11 +147,7 @@ public class WinMain extends JFrame
 		mainCanvas.addMouseListener(mouseHandler);
 		mainCanvas.addMouseMotionListener(mouseHandler);
 		mainCanvas.addMouseWheelListener(mouseHandler);
-		
-		//a scroll bar which moves the entire canvas up and down
-//		scroller = new Scroller();
-//		mainPanel.add(scroller, BorderLayout.EAST);
-		
+
 		//the panels with the zoom control sliders
 		for (GMapSet gMapSet : mainCanvas.gMapSetList)
 		{
@@ -170,7 +164,6 @@ public class WinMain extends JFrame
 		{
 			OverviewCanvas overviewCanvas = new OverviewCanvas(this,gMapSet);
 			overviewCanvas.setPreferredSize(new Dimension(0,250));
-//			overViewsContainerPanel.add(overviewCanvas);
 			overviewDialog.addCanvas(overviewCanvas);
 			overviewCanvases.add(overviewCanvas);
 		}
@@ -190,6 +183,15 @@ public class WinMain extends JFrame
 		bottomPanel.add(bottomPanelContainer,BorderLayout.CENTER);
 		add(toolbar, BorderLayout.NORTH);
 		add(splitPane, BorderLayout.CENTER);
+		
+		//add a property change listener to the plit pane so we know to repaint the canvas when it gets resized
+		splitPane.addPropertyChangeListener( new PropertyChangeListener () 
+		{			
+			public void propertyChange(PropertyChangeEvent evt) 
+			{
+				MapViewer.winMain.mainCanvas.updateCanvas(true);
+			}			
+		});
 	}
 	
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------

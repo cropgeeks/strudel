@@ -93,18 +93,6 @@ public class LinkDisplayManager
 			}
 			
 		}
-		// no hit detected
-//		else
-//		{
-//			// don't draw links
-//			mainCanvas.drawLinks = false;
-//			
-//			// reset the selectedMaps vectors in all genomes -- this removes the highlight frames from the chromosomes
-//			for (GMapSet mapSet : mainCanvas.gMapSetList)
-//			{
-//				mapSet.deselectAllMaps();
-//			}
-//		}
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------

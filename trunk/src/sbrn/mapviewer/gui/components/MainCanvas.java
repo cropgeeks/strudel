@@ -363,7 +363,7 @@ public class MainCanvas extends JPanel
 		//this draws homologies for features in a contiguous range on a chromosome
 		if(drawFoundFeaturesInRange)
 		{
-			if(MapViewer.winMain.toolbar.ffDialog.ffPanel.getDisplayHomologsCheckBox().isSelected() ||
+			if(MapViewer.winMain.toolbar.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().isSelected() ||
 							MapViewer.winMain.foundFeaturesTableControlPanel.getShowHomologsCheckbox().isSelected())
 			{
 				linkDisplayManager.drawHighlightedLinksInRange(g2);				
@@ -379,7 +379,7 @@ public class MainCanvas extends JPanel
 		
 		//this draws labels of features in a contiguous range on a chromosome
 		//need to do this in this order so things are drawn on top of each other in the right sequence
-		if(drawFoundFeaturesInRange && (MapViewer.winMain.toolbar.ffDialog.ffPanel.getDisplayLabelsCheckbox().isSelected() ||
+		if(drawFoundFeaturesInRange && (MapViewer.winMain.toolbar.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().isSelected() ||
 						MapViewer.winMain.foundFeaturesTableControlPanel.getShowLabelsCheckbox().isSelected()))
 		{
 			LabelDisplayManager.drawFeatureLabelsInRange(g2);

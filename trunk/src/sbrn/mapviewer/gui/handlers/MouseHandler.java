@@ -50,6 +50,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	{
 		MapViewer.logger.finest("mouse clicked");
 		
+		//mouse click with alt held down means zoom into single chromo so it fills the screen
 		if (e.isAltDown())
 		{
 			GChromoMap selectedMap = Utils.getSelectedMap(winMain.mainCanvas.gMapSetList, e.getX(),
@@ -58,12 +59,6 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			if (selectedMap != null)
 				winMain.mainCanvas.zoomHandler.processClickZoomRequest(selectedMap, 1000);
 			return;
-		}
-		
-		else if (e.isShiftDown() && isMetaClick(e))
-		{
-			Vector<Feature> selectedFeatures = mouseOverHandler.detectMouseOver(e.getX(), e.getY());
-			mouseOverHandler.updateAnnotationDisplay(selectedFeatures, e.getX(), e.getY());
 		}
 		
 		//turn antialiasing on and repaint
@@ -115,7 +110,31 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		//simple click on a target genome chromosome means display all links between this and all the reference chromos
 		if (!isMetaClick(e) && !e.isAltDown() && !e.isShiftDown())
 		{
-			winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(e.getX(), e.getY(), false);			
+			// first figure out which chromosome we are in
+			GChromoMap selectedMap = Utils.getSelectedMap(MapViewer.winMain.mainCanvas.gMapSetList, e.getX(), e.getY());
+			//if we have clicked on a map, display links between this map and all others
+			if(selectedMap != null)
+			{
+				winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(e.getX(), e.getY(), false);
+			}
+			//otherwise -- if we clicked on the background -- clear all links displayed
+			else
+			{
+				for(GMapSet gMapSet : winMain.mainCanvas.gMapSetList)
+				{
+					//reset selected maps
+					gMapSet.selectedMaps.clear();
+					
+					//for all maps within mapset
+					for(GChromoMap gMap: gMapSet.gMaps)
+					{			
+						//clear the outline
+						gMap.drawHighlightOutline = false;
+					}
+				}
+				winMain.mainCanvas.drawLinks = false;
+				winMain.mainCanvas.updateCanvas(true);
+			}
 		}
 		//CTRL+click on a chromosome means display all links between this and all other clicked chromos
 		else if (isMetaClick(e))
@@ -194,15 +213,15 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			if (now - timeOfMouseDown < 200)
 				return;
 				
-			// mouse is getting dragged down -- zoom in
-			if (y > mouseDragPosY)
+			// mouse is getting dragged up -- zoom in
+			if (y < mouseDragPosY)
 			{
 				// the multiplier is the amount by which we multiply the current zoom factor to increase it
 				float multiplier = 1.01f;
 				winMain.mainCanvas.moveGenomeViewPort(gMapSet, (int) (gMapSet.centerPoint * multiplier));
 			}
-			// mouse is getting dragged up -- zoom out
-			if (y < mouseDragPosY)
+			// mouse is getting dragged down -- zoom out
+			if (y > mouseDragPosY)
 			{
 				// the multiplier is the amount by which we multiply the current zoom factor to decrease it
 				float multiplier = 0.99f;

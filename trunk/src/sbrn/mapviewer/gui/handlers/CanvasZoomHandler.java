@@ -1,5 +1,6 @@
 package sbrn.mapviewer.gui.handlers;
 
+import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.animators.*;
 import sbrn.mapviewer.gui.components.*;
@@ -79,9 +80,8 @@ public class CanvasZoomHandler
 		//update the position lookup arrays for mouseover
 		MapViewer.winMain.fatController.initialisePositionArrays();
 
-		//update visible zoom info
+		//update zoom control position
 		MapViewer.winMain.fatController.updateZoomControls();
-
 	}
 
 
@@ -113,6 +113,11 @@ public class CanvasZoomHandler
 
 		// animate this by zooming in gradually
 		float finalZoomFactor = mainCanvas.initialCanvasHeight / mainCanvas.initialChromoHeight;
+		
+		//make sure this does not exceed the max zoom factor
+		if(finalZoomFactor > Constants.MAX_ZOOM_FACTOR)
+			finalZoomFactor = Constants.MAX_ZOOM_FACTOR;
+		
 		// work out the chromo height and total genome height for when the new zoom factor will have been applied
 		int finalChromoHeight = (int) (mainCanvas.initialChromoHeight * finalZoomFactor);
 		// this is the combined height of all spacers -- does not change with the zoom factor

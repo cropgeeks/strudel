@@ -27,6 +27,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 	private JButton bResetAll;
 	public FindFeaturesDialog ffDialog = new FindFeaturesDialog();
 	public FindFeaturesInRangeDialog ffInRangeDialog = new FindFeaturesInRangeDialog();
+	public OpenFileDialog openFileDialog = new OpenFileDialog();
 
 	ControlToolBar(WinMain winMain)
 	{
@@ -111,6 +112,12 @@ public class ControlToolBar extends JToolBar implements ActionListener
 
 	public void actionPerformed(ActionEvent e)
 	{
+		if (e.getSource() == bOpen)
+		{
+			openFileDialog.setLocationRelativeTo(MapViewer.winMain);
+			openFileDialog.setVisible(true);
+		}
+		
 		if (e.getSource() == bExport)
 			exportImage();
 

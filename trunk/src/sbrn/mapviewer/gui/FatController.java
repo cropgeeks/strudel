@@ -48,7 +48,7 @@ public class FatController
 	{
 		for (ZoomControlPanel zoomControlPanel : winMain.zoomControlPanels)
 		{
-			zoomControlPanel.updateSliders();
+			zoomControlPanel.updateSlider();
 		}
 	}
 	

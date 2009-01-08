@@ -1,5 +1,6 @@
 package sbrn.mapviewer.gui.animators;
 
+import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.components.*;
 import sbrn.mapviewer.gui.entities.*;
@@ -52,7 +53,7 @@ public class PanZoomAnimator extends Thread
 		int combinedSpacers = mainCanvas.chromoSpacing * (selectedSet.numMaps - 1);
 
 		// these are the values we want for the last iteration
-		float finalZoomFactor = selectedSet.zoomFactor * finalScalingFactor;
+		float finalZoomFactor = selectedSet.zoomFactor * finalScalingFactor;		
 		float finalChromoHeight = (int) (selectedSet.chromoHeight * finalScalingFactor);
 		// the distance from the top of the chromosome to the mousePressedY location, in pixels
 		float initialDistFromTop = (float) (mousePressedY - selectedMap.boundingRectangle.getY() + (mouseReleasedY - mousePressedY) / 2);
@@ -82,9 +83,13 @@ public class PanZoomAnimator extends Thread
 			// work out the current scaling factor
 			// next zoom factor divided by current zoom factor
 			float currentScalingFactor = (selectedSet.zoomFactor + zoomFactorIncrement) / selectedSet.zoomFactor;
-
+	
 			// set the new zoom factor
-			selectedSet.zoomFactor += zoomFactorIncrement;
+			//make sure this does not exceed the max zoom factor
+			if(selectedSet.zoomFactor < Constants.MAX_ZOOM_FACTOR)
+				selectedSet.zoomFactor += zoomFactorIncrement;
+			else
+				return;	
 
 			// work out the chromo height and total genome height for when the new zoom factor will have been applied
 			int newChromoHeight = Math.round(selectedSet.chromoHeight + chromoHeightIncrement);
@@ -113,6 +118,9 @@ public class PanZoomAnimator extends Thread
 
 		//now update the arrays with the position data
 		MapViewer.winMain.fatController.initialisePositionArrays();
+		
+		//update zoom control position
+		MapViewer.winMain.fatController.updateZoomControls();
 
 		//turn antialiasing on and repaint
 		mainCanvas.antiAlias = true;

@@ -52,5 +52,9 @@ public class Colors
 	public static Color backgroundGradientStartColour = Color.black;
 
 	public static Color backgroundGradientEndColour = new Color(110, 110, 110);
+	
+	public static Color mainCanvasBottomBorderColour = new Color(80, 80, 80);
+	
+	public static Color genomeLabelPanelColour = new Color(170, 170, 170);
 
 }

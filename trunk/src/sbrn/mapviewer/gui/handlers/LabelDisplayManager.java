@@ -98,32 +98,36 @@ public class LabelDisplayManager
 	// draws labels next to found features
 	public static void drawFeatureLabelsInRange(Graphics2D g2)
 	{
-		// the usual font stuff
 		g2.setFont(new Font("Sans-serif", Font.PLAIN, fontHeight));
 
-		//reset the stroke in case it has been altered elesewhere
+		//reset the stroke in case it has been altered elsewhere
 		g2.setStroke(new BasicStroke());
 		
 		//the features we need to draw
 		Vector<Feature> features = MapViewer.winMain.fatController.featuresInRange;
-
-		//divide the visible canvas size by the number of items to be labelled to get the distance we need to space them apart
-		int canvasHeight = MapViewer.winMain.mainCanvas.getHeight();
-		int labelInterval = Math.round(canvasHeight / features.size());
 		
-		//need to check that the label interval is no less than the height of an individual label plus some space at 
-		//the top and bottom of it respectively
-		int gap = 1;
-		int labelHeight = fontHeight + gap*2;
-		//the total amount of space on y that all the labkles will take up
-		int totalLabelsHeight = labelHeight * features.size();
-		//the position on the canvas where we need to start drawing to fit them all on
-		int labelYStartPos = 0;		
-		if (labelHeight > labelInterval)
-		{
-			labelInterval = labelHeight;
-			labelYStartPos = - ((totalLabelsHeight - canvasHeight) / 2);
-		}
+		//first work out the features y positions
+		//we need to create a LinkedHashMap withe the default positons
+		//these will all be at the featureY of the Feature
+		LinkedHashMap<Feature, Integer> featurePositions = calculateFeaturePositions(features);
+
+		//now work out the actual positions after correction for collision of labels
+		LinkedHashMap<Feature, Integer> laidoutPositions = calculateLabelPositions(features, featurePositions);
+
+//		//divide the visible canvas size by the number of items to be labelled to get the distance we need to space them apart
+//		int canvasHeight = MapViewer.winMain.mainCanvas.getHeight();
+//		int labelInterval = Math.round(canvasHeight / features.size());
+//		
+
+//		//the total amount of space on y that all the labkles will take up
+//		int totalLabelsHeight = labelHeight * features.size();
+//		//the position on the canvas where we need to start drawing to fit them all on
+//		int labelYStartPos = 0;		
+//		if (labelHeight > labelInterval)
+//		{
+//			labelInterval = labelHeight;
+//			labelYStartPos = - ((totalLabelsHeight - canvasHeight) / 2);
+//		}
 		
 		// for all features in our list
 		for (Feature f : features)
@@ -134,48 +138,14 @@ public class LabelDisplayManager
 			// we need these for working out the y positions
 			ChromoMap chromoMap = f.getOwningMap();
 			GChromoMap gChromoMap = chromoMap.getGChromoMap();
-			float mapEnd = chromoMap.getStop();
-			// this factor normalises the position to a value between 0 and 100
-			float scalingFactor = gChromoMap.height / mapEnd;
-
-			// the y position of the feature itself
-			int featureY;
-			if (f.getStart() == 0.0f)
-			{
-				featureY = gChromoMap.y;
-			}
-			else
-			{
-				featureY = Math.round(gChromoMap.y + gChromoMap.currentY + (f.getStart() * scalingFactor));
-			}		
-			//check whether the map is inverted			
-			if(gChromoMap.isPartlyInverted)
-			{
-				featureY = (int) ((mapEnd - f.getStart()) / (mapEnd / gChromoMap.height)) + (gChromoMap.y + gChromoMap.currentY);
-			}
 			
-			// now work out the y position of the feature label
-			// size and half size of our feature list
-			int listSize = MapViewer.winMain.fatController.featuresInRange.size();
-			float halfListSize = listSize / 2.0f;
 			// this is where the label goes
-			int labelY = 0;
-			// the index of the feature in the list
-			int index = features.indexOf(f);
+			int labelY = laidoutPositions.get(f);
+			int featureY = featurePositions.get(f);
 			
-			// if the list contains only a single feature
-			if (listSize == 1)
-			{
-				labelY = featureY + (fontHeight / 2);
-			}
-			// more than 1 feature in the list
-			else
-			{
-				//we want the labels to be distributed evenly across the canvas on y
-				//so we need to work where the label goes relative to the feature
-				//can be up or down by a certain amount
-				labelY = (labelInterval * (index +1)) + labelYStartPos;					
-			}
+			//apply a correction factor to move the label down by half a label height relative to the feature's y pos so
+			//that the label's center on y is aligned with the feature y
+			labelY = labelY + (fontHeight/2);
 			
 			// next decide where to place the label on x
 			// the amount by which we want to move the label end away from the chromosome (in pixels)
@@ -201,6 +171,86 @@ public class LabelDisplayManager
 			// draw a line for the marker on the chromosome itself
 			g2.drawLine(gChromoMap.x, featureY, gChromoMap.x + gChromoMap.width - 1, featureY);
 		}
+	}
+	
+	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	private static LinkedHashMap<Feature, Integer> calculateLabelPositions(Vector<Feature> features, LinkedHashMap<Feature, Integer> featurePositions)
+	{
+		LinkedHashMap<Feature, Integer> labelPositions = (LinkedHashMap<Feature, Integer>)featurePositions.clone();
+		
+		//need to check that the label interval is no less than the height of an individual label plus some space at 
+		//the top and bottom of it respectively
+		int gap = 1;
+		int labelHeight = fontHeight + gap*2;
+		
+		for (int i = 0; i < features.size(); i++)
+		{
+			try
+			{
+				Feature f1 = features.get(i);
+				Feature f2 = features.get(i+1);
+				
+				//if the difference between the feature y pos of this feature and that of the next one is less than the labelheight
+				//then we need to shuffle them downwards
+				int yDistance = labelPositions.get(f2) - labelPositions.get(f1);
+				if(yDistance < labelHeight)
+				{
+					//move the position of feature 2 down on y by the so it is at the position of feature 1 plus one label height
+					//need to make this change both to the map with the laid out positions as well as the default one because
+					//the value from the latter will be used in the next iteration
+					int newPos = labelPositions.get(f1) + Math.round(labelHeight*1.5f);
+					labelPositions.put(f2, newPos);
+				}
+			}
+			//this occurs when we process the last element in the features vector -- just ignore
+			catch (ArrayIndexOutOfBoundsException e)
+			{
+			}
+		}
+		
+//		System.out.println("laidoutPositions:\n" + featurePositions.toString());
+		
+		return labelPositions;
+	}
+	
+	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	private static LinkedHashMap<Feature, Integer> calculateFeaturePositions(Vector<Feature> features)
+	{
+		LinkedHashMap<Feature, Integer> featurePositions = new LinkedHashMap<Feature, Integer>();
+		
+		for (Feature f : features)
+		{
+			// we need these for working out the y positions
+			ChromoMap chromoMap = f.getOwningMap();
+			GChromoMap gChromoMap = chromoMap.getGChromoMap();
+			float mapEnd = chromoMap.getStop();
+			// this factor normalises the position to a value between 0 and 100
+			float scalingFactor = gChromoMap.height / mapEnd;
+
+			// the y position of the feature itself
+			int featureY;
+			if (f.getStart() == 0.0f)
+			{
+				featureY = gChromoMap.y;
+			}
+			else
+			{
+				featureY = Math.round(gChromoMap.y + gChromoMap.currentY + (f.getStart() * scalingFactor));
+			}		
+			//check whether the map is inverted			
+			if(gChromoMap.isPartlyInverted)
+			{
+				featureY = (int) ((mapEnd - f.getStart()) / (mapEnd / gChromoMap.height)) + (gChromoMap.y + gChromoMap.currentY);
+			}
+
+			featurePositions.put(f, featureY);
+		}
+		
+//		System.out.println("featurePositions:\n" + featurePositions.toString());
+		
+		return featurePositions;
 	}
 
 }//end class

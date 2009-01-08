@@ -2,22 +2,27 @@
 
 features to implement -- general:
 
+- name panel with labels for the genomes
 - show loci as filled rectangles rather than lines at higher zoom levels
 - colour selector for user 
+- separate data loading for left and right
+- x-y plots of marker positions in both genomes (Oxford grid) for a given combination of chromosomes
+
+================================
+
+QTL support:
+
+- need option for reading in QTL data
 - option to show homologies only that fall within a given QTL
 - need option (dialog?) for user defining new QTL manually
 - mouseover on QTL displays tool tip with info about the QTL
-- separate data loading for left and right
-- list panel on right showing links (names, e-values)
-- links filter options below that on right
-- x-y plots of marker positions in both genomes (Oxford grid) for a given combination of chromosomes
 
 ================================
 
 Data:
 
 - have annotation data for reference genome (e.g. rice) kept locally for fast access but perhaps include some kind of option for updating this if possible (manually? automatically?)
-- need option for reading in QTL data
+
 
 ================================
 
@@ -51,7 +56,7 @@ Jordi's list:
 
 - plot QTL profiles along the barley chromosomes
 
-- select an interval on the rice / brachypodium side and get a list with all the genes located within the interval
+- select an interval on the rice / brachypodium side and get a list with all the genes located within the interval -- DONE
 
 ================================
 

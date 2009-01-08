@@ -79,13 +79,23 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 	
 	private void showHomologsCheckboxStateChanged(javax.swing.event.ChangeEvent evt)
 	{
-		//		System.out.println("showHomologsCheckboxStateChanged");
+		//synchronise this checkbox with the corresponding one in the find features in range panel
+		if(showHomologsCheckbox.isSelected())
+			MapViewer.winMain.toolbar.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().setSelected(true);
+		else
+			MapViewer.winMain.toolbar.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().setSelected(false);
+		
 		MapViewer.winMain.mainCanvas.updateCanvas(true);
 	}
 	
 	private void showLabelsCheckboxStateChanged(javax.swing.event.ChangeEvent evt)
 	{
-		//		System.out.println("showLabelsCheckboxStateChanged");
+		//synchronise this checkbox with the corresponding one in the find features in range panel
+		if(showLabelsCheckbox.isSelected())
+			MapViewer.winMain.toolbar.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(true);
+		else
+			MapViewer.winMain.toolbar.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(false);
+				
 		MapViewer.winMain.mainCanvas.updateCanvas(true);
 	}
 	

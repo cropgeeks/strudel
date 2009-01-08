@@ -9,6 +9,7 @@ package sbrn.mapviewer.gui.components;
 import javax.swing.*;
 
 import sbrn.mapviewer.data.*;
+import sbrn.mapviewer.gui.*;
 
 /**
  *
@@ -16,26 +17,20 @@ import sbrn.mapviewer.data.*;
  */
 public class AnnotationPanel extends javax.swing.JPanel
 {
-	WinMain winMain;
 	MapSet mapSet;
 	
 	/** Creates new form AnnotationPanel */
-	public AnnotationPanel(WinMain winMain, MapSet mapSet)
+	public AnnotationPanel(MapSet mapSet)
 	{
-		this.winMain = winMain;
 		this.mapSet = mapSet;
 		initComponents();
+		setBackground(Colors.backgroundGradientEndColour);
 		setInitialText();
 	}
 	
 	private void setInitialText()
 	{
 		genomeInfo.setText(mapSet.getName());
-	}
-	
-	public JList getAnnotationList()
-	{
-		return annotationList;
 	}
 	
 	/** This method is called from within the constructor to
@@ -48,84 +43,32 @@ public class AnnotationPanel extends javax.swing.JPanel
 	private void initComponents()
 	{
 		
-		jPanel1 = new javax.swing.JPanel();
-		genomeLabel = new javax.swing.JLabel();
 		genomeInfo = new javax.swing.JLabel();
-		jScrollPane1 = new javax.swing.JScrollPane();
-		annotationList = new javax.swing.JList();
 		
 		setBackground(new java.awt.Color(255, 255, 255));
 		
-		jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-		
-		genomeLabel.setFont(new java.awt.Font("Tahoma", 1, 13));
-		genomeLabel.setText("Genome:");
-		
 		genomeInfo.setFont(new java.awt.Font("Tahoma", 1, 13));
-		
-		jScrollPane1.setViewportView(annotationList);
-		
-		org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
-		jPanel1.setLayout(jPanel1Layout);
-		jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(
-						org.jdesktop.layout.GroupLayout.LEADING).add(
-						org.jdesktop.layout.GroupLayout.TRAILING,
-						jPanel1Layout.createSequentialGroup().addContainerGap().add(
-										jPanel1Layout.createParallelGroup(
-														org.jdesktop.layout.GroupLayout.TRAILING).add(
-														org.jdesktop.layout.GroupLayout.LEADING,
-														jScrollPane1,
-														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-														293,
-														Short.MAX_VALUE).add(
-														jPanel1Layout.createSequentialGroup().add(
-																		genomeLabel).addPreferredGap(
-																		org.jdesktop.layout.LayoutStyle.RELATED).add(
-																		genomeInfo,
-																		org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																		231,
-																		Short.MAX_VALUE))).addContainerGap()));
-		jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(
-						org.jdesktop.layout.GroupLayout.LEADING).add(
-						jPanel1Layout.createSequentialGroup().add(
-										jPanel1Layout.createParallelGroup(
-														org.jdesktop.layout.GroupLayout.BASELINE).add(
-														genomeLabel).add(
-														genomeInfo,
-														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
-														16,
-														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
-										org.jdesktop.layout.LayoutStyle.UNRELATED).add(
-										jScrollPane1,
-										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-										86, Short.MAX_VALUE)));
+		genomeInfo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+		genomeInfo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 		
 		org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
 		this.setLayout(layout);
 		layout.setHorizontalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
 						layout.createSequentialGroup().addContainerGap().add(
-										jPanel1,
+										genomeInfo,
 										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE).addContainerGap()));
+										256, Short.MAX_VALUE).addContainerGap()));
 		layout.setVerticalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
 						layout.createSequentialGroup().addContainerGap().add(
-										jPanel1,
-										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+										genomeInfo,
 										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addContainerGap(
-										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE)));
+										11, Short.MAX_VALUE).addContainerGap()));
 	}// </editor-fold>
 	//GEN-END:initComponents
 	
 	//GEN-BEGIN:variables
 	// Variables declaration - do not modify
-	private javax.swing.JList annotationList;
 	private javax.swing.JLabel genomeInfo;
-	private javax.swing.JLabel genomeLabel;
-	private javax.swing.JPanel jPanel1;
-	private javax.swing.JScrollPane jScrollPane1;
 	// End of variables declaration//GEN-END:variables
 	
 }

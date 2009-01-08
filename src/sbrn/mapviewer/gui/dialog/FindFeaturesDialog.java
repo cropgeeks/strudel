@@ -6,6 +6,7 @@ import java.util.*;
 
 import javax.swing.*;
 
+import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.components.*;
@@ -89,7 +90,7 @@ public class FindFeaturesDialog extends JDialog implements ActionListener
 			
 			//set the results panel to be visible and hide the find dialog
 			this.setVisible(false);
-			MapViewer.winMain.splitPane.setDividerSize(5);
+			MapViewer.winMain.splitPane.setDividerSize(Constants.SPLITPANE_DIVIDER_SIZE);
 			int newDividerLocation = (int) (MapViewer.winMain.mainCanvas.getHeight() - MapViewer.winMain.foundFeaturesTableControlPanel.getPreferredSize().getHeight());
 			MapViewer.winMain.splitPane.setDividerLocation(newDividerLocation);
 

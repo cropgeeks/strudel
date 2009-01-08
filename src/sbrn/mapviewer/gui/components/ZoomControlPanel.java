@@ -6,6 +6,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
+import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.entities.*;
 
@@ -40,11 +41,9 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 	private void setupComponents()
 	{
 		int sliderMin = 1;
-		int sliderMax = 500;
+		int sliderMax = Constants.MAX_ZOOM_FACTOR;
 		int sliderInitialVal = 1;
 
-		// left hand control
-		JPanel leftPanel = new JPanel();
 		//label
 		label = new JLabel(Icons.getIcon("ZOOM"));
 		zoomSlider = new JSlider(sliderMin, sliderMax, sliderInitialVal);
@@ -55,8 +54,8 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		//this is the way it happens for all other cases where we need a pretty repaint
 		zoomSlider.addMouseListener(this);
 		zoomSlider.setPaintTicks(true);
-		zoomSlider.setMinorTickSpacing(50);
-		zoomSlider.setMajorTickSpacing(100);
+		zoomSlider.setMinorTickSpacing(sliderMax/2);
+		zoomSlider.setMajorTickSpacing(sliderMax);
 		//reset button
 		resetButton = new JButton(Icons.getIcon("RESET"));
 		resetButton.setToolTipText("Reset zoom");
@@ -81,14 +80,14 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		{
 			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(source.getValue(), 0, gMapSet, true);
 		}
-		updateSliders();
+		updateSlider();
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	public void updateSliders()
+	public void updateSlider()
 	{
-		//update the sliders
+		//update the slider
 		zoomSlider.setValue((int) gMapSet.zoomFactor);
 	}
 
@@ -101,7 +100,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 			winMain.mainCanvas.zoomHandler.processZoomResetRequest(gMapSet, 1000);
 		}
 
-		updateSliders();
+		updateSlider();
 	}
 
 

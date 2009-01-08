@@ -8,6 +8,7 @@ import java.util.*;
 import javax.swing.*;
 
 import sbrn.mapviewer.gui.*;
+import sbrn.mapviewer.gui.dialog.*;
 import sbrn.mapviewer.gui.entities.*;
 import sbrn.mapviewer.gui.handlers.*;
 import scri.commons.gui.*;
@@ -44,6 +45,13 @@ public class WinMain extends JFrame
 	public JSplitPane splitPane = null;
 	JPanel bottomPanel = null;
 	
+	//a panel for the zoom controls
+	public JPanel zoomControlContainerPanel;
+	
+	//this panel contains the genome labels and the zoom controls
+	JPanel zoomControlAndGenomelabelContainer;
+	
+	
 	//	=================================================c'tor=====================================
 	
 	public WinMain()
@@ -79,6 +87,7 @@ public class WinMain extends JFrame
 		// Window listeners are added last so they don't interfere with the
 		// maximization from above
 		addListeners();
+		
 	}
 	
 	//=================================================methods=====================================
@@ -129,25 +138,29 @@ public class WinMain extends JFrame
 		//this panel contains the main canvas
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		
-		//this panel contains the zoom controls and the searach results panel below it
+		//this panel contains the zoom controls and the search results panel below it
 		bottomPanel = new JPanel(new BorderLayout());
 		
 		//a panel for the zoom controls
-		JPanel zoomControlContainerPanel = new JPanel(new GridLayout(1,dataContainer.numRefGenomes+1));
+		zoomControlContainerPanel = new JPanel(new GridLayout(1,dataContainer.numRefGenomes+1));
 		
 		overviewDialog.createLayout();
 		
 		//this is the main canvas which we render the genomes on
 		mainCanvas = new MainCanvas(dataContainer.targetMapset, dataContainer.referenceMapsets, this, dataContainer.linkSets);
 		mainPanel.add(mainCanvas, BorderLayout.CENTER);
-		mainPanel.setBorder(BorderFactory.createLineBorder(new Color(125, 133, 151), 2));
+//		mainPanel.setBorder(BorderFactory.createLineBorder(new Color(125, 133, 151), 2));
 		
 		//add mousehandler
 		MouseHandler mouseHandler = new MouseHandler(this);
 		mainCanvas.addMouseListener(mouseHandler);
 		mainCanvas.addMouseMotionListener(mouseHandler);
 		mainCanvas.addMouseWheelListener(mouseHandler);
-
+		
+		//the panel with the genome labels	
+		GenomeLabelPanel genomeLabelPanel = new GenomeLabelPanel();
+		zoomControlContainerPanel.add(genomeLabelPanel);
+		
 		//the panels with the zoom control sliders
 		for (GMapSet gMapSet : mainCanvas.gMapSetList)
 		{
@@ -176,11 +189,21 @@ public class WinMain extends JFrame
 		hideSplitPaneBottomHalf();
 		
 		//assemble everything
-		mainPanel.add(zoomControlContainerPanel, BorderLayout.SOUTH);
+		
+		//this panel contains the genome labels and the zoom controls
+		zoomControlAndGenomelabelContainer = new JPanel(new BorderLayout());
+		zoomControlAndGenomelabelContainer.add(genomeLabelPanel,BorderLayout.NORTH);
+		zoomControlAndGenomelabelContainer.add(zoomControlContainerPanel, BorderLayout.CENTER);		
+		mainPanel.add(zoomControlAndGenomelabelContainer, BorderLayout.SOUTH);
+		//hide this panel initially until the data has been loaded
+		zoomControlAndGenomelabelContainer.setVisible(false);
+		
+		//this panel contains the results table and its control panel 
 		JPanel bottomPanelContainer = new JPanel(new BorderLayout());
 		bottomPanelContainer.add(foundFeaturesTableControlPanel, BorderLayout.WEST);
 		bottomPanelContainer.add(ffResultsPanel, BorderLayout.CENTER);
 		bottomPanel.add(bottomPanelContainer,BorderLayout.CENTER);
+		
 		add(toolbar, BorderLayout.NORTH);
 		add(splitPane, BorderLayout.CENTER);
 		

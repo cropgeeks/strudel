@@ -42,8 +42,11 @@ public class WinMain extends JFrame
 	public FoundFeaturesTableControlPanel foundFeaturesTableControlPanel = new FoundFeaturesTableControlPanel();
 	
 	//this splitpane contains the main panel and the bottom panel
-	public JSplitPane splitPane = null;
-	JPanel bottomPanel = null;
+	public JSplitPane splitPane;
+	JPanel bottomPanel;
+	
+	//this panel contains the main canvas
+	JPanel mainPanel;
 	
 	//a panel for the zoom controls
 	public JPanel zoomControlContainerPanel;
@@ -51,18 +54,26 @@ public class WinMain extends JFrame
 	//this panel contains the genome labels and the zoom controls
 	JPanel zoomControlAndGenomelabelContainer;
 	
+	//this panel simply takes the place of the main canvas before we have loaded any data
+	//just contains a simple label with instructions for how to load data
+	StartPanel startPanel;
+	
+	//dialogs
+	public FindFeaturesDialog ffDialog;
+	public FindFeaturesInRangeDialog ffInRangeDialog;
+	public OpenFileDialog openFileDialog;
+	
+	//the panel with the genome labels	
+	GenomeLabelPanel genomeLabelPanel;
+	
 	
 	//	=================================================c'tor=====================================
 	
 	public WinMain()
 	{
-		//load the data for testing
-		//TODO remove hard coded data loading once user import options are available
-		dataContainer = new DataContainer();
-		dataContainer.loadData();
 		
-		//get the GUI assembled
-		setupComponents();
+		//get the GUI assembled as far as possible without the data loaded
+		setupInitialComponents();
 		pack();
 		
 		//GUI bits and pieces
@@ -83,6 +94,7 @@ public class WinMain extends JFrame
 		// Maximize the frame if neccassary
 		if (Prefs.guiWinMainMaximized)
 			setExtendedState(Frame.MAXIMIZED_BOTH);
+		
 		
 		// Window listeners are added last so they don't interfere with the
 		// maximization from above
@@ -109,7 +121,8 @@ public class WinMain extends JFrame
 				else
 					Prefs.guiWinMainMaximized = true;
 				
-				mainCanvas.redraw = true;
+				if(mainCanvas !=null)
+					mainCanvas.redraw = true;
 			}
 			
 			public void componentMoved(ComponentEvent e)
@@ -120,101 +133,118 @@ public class WinMain extends JFrame
 					Prefs.guiWinMainY = getLocation().y;
 				}
 				
-				mainCanvas.redraw = true;
+				if(mainCanvas !=null)
+					mainCanvas.redraw = true;
 			}
 		});
 	}
 	
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	private void setupComponents()
+	//here we set up the components that we require at startup, before any data has been loaded
+	public void setupInitialComponents()
 	{
+		MapViewer.logger.fine("initing initial components in winMain");
+		
 		//the fat controller
 		fatController = new FatController(this);
 		
-		//the popup menu we use when are over a chromosome
-		chromoContextPopupMenu  = new ChromoContextPopupMenu();
+		//the file open dialog
+		openFileDialog = new OpenFileDialog();
 		
 		//this panel contains the main canvas
-		JPanel mainPanel = new JPanel(new BorderLayout());
+		mainPanel = new JPanel(new BorderLayout());
+		add(mainPanel, BorderLayout.CENTER);
 		
-		//this panel contains the zoom controls and the search results panel below it
-		bottomPanel = new JPanel(new BorderLayout());
+		//this panel simply takes the place of the main canvas before we have loaded any data
+		//just contains a simple label with instructions for how to load data
+		startPanel = new StartPanel();
+		mainPanel.add(startPanel, BorderLayout.CENTER);
 		
-		//a panel for the zoom controls
-		zoomControlContainerPanel = new JPanel(new GridLayout(1,dataContainer.numRefGenomes+1));
-		
-		overviewDialog.createLayout();
-		
-		//this is the main canvas which we render the genomes on
-		mainCanvas = new MainCanvas(dataContainer.targetMapset, dataContainer.referenceMapsets, this, dataContainer.linkSets);
-		mainPanel.add(mainCanvas, BorderLayout.CENTER);
-//		mainPanel.setBorder(BorderFactory.createLineBorder(new Color(125, 133, 151), 2));
-		
-		//add mousehandler
-		MouseHandler mouseHandler = new MouseHandler(this);
-		mainCanvas.addMouseListener(mouseHandler);
-		mainCanvas.addMouseMotionListener(mouseHandler);
-		mainCanvas.addMouseWheelListener(mouseHandler);
-		
-		//the panel with the genome labels	
-		GenomeLabelPanel genomeLabelPanel = new GenomeLabelPanel();
-		zoomControlContainerPanel.add(genomeLabelPanel);
-		
-		//the panels with the zoom control sliders
-		for (GMapSet gMapSet : mainCanvas.gMapSetList)
-		{
-			ZoomControlPanel zoomControlPanel = new ZoomControlPanel(this, gMapSet);
-			zoomControlContainerPanel.add(zoomControlPanel);
-			zoomControlPanels.add(zoomControlPanel);
-		}
-		
-		//the control panel
+		//the control toolbar at the top of the GUI
 		toolbar = new ControlToolBar(this);
-		
-		//the overviews for the genomes
-		for (GMapSet gMapSet : mainCanvas.gMapSetList)
-		{
-			OverviewCanvas overviewCanvas = new OverviewCanvas(this,gMapSet);
-			overviewCanvas.setPreferredSize(new Dimension(0,250));
-			overviewDialog.addCanvas(overviewCanvas);
-			overviewCanvases.add(overviewCanvas);
-		}
-		overviewDialog.setVisible(Prefs.guiOverviewVisible);
-		
-		//this splitpane contains the main panel and the bottom panel
-		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, mainPanel, bottomPanel);
-		splitPane.setOneTouchExpandable(true);
-		//hide the bottom component and any sign of the split pane initially
-		hideSplitPaneBottomHalf();
-		
-		//assemble everything
-		
-		//this panel contains the genome labels and the zoom controls
-		zoomControlAndGenomelabelContainer = new JPanel(new BorderLayout());
-		zoomControlAndGenomelabelContainer.add(genomeLabelPanel,BorderLayout.NORTH);
-		zoomControlAndGenomelabelContainer.add(zoomControlContainerPanel, BorderLayout.CENTER);		
-		mainPanel.add(zoomControlAndGenomelabelContainer, BorderLayout.SOUTH);
-		//hide this panel initially until the data has been loaded
-		zoomControlAndGenomelabelContainer.setVisible(false);
-		
-		//this panel contains the results table and its control panel 
-		JPanel bottomPanelContainer = new JPanel(new BorderLayout());
-		bottomPanelContainer.add(foundFeaturesTableControlPanel, BorderLayout.WEST);
-		bottomPanelContainer.add(ffResultsPanel, BorderLayout.CENTER);
-		bottomPanel.add(bottomPanelContainer,BorderLayout.CENTER);
-		
 		add(toolbar, BorderLayout.NORTH);
-		add(splitPane, BorderLayout.CENTER);
+	}
+	
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	//here we set up the components we cannot set up until data has been loaded
+	public void setupRemainingComponents()
+	{
+		MapViewer.logger.fine("initing remaining components in winMain");
 		
-		//add a property change listener to the plit pane so we know to repaint the canvas when it gets resized
-		splitPane.addPropertyChangeListener( new PropertyChangeListener () 
-		{			
-			public void propertyChange(PropertyChangeEvent evt) 
-			{
-				MapViewer.winMain.mainCanvas.updateCanvas(true);
-			}			
-		});
+		try
+		{		
+			//the popup menu we use when are over a chromosome
+			chromoContextPopupMenu  = new ChromoContextPopupMenu();
+			
+			//this panel contains the zoom controls and the search results panel below it
+			bottomPanel = new JPanel(new BorderLayout());
+			
+			//this is the main canvas which we render the genomes on
+			mainCanvas = new MainCanvas();
+			//add this but hide the start panel first -- the main canvas is going to take its place instead
+			showStartPanel(false);
+			mainPanel.add(mainCanvas, BorderLayout.CENTER);	
+			//mainPanel.setBorder(BorderFactory.createLineBorder(new Color(125, 133, 151), 2));
+			
+			//add mousehandler
+			MouseHandler mouseHandler = new MouseHandler(this);
+			mainCanvas.addMouseListener(mouseHandler);
+			mainCanvas.addMouseMotionListener(mouseHandler);
+			mainCanvas.addMouseWheelListener(mouseHandler);
+			
+			//the dialog which displays thumbnails of the genomes
+			overviewDialog.createLayout();
+			
+			//the panel with the genome labels	
+			genomeLabelPanel = new GenomeLabelPanel();
+			
+			//initialise the zoom controls and the overview dialog
+			initZoomControls();			
+			initOverviewDialog();
+			
+			//this splitpane contains the main panel and the bottom panel
+			splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, mainPanel, bottomPanel);
+			splitPane.setOneTouchExpandable(true);
+			//hide the bottom component and any sign of the split pane initially
+			hideSplitPaneBottomHalf();
+			
+			//these dialogs can only be instantiated now because they rely on data having been loaded previously
+			ffDialog = new FindFeaturesDialog();
+			ffInRangeDialog = new FindFeaturesInRangeDialog();
+			
+			//assemble everything
+			
+			//this panel contains the genome labels and the zoom controls
+			zoomControlAndGenomelabelContainer = new JPanel(new BorderLayout());
+			zoomControlAndGenomelabelContainer.add(genomeLabelPanel,BorderLayout.NORTH);
+			zoomControlAndGenomelabelContainer.add(zoomControlContainerPanel, BorderLayout.SOUTH);		
+			mainPanel.add(zoomControlAndGenomelabelContainer, BorderLayout.SOUTH);
+			
+			//this panel contains the results table and its control panel 
+			JPanel bottomPanelContainer = new JPanel(new BorderLayout());
+			bottomPanelContainer.add(foundFeaturesTableControlPanel, BorderLayout.WEST);
+			bottomPanelContainer.add(ffResultsPanel, BorderLayout.CENTER);
+			bottomPanel.add(bottomPanelContainer,BorderLayout.CENTER);
+			
+			add(splitPane, BorderLayout.CENTER);
+			
+			//add a property change listener to the plit pane so we know to repaint the canvas when it gets resized
+			splitPane.addPropertyChangeListener( new PropertyChangeListener () 
+			{			
+				public void propertyChange(PropertyChangeEvent evt) 
+				{
+					MapViewer.winMain.mainCanvas.updateCanvas(true);
+				}			
+			});
+			
+			repaint();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -225,6 +255,96 @@ public class WinMain extends JFrame
 		bottomPanel.setPreferredSize(new Dimension(0,0));
 		splitPane.setResizeWeight(1.0);
 		splitPane.setDividerSize(0);
+	}
+	
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	//removes, reconfigures, and adds GUI components which are dependent on the number of genomes
+	//needs to be done when users load different datasets in succession
+	public void reinitialiseDependentComponents()
+	{
+		MapViewer.logger.finest("reinitialiseDependentComponents()");
+		
+		//remove existing components
+		zoomControlAndGenomelabelContainer.remove(zoomControlContainerPanel);
+		for(OverviewCanvas overviewCanvas : overviewCanvases)
+		{
+			overviewDialog.remove(overviewCanvas);
+		}
+		
+		//clear lists with the corresponding objects
+		zoomControlPanels.clear();
+		overviewCanvases.clear();
+		
+		//reinstate everything
+		//the panels with the zoom control sliders
+		initZoomControls();
+		zoomControlAndGenomelabelContainer.add(zoomControlContainerPanel, BorderLayout.CENTER);		
+		
+		initOverviewDialog();
+		
+		repaint();
+	}
+	
+	
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	public void showStartPanel(boolean showStartPanel)
+	{
+		if(showStartPanel)
+		{
+			startPanel.setVisible(true);
+			mainCanvas.setVisible(false);
+		}
+		else
+		{
+			startPanel.setVisible(false);
+			mainCanvas.setVisible(true);
+		}
+	}
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------
+		
+	private void initOverviewDialog()
+	{
+		//the overviews for the genomes
+		for (GMapSet gMapSet : dataContainer.gMapSetList)
+		{
+			OverviewCanvas overviewCanvas = new OverviewCanvas(this,gMapSet);
+			overviewCanvas.setPreferredSize(new Dimension(0,250));
+			overviewDialog.add(overviewCanvas);
+			overviewCanvases.add(overviewCanvas);
+		}
+		overviewDialog.setVisible(Prefs.guiOverviewVisible);
+	}
+	
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	private void initZoomControls()
+	{
+		MapViewer.logger.finest("initZoomControls()");
+		
+		zoomControlContainerPanel = new JPanel(new GridLayout(1, dataContainer.gMapSetList.size()));
+
+		//if there is only one genome showing, we want a shorter zoom control that does not fill the width of  the entire canvas
+		if(dataContainer.gMapSetList.size() == 1)
+		{				
+			ZoomControlPanel zoomControlPanel = new ZoomControlPanel(this, dataContainer.gMapSetList.get(0), true);
+			zoomControlPanel.zoomSlider.setMaximumSize(new Dimension(500, Short.MAX_VALUE));
+			zoomControlContainerPanel.add(zoomControlPanel);
+			zoomControlPanels.add(zoomControlPanel);
+		}
+		else
+		{			
+			//the panels with the zoom control sliders
+			for (GMapSet gMapSet : dataContainer.gMapSetList)
+			{
+				ZoomControlPanel zoomControlPanel = new ZoomControlPanel(this, gMapSet, false);
+				zoomControlContainerPanel.add(zoomControlPanel);
+				zoomControlPanels.add(zoomControlPanel);
+			}
+		}
+		
+
 	}
 	
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -13,42 +13,44 @@ import sbrn.mapviewer.gui.entities.*;
 public class ZoomControlPanel extends JToolBar implements ChangeListener, ActionListener, MouseListener
 {
 	// ===============================================vars=======================================
-
+	
 	WinMain winMain;
 	JLabel label;
-	JSlider zoomSlider;
+	public JSlider zoomSlider;
 	JButton resetButton;
 	GMapSet gMapSet;
-
-
+	
+	
 	// ===================================================c'tor====================================
-
-	public ZoomControlPanel(WinMain winMain,GMapSet gMapSet)
+	
+	public ZoomControlPanel(WinMain winMain,GMapSet gMapSet, boolean addFiller)
 	{
 		super();
-
+		
 		this.winMain = winMain;
 		this.gMapSet = gMapSet;
-
+		
 		setFloatable(false);
 		setBorderPainted(false);
-
-		setupComponents();
+		
+		setupComponents(addFiller);
 	}
-
+	
 	// ==============================================methods====================================
-
-	private void setupComponents()
+	
+	private void setupComponents(boolean addFiller)
 	{
+		//settings for the slider
 		int sliderMin = 1;
 		int sliderMax = Constants.MAX_ZOOM_FACTOR;
 		int sliderInitialVal = 1;
-
+		
 		//label
 		label = new JLabel(Icons.getIcon("ZOOM"));
+		
+		//zoom slider
 		zoomSlider = new JSlider(sliderMin, sliderMax, sliderInitialVal);
 		zoomSlider.setToolTipText("Zoom this genome in or out");
-		// add it
 		zoomSlider.addChangeListener(this);
 		//we need the mouse listener so we can have the canvas repainted with antialias on when the mouse button is released
 		//this is the way it happens for all other cases where we need a pretty repaint
@@ -56,23 +58,34 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		zoomSlider.setPaintTicks(true);
 		zoomSlider.setMinorTickSpacing(sliderMax/2);
 		zoomSlider.setMajorTickSpacing(sliderMax);
+		
 		//reset button
 		resetButton = new JButton(Icons.getIcon("RESET"));
 		resetButton.setToolTipText("Reset zoom");
 		resetButton.addActionListener(this);
 		if (scri.commons.gui.SystemUtils.isMacOS() == false)
 			resetButton.setMargin(new Insets(2, 1, 2, 1));
-
-		add(new JLabel("  "));
+		
+		//we need the filler when this toolbar is the only one
+		//this is to stop it from filling the whole width of the frame
+		if(addFiller)
+			add(Box.createHorizontalGlue());
+		
+		//add the components
 		add(label);
 		add(new JLabel(" "));
 		add(zoomSlider);
 		add(resetButton);
-		add(new JLabel("  "));
+		
+		//we need the filler when this toolbar is the only one
+		//this is to stop it from filling the whole width of the frame
+		if(addFiller)
+			add(Box.createHorizontalGlue());
+		
 	}
-
+	
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+	
 	public void stateChanged(ChangeEvent e)
 	{
 		JSlider source = (JSlider) e.getSource();
@@ -82,40 +95,40 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		}
 		updateSlider();
 	}
-
+	
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+	
 	public void updateSlider()
 	{
 		//update the slider
 		zoomSlider.setValue((int) gMapSet.zoomFactor);
 	}
-
+	
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+	
 	public void actionPerformed(ActionEvent e)
 	{
 		if(e.getSource()==resetButton)
 		{
 			winMain.mainCanvas.zoomHandler.processZoomResetRequest(gMapSet, 1000);
 		}
-
+		
 		updateSlider();
 	}
-
-
-
+	
+	
+	
 	public void mouseReleased(MouseEvent e)
 	{
 		MapViewer.winMain.mainCanvas.antiAlias = true;
 		MapViewer.winMain.mainCanvas.updateCanvas(true);		
 	}
 	
-	//theseare currently not needed
+	//these are currently not needed
 	public void mouseClicked(MouseEvent e){}
 	public void mouseEntered(MouseEvent e){}
 	public void mouseExited(MouseEvent e){}
 	public void mousePressed(MouseEvent e){}
-
+	
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 }

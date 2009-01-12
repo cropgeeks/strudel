@@ -53,7 +53,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		//mouse click with alt held down means zoom into single chromo so it fills the screen
 		if (e.isAltDown())
 		{
-			GChromoMap selectedMap = Utils.getSelectedMap(winMain.mainCanvas.gMapSetList, e.getX(),
+			GChromoMap selectedMap = Utils.getSelectedMap(MapViewer.winMain.dataContainer.gMapSetList, e.getX(),
 							e.getY());
 			
 			if (selectedMap != null)
@@ -111,7 +111,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		if (!isMetaClick(e) && !e.isAltDown() && !e.isShiftDown())
 		{
 			// first figure out which chromosome we are in
-			GChromoMap selectedMap = Utils.getSelectedMap(MapViewer.winMain.mainCanvas.gMapSetList, e.getX(), e.getY());
+			GChromoMap selectedMap = Utils.getSelectedMap(MapViewer.winMain.dataContainer.gMapSetList, e.getX(), e.getY());
 			//if we have clicked on a map, display links between this map and all others
 			if(selectedMap != null)
 			{
@@ -120,7 +120,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			//otherwise -- if we clicked on the background -- clear all links displayed
 			else
 			{
-				for(GMapSet gMapSet : winMain.mainCanvas.gMapSetList)
+				for(GMapSet gMapSet : MapViewer.winMain.dataContainer.gMapSetList)
 				{
 					//reset selected maps
 					gMapSet.selectedMaps.clear();
@@ -206,7 +206,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		{
 			// figure out which genome the user is zooming 
 			int index = Utils.getSelectedSet(e);
-			GMapSet gMapSet = MapViewer.winMain.mainCanvas.gMapSetList.get(index);
+			GMapSet gMapSet = MapViewer.winMain.dataContainer.gMapSetList.get(index);
 			
 			//include a time delay before dragging so we can prevent accidental drags that were in fact intended to be mouse clicks
 			long now = System.currentTimeMillis();
@@ -284,7 +284,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		
 		// figure out whether the user is zooming the left or right genome
 		int index = Utils.getSelectedSet(e);
-		GMapSet selectedSet = winMain.mainCanvas.gMapSetList.get(index);
+		GMapSet selectedSet = MapViewer.winMain.dataContainer.gMapSetList.get(index);
 		
 		// work out by how much we have moved the mouse and in which direction
 		int notches = e.getWheelRotation();

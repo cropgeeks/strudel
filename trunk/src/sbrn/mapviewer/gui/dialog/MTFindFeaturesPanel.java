@@ -23,13 +23,7 @@ public class MTFindFeaturesPanel extends javax.swing.JPanel
 	public MTFindFeaturesPanel()
 	{
 		initComponents();
-		
-		//set up the combo boxes with their data models
-		Vector<String> genomes = new Vector<String>();
-		for (GMapSet gMapSet : MapViewer.winMain.mainCanvas.gMapSetList)
-		{
-			genomes.add(gMapSet.name);
-		}
+
 	}
 	
 	//GEN-BEGIN:initComponents

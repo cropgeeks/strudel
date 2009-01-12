@@ -29,7 +29,7 @@ public class MouseOverHandler
 		Vector<Feature> match = null;
 
 		// first figure out which chromosome we are in
-		selectedMap = Utils.getSelectedMap(winMain.mainCanvas.gMapSetList, x, y);
+		selectedMap = Utils.getSelectedMap(MapViewer.winMain.dataContainer.gMapSetList, x, y);
 		
 		if (selectedMap != null && selectedMap.arraysInitialized)
 		{
@@ -88,7 +88,7 @@ public class MouseOverHandler
 	public void updateAnnotationDisplay(Vector<Feature> selectedFeatures, int x, int y)
 	{
 		Vector<String> formattedData = new Vector<String>();
-		GChromoMap selectedMap = Utils.getSelectedMap(winMain.mainCanvas.gMapSetList, x, y);
+		GChromoMap selectedMap = Utils.getSelectedMap(MapViewer.winMain.dataContainer.gMapSetList, x, y);
 		//if we got here by clicking on a map
 		if (selectedMap != null)
 		{

@@ -30,7 +30,7 @@ public class CanvasZoomHandler
 	// adjusts the zoom factor and checks whether we need to display markers and labels
 	public void processContinuousZoomRequest(float newZoomFactor, float multiplier, int genomeIndex, boolean isSliderRequest)
 	{
-		GMapSet selectedSet = mainCanvas.gMapSetList.get(genomeIndex);
+		GMapSet selectedSet = MapViewer.winMain.dataContainer.gMapSetList.get(genomeIndex);
 		processContinuousZoomRequest(newZoomFactor, multiplier, selectedSet, isSliderRequest);
 
 	}

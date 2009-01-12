@@ -17,18 +17,17 @@ public class ControlToolBar extends JToolBar implements ActionListener
 	private WinMain winMain;
 
 	private JButton bOpen;
+	private JButton bClose;
 	private JButton bExport;
 	private JToggleButton bOverview;
 	private JButton bHelp;
 	private JLabel blastLabel, blastScoreLabel;
 	private JSlider eValueSlider;
-	private JButton bFindFeatures;
-	private JButton bFindFeaturesinRange;
+	public JButton bFindFeatures;
+	public JButton bFindFeaturesinRange;
 	private JButton bResetAll;
-	public FindFeaturesDialog ffDialog = new FindFeaturesDialog();
-	public FindFeaturesInRangeDialog ffInRangeDialog = new FindFeaturesInRangeDialog();
-	public OpenFileDialog openFileDialog = new OpenFileDialog();
-
+	
+	
 	ControlToolBar(WinMain winMain)
 	{
 		this.winMain = winMain;
@@ -42,6 +41,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 			add(new JLabel("  "));
 
 		add(bOpen);
+		add(bClose);
 
 		addSeparator(true);
 
@@ -59,12 +59,10 @@ public class ControlToolBar extends JToolBar implements ActionListener
 
 		add(blastLabel);
 		add(eValueSlider);
-//		add(blastScoreLabel);
 
 		addSeparator(true);
 
 		add(bHelp);
-
 		add(new JLabel("  "));
 	}
 
@@ -101,6 +99,11 @@ public class ControlToolBar extends JToolBar implements ActionListener
         });
 
 		bOpen = (JButton) getButton(false, "", "Load data into Mapviewer", Icons.getIcon("FILEOPEN"));
+		bOpen.setMnemonic(KeyEvent.VK_O);
+
+		bClose = (JButton) getButton(false, "", "Close currrent dataset", Icons.getIcon("FILECLOSE"));
+		bClose.setMnemonic(KeyEvent.VK_W);
+		
 		bExport = (JButton) getButton(false, "", "Export the display as an image", Icons.getIcon("EXPORTIMAGE"));
 		bOverview = (JToggleButton) getButton(true, "", "Toggle the overview dialog on or off", Icons.getIcon("OVERVIEW"));
 		bOverview.setSelected(Prefs.guiOverviewVisible);
@@ -114,8 +117,22 @@ public class ControlToolBar extends JToolBar implements ActionListener
 	{
 		if (e.getSource() == bOpen)
 		{
+			OpenFileDialog openFileDialog = MapViewer.winMain.openFileDialog;
 			openFileDialog.setLocationRelativeTo(MapViewer.winMain);
 			openFileDialog.setVisible(true);
+			//clear the text fields, in case they had text showing previously
+			openFileDialog.openFilesPanel.getTargetfeatFileTF().setText("");
+			openFileDialog.openFilesPanel.getRefGen1FeatFileTF().setText("");
+			openFileDialog.openFilesPanel.getRefGen1HomFileTF().setText("");
+			openFileDialog.openFilesPanel.getRefGen2FeatFileTF().setText("");
+			openFileDialog.openFilesPanel.getRefGen2HomFileTF().setText("");
+			
+		}
+		
+		if (e.getSource() == bClose)
+		{
+			MapViewer.winMain.showStartPanel(true);
+			MapViewer.winMain.overviewDialog.setVisible(false);
 		}
 		
 		if (e.getSource() == bExport)
@@ -131,11 +148,11 @@ public class ControlToolBar extends JToolBar implements ActionListener
 			MapViewer.winMain.fatController.resetMainCanvasView();
 
 			//clear the find dialog
-			ffDialog.ffPanel.getFFTextArea().setText("");
+			MapViewer.winMain.ffDialog.ffPanel.getFFTextArea().setText("");
 				
 			//show the find dialog
-			ffDialog.setLocationRelativeTo(winMain);
-			ffDialog.setVisible(true);
+			MapViewer.winMain.ffDialog.setLocationRelativeTo(winMain);
+			MapViewer.winMain.ffDialog.setVisible(true);
 		}
 		
 		//show the features in range dialog
@@ -145,14 +162,14 @@ public class ControlToolBar extends JToolBar implements ActionListener
 			MapViewer.winMain.fatController.resetMainCanvasView();
 
 			//clear the dialog
-			ffInRangeDialog.ffInRangePanel.getIntervalStartTextField().setText("");
-			ffInRangeDialog.ffInRangePanel.getIntervalEndTextField().setText("");
-			ffInRangeDialog.ffInRangePanel.getGenomeCombo().setSelectedIndex(0);
-			ffInRangeDialog.ffInRangePanel.getChromoCombo().setSelectedIndex(0);
+			MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getIntervalStartTextField().setText("");
+			MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getIntervalEndTextField().setText("");
+			MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getGenomeCombo().setSelectedIndex(0);
+			MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getChromoCombo().setSelectedIndex(0);
 
 			//show the dialog
-			ffInRangeDialog.setLocationRelativeTo(winMain);
-			ffInRangeDialog.setVisible(true);
+			MapViewer.winMain.ffInRangeDialog.setLocationRelativeTo(winMain);
+			MapViewer.winMain.ffInRangeDialog.setVisible(true);
 		}
 
 		//reset the main canvas view and deselect all features

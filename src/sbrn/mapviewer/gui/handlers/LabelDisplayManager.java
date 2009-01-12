@@ -175,6 +175,7 @@ public class LabelDisplayManager
 	
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
+	@SuppressWarnings("unchecked")
 	private static LinkedHashMap<Feature, Integer> calculateLabelPositions(Vector<Feature> features, LinkedHashMap<Feature, Integer> featurePositions)
 	{
 		LinkedHashMap<Feature, Integer> labelPositions = (LinkedHashMap<Feature, Integer>)featurePositions.clone();

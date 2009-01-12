@@ -12,7 +12,7 @@ public class GenomeLabelPanel extends JPanel
 	public GenomeLabelPanel()
 	{
 		setBackground(Colors.genomeLabelPanelColour);
-		setPreferredSize(new Dimension(getWidth(), 20));
+		setPreferredSize(new Dimension(10, 20));
 	}
 	
 	public void paintComponent(Graphics graphics)
@@ -28,18 +28,18 @@ public class GenomeLabelPanel extends JPanel
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
 		//work out label spacing
-		int numGenomes = MapViewer.winMain.mainCanvas.gMapSetList.size();
+		int numGenomes = MapViewer.winMain.dataContainer.gMapSetList.size();
 		int labelInterval = getWidth() / numGenomes;
 		int spacerLeft = labelInterval / 2;
 		
 		// draw the labels
 		for (int i = 0; i < numGenomes; i++)
 		{			
-			String genomeName = MapViewer.winMain.mainCanvas.gMapSetList.get(i).name;
+			String genomeName = MapViewer.winMain.dataContainer.gMapSetList.get(i).name;
 			int stringWidth = fm.stringWidth(genomeName);
 			int x = (labelInterval * i) + spacerLeft - (stringWidth / 2);
 			int y = (getHeight() / 2) + (fontHeight / 2);
-			g2.drawString(genomeName.toUpperCase(), x, y);
+			g2.drawString(genomeName, x, y);
 		}	
 		
 		//turn antialias off again

@@ -64,11 +64,7 @@ class OverviewDialog extends JDialog
 
 	void createLayout()
 	{
-		setLayout(new GridLayout(1, winMain.dataContainer.numRefGenomes+1));
+		setLayout(new GridLayout(1, MapViewer.winMain.dataContainer.gMapSetList.size()));
 	}
 
-	void addCanvas(OverviewCanvas canvas)
-	{
-		add(canvas);
-	}
 }

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.5" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+<Form version="1.5" maxVersion="1.5" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <NonVisualComponents>
+    <Component class="javax.swing.ButtonGroup" name="importModeButtonGroup">
+    </Component>
+  </NonVisualComponents>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
@@ -16,32 +20,35 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jPanel1" alignment="0" min="-2" max="-2" attributes="1"/>
-                  <Component id="jPanel2" alignment="0" min="-2" max="-2" attributes="1"/>
+              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                  <Component id="targetGenomeLoaderPanel" alignment="0" min="0" max="32767" attributes="1"/>
+                  <Component id="referenceGenomeLoaderPanel" alignment="0" max="32767" attributes="1"/>
+                  <Component id="dataImportModePanel" alignment="0" max="32767" attributes="1"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+              <Component id="dataImportModePanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+              <Component id="targetGenomeLoaderPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="referenceGenomeLoaderPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="javax.swing.JPanel" name="jPanel1">
+    <Container class="javax.swing.JPanel" name="dataImportModePanel">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Select target genome feature file:"/>
+            <TitledBorder title="Choose data import mode:"/>
           </Border>
         </Property>
       </Properties>
@@ -49,10 +56,65 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                      <Component id="ownDataRadioButton" alignment="0" max="32767" attributes="1"/>
+                      <Component id="exampleDataRadioButton" alignment="0" max="32767" attributes="1"/>
+                  </Group>
+                  <EmptySpace pref="289" max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <Component id="exampleDataRadioButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Component id="ownDataRadioButton" min="-2" max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JRadioButton" name="exampleDataRadioButton">
+          <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="importModeButtonGroup"/>
+            </Property>
+            <Property name="selected" type="boolean" value="true"/>
+            <Property name="text" type="java.lang.String" value="Load example data provided with the application"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="ownDataRadioButton">
+          <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="importModeButtonGroup"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Load own data files"/>
+          </Properties>
+          <Events>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="ownDataRadioButtonStateChanged"/>
+          </Events>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JPanel" name="targetGenomeLoaderPanel">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="Select target genome feature file:"/>
+          </Border>
+        </Property>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <Component id="jLabel2" pref="203" max="32767" attributes="0"/>
+                  <Component id="targetFeatFileLabel" pref="210" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="targetfeatFileTF" min="-2" pref="315" max="-2" attributes="0"/>
+                  <Component id="targetfeatFileTF" min="-2" pref="258" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="targetFeatFileButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -64,22 +126,27 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="targetFeatFileButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="targetfeatFileTF" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="targetFeatFileLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="jLabel2">
+        <Component class="javax.swing.JLabel" name="targetFeatFileLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Target genome feature file:"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="targetfeatFileTF">
+          <Properties>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="targetFeatFileButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Browse..."/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="actionPerformed"/>
@@ -87,13 +154,14 @@
         </Component>
       </SubComponents>
     </Container>
-    <Container class="javax.swing.JPanel" name="jPanel2">
+    <Container class="javax.swing.JPanel" name="referenceGenomeLoaderPanel">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
             <TitledBorder title="Optionally select one or two reference genomes:"/>
           </Border>
         </Property>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
 
       <Layout>
@@ -103,29 +171,29 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="refGen2FeatFileLabel" alignment="0" pref="204" max="32767" attributes="1"/>
-                              <Component id="refGen1FeatFileLabel" alignment="0" pref="204" max="32767" attributes="1"/>
-                              <Component id="refGen1HomFileLabel" alignment="0" max="32767" attributes="1"/>
+                              <Component id="refGen2FeatFileLabel" alignment="0" pref="208" max="32767" attributes="1"/>
+                              <Component id="refGen1FeatFileLabel" alignment="0" pref="208" max="32767" attributes="1"/>
+                              <Component id="refGen1HomFileLabel" alignment="0" pref="208" max="32767" attributes="1"/>
                           </Group>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
                                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="refGen2FeatFileTF" alignment="0" pref="316" max="32767" attributes="0"/>
-                                      <Component id="refGen2HomFileTF" alignment="0" pref="316" max="32767" attributes="0"/>
+                                      <Component id="refGen2FeatFileTF" alignment="0" pref="260" max="32767" attributes="0"/>
+                                      <Component id="refGen2HomFileTF" alignment="0" pref="260" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="refGen1FeatFileTF" alignment="0" pref="316" max="32767" attributes="1"/>
-                                      <Component id="refGen1HomFileTF" alignment="0" pref="316" max="32767" attributes="0"/>
+                                      <Component id="refGen1FeatFileTF" alignment="0" pref="260" max="32767" attributes="1"/>
+                                      <Component id="refGen1HomFileTF" alignment="0" pref="260" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
                       </Group>
                       <Group type="102" attributes="0">
-                          <Component id="refGen2HomFileLabel" pref="525" max="32767" attributes="1"/>
+                          <Component id="refGen2HomFileLabel" pref="473" max="32767" attributes="1"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -174,13 +242,18 @@
         <Component class="javax.swing.JLabel" name="refGen1FeatFileLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Reference genome 1 feature file:"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="refGen1FeatFileTF">
+          <Properties>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="ref1FeatFileButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Browse..."/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="actionPerformed"/>
@@ -189,13 +262,18 @@
         <Component class="javax.swing.JLabel" name="refGen1HomFileLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Reference genome 1 homology file:"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="refGen1HomFileTF">
+          <Properties>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="ref1HomFileButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Browse..."/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="actionPerformed"/>
@@ -204,13 +282,18 @@
         <Component class="javax.swing.JLabel" name="refGen2HomFileLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Reference genome 2 homology file:"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="refGen2HomFileTF">
+          <Properties>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="ref2FeatFileButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Browse..."/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="actionPerformed"/>
@@ -219,17 +302,22 @@
         <Component class="javax.swing.JLabel" name="refGen2FeatFileLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Reference genome 2 feature file:"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="ref2HomFileButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Browse..."/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="actionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="refGen2FeatFileTF">
+          <Properties>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>

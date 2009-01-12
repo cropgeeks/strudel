@@ -6,14 +6,19 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import sbrn.mapviewer.gui.*;
+import sbrn.mapviewer.gui.handlers.*;
 import scri.commons.gui.*;
 
 public class OpenFileDialog extends JDialog implements ActionListener
 {
 	
+	// =================================vars=======================================
+	
 	private JButton bOpen, bCancel;
 	public MTOpenFilesPanel openFilesPanel = new MTOpenFilesPanel();
-	public boolean dataLoaded = false;
+	
+	
+	// =================================c'tor=======================================
 	
 	public OpenFileDialog()
 	{
@@ -29,6 +34,7 @@ public class OpenFileDialog extends JDialog implements ActionListener
 		setResizable(true);
 	}
 	
+	// ======================================methods=================================
 	
 	private JPanel createButtons()
 	{
@@ -45,7 +51,7 @@ public class OpenFileDialog extends JDialog implements ActionListener
 		return p1;
 	}
 	
-	
+	// ----------------------------------------------------------------------------------------------------------------------------------------------
 	
 	public void actionPerformed(ActionEvent e)
 	{
@@ -56,22 +62,27 @@ public class OpenFileDialog extends JDialog implements ActionListener
 		
 		else if (e.getSource() == bCancel)
 		{
-			//hide the dialog
+			// hide the dialog
 			setVisible(false);
 		}
 	}
 	
+	// ----------------------------------------------------------------------------------------------------------------------------------------------
 	
 	private void openFiles()
 	{
 		try
-		{					
-			dataLoaded = true;
+		{
+			MapViewer.winMain.fatController.initialiseNewProject();
+			
+			//hide the startpanel and show the main canvas instead
+			MapViewer.winMain.showStartPanel(false);
+			MapViewer.winMain.mainCanvas.setVisible(true);
 			MapViewer.winMain.mainCanvas.updateCanvas(true);
-			//hide the dialog
-			setVisible(false);		
-			//show components that were initially not required
-			MapViewer.winMain.zoomControlContainerPanel.setVisible(true);
+			MapViewer.winMain.repaint();
+			
+			// hide the dialog
+			setVisible(false);
 		}
 		catch (RuntimeException e)
 		{
@@ -79,5 +90,6 @@ public class OpenFileDialog extends JDialog implements ActionListener
 		}
 	}
 	
+	// ----------------------------------------------------------------------------------------------------------------------------------------------
 	
-}
+}// end class

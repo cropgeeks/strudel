@@ -81,9 +81,9 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 	{
 		//synchronise this checkbox with the corresponding one in the find features in range panel
 		if(showHomologsCheckbox.isSelected())
-			MapViewer.winMain.toolbar.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().setSelected(true);
+			MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().setSelected(true);
 		else
-			MapViewer.winMain.toolbar.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().setSelected(false);
+			MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().setSelected(false);
 		
 		MapViewer.winMain.mainCanvas.updateCanvas(true);
 	}
@@ -92,9 +92,9 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 	{
 		//synchronise this checkbox with the corresponding one in the find features in range panel
 		if(showLabelsCheckbox.isSelected())
-			MapViewer.winMain.toolbar.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(true);
+			MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(true);
 		else
-			MapViewer.winMain.toolbar.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(false);
+			MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(false);
 				
 		MapViewer.winMain.mainCanvas.updateCanvas(true);
 	}

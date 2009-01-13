@@ -65,8 +65,11 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener, Mouse
 		int canvasHeight = getHeight();
 		int canvasWidth = getWidth();
 
+		// width of chromosomes -- set this to a fixed fraction of the screen width for now
+		int chromoWidth = canvasWidth / 10;
+		
 		// x position of genome
-		int genomeX = canvasWidth / 2;
+		int genomeX = (canvasWidth/2) - (chromoWidth/2);
 
 		//space between the chromosomes vertically
 		int chromoSpacing = (int) ((canvasHeight / gMapSet.numMaps) * 0.20f);
@@ -83,8 +86,6 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener, Mouse
 		// we want to fit all the chromosomes on at a zoom factor of 1 so we only use the top spacer when this is the case
 		int currentY = topBottomSpacer;
 
-		// width of chromosomes -- set this to a fixed fraction of the screen width for now
-		int chromoWidth = canvasWidth / 10;
 
 		//background gradient from top to bottom, dark to light, starts black
 		Color b1 = Colors.backgroundGradientStartColour;

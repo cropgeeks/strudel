@@ -109,7 +109,7 @@ public class FindFeaturesInRangeDialog extends JDialog implements ActionListener
 			//zoom back out first if we are not fully zoomed out already
 			if(gChromoMap.owningSet.zoomFactor > 1)
 			{
-				MapViewer.winMain.mainCanvas.zoomHandler.processZoomResetRequest(gChromoMap.owningSet, 1000);
+				MapViewer.winMain.mainCanvas.zoomHandler.processZoomResetRequest(gChromoMap.owningSet);
 			}
 			
 			//now zoom into that range on the chromosome

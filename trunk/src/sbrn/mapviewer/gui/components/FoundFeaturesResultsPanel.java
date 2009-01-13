@@ -124,8 +124,7 @@ public class FoundFeaturesResultsPanel extends JPanel implements ListSelectionLi
 				if (owningSet.zoomFactor < owningSet.singleChromoViewZoomFactor || !gChromoMap.isShowingOnCanvas)
 				{
 					// zoom into the map
-					MapViewer.winMain.mainCanvas.zoomHandler.processClickZoomRequest(gChromoMap,
-									1000);
+					MapViewer.winMain.mainCanvas.zoomHandler.processClickZoomRequest(gChromoMap);
 				}
 				
 				// remember this map

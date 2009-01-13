@@ -57,7 +57,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 							e.getY());
 			
 			if (selectedMap != null)
-				winMain.mainCanvas.zoomHandler.processClickZoomRequest(selectedMap, 1000);
+				winMain.mainCanvas.zoomHandler.processClickZoomRequest(selectedMap);
 			return;
 		}
 		

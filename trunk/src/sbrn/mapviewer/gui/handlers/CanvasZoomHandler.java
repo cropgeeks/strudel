@@ -16,6 +16,10 @@ public class CanvasZoomHandler
 	
 	// frame rate
 	int fps = 25;
+	
+	//this boolean is required because we need to check in the stateChanged method of the ZoomControlPanel class whether
+	//or not it was invoked manually or indirectly because we programmtically changed the value of the zoom slider
+	public boolean isClickZoomRequest = false;
 
 	// =====================================c'tors===================================
 
@@ -26,22 +30,12 @@ public class CanvasZoomHandler
 
 	// =====================================methods===================================
 
-	// gets invoked when the zoom is adjusted by using the sliders or the drag-and-zoom functionality
-	// adjusts the zoom factor and checks whether we need to display markers and labels
-	public void processContinuousZoomRequest(float newZoomFactor, float multiplier, int genomeIndex, boolean isSliderRequest)
-	{
-		GMapSet selectedSet = MapViewer.winMain.dataContainer.gMapSetList.get(genomeIndex);
-		processContinuousZoomRequest(newZoomFactor, multiplier, selectedSet, isSliderRequest);
-
-	}
-
-	// -----------------------------------------------------------------------------------------------------------------------------------
-
-	// gets invoked when the zoom is adjusted by using the sliders or the drag-and-zoom functionality
+	// gets invoked when the zoom is adjusted by using the sliders 
 	// adjusts the zoom factor and checks whether we need to display markers and labels
 	public void processContinuousZoomRequest(float newZoomFactor, float multiplier, GMapSet selectedSet, boolean isSliderRequest)
 	{
-
+		isClickZoomRequest = true;
+		
 		//make sure antialiasing is off
 		mainCanvas.antiAlias = false;
 
@@ -82,6 +76,8 @@ public class CanvasZoomHandler
 
 		//update zoom control position
 		MapViewer.winMain.fatController.updateZoomControls();
+		
+		isClickZoomRequest = false;
 	}
 
 
@@ -90,14 +86,15 @@ public class CanvasZoomHandler
 	//zooms in to a region determined by user by drawing a rectangle around it
 	public synchronized void processPanZoomRequest(GChromoMap selectedMap, int mousePressedY, int mouseReleasedY)
 	{
+		// animate this by zooming in gradually
+		// the length of time we want the animation to last in milliseconds
+		int millis = 500;
+		
 		// figure out the genome it belongs to and increase that genome's zoom factor so that we can
 		// just fit the chromosome on screen the next time it is painted
 		int selectedYDist = mouseReleasedY - mousePressedY;
 		float finalScalingFactor = mainCanvas.getHeight() / (float) selectedYDist;
 
-		// animate this by zooming in gradually
-		// the length of time we want the animation to last in milliseconds
-		int millis = 1000;
 		PanZoomAnimator panZoomAnimator = new PanZoomAnimator(fps, millis, finalScalingFactor, selectedMap, mainCanvas, mousePressedY, mouseReleasedY, this);
 		panZoomAnimator.start();
 	}
@@ -105,8 +102,10 @@ public class CanvasZoomHandler
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
 	// zooms in by a fixed amount on a chromosome the user clicked on (to fill screen with chromosome)
-	public  void processClickZoomRequest(GChromoMap selectedMap,int millis)
+	public  void processClickZoomRequest(GChromoMap selectedMap)
 	{
+		int millis = 500;
+		
 		// figure out the genome it belongs to and increase that genome's zoom factor so that we can
 		// just fit the chromosome on screen the next time it is painted
 		GMapSet selectedSet = selectedMap.owningSet;
@@ -133,8 +132,10 @@ public class CanvasZoomHandler
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
 	// zooms out to restore original zoom factor of 1
-	public  void processZoomResetRequest(GMapSet selectedSet,int millis)
+	public  void processZoomResetRequest(GMapSet selectedSet)
 	{
+		int millis = 500;
+		
 		// animate this by zooming out gradually
 		float finalZoomFactor = 1;
 		// work out the chromo height and total genome height for when the new zoom factor will have been applied

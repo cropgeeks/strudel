@@ -162,21 +162,25 @@ public class MainCanvas extends JPanel
 							RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
 		}
 		
-		//background and borders
+		//background
 		setBackground(Colors.mainCanvasBackgroundColour);
 		
 		// get current size of frame
 		canvasHeight = getHeight();
 		canvasWidth = getWidth();
+		
 		// create a bounding rectangle the size of the currently visible canvas
 		Rectangle canvasBounds = new Rectangle(0, 0, this.getWidth(), this.getHeight());
+		
 		//background gradient from top to bottom, dark to light, starts black
 		Color b1 = Colors.backgroundGradientStartColour;
 		Color b2 = Colors.backgroundGradientEndColour;
 		g2.setPaint(new GradientPaint(canvasWidth / 2, 0, b1, canvasWidth / 2, canvasHeight, b2));
 		g2.fillRect(0, 0, canvasWidth, canvasHeight);
-		//need to distribute the mapsets across the screen depending on their number
-		float[] xPositions = null;
+
+		// width of chromosomes -- set this to a fixed fraction of the screen width for now
+		int chromoWidth = Math.round(canvasWidth / 40);
+		
 		for (GMapSet gMapSet : winMain.dataContainer.gMapSetList)
 		{
 			checkMarkerPaintingThresholds(gMapSet);
@@ -185,7 +189,7 @@ public class MainCanvas extends JPanel
 			int numGenomes = winMain.dataContainer.gMapSetList.size();
 			int genomeInterval = getWidth()/numGenomes;
 			int spacerLeft = genomeInterval/2;
-			gMapSet.xPosition = (genomeInterval * winMain.dataContainer.gMapSetList.indexOf(gMapSet)) + spacerLeft;				
+			gMapSet.xPosition = (genomeInterval * winMain.dataContainer.gMapSetList.indexOf(gMapSet)) + spacerLeft - chromoWidth/2;				
 			
 			// work out the other coordinates needed
 			// these are genome specific because we can have a different zoom factor for each genome
@@ -225,8 +229,7 @@ public class MainCanvas extends JPanel
 				currentY = -(gMapSet.totalY / 2) + canvasHeight / 2 - (gMapSet.centerPoint - (gMapSet.totalY / 2));
 			}
 			
-			// width of chromosomes -- set this to a fixed fraction of the screen width for now
-			int chromoWidth = Math.round(canvasWidth / 40);
+
 			// check that this number is even
 			boolean evenNumber = chromoWidth % 2 == 0;
 			// if it isn't just add 1 -- otherwise we get into trouble with feature line widths exceeding the width of the chromosome

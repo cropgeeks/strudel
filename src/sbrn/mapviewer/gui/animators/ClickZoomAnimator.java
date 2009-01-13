@@ -38,6 +38,8 @@ public class ClickZoomAnimator extends Thread
 
 	public void run()
 	{
+		MapViewer.logger.fine("ClickZoomAnimator finalZoomFactor = " + finalZoomFactor);
+		
 		//turn antialiasing off
 		mainCanvas.antiAlias = false;
 		
@@ -53,6 +55,11 @@ public class ClickZoomAnimator extends Thread
 		float zoomFactorIncrement = (finalZoomFactor - selectedSet.zoomFactor) / totalFrames;
 		float chromoHeightIncrement = (finalChromoHeight - selectedSet.chromoHeight) / totalFrames;
 		float totalYIncrement = (finalTotalY - selectedSet.totalY) / totalFrames;
+		
+		MapViewer.logger.fine("zoomFactorIncrement = " + zoomFactorIncrement);
+		MapViewer.logger.fine("totalFrames = " + totalFrames);
+		MapViewer.logger.fine("fps = " + fps);
+		MapViewer.logger.fine("millis = " + millis);
 
 		// now loop for the number of total frames, zooming in by a bit each time
 		for (int i = 0; i < totalFrames; i++)
@@ -66,12 +73,16 @@ public class ClickZoomAnimator extends Thread
 			{
 			}
 
+			MapViewer.logger.fine("selectedSet.zoomFactor before = " + selectedSet.zoomFactor);
+			
 			// set the new zoom factor
-			selectedSet.zoomFactor += zoomFactorIncrement;
+			selectedSet.zoomFactor = selectedSet.zoomFactor + zoomFactorIncrement;
 
 			//don't let the zoom factor fall below 1
 			if(selectedSet.zoomFactor < 1)
-				selectedSet.zoomFactor = 1;
+				selectedSet.zoomFactor = 1;			
+			
+			MapViewer.logger.fine("selectedSet.zoomFactor after  = " + selectedSet.zoomFactor);
 
 			// work out the chromo height and total genome height for when the new zoom factor will have been applied
 			int newChromoHeight = Math.round(selectedSet.chromoHeight + chromoHeightIncrement);
@@ -115,7 +126,7 @@ public class ClickZoomAnimator extends Thread
 		
 		done = true;
 		
-		MapViewer.logger.finest("selectedSet.zoomFactor final = " + selectedSet.zoomFactor);
+		MapViewer.logger.fine("selectedSet.zoomFactor final = " + selectedSet.zoomFactor);
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------

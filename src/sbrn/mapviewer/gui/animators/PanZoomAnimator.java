@@ -42,7 +42,7 @@ public class PanZoomAnimator extends Thread
 		//turn antialiasing off
 		mainCanvas.antiAlias = false;
 
-		float totalFrames = fps * (millis / 1000);
+		int totalFrames = Math.round(fps * (millis / 1000.0f));
 
 		// divide the difference between a scaling factor of 1 and the final scaling factor by the number of frames we want to use for this
 		float increment = (finalScalingFactor - 1) / totalFrames;

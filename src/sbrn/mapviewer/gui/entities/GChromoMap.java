@@ -95,6 +95,8 @@ public class GChromoMap
 	public boolean highlightChromomapRegion = false;
 	public float highlightedRegionStart, highlightedRegionEnd;	
 	
+	int distanceMarkerZoomThreshold = 12;
+	
 	// ============================c'tors==================================
 	
 	public GChromoMap(Color colour, String name, int index, GMapSet owningSet)
@@ -257,7 +259,7 @@ public class GChromoMap
 	// draws a set of distance markers
 	public void drawDistanceMarkers(Graphics2D g2)
 	{
-		if (owningSet.zoomFactor > 25 && !inversionInProgress)
+		if (owningSet.zoomFactor > distanceMarkerZoomThreshold && !inversionInProgress)
 		{
 			//the number of markers we want to draw at any one time, regardless of our zoom level
 			float numMarkers = 50;

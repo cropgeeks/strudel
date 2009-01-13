@@ -205,7 +205,7 @@ public class FatController
 		for(GMapSet gMapSet : winMain.dataContainer.gMapSetList)
 		{
 			//reset zoom on all mapsets
-			winMain.mainCanvas.zoomHandler.processZoomResetRequest(gMapSet, 500);
+			winMain.mainCanvas.zoomHandler.processZoomResetRequest(gMapSet);
 			
 			//reset selected maps
 			gMapSet.selectedMaps.clear();
@@ -269,6 +269,11 @@ public class FatController
 		{
 			MapViewer.winMain.toolbar.bFindFeatures.setEnabled(false);
 			MapViewer.winMain.toolbar.bFindFeaturesinRange.setEnabled(false);
+		}
+		else
+		{
+			MapViewer.winMain.toolbar.bFindFeatures.setEnabled(true);
+			MapViewer.winMain.toolbar.bFindFeaturesinRange.setEnabled(true);
 		}
 
 	}

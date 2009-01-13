@@ -147,6 +147,7 @@ public class MainCanvas extends JPanel
 	// paint the genomes or portions thereof onto this canvas
 	private void paintCanvas(Graphics2D g2)
 	{
+		
 		// check whether the user wants antialiasing on
 		if (antiAlias)
 		{
@@ -163,7 +164,6 @@ public class MainCanvas extends JPanel
 		
 		//background and borders
 		setBackground(Colors.mainCanvasBackgroundColour);
-		setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Colors.mainCanvasBottomBorderColour));
 		
 		// get current size of frame
 		canvasHeight = getHeight();

@@ -34,8 +34,6 @@ public class CanvasZoomHandler
 	// adjusts the zoom factor and checks whether we need to display markers and labels
 	public void processContinuousZoomRequest(float newZoomFactor, float multiplier, GMapSet selectedSet, boolean isSliderRequest)
 	{
-		isClickZoomRequest = true;
-		
 		//make sure antialiasing is off
 		mainCanvas.antiAlias = false;
 
@@ -76,8 +74,7 @@ public class CanvasZoomHandler
 
 		//update zoom control position
 		MapViewer.winMain.fatController.updateZoomControls();
-		
-		isClickZoomRequest = false;
+
 	}
 
 
@@ -93,10 +90,12 @@ public class CanvasZoomHandler
 		// figure out the genome it belongs to and increase that genome's zoom factor so that we can
 		// just fit the chromosome on screen the next time it is painted
 		int selectedYDist = mouseReleasedY - mousePressedY;
-		float finalScalingFactor = mainCanvas.getHeight() / (float) selectedYDist;
-
-		PanZoomAnimator panZoomAnimator = new PanZoomAnimator(fps, millis, finalScalingFactor, selectedMap, mainCanvas, mousePressedY, mouseReleasedY, this);
-		panZoomAnimator.start();
+		if (selectedYDist > 0)
+		{
+			float finalScalingFactor = mainCanvas.getHeight() / (float) selectedYDist;
+			PanZoomAnimator panZoomAnimator = new PanZoomAnimator(fps, millis, finalScalingFactor, selectedMap, mainCanvas, mousePressedY, mouseReleasedY, this);
+			panZoomAnimator.start();
+		}
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
@@ -104,7 +103,7 @@ public class CanvasZoomHandler
 	// zooms in by a fixed amount on a chromosome the user clicked on (to fill screen with chromosome)
 	public  void processClickZoomRequest(GChromoMap selectedMap)
 	{
-		int millis = 500;
+		int millis = 600;
 		
 		// figure out the genome it belongs to and increase that genome's zoom factor so that we can
 		// just fit the chromosome on screen the next time it is painted
@@ -134,7 +133,7 @@ public class CanvasZoomHandler
 	// zooms out to restore original zoom factor of 1
 	public  void processZoomResetRequest(GMapSet selectedSet)
 	{
-		int millis = 500;
+		int millis = 600;
 		
 		// animate this by zooming out gradually
 		float finalZoomFactor = 1;

@@ -106,18 +106,17 @@ public class FindFeaturesInRangeDialog extends JDialog implements ActionListener
 			}
 			allNames = containedFeatureNames.toArray(allNames);
 			
-			//zoom back out first if we are not fully zoomed out already
-			if(gChromoMap.owningSet.zoomFactor > 1)
-			{
-				MapViewer.winMain.mainCanvas.zoomHandler.processZoomResetRequest(gChromoMap.owningSet);
-			}
+			//resize the split pane so we can see the results table
+			MapViewer.winMain.splitPane.setDividerSize(Constants.SPLITPANE_DIVIDER_SIZE);
+			int newDividerLocation = (int) (MapViewer.winMain.mainCanvas.getHeight() - MapViewer.winMain.foundFeaturesTableControlPanel.getPreferredSize().getHeight());
+			MapViewer.winMain.splitPane.setDividerLocation(newDividerLocation);
 			
 			//now zoom into that range on the chromosome
 			//need to know where to zoom into first
 			int relativeTopY = (int) Math.floor((gChromoMap.height / chromoMap.getStop()) * intervalStart);
 			int relativeBottomY = (int) Math.ceil((gChromoMap.height / chromoMap.getStop()) * intervalEnd);
 			//this buffer increases the size of the visible interval slightly so the bounds don't coincide with the canvas bounds
-			int buffer = 2;
+			int buffer = 4;
 			int topY =  relativeTopY + gChromoMap.y - buffer;
 			int bottomY = relativeBottomY  + gChromoMap.y + buffer;
 			MapViewer.winMain.mainCanvas.zoomHandler.processPanZoomRequest(gChromoMap, topY, bottomY);
@@ -147,11 +146,8 @@ public class FindFeaturesInRangeDialog extends JDialog implements ActionListener
 			//size the columns and the dialog containing the table appropriately
 			MapViewer.winMain.ffResultsPanel.initColumnSizes();
 			
-			//set the results panel to be visible and hide the find dialog
+			//set the results panel to be visible 
 			this.setVisible(false);
-			MapViewer.winMain.splitPane.setDividerSize(Constants.SPLITPANE_DIVIDER_SIZE);
-			int newDividerLocation = (int) (MapViewer.winMain.mainCanvas.getHeight() - MapViewer.winMain.foundFeaturesTableControlPanel.getPreferredSize().getHeight());
-			MapViewer.winMain.splitPane.setDividerLocation(newDividerLocation);
 			
 		}
 		catch (RuntimeException e1)

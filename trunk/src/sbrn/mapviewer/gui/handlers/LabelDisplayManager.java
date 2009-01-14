@@ -5,6 +5,7 @@ import java.util.*;
 
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
+import sbrn.mapviewer.gui.dialog.*;
 import sbrn.mapviewer.gui.entities.*;
 
 
@@ -105,6 +106,8 @@ public class LabelDisplayManager
 		
 		//the features we need to draw
 		Vector<Feature> features = MapViewer.winMain.fatController.featuresInRange;
+		//sort these by position
+		Collections.sort(features);
 		
 		//first work out the features y positions
 		//we need to create a LinkedHashMap withe the default positons
@@ -113,21 +116,6 @@ public class LabelDisplayManager
 
 		//now work out the actual positions after correction for collision of labels
 		LinkedHashMap<Feature, Integer> laidoutPositions = calculateLabelPositions(features, featurePositions);
-
-//		//divide the visible canvas size by the number of items to be labelled to get the distance we need to space them apart
-//		int canvasHeight = MapViewer.winMain.mainCanvas.getHeight();
-//		int labelInterval = Math.round(canvasHeight / features.size());
-//		
-
-//		//the total amount of space on y that all the labkles will take up
-//		int totalLabelsHeight = labelHeight * features.size();
-//		//the position on the canvas where we need to start drawing to fit them all on
-//		int labelYStartPos = 0;		
-//		if (labelHeight > labelInterval)
-//		{
-//			labelInterval = labelHeight;
-//			labelYStartPos = - ((totalLabelsHeight - canvasHeight) / 2);
-//		}
 		
 		// for all features in our list
 		for (Feature f : features)
@@ -180,18 +168,51 @@ public class LabelDisplayManager
 	{
 		LinkedHashMap<Feature, Integer> labelPositions = (LinkedHashMap<Feature, Integer>)featurePositions.clone();
 		
-		//need to check that the label interval is no less than the height of an individual label plus some space at 
-		//the top and bottom of it respectively
+		//the label's height
 		int gap = 1;
-		int labelHeight = fontHeight + gap*2;
+		int labelHeight = fontHeight + gap;
 		
+		//first we want to work out where we start drawing the labels relative to the range start point
+		//we want the labels fanning out evenly on y both up and downwards from the features themselves
+		//first work out the combined height of the labels
+		int totalLabelHeight = features.size() * labelHeight;
+		//then the height of the interval
+		//for this we need the interval start and end values
+		MTFindFeaturesInRangePanel ffInRangePanel = MapViewer.winMain.ffInRangeDialog.ffInRangePanel;
+		float intervalStart = Float.parseFloat(ffInRangePanel.getIntervalStartTextField().getText());
+		float intervalEnd = Float.parseFloat(ffInRangePanel.getIntervalEndTextField().getText());
+		//and the chromosome the interval is on
+		String genome = (String) ffInRangePanel.getGenomeCombo().getSelectedItem();
+		String chromosome =  (String) ffInRangePanel.getChromoCombo().getSelectedItem();
+		GChromoMap gChromoMap = Utils.getGMapByName(chromosome,genome);
+		ChromoMap chromoMap = gChromoMap.chromoMap;
+		
+		//convert the interval values to actual pixel positions on the canvas
+		int intervalStartPos = (int) ((chromoMap.getGChromoMap().owningSet.chromoHeight / chromoMap.getStop()) * intervalStart);
+		int intervalEndPos = (int) ((chromoMap.getGChromoMap().owningSet.chromoHeight / chromoMap.getStop()) * intervalEnd);
+		
+		//size of the interval in pixels
+		int intervalHeight = intervalEndPos - intervalStartPos;
+		
+		//the difference between the total label height and the interval height
+		int differential = totalLabelHeight - intervalHeight;
+		//the label offset on y relative to the start of the features themselves
+		//need to subtract this from each label position
+		int offset = Math.round(differential / 2.0f);	
+		
+		//don't want the offset to be negative
+		if(differential < 0)
+			offset = 0;
+		
+		//need to check that the label interval is no less than the height of an individual label plus some space at 
+		//the top and bottom of it respectively	
 		for (int i = 0; i < features.size(); i++)
 		{
 			try
 			{
 				Feature f1 = features.get(i);
 				Feature f2 = features.get(i+1);
-				
+
 				//if the difference between the feature y pos of this feature and that of the next one is less than the labelheight
 				//then we need to shuffle them downwards
 				int yDistance = labelPositions.get(f2) - labelPositions.get(f1);
@@ -200,7 +221,7 @@ public class LabelDisplayManager
 					//move the position of feature 2 down on y by the so it is at the position of feature 1 plus one label height
 					//need to make this change both to the map with the laid out positions as well as the default one because
 					//the value from the latter will be used in the next iteration
-					int newPos = labelPositions.get(f1) + Math.round(labelHeight*1.5f);
+					int newPos = labelPositions.get(f1) + labelHeight;
 					labelPositions.put(f2, newPos);
 				}
 			}
@@ -210,8 +231,13 @@ public class LabelDisplayManager
 			}
 		}
 		
-//		System.out.println("laidoutPositions:\n" + featurePositions.toString());
-		
+		//now subtract from each position the offset so things fan out properly
+		for (Feature feature : labelPositions.keySet())
+		{
+			int newPos = labelPositions.get(feature) - offset;
+			labelPositions.put(feature, newPos);
+		}
+
 		return labelPositions;
 	}
 	
@@ -248,9 +274,7 @@ public class LabelDisplayManager
 
 			featurePositions.put(f, featureY);
 		}
-		
-//		System.out.println("featurePositions:\n" + featurePositions.toString());
-		
+
 		return featurePositions;
 	}
 

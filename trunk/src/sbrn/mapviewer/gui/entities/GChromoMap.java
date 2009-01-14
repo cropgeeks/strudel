@@ -50,8 +50,11 @@ public class GChromoMap
 	float[] linkedFeaturePositions;
 	public TreeMap<Float, Feature> linkedFeaturePosLookup = new TreeMap<Float, Feature>();
 	
-	// indicates whether this map or part thereof is currently drawn on the canvas
+	// indicates whether this whole map or part thereof is currently drawn on the canvas
 	public boolean isShowingOnCanvas = true;
+	
+	// indicates whether this whole map is currently drawn on the canvas
+	public boolean isFullyShowingOnCanvas = true;
 	
 	// a vector containing features whose labels are to be displayed when the chromosome is drawn
 	public Vector<Feature> mouseOverFeatures = new Vector<Feature>();
@@ -95,7 +98,7 @@ public class GChromoMap
 	public boolean highlightChromomapRegion = false;
 	public float highlightedRegionStart, highlightedRegionEnd;	
 	
-	int distanceMarkerZoomThreshold = 12;
+	int distanceMarkerZoomThreshold = 20;
 	
 	// ============================c'tors==================================
 	
@@ -110,6 +113,7 @@ public class GChromoMap
 		
 		//for convenience also set this object on the ChromoMap object so we can do lookups in either direction
 		chromoMap.setGChromoMap(this);
+
 	}
 	
 	// ============================methods==================================

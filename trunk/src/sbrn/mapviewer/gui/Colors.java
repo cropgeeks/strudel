@@ -35,7 +35,7 @@ public class Colors
 
 	public static Color selectionRectColour = Color.red;
 
-	public static Color distanceMarkerColour = new Color(200,200,200);
+	public static Color distanceMarkerColour = new Color(140,140,150);
 
 	public static Color overviewCanvasTransparentPaint = new Color(1,1,1,0.25f);
 

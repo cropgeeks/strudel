@@ -173,13 +173,9 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		//this is when we do pan-and-zoom and we release the mouse at the end of the panning
 		// in that case we want to trigger a zoom event which zooms into the selected region
 		if (e.isShiftDown() && !isMetaClick(e))
-		{
-			// first repaint without the rectangle showing
-			winMain.mainCanvas.drawSelectionRect = false;
-			winMain.mainCanvas.updateCanvas(true);
-			
-			// then request zooming for the selected map with the given set of coordinates
-			// get the selected set first
+		{	
+			//request zooming for the selected map with the given set of coordinates
+			//get the selected set first
 			int gMapSetIndex = Utils.getSelectedSet(e);
 			GChromoMap selectedMap = Utils.getSelectedMap(winMain, gMapSetIndex, mousePressedY);
 			winMain.mainCanvas.zoomHandler.processPanZoomRequest(selectedMap, mousePressedY, e.getY());
@@ -187,13 +183,14 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		
 		MapViewer.logger.finest("repainting after mouse released");
 		//turn antialiasing on and repaint
+		winMain.mainCanvas.drawSelectionRect = false;
 		winMain.mainCanvas.antiAlias = true;
 		winMain.mainCanvas.updateCanvas(true);
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	// used for various ways of zooming for now
+	// used for zooming and scrolling
 	public void mouseDragged(MouseEvent e)
 	{
 		MapViewer.logger.finest("mouse dragged");
@@ -201,7 +198,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		int x = e.getX();
 		int y = e.getY();
 
-		//mouse is getting dragged without shift held down
+		//mouse is getting dragged without shift held down -- scroll the canvas up or down
 		if (!e.isShiftDown())
 		{
 			// figure out which genome the user is zooming 

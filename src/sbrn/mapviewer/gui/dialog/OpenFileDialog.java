@@ -78,7 +78,7 @@ public class OpenFileDialog extends JDialog implements ActionListener
 			//hide the startpanel and show the main canvas instead
 			MapViewer.winMain.showStartPanel(false);
 			MapViewer.winMain.mainCanvas.setVisible(true);
-			MapViewer.winMain.mainCanvas.updateCanvas(true);
+//			MapViewer.winMain.mainCanvas.updateCanvas(true);
 			MapViewer.winMain.repaint();
 			
 			// hide the dialog

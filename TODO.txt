@@ -73,8 +73,7 @@ Menu bar support for new/infrequent users – Robbie
 ================================
 
 
-FIXES:
-
+BUGS to fix:
 
 
 

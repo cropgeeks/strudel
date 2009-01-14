@@ -88,7 +88,8 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 	
 	public void stateChanged(ChangeEvent e)
 	{
-		MapViewer.logger.fine("zoom slider state changed");
+//		MapViewer.logger.fine("zoom slider state changed");
+//		MapViewer.logger.fine("isClickZoomRequest = " + winMain.mainCanvas.zoomHandler.isClickZoomRequest);
 		JSlider source = (JSlider) e.getSource();
 		if (source.equals(zoomSlider) && !winMain.mainCanvas.zoomHandler.isClickZoomRequest)
 		{

@@ -59,7 +59,6 @@ public class GMapSet
 	// a vector containing GChromoMap objects that have been selected by the user through mouse clicks
 	public Vector<GChromoMap> selectedMaps = new Vector<GChromoMap>();
 
-
 	// these control whether we draw chromosome markers and labels
 	public boolean paintLinkedMarkers = false;
 	public boolean paintAllMarkers = false;
@@ -67,7 +66,7 @@ public class GMapSet
 
 	//a zoom factor value above which we can draw all  features
 	//this is to reduce the amount of clutter on screen
-	public float thresholdAllMarkerPainting = 12;
+	public int thresholdAllMarkerPainting = 16;
 	//the same for drawing labels
 	public float thresholdLabelPainting;
 

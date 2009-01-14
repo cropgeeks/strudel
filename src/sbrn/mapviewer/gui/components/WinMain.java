@@ -25,8 +25,7 @@ public class WinMain extends JFrame
 	public static MainCanvas mainCanvas;
 	public LinkedList<ZoomControlPanel> zoomControlPanels = new LinkedList<ZoomControlPanel>();
 	public ControlToolBar toolbar;
-	public AnnotationPanel targetAnnotationPanel;
-	public AnnotationPanel referenceAnnotationPanel;
+
 	public LinkedList<OverviewCanvas> overviewCanvases = new LinkedList<OverviewCanvas>();
 	
 	public OverviewDialog overviewDialog = new OverviewDialog(this);
@@ -282,8 +281,6 @@ public class WinMain extends JFrame
 		zoomControlAndGenomelabelContainer.add(zoomControlContainerPanel, BorderLayout.CENTER);		
 		
 		initOverviewDialog();
-		
-		repaint();
 	}
 	
 	

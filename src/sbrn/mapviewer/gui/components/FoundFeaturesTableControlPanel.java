@@ -72,15 +72,45 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 		
 		org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
 		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(layout.createSequentialGroup().addContainerGap().add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(titleLabel).add(genomeLabel).add(chromoLabel).add(regionStartLabel).add(regionEndLabel).add(numberFeaturesLabel).add(showLabelsCheckbox).add(showHomologsCheckbox)).addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
-		layout.setVerticalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(layout.createSequentialGroup().addContainerGap().add(titleLabel).addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED).add(genomeLabel).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(chromoLabel).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(regionStartLabel).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(regionEndLabel).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(numberFeaturesLabel).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(showLabelsCheckbox).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(showHomologsCheckbox).addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+		layout.setHorizontalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
+						layout.createSequentialGroup().addContainerGap().add(
+										layout.createParallelGroup(
+														org.jdesktop.layout.GroupLayout.LEADING).add(
+														titleLabel).add(
+														genomeLabel).add(
+														chromoLabel).add(
+														regionStartLabel).add(
+														regionEndLabel).add(
+														numberFeaturesLabel).add(
+														showLabelsCheckbox).add(
+														showHomologsCheckbox)).addContainerGap(
+										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE)));
+		layout.setVerticalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
+						layout.createSequentialGroup().addContainerGap().add(titleLabel).addPreferredGap(
+										org.jdesktop.layout.LayoutStyle.UNRELATED).add(
+										genomeLabel).addPreferredGap(
+										org.jdesktop.layout.LayoutStyle.RELATED).add(
+										chromoLabel).addPreferredGap(
+										org.jdesktop.layout.LayoutStyle.RELATED).add(
+										regionStartLabel).addPreferredGap(
+										org.jdesktop.layout.LayoutStyle.RELATED).add(
+										regionEndLabel).addPreferredGap(
+										org.jdesktop.layout.LayoutStyle.RELATED).add(
+										numberFeaturesLabel).addPreferredGap(
+										org.jdesktop.layout.LayoutStyle.RELATED).add(
+										showLabelsCheckbox).addPreferredGap(
+										org.jdesktop.layout.LayoutStyle.RELATED).add(
+										showHomologsCheckbox).addContainerGap(
+										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE)));
 	}// </editor-fold>
 	//GEN-END:initComponents
 	
 	private void showHomologsCheckboxStateChanged(javax.swing.event.ChangeEvent evt)
 	{
 		//synchronise this checkbox with the corresponding one in the find features in range panel
-		if(showHomologsCheckbox.isSelected())
+		if (showHomologsCheckbox.isSelected())
 			MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().setSelected(true);
 		else
 			MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().setSelected(false);
@@ -91,11 +121,11 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 	private void showLabelsCheckboxStateChanged(javax.swing.event.ChangeEvent evt)
 	{
 		//synchronise this checkbox with the corresponding one in the find features in range panel
-		if(showLabelsCheckbox.isSelected())
+		if (showLabelsCheckbox.isSelected())
 			MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(true);
 		else
 			MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(false);
-				
+		
 		MapViewer.winMain.mainCanvas.updateCanvas(true);
 	}
 	

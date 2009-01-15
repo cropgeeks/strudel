@@ -58,10 +58,10 @@ public class ClickZoomAnimator extends Thread
 		float chromoHeightIncrement = (finalChromoHeight - selectedSet.chromoHeight) / totalFrames;
 		float totalYIncrement = (finalTotalY - selectedSet.totalY) / totalFrames;
 		
-//		MapViewer.logger.fine("zoomFactorIncrement = " + zoomFactorIncrement);
-//		MapViewer.logger.fine("totalFrames = " + totalFrames);
-//		MapViewer.logger.fine("fps = " + fps);
-//		MapViewer.logger.fine("millis = " + millis);
+		MapViewer.logger.fine("zoomFactorIncrement = " + zoomFactorIncrement);
+		MapViewer.logger.fine("totalFrames = " + totalFrames);
+		MapViewer.logger.fine("fps = " + fps);
+		MapViewer.logger.fine("millis = " + millis);
 
 		// now loop for the number of total frames, zooming in by a bit each time
 		for (int i = 0; i < totalFrames; i++)
@@ -75,7 +75,7 @@ public class ClickZoomAnimator extends Thread
 			{
 			}
 
-//			MapViewer.logger.fine("selectedSet.zoomFactor before = " + selectedSet.zoomFactor);
+			MapViewer.logger.fine("selectedSet.zoomFactor before = " + selectedSet.zoomFactor);
 			
 			// set the new zoom factor
 			selectedSet.zoomFactor = selectedSet.zoomFactor + zoomFactorIncrement;
@@ -84,7 +84,7 @@ public class ClickZoomAnimator extends Thread
 			if(selectedSet.zoomFactor < 1)
 				selectedSet.zoomFactor = 1;			
 			
-//			MapViewer.logger.fine("selectedSet.zoomFactor after  = " + selectedSet.zoomFactor);
+			MapViewer.logger.fine("selectedSet.zoomFactor after  = " + selectedSet.zoomFactor);
 
 			// work out the chromo height and total genome height for when the new zoom factor will have been applied
 			int newChromoHeight = Math.round(selectedSet.chromoHeight + chromoHeightIncrement);
@@ -107,8 +107,8 @@ public class ClickZoomAnimator extends Thread
 		}
 		
 		//do a final zoom adjust to ensure that we are at the right zoom level
-		selectedSet.zoomFactor = finalZoomFactor;
-		zoomHandler.adjustZoom(selectedMap, finalTotalY, finalChromoHeight, finalChromoHeight/2);
+//		selectedSet.zoomFactor = finalZoomFactor;
+//		zoomHandler.adjustZoom(selectedMap, finalTotalY, finalChromoHeight, finalChromoHeight/2);
 
 		//update overviews
 		MapViewer.winMain.fatController.updateOverviewCanvases();
@@ -130,7 +130,7 @@ public class ClickZoomAnimator extends Thread
 		
 		zoomHandler.isClickZoomRequest = false;
 		
-//		MapViewer.logger.fine("selectedSet.zoomFactor final = " + selectedSet.zoomFactor);
+		MapViewer.logger.fine("selectedSet.zoomFactor final = " + selectedSet.zoomFactor);
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------

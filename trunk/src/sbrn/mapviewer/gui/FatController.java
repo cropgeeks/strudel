@@ -1,12 +1,12 @@
 package sbrn.mapviewer.gui;
 
 import java.awt.*;
+import java.io.*;
 import java.util.*;
-
 import javax.swing.table.*;
-
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.components.*;
+import sbrn.mapviewer.gui.dialog.*;
 import sbrn.mapviewer.gui.entities.*;
 import sbrn.mapviewer.gui.handlers.*;
 
@@ -15,7 +15,7 @@ public class FatController
 	
 	// ===============================================vars===================================
 	
-	private WinMain winMain;
+	private WinMain winMain = MapViewer.winMain;
 	public Vector<Feature> foundFeatures = new Vector<Feature>();
 	public Vector<Feature> featuresInRange = new Vector<Feature>();
 	public Vector<Feature> foundFeatureHomologs = new Vector<Feature>();
@@ -190,7 +190,7 @@ public class FatController
 		winMain.splitPane.setDividerLocation(1.0);
 		
 		//clear the table model for the found features
-		MapViewer.winMain.ffResultsPanel.getFFResultsTable().setModel(new DefaultTableModel());
+		winMain.ffResultsPanel.getFFResultsTable().setModel(new DefaultTableModel());
 		
 		//clear the found features
 		if(foundFeatures != null)
@@ -235,8 +235,8 @@ public class FatController
 	// assemble the rest of the GUI as required
 	public void assembleRemainingGUIComps()
 	{	
-		MapViewer.winMain.setupRemainingComponents();
-		MapViewer.winMain.ffInRangeDialog.ffInRangePanel.initRemainingComponents();
+		winMain.setupRemainingComponents();
+		winMain.ffInRangeDialog.ffInRangePanel.initRemainingComponents();
 		guiFullyAssembled = true;
 	}
 	
@@ -246,38 +246,40 @@ public class FatController
 	{
 		// load the data			
 		//the easiest way of doing this is by simply creating a new data container instance
-		MapViewer.winMain.dataContainer = new DataContainer();
+		winMain.dataContainer = new DataContainer();
 		//if users load datasets in succession we need to make sure we don't run out of memory
-		//we want the old data container to be thrown away
+		//we want any old data containers to be thrown away
 		//run the garbage collector explicitly now
 		System.gc();
 		//check the memory situation
 		MapViewer.logger.fine("memory max (mb) = " + Runtime.getRuntime().maxMemory()/1024/1024);
 		MapViewer.logger.fine("memory available = (mb) " + Runtime.getRuntime().freeMemory()/1024/1024);
 		
-		if(!MapViewer.winMain.fatController.guiFullyAssembled)
-			MapViewer.winMain.fatController.assembleRemainingGUIComps();
+		//build the rest of the GUI as required
+		if(!winMain.fatController.guiFullyAssembled)
+			winMain.fatController.assembleRemainingGUIComps();
 		else
-			MapViewer.winMain.reinitialiseDependentComponents();
+			winMain.reinitialiseDependentComponents();
 		
 		//also need a new link display manager because it holds the precomputed links
-		MapViewer.winMain.mainCanvas.linkDisplayManager = new LinkDisplayManager(MapViewer.winMain.mainCanvas);	
+		winMain.mainCanvas.linkDisplayManager = new LinkDisplayManager(winMain.mainCanvas);	
 		
 		//check if we need to enable some functionality -- depends on the number of genomes loaded
 		//cannot do comparative stuff if user one loaded one (target) genome
-		if(MapViewer.winMain.dataContainer.gMapSetList.size() == 1)
+		if(winMain.dataContainer.gMapSetList.size() == 1)
 		{
-			MapViewer.winMain.toolbar.bFindFeatures.setEnabled(false);
-			MapViewer.winMain.toolbar.bFindFeaturesinRange.setEnabled(false);
+			winMain.toolbar.bFindFeatures.setEnabled(false);
+			winMain.toolbar.bFindFeaturesinRange.setEnabled(false);
 		}
 		else
 		{
-			MapViewer.winMain.toolbar.bFindFeatures.setEnabled(true);
-			MapViewer.winMain.toolbar.bFindFeaturesinRange.setEnabled(true);
+			winMain.toolbar.bFindFeatures.setEnabled(true);
+			winMain.toolbar.bFindFeaturesinRange.setEnabled(true);
 		}
-
+		
+		MapViewer.winMain.showStartPanel(false);
 	}
-	
+		
 	
 	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
 	

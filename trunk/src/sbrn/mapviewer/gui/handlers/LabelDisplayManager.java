@@ -1,6 +1,7 @@
 package sbrn.mapviewer.gui.handlers;
 
 import java.awt.*;
+import java.awt.geom.*;
 import java.util.*;
 
 import sbrn.mapviewer.data.*;
@@ -76,7 +77,12 @@ public class LabelDisplayManager
 
 			//draw a rectangle as a background for the label
 			g2.setColor(Colors.highlightedFeatureLabelBackgroundColour);
-			g2.fillRect(labelX - 2, labelY - fontHeight, stringWidth + 4, fontHeight + 2);
+			float arcSize = fontHeight/1.5f;
+			int horizontalGap = 3;
+			int verticalGap = 4;
+			RoundRectangle2D.Float backGroundRect = new RoundRectangle2D.Float(labelX - horizontalGap, labelY - fontHeight, stringWidth + horizontalGap*2,
+							fontHeight + verticalGap, arcSize, arcSize);
+			g2.fill(backGroundRect);
 
 			// set the label colour
 			g2.setColor(Colors.highlightedFeatureLabelColour);

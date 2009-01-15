@@ -98,7 +98,7 @@ public class GChromoMap
 	public boolean highlightChromomapRegion = false;
 	public float highlightedRegionStart, highlightedRegionEnd;	
 	
-	int distanceMarkerZoomThreshold = 20;
+	float distanceMarkerZoomThreshold;
 	
 	// ============================c'tors==================================
 	
@@ -113,7 +113,6 @@ public class GChromoMap
 		
 		//for convenience also set this object on the ChromoMap object so we can do lookups in either direction
 		chromoMap.setGChromoMap(this);
-
 	}
 	
 	// ============================methods==================================
@@ -137,6 +136,8 @@ public class GChromoMap
 				colour = owningSet.colour;
 				centreColour = owningSet.colour.brighter().brighter().brighter().brighter();
 			}
+			
+			distanceMarkerZoomThreshold = owningSet.thresholdAllMarkerPainting;
 			
 			//adjust the y in case we are inverting
 			multiplier = Math.abs(((Math.abs(angleFromVertical / 90.0f)) -1.0f) *0.5f);

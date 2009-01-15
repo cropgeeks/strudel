@@ -205,6 +205,7 @@ public class MainCanvas extends JPanel
 				
 				//the zoom factor at which we would fit a single chromosome (but nothing else) on the visible portion of the canvas
 				gMapSet.singleChromoViewZoomFactor = canvasHeight / gMapSet.chromoHeight;
+				gMapSet.thresholdAllMarkerPainting = gMapSet.singleChromoViewZoomFactor;
 				
 				// the total vertical extent of the genome, excluding top and bottom spacers
 				gMapSet.totalY = (gMapSet.numMaps * gMapSet.chromoHeight) + ((gMapSet.numMaps - 1) * chromoSpacing);

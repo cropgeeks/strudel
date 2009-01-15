@@ -21,20 +21,27 @@ public class WinMain extends JFrame
 	//this is where we hold the genome data
 	public DataContainer dataContainer;
 	
-	//Swing components that make up the GUI
-	public static MainCanvas mainCanvas;
+	//a list of the zoom control panels
 	public LinkedList<ZoomControlPanel> zoomControlPanels = new LinkedList<ZoomControlPanel>();
+	
+	//++++++++++Swing components that make up the GUI: +++++++++++++
+
+	//the tool bar at the top
 	public ControlToolBar toolbar;
 
+	//the thumbnail overviews and the dialog that contains them
 	public LinkedList<OverviewCanvas> overviewCanvases = new LinkedList<OverviewCanvas>();
-	
 	public OverviewDialog overviewDialog = new OverviewDialog(this);
 	
-	//the controller for the whole application
+	//the controller instance for the whole application
 	public FatController fatController;
 	
+	//a context menu that activates when the user right-clicks on a chromosome
 	public ChromoContextPopupMenu chromoContextPopupMenu;
 	
+	//the canvas for rendering the genomes
+	public static MainCanvas mainCanvas;
+
 	//this component shows the results of a feature search in a JTable
 	public FoundFeaturesResultsPanel ffResultsPanel = new FoundFeaturesResultsPanel();
 	//this is a control panel for it, showing just to its left
@@ -42,28 +49,32 @@ public class WinMain extends JFrame
 	
 	//this splitpane contains the main panel and the bottom panel
 	public JSplitPane splitPane;
-	JPanel bottomPanel;
+	public JPanel bottomPanel;
 	
-	//this panel contains the main canvas
-	JPanel mainPanel;
+	//this panel contains the main canvas and/or the start panel
+	public JPanel mainPanel;
 	
 	//a panel for the zoom controls
 	public JPanel zoomControlContainerPanel;
 	
 	//this panel contains the genome labels and the zoom controls
-	JPanel zoomControlAndGenomelabelContainer;
+	public JPanel zoomControlAndGenomelabelContainer;
+	
+	//this panel contains the results table and its control panel 
+	public JPanel bottomPanelContainer;
 	
 	//this panel simply takes the place of the main canvas before we have loaded any data
 	//just contains a simple label with instructions for how to load data
-	StartPanel startPanel;
+	public StartPanel startPanel;
+		
+	//the panel with the genome labels	
+	public GenomeLabelPanel genomeLabelPanel;
 	
 	//dialogs
 	public FindFeaturesDialog ffDialog;
 	public FindFeaturesInRangeDialog ffInRangeDialog;
 	public OpenFileDialog openFileDialog;
-	
-	//the panel with the genome labels	
-	GenomeLabelPanel genomeLabelPanel;
+
 	
 	
 	//	=================================================c'tor=====================================
@@ -163,6 +174,7 @@ public class WinMain extends JFrame
 		//the control toolbar at the top of the GUI
 		toolbar = new ControlToolBar(this);
 		add(toolbar, BorderLayout.NORTH);
+
 	}
 	
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -183,10 +195,10 @@ public class WinMain extends JFrame
 			//this is the main canvas which we render the genomes on
 			mainCanvas = new MainCanvas();
 			//add this but hide the start panel first -- the main canvas is going to take its place instead
-			showStartPanel(false);
+//			showStartPanel(false);
+			MapViewer.logger.fine("adding main canvas");
 			mainPanel.add(mainCanvas, BorderLayout.CENTER);	
-			//mainPanel.setBorder(BorderFactory.createLineBorder(new Color(125, 133, 151), 2));
-			
+
 			//add mousehandler
 			MouseHandler mouseHandler = new MouseHandler(this);
 			mainCanvas.addMouseListener(mouseHandler);
@@ -222,14 +234,14 @@ public class WinMain extends JFrame
 			mainPanel.add(zoomControlAndGenomelabelContainer, BorderLayout.SOUTH);
 			
 			//this panel contains the results table and its control panel 
-			JPanel bottomPanelContainer = new JPanel(new BorderLayout());
+			bottomPanelContainer = new JPanel(new BorderLayout());
 			bottomPanelContainer.add(foundFeaturesTableControlPanel, BorderLayout.WEST);
 			bottomPanelContainer.add(ffResultsPanel, BorderLayout.CENTER);
 			bottomPanel.add(bottomPanelContainer,BorderLayout.CENTER);
 			
 			add(splitPane, BorderLayout.CENTER);
 			
-			//add a property change listener to the plit pane so we know to repaint the canvas when it gets resized
+			//add a property change listener to the split pane so we know to repaint the canvas when it gets resized
 			splitPane.addPropertyChangeListener( new PropertyChangeListener () 
 			{			
 				public void propertyChange(PropertyChangeEvent evt) 

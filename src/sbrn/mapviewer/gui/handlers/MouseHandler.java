@@ -193,11 +193,9 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	// used for zooming and scrolling
 	public void mouseDragged(MouseEvent e)
 	{
-		MapViewer.logger.finest("mouse dragged");
-		
 		int x = e.getX();
 		int y = e.getY();
-
+		
 		//mouse is getting dragged without shift held down -- scroll the canvas up or down
 		if (!e.isShiftDown())
 		{
@@ -210,21 +208,22 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			if (now - timeOfMouseDown < 200)
 				return;
 				
-			// mouse is getting dragged up -- zoom in
+			//this is the amount by which we drag the canvas at a time
+			// afixed amount seems to work best as it moves the canvas the same way across all zoom levels
+			int distanceDragged = 25;
+			
+			// mouse is getting dragged up 
 			if (y < mouseDragPosY)
 			{
-				// the multiplier is the amount by which we multiply the current zoom factor to increase it
-				float multiplier = 1.01f;
-				winMain.mainCanvas.moveGenomeViewPort(gMapSet, (int) (gMapSet.centerPoint * multiplier));
+				winMain.mainCanvas.moveGenomeViewPort(gMapSet, gMapSet.centerPoint + distanceDragged);
 			}
-			// mouse is getting dragged down -- zoom out
+			// mouse is getting dragged down 
 			if (y > mouseDragPosY)
 			{
-				// the multiplier is the amount by which we multiply the current zoom factor to decrease it
-				float multiplier = 0.99f;
-				winMain.mainCanvas.moveGenomeViewPort(gMapSet, (int) (gMapSet.centerPoint * multiplier));
+				winMain.mainCanvas.moveGenomeViewPort(gMapSet, gMapSet.centerPoint - distanceDragged);
 			}
 		}
+		
 
 		// mouse is getting dragged horizontally with SHIFT down -- draw a rectangle for zoom selection
 		if (e.isShiftDown())
@@ -256,7 +255,6 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			
 			winMain.mainCanvas.drawSelectionRect = true;
 			winMain.mainCanvas.updateCanvas(false);
-
 		}
 		
 		// update the current drag positions

@@ -66,7 +66,7 @@ public class GMapSet
 
 	//a zoom factor value above which we can draw all  features
 	//this is to reduce the amount of clutter on screen
-	public int thresholdAllMarkerPainting = 16;
+	public float thresholdAllMarkerPainting;
 	//the same for drawing labels
 	public float thresholdLabelPainting;
 
@@ -86,6 +86,8 @@ public class GMapSet
 		this.name = mapSet.getName();
 		this.isTargetGenome = isTargetGenome;
 		numMaps = mapSet.size();
+		
+		thresholdAllMarkerPainting = singleChromoViewZoomFactor;
 
 		// init the list of maps contained in this genome
 		initialise(gMapLookup);

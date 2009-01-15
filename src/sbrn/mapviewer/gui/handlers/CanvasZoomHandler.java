@@ -103,7 +103,7 @@ public class CanvasZoomHandler
 	// zooms in by a fixed amount on a chromosome the user clicked on (to fill screen with chromosome)
 	public  void processClickZoomRequest(GChromoMap selectedMap)
 	{
-		int millis = 600;
+		int millis = 500;
 		
 		// figure out the genome it belongs to and increase that genome's zoom factor so that we can
 		// just fit the chromosome on screen the next time it is painted
@@ -133,7 +133,7 @@ public class CanvasZoomHandler
 	// zooms out to restore original zoom factor of 1
 	public  void processZoomResetRequest(GMapSet selectedSet)
 	{
-		int millis = 600;
+		int millis = 500;
 		
 		// animate this by zooming out gradually
 		float finalZoomFactor = 1;

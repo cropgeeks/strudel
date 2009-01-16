@@ -12,15 +12,30 @@ public class FoundFeatureTableModel extends AbstractTableModel
 {
 	LinkedList<Link> homologies = new LinkedList<Link>();
 	
+	public final static String targetNameColumnLabel =  "Target name";
+	public final static String targetPositionColumnLabel = "Target position";
+	public final static String targetChromosomeColumnLabel = "Target chromosome";
+	public final static String homologColumnLabel = "Homolog";
+	public final static String homologGenomeColumnLabel = "Homolog genome";
+	public final static String homologChromosomeColumnLabel = "Homolog chromosome";
+	public final static String homologPositionColumnLabel = "Homolog position";
+	public final static String homologAnnotationColumnLabel = "Homolog annotation";
+	
 	private String[] columnNames =
-	{ "Target name", "Target position", "Target chromosome", "Homolog", "Homolog genome", "Homolog chromosome",
-					"Homolog position", "Homolog annotation"};
+	{targetNameColumnLabel, targetPositionColumnLabel, targetChromosomeColumnLabel, homologColumnLabel, 
+	homologGenomeColumnLabel, homologChromosomeColumnLabel, homologPositionColumnLabel, homologAnnotationColumnLabel};
+	
+	public LinkedList<String> columnNameList = new LinkedList<String>();
 	
 
 	public FoundFeatureTableModel(LinkedList<Link> homologies)
 	{
 		super();
 		this.homologies = homologies;
+		for (int i = 0; i < columnNames.length; i++)
+		{
+			columnNameList.add(columnNames[i]);
+		}
 	}
 
 	public int getColumnCount()
@@ -57,5 +72,6 @@ public class FoundFeatureTableModel extends AbstractTableModel
 	{
 		return columnNames[col];
 	}
+	
 	
 }

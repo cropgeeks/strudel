@@ -105,7 +105,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		bClose.setMnemonic(KeyEvent.VK_W);
 		
 		bExport = (JButton) getButton(false, "", "Export the display as an image", Icons.getIcon("EXPORTIMAGE"));
-		bOverview = (JToggleButton) getButton(true, "", "Toggle the overview dialog on or off", Icons.getIcon("OVERVIEW2"));
+		bOverview = (JToggleButton) getButton(true, "", "Toggle the overview dialog on or off", Icons.getIcon("OVERVIEW"));
 		bOverview.setSelected(Prefs.guiOverviewVisible);
 		bHelp =  (JButton) getButton(false, "", "Help", Icons.getIcon("HELP"));
 		bFindFeatures = (JButton) getButton(false, "", "Find features by name", Icons.getIcon("FIND"));

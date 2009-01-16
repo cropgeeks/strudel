@@ -29,6 +29,13 @@ Data:
 Dave's list:
 
 - scrollbar for moving entire canvas up and down (not individual genomes)
+- potentials:
+	* include in raw data putative homologs e.g. for rice loci in barley and flag every entry in the data as mapped or putative; then display these in the mapviewer, perhaps in different colours based on the value of the flag
+	* include all reference genome features and their annotation in the feature range results table (but not on the canvas)
+	* have feature range results table sortable by at least position of target features and position of reference features but also chromosome
+	* as a user defined option, have separate result tables for homologies with each reference genome and combine these in a tabbed pane
+	* auto-arrange function for inverting all features on a chromosome in the same order as its homologs on another chromosome (or manual or combination of both?)
+
 
 
 ================================

@@ -60,13 +60,12 @@ public class GMapSet
 	public Vector<GChromoMap> selectedMaps = new Vector<GChromoMap>();
 
 	// these control whether we draw chromosome markers and labels
-	public boolean paintLinkedMarkers = false;
 	public boolean paintAllMarkers = false;
 	public boolean paintLabels = false;
 
 	//a zoom factor value above which we can draw all  features
 	//this is to reduce the amount of clutter on screen
-	public float thresholdAllMarkerPainting;
+	public float thresholdAllMarkerPainting = 10;
 	//the same for drawing labels
 	public float thresholdLabelPainting;
 
@@ -86,8 +85,6 @@ public class GMapSet
 		this.name = mapSet.getName();
 		this.isTargetGenome = isTargetGenome;
 		numMaps = mapSet.size();
-		
-		thresholdAllMarkerPainting = singleChromoViewZoomFactor;
 
 		// init the list of maps contained in this genome
 		initialise(gMapLookup);

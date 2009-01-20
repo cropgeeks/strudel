@@ -110,7 +110,7 @@ public class FindFeaturesInRangeDialog extends JDialog implements ActionListener
 			
 			//resize the split pane so we can see the results table
 			MapViewer.winMain.splitPane.setDividerSize(Constants.SPLITPANE_DIVIDER_SIZE);
-			int newDividerLocation = (int) (MapViewer.winMain.mainCanvas.getHeight() - MapViewer.winMain.foundFeaturesTableControlPanel.getPreferredSize().getHeight());
+			int newDividerLocation = (int) (MapViewer.winMain.getHeight() - MapViewer.winMain.foundFeaturesTableControlPanel.getMinimumSize().getHeight());
 			MapViewer.winMain.splitPane.setDividerLocation(newDividerLocation);
 			
 			//now zoom into that range on the chromosome

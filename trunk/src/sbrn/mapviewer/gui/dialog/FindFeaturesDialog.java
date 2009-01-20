@@ -31,6 +31,7 @@ public class FindFeaturesDialog extends JDialog implements ActionListener
 		
 		pack();
 		setResizable(true);
+
 	}
 	
 	
@@ -80,18 +81,35 @@ public class FindFeaturesDialog extends JDialog implements ActionListener
 			String input =  ffPanel.getFFTextArea().getText();		
 			allNames = input.split("\n");
 			
+			JTable homologResultsTable = MapViewer.winMain.ffResultsPanel.getFFResultsTable();
+			
 			//now insert the results into the JTable held by the results panel
 			FoundFeatureTableModel foundFeatureTableModel = MapViewer.winMain.fatController.makeFoundFeaturesDataModel(allNames);
-			MapViewer.winMain.ffResultsPanel.getFFResultsTable().setModel(foundFeatureTableModel);
+			homologResultsTable.setModel(foundFeatureTableModel);
 			//size the columns and the dialog containing the table appropriately
 			MapViewer.winMain.ffResultsPanel.initColumnSizes();
 			//hide the control panel for the results table as it is not needed with this kind of results
 			MapViewer.winMain.foundFeaturesTableControlPanel.setVisible(false);
-			
-			//set the results panel to be visible and hide the find dialog
+
+			//set the results panel to be visible
 			this.setVisible(false);
 			MapViewer.winMain.splitPane.setDividerSize(Constants.SPLITPANE_DIVIDER_SIZE);
-			int newDividerLocation = (int) (MapViewer.winMain.mainCanvas.getHeight() - MapViewer.winMain.foundFeaturesTableControlPanel.getPreferredSize().getHeight());
+			int newDividerLocation = -1;
+			
+			//check how big the results table is
+			int tableHeight = homologResultsTable.getRowCount() * homologResultsTable.getRowHeight();		
+			int spacer = 150;
+			int totalTableHeight = tableHeight + spacer;
+			
+			//if it is more than a third of the main window we want to limit it to that size
+			if(totalTableHeight > (MapViewer.winMain.getHeight() * 0.33f))
+			{
+				newDividerLocation = (int) (MapViewer.winMain.getHeight() * 0.66f);
+			}
+			else
+			{
+				newDividerLocation = (int) (MapViewer.winMain.getHeight() - totalTableHeight);
+			}			
 			MapViewer.winMain.splitPane.setDividerLocation(newDividerLocation);
 
 		}

@@ -75,8 +75,6 @@ public class ClickZoomAnimator extends Thread
 			{
 			}
 
-			MapViewer.logger.fine("selectedSet.zoomFactor before = " + selectedSet.zoomFactor);
-			
 			// set the new zoom factor
 			selectedSet.zoomFactor = selectedSet.zoomFactor + zoomFactorIncrement;
 
@@ -84,7 +82,7 @@ public class ClickZoomAnimator extends Thread
 			if(selectedSet.zoomFactor < 1)
 				selectedSet.zoomFactor = 1;			
 			
-			MapViewer.logger.fine("selectedSet.zoomFactor after  = " + selectedSet.zoomFactor);
+			MapViewer.logger.fine("selectedSet.zoomFactor after adjustment = " + selectedSet.zoomFactor);
 
 			// work out the chromo height and total genome height for when the new zoom factor will have been applied
 			int newChromoHeight = Math.round(selectedSet.chromoHeight + chromoHeightIncrement);
@@ -107,8 +105,8 @@ public class ClickZoomAnimator extends Thread
 		}
 		
 		//do a final zoom adjust to ensure that we are at the right zoom level
-//		selectedSet.zoomFactor = finalZoomFactor;
-//		zoomHandler.adjustZoom(selectedMap, finalTotalY, finalChromoHeight, finalChromoHeight/2);
+		selectedSet.zoomFactor = finalZoomFactor;
+		zoomHandler.adjustZoom(selectedMap, finalTotalY, finalChromoHeight, finalChromoHeight/2);
 
 		//update overviews
 		MapViewer.winMain.fatController.updateOverviewCanvases();
@@ -118,6 +116,10 @@ public class ClickZoomAnimator extends Thread
 
 		//now update the arrays with the position data
 		MapViewer.winMain.fatController.initialisePositionArrays();
+		
+		//enable drawing of markers providing we have zoomed in, not out
+		if(selectedSet.zoomFactor > 1)
+			selectedSet.thresholdAllMarkerPainting = selectedSet.zoomFactor;
 
 		//turn drawing of map index back on
 		selectedMap.drawChromoIndex = true;

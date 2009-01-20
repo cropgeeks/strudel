@@ -18,8 +18,9 @@ public class CanvasZoomHandler
 	int fps = 25;
 	
 	//this boolean is required because we need to check in the stateChanged method of the ZoomControlPanel class whether
-	//or not it was invoked manually or indirectly because we programmtically changed the value of the zoom slider
+	//or not it was invoked manually or indirectly because we programmatically changed the value of the zoom slider
 	public boolean isClickZoomRequest = false;
+	public boolean isPanZoomRequest = false;
 
 	// =====================================c'tors===================================
 
@@ -110,7 +111,7 @@ public class CanvasZoomHandler
 		GMapSet selectedSet = selectedMap.owningSet;
 
 		// animate this by zooming in gradually
-		float finalZoomFactor = mainCanvas.initialCanvasHeight / mainCanvas.initialChromoHeight;
+		float finalZoomFactor = mainCanvas.initialCanvasHeight / (mainCanvas.initialChromoHeight + mainCanvas.chromoSpacing);
 		
 		//make sure this does not exceed the max zoom factor
 		if(finalZoomFactor > Constants.MAX_ZOOM_FACTOR)

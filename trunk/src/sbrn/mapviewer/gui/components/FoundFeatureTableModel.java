@@ -27,6 +27,10 @@ public class FoundFeatureTableModel extends AbstractTableModel
 	
 	public LinkedList<String> columnNameList = new LinkedList<String>();
 	
+	public FoundFeatureTableModel()
+	{		
+	}
+	
 
 	public FoundFeatureTableModel(LinkedList<Link> homologies)
 	{

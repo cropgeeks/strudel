@@ -5,6 +5,7 @@ import java.awt.geom.*;
 import java.text.*;
 import java.util.*;
 
+import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
 
@@ -264,10 +265,12 @@ public class GChromoMap
 	// draws a set of distance markers
 	public void drawDistanceMarkers(Graphics2D g2)
 	{
-		if (owningSet.zoomFactor > distanceMarkerZoomThreshold && !inversionInProgress)
+		if (owningSet.paintAllMarkers && !inversionInProgress)
 		{
+			MapViewer.logger.fine("drawing distance markers for map " + name);
+			
 			//the number of markers we want to draw at any one time, regardless of our zoom level
-			float numMarkers = 50;
+			float numMarkers = Constants.numDistanceMarkers;
 			
 			// this is the number of pixels by which the markers get spaced
 			float interval = owningSet.chromoHeight / numMarkers;
@@ -510,7 +513,7 @@ public class GChromoMap
 	// initialises the arrays we need for fast drawing
 	public void initArrays()
 	{
-		if(owningSet.paintAllMarkers && isShowingOnCanvas)
+		if(isShowingOnCanvas)
 		{
 			// init the arrays that hold ALL the features for this map
 			int numFeatures = chromoMap.countFeatures();
@@ -543,6 +546,8 @@ public class GChromoMap
 	// draw the markers for the features
 	private void drawAllFeatures(Graphics2D g2)
 	{
+		MapViewer.logger.fine("drawing all features for map " + name);
+		
 		if (allFeaturePositions != null)
 		{
 			g2.setColor(Colors.featureColour);

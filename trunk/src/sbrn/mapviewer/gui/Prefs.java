@@ -25,5 +25,8 @@ public class Prefs extends XMLPreferences
 	public static int guiOverviewX = 0;
 	public static int guiOverviewY = 0;
 	public static boolean guiOverviewVisible = true;
+	
+	//a boolean indicating whether we need to show the "max zoom level reached " taskdialog when user has pan zoomed to the max
+	public static boolean showMaxZoomLevelMessage = true;
 		
 }

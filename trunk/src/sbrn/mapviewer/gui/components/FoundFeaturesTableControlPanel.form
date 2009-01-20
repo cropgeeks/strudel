@@ -7,6 +7,12 @@
         <TitledBorder title="Highlighted region: "/>
       </Border>
     </Property>
+    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+      <Dimension value="[250, 300]"/>
+    </Property>
+    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+      <Dimension value="[250, 300]"/>
+    </Property>
   </Properties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
@@ -21,12 +27,9 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="showLabelsCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="jCheckBox1" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="showHomologsCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
                               <Component id="jLabel3" alignment="1" max="32767" attributes="1"/>
@@ -40,15 +43,17 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="numberFeaturesLabel" min="-2" max="-2" attributes="1"/>
-                          <Component id="regionEndLabel" pref="54" max="32767" attributes="1"/>
-                          <Component id="regionStartLabel" pref="54" max="32767" attributes="1"/>
-                          <Component id="chromoLabel" pref="54" max="32767" attributes="1"/>
-                          <Component id="genomeLabel" alignment="0" pref="54" max="32767" attributes="1"/>
-                          <Component id="genomeFilterCombo" alignment="0" pref="54" max="32767" attributes="0"/>
+                          <Component id="regionEndLabel" pref="55" max="32767" attributes="1"/>
+                          <Component id="regionStartLabel" pref="55" max="32767" attributes="1"/>
+                          <Component id="chromoLabel" pref="55" max="32767" attributes="1"/>
+                          <Component id="genomeLabel" alignment="0" pref="55" max="32767" attributes="1"/>
+                          <Component id="genomeFilterCombo" alignment="0" pref="55" max="32767" attributes="0"/>
                       </Group>
                   </Group>
+                  <Component id="showLabelsCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="showHomologsCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -85,12 +90,9 @@
                   <Component id="genomeFilterCombo" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jCheckBox1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
               <Component id="showLabelsCheckbox" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="showHomologsCheckbox" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -175,11 +177,6 @@
           <Font name="Tahoma" size="12" style="1"/>
         </Property>
         <Property name="text" type="java.lang.String" value="No. of features:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JCheckBox" name="jCheckBox1">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="List all reference genome features"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel6">

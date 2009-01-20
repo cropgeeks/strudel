@@ -26,15 +26,21 @@ public class FoundFeaturesResultsPanel extends JPanel implements ListSelectionLi
 	{
 		super(new BorderLayout());
 		
-		resultsLabel = new JLabel("<html><b>Click on row to highlight homolog. Click on homolog name to show annotation in web browser.</b></html>");
-		resultsLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		this.add(resultsLabel, BorderLayout.NORTH);
+		String title = "Click on row to highlight homolog. Click on homolog name to show annotation in web browser: ";
+		setBorder(BorderFactory.createTitledBorder(title));
+		
+//		resultsLabel = new JLabel("<html><b>Click on row to highlight homolog. Click on homolog name to show annotation in web browser.</b></html>");
+//		resultsLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+//		this.add(resultsLabel, BorderLayout.NORTH);
 		
 		resultsTable = new HomologResultsTable();
 		JScrollPane scrollPane = new JScrollPane(resultsTable);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
-		resultsTable.setFillsViewportHeight(true);
+//		resultsTable.setFillsViewportHeight(true);
 		this.add(scrollPane, BorderLayout.CENTER);
+		
+		//set the table up for sorting
+		resultsTable.setAutoCreateRowSorter(true);
 		
 		// settings for results table
 		resultsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -97,14 +103,15 @@ public class FoundFeaturesResultsPanel extends JPanel implements ListSelectionLi
 		try
 		{
 			FoundFeatureTableModel foundFeatureTableModel = (FoundFeatureTableModel) resultsTable.getModel();
-			int selectedRow = resultsTable.getSelectionModel().getLeadSelectionIndex();
 			int selectedCol = resultsTable.getColumnModel().getSelectionModel().getLeadSelectionIndex();
+			
+			//get the index of the selected row but check for changes due to filtering
+			int modelRow = resultsTable.convertRowIndexToModel( resultsTable.getSelectedRow());
 
 			if (foundFeatureTableModel.getColumnCount() > 0)
 			{
 				// get the feature name
-				String featureName = (String) foundFeatureTableModel.getValueAt(
-								resultsTable.getSelectedRow(), 0);
+				String featureName = (String) foundFeatureTableModel.getValueAt(modelRow, 0);
 				// retrieve the Feature that corresponds to this name
 				Feature f = Utils.getFeatureByName(featureName);
 				// highlight it on the canvas
@@ -115,14 +122,6 @@ public class FoundFeaturesResultsPanel extends JPanel implements ListSelectionLi
 				GChromoMap gChromoMap = f.getOwningMap().getGChromoMap();
 				
 				// we have changed map
-				if (previousMap != null && !previousMap.equals(gChromoMap))
-				{
-					// zoom out first
-					// owningSet.zoomFactor = 1;
-					// owningSet.paintAllMarkers = false;
-					// MapViewer.winMain.mainCanvas.updateCanvas(true);
-				}
-				
 				// zoom into that chromosome so it fills the screen
 				if (owningSet.zoomFactor < owningSet.singleChromoViewZoomFactor || !gChromoMap.isShowingOnCanvas)
 				{
@@ -133,13 +132,12 @@ public class FoundFeaturesResultsPanel extends JPanel implements ListSelectionLi
 				// remember this map
 				previousMap = gChromoMap;
 				
-				// user has clicked on homolog name -- fire up web browser with annotation info
-
+				// user has clicked on homolog name -- fire up web browser with annotation info				
 				if (selectedCol == foundFeatureTableModel.columnNameList.indexOf(foundFeatureTableModel.homologColumnLabel))
 				{
 					// extract the value of the cell clicked on
-					String homologName = (String) foundFeatureTableModel.getValueAt(selectedRow, selectedCol);
-					String mapSetName = (String) foundFeatureTableModel.getValueAt(selectedRow, foundFeatureTableModel.columnNameList.indexOf(foundFeatureTableModel.homologGenomeColumnLabel));
+					String homologName = (String) foundFeatureTableModel.getValueAt(modelRow, selectedCol);
+					String mapSetName = (String) foundFeatureTableModel.getValueAt(modelRow, foundFeatureTableModel.columnNameList.indexOf(foundFeatureTableModel.homologGenomeColumnLabel));
 					
 					//figure out the URL we need to prefix this with
 					String url = "";
@@ -162,7 +160,7 @@ public class FoundFeaturesResultsPanel extends JPanel implements ListSelectionLi
 						else if(mapSetIndex == 1)
 							url = MapViewer.winMain.openFileDialog.openFilesPanel.getRefGenome2UrlTf().getText() + homologName;
 					}
-
+					
 					Desktop desktop = null;
 					if (Desktop.isDesktopSupported()) 
 						desktop = Desktop.getDesktop();
@@ -193,5 +191,27 @@ public class FoundFeaturesResultsPanel extends JPanel implements ListSelectionLi
 	{
 		return resultsLabel;
 	}
+	
+	//applies a regular epxression based filter to the results table
+	public void newFilter(String filterExpression, int index)
+	{
+		RowFilter<TableModel, Object> rf = null;
+		String expr = "^" + filterExpression;
+		
+		try
+		{
+			rf = RowFilter.regexFilter(expr, index);
+		}
+		catch (java.util.regex.PatternSyntaxException e)
+		{
+			return;
+		}
+		
+		if(filterExpression.equals("<none>"))
+			((DefaultRowSorter<TableModel, Integer>) resultsTable.getRowSorter()).setRowFilter(null);
+		else
+			((DefaultRowSorter<TableModel, Integer>) resultsTable.getRowSorter()).setRowFilter(rf);
+	}
+	
 	
 }

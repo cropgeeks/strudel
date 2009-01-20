@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.util.*;
 
 import javax.swing.*;
+import javax.swing.table.*;
 
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
@@ -32,6 +33,7 @@ public class FindFeaturesInRangeDialog extends JDialog implements ActionListener
 		setLocationRelativeTo(MapViewer.winMain);
 		pack();
 		setResizable(true);
+	
 	}
 	
 	
@@ -124,11 +126,11 @@ public class FindFeaturesInRangeDialog extends JDialog implements ActionListener
 			//we also need to set the labels on the control panel for the results to have the appropriate text
 			FoundFeaturesTableControlPanel foundFeaturesTableControlPanel = MapViewer.winMain.foundFeaturesTableControlPanel;
 			foundFeaturesTableControlPanel.setVisible(true);
-			foundFeaturesTableControlPanel.getGenomeLabel().setText("<html><b>Genome: </b>" + genome + "</html>");
-			foundFeaturesTableControlPanel.getChromoLabel().setText("<html><b>Chromosome: </b>" + chromosome + "</html>");
-			foundFeaturesTableControlPanel.getRegionStartLabel().setText("<html><b>Region start: </b>" + intervalStart + "</html>");
-			foundFeaturesTableControlPanel.getRegionEndLabel().setText("<html><b>Region end: </b>" + intervalEnd + "</html>");
-			foundFeaturesTableControlPanel.getNumberFeaturesLabel().setText("<html><b>No. of features: </b>" + containedFeatureNames.size() + "</html>");
+			foundFeaturesTableControlPanel.getGenomeLabel().setText(genome);
+			foundFeaturesTableControlPanel.getChromoLabel().setText(chromosome);
+			foundFeaturesTableControlPanel.getRegionStartLabel().setText(new Float(intervalStart).toString());
+			foundFeaturesTableControlPanel.getRegionEndLabel().setText(new Float(intervalEnd).toString());
+			foundFeaturesTableControlPanel.getNumberFeaturesLabel().setText(new Integer(containedFeatureNames.size()).toString());
 			
 			//sync the checkboxes states with those in the find dialog itself to make sure they show the same value
 			foundFeaturesTableControlPanel.getShowLabelsCheckbox().setSelected(ffInRangePanel.getDisplayLabelsCheckbox().isSelected());
@@ -143,6 +145,10 @@ public class FindFeaturesInRangeDialog extends JDialog implements ActionListener
 			//now insert the results into the JTable held by the results panel
 			FoundFeatureTableModel foundFeatureTableModel = MapViewer.winMain.fatController.makeFoundFeaturesDataModel(allNames);
 			MapViewer.winMain.ffResultsPanel.getFFResultsTable().setModel(foundFeatureTableModel);
+			//set up sorting/filtering capability
+			TableRowSorter<FoundFeatureTableModel> sorter = new TableRowSorter<FoundFeatureTableModel>(foundFeatureTableModel);
+			MapViewer.winMain.ffResultsPanel.getFFResultsTable().setRowSorter(sorter);
+
 			//size the columns and the dialog containing the table appropriately
 			MapViewer.winMain.ffResultsPanel.initColumnSizes();
 			

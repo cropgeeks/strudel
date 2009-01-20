@@ -165,14 +165,23 @@ public class ControlToolBar extends JToolBar implements ActionListener
 			MapViewer.winMain.fatController.resetMainCanvasView();
 
 			//clear the dialog
-			MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getIntervalStartTextField().setText("");
-			MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getIntervalEndTextField().setText("");
-			MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getGenomeCombo().setSelectedIndex(0);
-			MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getChromoCombo().setSelectedIndex(0);
-
+			FindFeaturesInRangeDialog featuresInRangeDialog = MapViewer.winMain.ffInRangeDialog; 
+			
+			featuresInRangeDialog.ffInRangePanel.getIntervalStartTextField().setText("");
+			featuresInRangeDialog.ffInRangePanel.getIntervalEndTextField().setText("");
+			featuresInRangeDialog.ffInRangePanel.getGenomeCombo().setSelectedIndex(0);
+			featuresInRangeDialog.ffInRangePanel.getChromoCombo().setSelectedIndex(0);
+						
+			////////////////////////////////THIS BIT JUST FOR EASE OF TESTING////////////////////////////////
+			//TODO: remove code used for testing only
+			featuresInRangeDialog.ffInRangePanel.getGenomeCombo().setSelectedIndex(1);
+			featuresInRangeDialog.ffInRangePanel.getChromoCombo().setSelectedIndex(2);
+			featuresInRangeDialog.ffInRangePanel.getIntervalStartTextField().setText("12");
+			featuresInRangeDialog.ffInRangePanel.getIntervalEndTextField().setText("23");
+			
 			//show the dialog
-			MapViewer.winMain.ffInRangeDialog.setLocationRelativeTo(winMain);
-			MapViewer.winMain.ffInRangeDialog.setVisible(true);
+			featuresInRangeDialog.setLocationRelativeTo(winMain);
+			featuresInRangeDialog.setVisible(true);
 		}
 
 		//reset the main canvas view and deselect all features

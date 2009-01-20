@@ -45,7 +45,7 @@ public class WinMain extends JFrame
 	//this component shows the results of a feature search in a JTable
 	public FoundFeaturesResultsPanel ffResultsPanel = new FoundFeaturesResultsPanel();
 	//this is a control panel for it, showing just to its left
-	public FoundFeaturesTableControlPanel foundFeaturesTableControlPanel = new FoundFeaturesTableControlPanel();
+	public FoundFeaturesTableControlPanel foundFeaturesTableControlPanel;
 	
 	//this splitpane contains the main panel and the bottom panel
 	public JSplitPane splitPane;
@@ -186,6 +186,9 @@ public class WinMain extends JFrame
 		
 		try
 		{		
+			//control panel for found features
+			foundFeaturesTableControlPanel = new FoundFeaturesTableControlPanel();
+			
 			//the popup menu we use when are over a chromosome
 			chromoContextPopupMenu  = new ChromoContextPopupMenu();
 			
@@ -290,6 +293,7 @@ public class WinMain extends JFrame
 		//reinstate everything
 		//the panels with the zoom control sliders
 		initZoomControls();
+		foundFeaturesTableControlPanel.setupGenomeFilterCombo();
 		zoomControlAndGenomelabelContainer.add(zoomControlContainerPanel, BorderLayout.CENTER);		
 		
 		initOverviewDialog();

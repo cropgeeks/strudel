@@ -140,6 +140,7 @@ public class MainCanvas extends JPanel
 	// paint the genomes or portions thereof onto this canvas
 	private void paintCanvas(Graphics2D g2)
 	{
+		MapViewer.logger.fine("========repainting main canvas");
 		
 		// check whether the user wants antialiasing on
 		if (antiAlias)
@@ -177,7 +178,7 @@ public class MainCanvas extends JPanel
 		for (GMapSet gMapSet : winMain.dataContainer.gMapSetList)
 		{
 			checkMarkerPaintingThresholds(gMapSet);
-			
+
 			//calculate the x position for this genome
 			int numGenomes = winMain.dataContainer.gMapSetList.size();
 			int genomeInterval = getWidth()/numGenomes;
@@ -428,7 +429,7 @@ public class MainCanvas extends JPanel
 	public void checkMarkerPaintingThresholds(GMapSet selectedSet)
 	{
 		// check whether we need to display markers and labels
-		if (selectedSet.zoomFactor > selectedSet.thresholdAllMarkerPainting)
+		if (selectedSet.zoomFactor >= selectedSet.thresholdAllMarkerPainting)
 		{
 			selectedSet.paintAllMarkers = true;
 			selectedSet.paintLabels = true;
@@ -436,13 +437,11 @@ public class MainCanvas extends JPanel
 		else if (selectedSet.zoomFactor < selectedSet.thresholdAllMarkerPainting)
 		{
 			selectedSet.paintAllMarkers = false;
-			selectedSet.paintLinkedMarkers = true;
 			selectedSet.paintLabels = true;
 		}
 		else
 		{
 			selectedSet.paintAllMarkers = false;
-			selectedSet.paintLinkedMarkers = false;
 			selectedSet.paintLabels = false;
 		}
 	}

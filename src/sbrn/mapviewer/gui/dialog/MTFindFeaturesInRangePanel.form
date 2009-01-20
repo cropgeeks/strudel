@@ -73,7 +73,6 @@
                       </Group>
                       <Component id="displayHomologsCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="displayLabelsCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="listAllRefFeaturesCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="15" max="32767" attributes="0"/>
               </Group>
@@ -103,8 +102,6 @@
                       <Component id="intervalEndTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="listAllRefFeaturesCheckbox" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="displayHomologsCheckBox" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="displayLabelsCheckbox" min="-2" max="-2" attributes="0"/>
@@ -182,11 +179,6 @@
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="listAllRefFeaturesCheckbox">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="List all features for the reference genome"/>
           </Properties>
         </Component>
       </SubComponents>

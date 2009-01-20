@@ -108,7 +108,9 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		bOverview = (JToggleButton) getButton(true, "", "Toggle the overview dialog on or off", Icons.getIcon("OVERVIEW"));
 		bOverview.setSelected(Prefs.guiOverviewVisible);
 		bHelp =  (JButton) getButton(false, "", "Help", Icons.getIcon("HELP"));
+		
 		bFindFeatures = (JButton) getButton(false, "", "Find features by name", Icons.getIcon("FIND"));
+		bFindFeatures.setMnemonic(KeyEvent.VK_F);
 		
 		bFindFeaturesinRange = (JButton) getButton(false, "", "List features in range", Icons.getIcon("RANGE"));
 		bFindFeaturesinRange.setMnemonic(KeyEvent.VK_R);
@@ -155,7 +157,13 @@ public class ControlToolBar extends JToolBar implements ActionListener
 				
 			//show the find dialog
 			MapViewer.winMain.ffDialog.setLocationRelativeTo(winMain);
+			
+			//////////////////////////////FOR TESTING ONLY////////////////////////////////
+			MapViewer.winMain.ffDialog.ffPanel.getFFTextArea().setText("11_10223");
+			
 			MapViewer.winMain.ffDialog.setVisible(true);
+			
+
 		}
 		
 		//show the features in range dialog

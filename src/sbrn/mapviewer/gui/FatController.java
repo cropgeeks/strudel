@@ -190,7 +190,7 @@ public class FatController
 		winMain.splitPane.setDividerLocation(1.0);
 		
 		//clear the table model for the found features
-		winMain.ffResultsPanel.getFFResultsTable().setModel(new DefaultTableModel());
+		winMain.ffResultsPanel.getFFResultsTable().setModel(new FoundFeatureTableModel());
 		
 		//clear the found features
 		if(foundFeatures != null)

@@ -25,11 +25,7 @@ public class HomologResultsTable extends JTable
 	{
 		//configure table for selections
 		setRowSelectionAllowed(true);
-		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
-		//add listeners
-		getSelectionModel().addListSelectionListener(new RowListener());
-		getColumnModel().getSelectionModel().addListSelectionListener(new ColumnListener());		
+		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);	
 	}
 	
 	//===============================================methods=========================================	
@@ -44,74 +40,7 @@ public class HomologResultsTable extends JTable
 		return super.getCellRenderer(row, column);
 	}
 	
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
-	//fire up web browser with annotation info	
-	private void launchBrowser(int selectedRow, int selectedCol)
-	{
-		if (!MapViewer.winMain.ffResultsPanel.isFilterEvent)
-		{
-			FoundFeatureTableModel foundFeatureTableModel = (FoundFeatureTableModel) getModel();
-			
-			//get the index of the selected row but check for changes due to filtering
-			int modelRow = -1;
-			if (getSelectedRow() >= 0)
-			{
-				modelRow = convertRowIndexToModel(getSelectedRow());
-			}
-			else
-			{
-				return;
-			}
-			
-			// extract the value of the cell clicked on
-			String homologName = (String) foundFeatureTableModel.getValueAt(modelRow, selectedCol);
-			String mapSetName = (String) foundFeatureTableModel.getValueAt(modelRow, foundFeatureTableModel.columnNameList.indexOf(foundFeatureTableModel.homologGenomeColumnLabel));
-			//figure out the URL we need to prefix this with
-			String url = "";
-			//find out the index of the mapset
-			int mapSetIndex = MapViewer.winMain.dataContainer.referenceGMapSets.indexOf(Utils.getGMapSetByName(mapSetName));
-			//for the canned example data that ship with the application we use this
-			if (!MapViewer.winMain.fatController.loadOwnData)
-			{
-				if (mapSetIndex == 0)
-					url = Constants.exampleRefGenome1BaseURL + homologName;
-				else if (mapSetIndex == 1)
-					url = Constants.exampleRefGenome2BaseURL + homologName;
-			}
-			//for the users own data we use these URLs
-			else
-			{
-				if (mapSetIndex == 0)
-					url = MapViewer.winMain.openFileDialog.openFilesPanel.getRefGenome1UrlTf().getText() + homologName;
-				else if (mapSetIndex == 1)
-					url = MapViewer.winMain.openFileDialog.openFilesPanel.getRefGenome2UrlTf().getText() + homologName;
-			}
-			Desktop desktop = null;
-			if (Desktop.isDesktopSupported())
-				desktop = Desktop.getDesktop();
-			if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE))
-			{
-				try
-				{
-					desktop.browse(new URI(url));
-				}
-				catch (java.net.URISyntaxException e1)
-				{
-					TaskDialog.error("Error: URL not specified or specified incorrectly", "Close");
-				}
-				catch (IOException e)
-				{
-					e.printStackTrace();
-				}
-			}
-		}
-		
-		MapViewer.winMain.ffResultsPanel.isFilterEvent = false;
-	}
-	
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	//===============================================inner classes=========================================
 	
 	class HyperlinkCellRenderer extends JLabel implements TableCellRenderer
@@ -148,47 +77,6 @@ public class HomologResultsTable extends JTable
 		}
 		
 	}
-	
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
-	private class RowListener implements ListSelectionListener
-	{
-		public void valueChanged(ListSelectionEvent event)
-		{
-			if (event.getValueIsAdjusting())
-			{
-				return;
-			}
-			
-			FoundFeatureTableModel foundFeatureTableModel = (FoundFeatureTableModel)getModel();			
-			if (getSelectedColumn() == foundFeatureTableModel.columnNameList.indexOf(foundFeatureTableModel.homologColumnLabel))
-			{
-				// user has clicked on homolog name -- fire up web browser with annotation info	
-				launchBrowser(getSelectedRow(), getSelectedColumn());
-			}
-		}
-	}
-	
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
-	private class ColumnListener implements ListSelectionListener
-	{
-		public void valueChanged(ListSelectionEvent event)
-		{
-			if (event.getValueIsAdjusting())
-			{
-				return;
-			}
-			
-			FoundFeatureTableModel foundFeatureTableModel = (FoundFeatureTableModel)getModel();			
-			if (getSelectedColumn() == foundFeatureTableModel.columnNameList.indexOf(foundFeatureTableModel.homologColumnLabel))
-			{
-				// user has clicked on homolog name -- fire up web browser with annotation info	
-				launchBrowser(getSelectedRow(), getSelectedColumn());
-			}
-		}
-	}
-	
 
 	
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	

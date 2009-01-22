@@ -1,12 +1,18 @@
 package sbrn.mapviewer.gui.components;
 
 import java.awt.*;
+import java.io.*;
+import java.net.*;
+
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
+
+import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.entities.*;
+import scri.commons.gui.*;
 
 public class FoundFeaturesResultsPanel extends JPanel implements ListSelectionListener
 {
@@ -102,7 +108,7 @@ public class FoundFeaturesResultsPanel extends JPanel implements ListSelectionLi
 		{
 			return;
 		}
-
+		
 		if (!isFilterEvent)
 		{
 			FoundFeatureTableModel foundFeatureTableModel = (FoundFeatureTableModel) resultsTable.getModel();
@@ -119,7 +125,8 @@ public class FoundFeaturesResultsPanel extends JPanel implements ListSelectionLi
 			if (foundFeatureTableModel.getColumnCount() > 0)
 			{
 				// get the feature name
-				String featureName = (String) foundFeatureTableModel.getValueAt(modelRow, 0);
+				int featureNameColumnIndex = foundFeatureTableModel.columnNameList.indexOf(foundFeatureTableModel.targetNameColumnLabel);
+				String featureName = (String) foundFeatureTableModel.getValueAt(modelRow, featureNameColumnIndex);
 				// retrieve the Feature that corresponds to this name
 				Feature f = Utils.getFeatureByName(featureName);
 				// highlight it on the canvas
@@ -139,6 +146,12 @@ public class FoundFeaturesResultsPanel extends JPanel implements ListSelectionLi
 				
 				// remember this map
 				previousMap = gChromoMap;
+				
+				if (resultsTable.getSelectedColumn() == foundFeatureTableModel.columnNameList.indexOf(foundFeatureTableModel.homologColumnLabel))
+				{
+					// user has clicked on homolog name -- fire up web browser with annotation info	
+					launchBrowser(resultsTable.getSelectedRow(), resultsTable.getSelectedColumn());
+				}
 			}
 		}
 		isFilterEvent = false;		
@@ -154,6 +167,7 @@ public class FoundFeaturesResultsPanel extends JPanel implements ListSelectionLi
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	//applies a regular epxression based filter to the results table
+	@SuppressWarnings({"unchecked"})
 	public void newFilter(String filterExpression, int index)
 	{
 		isFilterEvent = true;
@@ -174,6 +188,72 @@ public class FoundFeaturesResultsPanel extends JPanel implements ListSelectionLi
 			((DefaultRowSorter<TableModel, Integer>) resultsTable.getRowSorter()).setRowFilter(null);
 		else
 			((DefaultRowSorter<TableModel, Integer>) resultsTable.getRowSorter()).setRowFilter(rf);
+	}
+	
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	//fire up web browser with annotation info	
+	private void launchBrowser(int selectedRow, int selectedCol)
+	{
+		if (!MapViewer.winMain.ffResultsPanel.isFilterEvent)
+		{
+			FoundFeatureTableModel foundFeatureTableModel = (FoundFeatureTableModel) resultsTable.getModel();
+			
+			//get the index of the selected row but check for changes due to filtering
+			int modelRow = -1;
+			if (resultsTable.getSelectedRow() >= 0)
+			{
+				modelRow = resultsTable.convertRowIndexToModel(resultsTable.getSelectedRow());
+			}
+			else
+			{
+				return;
+			}
+			
+			// extract the value of the cell clicked on
+			String homologName = (String) foundFeatureTableModel.getValueAt(modelRow, selectedCol);
+			String mapSetName = (String) foundFeatureTableModel.getValueAt(modelRow, foundFeatureTableModel.columnNameList.indexOf(foundFeatureTableModel.homologGenomeColumnLabel));
+			//figure out the URL we need to prefix this with
+			String url = "";
+			//find out the index of the mapset
+			int mapSetIndex = MapViewer.winMain.dataContainer.referenceGMapSets.indexOf(Utils.getGMapSetByName(mapSetName));
+			//for the canned example data that ship with the application we use this
+			if (!MapViewer.winMain.fatController.loadOwnData)
+			{
+				if (mapSetIndex == 0)
+					url = Constants.exampleRefGenome1BaseURL + homologName;
+				else if (mapSetIndex == 1)
+					url = Constants.exampleRefGenome2BaseURL + homologName;
+			}
+			//for the users own data we use these URLs
+			else
+			{
+				if (mapSetIndex == 0)
+					url = MapViewer.winMain.openFileDialog.openFilesPanel.getRefGenome1UrlTf().getText() + homologName;
+				else if (mapSetIndex == 1)
+					url = MapViewer.winMain.openFileDialog.openFilesPanel.getRefGenome2UrlTf().getText() + homologName;
+			}
+			Desktop desktop = null;
+			if (Desktop.isDesktopSupported())
+				desktop = Desktop.getDesktop();
+			if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE))
+			{
+				try
+				{
+					desktop.browse(new URI(url));
+				}
+				catch (java.net.URISyntaxException e1)
+				{
+					TaskDialog.error("Error: URL not specified or specified incorrectly", "Close");
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		MapViewer.winMain.ffResultsPanel.isFilterEvent = false;
 	}
 	
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -24,6 +24,9 @@ public class LinkDisplayManager
 	
 	public static double blastThreshold = 1;
 	
+	GMapSet targetGMapSet = MapViewer.winMain.dataContainer.gMapSetList.get(MapViewer.winMain.dataContainer.targetGMapSetIndex);
+	
+	
 	//	=====================================c'tor==============================================
 	
 	public LinkDisplayManager(MainCanvas mainCanvas)
@@ -85,7 +88,7 @@ public class LinkDisplayManager
 				}
 				
 				// now check whether we have selected chromosomes in the target genome
-				if (MapViewer.winMain.dataContainer.gMapSetList.get(MapViewer.winMain.dataContainer.targetGMapSetIndex).selectedMaps.size() > 0)
+				if (targetGMapSet.selectedMaps.size() > 0)
 				{
 					mainCanvas.drawLinks = true;
 				}
@@ -103,6 +106,7 @@ public class LinkDisplayManager
 	// Draws the lines between a chromosome of the reference genome and all potential homologues in the compared genome
 	public void drawAllLinks(Graphics2D g2)
 	{
+
 		//only do this if we have reference genomes -- otherwise there are no links to deal with
 		if(MapViewer.winMain.dataContainer.gMapSetList.size() > 1)
 		{			
@@ -110,10 +114,10 @@ public class LinkDisplayManager
 			{
 				
 				// for each map in the selectedMaps vector of the target genome
-				for (int i = 0; i < MapViewer.winMain.dataContainer.gMapSetList.get(MapViewer.winMain.dataContainer.targetGMapSetIndex).selectedMaps.size(); i++)
+				for (int i = 0; i < targetGMapSet.selectedMaps.size(); i++)
 				{
 					// get the currently selected map
-					GChromoMap selectedMap = MapViewer.winMain.dataContainer.gMapSetList.get(MapViewer.winMain.dataContainer.targetGMapSetIndex).selectedMaps.get(i);
+					GChromoMap selectedMap = targetGMapSet.selectedMaps.get(i);
 					
 					// get the ChromoMap for the currently selected chromosome
 					ChromoMap selectedChromoMap = selectedMap.chromoMap;
@@ -145,7 +149,7 @@ public class LinkDisplayManager
 						// the referenceChromoX to be the reference chromo's x
 						if (MapViewer.winMain.dataContainer.referenceGMapSets.size() == 1 || (MapViewer.winMain.dataContainer.referenceGMapSets.size() == 2 && MapViewer.winMain.dataContainer.referenceGMapSets.indexOf(referenceGMapSet) == 1))
 						{
-							targetChromoX = Math.round(MapViewer.winMain.dataContainer.gMapSetList.get(MapViewer.winMain.dataContainer.targetGMapSetIndex).xPosition + MapViewer.winMain.dataContainer.gMapSetList.get(MapViewer.winMain.dataContainer.targetGMapSetIndex).gMaps.get(0).width);
+							targetChromoX = Math.round(targetGMapSet.xPosition + targetGMapSet.gMaps.get(0).width);
 							referenceChromoX = Math.round(referenceGMapSet.xPosition);
 						}
 						// if we have two reference genomes and this is the first reference genome
@@ -154,7 +158,7 @@ public class LinkDisplayManager
 							// we want the referenceChromoX to be the mapsets x plus its width
 							referenceChromoX = Math.round(referenceGMapSet.xPosition + referenceGMapSet.gMaps.get(0).width);
 							// and we want the target genome's x to be the targetChromoX
-							targetChromoX = Math.round(MapViewer.winMain.dataContainer.gMapSetList.get(MapViewer.winMain.dataContainer.targetGMapSetIndex).xPosition);
+							targetChromoX = Math.round(targetGMapSet.xPosition);
 						}
 						
 						// check whether this is a linkset we want to draw
@@ -211,9 +215,21 @@ public class LinkDisplayManager
 									if ((referenceY > 0  && referenceY < mainCanvas.getHeight()) &&
 													(targetY > 0  && targetY < mainCanvas.getHeight()) &&
 													referenceGMapSet.selectedMaps.contains(referenceGMap))
-									{
-										// draw the line
+									{										
+										// draw the link
 										g2.drawLine(targetChromoX + 1, targetY, referenceChromoX - 1, referenceY);
+										
+										if(targetGMapSet.paintAllMarkers)
+										{
+											// draw a line for the marker on targetGMap
+											g2.drawLine(targetGMap.x, targetY, (targetGMap.x + targetGMap.width), targetY);
+										}
+										if(referenceGMapSet.paintAllMarkers)
+										{
+											// draw a line for the marker on referenceGMap
+											g2.drawLine(referenceGMap.x, referenceY, (referenceGMap.x + referenceGMap.width), referenceY);
+										}
+										
 									}
 								}
 							}
@@ -268,7 +284,7 @@ public class LinkDisplayManager
 				// the referenceChromoX to be the reference chromo's x
 				if (MapViewer.winMain.dataContainer.referenceGMapSets.size() == 1 || (MapViewer.winMain.dataContainer.referenceGMapSets.size() == 2 && MapViewer.winMain.dataContainer.referenceGMapSets.indexOf(referenceGMapSet) == 1))
 				{
-					targetChromoX = Math.round(MapViewer.winMain.dataContainer.gMapSetList.get(MapViewer.winMain.dataContainer.targetGMapSetIndex).xPosition + MapViewer.winMain.dataContainer.gMapSetList.get(MapViewer.winMain.dataContainer.targetGMapSetIndex).gMaps.get(0).width);
+					targetChromoX = Math.round(targetGMapSet.xPosition + targetGMapSet.gMaps.get(0).width);
 					referenceChromoX = Math.round(referenceGMapSet.xPosition);
 				}
 				
@@ -278,7 +294,7 @@ public class LinkDisplayManager
 					// we want the referenceChromoX to be the mapsets x plus its width
 					referenceChromoX = Math.round(referenceGMapSet.xPosition + referenceGMapSet.gMaps.get(0).width);
 					// and we want the target genome's x to be the targetChromoX
-					targetChromoX = Math.round(MapViewer.winMain.dataContainer.gMapSetList.get(MapViewer.winMain.dataContainer.targetGMapSetIndex).xPosition);
+					targetChromoX = Math.round(targetGMapSet.xPosition);
 				}
 				
 				//y coords

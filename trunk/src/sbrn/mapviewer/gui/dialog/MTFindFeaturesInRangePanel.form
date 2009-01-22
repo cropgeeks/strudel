@@ -101,10 +101,10 @@
                       <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="intervalEndTextField" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="displayHomologsCheckBox" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="displayLabelsCheckbox" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="displayHomologsCheckBox" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -167,7 +167,7 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="displayHomologsCheckBox">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Display all homologies for this range"/>
+            <Property name="text" type="java.lang.String" value="Show all homologies"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
@@ -175,11 +175,14 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="displayLabelsCheckbox">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Display labels for all homologs"/>
+            <Property name="text" type="java.lang.String" value="Show all labels"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="displayLabelsCheckboxActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

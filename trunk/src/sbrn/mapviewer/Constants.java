@@ -17,6 +17,6 @@ public class Constants
 	
 	//URLs for annotation info for the reference example files we provide with the app
 	public static final String exampleRefGenome1BaseURL = "";
-	public static final String exampleRefGenome2BaseURL = "http://rice.plantbiology.msu.edu/cgi-bin/gbrowse/rice/?name=LOC_";
+	public static final String exampleRefGenome2BaseURL = "http://rice.plantbiology.msu.edu/cgi-bin/gbrowse/rice/?name=";
 	
 }

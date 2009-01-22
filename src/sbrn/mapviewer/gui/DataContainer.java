@@ -86,7 +86,7 @@ public class DataContainer
 				targetData = new File(workingDir + fileSep + "data/barleyExampleData.txt");
 				refGenome1FeatData = new File(workingDir + fileSep + "data/artificial_genome.txt");
 				refGenome1HomData = new File(workingDir + fileSep + "data/artificial_genome_homology data.txt");
-				refGenome2FeatData = new File(workingDir + fileSep + "data/riceExampleData.txt");
+				refGenome2FeatData = new File(workingDir + fileSep + "data/rice_TIGR_5_all.txt");
 				refGenome2HomData = new File(workingDir + fileSep + "data/barleyRiceHomologyData.txt");
 			}
 			

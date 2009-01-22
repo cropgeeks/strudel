@@ -110,7 +110,7 @@ public class PanZoomAnimator extends Thread implements ItemListener
 				
 				if(Prefs.showMaxZoomLevelMessage)
 				{
-					TaskDialog.info("Maximum zoom level reached", "Close", maxZoomMessageCheckBox);
+					TaskDialog.info("Maximum zoom level reached for map set " + selectedSet.name, "Close", maxZoomMessageCheckBox);
 				}
 				zoomHandler.isPanZoomRequest = false;
 				return;	

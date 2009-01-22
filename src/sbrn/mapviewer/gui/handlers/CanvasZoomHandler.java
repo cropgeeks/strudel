@@ -111,7 +111,7 @@ public class CanvasZoomHandler
 		GMapSet selectedSet = selectedMap.owningSet;
 
 		// animate this by zooming in gradually
-		float finalZoomFactor = mainCanvas.initialCanvasHeight / (mainCanvas.initialChromoHeight + mainCanvas.chromoSpacing);
+		float finalZoomFactor = mainCanvas.initialCanvasHeight / mainCanvas.initialChromoHeight;
 		
 		//make sure this does not exceed the max zoom factor
 		if(finalZoomFactor > Constants.MAX_ZOOM_FACTOR)

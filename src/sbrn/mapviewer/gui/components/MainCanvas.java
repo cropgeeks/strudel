@@ -128,7 +128,7 @@ public class MainCanvas extends JPanel
 				if(gChromoMap.isShowingOnCanvas && !gChromoMap.inversionInProgress)
 				{
 					gChromoMap.drawDistanceMarkers(g);
-					gChromoMap.drawMouseOverFeatures(g);
+//					gChromoMap.drawMouseOverFeatures(g);
 					gChromoMap.drawHighlightOutline(g);
 				}
 			}
@@ -140,8 +140,7 @@ public class MainCanvas extends JPanel
 	// paint the genomes or portions thereof onto this canvas
 	private void paintCanvas(Graphics2D g2)
 	{
-		MapViewer.logger.fine("========repainting main canvas");
-		
+
 		// check whether the user wants antialiasing on
 		if (antiAlias)
 		{

@@ -30,6 +30,7 @@ public class CMapLinkImporter
 	{ 
 		try
 		{
+			MapViewer.logger.fine("loadLinkSet()");
 			// We load feature links by scanning the data file. Other than the first
 			// line, expect to see one link (pair of features) per line
 			
@@ -44,7 +45,7 @@ public class CMapLinkImporter
 				// Find all features with the first name and all with the second
 				LinkedList<Feature> f1List = getFeaturesByName(t[0]);
 				LinkedList<Feature> f2List = getFeaturesByName(t[1]);
-				
+
 				// Pair up every instance of f1 with f2
 				for (Feature f1: f1List)
 					for (Feature f2: f2List)
@@ -60,8 +61,8 @@ public class CMapLinkImporter
 						//add the BLAST score as evidence
 						 DecimalFormat df = new DecimalFormat("0.###E0");
 						Number blastScore = df.parse(t[2]);
-//						MapViewer.logger.finest("link between " + f1.getName() + " and " + f2.getName());
-//						 MapViewer.logger.finest("blastScore = "+ blastScore.toString());
+						MapViewer.logger.finest("link between " + f1.getName() + " and " + f2.getName());
+						 MapViewer.logger.finest("blastScore = "+ blastScore.toString());
 						link.setBlastScore(blastScore.doubleValue());
 											
 						// TODO: Do we want to add a list of references Features to
@@ -80,6 +81,8 @@ public class CMapLinkImporter
 			e.printStackTrace();
 		}
 		
+		MapViewer.logger.fine("returning linkset of size " + linkSet.size());
+		
 		return linkSet;
 	}
 	
@@ -87,6 +90,7 @@ public class CMapLinkImporter
 	// one given.
 	private LinkedList<Feature> getFeaturesByName(String name) throws Exception
 	{		
+
 		LinkedList<Feature> list = new LinkedList<Feature>();
 		Feature feature = null;
 				
@@ -97,9 +101,11 @@ public class CMapLinkImporter
 				for (ChromoMap map: mapset)
 				{ 
 					// TODO: Should this be a case-insensitive search?
+//					MapViewer.logger.fine("looking for  feature " + name );
 					feature = map.getFeature(name);
 					if (feature != null)
 					{
+//						MapViewer.logger.fine("adding feature " + feature.getName());
 						list.add(feature);
 					}
 				}

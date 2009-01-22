@@ -1,12 +1,10 @@
 package sbrn.mapviewer.gui;
 
 import java.awt.*;
-import java.io.*;
 import java.util.*;
-import javax.swing.table.*;
+
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.components.*;
-import sbrn.mapviewer.gui.dialog.*;
 import sbrn.mapviewer.gui.entities.*;
 import sbrn.mapviewer.gui.handlers.*;
 

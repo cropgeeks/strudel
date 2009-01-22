@@ -41,7 +41,7 @@ public class GChromoMap
 	
 	// arrays with Feature names and positions for fast access during drawing operations
 	public float[] allFeaturePositions;
-//	public String [] allFeatureNames;
+	//	public String [] allFeatureNames;
 	public Feature [] allFeatures;
 	public TreeMap<Integer, Vector<Feature>> allFeaturesPosLookup = new TreeMap<Integer, Vector<Feature>>();
 	
@@ -248,10 +248,10 @@ public class GChromoMap
 			}
 			
 			// now draw features and labels as required
-			if (owningSet.paintAllMarkers && isShowingOnCanvas)
-			{
-				drawAllFeatures(g2);
-			}
+			//			if (owningSet.paintAllMarkers && isShowingOnCanvas)
+			//			{
+			//				drawAllFeatures(g2);
+			//			}
 		}
 		catch (RuntimeException e)
 		{
@@ -286,7 +286,7 @@ public class GChromoMap
 			
 			// need to format the number appropriately
 			NumberFormat nf = NumberFormat.getInstance();
-
+			
 			//font stuff
 			int fontHeight = 9;
 			g2.setFont(new Font("Sans-serif", Font.PLAIN, fontHeight));
@@ -306,7 +306,7 @@ public class GChromoMap
 			
 			// set the colour to white
 			g2.setColor(Colors.distanceMarkerColour);
-
+			
 			// decide where to place the label on x
 			// on the left hand genome we want the label on the left, right hand genome on the right
 			int labelX = 0; // this is where the label is drawn from
@@ -318,6 +318,14 @@ public class GChromoMap
 			// the amount we want to separate the label and the line by, in pixels
 			int gap = 5;
 			
+			//determine whether the marker should go on the left or right
+			boolean markersRight = false;
+			int listSize = MapViewer.winMain.dataContainer.gMapSetList.size();
+			int mapSetIndex = MapViewer.winMain.dataContainer.gMapSetList.indexOf(owningSet);
+			//if this is reference mapset 2 we want the label on the right
+			if((listSize == 3 && mapSetIndex == 2) || (listSize == 2 && mapSetIndex == 1))
+				markersRight = true;
+			
 			//draw
 			for (int i = 0; i <= numMarkers; i++)
 			{
@@ -325,10 +333,20 @@ public class GChromoMap
 				String label = String.valueOf(nf.format(currentVal));
 				int stringWidth = fm.stringWidth(label); 
 				
-				//x coords
-				labelX = x - lineLength - gap - stringWidth;
-				lineStartX =  x-1;
-				lineEndX =  x- lineLength;
+				// right hand genome (reference genome 1 or 2)
+				if (markersRight)
+				{
+					lineStartX = x + width;
+					lineEndX = x + width + lineLength;
+					labelX = lineEndX + gap;
+				}
+				else
+				{			
+					//x coords
+					labelX = x - lineLength - gap - stringWidth;
+					lineStartX =  x-1;
+					lineEndX =  x- lineLength;
+				}
 				
 				// draw a line from the marker to the label
 				g2.drawLine(lineStartX, Math.round(currentY), lineEndX, Math.round(currentY));
@@ -515,8 +533,13 @@ public class GChromoMap
 	{
 		if(isShowingOnCanvas)
 		{
+			
 			// init the arrays that hold ALL the features for this map
 			int numFeatures = chromoMap.countFeatures();
+			
+			MapViewer.logger.fine("initing arrays for map " + name);
+			MapViewer.logger.fine("numFeatures " + numFeatures);
+			
 			allFeatures = new Feature[numFeatures];
 			allFeaturePositions = new float[numFeatures];
 			Vector<Feature> featureList = chromoMap.getFeatureList();
@@ -566,7 +589,7 @@ public class GChromoMap
 				//check whether inversion in progress
 				if(inversionInProgress)
 					yPos = (yPos * (height / (float)owningSet.chromoHeight)) + currentY;
-
+				
 				// draw a line for the marker
 				g2.drawLine(0, (int) yPos, width, (int) yPos);
 			}

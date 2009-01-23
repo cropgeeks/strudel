@@ -1,6 +1,7 @@
 package sbrn.mapviewer.gui;
 
 import java.io.*;
+import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.dialog.*;
 
 public class DataLoaderThread extends Thread

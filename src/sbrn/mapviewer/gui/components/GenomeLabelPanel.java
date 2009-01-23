@@ -2,6 +2,7 @@ package sbrn.mapviewer.gui.components;
 
 import java.awt.*;
 import javax.swing.*;
+import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
 
 public class GenomeLabelPanel extends JPanel

@@ -9,7 +9,9 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
 import sbrn.mapviewer.*;
+import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
+import sbrn.mapviewer.gui.entities.*;
 import scri.commons.gui.*;
 
 public class HomologResultsTable extends JTable
@@ -40,7 +42,65 @@ public class HomologResultsTable extends JTable
 		return super.getCellRenderer(row, column);
 	}
 	
+	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	public void addFeaturesFromSelectedMap(GChromoMap selectedMap, int canvasIntervalTopY, int canvasIntervalBottomY)
+	{
+		//extract the list of features we need to insert 
+		LinkedList<Link> newFeatures = new LinkedList<Link>();
+		
+		//first convert the canvas coords to feature positions on the chromomap
+		int chromoIntervalStartPos  = Math.round(((canvasIntervalTopY  - selectedMap.y) / (float)selectedMap.height) * selectedMap.chromoMap.getStop());
+		int chromoIntervalEndPos  = Math.round(((canvasIntervalBottomY  - selectedMap.y) / (float)selectedMap.height) * selectedMap.chromoMap.getStop());
 
+		//the table's model
+		FoundFeatureTableModel foundFeatureTableModel = (FoundFeatureTableModel)getModel();
+		
+		//now find all features on the map that occur in the interval between these two coords
+		for (Feature f : selectedMap.chromoMap.getFeatureList())
+		{
+			if(f.getStart() > chromoIntervalStartPos && f.getStart() < chromoIntervalEndPos)
+			{
+				boolean featureExists = false;
+				//first check this feature is not already contained in the table
+				for(Link link : foundFeatureTableModel.homologies)
+				{
+					if(link.getFeature1() != null)
+					{
+						if(link.getFeature1().equals(f))
+							featureExists = true;
+					}
+					if(link.getFeature2() != null)
+					{
+						if(link.getFeature2().equals(f))
+							featureExists = true;
+					}
+				}
+				
+				//if the feature is not in the table yet
+				if(!featureExists)
+				{
+					//include this feature but turn it into half a link for now to make it match the data type used by the table
+					Link link = new Link(null,f);
+					newFeatures.add(link);
+				}
+				else
+				{
+					MapViewer.logger.finest("feature already exists -- not added" );
+				}
+			}
+		
+		}		
+		MapViewer.logger.fine("num new features extracted = " + newFeatures.size());
+		
+		//add the new features/links to the table's data model
+		foundFeatureTableModel.homologies.addAll(0, newFeatures);
+		
+		//now fire a table change event to update the table
+		foundFeatureTableModel.fireTableRowsInserted(0, newFeatures.size()-1);
+	}
+	
+	
 	//===============================================inner classes=========================================
 	
 	class HyperlinkCellRenderer extends JLabel implements TableCellRenderer
@@ -77,7 +137,7 @@ public class HomologResultsTable extends JTable
 		}
 		
 	}
-
+	
 	
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 }

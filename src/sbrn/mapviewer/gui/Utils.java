@@ -5,6 +5,7 @@ import java.awt.color.*;
 import java.awt.event.*;
 import java.util.*;
 
+import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.components.*;
 import sbrn.mapviewer.gui.entities.*;
@@ -131,6 +132,31 @@ public class Utils
 		}
 		
 		return darkenedColour;
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
+	
+	
+	//check whether we have a map that intersects with the rectangle passed in
+	public static GChromoMap getSelectedMap(Rectangle intersectionRect)
+	{
+		GChromoMap selectedMap = null;
+		
+		// check whether the point x,y lies within one of the bounding rectangles of our chromosomes
+		// for each chromosome in each genome
+		for (GMapSet gMapSet : MapViewer.winMain.dataContainer.gMapSetList)
+		{
+			for (GChromoMap gChromoMap : gMapSet.gMaps)
+			{
+				// check whether the hit falls within its current bounding rectangle
+				if (gChromoMap.boundingRectangle.intersects(intersectionRect))
+				{
+					selectedMap = gChromoMap;
+					break;
+				}
+			}
+		}		
+		return selectedMap;
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------

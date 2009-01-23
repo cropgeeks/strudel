@@ -15,7 +15,7 @@ public class CanvasZoomHandler
 	MainCanvas mainCanvas;
 	
 	// frame rate
-	int fps = 25;
+	int fps = 20;
 	
 	//this boolean is required because we need to check in the stateChanged method of the ZoomControlPanel class whether
 	//or not it was invoked manually or indirectly because we programmatically changed the value of the zoom slider
@@ -86,7 +86,7 @@ public class CanvasZoomHandler
 	{
 		// animate this by zooming in gradually
 		// the length of time we want the animation to last in milliseconds
-		int millis = 500;
+		int millis = 400;
 		
 		// figure out the genome it belongs to and increase that genome's zoom factor so that we can
 		// just fit the chromosome on screen the next time it is painted
@@ -104,7 +104,7 @@ public class CanvasZoomHandler
 	// zooms in by a fixed amount on a chromosome the user clicked on (to fill screen with chromosome)
 	public  void processClickZoomRequest(GChromoMap selectedMap)
 	{
-		int millis = 500;
+		int millis = 300;
 		
 		// figure out the genome it belongs to and increase that genome's zoom factor so that we can
 		// just fit the chromosome on screen the next time it is painted
@@ -134,7 +134,7 @@ public class CanvasZoomHandler
 	// zooms out to restore original zoom factor of 1
 	public  void processZoomResetRequest(GMapSet selectedSet)
 	{
-		int millis = 500;
+		int millis = 300;
 		
 		// animate this by zooming out gradually
 		float finalZoomFactor = 1;

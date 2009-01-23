@@ -7,6 +7,7 @@ import java.text.*;
 import javax.imageio.*;
 import javax.swing.*;
 
+import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.dialog.*;
 import sbrn.mapviewer.gui.handlers.*;

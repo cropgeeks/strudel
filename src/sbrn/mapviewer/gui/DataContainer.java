@@ -83,11 +83,11 @@ public class DataContainer
 			if(!MapViewer.winMain.fatController.loadOwnData)
 			{
 				//load the example data that ships with the application
-				targetData = new File(workingDir + fileSep + "data/barleyExampleData.txt");
-				refGenome1FeatData = new File(workingDir + fileSep + "data/artificial_genome.txt");
-				refGenome1HomData = new File(workingDir + fileSep + "data/artificial_genome_homology data.txt");
-				refGenome2FeatData = new File(workingDir + fileSep + "data/rice_TIGR_5_all.txt");
-				refGenome2HomData = new File(workingDir + fileSep + "data/barleyRiceHomologyData.txt");
+				targetData = new File(workingDir + fileSep + Constants.exampleTargetData);
+				refGenome1FeatData = new File(workingDir + fileSep + Constants.exampleRefGenome1FeatData);
+				refGenome1HomData = new File(workingDir + fileSep + Constants.exampleRefGenome1HomData);
+				refGenome2FeatData = new File(workingDir + fileSep + Constants.exampleRefGenome2FeatData);
+				refGenome2HomData = new File(workingDir + fileSep + Constants.exampleRefGenome2HomData);
 			}
 			
 			//in this next case the user wants to provide their own data files

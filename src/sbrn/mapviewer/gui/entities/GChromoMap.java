@@ -40,9 +40,8 @@ public class GChromoMap
 	public ChromoMap chromoMap;
 	
 	// arrays with Feature names and positions for fast access during drawing operations
-	public float[] allFeaturePositions;
-	//	public String [] allFeatureNames;
-	public Feature [] allFeatures;
+	public float[] allLinkedFeaturePositions;
+	public Feature [] allLinkedFeatures;
 	public TreeMap<Integer, Vector<Feature>> allFeaturesPosLookup = new TreeMap<Integer, Vector<Feature>>();
 	
 	// these are corresponding arrays and lists which only pertain to the features which are linked to from somewhere
@@ -100,6 +99,13 @@ public class GChromoMap
 	public float highlightedRegionStart, highlightedRegionEnd;	
 	
 	float distanceMarkerZoomThreshold;
+	
+	// if true, paint a rectangle to indicate the fact that we are panning over a region we want to select for zooming in to
+	public boolean drawSelectionRect = false;
+	public Rectangle selectionRect = new Rectangle();
+	//these are the relevant coordinates for this
+	public float selectionRectTopY, selectionRectBottomY;	
+	
 	
 	// ============================c'tors==================================
 	
@@ -206,6 +212,7 @@ public class GChromoMap
 			{
 				highlightChromomapRegion(g2);
 			}
+
 			
 			//if the chromosome is being inverted
 			if(angleFromVertical != 90 && angleFromVertical != -90)
@@ -248,10 +255,18 @@ public class GChromoMap
 			}
 			
 			// now draw features and labels as required
-			//			if (owningSet.paintAllMarkers && isShowingOnCanvas)
-			//			{
-			//				drawAllFeatures(g2);
-			//			}
+			if (owningSet.paintAllMarkers && isShowingOnCanvas)
+			{
+				drawLinkedFeatures(g2);
+			}
+			
+			//draw the selection rectangle if required
+			if (drawSelectionRect)
+			{
+				drawSelectionRectangle(g2);
+			}
+
+			
 		}
 		catch (RuntimeException e)
 		{
@@ -267,7 +282,7 @@ public class GChromoMap
 	{
 		if (owningSet.paintAllMarkers && !inversionInProgress)
 		{
-			MapViewer.logger.fine("drawing distance markers for map " + name);
+			MapViewer.logger.finest("drawing distance markers for map " + name);
 			
 			//the number of markers we want to draw at any one time, regardless of our zoom level
 			float numMarkers = Constants.numDistanceMarkers;
@@ -537,27 +552,35 @@ public class GChromoMap
 			// init the arrays that hold ALL the features for this map
 			int numFeatures = chromoMap.countFeatures();
 			
-			MapViewer.logger.fine("initing arrays for map " + name);
-			MapViewer.logger.fine("numFeatures " + numFeatures);
+			MapViewer.logger.finest("initing arrays for map " + name);
+			MapViewer.logger.finest("numFeatures " + numFeatures);
 			
-			allFeatures = new Feature[numFeatures];
-			allFeaturePositions = new float[numFeatures];
+			allLinkedFeatures = new Feature[numFeatures];
+			allLinkedFeaturePositions = new float[numFeatures];
 			Vector<Feature> featureList = chromoMap.getFeatureList();
 			for (int i = 0; i < featureList.size(); i++)
 			{
 				Feature f = featureList.get(i);
-				//the start point of this features in its own units (cM, bp, whatever)
-				float start = f.getStart();
-				//scale this by the current map height to give us a position in pixels, between zero and the chromosome height
-				//then store this value in the array we use for drawing
-				allFeaturePositions[i] = (int) ((owningSet.chromoHeight / chromoMap.getStop()) * start);
-				//if the map is inverted we need to store the inverse of this value i.e. the map end value minus the feature position
-				if(isFullyInverted || isPartlyInverted)
-				{
-					allFeaturePositions[i] = (int) ((owningSet.chromoHeight / chromoMap.getStop()) * (chromoMap.getStop() -start));
+				
+				//at this point we need to know whether this feature is involved in any links
+				//it it is, we add it to the arrays
+				//otherwise it's fine to just have it in the feature list of the corresponding chromomap from where we can access it for 
+				//other uses such as full feature lists for search ranges etc
+				if(f.getLinks() != null && f.getLinks().size() > 0)
+				{				
+					//the start point of this features in its own units (cM, bp, whatever)
+					float start = f.getStart();
+					//scale this by the current map height to give us a position in pixels, between zero and the chromosome height
+					//then store this value in the array we use for drawing
+					allLinkedFeaturePositions[i] = (int) ((owningSet.chromoHeight / chromoMap.getStop()) * start);
+					//if the map is inverted we need to store the inverse of this value i.e. the map end value minus the feature position
+					if(isFullyInverted || isPartlyInverted)
+					{
+						allLinkedFeaturePositions[i] = (int) ((owningSet.chromoHeight / chromoMap.getStop()) * (chromoMap.getStop() -start));
+					}
+					//also store a reference to the feature itself in a parallel array
+					allLinkedFeatures[i] = f;
 				}
-				//also store the feature itself in a parallel array
-				allFeatures[i] = f;
 			}
 			arraysInitialized = true;
 		}
@@ -567,23 +590,23 @@ public class GChromoMap
 	// -----------------------------------------------------------------------------------------------------------------------------------------
 	
 	// draw the markers for the features
-	private void drawAllFeatures(Graphics2D g2)
+	private void drawLinkedFeatures(Graphics2D g2)
 	{
-		MapViewer.logger.fine("drawing all features for map " + name);
+		MapViewer.logger.finest("drawing linked features for map " + name);
 		
-		if (allFeaturePositions != null)
+		if (allLinkedFeaturePositions != null)
 		{
 			g2.setColor(Colors.featureColour);
-			for (int i = 0; i < allFeaturePositions.length; i++)
+			for (int i = 0; i < allLinkedFeaturePositions.length; i++)
 			{
 				float yPos;
-				if (allFeaturePositions[i] == 0.0f)
+				if (allLinkedFeaturePositions[i] == 0.0f)
 				{
 					yPos = 0.0f;
 				}
 				else
 				{
-					yPos = allFeaturePositions[i];
+					yPos = allLinkedFeaturePositions[i];
 				}
 				
 				//check whether inversion in progress
@@ -619,4 +642,34 @@ public class GChromoMap
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------
 	
+	// this draws and fills a mildly opaque rectangle delimiting a region we want to select features from	
+	private void drawSelectionRectangle(Graphics2D g2)
+	{					
+//		int topY = (int) ((owningSet.chromoHeight / chromoMap.getStop()) * selectionRectTopY);
+//		int bottomY =  (int) ((owningSet.chromoHeight / chromoMap.getStop()) * selectionRectBottomY);
+//		int rectHeight = bottomY - topY;
+//		int rectWidth = Math.round(width*1.5f);
+//		int rectX = Math.round(- width*0.25f);
+//		
+//		MapViewer.logger.fine("drawing selection rect at (x,y,w,h) " + rectX + "," + topY + "," + rectWidth + "," + rectHeight);
+
+		g2.setPaint(Colors.selectionRectFillColour);
+		g2.fill(selectionRect);	
+//		g2.fillRect(rectX, topY, rectWidth, rectHeight);
+		//this draws on outline around it
+		g2.setColor(Colors.selectionRectOutlineColour);
+//		g2.drawRect(rectX, topY, rectWidth, rectHeight);
+		g2.draw(selectionRect);	
+	}
+	
 }// end class
+
+
+
+
+
+
+
+
+
+

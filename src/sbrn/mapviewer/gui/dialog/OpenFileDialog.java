@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.lang.reflect.*;
 import javax.swing.*;
+import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.handlers.*;
 import scri.commons.gui.*;

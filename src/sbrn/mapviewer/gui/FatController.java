@@ -3,6 +3,7 @@ package sbrn.mapviewer.gui;
 import java.awt.*;
 import java.util.*;
 
+import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.components.*;
 import sbrn.mapviewer.gui.entities.*;
@@ -14,10 +15,21 @@ public class FatController
 	// ===============================================vars===================================
 	
 	private WinMain winMain = MapViewer.winMain;
+	
+	//a vector of features we have looked up by name
 	public Vector<Feature> foundFeatures = new Vector<Feature>();
+	
+	//a vector of features we have looked up by position range
 	public Vector<Feature> featuresInRange = new Vector<Feature>();
+	
+	///a vector of homologs for the found features
 	public Vector<Feature> foundFeatureHomologs = new Vector<Feature>();
+	
+	//a map we are inverting
 	public static GChromoMap invertMap = null;
+	
+	//a map we are drawing a selection rectangle over for the purpose of including additional features in a range search
+	public static GChromoMap selectionMap = null;
 	
 	//true if all the components required for showing data have been assembled
 	//we need this flag because initially we have to show the GUI in an incomplete state -- the full set
@@ -59,6 +71,7 @@ public class FatController
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
 	
+	//changes the main canvas background colour
 	public void changeBackgroundColour(String newColour)
 	{
 		Color colour = null;
@@ -89,6 +102,8 @@ public class FatController
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
 	
+	//updates the positions of all features of all chromosomes
+	//this is necessary because zooming changes the actual position values as the canvas grows
 	public void initialisePositionArrays()
 	{
 		MapViewer.logger.finest("indexing position arrays");
@@ -114,6 +129,7 @@ public class FatController
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
 	
+	//sets up the data model for features we have searched for by name or range
 	public FoundFeatureTableModel makeFoundFeaturesDataModel(String [] featureNames)
 	{
 		LinkedList<Link> homologies = new LinkedList<Link>();
@@ -141,6 +157,7 @@ public class FatController
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
 	
+	//highlights a given feature and its homologs on the main canvas by drawing links to the homologs and putting up coloured name labels
 	public void highlightRequestedFeature(Feature f)
 	{		
 		winMain.mainCanvas.drawFoundFeatures = true;
@@ -180,7 +197,7 @@ public class FatController
 	
 	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	//	restores the original view to what it looked like after loading the current dataset
+	//restores the original view to what it looked like after loading the current dataset
 	public void resetMainCanvasView()
 	{	
 		//hide the found features part of the split pane
@@ -219,6 +236,9 @@ public class FatController
 				
 				//clear any highlighted regions
 				gMap.highlightChromomapRegion = false;
+				
+				//don't draw selection rectangle
+				gMap.drawSelectionRect = false;
 			}			
 		}	
 		

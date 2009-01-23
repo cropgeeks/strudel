@@ -1,5 +1,7 @@
 package sbrn.mapviewer;
 
+import java.io.*;
+
 public class Constants
 {
 	//types of genome represented by this app
@@ -14,6 +16,13 @@ public class Constants
 	
 	//the number of distance markers we want to draw on a chromosome -- fixed regardless of zoom factor
 	public static final int  numDistanceMarkers = 30;
+	
+	//example data file paths	
+	public static final String exampleTargetData =  "data/barleyExampleData.txt";
+	public static final String exampleRefGenome1FeatData =  "data/artificial_genome.txt";
+	public static final String exampleRefGenome1HomData =  "data/artificial_genome_homology data.txt";
+	public static final String exampleRefGenome2FeatData =  "data/rice_TIGR_5.txt";
+	public static final String exampleRefGenome2HomData =  "data/barleyRiceHomologyData.txt";
 	
 	//URLs for annotation info for the reference example files we provide with the app
 	public static final String exampleRefGenome1BaseURL = "";

@@ -1,5 +1,6 @@
 package sbrn.mapviewer.gui.animators;
 
+import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.entities.*;
 

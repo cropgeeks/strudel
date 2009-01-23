@@ -9,6 +9,7 @@ package sbrn.mapviewer.gui.dialog;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
+import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.entities.*;
 

@@ -125,8 +125,15 @@ public class FoundFeaturesResultsPanel extends JPanel implements ListSelectionLi
 			if (foundFeatureTableModel.getColumnCount() > 0)
 			{
 				// get the feature name
-				int featureNameColumnIndex = foundFeatureTableModel.columnNameList.indexOf(foundFeatureTableModel.targetNameColumnLabel);
-				String featureName = (String) foundFeatureTableModel.getValueAt(modelRow, featureNameColumnIndex);
+				int feature1NameColumnIndex = foundFeatureTableModel.columnNameList.indexOf(foundFeatureTableModel.targetNameColumnLabel);
+				int feature2NameColumnIndex = foundFeatureTableModel.columnNameList.indexOf(foundFeatureTableModel.homologColumnLabel);
+				String featureName = (String) foundFeatureTableModel.getValueAt(modelRow, feature1NameColumnIndex);
+				//if this fails we may have a feature in the table where there is no target value but only a homolog
+				//this happens when we have inserted additional loci from a reference genome into the tabel that have no known equivalent in the target genome
+				//in that case try the other feature's name
+				if(featureName == null)
+					featureName = (String) foundFeatureTableModel.getValueAt(modelRow, feature2NameColumnIndex);
+				
 				// retrieve the Feature that corresponds to this name
 				Feature f = Utils.getFeatureByName(featureName);
 				// highlight it on the canvas

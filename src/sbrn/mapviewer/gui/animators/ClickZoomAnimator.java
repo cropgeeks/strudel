@@ -1,5 +1,6 @@
 package sbrn.mapviewer.gui.animators;
 
+import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.components.*;
 import sbrn.mapviewer.gui.entities.*;
@@ -74,6 +75,8 @@ public class ClickZoomAnimator extends Thread
 			catch (InterruptedException e)
 			{
 			}
+			
+			MapViewer.logger.finest("selectedSet.zoomFactor before adjustment = " + selectedSet.zoomFactor);
 
 			// set the new zoom factor
 			selectedSet.zoomFactor = selectedSet.zoomFactor + zoomFactorIncrement;
@@ -82,7 +85,7 @@ public class ClickZoomAnimator extends Thread
 			if(selectedSet.zoomFactor < 1)
 				selectedSet.zoomFactor = 1;			
 			
-			MapViewer.logger.fine("selectedSet.zoomFactor after adjustment = " + selectedSet.zoomFactor);
+			MapViewer.logger.finest("selectedSet.zoomFactor after adjustment = " + selectedSet.zoomFactor);
 
 			// work out the chromo height and total genome height for when the new zoom factor will have been applied
 			int newChromoHeight = Math.round(selectedSet.chromoHeight + chromoHeightIncrement);

@@ -8,6 +8,7 @@ package sbrn.mapviewer.gui.components;
 
 import java.util.*;
 import javax.swing.*;
+import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.entities.*;
 

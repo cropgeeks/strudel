@@ -4,6 +4,7 @@ import java.util.*;
 
 import javax.swing.table.*;
 
+import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
 
 
@@ -58,18 +59,41 @@ public class FoundFeatureTableModel extends AbstractTableModel
 		
 		switch (columnIndex) 
 		{
-		            case 0:  return link.getFeature1().getName();
-		            case 1:  return link.getFeature1().getStart();
-		            case 2:  return link.getFeature1().getOwningMap().getName();
-		            case 3:  return link.getFeature2().getName();
-		            case 4:  return link.getFeature2().getOwningMap().getOwningMapSet().getName();
-		            case 5:  return link.getFeature2().getOwningMap().getName();
-		            case 6:  return (int)(link.getFeature2().getStart());
-		            case 7:   return link.getFeature2().getAnnotation();
-
-		            default: return null;
+		            case 0:  if(link.getFeature1() != null){return link.getFeature1().getName();}break;
+		            case 1:  if(link.getFeature1() != null){return link.getFeature1().getStart();}break;
+		            case 2: if(link.getFeature1() != null){ return link.getFeature1().getOwningMap().getName();}break;
+		            case 3:  if(link.getFeature2() != null){return link.getFeature2().getName();}break;
+		            case 4:  if(link.getFeature2() != null){return link.getFeature2().getOwningMap().getOwningMapSet().getName();}break;
+		            case 5:  if(link.getFeature2() != null){return link.getFeature2().getOwningMap().getName();}break;
+		            case 6:  if(link.getFeature2() != null){return (link.getFeature2().getStart());}break;
+		            case 7:  if(link.getFeature2() != null){return link.getFeature2().getAnnotation();}break;
 		  }
 
+		return null;
+	}
+	
+	public Class<?> getColumnClass(int columnIndex)
+	{
+		try
+		{
+			switch (columnIndex) 
+			{
+			            case 0:  return Class.forName("java.lang.String"); 
+			            case 1:  return Class.forName("java.lang.Float"); 
+			            case 2:  return Class.forName("java.lang.String"); 
+			            case 3:  return Class.forName("java.lang.String"); 
+			            case 4:  return Class.forName("java.lang.String"); 
+			            case 5:  return Class.forName("java.lang.String"); 
+			            case 6:  return Class.forName("java.lang.Float"); 
+			            case 7:  return Class.forName("java.lang.String"); 
+			  }
+		}
+		catch (ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 	
 	public String getColumnName(int col)

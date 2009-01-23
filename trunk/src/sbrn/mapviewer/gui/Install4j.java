@@ -7,6 +7,7 @@ import java.util.*;
 import com.install4j.api.launcher.*;
 import com.install4j.api.update.*;
 
+import sbrn.mapviewer.*;
 import scri.commons.gui.*;
 
 public class Install4j
@@ -19,7 +20,7 @@ public class Install4j
 	 * install4j update check. This will only work when running under the full
 	 * install4j environment, so expect exceptions everywhere else
 	 */
-	static void doStartUpCheck()
+	public static void doStartUpCheck()
 	{
 		getVersion();
 		pingServer();

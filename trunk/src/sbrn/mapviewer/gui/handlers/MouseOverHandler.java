@@ -1,6 +1,7 @@
 package sbrn.mapviewer.gui.handlers;
 
 import java.util.*;
+import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.components.*;
@@ -44,19 +45,19 @@ public class MouseOverHandler
 				int errorMargin = 1;
 
 				// now look up this value in the feature arrays of the map
-				for (int i = 0; i < selectedMap.allFeaturePositions.length; i++)
+				for (int i = 0; i < selectedMap.allLinkedFeaturePositions.length; i++)
 				{
 					//check the current pixel number from the top against the values in the array
 					//if there is one that is the same (incl. error margin) then add the corresponding feature to the vector
-					if(selectedMap.allFeaturePositions[i] == pixelNumberFromTop ||
-									selectedMap.allFeaturePositions[i] == pixelNumberFromTop + errorMargin ||
-									selectedMap.allFeaturePositions[i] == pixelNumberFromTop - errorMargin)
+					if(selectedMap.allLinkedFeaturePositions[i] == pixelNumberFromTop ||
+									selectedMap.allLinkedFeaturePositions[i] == pixelNumberFromTop + errorMargin ||
+									selectedMap.allLinkedFeaturePositions[i] == pixelNumberFromTop - errorMargin)
 					{
 						if(match == null)
 						{
 							match = new Vector<Feature>();
 						}
-						match.add(selectedMap.allFeatures[i]);
+						match.add(selectedMap.allLinkedFeatures[i]);
 					}
 				}
 
@@ -104,15 +105,6 @@ public class MouseOverHandler
 				formattedData.add(feature.getName() + " : " + feature.getAnnotation());
 			}
 
-			// now set this vector to be the new list data for the JList in the annotation panel
-//			if (selectedMap.owningSet.equals(winMain.mainCanvas.targetGMapSet))
-//			{
-//				winMain.targetAnnotationPanel.getAnnotationList().setListData(formattedData);
-//			}
-//			else
-//			{
-//				winMain.referenceAnnotationPanel.getAnnotationList().setListData(formattedData);
-//			}
 		}
 		//if we got here by clicking on the background
 		else
@@ -122,10 +114,6 @@ public class MouseOverHandler
 				previousMap.persistHighlightedFeatures = false;
 				clearPreviousMap();
 			}
-
-			//clear the currently displayed data by just pointing it at the empty vector
-//			winMain.targetAnnotationPanel.getAnnotationList().setListData(formattedData);
-//			winMain.referenceAnnotationPanel.getAnnotationList().setListData(formattedData);
 		}
 	}
 

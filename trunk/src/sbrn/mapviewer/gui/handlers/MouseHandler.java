@@ -6,6 +6,7 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
+import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.components.*;
@@ -23,7 +24,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	int mousePressedX = -1;
 	int mousePressedY = -1;
 	MouseOverHandler mouseOverHandler;
-
+	
 	long timeOfMouseDown = 0;
 	
 	private boolean isOSX = SystemUtils.isMacOS();
@@ -49,7 +50,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	public void mouseClicked(MouseEvent e)
 	{
 		MapViewer.logger.finest("mouse clicked");
-		
+				
 		//mouse click with alt held down means zoom into single chromo so it fills the screen
 		if (e.isAltDown())
 		{
@@ -83,11 +84,11 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	public void mousePressed(MouseEvent e)
-	{
-		MapViewer.logger.finest("mouse pressed");
-		
+	{		
 		mousePressedX = e.getX();
 		mousePressedY = e.getY();
+		
+		MapViewer.logger.finest("mouse pressed at (x,y) " + mousePressedX + "," + mousePressedY);
 		
 		timeOfMouseDown = System.currentTimeMillis();
 		
@@ -148,22 +149,37 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+	
 	
 	public void mouseReleased(MouseEvent e)
 	{
-		MapViewer.logger.fine("mouse released at " + e.getY());
-
+		MapViewer.logger.finest("mouse released at " + e.getY());
+		
 		//check whether this is a popup request -- needs to be done both in mousePressed and in mouseReleased due to platform dependent nonsense
 		if (e.isPopupTrigger())
 		{
 			//this is for bringing up a context menu when the mouse is over a chromosome
 			if(mouseOverHandler.selectedMap != null)
 			{
-				// get the selected set first
+				// get the selected map first
 				GChromoMap selectedMap = Utils.getSelectedMap(winMain, Utils.getSelectedSet(e), mousePressedY);
 				winMain.fatController.invertMap = selectedMap;
-				winMain.chromoContextPopupMenu.show(winMain.mainCanvas, e.getX(), e.getY());		
+				
+				//if we have got here because we had first drawn a selection rectangle for including all features in a range for inclusion 
+				//in the results table, then we want the context menu to only have the option for this, and not inverting chromos etc
+				if(selectedMap.drawSelectionRect)
+				{
+					winMain.chromoContextPopupMenu.addAllFeaturesItem.setVisible(true);
+					winMain.chromoContextPopupMenu.invertChromoMenuItem.setVisible(false);
+				}
+				else
+				{
+					winMain.chromoContextPopupMenu.addAllFeaturesItem.setVisible(false);
+					winMain.chromoContextPopupMenu.invertChromoMenuItem.setVisible(true);
+				}
+				
+				//show the context menu
+				winMain.chromoContextPopupMenu.show(winMain.mainCanvas, e.getX(), e.getY());	
 			}
 			return;
 		}		
@@ -179,10 +195,11 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			int gMapSetIndex = Utils.getSelectedSet(e);
 			GChromoMap selectedMap = Utils.getSelectedMap(winMain, gMapSetIndex, e.getY());
 			winMain.mainCanvas.zoomHandler.processPanZoomRequest(selectedMap, mousePressedY, e.getY());
+			
 		}
 		
+		//turn antialiasing on and repaint		
 		MapViewer.logger.finest("repainting after mouse released");
-		//turn antialiasing on and repaint
 		winMain.mainCanvas.drawSelectionRect = false;
 		winMain.mainCanvas.antiAlias = true;
 		winMain.mainCanvas.updateCanvas(true);
@@ -196,18 +213,24 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		int x = e.getX();
 		int y = e.getY();
 		
+		MapViewer.logger.finest("mouseDragged at (x,y) = "+ x + "," + y);
+		MapViewer.logger.finest("last mouse pressed coords (mousePressedX, mousePressedY) = " + mousePressedX + "," + mousePressedY);
+		
+		// figure out which genome this event pertains to (i.e. which section of the canvas on x are we in)
+		int index = Utils.getSelectedSet(e);
+		GMapSet gMapSet = MapViewer.winMain.dataContainer.gMapSetList.get(index);
+		
+		//the chromosome -- if any - this event pertains to (i.e. where on the canvas on y are we)
+		GChromoMap selectedMap = Utils.getSelectedMap(MapViewer.winMain.dataContainer.gMapSetList, (int)(gMapSet.xPosition), y);
+		
 		//mouse is getting dragged without shift held down -- scroll the canvas up or down
 		if (!e.isShiftDown())
 		{
-			// figure out which genome the user is zooming 
-			int index = Utils.getSelectedSet(e);
-			GMapSet gMapSet = MapViewer.winMain.dataContainer.gMapSetList.get(index);
-			
 			//include a time delay before dragging so we can prevent accidental drags that were in fact intended to be mouse clicks
 			long now = System.currentTimeMillis();
 			if (now - timeOfMouseDown < 200)
 				return;
-				
+			
 			//this is the amount by which we drag the canvas at a time
 			// afixed amount seems to work best as it moves the canvas the same way across all zoom levels
 			int distanceDragged = 25;
@@ -224,9 +247,48 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			}
 		}
 		
-
-		// mouse is getting dragged horizontally with SHIFT down -- draw a rectangle for zoom selection
-		if (e.isShiftDown())
+		
+		// mouse is getting dragged  with SHIFT or CTRL-SHIFT down -- draw a rectangle for  selection (zooming/range selection)	
+		
+		//this is what we do for drawing a selection rectangle
+		if(e.isShiftDown() && isMetaClick(e))
+		{
+			if(selectedMap != null)
+			{		
+				//we want to constrain the x values if this is a feature add event
+				//we want a fixed amount either side of the chromo to give us a nice regular box
+				selectedMap.selectionRect.x =  - selectedMap.width/4;
+				selectedMap.selectionRect.width = Math.round(selectedMap.width*1.5f);	
+				// +ve y
+				if (y >= mousePressedY)
+				{
+					selectedMap.selectionRect.y = mousePressedY;
+					selectedMap.selectionRect.height = y - mousePressedY;
+					
+//					selectedMap.selectionRectTopY = mousePressedY;
+//					selectedMap.selectionRectBottomY = y;
+				}
+				// -ve y
+				else if (y < mousePressedY)
+				{
+					selectedMap.selectionRect.y = y;
+					selectedMap.selectionRect.height = mousePressedY - y;
+					
+//					selectedMap.selectionRectTopY = y;
+//					selectedMap.selectionRectBottomY = mousePressedY;
+				}
+				
+				MapViewer.winMain.fatController.selectionMap = selectedMap;
+				//let the MAP draw this rectangle -- we want to have this rect associated with the map and redrawn when the map is rendered
+				selectedMap.drawSelectionRect = true;	
+				//redraw
+				winMain.mainCanvas.updateCanvas(true);
+				winMain.mainCanvas.requestFocusInWindow();
+			}
+		}
+		
+		//this is what we do for drawing a pan zoom rectangle
+		if(e.isShiftDown() && !isMetaClick(e))
 		{
 			// +ve x
 			if (x >= mousePressedX)
@@ -252,7 +314,8 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 				winMain.mainCanvas.selectionRect.y = y;
 				winMain.mainCanvas.selectionRect.height = mousePressedY - y;
 			}
-			
+			//let the MAIN CANVAS draw this rectangle -- we only ever have one of these at a time and we do not need to store
+			//its coordinates for any length of time
 			winMain.mainCanvas.drawSelectionRect = true;
 			winMain.mainCanvas.updateCanvas(false);
 		}
@@ -260,6 +323,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		// update the current drag positions
 		mouseDragPosX = e.getX();
 		mouseDragPosY = e.getY();
+		
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -301,7 +365,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		winMain.mainCanvas.updateCanvas(true);
 		
 	}
-
+	
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	

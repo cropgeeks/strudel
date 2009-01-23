@@ -3,6 +3,7 @@ package sbrn.mapviewer.gui.handlers;
 import java.awt.*;
 import java.util.*;
 
+import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.components.*;

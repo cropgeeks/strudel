@@ -8,4 +8,4 @@ SET mvcp=%mvcp%;%lib%\office-2.0.jar
 SET mvcp=%mvcp%;%lib%\scri-commons.jar
 SET mvcp=%mvcp%;%lib%\swing-layout-1.0.3.jar
 
-java -Xmx512m -cp .;classes;%mvcp% sbrn.mapviewer.gui.MapViewer %1
+java -Xmx512m -cp .;classes;%mvcp% sbrn.mapviewer.MapViewer %1

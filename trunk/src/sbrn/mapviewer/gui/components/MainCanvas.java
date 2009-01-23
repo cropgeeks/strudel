@@ -6,6 +6,7 @@ import java.util.*;
 
 import javax.swing.*;
 
+import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.entities.*;
 import sbrn.mapviewer.gui.handlers.*;
@@ -68,6 +69,10 @@ public class MainCanvas extends JPanel
 	{
 		this.winMain = MapViewer.winMain;
 		zoomHandler = new CanvasZoomHandler(this);
+		
+		//this is for detecting key events
+		addKeyListener(new CanvasKeyListener(this));
+		setFocusable(true);
 	}
 	
 	// ============================methods==================================
@@ -111,10 +116,11 @@ public class MainCanvas extends JPanel
 		// this optionally draws a rectangle delimiting a region we want to zoom in on
 		if (drawSelectionRect)
 		{
-			g.setPaint(new Color(1f, 1f, 1f, 0.25f));
-			g.fill(selectionRect);			
-			g.setColor(Colors.selectionRectColour);
-			// draw rectangle
+			//fill the rectangle first
+			g.setPaint(Colors.panZoomRectFillColour);
+			g.fill(selectionRect);		
+			//now draw the rectangle's outline
+			g.setColor(Colors.panZoomRectOutlineColour);
 			g.draw(selectionRect);
 		}
 

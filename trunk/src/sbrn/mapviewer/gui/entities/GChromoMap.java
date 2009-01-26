@@ -102,9 +102,9 @@ public class GChromoMap
 	
 	// if true, paint a rectangle to indicate the fact that we are panning over a region we want to select for zooming in to
 	public boolean drawSelectionRect = false;
-	public Rectangle selectionRect = new Rectangle();
+//	public Rectangle selectionRect = new Rectangle();
 	//these are the relevant coordinates for this
-	public float selectionRectTopY, selectionRectBottomY;	
+	public float selectionRectTopY, selectionRectBottomY, chromoHeightOnSelection;	
 	
 	
 	// ============================c'tors==================================
@@ -633,33 +633,40 @@ public class GChromoMap
 		
 		GradientPaint gradient = new GradientPaint(0, 0, highlightColour, width / 2, 0, centreHighlightColour);
 		g2.setPaint(gradient);
-		g2.fillRect(0, currentY + start, width / 2, rectHeight);
+		g2.fillRect(0, start, width / 2, rectHeight);
 		// draw second half of chromosome
 		GradientPaint whiteGradient = new GradientPaint(width / 2, 0, centreHighlightColour, width, 0, highlightColour);
 		g2.setPaint(whiteGradient);
-		g2.fillRect(width / 2, currentY + start, (width / 2)+1, rectHeight);
+		g2.fillRect(width / 2, start, (width / 2)+1, rectHeight);
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------
 	
 	// this draws and fills a mildly opaque rectangle delimiting a region we want to select features from	
 	private void drawSelectionRectangle(Graphics2D g2)
-	{					
-//		int topY = (int) ((owningSet.chromoHeight / chromoMap.getStop()) * selectionRectTopY);
-//		int bottomY =  (int) ((owningSet.chromoHeight / chromoMap.getStop()) * selectionRectBottomY);
-//		int rectHeight = bottomY - topY;
-//		int rectWidth = Math.round(width*1.5f);
-//		int rectX = Math.round(- width*0.25f);
-//		
-//		MapViewer.logger.fine("drawing selection rect at (x,y,w,h) " + rectX + "," + topY + "," + rectWidth + "," + rectHeight);
+	{		
+		//convert the absolute values of the y coords of the selection rectangle to relative ones (relative to the chromo) 
+		float relativeTopY = (selectionRectTopY / chromoHeightOnSelection) * chromoMap.getStop();
+		float relativeBottomY = (selectionRectBottomY / chromoHeightOnSelection) * chromoMap.getStop();
 
+		//now we need to convert them back to absolute ones that take into account the currrent height of the chromosome
+		//this is so we can zoom and still show the rectangle which then gets resized appropriately
+		int start = (int) ((owningSet.chromoHeight / chromoMap.getStop()) * relativeTopY) ;
+		int end =  (int) ((owningSet.chromoHeight / chromoMap.getStop()) * relativeBottomY);
+		int rectHeight = end - start;
+
+		//width and x -- always the same
+		//want a tight frame round the chromo here
+		int rectWidth = Math.round(width*1.5f);
+		int rectX = Math.round(- width*0.25f);
+
+		//fill the rectangle with slightly opaque paint
 		g2.setPaint(Colors.selectionRectFillColour);
-		g2.fill(selectionRect);	
-//		g2.fillRect(rectX, topY, rectWidth, rectHeight);
-		//this draws on outline around it
+		g2.fillRect(rectX, start, rectWidth, rectHeight);
+		
+		//then draw an outline around it
 		g2.setColor(Colors.selectionRectOutlineColour);
-//		g2.drawRect(rectX, topY, rectWidth, rectHeight);
-		g2.draw(selectionRect);	
+		g2.drawRect(rectX, start, rectWidth, rectHeight);
 	}
 	
 }// end class

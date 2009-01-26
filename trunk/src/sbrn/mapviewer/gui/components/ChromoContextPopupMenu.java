@@ -49,20 +49,14 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 		{
 			//first find out what chromosome this relates to
 			GChromoMap selectedMap = MapViewer.winMain.fatController.selectionMap;
-			
-			int selectionRectTopY = (int)selectedMap.selectionRect.getY();
-			int selectionRectBottomY = (int)(selectedMap.selectionRect.getY() + selectedMap.selectionRect.getHeight());
 
 			//add features from the selected region into the results table
 			if(selectedMap != null)
 			{
-				MapViewer.winMain.ffResultsPanel.resultsTable.addFeaturesFromSelectedMap(selectedMap, selectionRectTopY, selectionRectBottomY);
-				
-				//store the current selection rectangle as part of the chromosome now
-				//this is so it can move with the chromosome when the user scrolls or zooms
-				selectedMap.selectionRectTopY = selectionRectTopY;
-				selectedMap.selectionRectBottomY = selectionRectBottomY;		
+				MapViewer.winMain.ffResultsPanel.resultsTable.addFeaturesFromSelectedMap(selectedMap, selectedMap.selectionRectTopY, selectedMap.selectionRectBottomY);
+	
 				//this time we get the chromosome to paint the selection rectangle, not the canvas
+				//this is so we can get the selection stored against the chromosome and then repaint it if the user zooms/scrolls
 				selectedMap.drawSelectionRect = true;		
 			}
 			

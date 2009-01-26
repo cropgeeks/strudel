@@ -50,6 +50,9 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	public void mouseClicked(MouseEvent e)
 	{
 		MapViewer.logger.finest("mouse clicked");
+		
+		//place the focus on this window so we can listen to keyboard events too
+		winMain.mainCanvas.requestFocusInWindow();
 				
 		//mouse click with alt held down means zoom into single chromo so it fills the screen
 		if (e.isAltDown())
@@ -232,7 +235,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 				return;
 			
 			//this is the amount by which we drag the canvas at a time
-			// afixed amount seems to work best as it moves the canvas the same way across all zoom levels
+			// a fixed amount seems to work best as it moves the canvas the same way across all zoom levels
 			int distanceDragged = 25;
 			
 			// mouse is getting dragged up 
@@ -255,27 +258,19 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		{
 			if(selectedMap != null)
 			{		
-				//we want to constrain the x values if this is a feature add event
-				//we want a fixed amount either side of the chromo to give us a nice regular box
-				selectedMap.selectionRect.x =  - selectedMap.width/4;
-				selectedMap.selectionRect.width = Math.round(selectedMap.width*1.5f);	
 				// +ve y
 				if (y >= mousePressedY)
 				{
-					selectedMap.selectionRect.y = mousePressedY;
-					selectedMap.selectionRect.height = y - mousePressedY;
-					
-//					selectedMap.selectionRectTopY = mousePressedY;
-//					selectedMap.selectionRectBottomY = y;
+					selectedMap.selectionRectTopY = mousePressedY - selectedMap.boundingRectangle.y;
+					selectedMap.selectionRectBottomY = y - selectedMap.boundingRectangle.y;
+					selectedMap.chromoHeightOnSelection = selectedMap.boundingRectangle.height;
 				}
 				// -ve y
 				else if (y < mousePressedY)
 				{
-					selectedMap.selectionRect.y = y;
-					selectedMap.selectionRect.height = mousePressedY - y;
-					
-//					selectedMap.selectionRectTopY = y;
-//					selectedMap.selectionRectBottomY = mousePressedY;
+					selectedMap.selectionRectTopY = y - selectedMap.boundingRectangle.y;
+					selectedMap.selectionRectBottomY = mousePressedY - selectedMap.boundingRectangle.y;
+					selectedMap.chromoHeightOnSelection = selectedMap.boundingRectangle.height;
 				}
 				
 				MapViewer.winMain.fatController.selectionMap = selectedMap;

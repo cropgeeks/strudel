@@ -44,14 +44,14 @@ public class HomologResultsTable extends JTable
 	
 	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	public void addFeaturesFromSelectedMap(GChromoMap selectedMap, int canvasIntervalTopY, int canvasIntervalBottomY)
+	public void addFeaturesFromSelectedMap(GChromoMap selectedMap, float canvasIntervalTopY, float canvasIntervalBottomY)
 	{
 		//extract the list of features we need to insert 
 		LinkedList<Link> newFeatures = new LinkedList<Link>();
 		
 		//first convert the canvas coords to feature positions on the chromomap
-		int chromoIntervalStartPos  = Math.round(((canvasIntervalTopY  - selectedMap.y) / (float)selectedMap.height) * selectedMap.chromoMap.getStop());
-		int chromoIntervalEndPos  = Math.round(((canvasIntervalBottomY  - selectedMap.y) / (float)selectedMap.height) * selectedMap.chromoMap.getStop());
+		int chromoIntervalStartPos  = Math.round(((canvasIntervalTopY  - selectedMap.y) / selectedMap.height) * selectedMap.chromoMap.getStop());
+		int chromoIntervalEndPos  = Math.round(((canvasIntervalBottomY  - selectedMap.y) / selectedMap.height) * selectedMap.chromoMap.getStop());
 
 		//the table's model
 		FoundFeatureTableModel foundFeatureTableModel = (FoundFeatureTableModel)getModel();

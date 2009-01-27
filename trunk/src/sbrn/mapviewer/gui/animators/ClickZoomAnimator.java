@@ -108,8 +108,8 @@ public class ClickZoomAnimator extends Thread
 		}
 		
 		//do a final zoom adjust to ensure that we are at the right zoom level
-		selectedSet.zoomFactor = finalZoomFactor;
-		zoomHandler.adjustZoom(selectedMap, finalTotalY, finalChromoHeight, finalChromoHeight/2);
+//		selectedSet.zoomFactor = finalZoomFactor;
+//		zoomHandler.adjustZoom(selectedMap, finalTotalY, finalChromoHeight, finalChromoHeight/2);
 
 		//update overviews
 		MapViewer.winMain.fatController.updateOverviewCanvases();

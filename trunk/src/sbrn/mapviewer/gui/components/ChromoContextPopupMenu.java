@@ -39,9 +39,9 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 		{
 			//invert the whole chromosome
 			// frame rate
-			int fps = 20;
+			int fps = 25;
 			// the length of time we want the animation to last in milliseconds
-			int millis = 1000;
+			int millis = 500;
 			ChromoZAxisInversionAnimator chromoInversionAnimator = new ChromoZAxisInversionAnimator(MapViewer.winMain.fatController.invertMap, fps, millis);
 			chromoInversionAnimator.start();
 		}

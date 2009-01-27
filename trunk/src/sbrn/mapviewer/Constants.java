@@ -17,6 +17,10 @@ public class Constants
 	//the number of distance markers we want to draw on a chromosome -- fixed regardless of zoom factor
 	public static final int  numDistanceMarkers = 30;
 	
+	//the maximum curvature coefficient for the links
+	//this determines the shape of the curve, if any
+	public static final float MAX_CURVATURE_COEFF = 0.3f;
+	
 	//example data file paths	
 	public static final String exampleTargetData =  "data/barleyExampleData.txt";
 	public static final String exampleRefGenome1FeatData =  "data/artificial_genome.txt";

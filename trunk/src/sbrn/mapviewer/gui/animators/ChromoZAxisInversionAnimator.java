@@ -79,16 +79,16 @@ public class ChromoZAxisInversionAnimator extends Thread
 			else
 				invertMap.isFullyInverted = true;
 
-			invertMap.inversionInProgress = false;
-			
+			invertMap.inversionInProgress = false;		
+
 			//turn antialiasing back on
-			MapViewer.winMain.mainCanvas.antiAlias = true;		
-			
-			//update the position lookup arrays for mouseover
-			MapViewer.winMain.fatController.initialisePositionArrays();
-			
+			MapViewer.winMain.mainCanvas.antiAlias = true;	
 			//repaint
 			MapViewer.winMain.mainCanvas.updateCanvas(true);
+
+			//update the position lookup arrays for mouseover
+			MapViewer.winMain.fatController.initialisePositionArrays();
+
 		}
 		catch (RuntimeException e)
 		{

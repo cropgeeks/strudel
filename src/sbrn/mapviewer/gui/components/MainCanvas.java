@@ -61,6 +61,8 @@ public class MainCanvas extends JPanel
 	
 	//true if we want to display features within a certain range the user has searched for with the find dialog
 	public boolean drawFoundFeaturesInRange = false;
+	
+	public boolean drawDistanceMarkers = false;
 
 	
 	// ============================c'tor==================================
@@ -131,9 +133,10 @@ public class MainCanvas extends JPanel
 			// for each chromosome in the genome
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
 			{
-				if(gChromoMap.isShowingOnCanvas && !gChromoMap.inversionInProgress)
+				if(gChromoMap.isShowingOnCanvas)
 				{
-					gChromoMap.drawDistanceMarkers(g);
+					if(drawDistanceMarkers)
+						gChromoMap.drawDistanceMarkers(g);
 //					gChromoMap.drawMouseOverFeatures(g);
 					gChromoMap.drawHighlightOutline(g);
 				}

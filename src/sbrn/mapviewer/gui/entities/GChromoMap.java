@@ -280,7 +280,7 @@ public class GChromoMap
 	// draws a set of distance markers
 	public void drawDistanceMarkers(Graphics2D g2)
 	{
-		if (owningSet.paintAllMarkers && !inversionInProgress)
+		if (owningSet.zoomFactor >=  distanceMarkerZoomThreshold && !inversionInProgress)
 		{
 			MapViewer.logger.finest("drawing distance markers for map " + name);
 			

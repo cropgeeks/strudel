@@ -9,6 +9,7 @@ import javax.swing.*;
 
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
+import sbrn.mapviewer.gui.animators.*;
 import sbrn.mapviewer.gui.dialog.*;
 import sbrn.mapviewer.gui.handlers.*;
 import scri.commons.gui.*;
@@ -27,6 +28,8 @@ public class ControlToolBar extends JToolBar implements ActionListener
 	public JButton bFindFeatures;
 	public JButton bFindFeaturesinRange;
 	private JButton bResetAll;
+	private JToggleButton bDistMarkers;
+	private JToggleButton bCurves;
 	
 	
 	ControlToolBar(WinMain winMain)
@@ -47,6 +50,8 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		addSeparator(true);
 
 		add(bOverview);
+		add(bDistMarkers);
+		add(bCurves);
 		add(bExport);
 
 		addSeparator(true);
@@ -65,6 +70,8 @@ public class ControlToolBar extends JToolBar implements ActionListener
 
 		add(bHelp);
 		add(new JLabel("  "));
+		
+
 	}
 
 	private void createControls()
@@ -108,6 +115,8 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		bExport = (JButton) getButton(false, "", "Export the display as an image", Icons.getIcon("EXPORTIMAGE"));
 		bOverview = (JToggleButton) getButton(true, "", "Toggle the overview dialog on or off", Icons.getIcon("OVERVIEW"));
 		bOverview.setSelected(Prefs.guiOverviewVisible);
+		bDistMarkers = (JToggleButton) getButton(true, "", "Toggle the distance markers on or off", Icons.getIcon("DISTANCEMARKERS"));
+		bCurves = (JToggleButton) getButton(true, "", "Toggle between straight and curved links", Icons.getIcon("CURVES"));
 		bHelp =  (JButton) getButton(false, "", "Help", Icons.getIcon("HELP"));
 		
 		bFindFeatures = (JButton) getButton(false, "", "Find features by name", Icons.getIcon("FIND"));
@@ -146,6 +155,39 @@ public class ControlToolBar extends JToolBar implements ActionListener
 
 		else if (e.getSource() == bOverview)
 			toggleOverviewDialog();
+		
+		//toggles the distance markers on or off
+		else if(e.getSource() == bDistMarkers)
+		{
+			if(bDistMarkers.isSelected())
+			{
+				MapViewer.winMain.mainCanvas.drawDistanceMarkers = true;
+			}
+			else
+			{
+				MapViewer.winMain.mainCanvas.drawDistanceMarkers = false;
+			}
+			MapViewer.winMain.mainCanvas.updateCanvas(true);
+		}
+
+
+		//toggle the link shape between straight and curved
+		else if(e.getSource() == bCurves)
+		{
+			int fps = 20;
+			int millis = 500;
+			if(bCurves.isSelected())
+			{
+				LinkShapeAnimator linkShapeAnimator = new LinkShapeAnimator(fps,millis, true);
+				linkShapeAnimator.start();
+			}
+			else
+			{
+				LinkShapeAnimator linkShapeAnimator = new LinkShapeAnimator(fps,millis, false);
+				linkShapeAnimator.start();
+			}
+		}
+		
 
 		//show the find features dialog
 		else if (e.getSource() == bFindFeatures)
@@ -163,7 +205,6 @@ public class ControlToolBar extends JToolBar implements ActionListener
 			MapViewer.winMain.ffDialog.ffPanel.getFFTextArea().setText("11_10223");
 			
 			MapViewer.winMain.ffDialog.setVisible(true);
-			
 
 		}
 		

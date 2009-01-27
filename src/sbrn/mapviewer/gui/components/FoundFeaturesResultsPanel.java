@@ -32,7 +32,7 @@ public class FoundFeaturesResultsPanel extends JPanel implements ListSelectionLi
 	{
 		super(new BorderLayout());
 		
-		String title = "Click on row to highlight homolog. Click on homolog name to show annotation in web browser: ";
+		String title = "Click on a row to highlight a homolog. Click on a homolog name to show annotation in a web browser: ";
 		setBorder(BorderFactory.createTitledBorder(title));
 		
 		resultsTable = new HomologResultsTable();

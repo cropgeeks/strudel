@@ -1,6 +1,7 @@
 package sbrn.mapviewer.gui.handlers;
 
 import java.awt.*;
+import java.awt.geom.*;
 import java.util.*;
 
 import sbrn.mapviewer.*;
@@ -26,6 +27,15 @@ public class LinkDisplayManager
 	public static double blastThreshold = 1;
 	
 	GMapSet targetGMapSet = MapViewer.winMain.dataContainer.gMapSetList.get(MapViewer.winMain.dataContainer.targetGMapSetIndex);
+	
+	//do we want our links straight or curved
+	public boolean linkShapeStraight = false;
+	
+	//degree of link curvature
+	public float linkCurvatureCoeff = Constants.MAX_CURVATURE_COEFF;
+	
+	// CubicCurve2D.Double -- this object can be reused for drawing all curved lines
+	CubicCurve2D c = new CubicCurve2D.Double();
 	
 	
 	//	=====================================c'tor==============================================
@@ -107,13 +117,12 @@ public class LinkDisplayManager
 	// Draws the lines between a chromosome of the reference genome and all potential homologues in the compared genome
 	public void drawAllLinks(Graphics2D g2)
 	{
-
 		//only do this if we have reference genomes -- otherwise there are no links to deal with
 		if(MapViewer.winMain.dataContainer.gMapSetList.size() > 1)
 		{			
 			try
 			{
-				
+			
 				// for each map in the selectedMaps vector of the target genome
 				for (int i = 0; i < targetGMapSet.selectedMaps.size(); i++)
 				{
@@ -216,21 +225,9 @@ public class LinkDisplayManager
 									if ((referenceY > 0  && referenceY < mainCanvas.getHeight()) &&
 													(targetY > 0  && targetY < mainCanvas.getHeight()) &&
 													referenceGMapSet.selectedMaps.contains(referenceGMap))
-									{										
-										// draw the link
-										g2.drawLine(targetChromoX + 1, targetY, referenceChromoX - 1, referenceY);
-										
-										if(targetGMapSet.paintAllMarkers)
-										{
-											// draw a line for the marker on targetGMap
-											g2.drawLine(targetGMap.x, targetY, (targetGMap.x + targetGMap.width), targetY);
-										}
-										if(referenceGMapSet.paintAllMarkers)
-										{
-											// draw a line for the marker on referenceGMap
-											g2.drawLine(referenceGMap.x, referenceY, (referenceGMap.x + referenceGMap.width), referenceY);
-										}
-										
+									{	
+										// draw the link either as a straight line or a curve
+										drawStraightOrCurvedLink(g2,targetChromoX + 1, targetY, referenceChromoX - 1, referenceY);	
 									}
 								}
 							}
@@ -311,14 +308,10 @@ public class LinkDisplayManager
 				{
 					y2 = (int) ((gMap2.chromoMap.getStop() - f2.getStart()) / (gMap2.chromoMap.getStop() / gMap2.height)) + (gMap2.y + gMap2.currentY);
 				}
-				
-				// draw the link
+
+				// draw the link either as a straight line or a curve
 				g2.setColor(linkColour);
-				//			if(thickerLine)
-				//				g2.setStroke(new BasicStroke(2.0f));
-				//			else
-				//				g2.setStroke(new BasicStroke());
-				g2.drawLine(targetChromoX, y1, referenceChromoX, y2);
+				drawStraightOrCurvedLink(g2,targetChromoX, y1, referenceChromoX, y2);
 			}
 		}
 	}
@@ -523,6 +516,41 @@ public class LinkDisplayManager
 	
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------
+	
+	//draws a single link, either as a straight line or a curve depending on the boolean set at class level
+	private void drawStraightOrCurvedLink(Graphics2D g2, int startX, int startY, int endX, int endY)
+	{
+
+		//		// draw the link as a straight line
+		//		if(linkShapeStraight)
+		//		{											
+		//			g2.drawLine(startX, startY, endX, endY);	
+		//		}
+		//		//draw the link as a cubic curve
+		//		else
+		//		{										
+		//ctrlx1 - the X coordinate used to set the first control point of this CubicCurve2D
+		//ctrly1 - the Y coordinate used to set the first control point of this CubicCurve2D
+		//ctrlx2 - the X coordinate used to set the second control point of this CubicCurve2D
+		//ctrly2 - the Y coordinate used to set the second control point of this CubicCurve2D
+		
+		double ctrlx1 = startX;
+		double ctrlx2 = endX;
+		
+		double ctrly1 = startY;
+		double ctrly2 = endY;
+		
+		if(linkCurvatureCoeff > 0)
+		{
+			ctrlx1 = startX + ((endX - startX) * linkCurvatureCoeff);		
+			ctrlx2 = startX + ((endX - startX) * (linkCurvatureCoeff*2));
+		}
+
+		// draw CubicCurve2D.Double with set coordinates
+		c.setCurve(startX, startY, ctrlx1, ctrly1, ctrlx2, ctrly2, endX, endY);
+		g2.draw(c);
+		//		}
+	}
 	
 	
 }// end class

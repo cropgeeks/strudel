@@ -41,8 +41,8 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 	private void setupComponents(boolean addFiller)
 	{
 		//settings for the slider
-		int sliderMin = 1;
 		int sliderMax = Constants.MAX_ZOOM_FACTOR;
+		int sliderMin = 1;
 		int sliderInitialVal = 1;
 		
 		//label
@@ -56,8 +56,8 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		//this is the way it happens for all other cases where we need a pretty repaint
 		zoomSlider.addMouseListener(this);
 		zoomSlider.setPaintTicks(true);
-		zoomSlider.setMinorTickSpacing(sliderMax/2);
-		zoomSlider.setMajorTickSpacing(sliderMax);
+		zoomSlider.setMinorTickSpacing(sliderMax/20);
+		zoomSlider.setMajorTickSpacing(sliderMax/10);	
 		
 		//reset button
 		resetButton = new JButton(Icons.getIcon("RESET"));

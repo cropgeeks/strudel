@@ -2,17 +2,12 @@ package sbrn.mapviewer.gui.components;
 
 import java.awt.*;
 import java.awt.font.*;
-import java.io.*;
-import java.net.*;
 import java.util.*;
 import javax.swing.*;
-import javax.swing.event.*;
 import javax.swing.table.*;
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
-import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.entities.*;
-import scri.commons.gui.*;
 
 public class HomologResultsTable extends JTable
 {

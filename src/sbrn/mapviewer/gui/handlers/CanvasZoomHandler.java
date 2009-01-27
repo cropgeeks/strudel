@@ -15,7 +15,7 @@ public class CanvasZoomHandler
 	MainCanvas mainCanvas;
 	
 	// frame rate
-	int fps = 20;
+	int fps = 25;
 	
 	//this boolean is required because we need to check in the stateChanged method of the ZoomControlPanel class whether
 	//or not it was invoked manually or indirectly because we programmatically changed the value of the zoom slider

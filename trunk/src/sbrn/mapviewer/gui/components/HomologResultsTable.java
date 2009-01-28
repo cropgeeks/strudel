@@ -3,8 +3,10 @@ package sbrn.mapviewer.gui.components;
 import java.awt.*;
 import java.awt.font.*;
 import java.util.*;
+
 import javax.swing.*;
 import javax.swing.table.*;
+
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.entities.*;
@@ -15,6 +17,8 @@ public class HomologResultsTable extends JTable
 	//===============================================vars=========================================		
 	
 	HyperlinkCellRenderer hyperlinkCellRenderer = new HyperlinkCellRenderer();
+
+	public boolean isFilterEvent = false;
 	
 	//===============================================c'tor=========================================	
 	
@@ -23,6 +27,12 @@ public class HomologResultsTable extends JTable
 		//configure table for selections
 		setRowSelectionAllowed(true);
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);	
+		
+		//listeners
+		HomologResultsTableListener homologResultsTableListener = new HomologResultsTableListener(this);
+		addMouseMotionListener(homologResultsTableListener);
+		addMouseListener(homologResultsTableListener);
+		getSelectionModel().addListSelectionListener(homologResultsTableListener);
 	}
 	
 	//===============================================methods=========================================	
@@ -132,7 +142,33 @@ public class HomologResultsTable extends JTable
 		}
 		
 	}
+
 	
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
+	//applies a regular epxression based filter to the results table
+	@SuppressWarnings({"unchecked"})
+	public void newFilter(String filterExpression, int index)
+	{
+		isFilterEvent = true;
+		
+		RowFilter<TableModel, Object> rf = null;
+		String expr = "^" + filterExpression;
+		
+		try
+		{
+			rf = RowFilter.regexFilter(expr, index);
+		}
+		catch (java.util.regex.PatternSyntaxException e)
+		{
+			return;
+		}
+		
+		if(filterExpression.equals("<none>"))
+			((DefaultRowSorter<TableModel, Integer>) getRowSorter()).setRowFilter(null);
+		else
+			((DefaultRowSorter<TableModel, Integer>) getRowSorter()).setRowFilter(rf);
+	}
+	
+//	---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 }

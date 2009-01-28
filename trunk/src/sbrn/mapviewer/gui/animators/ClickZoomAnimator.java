@@ -128,8 +128,10 @@ public class ClickZoomAnimator extends Thread
 		selectedMap.drawChromoIndex = true;
 		
 		//turn antialiasing on and repaint
-		mainCanvas.antiAlias = true;
-		mainCanvas.updateCanvas(true);
+//		mainCanvas.antiAlias = true;
+//		mainCanvas.updateCanvas(true);
+		AntiAliasRepaintThread antiAliasRepaintThread = new AntiAliasRepaintThread();
+		antiAliasRepaintThread.start();
 		
 		done = true;
 		

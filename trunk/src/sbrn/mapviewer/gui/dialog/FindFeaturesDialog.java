@@ -39,7 +39,7 @@ public class FindFeaturesDialog extends JDialog implements ActionListener
 	{
 		bFind = SwingUtils.getButton("Find");
 		bFind.addActionListener(this);
-		bCancel = SwingUtils.getButton("Close");
+		bCancel = SwingUtils.getButton("Cancel");
 		bCancel.addActionListener(this);
 		
 		JPanel p1 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));

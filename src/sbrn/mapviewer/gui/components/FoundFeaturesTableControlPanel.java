@@ -210,7 +210,7 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 		String genomeName = (String) cb.getSelectedItem();
 		FoundFeatureTableModel foundFeatureTableModel = (FoundFeatureTableModel) MapViewer.winMain.ffResultsPanel.resultsTable.getModel();
 		int genomeColumnIndex = foundFeatureTableModel.findColumn(foundFeatureTableModel.homologGenomeColumnLabel);
-		MapViewer.winMain.ffResultsPanel.newFilter(genomeName, genomeColumnIndex);
+		MapViewer.winMain.ffResultsPanel.resultsTable.newFilter(genomeName, genomeColumnIndex);
 	}
 	
 	private void showHomologsCheckboxStateChanged(javax.swing.event.ChangeEvent evt)

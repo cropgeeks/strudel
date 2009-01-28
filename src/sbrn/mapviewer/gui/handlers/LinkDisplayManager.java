@@ -517,39 +517,29 @@ public class LinkDisplayManager
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------
 	
-	//draws a single link, either as a straight line or a curve depending on the boolean set at class level
+	//draws a single link, either as a straight line or a curve depending on the value of the linkCurvatureCoeff set at class level
 	private void drawStraightOrCurvedLink(Graphics2D g2, int startX, int startY, int endX, int endY)
-	{
-
-		//		// draw the link as a straight line
-		//		if(linkShapeStraight)
-		//		{											
-		//			g2.drawLine(startX, startY, endX, endY);	
-		//		}
-		//		//draw the link as a cubic curve
-		//		else
-		//		{										
+	{	
+		//if the linkCurvatureCoeff is 0 then the line will be straight and the control points are simply moved to either end of the line	
 		//ctrlx1 - the X coordinate used to set the first control point of this CubicCurve2D
 		//ctrly1 - the Y coordinate used to set the first control point of this CubicCurve2D
 		//ctrlx2 - the X coordinate used to set the second control point of this CubicCurve2D
-		//ctrly2 - the Y coordinate used to set the second control point of this CubicCurve2D
-		
+		//ctrly2 - the Y coordinate used to set the second control point of this CubicCurve2D	
 		double ctrlx1 = startX;
-		double ctrlx2 = endX;
-		
+		double ctrlx2 = endX;		
 		double ctrly1 = startY;
 		double ctrly2 = endY;
 		
+		//if the linkCurvatureCoeff is greater than 0 we make this line into a curve by moving the control points towards the centre	
 		if(linkCurvatureCoeff > 0)
 		{
 			ctrlx1 = startX + ((endX - startX) * linkCurvatureCoeff);		
-			ctrlx2 = startX + ((endX - startX) * (linkCurvatureCoeff*2));
+			ctrlx2 = endX - ((endX - startX) * (linkCurvatureCoeff*2));
 		}
 
 		// draw CubicCurve2D.Double with set coordinates
 		c.setCurve(startX, startY, ctrlx1, ctrly1, ctrlx2, ctrly2, endX, endY);
 		g2.draw(c);
-		//		}
 	}
 	
 	

@@ -9,6 +9,7 @@ import javax.swing.*;
 
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
+import sbrn.mapviewer.gui.actions.*;
 import sbrn.mapviewer.gui.animators.*;
 import sbrn.mapviewer.gui.dialog.*;
 import sbrn.mapviewer.gui.handlers.*;
@@ -17,9 +18,8 @@ import scri.commons.gui.*;
 public class ControlToolBar extends JToolBar implements ActionListener
 {
 	private WinMain winMain;
-
+	
 	private JButton bOpen;
-	private JButton bClose;
 	private JButton bExport;
 	private JToggleButton bOverview;
 	private JButton bHelp;
@@ -35,45 +35,44 @@ public class ControlToolBar extends JToolBar implements ActionListener
 	ControlToolBar(WinMain winMain)
 	{
 		this.winMain = winMain;
-
+		
 		setFloatable(false);
 		setBorderPainted(false);
-
+		
 		createControls();
-
+		
 		if (SystemUtils.isMacOS() == false)
 			add(new JLabel("  "));
-
+		
 		add(bOpen);
-		add(bClose);
-
+		
 		addSeparator(true);
-
+		
 		add(bOverview);
 		add(bDistMarkers);
 		add(bCurves);
 		add(bExport);
-
+		
 		addSeparator(true);
-
+		
 		//maybe keep this group of controls on a theme of "does something with the data"
 		add(bFindFeatures);
 		add(bFindFeaturesinRange);
 		add(bResetAll);
-
+		
 		addSeparator(true);
-
+		
 		add(blastLabel);
 		add(eValueSlider);
-
+		
 		addSeparator(true);
-
+		
 		add(bHelp);
 		add(new JLabel("  "));
 		
-
+		
 	}
-
+	
 	private void createControls()
 	{
 		blastLabel = new JLabel("BLAST Cut-off:");
@@ -83,77 +82,72 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		eValueSlider.setMajorTickSpacing(100);
 		eValueSlider.setMaximum(300);
 		eValueSlider.setMinorTickSpacing(50);
-//		eValueSlider.setPaintLabels(true);
+		//		eValueSlider.setPaintLabels(true);
 		eValueSlider.setPaintTicks(true);
 		eValueSlider.setValue(0);
-        eValueSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                eValueSliderStateChanged(evt);
-            }
-        });
-
-        eValueSlider.addMouseListener(new MouseAdapter() {
-        	public void mousePressed(MouseEvent e)
-        	{
-        		winMain.mainCanvas.drawBlastScore = true;
-        		winMain.mainCanvas.updateCanvas(true);
-        	}
-
-        	public void mouseReleased(MouseEvent e)
-        	{
-        		winMain.mainCanvas.drawBlastScore = false;
-        		winMain.mainCanvas.updateCanvas(true);
-        	}
-        });
-
-		bOpen = (JButton) getButton(false, "", "Load data into Mapviewer", Icons.getIcon("FILEOPEN"));
-		bOpen.setMnemonic(KeyEvent.VK_O);
-
-		bClose = (JButton) getButton(false, "", "Close currrent dataset", Icons.getIcon("FILECLOSE"));
-		bClose.setMnemonic(KeyEvent.VK_W);
+		eValueSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+			public void stateChanged(javax.swing.event.ChangeEvent evt) {
+				eValueSliderStateChanged(evt);
+			}
+		});
 		
-		bExport = (JButton) getButton(false, "", "Export the display as an image", Icons.getIcon("EXPORTIMAGE"));
-		bOverview = (JToggleButton) getButton(true, "", "Toggle the overview dialog on or off", Icons.getIcon("OVERVIEW"));
+		eValueSlider.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e)
+			{
+				winMain.mainCanvas.drawBlastScore = true;
+				winMain.mainCanvas.updateCanvas(true);
+			}
+			
+			public void mouseReleased(MouseEvent e)
+			{
+				winMain.mainCanvas.drawBlastScore = false;
+				winMain.mainCanvas.updateCanvas(true);
+			}
+		});
+		
+		//for a few of the buttons we want Ctrl based keyboard shortcuts
+		//this requires some crazy configuration code, sadly
+		
+		//configure open file dialog button
+		OpenFileDialogAction openFileDialogAction = new OpenFileDialogAction();
+		bOpen = (JButton) getButton(false, "", "Load data into Mapviewer", Icons.getIcon("FILEOPEN"), openFileDialogAction);
+		KeyStroke ctrlOKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK);
+		bOpen.getInputMap(JButton.WHEN_IN_FOCUSED_WINDOW).put(ctrlOKeyStroke, "openFileDialog");
+		bOpen.getActionMap().put("openFileDialog", openFileDialogAction);
+	
+		//configure export image button
+		ExportImageAction exportImageAction = new ExportImageAction();
+		bExport = (JButton) getButton(false, "", "Export the display as an image", Icons.getIcon("EXPORTIMAGE"), exportImageAction);
+		KeyStroke ctrlEKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK);
+		bExport.getInputMap(JButton.WHEN_IN_FOCUSED_WINDOW).put(ctrlEKeyStroke, "exportImage");
+		bExport.getActionMap().put("exportImage", exportImageAction);
+		
+		//configure find features button
+		FindFeaturesAction findFeaturesAction = new FindFeaturesAction();
+		bFindFeatures = (JButton) getButton(false, "", "Find features by name", Icons.getIcon("FIND"), findFeaturesAction);
+		KeyStroke ctrlFKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK);
+		bFindFeatures.getInputMap(JButton.WHEN_IN_FOCUSED_WINDOW).put(ctrlFKeyStroke, "findFeatures");
+		bFindFeatures.getActionMap().put("findFeatures", findFeaturesAction);
+		
+		//configure find features in range button
+		FindFeaturesInRangeAction findFeaturesInRangeAction = new FindFeaturesInRangeAction();
+		bFindFeaturesinRange = (JButton) getButton(false, "", "List features in range", Icons.getIcon("RANGE"), findFeaturesInRangeAction);
+		KeyStroke ctrlRKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
+		bFindFeaturesinRange.getInputMap(JButton.WHEN_IN_FOCUSED_WINDOW).put(ctrlRKeyStroke, "findFeaturesInRange");
+		bFindFeaturesinRange.getActionMap().put("findFeaturesInRange", findFeaturesInRangeAction);
+		
+		//these buttons have no keyboard shortcuts associated with them as yet -- straightforward config
+		bOverview = (JToggleButton) getButton(true, "", "Toggle the overview dialog on or off", Icons.getIcon("OVERVIEW"), null);
 		bOverview.setSelected(Prefs.guiOverviewVisible);
-		bDistMarkers = (JToggleButton) getButton(true, "", "Toggle the distance markers on or off", Icons.getIcon("DISTANCEMARKERS"));
-		bCurves = (JToggleButton) getButton(true, "", "Toggle between straight and curved links", Icons.getIcon("CURVES"));
-		bHelp =  (JButton) getButton(false, "", "Help", Icons.getIcon("HELP"));
-		
-		bFindFeatures = (JButton) getButton(false, "", "Find features by name", Icons.getIcon("FIND"));
-		bFindFeatures.setMnemonic(KeyEvent.VK_F);
-		
-		bFindFeaturesinRange = (JButton) getButton(false, "", "List features in range", Icons.getIcon("RANGE"));
-		bFindFeaturesinRange.setMnemonic(KeyEvent.VK_R);
-		
-		bResetAll =  (JButton) getButton(false, "", "Reset display", Icons.getIcon("RESET"));
-}
-
+		bDistMarkers = (JToggleButton) getButton(true, "", "Toggle the distance markers on or off", Icons.getIcon("DISTANCEMARKERS"), null);
+		bCurves = (JToggleButton) getButton(true, "", "Toggle between straight and curved links", Icons.getIcon("CURVES"), null);
+		bHelp =  (JButton) getButton(false, "", "Help", Icons.getIcon("HELP"), null);
+		bResetAll =  (JButton) getButton(false, "", "Reset display", Icons.getIcon("RESET"), null);
+	}
+	
 	public void actionPerformed(ActionEvent e)
 	{
-		if (e.getSource() == bOpen)
-		{
-			OpenFileDialog openFileDialog = MapViewer.winMain.openFileDialog;
-			openFileDialog.setLocationRelativeTo(MapViewer.winMain);
-			openFileDialog.setVisible(true);
-			//clear the text fields, in case they had text showing previously
-			openFileDialog.openFilesPanel.getTargetfeatFileTF().setText("");
-			openFileDialog.openFilesPanel.getRefGen1FeatFileTF().setText("");
-			openFileDialog.openFilesPanel.getRefGen1HomFileTF().setText("");
-			openFileDialog.openFilesPanel.getRefGen2FeatFileTF().setText("");
-			openFileDialog.openFilesPanel.getRefGen2HomFileTF().setText("");
-			
-		}
-		
-		if (e.getSource() == bClose)
-		{
-			MapViewer.winMain.showStartPanel(true);
-			MapViewer.winMain.overviewDialog.setVisible(false);
-		}
-		
-		if (e.getSource() == bExport)
-			exportImage();
-
-		else if (e.getSource() == bOverview)
+		if (e.getSource() == bOverview)
 			toggleOverviewDialog();
 		
 		//toggles the distance markers on or off
@@ -169,76 +163,30 @@ public class ControlToolBar extends JToolBar implements ActionListener
 			}
 			MapViewer.winMain.mainCanvas.updateCanvas(true);
 		}
-
-
+		
+		
 		//toggle the link shape between straight and curved
 		else if(e.getSource() == bCurves)
 		{
-			int fps = 20;
-			int millis = 500;
 			if(bCurves.isSelected())
 			{
-				LinkShapeAnimator linkShapeAnimator = new LinkShapeAnimator(fps,millis, true);
+				//straighten the links
+				LinkShapeAnimator linkShapeAnimator = new LinkShapeAnimator(true);
 				linkShapeAnimator.start();
 			}
 			else
 			{
-				LinkShapeAnimator linkShapeAnimator = new LinkShapeAnimator(fps,millis, false);
+				//make the links curved
+				LinkShapeAnimator linkShapeAnimator = new LinkShapeAnimator(false);
 				linkShapeAnimator.start();
 			}
 		}
 		
-
-		//show the find features dialog
-		else if (e.getSource() == bFindFeatures)
-		{
-			//reset the main canvas view to all its defaults 
-			MapViewer.winMain.fatController.resetMainCanvasView();
-
-			//clear the find dialog
-			MapViewer.winMain.ffDialog.ffPanel.getFFTextArea().setText("");
-				
-			//show the find dialog
-			MapViewer.winMain.ffDialog.setLocationRelativeTo(winMain);
-			
-			//////////////////////////////FOR TESTING ONLY////////////////////////////////
-			MapViewer.winMain.ffDialog.ffPanel.getFFTextArea().setText("11_10223");
-			
-			MapViewer.winMain.ffDialog.setVisible(true);
-
-		}
-		
-		//show the features in range dialog
-		else if (e.getSource() == bFindFeaturesinRange)
-		{
-			//reset the main canvas view to all its defaults 
-			MapViewer.winMain.fatController.resetMainCanvasView();
-
-			//clear the dialog
-			FindFeaturesInRangeDialog featuresInRangeDialog = MapViewer.winMain.ffInRangeDialog; 
-			
-			featuresInRangeDialog.ffInRangePanel.getIntervalStartTextField().setText("");
-			featuresInRangeDialog.ffInRangePanel.getIntervalEndTextField().setText("");
-			featuresInRangeDialog.ffInRangePanel.getGenomeCombo().setSelectedIndex(0);
-			featuresInRangeDialog.ffInRangePanel.getChromoCombo().setSelectedIndex(0);
-						
-			////////////////////////////////THIS BIT JUST FOR EASE OF TESTING////////////////////////////////
-			//TODO: remove code used for testing only
-			featuresInRangeDialog.ffInRangePanel.getGenomeCombo().setSelectedIndex(1);
-			featuresInRangeDialog.ffInRangePanel.getChromoCombo().setSelectedIndex(2);
-			featuresInRangeDialog.ffInRangePanel.getIntervalStartTextField().setText("12");
-			featuresInRangeDialog.ffInRangePanel.getIntervalEndTextField().setText("23");
-			
-			//show the dialog
-			featuresInRangeDialog.setLocationRelativeTo(winMain);
-			featuresInRangeDialog.setVisible(true);
-		}
-
 		//reset the main canvas view and deselect all features
 		else if (e.getSource() == bResetAll)
 			MapViewer.winMain.fatController.resetMainCanvasView();
 	}
-
+	
 	private void addSeparator(boolean separator)
 	{
 		if (SystemUtils.isMacOS())
@@ -250,18 +198,18 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		else if (separator)
 			addSeparator();
 	}
-
+	
 	// Utility method to help create the buttons. Sets their text, tooltip, and
 	// icon, as well as adding actionListener, defining margings, etc.
-	private AbstractButton getButton(boolean toggle, String title, String tt, ImageIcon icon)
+	private AbstractButton getButton(boolean toggle, String title, String tt, ImageIcon icon, Action action)
 	{
 		AbstractButton button = null;
-
+		
 		if (toggle)
-			button = new JToggleButton();
+			button = new JToggleButton(action);
 		else
-			button = new JButton();
-
+			button = new JButton(action);
+		
 		button.setText(title != null ? title : "");
 		button.setToolTipText(tt);
 		button.setIcon(icon);
@@ -269,30 +217,30 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		button.setFocusable(false);
 		button.addActionListener(this);
 		button.setMargin(new Insets(2, 1, 2, 1));
-
+		
 		if (SystemUtils.isMacOS())
 		{
 			button.putClientProperty("JButton.buttonType", "bevel");
 			button.setMargin(new Insets(-2, -1, -2, -1));
 		}
-
+		
 		return button;
 	}
-
+	
 	void toggleOverviewDialog()
 	{
 		// Toggle the state
 		Prefs.guiOverviewVisible = !Prefs.guiOverviewVisible;
-
+		
 		// Then set the toolbar button and dialog to match
 		bOverview.setSelected(Prefs.guiOverviewVisible);
 		winMain.overviewDialog.setVisible(Prefs.guiOverviewVisible);
 	}
-
+	
 	private void eValueSliderStateChanged(javax.swing.event.ChangeEvent e)
 	{
 		JSlider source = (JSlider) e.getSource();
-
+		
 		//convert the value selected to the exponent of a small decimal and set this as
 		//the new BLAST threshold (which is a double)
 		int exponent = source.getValue();
@@ -302,7 +250,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 			Number score = df.parse("1.00E-" + exponent);
 			LinkDisplayManager.blastThreshold = score.doubleValue();
 			blastScoreLabel.setText("" + LinkDisplayManager.blastThreshold);
-
+			
 			winMain.mainCanvas.updateCanvas(true);
 		}
 		catch (ParseException e1)
@@ -310,53 +258,5 @@ public class ControlToolBar extends JToolBar implements ActionListener
 			e1.printStackTrace();
 		}
 	}
-
-	// Queries the user for the location on disk to save a PNG image containing
-	// the contents of the main canvas (via its back buffer).
-	private void exportImage()
-	{
-		JFileChooser fc = new JFileChooser();
-		fc.setDialogTitle("Save Image As");
-		fc.setAcceptAllFileFilterUsed(false);
-		// TODO: track current directories and offer a suitable filename
-		fc.setSelectedFile(new File("mapviewer.png"));
-
-		while (fc.showSaveDialog(winMain) == JFileChooser.APPROVE_OPTION)
-		{
-			File file = fc.getSelectedFile();
-
-			// Confirm overwrite
-			if (file.exists())
-			{
-				String msg = file + " already exists.\nContinuing will "
-					+ "overwrite this file with your new image.";
-				String[] options = new String[] { "Overwrite", "Rename", "Cancel" };
-
-				int response = TaskDialog.show(msg, MsgBox.WAR, 0, options);
-
-				if (response == 1)
-					continue;
-				else if (response == -1 || response == 2)
-					return;
-			}
-
-			try
-			{
-				ImageIO.write(winMain.mainCanvas.getImageBuffer(), "png", file);
-				TaskDialog.info("The exported image was successfully saved "
-					+ " to " + file, "Close");
-			}
-			catch (Exception exception)
-			{
-				TaskDialog.error("An internal error has prevented the image "
-					+ "from being exported correctly.\n\nError details: "
-					+ exception.getMessage(), "Close");
-			}
-
-			return;
-		}
-	}
-
-
-
+		
 }

@@ -19,7 +19,7 @@ public class Constants
 	
 	//the maximum curvature coefficient for the links
 	//this determines the shape of the curve, if any
-	public static final float MAX_CURVATURE_COEFF = 0.3f;
+	public static final float MAX_CURVATURE_COEFF = 0.4f;
 	
 	//example data file paths	
 	public static final String exampleTargetData =  "data/barleyExampleData.txt";

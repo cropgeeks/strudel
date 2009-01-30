@@ -145,7 +145,7 @@ public class CanvasZoomHandler
 		// the new total Y extent of the genome in pixels
 		int finalTotalY =  mainCanvas.initialChromoHeight*selectedSet.numMaps + combinedSpacers;
 
-		ClickZoomAnimator clickZoomAnimator = new ClickZoomAnimator(fps, millis, selectedSet.getVisibleMaps().get(0),
+		ClickZoomAnimator clickZoomAnimator = new ClickZoomAnimator(fps, millis, selectedSet.gMaps.get(0),
 						mainCanvas, finalZoomFactor, finalTotalY, finalChromoHeight, this);
 		clickZoomAnimator.start();
 	}

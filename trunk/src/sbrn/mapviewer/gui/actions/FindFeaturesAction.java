@@ -9,7 +9,6 @@ import sbrn.mapviewer.*;
 public class FindFeaturesAction extends AbstractAction
 {
 
-	@Override
 	public void actionPerformed(ActionEvent e)
 	{
 		//reset the main canvas view to all its defaults 

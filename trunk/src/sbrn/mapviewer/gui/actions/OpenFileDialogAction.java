@@ -15,7 +15,6 @@ public class OpenFileDialogAction extends AbstractAction
 		super("openFileDialog");
 	}
 	
-	@Override
 	public void actionPerformed(ActionEvent e)
 	{
 		MapViewer.logger.fine("action event triggered -- opening file");

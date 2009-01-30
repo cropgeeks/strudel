@@ -12,7 +12,6 @@ import scri.commons.gui.*;
 public class ExportImageAction extends AbstractAction
 {
 
-	@Override
 	public void actionPerformed(ActionEvent e)
 	{
 		JFileChooser fc = new JFileChooser();

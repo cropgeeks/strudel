@@ -8,7 +8,7 @@ public class LinkShapeAnimator extends Thread
 	
 	//frame rate per seconds
 	int fps = 20;
-	int millis = 500;
+	int millis = 300;
 	boolean straighten;
 	
 	public LinkShapeAnimator(boolean straighten)

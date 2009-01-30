@@ -137,7 +137,7 @@ public class MainCanvas extends JPanel
 				{
 					if(drawDistanceMarkers)
 						gChromoMap.drawDistanceMarkers(g);
-//					gChromoMap.drawMouseOverFeatures(g);
+					gChromoMap.drawMouseOverFeatures(g);
 					gChromoMap.drawHighlightOutline(g);
 				}
 			}
@@ -362,39 +362,12 @@ public class MainCanvas extends JPanel
 		g2.setColor(Colors.chromosomeIndexColour);
 		
 		// decide where to place the label on y
-		Vector<GChromoMap> visibleMaps = gMapSet.getVisibleMaps();
-		int selectedIndex = visibleMaps.indexOf(gChromoMap);
 		int labelY = 0;	
 		//position of index with this var is in the center of the chromosome regardless of chromo position
 		int chromoCenterPos = gChromoMap.y + Math.round(gChromoMap.height / 2.0f) + (fontSize/2);
-		//position of index with this var is in the center of the canvas at all times
-		int canvasCenterPos = Math.round(getHeight() / 2.0f) + (fontSize/2);
-			
-		//if there is only a single map on the canvas  and it is fully showing we draw the 
-		//index in the middle of the chromo on y
-		if (visibleMaps.size() == 1 && gChromoMap.isFullyShowingOnCanvas)
-		{
-			labelY = chromoCenterPos;
-		}
-		//if there is only a single map on the canvas  and it is NOT fully showing we draw the 
-		//index in the middle of the CANVAS on y
-		else if (visibleMaps.size() == 1 && !gChromoMap.isFullyShowingOnCanvas)
-		{
-			labelY = canvasCenterPos;
-		}
-		//if there are two maps visible we draw the indices near the top and bottom
-		else if (visibleMaps.size() == 2)
-		{
-			if (selectedIndex == 0)
-				labelY = Math.round(0.1f * getHeight());
-			else if (selectedIndex == 1)
-				labelY = Math.round(0.9f * getHeight());
-		}
-		//more than two maps visible -- draw the index in the center of each chromosome
-		else
-		{
-			labelY = chromoCenterPos;
-		}
+
+		//draw the index in the center of each chromosome
+		labelY = chromoCenterPos;
 		
 		//turn text antialiasing on
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);

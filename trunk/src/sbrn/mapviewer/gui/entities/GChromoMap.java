@@ -102,9 +102,11 @@ public class GChromoMap
 	
 	// if true, paint a rectangle to indicate the fact that we are panning over a region we want to select for zooming in to
 	public boolean drawSelectionRect = false;
-//	public Rectangle selectionRect = new Rectangle();
 	//these are the relevant coordinates for this
 	public float selectionRectTopY, selectionRectBottomY, chromoHeightOnSelection;	
+	//and the relative coordinates that correspond to the positions on the screen
+	public float relativeTopY;
+	public float relativeBottomY;
 	
 	
 	// ============================c'tors==================================
@@ -504,14 +506,36 @@ public class GChromoMap
 				
 				// now set the y position of the label
 				labelY = featureY + (int) offset;
-				
-				// next decide where to place the label on x			
+
+				// next decide where to place the label on x					
+				//determine whether the marker should go on the left or right
+				boolean markersRight = false;
+				int mapSetIndex = MapViewer.winMain.dataContainer.gMapSetList.indexOf(owningSet);
+				//if this is reference mapset 2 we want the label on the right
+				if((MapViewer.winMain.dataContainer.gMapSetList.size() == 3 && mapSetIndex == 2) || (MapViewer.winMain.dataContainer.gMapSetList.size() == 2 && mapSetIndex == 1))
+					markersRight = true;
+
 				int labelSpacer = 60; // the amount by which we want to move the label away from the chromosome (in pixels)
-				int labelX = x - stringWidth - labelSpacer; // this is where the label is drawn from
-				int lineStartX = x; // this is where the line to the label is drawn from
 				int labelGap = 3; // the gap between the label and the line
-				int lineEndX = lineStartX - labelSpacer + labelGap; // the label connects to the line here
 				
+				//by default the labels go on the left
+				int labelX = x - stringWidth - labelSpacer; // this is where the label is drawn from
+				int lineStartX = x; // this is where the line to the label is drawn from				
+				int lineEndX = lineStartX - labelSpacer + labelGap; // the label connects to the line here
+							
+				// draw a line for the marker on the chromosome itself
+				//first set the colour accordingly
+				g2.setColor(Colors.highlightedFeatureColour);
+				g2.drawLine(lineStartX, featureY, lineStartX + width - 1, featureY);
+				
+				// labels only go on the right if it is the right hand genome (reference genome 1 or 2)
+				if (markersRight)
+				{				
+					lineStartX = x + width;		
+					labelX = lineStartX + labelSpacer + labelGap; 
+					lineEndX = labelX - labelGap;
+				}
+
 				// set the colour to white
 				g2.setColor(Colors.featureLabelColour);
 				
@@ -520,11 +544,7 @@ public class GChromoMap
 				
 				// draw a line from the marker to the label
 				g2.drawLine(lineStartX, featureY, lineEndX, labelY - fontHeight / 2);
-				
-				// draw a line for the marker on the chromosome itself
-				//first set the colour accordingly
-				g2.setColor(Colors.highlightedFeatureColour);
-				g2.drawLine(lineStartX, featureY, lineStartX + width - 1, featureY);
+
 			}
 		}
 	}
@@ -646,13 +666,16 @@ public class GChromoMap
 	private void drawSelectionRectangle(Graphics2D g2)
 	{		
 		//convert the absolute values of the y coords of the selection rectangle to relative ones (relative to the chromo) 
-		float relativeTopY = (selectionRectTopY / chromoHeightOnSelection) * chromoMap.getStop();
-		float relativeBottomY = (selectionRectBottomY / chromoHeightOnSelection) * chromoMap.getStop();
+		relativeTopY = (selectionRectTopY / chromoHeightOnSelection) * chromoMap.getStop();
+		relativeBottomY = (selectionRectBottomY / chromoHeightOnSelection) * chromoMap.getStop();
+		
+		MapViewer.logger.fine("relativeTopY = " + relativeTopY);
+		MapViewer.logger.fine("relativeBottomY = " + relativeBottomY);
 
 		//now we need to convert them back to absolute ones that take into account the currrent height of the chromosome
 		//this is so we can zoom and still show the rectangle which then gets resized appropriately
-		int start = (int) ((owningSet.chromoHeight / chromoMap.getStop()) * relativeTopY) ;
-		int end =  (int) ((owningSet.chromoHeight / chromoMap.getStop()) * relativeBottomY);
+		int start = Math.round((owningSet.chromoHeight / chromoMap.getStop()) * relativeTopY) ;
+		int end =  Math.round((owningSet.chromoHeight / chromoMap.getStop()) * relativeBottomY);
 		int rectHeight = end - start;
 
 		//width and x -- always the same

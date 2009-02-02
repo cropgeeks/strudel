@@ -6,6 +6,7 @@ import javax.swing.*;
 
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.dialog.*;
+import sbrn.mapviewer.gui.components.*;
 
 public class OpenFileDialogAction extends AbstractAction
 {
@@ -19,9 +20,11 @@ public class OpenFileDialogAction extends AbstractAction
 	{
 		MapViewer.logger.fine("action event triggered -- opening file");
 		
+		//open the file dialog
 		OpenFileDialog openFileDialog = MapViewer.winMain.openFileDialog;
 		openFileDialog.setLocationRelativeTo(MapViewer.winMain);
 		openFileDialog.setVisible(true);
+		
 		//clear the text fields, in case they had text showing previously
 		openFileDialog.openFilesPanel.getTargetfeatFileTF().setText("");
 		openFileDialog.openFilesPanel.getRefGen1FeatFileTF().setText("");

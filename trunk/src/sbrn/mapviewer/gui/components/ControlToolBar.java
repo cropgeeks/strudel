@@ -2,16 +2,12 @@ package sbrn.mapviewer.gui.components;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
 import java.text.*;
-import javax.imageio.*;
 import javax.swing.*;
-
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.actions.*;
 import sbrn.mapviewer.gui.animators.*;
-import sbrn.mapviewer.gui.dialog.*;
 import sbrn.mapviewer.gui.handlers.*;
 import scri.commons.gui.*;
 
@@ -29,7 +25,8 @@ public class ControlToolBar extends JToolBar implements ActionListener
 	public JButton bFindFeaturesinRange;
 	private JButton bResetAll;
 	private JToggleButton bDistMarkers;
-	private JToggleButton bCurves;
+	public JButton bCurves;
+	public int currentLinkShapeType = 1;
 	
 	
 	ControlToolBar(WinMain winMain)
@@ -140,7 +137,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		bOverview = (JToggleButton) getButton(true, "", "Toggle the overview dialog on or off", Icons.getIcon("OVERVIEW"), null);
 		bOverview.setSelected(Prefs.guiOverviewVisible);
 		bDistMarkers = (JToggleButton) getButton(true, "", "Toggle the distance markers on or off", Icons.getIcon("DISTANCEMARKERS"), null);
-		bCurves = (JToggleButton) getButton(true, "", "Toggle between straight and curved links", Icons.getIcon("CURVES"), null);
+		bCurves = (JButton) getButton(false, "", "Cycle through straight, angled and curved links", Icons.getIcon("CURVES"), null);
 		bHelp =  (JButton) getButton(false, "", "Help", Icons.getIcon("HELP"), null);
 		bResetAll =  (JButton) getButton(false, "", "Reset display", Icons.getIcon("RESET"), null);
 	}
@@ -165,21 +162,18 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		}
 		
 		
-		//toggle the link shape between straight and curved
+		//toggle the link shape between straight, angled and curved
 		else if(e.getSource() == bCurves)
-		{
-			if(bCurves.isSelected())
-			{
-				//straighten the links
-				LinkShapeAnimator linkShapeAnimator = new LinkShapeAnimator(true);
-				linkShapeAnimator.start();
-			}
-			else
-			{
-				//make the links curved
-				LinkShapeAnimator linkShapeAnimator = new LinkShapeAnimator(false);
-				linkShapeAnimator.start();
-			}
+		{		
+			//increment the currentLinkShapeType held by the tool bar by one
+			MapViewer.winMain.toolbar.currentLinkShapeType ++;
+			
+			//reset the index of the current link shape type back to 1 if it is greater than the max number so we can keep cycling through the options
+			if(currentLinkShapeType > Constants.NUM_LINKSHAPE_TYPES)
+				currentLinkShapeType = 1;
+
+			LinkShapeAnimator linkShapeAnimator = new LinkShapeAnimator(currentLinkShapeType);
+			linkShapeAnimator.start();	
 		}
 		
 		//reset the main canvas view and deselect all features

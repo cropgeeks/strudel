@@ -7,26 +7,47 @@ public class LinkShapeAnimator extends Thread
 {
 	
 	//frame rate per seconds
-	int fps = 20;
+	int fps = 25;
 	int millis = 300;
 	boolean straighten;
+	int linkType;
 	
-	public LinkShapeAnimator(boolean straighten)
+	public LinkShapeAnimator(int linkType)
 	{
-		this.straighten = straighten;
+		this.linkType = linkType;
 	}
 
 	
 	public void run()
 	{
+		//first of all disable the button that triggered this thread so that the user cannot start multiple instances of this
+		MapViewer.winMain.toolbar.bCurves.setEnabled(false);
+		
 		//turn antialiasing off
 		MapViewer.winMain.mainCanvas.antiAlias = false;
 
 		//the total number of frames we need to render
 		int totalFrames = Math.round(fps * (millis / 1000.0f));
 		
+		float curvatureCoefficient;
+		//draw straight links
+		if(linkType == Constants.LINKTYPE_STRAIGHT)
+		{
+			curvatureCoefficient = Constants.MAX_CURVEDLINK_COEFF;
+		}
+		//draw angled links
+		else  if(linkType == Constants.LINKTYPE_ANGLED)
+		{
+			curvatureCoefficient = Constants.MAX_ANGLEDLINK_COEFF;
+		}
+		//draw curved links
+		else
+		{
+			curvatureCoefficient = Constants.MAX_CURVEDLINK_COEFF - Constants.MAX_ANGLEDLINK_COEFF;
+		}
+
 		//work out the curvature coefficient increment over the range we need to cover
-		float coefficientIncrement = Constants.MAX_CURVATURE_COEFF / totalFrames;
+		float coefficientIncrement = curvatureCoefficient / totalFrames;
 
 		// now loop for the number of total frames, zooming in by a bit each time
 		for (int i = 0; i < totalFrames; i++)
@@ -39,21 +60,49 @@ public class LinkShapeAnimator extends Thread
 			catch (InterruptedException e)
 			{
 			}
-			
-			//adjust the curvature coefficient by its increment
-			if(straighten)
+
+			//straight links
+			if(linkType == Constants.LINKTYPE_STRAIGHT)
 			{
-				MapViewer.winMain.mainCanvas.linkDisplayManager.linkCurvatureCoeff -= coefficientIncrement;
+				MapViewer.winMain.mainCanvas.linkDisplayManager.linkShapeCoeff -= coefficientIncrement;
+				
+				//as a precaution, make sure that the last iteration of this loop will set the value of the link shape coefficient to the
+				// minimum so that the lines are definitely straight
+				//this is so we don't ever exceed the value in either direction
+				if(i == totalFrames -1)
+					MapViewer.winMain.mainCanvas.linkDisplayManager.linkShapeCoeff = 0;
 			}
+			//angled links
+			else  if(linkType == Constants.LINKTYPE_ANGLED)
+			{
+				MapViewer.winMain.mainCanvas.linkDisplayManager.linkShapeCoeff += coefficientIncrement;
+				
+				//as a precaution, make sure that the last iteration of this loop will set the value of the link shape coefficient to the
+				// maximum so that the lines are definitely angled
+				//this is so we don't ever exceed the value in either direction
+				if(i == totalFrames -1)
+					MapViewer.winMain.mainCanvas.linkDisplayManager.linkShapeCoeff = curvatureCoefficient;
+			}
+			//curved links
 			else
 			{
-				MapViewer.winMain.mainCanvas.linkDisplayManager.linkCurvatureCoeff += coefficientIncrement;
+				MapViewer.winMain.mainCanvas.linkDisplayManager.linkShapeCoeff += coefficientIncrement;
+				
+				//as a precaution, make sure that the last iteration of this loop will set the value of the link shape coefficient to the
+				// maximum so that the lines are definitely curved
+				//this is so we don't ever exceed the value in either direction
+				if(i == totalFrames -1)
+					MapViewer.winMain.mainCanvas.linkDisplayManager.linkShapeCoeff = Constants.MAX_CURVEDLINK_COEFF;
 			}
-			
+
 			//do the repaint
 			MapViewer.winMain.mainCanvas.updateCanvas(true);		
 		}
 		
+		//re-enable the button that triggered this thread
+		MapViewer.winMain.toolbar.bCurves.setEnabled(true);
+		
+		//repaint with antialiasing on
 		AntiAliasRepaintThread antiAliasRepaintThread = new AntiAliasRepaintThread();
 		antiAliasRepaintThread.start();
 	}

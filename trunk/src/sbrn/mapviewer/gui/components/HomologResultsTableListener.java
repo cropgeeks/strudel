@@ -15,7 +15,7 @@ import scri.commons.gui.*;
 
 public class HomologResultsTableListener implements ListSelectionListener, MouseMotionListener, MouseListener
 {
-
+	
 	HomologResultsTable homologResultsTable;
 	Point point = new Point();	
 	
@@ -24,62 +24,21 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 		super();
 		this.homologResultsTable = homologResultsTable;
 	}
-
+	
 	// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	public void valueChanged(ListSelectionEvent e)
 	{
-		if (e.getValueIsAdjusting())
-		{
-			return;
-		}
-		
-		if (!homologResultsTable.isFilterEvent)
-		{
-			FoundFeatureTableModel foundFeatureTableModel = (FoundFeatureTableModel) homologResultsTable.getModel();
-			// get the index of the selected row but check for changes due to filtering
-			int modelRow = -1;
-			if (homologResultsTable.getSelectedRow() >= 0)
-			{
-				modelRow = homologResultsTable.convertRowIndexToModel(homologResultsTable.getSelectedRow());
-			}
-			else
-			{
-				return;
-			}
-			if (foundFeatureTableModel.getColumnCount() > 0)
-			{
-				// get the feature name
-				int feature1NameColumnIndex = foundFeatureTableModel.columnNameList.indexOf(foundFeatureTableModel.targetNameColumnLabel);
-				int feature2NameColumnIndex = foundFeatureTableModel.columnNameList.indexOf(foundFeatureTableModel.homologColumnLabel);
-				String featureName = (String) foundFeatureTableModel.getValueAt(modelRow,
-								feature1NameColumnIndex);
-				// if this fails we may have a feature in the table where there is no target value but only a homolog
-				// this happens when we have inserted additional loci from a reference genome into the tabel that have no known equivalent in the target genome
-				// in that case try the other feature's name
-				if (featureName == null)
-					featureName = (String) foundFeatureTableModel.getValueAt(modelRow,
-									feature2NameColumnIndex);
-				
-				// retrieve the Feature that corresponds to this name
-				Feature f = Utils.getFeatureByName(featureName);
-				// highlight it on the canvas
-				MapViewer.winMain.fatController.highlightRequestedFeature(f);
-				
-				// which map and mapset are we dealing with here
-				GMapSet owningSet = f.getOwningMap().getGChromoMap().owningSet;
-				GChromoMap gChromoMap = f.getOwningMap().getGChromoMap();
-				
-				// we have changed map
-				// zoom into that chromosome so it fills the screen
-				if (owningSet.zoomFactor < owningSet.singleChromoViewZoomFactor || !gChromoMap.isShowingOnCanvas)
+				if (e.getValueIsAdjusting())
 				{
-					// zoom into the map
-					MapViewer.winMain.mainCanvas.zoomHandler.processClickZoomRequest(gChromoMap);
+					return;
 				}
-			}
-		}
-		homologResultsTable.isFilterEvent = false;
+				
+				if (!homologResultsTable.isFilterEvent)
+				{
+					highlightFeature();
+				}
+				homologResultsTable.isFilterEvent = false;
 	}
 	
 	public void mouseClicked(MouseEvent e)
@@ -95,6 +54,8 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 		{
 			launchBrowser(row, col);
 		}
+		
+		highlightFeature();
 		
 	}
 	
@@ -200,6 +161,55 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 		}
 		
 		homologResultsTable.isFilterEvent = false;
+	}
+	
+	
+	// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	private void highlightFeature()
+	{	
+		FoundFeatureTableModel foundFeatureTableModel = (FoundFeatureTableModel) homologResultsTable.getModel();
+		// get the index of the selected row but check for changes due to filtering
+		int modelRow = -1;
+		if (homologResultsTable.getSelectedRow() >= 0)
+		{
+			modelRow = homologResultsTable.convertRowIndexToModel(homologResultsTable.getSelectedRow());
+		}
+		else
+		{
+			return;
+		}
+		if (foundFeatureTableModel.getColumnCount() > 0)
+		{
+			// get the feature name
+			int feature1NameColumnIndex = foundFeatureTableModel.columnNameList.indexOf(foundFeatureTableModel.targetNameColumnLabel);
+			int feature2NameColumnIndex = foundFeatureTableModel.columnNameList.indexOf(foundFeatureTableModel.homologColumnLabel);
+			String featureName = (String) foundFeatureTableModel.getValueAt(modelRow,
+							feature1NameColumnIndex);
+			// if this fails we may have a feature in the table where there is no target value but only a homolog
+			// this happens when we have inserted additional loci from a reference genome into the tabel that have no known equivalent in the target genome
+			// in that case try the other feature's name
+			if (featureName == null)
+				featureName = (String) foundFeatureTableModel.getValueAt(modelRow,
+								feature2NameColumnIndex);
+			
+			// retrieve the Feature that corresponds to this name
+			Feature f = Utils.getFeatureByName(featureName);
+			// highlight it on the canvas
+			MapViewer.winMain.fatController.highlightRequestedFeature(f);
+			
+			// which map and mapset are we dealing with here
+			GMapSet owningSet = f.getOwningMap().getGChromoMap().owningSet;
+			GChromoMap gChromoMap = f.getOwningMap().getGChromoMap();
+			
+			// we have changed map
+			// zoom into that chromosome so it fills the screen
+			if (owningSet.zoomFactor < owningSet.singleChromoViewZoomFactor || !gChromoMap.isShowingOnCanvas)
+			{
+				// zoom into the map
+				MapViewer.winMain.mainCanvas.zoomHandler.processClickZoomRequest(gChromoMap);
+			}
+		}
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

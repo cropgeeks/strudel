@@ -28,11 +28,8 @@ public class LinkDisplayManager
 	
 	GMapSet targetGMapSet = MapViewer.winMain.dataContainer.gMapSetList.get(MapViewer.winMain.dataContainer.targetGMapSetIndex);
 	
-	//do we want our links straight or curved
-	public boolean linkShapeStraight = false;
-	
 	//degree of link curvature
-	public float linkCurvatureCoeff = Constants.MAX_CURVATURE_COEFF;
+	public float linkShapeCoeff = Constants.MAX_CURVEDLINK_COEFF;
 	
 	// CubicCurve2D.Double -- this object can be reused for drawing all curved lines
 	CubicCurve2D c = new CubicCurve2D.Double();
@@ -530,16 +527,31 @@ public class LinkDisplayManager
 		double ctrly1 = startY;
 		double ctrly2 = endY;
 		
-		//if the linkCurvatureCoeff is greater than 0 we make this line into a curve by moving the control points towards the centre	
-		if(linkCurvatureCoeff > 0)
+		//this is what we do for straight or curved lines
+		if(MapViewer.winMain.toolbar.currentLinkShapeType == Constants.LINKTYPE_CURVED || 
+						MapViewer.winMain.toolbar.currentLinkShapeType == Constants.LINKTYPE_STRAIGHT)
 		{
-			ctrlx1 = startX + ((endX - startX) * linkCurvatureCoeff);		
-			ctrlx2 = endX - ((endX - startX) * (linkCurvatureCoeff*2));
-		}
+			//if the linkCurvatureCoeff is greater than 0 we make this line into a curve by moving the control points towards the centre	
+			if (linkShapeCoeff > 0)
+			{
+				ctrlx1 = startX + ((endX - startX) * linkShapeCoeff);
+				ctrlx2 = endX - ((endX - startX) * (linkShapeCoeff * 2));
+			}
 
-		// draw CubicCurve2D.Double with set coordinates
-		c.setCurve(startX, startY, ctrlx1, ctrly1, ctrlx2, ctrly2, endX, endY);
-		g2.draw(c);
+			// draw CubicCurve2D.Double with set coordinates
+			c.setCurve(startX, startY, ctrlx1, ctrly1, ctrlx2, ctrly2, endX, endY);
+			g2.draw(c);
+		}
+		//this is what we do for angled lines
+		else if(MapViewer.winMain.toolbar.currentLinkShapeType == Constants.LINKTYPE_ANGLED)
+		{
+			ctrlx1 = startX + ((endX - startX) * linkShapeCoeff);
+			ctrlx2 = endX - ((endX - startX) * linkShapeCoeff);
+			
+			g2.drawLine(startX, startY, (int)ctrlx1, (int)ctrly1);
+			g2.drawLine((int)ctrlx1, (int)ctrly1, (int)ctrlx2, (int)ctrly2);
+			g2.drawLine((int)ctrlx2, (int)ctrly2, endX, endY);			
+		}
 	}
 	
 	

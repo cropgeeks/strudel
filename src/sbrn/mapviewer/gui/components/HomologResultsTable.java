@@ -39,7 +39,7 @@ public class HomologResultsTable extends JTable
 	
 	public TableCellRenderer getCellRenderer(int row, int column)
 	{
-		if (column == 3)
+		if (column == ((FoundFeatureTableModel)getModel()).findColumn(FoundFeatureTableModel.homologColumnLabel))
 		{
 			return hyperlinkCellRenderer;
 		}
@@ -53,10 +53,6 @@ public class HomologResultsTable extends JTable
 	{
 		//extract the list of features we need to insert 
 		LinkedList<Link> newFeatures = new LinkedList<Link>();
-		
-		//first convert the canvas coords to feature positions on the chromomap
-		int chromoIntervalStartPos  = Math.round(((canvasIntervalTopY  - selectedMap.y) / selectedMap.height) * selectedMap.chromoMap.getStop());
-		int chromoIntervalEndPos  = Math.round(((canvasIntervalBottomY  - selectedMap.y) / selectedMap.height) * selectedMap.chromoMap.getStop());
 
 		//the table's model
 		FoundFeatureTableModel foundFeatureTableModel = (FoundFeatureTableModel)getModel();
@@ -64,7 +60,7 @@ public class HomologResultsTable extends JTable
 		//now find all features on the map that occur in the interval between these two coords
 		for (Feature f : selectedMap.chromoMap.getFeatureList())
 		{
-			if(f.getStart() > chromoIntervalStartPos && f.getStart() < chromoIntervalEndPos)
+			if(f.getStart() > selectedMap.relativeTopY && f.getStart() < selectedMap.relativeBottomY)
 			{
 				boolean featureExists = false;
 				//first check this feature is not already contained in the table

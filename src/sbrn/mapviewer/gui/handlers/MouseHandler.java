@@ -1,17 +1,12 @@
 package sbrn.mapviewer.gui.handlers;
 
 import java.awt.event.*;
-import java.util.*;
-
 import javax.swing.*;
 import javax.swing.event.*;
-
 import sbrn.mapviewer.*;
-import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.components.*;
 import sbrn.mapviewer.gui.entities.*;
-
 import scri.commons.gui.*;
 
 public class MouseHandler implements MouseInputListener, MouseWheelListener
@@ -121,24 +116,9 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			{
 				winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(e.getX(), e.getY(), false);
 			}
-			//otherwise -- if we clicked on the background -- clear all links displayed
+			//otherwise -- if we clicked on the background -- do nothing, not even a repaint
 			else
-			{
-				for(GMapSet gMapSet : MapViewer.winMain.dataContainer.gMapSetList)
-				{
-					//reset selected maps
-					gMapSet.selectedMaps.clear();
-					
-					//for all maps within mapset
-					for(GChromoMap gMap: gMapSet.gMaps)
-					{			
-						//clear the outline
-						gMap.drawHighlightOutline = false;
-					}
-				}
-				winMain.mainCanvas.drawLinks = false;
-				winMain.mainCanvas.updateCanvas(true);
-			}
+				return;
 		}
 		//CTRL+click on a chromosome means display all links between this and all other clicked chromos
 		else if (isMetaClick(e))

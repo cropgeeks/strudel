@@ -98,6 +98,7 @@ public class GChromoMap
 	public boolean highlightChromomapRegion = false;
 	public float highlightedRegionStart, highlightedRegionEnd;	
 	
+	//the zoom factor above which we want to display distance markers on the chromosomes
 	float distanceMarkerZoomThreshold;
 	
 	// if true, paint a rectangle to indicate the fact that we are panning over a region we want to select for zooming in to

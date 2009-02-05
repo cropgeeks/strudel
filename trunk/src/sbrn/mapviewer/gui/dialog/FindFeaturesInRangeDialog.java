@@ -66,8 +66,8 @@ public class FindFeaturesInRangeDialog extends JDialog implements ActionListener
 			//hide the find dialog
 			setVisible(false);
 			//clear the found features
-			MapViewer.winMain.fatController.foundFeatures.clear();
-			MapViewer.winMain.fatController.foundFeatureHomologs.clear();
+			MapViewer.winMain.fatController.highlightFeature = null;
+			MapViewer.winMain.fatController.highlightFeatureHomolog = null;
 		}
 	}
 	

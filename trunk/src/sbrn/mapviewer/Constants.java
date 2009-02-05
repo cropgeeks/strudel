@@ -18,7 +18,7 @@ public class Constants
 	//the maximum curvature coefficient for the links
 	//this determines the shape of the curve, if any
 	public static final float MAX_CURVEDLINK_COEFF = 0.3f;
-	public static final float MAX_ANGLEDLINK_COEFF = 0.1f;
+	public static final float MAX_ANGLEDLINK_COEFF = 0.15f;
 	public static final int LINKTYPE_CURVED = 1;
 	public static final int LINKTYPE_STRAIGHT = 2;
 	public static final int LINKTYPE_ANGLED = 3;

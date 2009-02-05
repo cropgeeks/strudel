@@ -33,7 +33,7 @@ public class LinkShapeAnimator extends Thread
 		//draw straight links
 		if(linkType == Constants.LINKTYPE_STRAIGHT)
 		{
-			curvatureCoefficient = Constants.MAX_CURVEDLINK_COEFF;
+				curvatureCoefficient = 0;
 		}
 		//draw angled links
 		else  if(linkType == Constants.LINKTYPE_ANGLED)
@@ -43,11 +43,16 @@ public class LinkShapeAnimator extends Thread
 		//draw curved links
 		else
 		{
-			curvatureCoefficient = Constants.MAX_CURVEDLINK_COEFF - Constants.MAX_ANGLEDLINK_COEFF;
+			curvatureCoefficient = Constants.MAX_CURVEDLINK_COEFF;
 		}
 
 		//work out the curvature coefficient increment over the range we need to cover
-		float coefficientIncrement = curvatureCoefficient / totalFrames;
+		float differential;
+		if(MapViewer.winMain.mainCanvas.linkDisplayManager.linkShapeCoeff > curvatureCoefficient)
+			differential = MapViewer.winMain.mainCanvas.linkDisplayManager.linkShapeCoeff - curvatureCoefficient;
+		else
+			differential = curvatureCoefficient - MapViewer.winMain.mainCanvas.linkDisplayManager.linkShapeCoeff;
+		float coefficientIncrement = differential / totalFrames;
 
 		// now loop for the number of total frames, zooming in by a bit each time
 		for (int i = 0; i < totalFrames; i++)

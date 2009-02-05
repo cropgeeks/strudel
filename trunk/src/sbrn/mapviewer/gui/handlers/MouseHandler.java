@@ -116,9 +116,24 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			{
 				winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(e.getX(), e.getY(), false);
 			}
-			//otherwise -- if we clicked on the background -- do nothing, not even a repaint
+			//otherwise -- if we clicked on the background -- clear all links displayed
 			else
-				return;
+			{
+				for(GMapSet gMapSet : MapViewer.winMain.dataContainer.gMapSetList)
+				{
+					//reset selected maps
+					gMapSet.selectedMaps.clear();
+					
+					//for all maps within mapset
+					for(GChromoMap gMap: gMapSet.gMaps)
+					{			
+						//clear the outline
+						gMap.drawHighlightOutline = false;
+					}
+				}
+				winMain.mainCanvas.drawLinks = false;
+				winMain.mainCanvas.updateCanvas(true);
+			}
 		}
 		//CTRL+click on a chromosome means display all links between this and all other clicked chromos
 		else if (isMetaClick(e))
@@ -316,7 +331,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		//turn antialiasing off for faster scrolling
 		winMain.mainCanvas.antiAlias = false;
 		
-		// figure out whether the user is zooming the left or right genome
+		// figure out which genome we are moving
 		int index = Utils.getSelectedSet(e);
 		GMapSet selectedSet = MapViewer.winMain.dataContainer.gMapSetList.get(index);
 		
@@ -332,12 +347,13 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			differential = (selectedSet.totalY / selectedSet.zoomFactor) * 0.3f;
 		}
 		
+		//this moves the genome center point up and down
 		int newCenterPoint = (int) (selectedSet.centerPoint + differential);
 		winMain.mainCanvas.moveGenomeViewPort(selectedSet, newCenterPoint);
 		
-		//turn antialiasing back on and repaint
-		winMain.mainCanvas.antiAlias = true;
-		winMain.mainCanvas.updateCanvas(true);
+		//turn antialiasing on and repaint
+		AntiAliasRepaintThread antiAliasRepaintThread = new AntiAliasRepaintThread();
+		antiAliasRepaintThread.start();
 		
 	}
 	

@@ -57,7 +57,7 @@ public class MainCanvas extends JPanel
 	boolean redraw = true;
 	
 	//true if we want to display individual features the user has searched for with the find dialog
-	public boolean drawFoundFeatures = false;
+	public boolean drawHighlightFeatures = false;
 	
 	//true if we want to display features within a certain range the user has searched for with the find dialog
 	public boolean drawFoundFeaturesInRange = false;
@@ -311,9 +311,10 @@ public class MainCanvas extends JPanel
 		}
 		//we also want to check whether there are any links to display that are to be highlighted after a name based search for
 		//features and links originating from them
-		if (drawFoundFeatures)
+		if (drawHighlightFeatures)
 		{
-			linkDisplayManager.drawSingleHighlightedLink(g2);
+			linkDisplayManager.drawHighlightedLink(g2, winMain.fatController.highlightFeature, winMain.fatController.highlightFeatureHomolog, true);
+			LabelDisplayManager.drawHighlightedFeatureLabels(g2, winMain.fatController.highlightFeature, winMain.fatController.highlightFeatureHomolog);
 		}
 		//this draws labels of features in a contiguous range on a chromosome
 		//need to do this in this order so things are drawn on top of each other in the right sequence

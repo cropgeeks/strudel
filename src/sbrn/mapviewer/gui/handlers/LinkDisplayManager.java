@@ -119,7 +119,7 @@ public class LinkDisplayManager
 		{			
 			try
 			{
-			
+				
 				// for each map in the selectedMaps vector of the target genome
 				for (int i = 0; i < targetGMapSet.selectedMaps.size(); i++)
 				{
@@ -241,118 +241,72 @@ public class LinkDisplayManager
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
 	
-	private void drawHighlightedLink(Graphics2D g2, Link link, Color linkColour, boolean thickerLine)
+	public void drawHighlightedLink(Graphics2D g2, Feature f1, Feature f2, boolean strongEmphasis)
 	{
 		//only do this if we have reference genomes -- otherwise there are no links to deal with
 		if(MapViewer.winMain.dataContainer.gMapSetList.size() > 1)
-		{			
+		{					
+			//get the owning GChromoMap objects associated with this link
+			GChromoMap gMap1 = f1.getOwningMap().getGChromoMap();
+			GChromoMap gMap2 = f2.getOwningMap().getGChromoMap();
 			
-			// we only want to draw this link if it has a BLAST e-value smaller than the cut-off currently selected by the user
-			if (link.getBlastScore() <= blastThreshold)
+			//get the respective GMapSets they belong to and figure out whether they are target or reference gmapsets
+			GMapSet referenceGMapSet, targetGMapSet;
+			if(gMap1.owningSet.isTargetGenome)
 			{
-				//get the features of this link
-				Feature f1 = link.getFeature1();
-				Feature f2 = link.getFeature2();
-				
-				//get the owning GChromoMap objects associated with this link
-				GChromoMap gMap1 = f1.getOwningMap().getGChromoMap();
-				GChromoMap gMap2 = f2.getOwningMap().getGChromoMap();
-				
-				//get the respective GMapSets they belong to and figure out whether they are target or reference gmapsets
-				GMapSet referenceGMapSet, targetGMapSet;
-				if(gMap1.owningSet.isTargetGenome)
-				{
-					targetGMapSet = gMap1.owningSet;
-					referenceGMapSet = gMap2.owningSet;
-				}
-				else
-				{
-					targetGMapSet = gMap2.owningSet;
-					referenceGMapSet = gMap1.owningSet;
-				}
-				
-				//work out the x and y coords for drawing the link
-				int targetChromoX = -1;
-				int referenceChromoX = -1;
-				
-				// if we have only one reference genome we want the targetChromoX to be that chromo'sx plus its width and
-				// the referenceChromoX to be the reference chromo's x
-				if (MapViewer.winMain.dataContainer.referenceGMapSets.size() == 1 || (MapViewer.winMain.dataContainer.referenceGMapSets.size() == 2 && MapViewer.winMain.dataContainer.referenceGMapSets.indexOf(referenceGMapSet) == 1))
-				{
-					targetChromoX = Math.round(targetGMapSet.xPosition + targetGMapSet.gMaps.get(0).width);
-					referenceChromoX = Math.round(referenceGMapSet.xPosition);
-				}
-				
-				// if we have two reference genomes and this is the first reference genome
-				else if (MapViewer.winMain.dataContainer.referenceGMapSets.size() == 2 && MapViewer.winMain.dataContainer.referenceGMapSets.indexOf(referenceGMapSet) == 0)
-				{
-					// we want the referenceChromoX to be the mapsets x plus its width
-					referenceChromoX = Math.round(referenceGMapSet.xPosition + referenceGMapSet.gMaps.get(0).width);
-					// and we want the target genome's x to be the targetChromoX
-					targetChromoX = Math.round(targetGMapSet.xPosition);
-				}
-				
-				//y coords
-				int y1 = Math.round(gMap1.y + gMap1.currentY + (f1.getStart() * (gMap1.height / gMap1.chromoMap.getStop())));
-				int y2 = Math.round(gMap2.y + gMap2.currentY + (f2.getStart() * (gMap2.height / gMap2.chromoMap.getStop())));
-				
-				//check for chromosome inversion and invert values if necessary
-				if(gMap1.isPartlyInverted)
-				{
-					y1 = (int) ((gMap1.chromoMap.getStop() - f1.getStart()) / (gMap1.chromoMap.getStop() / gMap1.height)) + (gMap1.y + gMap1.currentY);
-				}
-				if(gMap2.isPartlyInverted)
-				{
-					y2 = (int) ((gMap2.chromoMap.getStop() - f2.getStart()) / (gMap2.chromoMap.getStop() / gMap2.height)) + (gMap2.y + gMap2.currentY);
-				}
-
-				// draw the link either as a straight line or a curve
-				g2.setColor(linkColour);
-				drawStraightOrCurvedLink(g2,targetChromoX, y1, referenceChromoX, y2);
+				targetGMapSet = gMap1.owningSet;
+				referenceGMapSet = gMap2.owningSet;
 			}
-		}
-	}
-	
-	// --------------------------------------------------------------------------------------------------------------------------------
-	
-	
-	// Draws the lines between a chromosome of the reference genome and all potential homologues in the compared genome
-	public void drawSingleHighlightedLink(Graphics2D g2)
-	{
-		//only do this if we have reference genomes -- otherwise there are no links to deal with
-		if(MapViewer.winMain.dataContainer.gMapSetList.size() > 1)
-		{			
-			
-			// for all  links between the target genome and all reference genomes
-			for (LinkSet selectedLinks : MapViewer.winMain.dataContainer.linkSets)
+			else
 			{
-				// for each link in the linkset
-				for (Link link : selectedLinks)
-				{
-					//get the features of this link
-					Feature f1 = link.getFeature1();
-					Feature f2 = link.getFeature2();
-					
-					Vector<Feature> foundFeatures = MapViewer.winMain.fatController.foundFeatures;
-					Vector<Feature> foundFeatureHomologs = MapViewer.winMain.fatController.foundFeatureHomologs;
-					Color linkColour = Colors.strongEmphasisLinkColour;
-					
-					//check whether either of the features for this link are included in the found features list of their maps
-					if((foundFeatures.contains(f1) && foundFeatureHomologs.contains(f2)) ||
-									(foundFeatures.contains(f2) && foundFeatureHomologs.contains(f1)))
-					{
-						//draw the link
-						drawHighlightedLink(g2, link,linkColour, true);				
-					}
-				}
+				targetGMapSet = gMap2.owningSet;
+				referenceGMapSet = gMap1.owningSet;
 			}
 			
-			//draw labels for the feature and its homologs
-			LabelDisplayManager.drawHighlightedFeatureLabels(g2);
+			//work out the x and y coords for drawing the link
+			int targetChromoX = -1;
+			int referenceChromoX = -1;
+			
+			// if we have only one reference genome we want the targetChromoX to be that chromo'sx plus its width and
+			// the referenceChromoX to be the reference chromo's x
+			if (MapViewer.winMain.dataContainer.referenceGMapSets.size() == 1 || (MapViewer.winMain.dataContainer.referenceGMapSets.size() == 2 && MapViewer.winMain.dataContainer.referenceGMapSets.indexOf(referenceGMapSet) == 1))
+			{
+				targetChromoX = Math.round(targetGMapSet.xPosition + targetGMapSet.gMaps.get(0).width);
+				referenceChromoX = Math.round(referenceGMapSet.xPosition);
+			}
+			
+			// if we have two reference genomes and this is the first reference genome
+			else if (MapViewer.winMain.dataContainer.referenceGMapSets.size() == 2 && MapViewer.winMain.dataContainer.referenceGMapSets.indexOf(referenceGMapSet) == 0)
+			{
+				// we want the referenceChromoX to be the mapsets x plus its width
+				referenceChromoX = Math.round(referenceGMapSet.xPosition + referenceGMapSet.gMaps.get(0).width);
+				// and we want the target genome's x to be the targetChromoX
+				targetChromoX = Math.round(targetGMapSet.xPosition);
+			}
+			
+			//y coords
+			int y1 = Math.round(gMap1.y + gMap1.currentY + (f1.getStart() * (gMap1.height / gMap1.chromoMap.getStop())));
+			int y2 = Math.round(gMap2.y + gMap2.currentY + (f2.getStart() * (gMap2.height / gMap2.chromoMap.getStop())));
+			
+			//check for chromosome inversion and invert values if necessary
+			if(gMap1.isPartlyInverted)
+			{
+				y1 = (int) ((gMap1.chromoMap.getStop() - f1.getStart()) / (gMap1.chromoMap.getStop() / gMap1.height)) + (gMap1.y + gMap1.currentY);
+			}
+			if(gMap2.isPartlyInverted)
+			{
+				y2 = (int) ((gMap2.chromoMap.getStop() - f2.getStart()) / (gMap2.chromoMap.getStop() / gMap2.height)) + (gMap2.y + gMap2.currentY);
+			}
+			
+			// draw the link either as a straight line or a curve
+			if(strongEmphasis)
+				g2.setColor(Colors.strongEmphasisLinkColour);
+			else
+				g2.setColor(Colors.mildEmphasisLinkColour);
+			drawStraightOrCurvedLink(g2,targetChromoX, y1, referenceChromoX, y2);		
 		}
 	}
-	
-	
+		
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
 	
@@ -382,7 +336,7 @@ public class LinkDisplayManager
 					if(featuresInRange.contains(f1) ||	featuresInRange.contains(f2))
 					{
 						//draw the link
-						drawHighlightedLink(g2, link,linkColour, false);	
+						drawHighlightedLink(g2, f1, f2, false);	
 					}
 				}
 			}
@@ -537,7 +491,7 @@ public class LinkDisplayManager
 				ctrlx1 = startX + ((endX - startX) * linkShapeCoeff);
 				ctrlx2 = endX - ((endX - startX) * (linkShapeCoeff * 2));
 			}
-
+			
 			// draw CubicCurve2D.Double with set coordinates
 			c.setCurve(startX, startY, ctrlx1, ctrly1, ctrlx2, ctrly2, endX, endY);
 			g2.draw(c);

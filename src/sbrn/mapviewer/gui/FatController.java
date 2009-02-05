@@ -17,13 +17,13 @@ public class FatController
 	private WinMain winMain = MapViewer.winMain;
 	
 	//a vector of features we have looked up by name
-	public Vector<Feature> foundFeatures = new Vector<Feature>();
+//	public Vector<Feature> foundFeatures = new Vector<Feature>();
 	
 	//a vector of features we have looked up by position range
 	public Vector<Feature> featuresInRange = new Vector<Feature>();
 	
 	///a vector of homologs for the found features
-	public Vector<Feature> foundFeatureHomologs = new Vector<Feature>();
+//	public Vector<Feature> foundFeatureHomologs = new Vector<Feature>();
 	
 	//a map we are inverting
 	public static GChromoMap invertMap = null;
@@ -38,6 +38,9 @@ public class FatController
 	
 	//this boolean indicates whether we load our own data or the example data provided by the application
 	public boolean loadOwnData = false;
+	
+	//feature for highlighting and a single homolog for this
+	public Feature highlightFeature, highlightFeatureHomolog;
 
 	
 	// ===============================================c'tors===================================
@@ -153,48 +156,7 @@ public class FatController
 		
 		return new FoundFeatureTableModel(homologies);
 	}
-	
-	
-	// --------------------------------------------------------------------------------------------------------------------------------------------------------
-	
-	//highlights a given feature and its homologs on the main canvas by drawing links to the homologs and putting up coloured name labels
-	public void highlightRequestedFeature(Feature f)
-	{		
-		winMain.mainCanvas.drawFoundFeatures = true;
-		
-		//clear the found features
-		if(foundFeatures != null)
-			foundFeatures.clear();
-		if(foundFeatureHomologs != null)
-			foundFeatureHomologs.clear();
-		
-		//add the feature itself to the found features vector
-		foundFeatures.add(f);
-		
-		for(Link link : f.getLinks())
-		{
-			//get both features from the link and put the homologue into the homologues vector
-			
-			//get the features of this link
-			Feature f1 = link.getFeature1();
-			Feature f2 = link.getFeature2();
-			
-			//check whether either of the features for this link are included in the highlightedfeatures list for its map
-			if(!foundFeatures.contains(f1) && f1 != f)
-			{
-				foundFeatureHomologs.add(f1);
-			}
-			if(!foundFeatures.contains(f2) && f2 != f)
-			{
-				foundFeatureHomologs.add(f2);
-			}
-		}								
-		
-		// update the display
-		winMain.mainCanvas.antiAlias = true;
-		winMain.mainCanvas.updateCanvas(true);
-	}
-	
+
 	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	//restores the original view to what it looked like after loading the current dataset
@@ -208,13 +170,11 @@ public class FatController
 		winMain.ffResultsPanel.getFFResultsTable().setModel(new FoundFeatureTableModel());
 		
 		//clear the found features
-		if(foundFeatures != null)
-			foundFeatures.clear();
-		if(foundFeatureHomologs != null)
-			foundFeatureHomologs.clear();
+		MapViewer.winMain.fatController.highlightFeature = null;
+		MapViewer.winMain.fatController.highlightFeatureHomolog = null;
 		if(featuresInRange != null)
 			featuresInRange.clear();		
-		winMain.mainCanvas.drawFoundFeatures = false;
+		winMain.mainCanvas.drawHighlightFeatures = false;
 		winMain.mainCanvas.drawFoundFeaturesInRange = false;
 		
 		for(GMapSet gMapSet : winMain.dataContainer.gMapSetList)

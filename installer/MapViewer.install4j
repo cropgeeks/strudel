@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.1.5" transformSequenceNumber="2">
-  <directoryPresets config="../res/icons" />
-  <application name="MapViewer" distributionSourceDir="" applicationId="6538-8163-8628-9425" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" keepModificationTimes="false" shortName="MapViewer" publisher="SCRI" publisherWeb="http://www.scri.ac.uk" version="0.08.11.17" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.5" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
+  <directoryPresets config=".." />
+  <application name="MapViewer" distributionSourceDir="" applicationId="6538-8163-8628-9425" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" keepModificationTimes="false" shortName="MapViewer" publisher="SCRI" publisherWeb="http://www.scri.ac.uk" version="0.09.02.04" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.5" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -25,10 +25,10 @@
         <exclude />
       </dirEntry>
       <fileEntry mountPoint="18" file="../data/artificial_genome.txt" overwrite="1" shared="false" mode="644" uninstallMode="0" />
+      <fileEntry mountPoint="18" file="../data/barleyExampleData.txt" overwrite="4" shared="false" mode="644" uninstallMode="0" />
+      <fileEntry mountPoint="18" file="../data/rice_TIGR_5.txt" overwrite="4" shared="false" mode="644" uninstallMode="0" />
+      <fileEntry mountPoint="18" file="../data/barleyRiceHomologyData.txt" overwrite="4" shared="false" mode="644" uninstallMode="0" />
       <fileEntry mountPoint="18" file="../data/artificial_genome_homology data.txt" overwrite="1" shared="false" mode="644" uninstallMode="0" />
-      <fileEntry mountPoint="18" file="../data/Barley_Map(UCR_20080416-2)_barley.txt" overwrite="1" shared="false" mode="644" uninstallMode="0" />
-      <fileEntry mountPoint="18" file="../data/Barley_Map(UCR_20080416-2)_homology_data.txt" overwrite="1" shared="false" mode="644" uninstallMode="0" />
-      <fileEntry mountPoint="18" file="../data/riceHomologs_TIGR5.txt" overwrite="1" shared="false" mode="644" uninstallMode="0" />
     </entries>
     <components />
   </files>
@@ -43,7 +43,7 @@
           <versionLine x="20" y="40" text="version ${compiler:sys.version}" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
         </text>
       </splashScreen>
-      <java mainClass="sbrn.mapviewer.gui.MapViewer" vmParameters="-Xmx512m" arguments="" allowVMPassthroughParameters="true" preferredVM="">
+      <java mainClass="sbrn.mapviewer.MapViewer" vmParameters="-Xmx512m" arguments="" allowVMPassthroughParameters="true" preferredVM="">
         <classPath>
           <archive location="lib/mapviewer.jar" failOnError="false" />
         </classPath>
@@ -144,6 +144,14 @@
             <preActivation />
             <postActivation />
             <actions>
+              <action name="" id="118" beanClass="com.install4j.runtime.beans.actions.UninstallPreviousAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.UninstallPreviousAction" />
+                  </java>
+                </serializedBean>
+                <condition />
+              </action>
               <action name="" id="7" beanClass="com.install4j.runtime.beans.actions.InstallFilesAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
@@ -189,8 +197,40 @@
             <validation />
             <preActivation />
             <postActivation />
-            <actions />
-            <formComponents />
+            <actions>
+              <action name="" id="119" beanClass="com.install4j.runtime.beans.actions.finish.ExecuteLauncherAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.actions.finish.ExecuteLauncherAction">
+                      <void property="launcherId">
+                        <string>19</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <condition>context.getBooleanVariable("executeLauncherAction") &amp;&amp; (!context.isUnattended())</condition>
+              </action>
+            </actions>
+            <formComponents>
+              <formComponent name="Execute launcher" id="120" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
+                      <void property="checkboxText">
+                        <string>${i18n:RunEntryExec("${compiler:sys.fullName}")}</string>
+                      </void>
+                      <void property="initiallySelected">
+                        <boolean>true</boolean>
+                      </void>
+                      <void property="variableName">
+                        <string>executeLauncherAction</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+              </formComponent>
+            </formComponents>
           </screen>
         </screens>
       </application>
@@ -1038,7 +1078,7 @@ if (wizardContext != null) {
       </installerScript>
     </unixInstaller>
   </mediaSets>
-  <buildIds buildAll="false">
+  <buildIds buildAll="true">
     <mediaSet refId="20" />
   </buildIds>
 </install4j>

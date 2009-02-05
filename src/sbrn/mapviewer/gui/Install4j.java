@@ -14,7 +14,7 @@ public class Install4j
 {
 	private static String URL = "http://bioinf.scri.ac.uk/mapviewer/installers/updates.xml";
 
-	public static String VERSION = "0.08.11.17";
+	public static String VERSION = "X.XX.XX.XX";
 
 	/**
 	 * install4j update check. This will only work when running under the full

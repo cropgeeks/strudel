@@ -184,23 +184,26 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 			// get the feature name
 			int feature1NameColumnIndex = foundFeatureTableModel.columnNameList.indexOf(foundFeatureTableModel.targetNameColumnLabel);
 			int feature2NameColumnIndex = foundFeatureTableModel.columnNameList.indexOf(foundFeatureTableModel.homologColumnLabel);
-			String featureName = (String) foundFeatureTableModel.getValueAt(modelRow,
-							feature1NameColumnIndex);
+			String feature1Name = (String) foundFeatureTableModel.getValueAt(modelRow,feature1NameColumnIndex);
+			String feature2Name = (String) foundFeatureTableModel.getValueAt(modelRow,feature2NameColumnIndex);
 			// if this fails we may have a feature in the table where there is no target value but only a homolog
 			// this happens when we have inserted additional loci from a reference genome into the tabel that have no known equivalent in the target genome
 			// in that case try the other feature's name
-			if (featureName == null)
-				featureName = (String) foundFeatureTableModel.getValueAt(modelRow,
+			if (feature1Name == null)
+				feature1Name = (String) foundFeatureTableModel.getValueAt(modelRow,
 								feature2NameColumnIndex);
 			
 			// retrieve the Feature that corresponds to this name
-			Feature f = Utils.getFeatureByName(featureName);
+			Feature f1 = Utils.getFeatureByName(feature1Name);
+			Feature f2 = Utils.getFeatureByName(feature2Name);
 			// highlight it on the canvas
-			MapViewer.winMain.fatController.highlightRequestedFeature(f);
-			
+			MapViewer.winMain.fatController.highlightFeature = f1;
+			MapViewer.winMain.fatController.highlightFeatureHomolog = f2;	
+			MapViewer.winMain.mainCanvas.drawHighlightFeatures = true;
+
 			// which map and mapset are we dealing with here
-			GMapSet owningSet = f.getOwningMap().getGChromoMap().owningSet;
-			GChromoMap gChromoMap = f.getOwningMap().getGChromoMap();
+			GMapSet owningSet = f1.getOwningMap().getGChromoMap().owningSet;
+			GChromoMap gChromoMap = f1.getOwningMap().getGChromoMap();
 			
 			// we have changed map
 			// zoom into that chromosome so it fills the screen
@@ -209,6 +212,10 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 				// zoom into the map
 				MapViewer.winMain.mainCanvas.zoomHandler.processClickZoomRequest(gChromoMap);
 			}
+			
+			
+			//update the canvas
+			MapViewer.winMain.mainCanvas.updateCanvas(true);	
 		}
 	}
 	

@@ -20,22 +20,24 @@ public class LabelDisplayManager
 	//------------------------------------------------------------------------------------------------------------------------------------
 
 	// draws labels next to found features
-	public static void drawHighlightedFeatureLabels(Graphics2D g2)
+	public static void drawHighlightedFeatureLabels(Graphics2D g2, Feature f1, Feature f2)
 	{
 		// the usual font stuff
 		g2.setFont(new Font("Sans-serif", Font.PLAIN, fontHeight));
 		FontMetrics fm = g2.getFontMetrics();
 
-		//for the purpose of this we can combine the elements in the foundFeatures and foundFeatureHomologs vectors
-		int size = MapViewer.winMain.fatController.foundFeatures.size()
-			+ MapViewer.winMain.fatController.foundFeatureHomologs.size();
-		Vector<Feature> featuresAndHomologs = new Vector<Feature>(size);
-		featuresAndHomologs.addAll(MapViewer.winMain.fatController.foundFeatures);
-		featuresAndHomologs.addAll(MapViewer.winMain.fatController.foundFeatureHomologs);
+		//easiest to do this with a local Vector for the two features -- saves duplication 
+		Vector<Feature> features = new Vector<Feature>();
+		features.add(f1);
+		features.add(f2);
+		
+		//work out the mapset index for the homolog
+		int mapSetIndexF2 = MapViewer.winMain.dataContainer.gMapSetList.indexOf(f2.getOwningMap().getGChromoMap().owningSet);
 
 		// for all features in our list
-		for (Feature f : featuresAndHomologs)
+		for (Feature f : features)
 		{
+
 			// get the name of the feature
 			String featureName = f.getName();
 			int stringWidth = fm.stringWidth(featureName);
@@ -75,6 +77,27 @@ public class LabelDisplayManager
 			int labelX = gChromoMap.x - lineLength - gap - stringWidth;
 			int lineStartX =  gChromoMap.x;
 			int lineEndX =  gChromoMap.x- lineLength;
+			
+			// next decide where to place the label on x					
+			//determine whether the marker should go on the left or right
+			boolean markersRight = false;
+
+			//we want the label on the right for the rightmost genome, left for the leftmost genome
+			if((features.indexOf(f) == 0 && mapSetIndexF2 == 0) ||
+							(features.indexOf(f) == 1 && mapSetIndexF2 == 2))
+			{
+				markersRight = true;	
+			}
+			else
+			{
+				markersRight =  false;
+			}
+			if (markersRight)
+			{				
+				lineStartX = gChromoMap.x + gChromoMap.width;		
+				labelX = lineStartX + lineLength + gap; 
+				lineEndX = labelX - gap;
+			}
 
 			//draw a rectangle as a background for the label
 			g2.setColor(Colors.highlightedFeatureLabelBackgroundColour);

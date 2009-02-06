@@ -1,7 +1,6 @@
 package sbrn.mapviewer.gui.animators;
 
 import sbrn.mapviewer.*;
-import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.components.*;
 import sbrn.mapviewer.gui.entities.*;
 import sbrn.mapviewer.gui.handlers.*;
@@ -39,9 +38,11 @@ public class ClickZoomAnimator extends Thread
 
 	public void run()
 	{
+		GMapSet selectedSet = selectedMap.owningSet;
+		
 		zoomHandler.isClickZoomRequest = true;
 
-//		MapViewer.logger.fine("ClickZoomAnimator finalZoomFactor = " + finalZoomFactor);
+		MapViewer.logger.fine("ClickZoomAnimator run()");
 		
 		//turn antialiasing off
 		mainCanvas.antiAlias = false;
@@ -51,7 +52,6 @@ public class ClickZoomAnimator extends Thread
 
 		//the total number of frames we need to render
 		int totalFrames = Math.round(fps * (millis / 1000.0f));
-		GMapSet selectedSet = selectedMap.owningSet;
 
 		// these are the amounts we need to increment things by
 		// follows the pattern of: (final value minus current value) divided by the total number of frames
@@ -59,10 +59,10 @@ public class ClickZoomAnimator extends Thread
 		float chromoHeightIncrement = (finalChromoHeight - selectedSet.chromoHeight) / totalFrames;
 		float totalYIncrement = (finalTotalY - selectedSet.totalY) / totalFrames;
 		
-		MapViewer.logger.fine("zoomFactorIncrement = " + zoomFactorIncrement);
-		MapViewer.logger.fine("totalFrames = " + totalFrames);
-		MapViewer.logger.fine("fps = " + fps);
-		MapViewer.logger.fine("millis = " + millis);
+		MapViewer.logger.finest("zoomFactorIncrement = " + zoomFactorIncrement);
+		MapViewer.logger.finest("totalFrames = " + totalFrames);
+		MapViewer.logger.finest("fps = " + fps);
+		MapViewer.logger.finest("millis = " + millis);
 
 		// now loop for the number of total frames, zooming in by a bit each time
 		for (int i = 0; i < totalFrames; i++)
@@ -84,8 +84,6 @@ public class ClickZoomAnimator extends Thread
 			//don't let the zoom factor fall below 1
 			if(selectedSet.zoomFactor < 1)
 				selectedSet.zoomFactor = 1;			
-			
-			MapViewer.logger.finest("selectedSet.zoomFactor after adjustment = " + selectedSet.zoomFactor);
 
 			// work out the chromo height and total genome height for when the new zoom factor will have been applied
 			int newChromoHeight = Math.round(selectedSet.chromoHeight + chromoHeightIncrement);
@@ -106,10 +104,6 @@ public class ClickZoomAnimator extends Thread
 			//update zoom control position
 			MapViewer.winMain.fatController.updateZoomControls();
 		}
-		
-		//do a final zoom adjust to ensure that we are at the right zoom level
-//		selectedSet.zoomFactor = finalZoomFactor;
-//		zoomHandler.adjustZoom(selectedMap, finalTotalY, finalChromoHeight, finalChromoHeight/2);
 
 		//update overviews
 		MapViewer.winMain.fatController.updateOverviewCanvases();
@@ -126,7 +120,7 @@ public class ClickZoomAnimator extends Thread
 
 		//turn drawing of map index back on
 		selectedMap.drawChromoIndex = true;
-		
+
 		//turn antialiasing on and repaint
 		AntiAliasRepaintThread antiAliasRepaintThread = new AntiAliasRepaintThread();
 		antiAliasRepaintThread.start();

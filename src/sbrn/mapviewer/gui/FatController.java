@@ -16,15 +16,9 @@ public class FatController
 	
 	private WinMain winMain = MapViewer.winMain;
 	
-	//a vector of features we have looked up by name
-//	public Vector<Feature> foundFeatures = new Vector<Feature>();
-	
 	//a vector of features we have looked up by position range
 	public Vector<Feature> featuresInRange = new Vector<Feature>();
-	
-	///a vector of homologs for the found features
-//	public Vector<Feature> foundFeatureHomologs = new Vector<Feature>();
-	
+
 	//a map we are inverting
 	public static GChromoMap invertMap = null;
 	
@@ -41,6 +35,9 @@ public class FatController
 	
 	//feature for highlighting and a single homolog for this
 	public Feature highlightFeature, highlightFeatureHomolog;
+	
+	//true if we have requested to find features by name
+	public boolean findFeaturesRequested = false;
 
 	
 	// ===============================================c'tors===================================
@@ -133,7 +130,7 @@ public class FatController
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	//sets up the data model for features we have searched for by name or range
-	public FoundFeatureTableModel makeFoundFeaturesDataModel(String [] featureNames)
+	public LinkedList<Link> matchFeaturesToNames(String [] featureNames)
 	{
 		LinkedList<Link> homologies = new LinkedList<Link>();
 		
@@ -154,7 +151,7 @@ public class FatController
 			}
 		}
 		
-		return new FoundFeatureTableModel(homologies);
+		return homologies;
 	}
 
 	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -176,6 +173,7 @@ public class FatController
 			featuresInRange.clear();		
 		winMain.mainCanvas.drawHighlightFeatures = false;
 		winMain.mainCanvas.drawFoundFeaturesInRange = false;
+		findFeaturesRequested = false;
 		
 		for(GMapSet gMapSet : winMain.dataContainer.gMapSetList)
 		{

@@ -32,7 +32,12 @@ public class MainCanvas extends JPanel
 	boolean drawBlastScore = false;
 	
 	// if true, antialias everything
+	//this is a flag set by code within the application 
 	public boolean antiAlias = false;
+	//in addition we have a flag set by the user (through a button) -- userPrefAntialias
+	//stored in the Prefs 
+	//this overrides the local flag if it is set to false
+	//otherwise we ignore it
 	
 	// if true, paint a rectangle to indicate the fact that we are panning over a region we want to select for zooming in to
 	public boolean drawSelectionRect = false;
@@ -64,7 +69,6 @@ public class MainCanvas extends JPanel
 	
 	public boolean drawDistanceMarkers = false;
 
-	
 	// ============================c'tor==================================
 	
 	public MainCanvas()
@@ -150,7 +154,7 @@ public class MainCanvas extends JPanel
 	private void paintCanvas(Graphics2D g2)
 	{
 
-		// check whether the user wants antialiasing on
+		// check whether we need antialiasing on
 		if (antiAlias)
 		{
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -158,6 +162,15 @@ public class MainCanvas extends JPanel
 							RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		}
 		else
+		{
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+			g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+							RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+		}
+		
+		//this additional flag set by the user can override what we just set here
+		//if it is set to true we ignore it though and just do what we were doing above anyway
+		if(!Prefs.userPrefAntialias)
 		{
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 			g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,

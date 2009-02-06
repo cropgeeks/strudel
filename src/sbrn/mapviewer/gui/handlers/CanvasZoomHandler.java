@@ -1,6 +1,7 @@
 package sbrn.mapviewer.gui.handlers;
 
 import sbrn.mapviewer.*;
+import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.animators.*;
 import sbrn.mapviewer.gui.components.*;
@@ -134,20 +135,22 @@ public class CanvasZoomHandler
 	// zooms out to restore original zoom factor of 1
 	public  void processZoomResetRequest(GMapSet selectedSet)
 	{
-		int millis = 300;
+		//this is the final zoom factor we want to have here
+		selectedSet.zoomFactor = 1;
 		
-		// animate this by zooming out gradually
-		float finalZoomFactor = 1;
-		// work out the chromo height and total genome height for when the new zoom factor will have been applied
-		int finalChromoHeight = mainCanvas.initialChromoHeight;
-		// this is the combined height of all spacers -- does not change with the zoom factor
-		int combinedSpacers = mainCanvas.chromoSpacing * (selectedSet.numMaps - 1);
-		// the new total Y extent of the genome in pixels
-		int finalTotalY =  mainCanvas.initialChromoHeight*selectedSet.numMaps + combinedSpacers;
+		//update overviews
+		MapViewer.winMain.fatController.updateOverviewCanvases();
+		
+		//update zoom control position
+		MapViewer.winMain.fatController.updateZoomControls();
 
-		ClickZoomAnimator clickZoomAnimator = new ClickZoomAnimator(fps, millis, selectedSet.gMaps.get(0),
-						mainCanvas, finalZoomFactor, finalTotalY, finalChromoHeight, this);
-		clickZoomAnimator.start();
+		//now update the arrays with the position data
+		MapViewer.winMain.fatController.initialisePositionArrays();
+		
+		MapViewer.winMain.mainCanvas.zoomHandler.isClickZoomRequest = false;
+		
+		//now repaint
+		MapViewer.winMain.mainCanvas.updateCanvas(true);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
@@ -191,5 +194,27 @@ public class CanvasZoomHandler
 
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
+	
+	//zoom into a range on a chromosome
+	public void zoomIntoRange(GChromoMap gChromoMap, float intervalStart, float intervalEnd)
+	{	
+		//the map that pertains to the gChromoMap object
+		ChromoMap chromoMap = gChromoMap.chromoMap;
+		
+		//need to know where to zoom into first
+		int relativeTopY = (int) Math.floor((gChromoMap.height / chromoMap.getStop()) * intervalStart);
+		int relativeBottomY = (int) Math.ceil((gChromoMap.height / chromoMap.getStop()) * intervalEnd);
+		
+		//this buffer increases the size of the visible interval slightly so the bounds don't coincide with the canvas bounds
+		int buffer = 4;
+		int topY = relativeTopY + gChromoMap.y - buffer;
+		int bottomY = relativeBottomY + gChromoMap.y + buffer;
+		MapViewer.winMain.mainCanvas.zoomHandler.processPanZoomRequest(gChromoMap, topY,
+						bottomY);
+	}
+	
+
+	// -----------------------------------------------------------------------------------------------------------------------------------
+	
 
 }// end class

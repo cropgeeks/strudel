@@ -260,6 +260,7 @@ public class GChromoMap
 			// now draw features and labels as required
 			if (owningSet.paintAllMarkers && isShowingOnCanvas)
 			{
+				MapViewer.logger.fine("drawing features for map " + name);
 				drawLinkedFeatures(g2);
 			}
 			

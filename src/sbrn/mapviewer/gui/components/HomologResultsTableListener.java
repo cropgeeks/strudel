@@ -18,6 +18,8 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 	
 	HomologResultsTable homologResultsTable;
 	Point point = new Point();	
+	boolean isMouseClick = false;
+	
 	
 	public HomologResultsTableListener(HomologResultsTable homologResultsTable)
 	{
@@ -29,17 +31,21 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 	
 	public void valueChanged(ListSelectionEvent e)
 	{
-				if (e.getValueIsAdjusting())
-				{
-					return;
-				}
-				
-				if (!homologResultsTable.isFilterEvent)
-				{
-					highlightFeature();
-				}
-				homologResultsTable.isFilterEvent = false;
+		MapViewer.logger.fine("=========valueChanged");
+		
+		if (e.getValueIsAdjusting())
+		{
+			return;
+		}
+		
+		if (!homologResultsTable.isFilterEvent)
+		{
+			highlightFeature();
+		}
+		homologResultsTable.isFilterEvent = false;
 	}
+	
+	// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	public void mouseClicked(MouseEvent e)
 	{
@@ -54,30 +60,10 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 		{
 			launchBrowser(row, col);
 		}
-		
-		highlightFeature();
-		
 	}
 	
-	public void mouseEntered(MouseEvent e)
-	{
-	}
 	
-	public void mouseExited(MouseEvent e)
-	{
-	}
-	
-	public void mousePressed(MouseEvent e)
-	{
-	}
-	
-	public void mouseReleased(MouseEvent e)
-	{
-	}
-	
-	public void mouseDragged(MouseEvent e)
-	{
-	}
+	// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	public void mouseMoved(MouseEvent e)
 	{
@@ -168,6 +154,8 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 	
 	private void highlightFeature()
 	{	
+		MapViewer.logger.fine("highlightFeature()");
+		
 		FoundFeatureTableModel foundFeatureTableModel = (FoundFeatureTableModel) homologResultsTable.getModel();
 		// get the index of the selected row but check for changes due to filtering
 		int modelRow = -1;
@@ -196,30 +184,53 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 			// retrieve the Feature that corresponds to this name
 			Feature f1 = Utils.getFeatureByName(feature1Name);
 			Feature f2 = Utils.getFeatureByName(feature2Name);
-			// highlight it on the canvas
+			
+			// which map and mapset are we dealing with here
+			GMapSet owningSet1 = f1.getOwningMap().getGChromoMap().owningSet;
+			GMapSet owningSet2 = f2.getOwningMap().getGChromoMap().owningSet;
+
+			//if we got here because we requested features through the find features by name dialog then we
+			//want to zoom out fully so we can see them in the broadest possible context
+			//if we got here through a range request we do nothing
+			if(MapViewer.winMain.fatController.findFeaturesRequested)
+			{
+				MapViewer.winMain.mainCanvas.zoomHandler.processZoomResetRequest(owningSet1);
+				MapViewer.winMain.mainCanvas.zoomHandler.processZoomResetRequest(owningSet2);
+			}
+			
+			// highlight the feature on the canvas
 			MapViewer.winMain.fatController.highlightFeature = f1;
 			MapViewer.winMain.fatController.highlightFeatureHomolog = f2;	
 			MapViewer.winMain.mainCanvas.drawHighlightFeatures = true;
-
-			// which map and mapset are we dealing with here
-			GMapSet owningSet = f1.getOwningMap().getGChromoMap().owningSet;
-			GChromoMap gChromoMap = f1.getOwningMap().getGChromoMap();
-			
-			// we have changed map
-			// zoom into that chromosome so it fills the screen
-			if (owningSet.zoomFactor < owningSet.singleChromoViewZoomFactor || !gChromoMap.isShowingOnCanvas)
-			{
-				// zoom into the map
-				MapViewer.winMain.mainCanvas.zoomHandler.processClickZoomRequest(gChromoMap);
-			}
-			
 			
 			//update the canvas
 			MapViewer.winMain.mainCanvas.updateCanvas(true);	
 		}
 	}
 	
-	// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
+	
+	public void mouseEntered(MouseEvent e)
+	{
+	}
+	
+	public void mouseExited(MouseEvent e)
+	{
+	}
+	
+	public void mousePressed(MouseEvent e)
+	{
+	}
+	
+	public void mouseReleased(MouseEvent e)
+	{
+	}
+	
+	public void mouseDragged(MouseEvent e)
+	{
+	}	
+	
+	// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 }

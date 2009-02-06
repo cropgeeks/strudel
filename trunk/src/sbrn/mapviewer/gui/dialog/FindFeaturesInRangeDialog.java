@@ -108,52 +108,54 @@ public class FindFeaturesInRangeDialog extends JDialog implements ActionListener
 			}
 			allNames = containedFeatureNames.toArray(allNames);
 			
-			//resize the split pane so we can see the results table
-			MapViewer.winMain.splitPane.setDividerSize(Constants.SPLITPANE_DIVIDER_SIZE);
-			int newDividerLocation = (int) (MapViewer.winMain.getHeight() - MapViewer.winMain.foundFeaturesTableControlPanel.getMinimumSize().getHeight());
-			MapViewer.winMain.splitPane.setDividerLocation(newDividerLocation);
-			
-			//now zoom into that range on the chromosome
-			//need to know where to zoom into first
-			int relativeTopY = (int) Math.floor((gChromoMap.height / chromoMap.getStop()) * intervalStart);
-			int relativeBottomY = (int) Math.ceil((gChromoMap.height / chromoMap.getStop()) * intervalEnd);
-			//this buffer increases the size of the visible interval slightly so the bounds don't coincide with the canvas bounds
-			int buffer = 4;
-			int topY =  relativeTopY + gChromoMap.y - buffer;
-			int bottomY = relativeBottomY  + gChromoMap.y + buffer;
-			MapViewer.winMain.mainCanvas.zoomHandler.processPanZoomRequest(gChromoMap, topY, bottomY);
-			
-			//we also need to set the labels on the control panel for the results to have the appropriate text
-			FoundFeaturesTableControlPanel foundFeaturesTableControlPanel = MapViewer.winMain.foundFeaturesTableControlPanel;
-			foundFeaturesTableControlPanel.setVisible(true);
-			foundFeaturesTableControlPanel.getGenomeLabel().setText(genome);
-			foundFeaturesTableControlPanel.getChromoLabel().setText(chromosome);
-			foundFeaturesTableControlPanel.getRegionStartLabel().setText(new Float(intervalStart).toString());
-			foundFeaturesTableControlPanel.getRegionEndLabel().setText(new Float(intervalEnd).toString());
-			foundFeaturesTableControlPanel.getNumberFeaturesLabel().setText(new Integer(containedFeatureNames.size()).toString());
-			
-			//sync the checkboxes states with those in the find dialog itself to make sure they show the same value
-			foundFeaturesTableControlPanel.getShowLabelsCheckbox().setSelected(ffInRangePanel.getDisplayLabelsCheckbox().isSelected());
-			foundFeaturesTableControlPanel.getShowHomologsCheckbox().setSelected(ffInRangePanel.getDisplayHomologsCheckBox().isSelected());				
-			
-			//earmark the features for drawing on repaint
-			MapViewer.winMain.mainCanvas.drawFoundFeaturesInRange = true;
-			
-			//repaint the canvas so we can see the highlighted region which should then be coloured in differently
-			MapViewer.winMain.mainCanvas.updateCanvas(true);
-
-			//now insert the results into the JTable held by the results panel
-			FoundFeatureTableModel foundFeatureTableModel = MapViewer.winMain.fatController.makeFoundFeaturesDataModel(allNames);
-			MapViewer.winMain.ffResultsPanel.getFFResultsTable().setModel(foundFeatureTableModel);
-			//set up sorting/filtering capability
-			TableRowSorter<FoundFeatureTableModel> sorter = new TableRowSorter<FoundFeatureTableModel>(foundFeatureTableModel);
-			MapViewer.winMain.ffResultsPanel.getFFResultsTable().setRowSorter(sorter);
-
-			//size the columns and the dialog containing the table appropriately
-			MapViewer.winMain.ffResultsPanel.initColumnSizes();
-			
-			//set the results panel to be visible 
-			this.setVisible(false);
+			//if there are actually features contained in this range
+			if (containedFeatureNames.size() > 0)
+			{
+				//resize the split pane so we can see the results table
+				MapViewer.winMain.splitPane.setDividerSize(Constants.SPLITPANE_DIVIDER_SIZE);
+				int newDividerLocation = (int) (MapViewer.winMain.getHeight() - MapViewer.winMain.foundFeaturesTableControlPanel.getMinimumSize().getHeight());
+				MapViewer.winMain.splitPane.setDividerLocation(newDividerLocation);
+				
+				//now zoom into that range on the chromosome
+				MapViewer.winMain.mainCanvas.zoomHandler.zoomIntoRange(gChromoMap, intervalStart, intervalEnd);
+				
+				//we also need to set the labels on the control panel for the results to have the appropriate text
+				FoundFeaturesTableControlPanel foundFeaturesTableControlPanel = MapViewer.winMain.foundFeaturesTableControlPanel;
+				foundFeaturesTableControlPanel.setVisible(true);
+				foundFeaturesTableControlPanel.getGenomeLabel().setText(genome);
+				foundFeaturesTableControlPanel.getChromoLabel().setText(chromosome);
+				foundFeaturesTableControlPanel.getRegionStartLabel().setText(
+								new Float(intervalStart).toString());
+				foundFeaturesTableControlPanel.getRegionEndLabel().setText(
+								new Float(intervalEnd).toString());
+				foundFeaturesTableControlPanel.getNumberFeaturesLabel().setText(
+								new Integer(containedFeatureNames.size()).toString());
+				//sync the checkboxes states with those in the find dialog itself to make sure they show the same value
+				foundFeaturesTableControlPanel.getShowLabelsCheckbox().setSelected(
+								ffInRangePanel.getDisplayLabelsCheckbox().isSelected());
+				foundFeaturesTableControlPanel.getShowHomologsCheckbox().setSelected(
+								ffInRangePanel.getDisplayHomologsCheckBox().isSelected());
+				//earmark the features for drawing on repaint
+				MapViewer.winMain.mainCanvas.drawFoundFeaturesInRange = true;
+				//repaint the canvas so we can see the highlighted region which should then be coloured in differently
+				MapViewer.winMain.mainCanvas.updateCanvas(true);
+				//now insert the results into the JTable held by the results panel
+				LinkedList<Link> featuresFound = MapViewer.winMain.fatController.matchFeaturesToNames(allNames);
+				FoundFeatureTableModel foundFeatureTableModel = new FoundFeatureTableModel(featuresFound);
+				MapViewer.winMain.ffResultsPanel.getFFResultsTable().setModel(foundFeatureTableModel);
+				//set up sorting/filtering capability
+				TableRowSorter<FoundFeatureTableModel> sorter = new TableRowSorter<FoundFeatureTableModel>(foundFeatureTableModel);
+				MapViewer.winMain.ffResultsPanel.getFFResultsTable().setRowSorter(sorter);
+				//size the columns and the dialog containing the table appropriately
+				MapViewer.winMain.ffResultsPanel.initColumnSizes();
+				//set the results panel to be visible 
+				this.setVisible(false);
+			}
+			//no features in the range specified
+			else
+			{
+				TaskDialog.info("No features found in this range", "Close");				
+			}
 			
 		}
 		catch (RuntimeException e1)

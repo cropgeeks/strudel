@@ -26,6 +26,8 @@ public class ControlToolBar extends JToolBar implements ActionListener
 	private JButton bResetAll;
 	private JToggleButton bDistMarkers;
 	public JButton bCurves;
+	private JToggleButton bAntialias;
+	private JToggleButton bLinkFilter;
 	public int currentLinkShapeType = 1;
 	public boolean linkShapeOrderAscending = true;
 	
@@ -42,14 +44,17 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		if (SystemUtils.isMacOS() == false)
 			add(new JLabel("  "));
 		
-		add(bOpen);
+		//this group of buttons is related to higher level tasks in the app such as data import and export
+		add(bOpen);		
+		add(bExport);
 		
 		addSeparator(true);
 		
 		add(bOverview);
 		add(bDistMarkers);
 		add(bCurves);
-		add(bExport);
+		add(bAntialias);
+		add(bLinkFilter);
 		
 		addSeparator(true);
 		
@@ -68,7 +73,8 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		add(bHelp);
 		add(new JLabel("  "));
 		
-		
+		bAntialias.setSelected(Prefs.userPrefAntialias);
+		bLinkFilter.setSelected(Prefs.drawOnlyLinksToVisibleFeatures);
 	}
 	
 	private void createControls()
@@ -139,6 +145,8 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		bOverview.setSelected(Prefs.guiOverviewVisible);
 		bDistMarkers = (JToggleButton) getButton(true, "", "Toggle the distance markers on or off", Icons.getIcon("DISTANCEMARKERS"), null);
 		bCurves = (JButton) getButton(false, "", "Cycle through straight, angled and curved links", Icons.getIcon("CURVES"), null);
+		bAntialias = (JToggleButton) getButton(true, "", "Toggle between antialiased and plain drawing styles", Icons.getIcon("ANTIALIAS"), null);
+		bLinkFilter = (JToggleButton) getButton(true, "", "Toggle between visibility-based filtering of links and no filtering", Icons.getIcon("LINKFILTER"), null);		
 		bHelp =  (JButton) getButton(false, "", "Help", Icons.getIcon("HELP"), null);
 		bResetAll =  (JButton) getButton(false, "", "Reset display", Icons.getIcon("RESET"), null);
 	}
@@ -162,6 +170,19 @@ public class ControlToolBar extends JToolBar implements ActionListener
 			MapViewer.winMain.mainCanvas.updateCanvas(true);
 		}
 		
+		//toggle between antialias and none
+		else if(e.getSource() == bAntialias)
+		{
+			Prefs.userPrefAntialias = bAntialias.isSelected();
+			MapViewer.winMain.mainCanvas.updateCanvas(true);
+		}
+		
+		//toggle between antialias and none
+		else if(e.getSource() == bLinkFilter)
+		{
+			Prefs.drawOnlyLinksToVisibleFeatures = bLinkFilter.isSelected();
+			MapViewer.winMain.mainCanvas.updateCanvas(true);
+		}
 		
 		//toggle the link shape between straight, angled and curved
 		else if(e.getSource() == bCurves)

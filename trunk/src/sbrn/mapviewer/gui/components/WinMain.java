@@ -37,6 +37,9 @@ public class WinMain extends JFrame
 	//the controller instance for the whole application
 	public FatController fatController;
 	
+	//the mouse handler for the whole application
+	public MouseHandler mouseHandler;
+	
 	//a context menu that activates when the user right-clicks on a chromosome
 	public ChromoContextPopupMenu chromoContextPopupMenu;
 	
@@ -204,7 +207,7 @@ public class WinMain extends JFrame
 			mainPanel.add(mainCanvas, BorderLayout.CENTER);	
 
 			//add mousehandler
-			MouseHandler mouseHandler = new MouseHandler(this);
+			mouseHandler = new MouseHandler(this);
 			mainCanvas.addMouseListener(mouseHandler);
 			mainCanvas.addMouseMotionListener(mouseHandler);
 			mainCanvas.addMouseWheelListener(mouseHandler);

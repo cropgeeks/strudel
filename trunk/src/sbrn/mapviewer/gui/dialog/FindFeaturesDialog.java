@@ -8,9 +8,7 @@ import javax.swing.*;
 
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
-import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.components.*;
-import sbrn.mapviewer.gui.entities.*;
 import scri.commons.gui.*;
 
 public class FindFeaturesDialog extends JDialog implements ActionListener
@@ -56,6 +54,7 @@ public class FindFeaturesDialog extends JDialog implements ActionListener
 	{
 		if (e.getSource() == bFind)
 		{
+			MapViewer.winMain.fatController.findFeaturesRequested = true;
 			showResultsPanel();
 		}
 		
@@ -84,33 +83,39 @@ public class FindFeaturesDialog extends JDialog implements ActionListener
 			JTable homologResultsTable = MapViewer.winMain.ffResultsPanel.getFFResultsTable();
 			
 			//now insert the results into the JTable held by the results panel
-			FoundFeatureTableModel foundFeatureTableModel = MapViewer.winMain.fatController.makeFoundFeaturesDataModel(allNames);
+			LinkedList<Link> featuresFound = MapViewer.winMain.fatController.matchFeaturesToNames(allNames);
+			FoundFeatureTableModel foundFeatureTableModel = new FoundFeatureTableModel(featuresFound);
 			homologResultsTable.setModel(foundFeatureTableModel);
 			//size the columns and the dialog containing the table appropriately
 			MapViewer.winMain.ffResultsPanel.initColumnSizes();
 			//hide the control panel for the results table as it is not needed with this kind of results
 			MapViewer.winMain.foundFeaturesTableControlPanel.setVisible(false);
 
-			//set the results panel to be visible
-			this.setVisible(false);
-			MapViewer.winMain.splitPane.setDividerSize(Constants.SPLITPANE_DIVIDER_SIZE);
-			int newDividerLocation = -1;
-			
-			//check how big the results table is
-			int tableHeight = homologResultsTable.getRowCount() * homologResultsTable.getRowHeight();		
-			int spacer = 150;
-			int totalTableHeight = tableHeight + spacer;
-			
-			//if it is more than a third of the main window we want to limit it to that size
-			if(totalTableHeight > (MapViewer.winMain.getHeight() * 0.33f))
+			if (featuresFound.size() > 0)
 			{
-				newDividerLocation = (int) (MapViewer.winMain.getHeight() * 0.66f);
+				//set the results panel to be visible
+				this.setVisible(false);
+				MapViewer.winMain.splitPane.setDividerSize(Constants.SPLITPANE_DIVIDER_SIZE);
+				int newDividerLocation = -1;
+				//check how big the results table is
+				int tableHeight = homologResultsTable.getRowCount() * homologResultsTable.getRowHeight();
+				int spacer = 150;
+				int totalTableHeight = tableHeight + spacer;
+				//if it is more than a third of the main window we want to limit it to that size
+				if (totalTableHeight > (MapViewer.winMain.getHeight() * 0.33f))
+				{
+					newDividerLocation = (int) (MapViewer.winMain.getHeight() * 0.66f);
+				}
+				else
+				{
+					newDividerLocation = (int) (MapViewer.winMain.getHeight() - totalTableHeight);
+				}
+				MapViewer.winMain.splitPane.setDividerLocation(newDividerLocation);
 			}
 			else
 			{
-				newDividerLocation = (int) (MapViewer.winMain.getHeight() - totalTableHeight);
-			}			
-			MapViewer.winMain.splitPane.setDividerLocation(newDividerLocation);
+				TaskDialog.info("No matches found for the name(s) entered", "Close");
+			}
 
 		}
 		catch (RuntimeException e1)

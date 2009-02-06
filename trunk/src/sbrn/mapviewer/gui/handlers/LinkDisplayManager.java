@@ -218,13 +218,32 @@ public class LinkDisplayManager
 										referenceY = (int) ((referenceMapStop - feat2Start) / (referenceMapStop / referenceGMap.height)) + referenceChromoY;
 									}
 									
-									//this next condition ensures we only draw links to reference features that are showing on the canvas
-									if ((referenceY > 0  && referenceY < mainCanvas.getHeight()) &&
-													(targetY > 0  && targetY < mainCanvas.getHeight()) &&
-													referenceGMapSet.selectedMaps.contains(referenceGMap))
-									{	
+									//this is a user preference for filerting the number of links by whether their originating
+									//feature is visible on canvas or not
+									if (Prefs.drawOnlyLinksToVisibleFeatures)
+									{
+										//this next condition ensures we only draw links to reference features that are showing on the canvas
+										if ((referenceY > 0 && referenceY < mainCanvas.getHeight()) && (targetY > 0 && targetY < mainCanvas.getHeight()) && referenceGMapSet.selectedMaps.contains(referenceGMap))
+										{
+											// draw the link either as a straight line or a curve
+											drawStraightOrCurvedLink(
+															g2,
+															targetChromoX + 1,
+															targetY,
+															referenceChromoX - 1,
+															referenceY);
+										}
+									}
+									//otherwise we just draw every link
+									else
+									{
 										// draw the link either as a straight line or a curve
-										drawStraightOrCurvedLink(g2,targetChromoX + 1, targetY, referenceChromoX - 1, referenceY);	
+										drawStraightOrCurvedLink(
+														g2,
+														targetChromoX + 1,
+														targetY,
+														referenceChromoX - 1,
+														referenceY);
 									}
 								}
 							}

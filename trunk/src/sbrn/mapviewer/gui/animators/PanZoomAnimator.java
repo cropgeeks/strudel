@@ -82,6 +82,7 @@ public class PanZoomAnimator extends Thread implements ItemListener
 		float zoomFactorIncrement = (finalZoomFactor - selectedSet.zoomFactor) / totalFrames;
 		float chromoHeightIncrement = (finalChromoHeight - selectedSet.chromoHeight) / totalFrames;
 		float totalYIncrement = (finalTotalY - selectedSet.totalY) / totalFrames;
+		boolean maxZoomFactorReached = false;
 		
 		// now loop for the number of total frames, zooming in by a bit each time
 		for (int i = 0; i < totalFrames; i++)
@@ -113,7 +114,9 @@ public class PanZoomAnimator extends Thread implements ItemListener
 					TaskDialog.info("Maximum zoom level reached for map set " + selectedSet.name, "Close", maxZoomMessageCheckBox);
 				}
 				zoomHandler.isPanZoomRequest = false;
-				return;	
+				maxZoomFactorReached = true;
+				
+				break;	
 			}
 			
 			// work out the chromo height and total genome height for when the new zoom factor will have been applied
@@ -136,17 +139,24 @@ public class PanZoomAnimator extends Thread implements ItemListener
 			MapViewer.winMain.fatController.updateZoomControls();
 		}
 		
-		//one more zoom adjust  to be done explicitly here to make sure we have all the final intended values and have not fallen short
+		//if we have not reached the max zoom factor with this we need to do one more zoom adjust 
+		//explicitly here to make sure we have all the final intended values and have not fallen short
 		//of these due to rounding errors etc.
-		selectedSet.zoomFactor = finalZoomFactor;
-		zoomHandler.adjustZoom(selectedMap, finalTotalY, (int)finalChromoHeight, (int)(finalChromoHeight - (initialDistFromTopProportion * finalChromoHeight)));
+		if (!maxZoomFactorReached)
+		{
+			selectedSet.zoomFactor = finalZoomFactor;
+			zoomHandler.adjustZoom(
+							selectedMap,
+							finalTotalY,
+							(int) finalChromoHeight,
+							(int) (finalChromoHeight - (initialDistFromTopProportion * finalChromoHeight)));
+		}
 		
 		//now update the arrays with the position data
 		MapViewer.winMain.fatController.initialisePositionArrays();
-		
 		//update zoom control position
 		MapViewer.winMain.fatController.updateZoomControls();
-		
+				
 		//turn antialiasing on and repaint
 		mainCanvas.antiAlias = true;
 		mainCanvas.updateCanvas(true);

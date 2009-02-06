@@ -12,6 +12,36 @@ import sbrn.mapviewer.gui.entities.*;
 
 public class Utils
 {
+	
+	// --------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	//returns the y coordinate of a feature in genome space rather than canvas space
+	//genome space = the extent of the genome as calculated by the application (can be greater than the visible canvas height)
+	public static int getFeatureYInGenomeSpace(Feature f)
+	{
+		int featureYInGenomeSpace = -1;
+
+		//the gmap the feature is on
+		GChromoMap gChromoMap = f.getOwningMap().getGChromoMap();
+
+		//the index of the chromo in the genome -- starts at 1
+		int chromoIndex = gChromoMap.index;
+				
+		//the combined height of all chromosomes up to and excluding the one the feature is on
+		int combinedChromoHeight = (chromoIndex-1) * gChromoMap.height;
+		
+		//the combined height of all spaces between chromos up to the one the feature is on
+		int combinedSpacerHeight = (chromoIndex-1) * MapViewer.winMain.mainCanvas.chromoSpacing;
+		
+		//the offset of the feature position from the top of the chromosome
+		int featureOffset = Math.round((f.getStart() / f.getOwningMap().getStop()) * gChromoMap.height);
+		
+		//add it all up
+		featureYInGenomeSpace = combinedChromoHeight  + combinedSpacerHeight + featureOffset;
+		
+		return featureYInGenomeSpace;
+	}
+	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	//finds a genome by name
@@ -32,7 +62,7 @@ public class Utils
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	//finds a Feature by name
+	//finds a map by name
 	public static GChromoMap getGMapByName(String gMapName, String gMapSetName)
 	{
 		GChromoMap foundMap = null;

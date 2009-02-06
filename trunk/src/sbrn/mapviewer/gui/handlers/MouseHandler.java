@@ -23,6 +23,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	long timeOfMouseDown = 0;
 	
 	private boolean isOSX = SystemUtils.isMacOS();
+
 	
 	// ===============================================c'tors===========================================
 	
@@ -320,7 +321,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	
 	public void mouseMoved(MouseEvent e)
 	{
-		mouseOverHandler.detectMouseOver(e.getX(), e.getY());
+			mouseOverHandler.detectMouseOver(e.getX(), e.getY());
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -1,7 +1,5 @@
 package sbrn.mapviewer.gui;
 
-import java.awt.*;
-
 import scri.commons.gui.*;
 
 public class Prefs extends XMLPreferences
@@ -28,5 +26,11 @@ public class Prefs extends XMLPreferences
 	
 	//a boolean indicating whether we need to show the "max zoom level reached " taskdialog when user has pan zoomed to the max
 	public static boolean showMaxZoomLevelMessage = true;
+	
+	//this boolean is set by the user through a button and indicates a global preference for antialiased or plain darwing styles
+	public static boolean userPrefAntialias = true;	
+	
+	//do we links to be drawn whether their orginating feature is currently visible on the canvas or not?
+	public static boolean drawOnlyLinksToVisibleFeatures = false;
 		
 }

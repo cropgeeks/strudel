@@ -3,12 +3,15 @@ package sbrn.mapviewer.gui;
 import java.awt.*;
 import java.awt.color.*;
 import java.awt.event.*;
+import java.lang.reflect.*;
+import java.net.*;
 import java.util.*;
 
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.components.*;
 import sbrn.mapviewer.gui.entities.*;
+import scri.commons.gui.*;
 
 public class Utils
 {
@@ -334,6 +337,51 @@ public class Utils
 		}
 		
 		return index;
+	}
+	
+	// ---------------------------------------------------------------------------------------------------------------------
+
+	public static void visitURL(String html)
+	{
+		try
+		{
+			if (SystemUtils.jreVersion() >= 1.6)
+				visitURL6(html);
+			else
+				visitURL5(html);
+		}
+		catch (Exception e)
+		{
+			TaskDialog.error("Error: URL not specified or specified incorrectly", "Close");
+			System.out.println(e);
+		}
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
+
+	// Java6 method for visiting a URL
+	private static void visitURL6(String html)
+		throws Exception
+	{
+		Desktop desktop = Desktop.getDesktop();
+
+		URI uri = new URI(html);
+		desktop.browse(uri);
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
+
+	// Java5 (OS X only) method for visiting a URL
+	private static void visitURL5(String html)
+		throws Exception
+	{
+		// See: http://www.centerkey.com/java/browser/
+
+		Class<?> fileMgr = Class.forName("com.apple.eio.FileManager");
+		Method openURL = fileMgr.getDeclaredMethod("openURL",
+			new Class[] {String.class});
+
+		openURL.invoke(null, new Object[] {html});
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------

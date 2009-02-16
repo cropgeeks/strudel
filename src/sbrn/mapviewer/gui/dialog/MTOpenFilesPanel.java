@@ -78,6 +78,8 @@ public class MTOpenFilesPanel extends javax.swing.JPanel
 		refGenome1UrlTf = new javax.swing.JTextField();
 		refGenome2UrlLabel = new javax.swing.JLabel();
 		refGenome2UrlTf = new javax.swing.JTextField();
+		targetGenomeUrlLabel1 = new javax.swing.JLabel();
+		targetGenomeUrlTf1 = new javax.swing.JTextField();
 		
 		dataImportModePanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Choose data import mode:"));
 		
@@ -97,8 +99,30 @@ public class MTOpenFilesPanel extends javax.swing.JPanel
 		
 		org.jdesktop.layout.GroupLayout dataImportModePanelLayout = new org.jdesktop.layout.GroupLayout(dataImportModePanel);
 		dataImportModePanel.setLayout(dataImportModePanelLayout);
-		dataImportModePanelLayout.setHorizontalGroup(dataImportModePanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(dataImportModePanelLayout.createSequentialGroup().add(dataImportModePanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false).add(org.jdesktop.layout.GroupLayout.LEADING, ownDataRadioButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, exampleDataRadioButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addContainerGap(317, Short.MAX_VALUE)));
-		dataImportModePanelLayout.setVerticalGroup(dataImportModePanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(dataImportModePanelLayout.createSequentialGroup().add(exampleDataRadioButton).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(ownDataRadioButton)));
+		dataImportModePanelLayout.setHorizontalGroup(dataImportModePanelLayout.createParallelGroup(
+						org.jdesktop.layout.GroupLayout.LEADING).add(
+						dataImportModePanelLayout.createSequentialGroup().add(
+										dataImportModePanelLayout.createParallelGroup(
+														org.jdesktop.layout.GroupLayout.TRAILING,
+														false).add(
+														org.jdesktop.layout.GroupLayout.LEADING,
+														ownDataRadioButton,
+														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+														Short.MAX_VALUE).add(
+														org.jdesktop.layout.GroupLayout.LEADING,
+														exampleDataRadioButton,
+														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+														Short.MAX_VALUE)).addContainerGap(
+										317, Short.MAX_VALUE)));
+		dataImportModePanelLayout.setVerticalGroup(dataImportModePanelLayout.createParallelGroup(
+						org.jdesktop.layout.GroupLayout.LEADING).add(
+						dataImportModePanelLayout.createSequentialGroup().add(
+										exampleDataRadioButton).addPreferredGap(
+										org.jdesktop.layout.LayoutStyle.RELATED,
+										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE).add(ownDataRadioButton)));
 		
 		targetGenomeLoaderPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Select target genome feature file:"));
 		targetGenomeLoaderPanel.setEnabled(false);
@@ -120,8 +144,29 @@ public class MTOpenFilesPanel extends javax.swing.JPanel
 		
 		org.jdesktop.layout.GroupLayout targetGenomeLoaderPanelLayout = new org.jdesktop.layout.GroupLayout(targetGenomeLoaderPanel);
 		targetGenomeLoaderPanel.setLayout(targetGenomeLoaderPanelLayout);
-		targetGenomeLoaderPanelLayout.setHorizontalGroup(targetGenomeLoaderPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(org.jdesktop.layout.GroupLayout.TRAILING, targetGenomeLoaderPanelLayout.createSequentialGroup().add(targetFeatFileLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 222, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(targetfeatFileTF, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 274, Short.MAX_VALUE).add(18, 18, 18).add(targetFeatFileButton).addContainerGap()));
-		targetGenomeLoaderPanelLayout.setVerticalGroup(targetGenomeLoaderPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(targetGenomeLoaderPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(targetFeatFileButton).add(targetfeatFileTF, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(targetFeatFileLabel)));
+		targetGenomeLoaderPanelLayout.setHorizontalGroup(targetGenomeLoaderPanelLayout.createParallelGroup(
+						org.jdesktop.layout.GroupLayout.LEADING).add(
+						org.jdesktop.layout.GroupLayout.TRAILING,
+						targetGenomeLoaderPanelLayout.createSequentialGroup().add(
+										targetFeatFileLabel,
+										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+										222,
+										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(
+										org.jdesktop.layout.LayoutStyle.RELATED).add(
+										targetfeatFileTF,
+										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+										274, Short.MAX_VALUE).add(18, 18, 18).add(
+										targetFeatFileButton).addContainerGap()));
+		targetGenomeLoaderPanelLayout.setVerticalGroup(targetGenomeLoaderPanelLayout.createParallelGroup(
+						org.jdesktop.layout.GroupLayout.LEADING).add(
+						targetGenomeLoaderPanelLayout.createParallelGroup(
+										org.jdesktop.layout.GroupLayout.BASELINE).add(
+										targetFeatFileButton).add(
+										targetfeatFileTF,
+										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(
+										targetFeatFileLabel)));
 		
 		referenceGenomeLoaderPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Optionally select one or two reference genomes:"));
 		referenceGenomeLoaderPanel.setEnabled(false);
@@ -188,8 +233,108 @@ public class MTOpenFilesPanel extends javax.swing.JPanel
 		
 		org.jdesktop.layout.GroupLayout referenceGenomeLoaderPanelLayout = new org.jdesktop.layout.GroupLayout(referenceGenomeLoaderPanel);
 		referenceGenomeLoaderPanel.setLayout(referenceGenomeLoaderPanelLayout);
-		referenceGenomeLoaderPanelLayout.setHorizontalGroup(referenceGenomeLoaderPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(referenceGenomeLoaderPanelLayout.createSequentialGroup().add(referenceGenomeLoaderPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(referenceGenomeLoaderPanelLayout.createSequentialGroup().add(referenceGenomeLoaderPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING).add(org.jdesktop.layout.GroupLayout.LEADING, refGen2FeatFileLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, refGen1FeatFileLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, refGen1HomFileLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)).add(referenceGenomeLoaderPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(referenceGenomeLoaderPanelLayout.createSequentialGroup().add(5, 5, 5).add(referenceGenomeLoaderPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(refGen2FeatFileTF, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 274, Short.MAX_VALUE).add(refGen2HomFileTF, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 274, Short.MAX_VALUE))).add(referenceGenomeLoaderPanelLayout.createSequentialGroup().addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(referenceGenomeLoaderPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(refGen1FeatFileTF, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 274, Short.MAX_VALUE).add(refGen1HomFileTF, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 274, Short.MAX_VALUE))))).add(referenceGenomeLoaderPanelLayout.createSequentialGroup().add(refGen2HomFileLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 501, Short.MAX_VALUE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED))).add(18, 18, 18).add(referenceGenomeLoaderPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(ref1HomFileButton).add(ref1FeatFileButton).add(ref2FeatFileButton).add(ref2HomFileButton)).addContainerGap()));
-		referenceGenomeLoaderPanelLayout.setVerticalGroup(referenceGenomeLoaderPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(referenceGenomeLoaderPanelLayout.createSequentialGroup().add(referenceGenomeLoaderPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(refGen1FeatFileLabel).add(refGen1FeatFileTF, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(ref1FeatFileButton)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(referenceGenomeLoaderPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(refGen1HomFileLabel).add(refGen1HomFileTF, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(ref1HomFileButton)).add(8, 8, 8).add(referenceGenomeLoaderPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(refGen2FeatFileLabel).add(refGen2FeatFileTF, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(ref2FeatFileButton)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(referenceGenomeLoaderPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(refGen2HomFileLabel).add(refGen2HomFileTF, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(ref2HomFileButton))));
+		referenceGenomeLoaderPanelLayout.setHorizontalGroup(referenceGenomeLoaderPanelLayout.createParallelGroup(
+						org.jdesktop.layout.GroupLayout.LEADING).add(
+						referenceGenomeLoaderPanelLayout.createSequentialGroup().add(
+										referenceGenomeLoaderPanelLayout.createParallelGroup(
+														org.jdesktop.layout.GroupLayout.LEADING).add(
+														referenceGenomeLoaderPanelLayout.createSequentialGroup().add(
+																		referenceGenomeLoaderPanelLayout.createParallelGroup(
+																						org.jdesktop.layout.GroupLayout.TRAILING).add(
+																						org.jdesktop.layout.GroupLayout.LEADING,
+																						refGen2FeatFileLabel,
+																						org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+																						222,
+																						Short.MAX_VALUE).add(
+																						org.jdesktop.layout.GroupLayout.LEADING,
+																						refGen1FeatFileLabel,
+																						org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+																						222,
+																						Short.MAX_VALUE).add(
+																						org.jdesktop.layout.GroupLayout.LEADING,
+																						refGen1HomFileLabel,
+																						org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+																						222,
+																						Short.MAX_VALUE)).add(
+																		referenceGenomeLoaderPanelLayout.createParallelGroup(
+																						org.jdesktop.layout.GroupLayout.LEADING).add(
+																						referenceGenomeLoaderPanelLayout.createSequentialGroup().add(
+																										5,
+																										5,
+																										5).add(
+																										referenceGenomeLoaderPanelLayout.createParallelGroup(
+																														org.jdesktop.layout.GroupLayout.LEADING).add(
+																														refGen2FeatFileTF,
+																														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+																														274,
+																														Short.MAX_VALUE).add(
+																														refGen2HomFileTF,
+																														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+																														274,
+																														Short.MAX_VALUE))).add(
+																						referenceGenomeLoaderPanelLayout.createSequentialGroup().addPreferredGap(
+																										org.jdesktop.layout.LayoutStyle.RELATED).add(
+																										referenceGenomeLoaderPanelLayout.createParallelGroup(
+																														org.jdesktop.layout.GroupLayout.LEADING).add(
+																														refGen1FeatFileTF,
+																														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+																														274,
+																														Short.MAX_VALUE).add(
+																														refGen1HomFileTF,
+																														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+																														274,
+																														Short.MAX_VALUE))))).add(
+														referenceGenomeLoaderPanelLayout.createSequentialGroup().add(
+																		refGen2HomFileLabel,
+																		org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+																		501,
+																		Short.MAX_VALUE).addPreferredGap(
+																		org.jdesktop.layout.LayoutStyle.RELATED))).add(
+										18, 18, 18).add(
+										referenceGenomeLoaderPanelLayout.createParallelGroup(
+														org.jdesktop.layout.GroupLayout.LEADING).add(
+														ref1HomFileButton).add(
+														ref1FeatFileButton).add(
+														ref2FeatFileButton).add(
+														ref2HomFileButton)).addContainerGap()));
+		referenceGenomeLoaderPanelLayout.setVerticalGroup(referenceGenomeLoaderPanelLayout.createParallelGroup(
+						org.jdesktop.layout.GroupLayout.LEADING).add(
+						referenceGenomeLoaderPanelLayout.createSequentialGroup().add(
+										referenceGenomeLoaderPanelLayout.createParallelGroup(
+														org.jdesktop.layout.GroupLayout.BASELINE).add(
+														refGen1FeatFileLabel).add(
+														refGen1FeatFileTF,
+														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(
+														ref1FeatFileButton)).addPreferredGap(
+										org.jdesktop.layout.LayoutStyle.RELATED).add(
+										referenceGenomeLoaderPanelLayout.createParallelGroup(
+														org.jdesktop.layout.GroupLayout.BASELINE).add(
+														refGen1HomFileLabel).add(
+														refGen1HomFileTF,
+														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(
+														ref1HomFileButton)).add(
+										8, 8, 8).add(
+										referenceGenomeLoaderPanelLayout.createParallelGroup(
+														org.jdesktop.layout.GroupLayout.BASELINE).add(
+														refGen2FeatFileLabel).add(
+														refGen2FeatFileTF,
+														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(
+														ref2FeatFileButton)).addPreferredGap(
+										org.jdesktop.layout.LayoutStyle.RELATED).add(
+										referenceGenomeLoaderPanelLayout.createParallelGroup(
+														org.jdesktop.layout.GroupLayout.BASELINE).add(
+														refGen2HomFileLabel).add(
+														refGen2HomFileTF,
+														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(
+														ref2HomFileButton))));
 		
 		jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Annotation URLs for reference genomes:"));
 		
@@ -203,15 +348,134 @@ public class MTOpenFilesPanel extends javax.swing.JPanel
 		
 		refGenome2UrlTf.setEnabled(false);
 		
+		targetGenomeUrlLabel1.setText("URL target genome:");
+		targetGenomeUrlLabel1.setEnabled(false);
+		
+		targetGenomeUrlTf1.setEnabled(false);
+		
 		org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
 		jPanel1.setLayout(jPanel1Layout);
-		jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jPanel1Layout.createSequentialGroup().add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jPanel1Layout.createSequentialGroup().add(refGenome1UrlLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 223, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(refGenome1UrlTf, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)).add(jPanel1Layout.createSequentialGroup().add(refGenome2UrlLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 223, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(refGenome2UrlTf, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE))).addContainerGap()));
-		jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jPanel1Layout.createSequentialGroup().add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(refGenome1UrlLabel).add(refGenome1UrlTf, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(refGenome2UrlLabel).add(refGenome2UrlTf, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+		jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(
+						org.jdesktop.layout.GroupLayout.LEADING).add(
+						jPanel1Layout.createSequentialGroup().add(
+										jPanel1Layout.createParallelGroup(
+														org.jdesktop.layout.GroupLayout.LEADING).add(
+														jPanel1Layout.createSequentialGroup().add(
+																		refGenome2UrlLabel,
+																		org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+																		223,
+																		org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(
+																		org.jdesktop.layout.LayoutStyle.RELATED).add(
+																		refGenome2UrlTf,
+																		org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+																		378,
+																		Short.MAX_VALUE)).add(
+														jPanel1Layout.createSequentialGroup().add(
+																		jPanel1Layout.createParallelGroup(
+																						org.jdesktop.layout.GroupLayout.LEADING).add(
+																						refGenome1UrlLabel,
+																						org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+																						223,
+																						org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(
+																						targetGenomeUrlLabel1,
+																						org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+																						223,
+																						org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
+																		org.jdesktop.layout.LayoutStyle.RELATED).add(
+																		jPanel1Layout.createParallelGroup(
+																						org.jdesktop.layout.GroupLayout.LEADING).add(
+																						targetGenomeUrlTf1,
+																						org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+																						378,
+																						Short.MAX_VALUE).add(
+																						refGenome1UrlTf,
+																						org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+																						378,
+																						Short.MAX_VALUE)))).addContainerGap()));
+		jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(
+						org.jdesktop.layout.GroupLayout.LEADING).add(
+						jPanel1Layout.createSequentialGroup().addContainerGap().add(
+										jPanel1Layout.createParallelGroup(
+														org.jdesktop.layout.GroupLayout.BASELINE).add(
+														targetGenomeUrlLabel1).add(
+														targetGenomeUrlTf1,
+														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
+										org.jdesktop.layout.LayoutStyle.RELATED).add(
+										jPanel1Layout.createParallelGroup(
+														org.jdesktop.layout.GroupLayout.BASELINE).add(
+														refGenome1UrlLabel).add(
+														refGenome1UrlTf,
+														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
+										org.jdesktop.layout.LayoutStyle.RELATED).add(
+										jPanel1Layout.createParallelGroup(
+														org.jdesktop.layout.GroupLayout.BASELINE).add(
+														refGenome2UrlLabel).add(
+														refGenome2UrlTf,
+														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addContainerGap(
+										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE)));
 		
 		org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
 		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(layout.createSequentialGroup().addContainerGap().add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING).add(org.jdesktop.layout.GroupLayout.LEADING, jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false).add(org.jdesktop.layout.GroupLayout.LEADING, targetGenomeLoaderPanel, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, referenceGenomeLoaderPanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, dataImportModePanel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))).addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
-		layout.setVerticalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(layout.createSequentialGroup().add(13, 13, 13).add(dataImportModePanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED).add(targetGenomeLoaderPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED).add(referenceGenomeLoaderPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(18, 18, 18).add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+		layout.setHorizontalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
+						layout.createSequentialGroup().addContainerGap().add(
+										layout.createParallelGroup(
+														org.jdesktop.layout.GroupLayout.TRAILING).add(
+														org.jdesktop.layout.GroupLayout.LEADING,
+														jPanel1,
+														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+														Short.MAX_VALUE).add(
+														org.jdesktop.layout.GroupLayout.LEADING,
+														layout.createParallelGroup(
+																		org.jdesktop.layout.GroupLayout.TRAILING,
+																		false).add(
+																		org.jdesktop.layout.GroupLayout.LEADING,
+																		targetGenomeLoaderPanel,
+																		0,
+																		org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+																		Short.MAX_VALUE).add(
+																		org.jdesktop.layout.GroupLayout.LEADING,
+																		referenceGenomeLoaderPanel,
+																		org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+																		org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+																		Short.MAX_VALUE).add(
+																		org.jdesktop.layout.GroupLayout.LEADING,
+																		dataImportModePanel,
+																		org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+																		org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+																		Short.MAX_VALUE))).addContainerGap(
+										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE)));
+		layout.setVerticalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
+						layout.createSequentialGroup().add(13, 13, 13).add(
+										dataImportModePanel,
+										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(
+										org.jdesktop.layout.LayoutStyle.UNRELATED).add(
+										targetGenomeLoaderPanel,
+										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(
+										org.jdesktop.layout.LayoutStyle.UNRELATED).add(
+										referenceGenomeLoaderPanel,
+										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(
+										18, 18, 18).add(
+										jPanel1,
+										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addContainerGap(
+										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE)));
 	}// </editor-fold>
 	//GEN-END:initComponents
 	
@@ -252,10 +516,12 @@ public class MTOpenFilesPanel extends javax.swing.JPanel
 		refGen2HomFileTF.setEnabled(enable);
 		refGen1FeatFileTF.setEnabled(enable);
 		targetfeatFileTF.setEnabled(enable);
+		targetGenomeUrlTf1.setEnabled(enable);
 		refGenome1UrlTf.setEnabled(enable);
 		refGenome2UrlTf.setEnabled(enable);
 		refGenome1UrlLabel.setEnabled(enable);
 		refGenome2UrlLabel.setEnabled(enable);
+		targetGenomeUrlLabel1.setEnabled(enable);
 	}
 	
 	//---------------------------------------------------------------------------------------------------------------------------------
@@ -308,6 +574,8 @@ public class MTOpenFilesPanel extends javax.swing.JPanel
 	private javax.swing.JButton targetFeatFileButton;
 	private javax.swing.JLabel targetFeatFileLabel;
 	private javax.swing.JPanel targetGenomeLoaderPanel;
+	private javax.swing.JLabel targetGenomeUrlLabel1;
+	private javax.swing.JTextField targetGenomeUrlTf1;
 	private javax.swing.JTextField targetfeatFileTF;
 	
 	// End of variables declaration//GEN-END:variables
@@ -346,15 +614,20 @@ public class MTOpenFilesPanel extends javax.swing.JPanel
 	{
 		return refGenome2UrlTf;
 	}
-
+	
 	public javax.swing.JLabel getRefGenome1UrlLabel()
 	{
 		return refGenome1UrlLabel;
 	}
-
+	
 	public javax.swing.JLabel getRefGenome2UrlLabel()
 	{
 		return refGenome2UrlLabel;
+	}
+
+	public javax.swing.JTextField getTargetGenomeUrlTf1()
+	{
+		return targetGenomeUrlTf1;
 	}
 	
 }

@@ -78,6 +78,7 @@ public class WinMain extends JFrame
 	public FindFeaturesDialog ffDialog;
 	public FindFeaturesInRangeDialog ffInRangeDialog;
 	public OpenFileDialog openFileDialog;
+	public AboutDialog aboutDialog = new AboutDialog(this, true);
 
 	
 	
@@ -91,7 +92,7 @@ public class WinMain extends JFrame
 		pack();
 		
 		//GUI bits and pieces
-		setTitle("Map Viewer - " + Install4j.VERSION);
+		setTitle("Strudel " + Install4j.VERSION);
 		setIconImage(Icons.getIcon("MAPVIEWER").getImage());
 		setSize(Prefs.guiWinMainWidth, Prefs.guiWinMainHeight);
 		

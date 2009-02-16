@@ -28,6 +28,9 @@ public class ControlToolBar extends JToolBar implements ActionListener
 	public JButton bCurves;
 	private JToggleButton bAntialias;
 	private JToggleButton bLinkFilter;
+	private JButton bInfo;
+	
+	
 	public int currentLinkShapeType = 1;
 	public boolean linkShapeOrderAscending = true;
 	
@@ -71,6 +74,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		addSeparator(true);
 		
 		add(bHelp);
+		add(bInfo);
 		add(new JLabel("  "));
 		
 		bAntialias.setSelected(Prefs.userPrefAntialias);
@@ -148,6 +152,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		bAntialias = (JToggleButton) getButton(true, "", "Toggle between antialiased and plain drawing styles", Icons.getIcon("ANTIALIAS"), null);
 		bLinkFilter = (JToggleButton) getButton(true, "", "Toggle between visibility-based filtering of links and no filtering", Icons.getIcon("LINKFILTER"), null);		
 		bHelp =  (JButton) getButton(false, "", "Help", Icons.getIcon("HELP"), null);
+		bInfo =  (JButton) getButton(false, "", "About Strudel", Icons.getIcon("INFO"), null);
 		bResetAll =  (JButton) getButton(false, "", "Reset display", Icons.getIcon("RESET"), null);
 	}
 	
@@ -210,6 +215,22 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		//reset the main canvas view and deselect all features
 		else if (e.getSource() == bResetAll)
 			MapViewer.winMain.fatController.resetMainCanvasView();
+		
+		//help menu
+		else if (e.getSource() == bHelp)
+		{
+			String url = Constants.strudelHomePage + "strudelManual.pdf";
+
+			Utils.visitURL(url);
+		}
+		
+		//"about" dialog
+		else if(e.getSource() == bInfo)
+		{
+			MapViewer.winMain.aboutDialog.setLocationRelativeTo(MapViewer.winMain);
+			MapViewer.winMain.aboutDialog.setVisible(true);
+		}
+		
 	}
 	
 	private void addSeparator(boolean separator)

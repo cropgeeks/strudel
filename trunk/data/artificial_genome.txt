@@ -1,1600 +1,1600 @@
-chromosome	locus name	start	alias	annotation
-1	locus 1_0001	5631	none	none
-1	locus 1_0002	9669	none	none
-1	locus 1_0003	4162	none	none
-1	locus 1_0004	832	none	none
-1	locus 1_0005	1651	none	none
-1	locus 1_0006	6830	none	none
-1	locus 1_0007	1220	none	none
-1	locus 1_0008	5231	none	none
-1	locus 1_0009	8635	none	none
-1	locus 1_0010	5774	none	none
-1	locus 1_0011	9805	none	none
-1	locus 1_0012	9198	none	none
-1	locus 1_0013	3013	none	none
-1	locus 1_0014	6281	none	none
-1	locus 1_0015	3270	none	none
-1	locus 1_0016	9524	none	none
-1	locus 1_0017	3520	none	none
-1	locus 1_0018	2876	none	none
-1	locus 1_0019	9273	none	none
-1	locus 1_0020	2091	none	none
-1	locus 1_0021	2903	none	none
-1	locus 1_0022	3348	none	none
-1	locus 1_0023	799	none	none
-1	locus 1_0024	8057	none	none
-1	locus 1_0025	7287	none	none
-1	locus 1_0026	441	none	none
-1	locus 1_0027	9695	none	none
-1	locus 1_0028	6646	none	none
-1	locus 1_0029	5202	none	none
-1	locus 1_0030	141	none	none
-1	locus 1_0031	3220	none	none
-1	locus 1_0032	9400	none	none
-1	locus 1_0033	1698	none	none
-1	locus 1_0034	9589	none	none
-1	locus 1_0035	687	none	none
-1	locus 1_0036	5390	none	none
-1	locus 1_0037	3234	none	none
-1	locus 1_0038	4415	none	none
-1	locus 1_0039	2148	none	none
-1	locus 1_0040	5064	none	none
-1	locus 1_0041	963	none	none
-1	locus 1_0042	1813	none	none
-1	locus 1_0043	7599	none	none
-1	locus 1_0044	135	none	none
-1	locus 1_0045	44	none	none
-1	locus 1_0046	1836	none	none
-1	locus 1_0047	9565	none	none
-1	locus 1_0048	747	none	none
-1	locus 1_0049	5909	none	none
-1	locus 1_0050	4869	none	none
-1	locus 1_0051	269	none	none
-1	locus 1_0052	5855	none	none
-1	locus 1_0053	7344	none	none
-1	locus 1_0054	7225	none	none
-1	locus 1_0055	5103	none	none
-1	locus 1_0056	9777	none	none
-1	locus 1_0057	2736	none	none
-1	locus 1_0058	6356	none	none
-1	locus 1_0059	861	none	none
-1	locus 1_0060	3903	none	none
-1	locus 1_0061	5115	none	none
-1	locus 1_0062	9740	none	none
-1	locus 1_0063	6563	none	none
-1	locus 1_0064	3929	none	none
-1	locus 1_0065	5735	none	none
-1	locus 1_0066	6317	none	none
-1	locus 1_0067	2742	none	none
-1	locus 1_0068	5701	none	none
-1	locus 1_0069	9127	none	none
-1	locus 1_0070	5971	none	none
-1	locus 1_0071	2906	none	none
-1	locus 1_0072	7420	none	none
-1	locus 1_0073	9013	none	none
-1	locus 1_0074	3826	none	none
-1	locus 1_0075	1800	none	none
-1	locus 1_0076	8667	none	none
-1	locus 1_0077	8938	none	none
-1	locus 1_0078	8239	none	none
-1	locus 1_0079	4029	none	none
-1	locus 1_0080	7663	none	none
-1	locus 1_0081	684	none	none
-1	locus 1_0082	7226	none	none
-1	locus 1_0083	2606	none	none
-1	locus 1_0084	2242	none	none
-1	locus 1_0085	8310	none	none
-1	locus 1_0086	6308	none	none
-1	locus 1_0087	6457	none	none
-1	locus 1_0088	8739	none	none
-1	locus 1_0089	7014	none	none
-1	locus 1_0090	6995	none	none
-1	locus 1_0091	8564	none	none
-1	locus 1_0092	6997	none	none
-1	locus 1_0093	1280	none	none
-1	locus 1_0094	2458	none	none
-1	locus 1_0095	7432	none	none
-1	locus 1_0096	9379	none	none
-1	locus 1_0097	1677	none	none
-1	locus 1_0098	7298	none	none
-1	locus 1_0099	1026	none	none
-1	locus 1_0100	4403	none	none
-1	locus 1_0101	7755	none	none
-1	locus 1_0102	7758	none	none
-1	locus 1_0103	6799	none	none
-1	locus 1_0104	7510	none	none
-1	locus 1_0105	5141	none	none
-1	locus 1_0106	4245	none	none
-1	locus 1_0107	6764	none	none
-1	locus 1_0108	9858	none	none
-1	locus 1_0109	9893	none	none
-1	locus 1_0110	5841	none	none
-1	locus 1_0111	2080	none	none
-1	locus 1_0112	5549	none	none
-1	locus 1_0113	5173	none	none
-1	locus 1_0114	1579	none	none
-1	locus 1_0115	5992	none	none
-1	locus 1_0116	2411	none	none
-1	locus 1_0117	3322	none	none
-1	locus 1_0118	1549	none	none
-1	locus 1_0119	7074	none	none
-1	locus 1_0120	3446	none	none
-1	locus 1_0121	2950	none	none
-1	locus 1_0122	3735	none	none
-1	locus 1_0123	5214	none	none
-1	locus 1_0124	1267	none	none
-1	locus 1_0125	6724	none	none
-1	locus 1_0126	7838	none	none
-1	locus 1_0127	2689	none	none
-1	locus 1_0128	6663	none	none
-1	locus 1_0129	1324	none	none
-1	locus 1_0130	7060	none	none
-1	locus 1_0131	1289	none	none
-1	locus 1_0132	7298	none	none
-1	locus 1_0133	3938	none	none
-1	locus 1_0134	9153	none	none
-1	locus 1_0135	3283	none	none
-1	locus 1_0136	9803	none	none
-1	locus 1_0137	7219	none	none
-1	locus 1_0138	7298	none	none
-1	locus 1_0139	9968	none	none
-1	locus 1_0140	2076	none	none
-1	locus 1_0141	8581	none	none
-1	locus 1_0142	9319	none	none
-1	locus 1_0143	4272	none	none
-1	locus 1_0144	8530	none	none
-1	locus 1_0145	5710	none	none
-1	locus 1_0146	8610	none	none
-1	locus 1_0147	8211	none	none
-1	locus 1_0148	4466	none	none
-1	locus 1_0149	3964	none	none
-1	locus 1_0150	3355	none	none
-1	locus 1_0151	4297	none	none
-1	locus 1_0152	4912	none	none
-1	locus 1_0153	7433	none	none
-1	locus 1_0154	2801	none	none
-1	locus 1_0155	3340	none	none
-1	locus 1_0156	3884	none	none
-1	locus 1_0157	6341	none	none
-1	locus 1_0158	9596	none	none
-1	locus 1_0159	9524	none	none
-1	locus 1_0160	2482	none	none
-1	locus 1_0161	4476	none	none
-1	locus 1_0162	6437	none	none
-1	locus 1_0163	3589	none	none
-1	locus 1_0164	6906	none	none
-1	locus 1_0165	4430	none	none
-1	locus 1_0166	2309	none	none
-1	locus 1_0167	5245	none	none
-1	locus 1_0168	4458	none	none
-1	locus 1_0169	2134	none	none
-1	locus 1_0170	3471	none	none
-1	locus 1_0171	995	none	none
-1	locus 1_0172	8611	none	none
-1	locus 1_0173	2446	none	none
-1	locus 1_0174	4570	none	none
-1	locus 1_0175	4565	none	none
-1	locus 1_0176	737	none	none
-1	locus 1_0177	1283	none	none
-1	locus 1_0178	3871	none	none
-1	locus 1_0179	130	none	none
-1	locus 1_0180	6204	none	none
-1	locus 1_0181	5960	none	none
-1	locus 1_0182	986	none	none
-1	locus 1_0183	7492	none	none
-1	locus 1_0184	3214	none	none
-1	locus 1_0185	4214	none	none
-1	locus 1_0186	9911	none	none
-1	locus 1_0187	3228	none	none
-1	locus 1_0188	6722	none	none
-1	locus 1_0189	1799	none	none
-1	locus 1_0190	4000	none	none
-1	locus 1_0191	7299	none	none
-1	locus 1_0192	263	none	none
-1	locus 1_0193	6801	none	none
-1	locus 1_0194	9030	none	none
-1	locus 1_0195	3570	none	none
-1	locus 1_0196	8281	none	none
-1	locus 1_0197	5780	none	none
-1	locus 1_0198	8073	none	none
-1	locus 1_0199	2426	none	none
-1	locus 1_0200	8815	none	none
-1	locus 1_0201	6835	none	none
-1	locus 1_0202	6128	none	none
-1	locus 1_0203	9447	none	none
-1	locus 1_0204	3618	none	none
-1	locus 1_0205	4017	none	none
-1	locus 1_0206	1741	none	none
-1	locus 1_0207	4085	none	none
-1	locus 1_0208	682	none	none
-1	locus 1_0209	4846	none	none
-1	locus 1_0210	244	none	none
-1	locus 1_0211	4081	none	none
-1	locus 1_0212	6850	none	none
-1	locus 1_0213	4443	none	none
-1	locus 1_0214	3152	none	none
-1	locus 1_0215	5903	none	none
-1	locus 1_0216	4581	none	none
-1	locus 1_0217	9339	none	none
-1	locus 1_0218	3532	none	none
-1	locus 1_0219	6256	none	none
-1	locus 1_0220	861	none	none
-1	locus 1_0221	8856	none	none
-1	locus 1_0222	5164	none	none
-1	locus 1_0223	9306	none	none
-1	locus 1_0224	348	none	none
-1	locus 1_0225	1696	none	none
-1	locus 1_0226	8813	none	none
-2	locus 2_0001	605	none	none
-2	locus 2_0002	224	none	none
-2	locus 2_0003	8342	none	none
-2	locus 2_0004	2105	none	none
-2	locus 2_0005	7309	none	none
-2	locus 2_0006	1498	none	none
-2	locus 2_0007	1152	none	none
-2	locus 2_0008	8826	none	none
-2	locus 2_0009	9435	none	none
-2	locus 2_0010	1850	none	none
-2	locus 2_0011	5182	none	none
-2	locus 2_0012	9707	none	none
-2	locus 2_0013	1606	none	none
-2	locus 2_0014	3094	none	none
-2	locus 2_0015	1350	none	none
-2	locus 2_0016	8527	none	none
-2	locus 2_0017	1980	none	none
-2	locus 2_0018	5888	none	none
-2	locus 2_0019	518	none	none
-2	locus 2_0020	9236	none	none
-2	locus 2_0021	9852	none	none
-2	locus 2_0022	867	none	none
-2	locus 2_0023	1044	none	none
-2	locus 2_0024	4737	none	none
-2	locus 2_0025	6534	none	none
-2	locus 2_0026	1355	none	none
-2	locus 2_0027	7922	none	none
-2	locus 2_0028	3982	none	none
-2	locus 2_0029	5704	none	none
-2	locus 2_0030	4174	none	none
-2	locus 2_0031	3997	none	none
-2	locus 2_0032	1866	none	none
-2	locus 2_0033	7697	none	none
-2	locus 2_0034	8127	none	none
-2	locus 2_0035	1981	none	none
-2	locus 2_0036	8033	none	none
-2	locus 2_0037	1149	none	none
-2	locus 2_0038	8753	none	none
-2	locus 2_0039	3605	none	none
-2	locus 2_0040	7767	none	none
-2	locus 2_0041	941	none	none
-2	locus 2_0042	3230	none	none
-2	locus 2_0043	2505	none	none
-2	locus 2_0044	4497	none	none
-2	locus 2_0045	6224	none	none
-2	locus 2_0046	3038	none	none
-2	locus 2_0047	611	none	none
-2	locus 2_0048	3392	none	none
-2	locus 2_0049	1911	none	none
-2	locus 2_0050	6446	none	none
-2	locus 2_0051	6359	none	none
-2	locus 2_0052	7545	none	none
-2	locus 2_0053	3408	none	none
-2	locus 2_0054	1472	none	none
-2	locus 2_0055	1829	none	none
-2	locus 2_0056	1006	none	none
-2	locus 2_0057	416	none	none
-2	locus 2_0058	9711	none	none
-2	locus 2_0059	8405	none	none
-2	locus 2_0060	6404	none	none
-2	locus 2_0061	7060	none	none
-2	locus 2_0062	377	none	none
-2	locus 2_0063	674	none	none
-2	locus 2_0064	3396	none	none
-2	locus 2_0065	4143	none	none
-2	locus 2_0066	5999	none	none
-2	locus 2_0067	6835	none	none
-2	locus 2_0068	7543	none	none
-2	locus 2_0069	6154	none	none
-2	locus 2_0070	8668	none	none
-2	locus 2_0071	5099	none	none
-2	locus 2_0072	6872	none	none
-2	locus 2_0073	2683	none	none
-2	locus 2_0074	8235	none	none
-2	locus 2_0075	5022	none	none
-2	locus 2_0076	1073	none	none
-2	locus 2_0077	15	none	none
-2	locus 2_0078	6211	none	none
-2	locus 2_0079	3009	none	none
-2	locus 2_0080	7267	none	none
-2	locus 2_0081	5483	none	none
-2	locus 2_0082	6097	none	none
-2	locus 2_0083	924	none	none
-2	locus 2_0084	2962	none	none
-2	locus 2_0085	3113	none	none
-2	locus 2_0086	7818	none	none
-2	locus 2_0087	7443	none	none
-2	locus 2_0088	5533	none	none
-2	locus 2_0089	1604	none	none
-2	locus 2_0090	291	none	none
-2	locus 2_0091	1797	none	none
-2	locus 2_0092	500	none	none
-2	locus 2_0093	2287	none	none
-2	locus 2_0094	1486	none	none
-2	locus 2_0095	8854	none	none
-2	locus 2_0096	7368	none	none
-2	locus 2_0097	6974	none	none
-2	locus 2_0098	5108	none	none
-2	locus 2_0099	7861	none	none
-2	locus 2_0100	7801	none	none
-2	locus 2_0101	7460	none	none
-2	locus 2_0102	7796	none	none
-2	locus 2_0103	3642	none	none
-2	locus 2_0104	72	none	none
-2	locus 2_0105	6513	none	none
-2	locus 2_0106	8289	none	none
-2	locus 2_0107	9901	none	none
-2	locus 2_0108	5712	none	none
-2	locus 2_0109	527	none	none
-2	locus 2_0110	8467	none	none
-2	locus 2_0111	6705	none	none
-2	locus 2_0112	6333	none	none
-2	locus 2_0113	7966	none	none
-2	locus 2_0114	449	none	none
-2	locus 2_0115	142	none	none
-2	locus 2_0116	8353	none	none
-2	locus 2_0117	7887	none	none
-2	locus 2_0118	6035	none	none
-2	locus 2_0119	2035	none	none
-2	locus 2_0120	8997	none	none
-2	locus 2_0121	8106	none	none
-2	locus 2_0122	6888	none	none
-2	locus 2_0123	8024	none	none
-2	locus 2_0124	8404	none	none
-2	locus 2_0125	2998	none	none
-2	locus 2_0126	5437	none	none
-2	locus 2_0127	1444	none	none
-2	locus 2_0128	5154	none	none
-2	locus 2_0129	7028	none	none
-2	locus 2_0130	5632	none	none
-2	locus 2_0131	2539	none	none
-2	locus 2_0132	14	none	none
-2	locus 2_0133	2589	none	none
-2	locus 2_0134	2701	none	none
-2	locus 2_0135	5132	none	none
-2	locus 2_0136	9851	none	none
-2	locus 2_0137	8137	none	none
-2	locus 2_0138	8607	none	none
-2	locus 2_0139	4017	none	none
-2	locus 2_0140	9031	none	none
-2	locus 2_0141	2840	none	none
-2	locus 2_0142	1478	none	none
-2	locus 2_0143	49	none	none
-2	locus 2_0144	2039	none	none
-2	locus 2_0145	4947	none	none
-2	locus 2_0146	1527	none	none
-2	locus 2_0147	9061	none	none
-2	locus 2_0148	9599	none	none
-2	locus 2_0149	8794	none	none
-2	locus 2_0150	648	none	none
-2	locus 2_0151	1797	none	none
-2	locus 2_0152	7059	none	none
-2	locus 2_0153	6202	none	none
-2	locus 2_0154	5914	none	none
-2	locus 2_0155	8014	none	none
-2	locus 2_0156	1170	none	none
-2	locus 2_0157	559	none	none
-2	locus 2_0158	3433	none	none
-2	locus 2_0159	2242	none	none
-2	locus 2_0160	1646	none	none
-2	locus 2_0161	4150	none	none
-2	locus 2_0162	3029	none	none
-2	locus 2_0163	3115	none	none
-2	locus 2_0164	5286	none	none
-2	locus 2_0165	6595	none	none
-2	locus 2_0166	1059	none	none
-2	locus 2_0167	2751	none	none
-2	locus 2_0168	3889	none	none
-2	locus 2_0169	8410	none	none
-2	locus 2_0170	7430	none	none
-2	locus 2_0171	9218	none	none
-2	locus 2_0172	8644	none	none
-2	locus 2_0173	242	none	none
-2	locus 2_0174	4139	none	none
-2	locus 2_0175	2050	none	none
-2	locus 2_0176	2238	none	none
-2	locus 2_0177	5263	none	none
-2	locus 2_0178	9471	none	none
-2	locus 2_0179	3149	none	none
-2	locus 2_0180	4723	none	none
-2	locus 2_0181	5033	none	none
-2	locus 2_0182	2745	none	none
-2	locus 2_0183	1743	none	none
-2	locus 2_0184	2858	none	none
-2	locus 2_0185	2567	none	none
-2	locus 2_0186	3353	none	none
-2	locus 2_0187	3489	none	none
-2	locus 2_0188	3027	none	none
-2	locus 2_0189	5694	none	none
-2	locus 2_0190	7703	none	none
-2	locus 2_0191	6913	none	none
-2	locus 2_0192	8671	none	none
-2	locus 2_0193	1863	none	none
-2	locus 2_0194	6940	none	none
-2	locus 2_0195	4962	none	none
-2	locus 2_0196	5754	none	none
-2	locus 2_0197	6941	none	none
-2	locus 2_0198	2855	none	none
-2	locus 2_0199	2038	none	none
-2	locus 2_0200	2328	none	none
-2	locus 2_0201	9640	none	none
-2	locus 2_0202	8022	none	none
-2	locus 2_0203	7495	none	none
-2	locus 2_0204	1036	none	none
-2	locus 2_0205	2405	none	none
-2	locus 2_0206	148	none	none
-2	locus 2_0207	5137	none	none
-2	locus 2_0208	9029	none	none
-2	locus 2_0209	7624	none	none
-2	locus 2_0210	5145	none	none
-2	locus 2_0211	7131	none	none
-2	locus 2_0212	1683	none	none
-2	locus 2_0213	6388	none	none
-2	locus 2_0214	6821	none	none
-2	locus 2_0215	2428	none	none
-2	locus 2_0216	8622	none	none
-2	locus 2_0217	9072	none	none
-2	locus 2_0218	4083	none	none
-2	locus 2_0219	2423	none	none
-2	locus 2_0220	1115	none	none
-2	locus 2_0221	2666	none	none
-2	locus 2_0222	2828	none	none
-2	locus 2_0223	5500	none	none
-2	locus 2_0224	7363	none	none
-2	locus 2_0225	6041	none	none
-2	locus 2_0226	9833	none	none
-2	locus 2_0227	8614	none	none
-2	locus 2_0228	3742	none	none
-2	locus 2_0229	8261	none	none
-2	locus 2_0230	5167	none	none
-2	locus 2_0231	7666	none	none
-2	locus 2_0232	2284	none	none
-2	locus 2_0233	8066	none	none
-2	locus 2_0234	8283	none	none
-2	locus 2_0235	9702	none	none
-2	locus 2_0236	3388	none	none
-2	locus 2_0237	9115	none	none
-2	locus 2_0238	2365	none	none
-2	locus 2_0239	6321	none	none
-2	locus 2_0240	2679	none	none
-2	locus 2_0241	4430	none	none
-2	locus 2_0242	3475	none	none
-2	locus 2_0243	6269	none	none
-2	locus 2_0244	4934	none	none
-2	locus 2_0245	6791	none	none
-2	locus 2_0246	7705	none	none
-2	locus 2_0247	5064	none	none
-2	locus 2_0248	5817	none	none
-2	locus 2_0249	7436	none	none
-2	locus 2_0250	6725	none	none
-2	locus 2_0251	987	none	none
-2	locus 2_0252	2200	none	none
-2	locus 2_0253	6210	none	none
-2	locus 2_0254	1316	none	none
-2	locus 2_0255	7632	none	none
-2	locus 2_0256	9615	none	none
-2	locus 2_0257	6488	none	none
-2	locus 2_0258	8137	none	none
-2	locus 2_0259	107	none	none
-2	locus 2_0260	6650	none	none
-2	locus 2_0261	9961	none	none
-2	locus 2_0262	8076	none	none
-2	locus 2_0263	4074	none	none
-2	locus 2_0264	7477	none	none
-2	locus 2_0265	6073	none	none
-2	locus 2_0266	6506	none	none
-2	locus 2_0267	3779	none	none
-2	locus 2_0268	7163	none	none
-2	locus 2_0269	3551	none	none
-2	locus 2_0270	70	none	none
-2	locus 2_0271	3190	none	none
-2	locus 2_0272	2374	none	none
-2	locus 2_0273	1916	none	none
-2	locus 2_0274	5465	none	none
-2	locus 2_0275	3875	none	none
-2	locus 2_0276	7857	none	none
-2	locus 2_0277	4301	none	none
-2	locus 2_0278	4562	none	none
-2	locus 2_0279	2867	none	none
-2	locus 2_0280	2722	none	none
-2	locus 2_0281	7556	none	none
-2	locus 2_0282	7390	none	none
-2	locus 2_0283	3088	none	none
-2	locus 2_0284	9358	none	none
-2	locus 2_0285	7113	none	none
-2	locus 2_0286	8476	none	none
-2	locus 2_0287	1032	none	none
-2	locus 2_0288	7810	none	none
-2	locus 2_0289	5452	none	none
-2	locus 2_0290	6930	none	none
-2	locus 2_0291	1910	none	none
-2	locus 2_0292	4757	none	none
-2	locus 2_0293	4347	none	none
-2	locus 2_0294	7223	none	none
-2	locus 2_0295	2757	none	none
-2	locus 2_0296	5069	none	none
-2	locus 2_0297	6034	none	none
-2	locus 2_0298	6699	none	none
-2	locus 2_0299	6693	none	none
-2	locus 2_0300	2139	none	none
-2	locus 2_0301	9603	none	none
-2	locus 2_0302	3074	none	none
-2	locus 2_0303	9334	none	none
-2	locus 2_0304	3214	none	none
-2	locus 2_0305	9716	none	none
-2	locus 2_0306	1353	none	none
-2	locus 2_0307	4738	none	none
-3	locus 3_0001	3042	none	none
-3	locus 3_0002	4443	none	none
-3	locus 3_0003	7406	none	none
-3	locus 3_0004	9749	none	none
-3	locus 3_0005	741	none	none
-3	locus 3_0006	9523	none	none
-3	locus 3_0007	6572	none	none
-3	locus 3_0008	3305	none	none
-3	locus 3_0009	1251	none	none
-3	locus 3_0010	7639	none	none
-3	locus 3_0011	263	none	none
-3	locus 3_0012	1893	none	none
-3	locus 3_0013	8603	none	none
-3	locus 3_0014	1637	none	none
-3	locus 3_0015	9893	none	none
-3	locus 3_0016	9297	none	none
-3	locus 3_0017	2689	none	none
-3	locus 3_0018	8173	none	none
-3	locus 3_0019	1411	none	none
-3	locus 3_0020	7882	none	none
-3	locus 3_0021	5123	none	none
-3	locus 3_0022	8292	none	none
-3	locus 3_0023	4269	none	none
-3	locus 3_0024	7894	none	none
-3	locus 3_0025	6409	none	none
-3	locus 3_0026	2958	none	none
-3	locus 3_0027	3647	none	none
-3	locus 3_0028	1629	none	none
-3	locus 3_0029	7828	none	none
-3	locus 3_0030	7068	none	none
-3	locus 3_0031	9777	none	none
-3	locus 3_0032	5359	none	none
-3	locus 3_0033	2618	none	none
-3	locus 3_0034	322	none	none
-3	locus 3_0035	6107	none	none
-3	locus 3_0036	5706	none	none
-3	locus 3_0037	9361	none	none
-3	locus 3_0038	41	none	none
-3	locus 3_0039	4062	none	none
-3	locus 3_0040	2173	none	none
-3	locus 3_0041	7540	none	none
-3	locus 3_0042	4612	none	none
-3	locus 3_0043	4139	none	none
-3	locus 3_0044	9430	none	none
-3	locus 3_0045	2636	none	none
-3	locus 3_0046	3138	none	none
-3	locus 3_0047	188	none	none
-3	locus 3_0048	4255	none	none
-3	locus 3_0049	144	none	none
-3	locus 3_0050	3484	none	none
-3	locus 3_0051	5451	none	none
-3	locus 3_0052	4928	none	none
-3	locus 3_0053	9746	none	none
-3	locus 3_0054	9347	none	none
-3	locus 3_0055	6201	none	none
-3	locus 3_0056	8792	none	none
-3	locus 3_0057	4249	none	none
-3	locus 3_0058	8417	none	none
-3	locus 3_0059	502	none	none
-3	locus 3_0060	3726	none	none
-3	locus 3_0061	4824	none	none
-3	locus 3_0062	9165	none	none
-3	locus 3_0063	1941	none	none
-3	locus 3_0064	8192	none	none
-3	locus 3_0065	4599	none	none
-3	locus 3_0066	2612	none	none
-3	locus 3_0067	2127	none	none
-3	locus 3_0068	5860	none	none
-3	locus 3_0069	4839	none	none
-3	locus 3_0070	7837	none	none
-3	locus 3_0071	8532	none	none
-3	locus 3_0072	2303	none	none
-3	locus 3_0073	8332	none	none
-3	locus 3_0074	6582	none	none
-3	locus 3_0075	728	none	none
-3	locus 3_0076	7521	none	none
-3	locus 3_0077	5416	none	none
-3	locus 3_0078	4252	none	none
-3	locus 3_0079	1002	none	none
-3	locus 3_0080	4208	none	none
-3	locus 3_0081	923	none	none
-3	locus 3_0082	6724	none	none
-3	locus 3_0083	7502	none	none
-3	locus 3_0084	7122	none	none
-3	locus 3_0085	8747	none	none
-3	locus 3_0086	7769	none	none
-3	locus 3_0087	5799	none	none
-3	locus 3_0088	9717	none	none
-3	locus 3_0089	2926	none	none
-3	locus 3_0090	4183	none	none
-3	locus 3_0091	4198	none	none
-3	locus 3_0092	9449	none	none
-3	locus 3_0093	4496	none	none
-3	locus 3_0094	619	none	none
-3	locus 3_0095	2657	none	none
-3	locus 3_0096	2881	none	none
-3	locus 3_0097	3981	none	none
-3	locus 3_0098	9406	none	none
-3	locus 3_0099	368	none	none
-3	locus 3_0100	2557	none	none
-3	locus 3_0101	6334	none	none
-3	locus 3_0102	3404	none	none
-3	locus 3_0103	9545	none	none
-3	locus 3_0104	4073	none	none
-3	locus 3_0105	8120	none	none
-3	locus 3_0106	4167	none	none
-3	locus 3_0107	1398	none	none
-3	locus 3_0108	5161	none	none
-3	locus 3_0109	5608	none	none
-3	locus 3_0110	8811	none	none
-3	locus 3_0111	4986	none	none
-3	locus 3_0112	1202	none	none
-3	locus 3_0113	1094	none	none
-3	locus 3_0114	4291	none	none
-3	locus 3_0115	3238	none	none
-3	locus 3_0116	6111	none	none
-3	locus 3_0117	5882	none	none
-3	locus 3_0118	7395	none	none
-3	locus 3_0119	1131	none	none
-3	locus 3_0120	177	none	none
-3	locus 3_0121	1686	none	none
-3	locus 3_0122	9809	none	none
-3	locus 3_0123	5852	none	none
-3	locus 3_0124	1908	none	none
-3	locus 3_0125	2588	none	none
-3	locus 3_0126	5325	none	none
-3	locus 3_0127	3741	none	none
-3	locus 3_0128	449	none	none
-3	locus 3_0129	4275	none	none
-3	locus 3_0130	8922	none	none
-3	locus 3_0131	6908	none	none
-3	locus 3_0132	1282	none	none
-3	locus 3_0133	473	none	none
-3	locus 3_0134	9109	none	none
-3	locus 3_0135	2142	none	none
-3	locus 3_0136	7345	none	none
-3	locus 3_0137	5002	none	none
-3	locus 3_0138	3210	none	none
-3	locus 3_0139	2417	none	none
-3	locus 3_0140	2404	none	none
-3	locus 3_0141	7154	none	none
-3	locus 3_0142	8929	none	none
-3	locus 3_0143	8079	none	none
-3	locus 3_0144	7283	none	none
-3	locus 3_0145	8019	none	none
-3	locus 3_0146	7444	none	none
-3	locus 3_0147	3351	none	none
-3	locus 3_0148	4823	none	none
-3	locus 3_0149	3247	none	none
-3	locus 3_0150	6671	none	none
-3	locus 3_0151	3202	none	none
-3	locus 3_0152	9032	none	none
-3	locus 3_0153	9428	none	none
-3	locus 3_0154	5990	none	none
-3	locus 3_0155	4420	none	none
-3	locus 3_0156	4073	none	none
-3	locus 3_0157	6296	none	none
-3	locus 3_0158	13	none	none
-3	locus 3_0159	6448	none	none
-3	locus 3_0160	8233	none	none
-3	locus 3_0161	2063	none	none
-3	locus 3_0162	1779	none	none
-3	locus 3_0163	5368	none	none
-3	locus 3_0164	6628	none	none
-3	locus 3_0165	661	none	none
-3	locus 3_0166	2789	none	none
-3	locus 3_0167	837	none	none
-3	locus 3_0168	7134	none	none
-3	locus 3_0169	2517	none	none
-3	locus 3_0170	8253	none	none
-3	locus 3_0171	8065	none	none
-3	locus 3_0172	163	none	none
-3	locus 3_0173	5917	none	none
-3	locus 3_0174	445	none	none
-3	locus 3_0175	4282	none	none
-3	locus 3_0176	6680	none	none
-3	locus 3_0177	5804	none	none
-3	locus 3_0178	9932	none	none
-3	locus 3_0179	2678	none	none
-3	locus 3_0180	8695	none	none
-3	locus 3_0181	4341	none	none
-3	locus 3_0182	3536	none	none
-3	locus 3_0183	6198	none	none
-3	locus 3_0184	8930	none	none
-3	locus 3_0185	2015	none	none
-3	locus 3_0186	5566	none	none
-3	locus 3_0187	910	none	none
-3	locus 3_0188	1449	none	none
-3	locus 3_0189	5934	none	none
-3	locus 3_0190	881	none	none
-3	locus 3_0191	2552	none	none
-3	locus 3_0192	8135	none	none
-3	locus 3_0193	1137	none	none
-3	locus 3_0194	437	none	none
-3	locus 3_0195	6718	none	none
-3	locus 3_0196	4653	none	none
-3	locus 3_0197	4038	none	none
-3	locus 3_0198	198	none	none
-3	locus 3_0199	1179	none	none
-3	locus 3_0200	4419	none	none
-3	locus 3_0201	3810	none	none
-3	locus 3_0202	62	none	none
-3	locus 3_0203	8304	none	none
-3	locus 3_0204	3045	none	none
-3	locus 3_0205	592	none	none
-3	locus 3_0206	9121	none	none
-3	locus 3_0207	2751	none	none
-3	locus 3_0208	6972	none	none
-3	locus 3_0209	6768	none	none
-3	locus 3_0210	7651	none	none
-3	locus 3_0211	4378	none	none
-3	locus 3_0212	951	none	none
-3	locus 3_0213	1548	none	none
-3	locus 3_0214	3533	none	none
-3	locus 3_0215	8036	none	none
-3	locus 3_0216	5828	none	none
-3	locus 3_0217	7941	none	none
-3	locus 3_0218	6605	none	none
-3	locus 3_0219	6793	none	none
-3	locus 3_0220	8758	none	none
-3	locus 3_0221	3912	none	none
-3	locus 3_0222	7435	none	none
-3	locus 3_0223	6754	none	none
-3	locus 3_0224	9397	none	none
-3	locus 3_0225	2393	none	none
-3	locus 3_0226	1860	none	none
-4	locus 4_0001	5729	none	none
-4	locus 4_0002	5206	none	none
-4	locus 4_0003	8849	none	none
-4	locus 4_0004	7417	none	none
-4	locus 4_0005	6795	none	none
-4	locus 4_0006	5553	none	none
-4	locus 4_0007	7079	none	none
-4	locus 4_0008	1107	none	none
-4	locus 4_0009	5196	none	none
-4	locus 4_0010	2884	none	none
-4	locus 4_0011	5535	none	none
-4	locus 4_0012	5625	none	none
-4	locus 4_0013	9851	none	none
-4	locus 4_0014	8794	none	none
-4	locus 4_0015	5709	none	none
-4	locus 4_0016	742	none	none
-4	locus 4_0017	5387	none	none
-4	locus 4_0018	217	none	none
-4	locus 4_0019	1111	none	none
-4	locus 4_0020	4241	none	none
-4	locus 4_0021	1165	none	none
-4	locus 4_0022	7419	none	none
-4	locus 4_0023	7536	none	none
-4	locus 4_0024	6146	none	none
-4	locus 4_0025	3831	none	none
-4	locus 4_0026	359	none	none
-4	locus 4_0027	8140	none	none
-4	locus 4_0028	6097	none	none
-4	locus 4_0029	4945	none	none
-4	locus 4_0030	4592	none	none
-4	locus 4_0031	6495	none	none
-4	locus 4_0032	4914	none	none
-4	locus 4_0033	9871	none	none
-4	locus 4_0034	2864	none	none
-4	locus 4_0035	4935	none	none
-4	locus 4_0036	9358	none	none
-4	locus 4_0037	2954	none	none
-4	locus 4_0038	8402	none	none
-4	locus 4_0039	3014	none	none
-4	locus 4_0040	9223	none	none
-4	locus 4_0041	9236	none	none
-4	locus 4_0042	5615	none	none
-4	locus 4_0043	4719	none	none
-4	locus 4_0044	4866	none	none
-4	locus 4_0045	4950	none	none
-4	locus 4_0046	2389	none	none
-4	locus 4_0047	4613	none	none
-4	locus 4_0048	396	none	none
-4	locus 4_0049	260	none	none
-4	locus 4_0050	5249	none	none
-4	locus 4_0051	619	none	none
-4	locus 4_0052	8499	none	none
-4	locus 4_0053	9868	none	none
-4	locus 4_0054	1963	none	none
-4	locus 4_0055	4536	none	none
-4	locus 4_0056	6756	none	none
-4	locus 4_0057	3588	none	none
-4	locus 4_0058	3508	none	none
-4	locus 4_0059	5526	none	none
-4	locus 4_0060	108	none	none
-4	locus 4_0061	974	none	none
-4	locus 4_0062	2523	none	none
-4	locus 4_0063	9470	none	none
-4	locus 4_0064	9419	none	none
-4	locus 4_0065	9711	none	none
-4	locus 4_0066	1868	none	none
-4	locus 4_0067	9136	none	none
-4	locus 4_0068	9913	none	none
-4	locus 4_0069	5551	none	none
-4	locus 4_0070	1159	none	none
-4	locus 4_0071	524	none	none
-4	locus 4_0072	4259	none	none
-4	locus 4_0073	6198	none	none
-4	locus 4_0074	3872	none	none
-4	locus 4_0075	4576	none	none
-4	locus 4_0076	6903	none	none
-4	locus 4_0077	5363	none	none
-4	locus 4_0078	7029	none	none
-4	locus 4_0079	4859	none	none
-4	locus 4_0080	7146	none	none
-4	locus 4_0081	940	none	none
-4	locus 4_0082	9053	none	none
-4	locus 4_0083	9908	none	none
-4	locus 4_0084	9825	none	none
-4	locus 4_0085	2888	none	none
-4	locus 4_0086	6256	none	none
-4	locus 4_0087	509	none	none
-4	locus 4_0088	5908	none	none
-4	locus 4_0089	4287	none	none
-4	locus 4_0090	2702	none	none
-4	locus 4_0091	5168	none	none
-4	locus 4_0092	2533	none	none
-4	locus 4_0093	8498	none	none
-4	locus 4_0094	7720	none	none
-4	locus 4_0095	8437	none	none
-4	locus 4_0096	5462	none	none
-4	locus 4_0097	459	none	none
-4	locus 4_0098	150	none	none
-4	locus 4_0099	8133	none	none
-4	locus 4_0100	9867	none	none
-4	locus 4_0101	9777	none	none
-4	locus 4_0102	5508	none	none
-4	locus 4_0103	2483	none	none
-4	locus 4_0104	4882	none	none
-4	locus 4_0105	6168	none	none
-4	locus 4_0106	4242	none	none
-4	locus 4_0107	300	none	none
-4	locus 4_0108	8784	none	none
-4	locus 4_0109	2533	none	none
-4	locus 4_0110	3164	none	none
-4	locus 4_0111	6298	none	none
-4	locus 4_0112	3418	none	none
-4	locus 4_0113	3085	none	none
-4	locus 4_0114	1864	none	none
-4	locus 4_0115	2843	none	none
-4	locus 4_0116	4657	none	none
-4	locus 4_0117	9105	none	none
-4	locus 4_0118	265	none	none
-4	locus 4_0119	9024	none	none
-4	locus 4_0120	8644	none	none
-4	locus 4_0121	3971	none	none
-4	locus 4_0122	1501	none	none
-4	locus 4_0123	2974	none	none
-4	locus 4_0124	3672	none	none
-4	locus 4_0125	7934	none	none
-4	locus 4_0126	5085	none	none
-4	locus 4_0127	6450	none	none
-4	locus 4_0128	1321	none	none
-4	locus 4_0129	8932	none	none
-4	locus 4_0130	5107	none	none
-4	locus 4_0131	7179	none	none
-4	locus 4_0132	6091	none	none
-4	locus 4_0133	3114	none	none
-4	locus 4_0134	1984	none	none
-4	locus 4_0135	7282	none	none
-4	locus 4_0136	5264	none	none
-4	locus 4_0137	3479	none	none
-4	locus 4_0138	7266	none	none
-4	locus 4_0139	8028	none	none
-4	locus 4_0140	2092	none	none
-4	locus 4_0141	9768	none	none
-4	locus 4_0142	2747	none	none
-4	locus 4_0143	9710	none	none
-4	locus 4_0144	2538	none	none
-4	locus 4_0145	8119	none	none
-4	locus 4_0146	3337	none	none
-4	locus 4_0147	2186	none	none
-4	locus 4_0148	8448	none	none
-4	locus 4_0149	5018	none	none
-4	locus 4_0150	4059	none	none
-4	locus 4_0151	3425	none	none
-4	locus 4_0152	2193	none	none
-4	locus 4_0153	8803	none	none
-4	locus 4_0154	6783	none	none
-4	locus 4_0155	3306	none	none
-4	locus 4_0156	2989	none	none
-4	locus 4_0157	1251	none	none
-4	locus 4_0158	7125	none	none
-4	locus 4_0159	7210	none	none
-4	locus 4_0160	2245	none	none
-4	locus 4_0161	3557	none	none
-4	locus 4_0162	136	none	none
-4	locus 4_0163	6188	none	none
-4	locus 4_0164	5448	none	none
-4	locus 4_0165	3184	none	none
-4	locus 4_0166	429	none	none
-4	locus 4_0167	6473	none	none
-4	locus 4_0168	4276	none	none
-4	locus 4_0169	4163	none	none
-4	locus 4_0170	5900	none	none
-4	locus 4_0171	1484	none	none
-4	locus 4_0172	344	none	none
-4	locus 4_0173	2726	none	none
-4	locus 4_0174	9365	none	none
-4	locus 4_0175	6271	none	none
-4	locus 4_0176	5461	none	none
-4	locus 4_0177	2491	none	none
-4	locus 4_0178	4206	none	none
-4	locus 4_0179	564	none	none
-4	locus 4_0180	4121	none	none
-4	locus 4_0181	5385	none	none
-4	locus 4_0182	5093	none	none
-4	locus 4_0183	3135	none	none
-4	locus 4_0184	7634	none	none
-4	locus 4_0185	4203	none	none
-4	locus 4_0186	5618	none	none
-4	locus 4_0187	7597	none	none
-4	locus 4_0188	3391	none	none
-4	locus 4_0189	5440	none	none
-4	locus 4_0190	7089	none	none
-4	locus 4_0191	8727	none	none
-4	locus 4_0192	9891	none	none
-4	locus 4_0193	2316	none	none
-4	locus 4_0194	570	none	none
-4	locus 4_0195	9195	none	none
-4	locus 4_0196	5728	none	none
-4	locus 4_0197	2392	none	none
-4	locus 4_0198	3706	none	none
-4	locus 4_0199	4149	none	none
-4	locus 4_0200	3743	none	none
-4	locus 4_0201	6127	none	none
-4	locus 4_0202	3038	none	none
-4	locus 4_0203	9298	none	none
-4	locus 4_0204	387	none	none
-4	locus 4_0205	3660	none	none
-4	locus 4_0206	3391	none	none
-4	locus 4_0207	7595	none	none
-4	locus 4_0208	2701	none	none
-4	locus 4_0209	985	none	none
-4	locus 4_0210	5722	none	none
-4	locus 4_0211	8637	none	none
-4	locus 4_0212	6706	none	none
-4	locus 4_0213	4680	none	none
-4	locus 4_0214	5719	none	none
-4	locus 4_0215	6589	none	none
-4	locus 4_0216	2720	none	none
-4	locus 4_0217	6611	none	none
-4	locus 4_0218	6837	none	none
-4	locus 4_0219	9720	none	none
-4	locus 4_0220	4960	none	none
-4	locus 4_0221	7882	none	none
-4	locus 4_0222	5957	none	none
-4	locus 4_0223	6656	none	none
-4	locus 4_0224	9093	none	none
-4	locus 4_0225	5928	none	none
-4	locus 4_0226	9218	none	none
-4	locus 4_0227	3725	none	none
-4	locus 4_0228	7893	none	none
-4	locus 4_0229	1552	none	none
-4	locus 4_0230	9922	none	none
-4	locus 4_0231	6607	none	none
-4	locus 4_0232	4943	none	none
-4	locus 4_0233	2647	none	none
-4	locus 4_0234	7021	none	none
-4	locus 4_0235	4864	none	none
-4	locus 4_0236	6932	none	none
-4	locus 4_0237	1364	none	none
-4	locus 4_0238	4849	none	none
-4	locus 4_0239	5601	none	none
-4	locus 4_0240	328	none	none
-4	locus 4_0241	9653	none	none
-4	locus 4_0242	6799	none	none
-4	locus 4_0243	8434	none	none
-4	locus 4_0244	6772	none	none
-4	locus 4_0245	5348	none	none
-4	locus 4_0246	9627	none	none
-4	locus 4_0247	9462	none	none
-4	locus 4_0248	2217	none	none
-4	locus 4_0249	454	none	none
-4	locus 4_0250	3603	none	none
-4	locus 4_0251	6470	none	none
-4	locus 4_0252	1425	none	none
-4	locus 4_0253	4026	none	none
-4	locus 4_0254	8138	none	none
-4	locus 4_0255	87	none	none
-4	locus 4_0256	8132	none	none
-4	locus 4_0257	7721	none	none
-4	locus 4_0258	7358	none	none
-4	locus 4_0259	8149	none	none
-4	locus 4_0260	3985	none	none
-4	locus 4_0261	8934	none	none
-4	locus 4_0262	9450	none	none
-4	locus 4_0263	521	none	none
-4	locus 4_0264	8415	none	none
-4	locus 4_0265	2639	none	none
-4	locus 4_0266	829	none	none
-4	locus 4_0267	3582	none	none
-4	locus 4_0268	9906	none	none
-4	locus 4_0269	6810	none	none
-4	locus 4_0270	1710	none	none
-4	locus 4_0271	3508	none	none
-4	locus 4_0272	5191	none	none
-4	locus 4_0273	9568	none	none
-4	locus 4_0274	5224	none	none
-4	locus 4_0275	8620	none	none
-4	locus 4_0276	488	none	none
-4	locus 4_0277	4995	none	none
-4	locus 4_0278	323	none	none
-4	locus 4_0279	9127	none	none
-4	locus 4_0280	3021	none	none
-4	locus 4_0281	1985	none	none
-4	locus 4_0282	4396	none	none
-4	locus 4_0283	9780	none	none
-4	locus 4_0284	140	none	none
-4	locus 4_0285	1439	none	none
-4	locus 4_0286	230	none	none
-4	locus 4_0287	6675	none	none
-4	locus 4_0288	1936	none	none
-4	locus 4_0289	7023	none	none
-4	locus 4_0290	7942	none	none
-4	locus 4_0291	7868	none	none
-4	locus 4_0292	6059	none	none
-4	locus 4_0293	9910	none	none
-4	locus 4_0294	7412	none	none
-4	locus 4_0295	2156	none	none
-4	locus 4_0296	2033	none	none
-4	locus 4_0297	4342	none	none
-4	locus 4_0298	3540	none	none
-4	locus 4_0299	9266	none	none
-4	locus 4_0300	7870	none	none
-4	locus 4_0301	3251	none	none
-4	locus 4_0302	8298	none	none
-4	locus 4_0303	1414	none	none
-4	locus 4_0304	4154	none	none
-4	locus 4_0305	8616	none	none
-4	locus 4_0306	6351	none	none
-4	locus 4_0307	9339	none	none
-5	locus 5_0001	2603	none	none
-5	locus 5_0002	2501	none	none
-5	locus 5_0003	7211	none	none
-5	locus 5_0004	7762	none	none
-5	locus 5_0005	1663	none	none
-5	locus 5_0006	5752	none	none
-5	locus 5_0007	6305	none	none
-5	locus 5_0008	2244	none	none
-5	locus 5_0009	7581	none	none
-5	locus 5_0010	9284	none	none
-5	locus 5_0011	7264	none	none
-5	locus 5_0012	5448	none	none
-5	locus 5_0013	7810	none	none
-5	locus 5_0014	1676	none	none
-5	locus 5_0015	2018	none	none
-5	locus 5_0016	1155	none	none
-5	locus 5_0017	1768	none	none
-5	locus 5_0018	2985	none	none
-5	locus 5_0019	1421	none	none
-5	locus 5_0020	2861	none	none
-5	locus 5_0021	5221	none	none
-5	locus 5_0022	6750	none	none
-5	locus 5_0023	3097	none	none
-5	locus 5_0024	8243	none	none
-5	locus 5_0025	251	none	none
-5	locus 5_0026	4532	none	none
-5	locus 5_0027	286	none	none
-5	locus 5_0028	4706	none	none
-5	locus 5_0029	890	none	none
-5	locus 5_0030	3433	none	none
-5	locus 5_0031	7024	none	none
-5	locus 5_0032	4498	none	none
-5	locus 5_0033	7509	none	none
-5	locus 5_0034	8851	none	none
-5	locus 5_0035	8016	none	none
-5	locus 5_0036	48	none	none
-5	locus 5_0037	8188	none	none
-5	locus 5_0038	996	none	none
-5	locus 5_0039	2775	none	none
-5	locus 5_0040	7620	none	none
-5	locus 5_0041	3654	none	none
-5	locus 5_0042	9349	none	none
-5	locus 5_0043	7382	none	none
-5	locus 5_0044	5232	none	none
-5	locus 5_0045	1654	none	none
-5	locus 5_0046	701	none	none
-5	locus 5_0047	1788	none	none
-5	locus 5_0048	4417	none	none
-5	locus 5_0049	1686	none	none
-5	locus 5_0050	6892	none	none
-5	locus 5_0051	7491	none	none
-5	locus 5_0052	8603	none	none
-5	locus 5_0053	9100	none	none
-5	locus 5_0054	883	none	none
-5	locus 5_0055	5131	none	none
-5	locus 5_0056	8152	none	none
-5	locus 5_0057	7477	none	none
-5	locus 5_0058	1293	none	none
-5	locus 5_0059	3271	none	none
-5	locus 5_0060	1135	none	none
-5	locus 5_0061	4065	none	none
-5	locus 5_0062	8881	none	none
-5	locus 5_0063	6469	none	none
-5	locus 5_0064	6803	none	none
-5	locus 5_0065	2693	none	none
-5	locus 5_0066	4655	none	none
-5	locus 5_0067	9966	none	none
-5	locus 5_0068	7211	none	none
-5	locus 5_0069	2833	none	none
-5	locus 5_0070	9395	none	none
-5	locus 5_0071	5834	none	none
-5	locus 5_0072	2148	none	none
-5	locus 5_0073	1172	none	none
-5	locus 5_0074	4056	none	none
-5	locus 5_0075	8663	none	none
-5	locus 5_0076	2440	none	none
-5	locus 5_0077	4141	none	none
-5	locus 5_0078	8471	none	none
-5	locus 5_0079	5653	none	none
-5	locus 5_0080	7149	none	none
-5	locus 5_0081	4970	none	none
-5	locus 5_0082	883	none	none
-5	locus 5_0083	6624	none	none
-5	locus 5_0084	6552	none	none
-5	locus 5_0085	9340	none	none
-5	locus 5_0086	9905	none	none
-5	locus 5_0087	9525	none	none
-5	locus 5_0088	93	none	none
-5	locus 5_0089	9744	none	none
-5	locus 5_0090	1283	none	none
-5	locus 5_0091	6724	none	none
-5	locus 5_0092	6553	none	none
-5	locus 5_0093	5756	none	none
-5	locus 5_0094	703	none	none
-5	locus 5_0095	3557	none	none
-5	locus 5_0096	8041	none	none
-5	locus 5_0097	7822	none	none
-5	locus 5_0098	2305	none	none
-5	locus 5_0099	9877	none	none
-5	locus 5_0100	7618	none	none
-5	locus 5_0101	2535	none	none
-5	locus 5_0102	6848	none	none
-5	locus 5_0103	690	none	none
-5	locus 5_0104	2401	none	none
-5	locus 5_0105	737	none	none
-5	locus 5_0106	2384	none	none
-5	locus 5_0107	6254	none	none
-5	locus 5_0108	3264	none	none
-5	locus 5_0109	8226	none	none
-5	locus 5_0110	1330	none	none
-5	locus 5_0111	8055	none	none
-5	locus 5_0112	9225	none	none
-5	locus 5_0113	4795	none	none
-5	locus 5_0114	5803	none	none
-5	locus 5_0115	6648	none	none
-5	locus 5_0116	8305	none	none
-5	locus 5_0117	6755	none	none
-5	locus 5_0118	2549	none	none
-5	locus 5_0119	6600	none	none
-5	locus 5_0120	6501	none	none
-5	locus 5_0121	1212	none	none
-5	locus 5_0122	9311	none	none
-5	locus 5_0123	4567	none	none
-5	locus 5_0124	34	none	none
-5	locus 5_0125	4805	none	none
-5	locus 5_0126	8169	none	none
-5	locus 5_0127	3487	none	none
-5	locus 5_0128	9465	none	none
-5	locus 5_0129	865	none	none
-5	locus 5_0130	9188	none	none
-5	locus 5_0131	7615	none	none
-5	locus 5_0132	6421	none	none
-5	locus 5_0133	1696	none	none
-5	locus 5_0134	4923	none	none
-5	locus 5_0135	7583	none	none
-5	locus 5_0136	4869	none	none
-5	locus 5_0137	3008	none	none
-5	locus 5_0138	9652	none	none
-5	locus 5_0139	3449	none	none
-5	locus 5_0140	5090	none	none
-5	locus 5_0141	3894	none	none
-5	locus 5_0142	6604	none	none
-5	locus 5_0143	9136	none	none
-5	locus 5_0144	2120	none	none
-5	locus 5_0145	1152	none	none
-5	locus 5_0146	6540	none	none
-5	locus 5_0147	1030	none	none
-5	locus 5_0148	6435	none	none
-5	locus 5_0149	8008	none	none
-5	locus 5_0150	4062	none	none
-5	locus 5_0151	640	none	none
-5	locus 5_0152	1294	none	none
-5	locus 5_0153	9255	none	none
-5	locus 5_0154	3268	none	none
-5	locus 5_0155	6452	none	none
-5	locus 5_0156	6521	none	none
-5	locus 5_0157	1762	none	none
-5	locus 5_0158	9491	none	none
-5	locus 5_0159	3302	none	none
-5	locus 5_0160	9194	none	none
-5	locus 5_0161	6646	none	none
-5	locus 5_0162	2047	none	none
-5	locus 5_0163	498	none	none
-5	locus 5_0164	9893	none	none
-5	locus 5_0165	1539	none	none
-5	locus 5_0166	3525	none	none
-5	locus 5_0167	4277	none	none
-5	locus 5_0168	1973	none	none
-5	locus 5_0169	5769	none	none
-5	locus 5_0170	3860	none	none
-5	locus 5_0171	1828	none	none
-5	locus 5_0172	9978	none	none
-5	locus 5_0173	2506	none	none
-5	locus 5_0174	1229	none	none
-5	locus 5_0175	4885	none	none
-5	locus 5_0176	7746	none	none
-5	locus 5_0177	8996	none	none
-5	locus 5_0178	782	none	none
-5	locus 5_0179	1387	none	none
-5	locus 5_0180	4409	none	none
-5	locus 5_0181	2274	none	none
-5	locus 5_0182	9746	none	none
-5	locus 5_0183	5388	none	none
-5	locus 5_0184	168	none	none
-5	locus 5_0185	9850	none	none
-5	locus 5_0186	7535	none	none
-5	locus 5_0187	8268	none	none
-5	locus 5_0188	8246	none	none
-5	locus 5_0189	496	none	none
-5	locus 5_0190	7908	none	none
-5	locus 5_0191	8804	none	none
-5	locus 5_0192	6235	none	none
-5	locus 5_0193	6304	none	none
-5	locus 5_0194	9587	none	none
-5	locus 5_0195	8281	none	none
-5	locus 5_0196	2044	none	none
-5	locus 5_0197	1524	none	none
-5	locus 5_0198	4159	none	none
-5	locus 5_0199	5381	none	none
-5	locus 5_0200	5094	none	none
-5	locus 5_0201	6024	none	none
-5	locus 5_0202	3882	none	none
-5	locus 5_0203	4153	none	none
-5	locus 5_0204	6324	none	none
-5	locus 5_0205	5551	none	none
-5	locus 5_0206	1552	none	none
-5	locus 5_0207	5797	none	none
-5	locus 5_0208	8779	none	none
-5	locus 5_0209	9726	none	none
-5	locus 5_0210	837	none	none
-5	locus 5_0211	3454	none	none
-5	locus 5_0212	7879	none	none
-5	locus 5_0213	6496	none	none
-5	locus 5_0214	4475	none	none
-5	locus 5_0215	5808	none	none
-5	locus 5_0216	204	none	none
-5	locus 5_0217	9864	none	none
-5	locus 5_0218	8298	none	none
-5	locus 5_0219	8788	none	none
-5	locus 5_0220	7299	none	none
-5	locus 5_0221	2901	none	none
-5	locus 5_0222	8351	none	none
-5	locus 5_0223	8311	none	none
-5	locus 5_0224	8756	none	none
-5	locus 5_0225	3223	none	none
-5	locus 5_0226	9842	none	none
-6	locus 0001	9057	none	none
-6	locus 0002	6923	none	none
-6	locus 0003	2121	none	none
-6	locus 0004	3126	none	none
-6	locus 0005	5113	none	none
-6	locus 0006	2151	none	none
-6	locus 0007	3964	none	none
-6	locus 0008	938	none	none
-6	locus 0009	4604	none	none
-6	locus 0010	8133	none	none
-6	locus 0011	8811	none	none
-6	locus 0012	5646	none	none
-6	locus 0013	3380	none	none
-6	locus 0014	4571	none	none
-6	locus 0015	2105	none	none
-6	locus 0016	9910	none	none
-6	locus 0017	3190	none	none
-6	locus 0018	877	none	none
-6	locus 0019	4705	none	none
-6	locus 0020	6089	none	none
-6	locus 0021	5592	none	none
-6	locus 0022	2539	none	none
-6	locus 0023	8797	none	none
-6	locus 0024	643	none	none
-6	locus 0025	1960	none	none
-6	locus 0026	3352	none	none
-6	locus 0027	7188	none	none
-6	locus 0028	592	none	none
-6	locus 0029	8937	none	none
-6	locus 0030	4160	none	none
-6	locus 0031	2774	none	none
-6	locus 0032	8118	none	none
-6	locus 0033	489	none	none
-6	locus 0034	3985	none	none
-6	locus 0035	6408	none	none
-6	locus 0036	8459	none	none
-6	locus 0037	1352	none	none
-6	locus 0038	3180	none	none
-6	locus 0039	3743	none	none
-6	locus 0040	1471	none	none
-6	locus 0041	9814	none	none
-6	locus 0042	9850	none	none
-6	locus 0043	6485	none	none
-6	locus 0044	5609	none	none
-6	locus 0045	2043	none	none
-6	locus 0046	3816	none	none
-6	locus 0047	2035	none	none
-6	locus 0048	4834	none	none
-6	locus 0049	9980	none	none
-6	locus 0050	6912	none	none
-6	locus 0051	8088	none	none
-6	locus 0052	5806	none	none
-6	locus 0053	8555	none	none
-6	locus 0054	9010	none	none
-6	locus 0055	4995	none	none
-6	locus 0056	2759	none	none
-6	locus 0057	1975	none	none
-6	locus 0058	1793	none	none
-6	locus 0059	4038	none	none
-6	locus 0060	7006	none	none
-6	locus 0061	821	none	none
-6	locus 0062	6106	none	none
-6	locus 0063	688	none	none
-6	locus 0064	5258	none	none
-6	locus 0065	5825	none	none
-6	locus 0066	5232	none	none
-6	locus 0067	2818	none	none
-6	locus 0068	1248	none	none
-6	locus 0069	7244	none	none
-6	locus 0070	1547	none	none
-6	locus 0071	2893	none	none
-6	locus 0072	599	none	none
-6	locus 0073	730	none	none
-6	locus 0074	987	none	none
-6	locus 0075	2940	none	none
-6	locus 0076	8384	none	none
-6	locus 0077	4635	none	none
-6	locus 0078	9116	none	none
-6	locus 0079	8926	none	none
-6	locus 0080	5214	none	none
-6	locus 0081	7629	none	none
-6	locus 0082	8764	none	none
-6	locus 0083	6064	none	none
-6	locus 0084	8651	none	none
-6	locus 0085	4157	none	none
-6	locus 0086	6754	none	none
-6	locus 0087	1068	none	none
-6	locus 0088	5065	none	none
-6	locus 0089	6208	none	none
-6	locus 0090	559	none	none
-6	locus 0091	2317	none	none
-6	locus 0092	5589	none	none
-6	locus 0093	119	none	none
-6	locus 0094	1852	none	none
-6	locus 0095	4768	none	none
-6	locus 0096	1501	none	none
-6	locus 0097	6314	none	none
-6	locus 0098	8153	none	none
-6	locus 0099	2767	none	none
-6	locus 0100	1758	none	none
-6	locus 0101	5717	none	none
-6	locus 0102	4367	none	none
-6	locus 0103	7995	none	none
-6	locus 0104	23	none	none
-6	locus 0105	8821	none	none
-6	locus 0106	2895	none	none
-6	locus 0107	6430	none	none
-6	locus 0108	6635	none	none
-6	locus 0109	8299	none	none
-6	locus 0110	41	none	none
-6	locus 0111	2026	none	none
-6	locus 0112	8947	none	none
-6	locus 0113	6886	none	none
-6	locus 0114	4714	none	none
-6	locus 0115	4278	none	none
-6	locus 0116	3188	none	none
-6	locus 0117	6264	none	none
-6	locus 0118	9840	none	none
-6	locus 0119	708	none	none
-6	locus 0120	4382	none	none
-6	locus 0121	2200	none	none
-6	locus 0122	9410	none	none
-6	locus 0123	1201	none	none
-6	locus 0124	3120	none	none
-6	locus 0125	6784	none	none
-6	locus 0126	4644	none	none
-6	locus 0127	2844	none	none
-6	locus 0128	2359	none	none
-6	locus 0129	1441	none	none
-6	locus 0130	646	none	none
-6	locus 0131	1092	none	none
-6	locus 0132	266	none	none
-6	locus 0133	9822	none	none
-6	locus 0134	9569	none	none
-6	locus 0135	7273	none	none
-6	locus 0136	3469	none	none
-6	locus 0137	9438	none	none
-6	locus 0138	7590	none	none
-6	locus 0139	5541	none	none
-6	locus 0140	6103	none	none
-6	locus 0141	3066	none	none
-6	locus 0142	8665	none	none
-6	locus 0143	4970	none	none
-6	locus 0144	4042	none	none
-6	locus 0145	2473	none	none
-6	locus 0146	1434	none	none
-6	locus 0147	9828	none	none
-6	locus 0148	3446	none	none
-6	locus 0149	4285	none	none
-6	locus 0150	3240	none	none
-6	locus 0151	1083	none	none
-6	locus 0152	9458	none	none
-6	locus 0153	3196	none	none
-6	locus 0154	6406	none	none
-6	locus 0155	9707	none	none
-6	locus 0156	1980	none	none
-6	locus 0157	9314	none	none
-6	locus 0158	3424	none	none
-6	locus 0159	2308	none	none
-6	locus 0160	9079	none	none
-6	locus 0161	8655	none	none
-6	locus 0162	7422	none	none
-6	locus 0163	3693	none	none
-6	locus 0164	6779	none	none
-6	locus 0165	6652	none	none
-6	locus 0166	1381	none	none
-6	locus 0167	1287	none	none
-6	locus 0168	3192	none	none
-6	locus 0169	2096	none	none
-6	locus 0170	7747	none	none
-6	locus 0171	1276	none	none
-6	locus 0172	7077	none	none
-6	locus 0173	1023	none	none
-6	locus 0174	9044	none	none
-6	locus 0175	7490	none	none
-6	locus 0176	7513	none	none
-6	locus 0177	3137	none	none
-6	locus 0178	7287	none	none
-6	locus 0179	6361	none	none
-6	locus 0180	9852	none	none
-6	locus 0181	3089	none	none
-6	locus 0182	366	none	none
-6	locus 0183	9162	none	none
-6	locus 0184	4676	none	none
-6	locus 0185	5735	none	none
-6	locus 0186	2376	none	none
-6	locus 0187	6324	none	none
-6	locus 0188	4069	none	none
-6	locus 0189	7234	none	none
-6	locus 0190	4383	none	none
-6	locus 0191	9395	none	none
-6	locus 0192	1028	none	none
-6	locus 0193	2665	none	none
-6	locus 0194	7655	none	none
-6	locus 0195	691	none	none
-6	locus 0196	4364	none	none
-6	locus 0197	4907	none	none
-6	locus 0198	9076	none	none
-6	locus 0199	4912	none	none
-6	locus 0200	7406	none	none
-6	locus 0201	2641	none	none
-6	locus 0202	1821	none	none
-6	locus 0203	2472	none	none
-6	locus 0204	4728	none	none
-6	locus 0205	7987	none	none
-6	locus 0206	1498	none	none
-6	locus 0207	6485	none	none
-6	locus 0208	7260	none	none
-6	locus 0209	668	none	none
-6	locus 0210	4139	none	none
-6	locus 0211	399	none	none
-6	locus 0212	693	none	none
-6	locus 0213	8635	none	none
-6	locus 0214	270	none	none
-6	locus 0215	2261	none	none
-6	locus 0216	3774	none	none
-6	locus 0217	9039	none	none
-6	locus 0218	174	none	none
-6	locus 0219	4666	none	none
-6	locus 0220	1857	none	none
-6	locus 0221	3069	none	none
-6	locus 0222	6736	none	none
-6	locus 0223	4749	none	none
-6	locus 0224	446	none	none
-6	locus 0225	7495	none	none
-6	locus 0226	2269	none	none
-6	locus 0227	6503	none	none
-6	locus 0228	4227	none	none
-6	locus 0229	7776	none	none
-6	locus 0230	4142	none	none
-6	locus 0231	8480	none	none
-6	locus 0232	9596	none	none
-6	locus 0233	7185	none	none
-6	locus 0234	5716	none	none
-6	locus 0235	3481	none	none
-6	locus 0236	1208	none	none
-6	locus 0237	7784	none	none
-6	locus 0238	1949	none	none
-6	locus 0239	6847	none	none
-6	locus 0240	8065	none	none
-6	locus 0241	7246	none	none
-6	locus 0242	683	none	none
-6	locus 0243	3315	none	none
-6	locus 0244	9208	none	none
-6	locus 0245	357	none	none
-6	locus 0246	907	none	none
-6	locus 0247	3729	none	none
-6	locus 0248	3441	none	none
-6	locus 0249	8174	none	none
-6	locus 0250	3501	none	none
-6	locus 0251	3973	none	none
-6	locus 0252	4873	none	none
-6	locus 0253	7696	none	none
-6	locus 0254	9281	none	none
-6	locus 0255	7487	none	none
-6	locus 0256	6449	none	none
-6	locus 0257	1419	none	none
-6	locus 0258	9199	none	none
-6	locus 0259	3936	none	none
-6	locus 0260	1695	none	none
-6	locus 0261	4669	none	none
-6	locus 0262	9203	none	none
-6	locus 0263	4066	none	none
-6	locus 0264	3307	none	none
-6	locus 0265	767	none	none
-6	locus 0266	2854	none	none
-6	locus 0267	3730	none	none
-6	locus 0268	5160	none	none
-6	locus 0269	3996	none	none
-6	locus 0270	8400	none	none
-6	locus 0271	2255	none	none
-6	locus 0272	3075	none	none
-6	locus 0273	3092	none	none
-6	locus 0274	3240	none	none
-6	locus 0275	7232	none	none
-6	locus 0276	1895	none	none
-6	locus 0277	3552	none	none
-6	locus 0278	4274	none	none
-6	locus 0279	2955	none	none
-6	locus 0280	6338	none	none
-6	locus 0281	4736	none	none
-6	locus 0282	8970	none	none
-6	locus 0283	8516	none	none
-6	locus 0284	7364	none	none
-6	locus 0285	4467	none	none
-6	locus 0286	6281	none	none
-6	locus 0287	8296	none	none
-6	locus 0288	5377	none	none
-6	locus 0289	218	none	none
-6	locus 0290	7581	none	none
-6	locus 0291	2936	none	none
-6	locus 0292	6630	none	none
-6	locus 0293	6358	none	none
-6	locus 0294	4736	none	none
-6	locus 0295	7908	none	none
-6	locus 0296	5061	none	none
-6	locus 0297	7707	none	none
-6	locus 0298	3601	none	none
-6	locus 0299	9963	none	none
-6	locus 0300	1068	none	none
-6	locus 0301	8571	none	none
-6	locus 0302	8854	none	none
-6	locus 0303	6161	none	none
-6	locus 0304	5706	none	none
-6	locus 0305	2633	none	none
-6	locus 0306	5805	none	none
-6	locus 0307	9064	none	none
+chromosome	name	start	alias	annotation
+1	1_0001	5631	none	none
+1	1_0002	9669	none	none
+1	1_0003	4162	none	none
+1	1_0004	832	none	none
+1	1_0005	1651	none	none
+1	1_0006	6830	none	none
+1	1_0007	1220	none	none
+1	1_0008	5231	none	none
+1	1_0009	8635	none	none
+1	1_0010	5774	none	none
+1	1_0011	9805	none	none
+1	1_0012	9198	none	none
+1	1_0013	3013	none	none
+1	1_0014	6281	none	none
+1	1_0015	3270	none	none
+1	1_0016	9524	none	none
+1	1_0017	3520	none	none
+1	1_0018	2876	none	none
+1	1_0019	9273	none	none
+1	1_0020	2091	none	none
+1	1_0021	2903	none	none
+1	1_0022	3348	none	none
+1	1_0023	799	none	none
+1	1_0024	8057	none	none
+1	1_0025	7287	none	none
+1	1_0026	441	none	none
+1	1_0027	9695	none	none
+1	1_0028	6646	none	none
+1	1_0029	5202	none	none
+1	1_0030	141	none	none
+1	1_0031	3220	none	none
+1	1_0032	9400	none	none
+1	1_0033	1698	none	none
+1	1_0034	9589	none	none
+1	1_0035	687	none	none
+1	1_0036	5390	none	none
+1	1_0037	3234	none	none
+1	1_0038	4415	none	none
+1	1_0039	2148	none	none
+1	1_0040	5064	none	none
+1	1_0041	963	none	none
+1	1_0042	1813	none	none
+1	1_0043	7599	none	none
+1	1_0044	135	none	none
+1	1_0045	44	none	none
+1	1_0046	1836	none	none
+1	1_0047	9565	none	none
+1	1_0048	747	none	none
+1	1_0049	5909	none	none
+1	1_0050	4869	none	none
+1	1_0051	269	none	none
+1	1_0052	5855	none	none
+1	1_0053	7344	none	none
+1	1_0054	7225	none	none
+1	1_0055	5103	none	none
+1	1_0056	9777	none	none
+1	1_0057	2736	none	none
+1	1_0058	6356	none	none
+1	1_0059	861	none	none
+1	1_0060	3903	none	none
+1	1_0061	5115	none	none
+1	1_0062	9740	none	none
+1	1_0063	6563	none	none
+1	1_0064	3929	none	none
+1	1_0065	5735	none	none
+1	1_0066	6317	none	none
+1	1_0067	2742	none	none
+1	1_0068	5701	none	none
+1	1_0069	9127	none	none
+1	1_0070	5971	none	none
+1	1_0071	2906	none	none
+1	1_0072	7420	none	none
+1	1_0073	9013	none	none
+1	1_0074	3826	none	none
+1	1_0075	1800	none	none
+1	1_0076	8667	none	none
+1	1_0077	8938	none	none
+1	1_0078	8239	none	none
+1	1_0079	4029	none	none
+1	1_0080	7663	none	none
+1	1_0081	684	none	none
+1	1_0082	7226	none	none
+1	1_0083	2606	none	none
+1	1_0084	2242	none	none
+1	1_0085	8310	none	none
+1	1_0086	6308	none	none
+1	1_0087	6457	none	none
+1	1_0088	8739	none	none
+1	1_0089	7014	none	none
+1	1_0090	6995	none	none
+1	1_0091	8564	none	none
+1	1_0092	6997	none	none
+1	1_0093	1280	none	none
+1	1_0094	2458	none	none
+1	1_0095	7432	none	none
+1	1_0096	9379	none	none
+1	1_0097	1677	none	none
+1	1_0098	7298	none	none
+1	1_0099	1026	none	none
+1	1_0100	4403	none	none
+1	1_0101	7755	none	none
+1	1_0102	7758	none	none
+1	1_0103	6799	none	none
+1	1_0104	7510	none	none
+1	1_0105	5141	none	none
+1	1_0106	4245	none	none
+1	1_0107	6764	none	none
+1	1_0108	9858	none	none
+1	1_0109	9893	none	none
+1	1_0110	5841	none	none
+1	1_0111	2080	none	none
+1	1_0112	5549	none	none
+1	1_0113	5173	none	none
+1	1_0114	1579	none	none
+1	1_0115	5992	none	none
+1	1_0116	2411	none	none
+1	1_0117	3322	none	none
+1	1_0118	1549	none	none
+1	1_0119	7074	none	none
+1	1_0120	3446	none	none
+1	1_0121	2950	none	none
+1	1_0122	3735	none	none
+1	1_0123	5214	none	none
+1	1_0124	1267	none	none
+1	1_0125	6724	none	none
+1	1_0126	7838	none	none
+1	1_0127	2689	none	none
+1	1_0128	6663	none	none
+1	1_0129	1324	none	none
+1	1_0130	7060	none	none
+1	1_0131	1289	none	none
+1	1_0132	7298	none	none
+1	1_0133	3938	none	none
+1	1_0134	9153	none	none
+1	1_0135	3283	none	none
+1	1_0136	9803	none	none
+1	1_0137	7219	none	none
+1	1_0138	7298	none	none
+1	1_0139	9968	none	none
+1	1_0140	2076	none	none
+1	1_0141	8581	none	none
+1	1_0142	9319	none	none
+1	1_0143	4272	none	none
+1	1_0144	8530	none	none
+1	1_0145	5710	none	none
+1	1_0146	8610	none	none
+1	1_0147	8211	none	none
+1	1_0148	4466	none	none
+1	1_0149	3964	none	none
+1	1_0150	3355	none	none
+1	1_0151	4297	none	none
+1	1_0152	4912	none	none
+1	1_0153	7433	none	none
+1	1_0154	2801	none	none
+1	1_0155	3340	none	none
+1	1_0156	3884	none	none
+1	1_0157	6341	none	none
+1	1_0158	9596	none	none
+1	1_0159	9524	none	none
+1	1_0160	2482	none	none
+1	1_0161	4476	none	none
+1	1_0162	6437	none	none
+1	1_0163	3589	none	none
+1	1_0164	6906	none	none
+1	1_0165	4430	none	none
+1	1_0166	2309	none	none
+1	1_0167	5245	none	none
+1	1_0168	4458	none	none
+1	1_0169	2134	none	none
+1	1_0170	3471	none	none
+1	1_0171	995	none	none
+1	1_0172	8611	none	none
+1	1_0173	2446	none	none
+1	1_0174	4570	none	none
+1	1_0175	4565	none	none
+1	1_0176	737	none	none
+1	1_0177	1283	none	none
+1	1_0178	3871	none	none
+1	1_0179	130	none	none
+1	1_0180	6204	none	none
+1	1_0181	5960	none	none
+1	1_0182	986	none	none
+1	1_0183	7492	none	none
+1	1_0184	3214	none	none
+1	1_0185	4214	none	none
+1	1_0186	9911	none	none
+1	1_0187	3228	none	none
+1	1_0188	6722	none	none
+1	1_0189	1799	none	none
+1	1_0190	4000	none	none
+1	1_0191	7299	none	none
+1	1_0192	263	none	none
+1	1_0193	6801	none	none
+1	1_0194	9030	none	none
+1	1_0195	3570	none	none
+1	1_0196	8281	none	none
+1	1_0197	5780	none	none
+1	1_0198	8073	none	none
+1	1_0199	2426	none	none
+1	1_0200	8815	none	none
+1	1_0201	6835	none	none
+1	1_0202	6128	none	none
+1	1_0203	9447	none	none
+1	1_0204	3618	none	none
+1	1_0205	4017	none	none
+1	1_0206	1741	none	none
+1	1_0207	4085	none	none
+1	1_0208	682	none	none
+1	1_0209	4846	none	none
+1	1_0210	244	none	none
+1	1_0211	4081	none	none
+1	1_0212	6850	none	none
+1	1_0213	4443	none	none
+1	1_0214	3152	none	none
+1	1_0215	5903	none	none
+1	1_0216	4581	none	none
+1	1_0217	9339	none	none
+1	1_0218	3532	none	none
+1	1_0219	6256	none	none
+1	1_0220	861	none	none
+1	1_0221	8856	none	none
+1	1_0222	5164	none	none
+1	1_0223	9306	none	none
+1	1_0224	348	none	none
+1	1_0225	1696	none	none
+1	1_0226	8813	none	none
+2	2_0001	605	none	none
+2	2_0002	224	none	none
+2	2_0003	8342	none	none
+2	2_0004	2105	none	none
+2	2_0005	7309	none	none
+2	2_0006	1498	none	none
+2	2_0007	1152	none	none
+2	2_0008	8826	none	none
+2	2_0009	9435	none	none
+2	2_0010	1850	none	none
+2	2_0011	5182	none	none
+2	2_0012	9707	none	none
+2	2_0013	1606	none	none
+2	2_0014	3094	none	none
+2	2_0015	1350	none	none
+2	2_0016	8527	none	none
+2	2_0017	1980	none	none
+2	2_0018	5888	none	none
+2	2_0019	518	none	none
+2	2_0020	9236	none	none
+2	2_0021	9852	none	none
+2	2_0022	867	none	none
+2	2_0023	1044	none	none
+2	2_0024	4737	none	none
+2	2_0025	6534	none	none
+2	2_0026	1355	none	none
+2	2_0027	7922	none	none
+2	2_0028	3982	none	none
+2	2_0029	5704	none	none
+2	2_0030	4174	none	none
+2	2_0031	3997	none	none
+2	2_0032	1866	none	none
+2	2_0033	7697	none	none
+2	2_0034	8127	none	none
+2	2_0035	1981	none	none
+2	2_0036	8033	none	none
+2	2_0037	1149	none	none
+2	2_0038	8753	none	none
+2	2_0039	3605	none	none
+2	2_0040	7767	none	none
+2	2_0041	941	none	none
+2	2_0042	3230	none	none
+2	2_0043	2505	none	none
+2	2_0044	4497	none	none
+2	2_0045	6224	none	none
+2	2_0046	3038	none	none
+2	2_0047	611	none	none
+2	2_0048	3392	none	none
+2	2_0049	1911	none	none
+2	2_0050	6446	none	none
+2	2_0051	6359	none	none
+2	2_0052	7545	none	none
+2	2_0053	3408	none	none
+2	2_0054	1472	none	none
+2	2_0055	1829	none	none
+2	2_0056	1006	none	none
+2	2_0057	416	none	none
+2	2_0058	9711	none	none
+2	2_0059	8405	none	none
+2	2_0060	6404	none	none
+2	2_0061	7060	none	none
+2	2_0062	377	none	none
+2	2_0063	674	none	none
+2	2_0064	3396	none	none
+2	2_0065	4143	none	none
+2	2_0066	5999	none	none
+2	2_0067	6835	none	none
+2	2_0068	7543	none	none
+2	2_0069	6154	none	none
+2	2_0070	8668	none	none
+2	2_0071	5099	none	none
+2	2_0072	6872	none	none
+2	2_0073	2683	none	none
+2	2_0074	8235	none	none
+2	2_0075	5022	none	none
+2	2_0076	1073	none	none
+2	2_0077	15	none	none
+2	2_0078	6211	none	none
+2	2_0079	3009	none	none
+2	2_0080	7267	none	none
+2	2_0081	5483	none	none
+2	2_0082	6097	none	none
+2	2_0083	924	none	none
+2	2_0084	2962	none	none
+2	2_0085	3113	none	none
+2	2_0086	7818	none	none
+2	2_0087	7443	none	none
+2	2_0088	5533	none	none
+2	2_0089	1604	none	none
+2	2_0090	291	none	none
+2	2_0091	1797	none	none
+2	2_0092	500	none	none
+2	2_0093	2287	none	none
+2	2_0094	1486	none	none
+2	2_0095	8854	none	none
+2	2_0096	7368	none	none
+2	2_0097	6974	none	none
+2	2_0098	5108	none	none
+2	2_0099	7861	none	none
+2	2_0100	7801	none	none
+2	2_0101	7460	none	none
+2	2_0102	7796	none	none
+2	2_0103	3642	none	none
+2	2_0104	72	none	none
+2	2_0105	6513	none	none
+2	2_0106	8289	none	none
+2	2_0107	9901	none	none
+2	2_0108	5712	none	none
+2	2_0109	527	none	none
+2	2_0110	8467	none	none
+2	2_0111	6705	none	none
+2	2_0112	6333	none	none
+2	2_0113	7966	none	none
+2	2_0114	449	none	none
+2	2_0115	142	none	none
+2	2_0116	8353	none	none
+2	2_0117	7887	none	none
+2	2_0118	6035	none	none
+2	2_0119	2035	none	none
+2	2_0120	8997	none	none
+2	2_0121	8106	none	none
+2	2_0122	6888	none	none
+2	2_0123	8024	none	none
+2	2_0124	8404	none	none
+2	2_0125	2998	none	none
+2	2_0126	5437	none	none
+2	2_0127	1444	none	none
+2	2_0128	5154	none	none
+2	2_0129	7028	none	none
+2	2_0130	5632	none	none
+2	2_0131	2539	none	none
+2	2_0132	14	none	none
+2	2_0133	2589	none	none
+2	2_0134	2701	none	none
+2	2_0135	5132	none	none
+2	2_0136	9851	none	none
+2	2_0137	8137	none	none
+2	2_0138	8607	none	none
+2	2_0139	4017	none	none
+2	2_0140	9031	none	none
+2	2_0141	2840	none	none
+2	2_0142	1478	none	none
+2	2_0143	49	none	none
+2	2_0144	2039	none	none
+2	2_0145	4947	none	none
+2	2_0146	1527	none	none
+2	2_0147	9061	none	none
+2	2_0148	9599	none	none
+2	2_0149	8794	none	none
+2	2_0150	648	none	none
+2	2_0151	1797	none	none
+2	2_0152	7059	none	none
+2	2_0153	6202	none	none
+2	2_0154	5914	none	none
+2	2_0155	8014	none	none
+2	2_0156	1170	none	none
+2	2_0157	559	none	none
+2	2_0158	3433	none	none
+2	2_0159	2242	none	none
+2	2_0160	1646	none	none
+2	2_0161	4150	none	none
+2	2_0162	3029	none	none
+2	2_0163	3115	none	none
+2	2_0164	5286	none	none
+2	2_0165	6595	none	none
+2	2_0166	1059	none	none
+2	2_0167	2751	none	none
+2	2_0168	3889	none	none
+2	2_0169	8410	none	none
+2	2_0170	7430	none	none
+2	2_0171	9218	none	none
+2	2_0172	8644	none	none
+2	2_0173	242	none	none
+2	2_0174	4139	none	none
+2	2_0175	2050	none	none
+2	2_0176	2238	none	none
+2	2_0177	5263	none	none
+2	2_0178	9471	none	none
+2	2_0179	3149	none	none
+2	2_0180	4723	none	none
+2	2_0181	5033	none	none
+2	2_0182	2745	none	none
+2	2_0183	1743	none	none
+2	2_0184	2858	none	none
+2	2_0185	2567	none	none
+2	2_0186	3353	none	none
+2	2_0187	3489	none	none
+2	2_0188	3027	none	none
+2	2_0189	5694	none	none
+2	2_0190	7703	none	none
+2	2_0191	6913	none	none
+2	2_0192	8671	none	none
+2	2_0193	1863	none	none
+2	2_0194	6940	none	none
+2	2_0195	4962	none	none
+2	2_0196	5754	none	none
+2	2_0197	6941	none	none
+2	2_0198	2855	none	none
+2	2_0199	2038	none	none
+2	2_0200	2328	none	none
+2	2_0201	9640	none	none
+2	2_0202	8022	none	none
+2	2_0203	7495	none	none
+2	2_0204	1036	none	none
+2	2_0205	2405	none	none
+2	2_0206	148	none	none
+2	2_0207	5137	none	none
+2	2_0208	9029	none	none
+2	2_0209	7624	none	none
+2	2_0210	5145	none	none
+2	2_0211	7131	none	none
+2	2_0212	1683	none	none
+2	2_0213	6388	none	none
+2	2_0214	6821	none	none
+2	2_0215	2428	none	none
+2	2_0216	8622	none	none
+2	2_0217	9072	none	none
+2	2_0218	4083	none	none
+2	2_0219	2423	none	none
+2	2_0220	1115	none	none
+2	2_0221	2666	none	none
+2	2_0222	2828	none	none
+2	2_0223	5500	none	none
+2	2_0224	7363	none	none
+2	2_0225	6041	none	none
+2	2_0226	9833	none	none
+2	2_0227	8614	none	none
+2	2_0228	3742	none	none
+2	2_0229	8261	none	none
+2	2_0230	5167	none	none
+2	2_0231	7666	none	none
+2	2_0232	2284	none	none
+2	2_0233	8066	none	none
+2	2_0234	8283	none	none
+2	2_0235	9702	none	none
+2	2_0236	3388	none	none
+2	2_0237	9115	none	none
+2	2_0238	2365	none	none
+2	2_0239	6321	none	none
+2	2_0240	2679	none	none
+2	2_0241	4430	none	none
+2	2_0242	3475	none	none
+2	2_0243	6269	none	none
+2	2_0244	4934	none	none
+2	2_0245	6791	none	none
+2	2_0246	7705	none	none
+2	2_0247	5064	none	none
+2	2_0248	5817	none	none
+2	2_0249	7436	none	none
+2	2_0250	6725	none	none
+2	2_0251	987	none	none
+2	2_0252	2200	none	none
+2	2_0253	6210	none	none
+2	2_0254	1316	none	none
+2	2_0255	7632	none	none
+2	2_0256	9615	none	none
+2	2_0257	6488	none	none
+2	2_0258	8137	none	none
+2	2_0259	107	none	none
+2	2_0260	6650	none	none
+2	2_0261	9961	none	none
+2	2_0262	8076	none	none
+2	2_0263	4074	none	none
+2	2_0264	7477	none	none
+2	2_0265	6073	none	none
+2	2_0266	6506	none	none
+2	2_0267	3779	none	none
+2	2_0268	7163	none	none
+2	2_0269	3551	none	none
+2	2_0270	70	none	none
+2	2_0271	3190	none	none
+2	2_0272	2374	none	none
+2	2_0273	1916	none	none
+2	2_0274	5465	none	none
+2	2_0275	3875	none	none
+2	2_0276	7857	none	none
+2	2_0277	4301	none	none
+2	2_0278	4562	none	none
+2	2_0279	2867	none	none
+2	2_0280	2722	none	none
+2	2_0281	7556	none	none
+2	2_0282	7390	none	none
+2	2_0283	3088	none	none
+2	2_0284	9358	none	none
+2	2_0285	7113	none	none
+2	2_0286	8476	none	none
+2	2_0287	1032	none	none
+2	2_0288	7810	none	none
+2	2_0289	5452	none	none
+2	2_0290	6930	none	none
+2	2_0291	1910	none	none
+2	2_0292	4757	none	none
+2	2_0293	4347	none	none
+2	2_0294	7223	none	none
+2	2_0295	2757	none	none
+2	2_0296	5069	none	none
+2	2_0297	6034	none	none
+2	2_0298	6699	none	none
+2	2_0299	6693	none	none
+2	2_0300	2139	none	none
+2	2_0301	9603	none	none
+2	2_0302	3074	none	none
+2	2_0303	9334	none	none
+2	2_0304	3214	none	none
+2	2_0305	9716	none	none
+2	2_0306	1353	none	none
+2	2_0307	4738	none	none
+3	3_0001	3042	none	none
+3	3_0002	4443	none	none
+3	3_0003	7406	none	none
+3	3_0004	9749	none	none
+3	3_0005	741	none	none
+3	3_0006	9523	none	none
+3	3_0007	6572	none	none
+3	3_0008	3305	none	none
+3	3_0009	1251	none	none
+3	3_0010	7639	none	none
+3	3_0011	263	none	none
+3	3_0012	1893	none	none
+3	3_0013	8603	none	none
+3	3_0014	1637	none	none
+3	3_0015	9893	none	none
+3	3_0016	9297	none	none
+3	3_0017	2689	none	none
+3	3_0018	8173	none	none
+3	3_0019	1411	none	none
+3	3_0020	7882	none	none
+3	3_0021	5123	none	none
+3	3_0022	8292	none	none
+3	3_0023	4269	none	none
+3	3_0024	7894	none	none
+3	3_0025	6409	none	none
+3	3_0026	2958	none	none
+3	3_0027	3647	none	none
+3	3_0028	1629	none	none
+3	3_0029	7828	none	none
+3	3_0030	7068	none	none
+3	3_0031	9777	none	none
+3	3_0032	5359	none	none
+3	3_0033	2618	none	none
+3	3_0034	322	none	none
+3	3_0035	6107	none	none
+3	3_0036	5706	none	none
+3	3_0037	9361	none	none
+3	3_0038	41	none	none
+3	3_0039	4062	none	none
+3	3_0040	2173	none	none
+3	3_0041	7540	none	none
+3	3_0042	4612	none	none
+3	3_0043	4139	none	none
+3	3_0044	9430	none	none
+3	3_0045	2636	none	none
+3	3_0046	3138	none	none
+3	3_0047	188	none	none
+3	3_0048	4255	none	none
+3	3_0049	144	none	none
+3	3_0050	3484	none	none
+3	3_0051	5451	none	none
+3	3_0052	4928	none	none
+3	3_0053	9746	none	none
+3	3_0054	9347	none	none
+3	3_0055	6201	none	none
+3	3_0056	8792	none	none
+3	3_0057	4249	none	none
+3	3_0058	8417	none	none
+3	3_0059	502	none	none
+3	3_0060	3726	none	none
+3	3_0061	4824	none	none
+3	3_0062	9165	none	none
+3	3_0063	1941	none	none
+3	3_0064	8192	none	none
+3	3_0065	4599	none	none
+3	3_0066	2612	none	none
+3	3_0067	2127	none	none
+3	3_0068	5860	none	none
+3	3_0069	4839	none	none
+3	3_0070	7837	none	none
+3	3_0071	8532	none	none
+3	3_0072	2303	none	none
+3	3_0073	8332	none	none
+3	3_0074	6582	none	none
+3	3_0075	728	none	none
+3	3_0076	7521	none	none
+3	3_0077	5416	none	none
+3	3_0078	4252	none	none
+3	3_0079	1002	none	none
+3	3_0080	4208	none	none
+3	3_0081	923	none	none
+3	3_0082	6724	none	none
+3	3_0083	7502	none	none
+3	3_0084	7122	none	none
+3	3_0085	8747	none	none
+3	3_0086	7769	none	none
+3	3_0087	5799	none	none
+3	3_0088	9717	none	none
+3	3_0089	2926	none	none
+3	3_0090	4183	none	none
+3	3_0091	4198	none	none
+3	3_0092	9449	none	none
+3	3_0093	4496	none	none
+3	3_0094	619	none	none
+3	3_0095	2657	none	none
+3	3_0096	2881	none	none
+3	3_0097	3981	none	none
+3	3_0098	9406	none	none
+3	3_0099	368	none	none
+3	3_0100	2557	none	none
+3	3_0101	6334	none	none
+3	3_0102	3404	none	none
+3	3_0103	9545	none	none
+3	3_0104	4073	none	none
+3	3_0105	8120	none	none
+3	3_0106	4167	none	none
+3	3_0107	1398	none	none
+3	3_0108	5161	none	none
+3	3_0109	5608	none	none
+3	3_0110	8811	none	none
+3	3_0111	4986	none	none
+3	3_0112	1202	none	none
+3	3_0113	1094	none	none
+3	3_0114	4291	none	none
+3	3_0115	3238	none	none
+3	3_0116	6111	none	none
+3	3_0117	5882	none	none
+3	3_0118	7395	none	none
+3	3_0119	1131	none	none
+3	3_0120	177	none	none
+3	3_0121	1686	none	none
+3	3_0122	9809	none	none
+3	3_0123	5852	none	none
+3	3_0124	1908	none	none
+3	3_0125	2588	none	none
+3	3_0126	5325	none	none
+3	3_0127	3741	none	none
+3	3_0128	449	none	none
+3	3_0129	4275	none	none
+3	3_0130	8922	none	none
+3	3_0131	6908	none	none
+3	3_0132	1282	none	none
+3	3_0133	473	none	none
+3	3_0134	9109	none	none
+3	3_0135	2142	none	none
+3	3_0136	7345	none	none
+3	3_0137	5002	none	none
+3	3_0138	3210	none	none
+3	3_0139	2417	none	none
+3	3_0140	2404	none	none
+3	3_0141	7154	none	none
+3	3_0142	8929	none	none
+3	3_0143	8079	none	none
+3	3_0144	7283	none	none
+3	3_0145	8019	none	none
+3	3_0146	7444	none	none
+3	3_0147	3351	none	none
+3	3_0148	4823	none	none
+3	3_0149	3247	none	none
+3	3_0150	6671	none	none
+3	3_0151	3202	none	none
+3	3_0152	9032	none	none
+3	3_0153	9428	none	none
+3	3_0154	5990	none	none
+3	3_0155	4420	none	none
+3	3_0156	4073	none	none
+3	3_0157	6296	none	none
+3	3_0158	13	none	none
+3	3_0159	6448	none	none
+3	3_0160	8233	none	none
+3	3_0161	2063	none	none
+3	3_0162	1779	none	none
+3	3_0163	5368	none	none
+3	3_0164	6628	none	none
+3	3_0165	661	none	none
+3	3_0166	2789	none	none
+3	3_0167	837	none	none
+3	3_0168	7134	none	none
+3	3_0169	2517	none	none
+3	3_0170	8253	none	none
+3	3_0171	8065	none	none
+3	3_0172	163	none	none
+3	3_0173	5917	none	none
+3	3_0174	445	none	none
+3	3_0175	4282	none	none
+3	3_0176	6680	none	none
+3	3_0177	5804	none	none
+3	3_0178	9932	none	none
+3	3_0179	2678	none	none
+3	3_0180	8695	none	none
+3	3_0181	4341	none	none
+3	3_0182	3536	none	none
+3	3_0183	6198	none	none
+3	3_0184	8930	none	none
+3	3_0185	2015	none	none
+3	3_0186	5566	none	none
+3	3_0187	910	none	none
+3	3_0188	1449	none	none
+3	3_0189	5934	none	none
+3	3_0190	881	none	none
+3	3_0191	2552	none	none
+3	3_0192	8135	none	none
+3	3_0193	1137	none	none
+3	3_0194	437	none	none
+3	3_0195	6718	none	none
+3	3_0196	4653	none	none
+3	3_0197	4038	none	none
+3	3_0198	198	none	none
+3	3_0199	1179	none	none
+3	3_0200	4419	none	none
+3	3_0201	3810	none	none
+3	3_0202	62	none	none
+3	3_0203	8304	none	none
+3	3_0204	3045	none	none
+3	3_0205	592	none	none
+3	3_0206	9121	none	none
+3	3_0207	2751	none	none
+3	3_0208	6972	none	none
+3	3_0209	6768	none	none
+3	3_0210	7651	none	none
+3	3_0211	4378	none	none
+3	3_0212	951	none	none
+3	3_0213	1548	none	none
+3	3_0214	3533	none	none
+3	3_0215	8036	none	none
+3	3_0216	5828	none	none
+3	3_0217	7941	none	none
+3	3_0218	6605	none	none
+3	3_0219	6793	none	none
+3	3_0220	8758	none	none
+3	3_0221	3912	none	none
+3	3_0222	7435	none	none
+3	3_0223	6754	none	none
+3	3_0224	9397	none	none
+3	3_0225	2393	none	none
+3	3_0226	1860	none	none
+4	4_0001	5729	none	none
+4	4_0002	5206	none	none
+4	4_0003	8849	none	none
+4	4_0004	7417	none	none
+4	4_0005	6795	none	none
+4	4_0006	5553	none	none
+4	4_0007	7079	none	none
+4	4_0008	1107	none	none
+4	4_0009	5196	none	none
+4	4_0010	2884	none	none
+4	4_0011	5535	none	none
+4	4_0012	5625	none	none
+4	4_0013	9851	none	none
+4	4_0014	8794	none	none
+4	4_0015	5709	none	none
+4	4_0016	742	none	none
+4	4_0017	5387	none	none
+4	4_0018	217	none	none
+4	4_0019	1111	none	none
+4	4_0020	4241	none	none
+4	4_0021	1165	none	none
+4	4_0022	7419	none	none
+4	4_0023	7536	none	none
+4	4_0024	6146	none	none
+4	4_0025	3831	none	none
+4	4_0026	359	none	none
+4	4_0027	8140	none	none
+4	4_0028	6097	none	none
+4	4_0029	4945	none	none
+4	4_0030	4592	none	none
+4	4_0031	6495	none	none
+4	4_0032	4914	none	none
+4	4_0033	9871	none	none
+4	4_0034	2864	none	none
+4	4_0035	4935	none	none
+4	4_0036	9358	none	none
+4	4_0037	2954	none	none
+4	4_0038	8402	none	none
+4	4_0039	3014	none	none
+4	4_0040	9223	none	none
+4	4_0041	9236	none	none
+4	4_0042	5615	none	none
+4	4_0043	4719	none	none
+4	4_0044	4866	none	none
+4	4_0045	4950	none	none
+4	4_0046	2389	none	none
+4	4_0047	4613	none	none
+4	4_0048	396	none	none
+4	4_0049	260	none	none
+4	4_0050	5249	none	none
+4	4_0051	619	none	none
+4	4_0052	8499	none	none
+4	4_0053	9868	none	none
+4	4_0054	1963	none	none
+4	4_0055	4536	none	none
+4	4_0056	6756	none	none
+4	4_0057	3588	none	none
+4	4_0058	3508	none	none
+4	4_0059	5526	none	none
+4	4_0060	108	none	none
+4	4_0061	974	none	none
+4	4_0062	2523	none	none
+4	4_0063	9470	none	none
+4	4_0064	9419	none	none
+4	4_0065	9711	none	none
+4	4_0066	1868	none	none
+4	4_0067	9136	none	none
+4	4_0068	9913	none	none
+4	4_0069	5551	none	none
+4	4_0070	1159	none	none
+4	4_0071	524	none	none
+4	4_0072	4259	none	none
+4	4_0073	6198	none	none
+4	4_0074	3872	none	none
+4	4_0075	4576	none	none
+4	4_0076	6903	none	none
+4	4_0077	5363	none	none
+4	4_0078	7029	none	none
+4	4_0079	4859	none	none
+4	4_0080	7146	none	none
+4	4_0081	940	none	none
+4	4_0082	9053	none	none
+4	4_0083	9908	none	none
+4	4_0084	9825	none	none
+4	4_0085	2888	none	none
+4	4_0086	6256	none	none
+4	4_0087	509	none	none
+4	4_0088	5908	none	none
+4	4_0089	4287	none	none
+4	4_0090	2702	none	none
+4	4_0091	5168	none	none
+4	4_0092	2533	none	none
+4	4_0093	8498	none	none
+4	4_0094	7720	none	none
+4	4_0095	8437	none	none
+4	4_0096	5462	none	none
+4	4_0097	459	none	none
+4	4_0098	150	none	none
+4	4_0099	8133	none	none
+4	4_0100	9867	none	none
+4	4_0101	9777	none	none
+4	4_0102	5508	none	none
+4	4_0103	2483	none	none
+4	4_0104	4882	none	none
+4	4_0105	6168	none	none
+4	4_0106	4242	none	none
+4	4_0107	300	none	none
+4	4_0108	8784	none	none
+4	4_0109	2533	none	none
+4	4_0110	3164	none	none
+4	4_0111	6298	none	none
+4	4_0112	3418	none	none
+4	4_0113	3085	none	none
+4	4_0114	1864	none	none
+4	4_0115	2843	none	none
+4	4_0116	4657	none	none
+4	4_0117	9105	none	none
+4	4_0118	265	none	none
+4	4_0119	9024	none	none
+4	4_0120	8644	none	none
+4	4_0121	3971	none	none
+4	4_0122	1501	none	none
+4	4_0123	2974	none	none
+4	4_0124	3672	none	none
+4	4_0125	7934	none	none
+4	4_0126	5085	none	none
+4	4_0127	6450	none	none
+4	4_0128	1321	none	none
+4	4_0129	8932	none	none
+4	4_0130	5107	none	none
+4	4_0131	7179	none	none
+4	4_0132	6091	none	none
+4	4_0133	3114	none	none
+4	4_0134	1984	none	none
+4	4_0135	7282	none	none
+4	4_0136	5264	none	none
+4	4_0137	3479	none	none
+4	4_0138	7266	none	none
+4	4_0139	8028	none	none
+4	4_0140	2092	none	none
+4	4_0141	9768	none	none
+4	4_0142	2747	none	none
+4	4_0143	9710	none	none
+4	4_0144	2538	none	none
+4	4_0145	8119	none	none
+4	4_0146	3337	none	none
+4	4_0147	2186	none	none
+4	4_0148	8448	none	none
+4	4_0149	5018	none	none
+4	4_0150	4059	none	none
+4	4_0151	3425	none	none
+4	4_0152	2193	none	none
+4	4_0153	8803	none	none
+4	4_0154	6783	none	none
+4	4_0155	3306	none	none
+4	4_0156	2989	none	none
+4	4_0157	1251	none	none
+4	4_0158	7125	none	none
+4	4_0159	7210	none	none
+4	4_0160	2245	none	none
+4	4_0161	3557	none	none
+4	4_0162	136	none	none
+4	4_0163	6188	none	none
+4	4_0164	5448	none	none
+4	4_0165	3184	none	none
+4	4_0166	429	none	none
+4	4_0167	6473	none	none
+4	4_0168	4276	none	none
+4	4_0169	4163	none	none
+4	4_0170	5900	none	none
+4	4_0171	1484	none	none
+4	4_0172	344	none	none
+4	4_0173	2726	none	none
+4	4_0174	9365	none	none
+4	4_0175	6271	none	none
+4	4_0176	5461	none	none
+4	4_0177	2491	none	none
+4	4_0178	4206	none	none
+4	4_0179	564	none	none
+4	4_0180	4121	none	none
+4	4_0181	5385	none	none
+4	4_0182	5093	none	none
+4	4_0183	3135	none	none
+4	4_0184	7634	none	none
+4	4_0185	4203	none	none
+4	4_0186	5618	none	none
+4	4_0187	7597	none	none
+4	4_0188	3391	none	none
+4	4_0189	5440	none	none
+4	4_0190	7089	none	none
+4	4_0191	8727	none	none
+4	4_0192	9891	none	none
+4	4_0193	2316	none	none
+4	4_0194	570	none	none
+4	4_0195	9195	none	none
+4	4_0196	5728	none	none
+4	4_0197	2392	none	none
+4	4_0198	3706	none	none
+4	4_0199	4149	none	none
+4	4_0200	3743	none	none
+4	4_0201	6127	none	none
+4	4_0202	3038	none	none
+4	4_0203	9298	none	none
+4	4_0204	387	none	none
+4	4_0205	3660	none	none
+4	4_0206	3391	none	none
+4	4_0207	7595	none	none
+4	4_0208	2701	none	none
+4	4_0209	985	none	none
+4	4_0210	5722	none	none
+4	4_0211	8637	none	none
+4	4_0212	6706	none	none
+4	4_0213	4680	none	none
+4	4_0214	5719	none	none
+4	4_0215	6589	none	none
+4	4_0216	2720	none	none
+4	4_0217	6611	none	none
+4	4_0218	6837	none	none
+4	4_0219	9720	none	none
+4	4_0220	4960	none	none
+4	4_0221	7882	none	none
+4	4_0222	5957	none	none
+4	4_0223	6656	none	none
+4	4_0224	9093	none	none
+4	4_0225	5928	none	none
+4	4_0226	9218	none	none
+4	4_0227	3725	none	none
+4	4_0228	7893	none	none
+4	4_0229	1552	none	none
+4	4_0230	9922	none	none
+4	4_0231	6607	none	none
+4	4_0232	4943	none	none
+4	4_0233	2647	none	none
+4	4_0234	7021	none	none
+4	4_0235	4864	none	none
+4	4_0236	6932	none	none
+4	4_0237	1364	none	none
+4	4_0238	4849	none	none
+4	4_0239	5601	none	none
+4	4_0240	328	none	none
+4	4_0241	9653	none	none
+4	4_0242	6799	none	none
+4	4_0243	8434	none	none
+4	4_0244	6772	none	none
+4	4_0245	5348	none	none
+4	4_0246	9627	none	none
+4	4_0247	9462	none	none
+4	4_0248	2217	none	none
+4	4_0249	454	none	none
+4	4_0250	3603	none	none
+4	4_0251	6470	none	none
+4	4_0252	1425	none	none
+4	4_0253	4026	none	none
+4	4_0254	8138	none	none
+4	4_0255	87	none	none
+4	4_0256	8132	none	none
+4	4_0257	7721	none	none
+4	4_0258	7358	none	none
+4	4_0259	8149	none	none
+4	4_0260	3985	none	none
+4	4_0261	8934	none	none
+4	4_0262	9450	none	none
+4	4_0263	521	none	none
+4	4_0264	8415	none	none
+4	4_0265	2639	none	none
+4	4_0266	829	none	none
+4	4_0267	3582	none	none
+4	4_0268	9906	none	none
+4	4_0269	6810	none	none
+4	4_0270	1710	none	none
+4	4_0271	3508	none	none
+4	4_0272	5191	none	none
+4	4_0273	9568	none	none
+4	4_0274	5224	none	none
+4	4_0275	8620	none	none
+4	4_0276	488	none	none
+4	4_0277	4995	none	none
+4	4_0278	323	none	none
+4	4_0279	9127	none	none
+4	4_0280	3021	none	none
+4	4_0281	1985	none	none
+4	4_0282	4396	none	none
+4	4_0283	9780	none	none
+4	4_0284	140	none	none
+4	4_0285	1439	none	none
+4	4_0286	230	none	none
+4	4_0287	6675	none	none
+4	4_0288	1936	none	none
+4	4_0289	7023	none	none
+4	4_0290	7942	none	none
+4	4_0291	7868	none	none
+4	4_0292	6059	none	none
+4	4_0293	9910	none	none
+4	4_0294	7412	none	none
+4	4_0295	2156	none	none
+4	4_0296	2033	none	none
+4	4_0297	4342	none	none
+4	4_0298	3540	none	none
+4	4_0299	9266	none	none
+4	4_0300	7870	none	none
+4	4_0301	3251	none	none
+4	4_0302	8298	none	none
+4	4_0303	1414	none	none
+4	4_0304	4154	none	none
+4	4_0305	8616	none	none
+4	4_0306	6351	none	none
+4	4_0307	9339	none	none
+5	5_0001	2603	none	none
+5	5_0002	2501	none	none
+5	5_0003	7211	none	none
+5	5_0004	7762	none	none
+5	5_0005	1663	none	none
+5	5_0006	5752	none	none
+5	5_0007	6305	none	none
+5	5_0008	2244	none	none
+5	5_0009	7581	none	none
+5	5_0010	9284	none	none
+5	5_0011	7264	none	none
+5	5_0012	5448	none	none
+5	5_0013	7810	none	none
+5	5_0014	1676	none	none
+5	5_0015	2018	none	none
+5	5_0016	1155	none	none
+5	5_0017	1768	none	none
+5	5_0018	2985	none	none
+5	5_0019	1421	none	none
+5	5_0020	2861	none	none
+5	5_0021	5221	none	none
+5	5_0022	6750	none	none
+5	5_0023	3097	none	none
+5	5_0024	8243	none	none
+5	5_0025	251	none	none
+5	5_0026	4532	none	none
+5	5_0027	286	none	none
+5	5_0028	4706	none	none
+5	5_0029	890	none	none
+5	5_0030	3433	none	none
+5	5_0031	7024	none	none
+5	5_0032	4498	none	none
+5	5_0033	7509	none	none
+5	5_0034	8851	none	none
+5	5_0035	8016	none	none
+5	5_0036	48	none	none
+5	5_0037	8188	none	none
+5	5_0038	996	none	none
+5	5_0039	2775	none	none
+5	5_0040	7620	none	none
+5	5_0041	3654	none	none
+5	5_0042	9349	none	none
+5	5_0043	7382	none	none
+5	5_0044	5232	none	none
+5	5_0045	1654	none	none
+5	5_0046	701	none	none
+5	5_0047	1788	none	none
+5	5_0048	4417	none	none
+5	5_0049	1686	none	none
+5	5_0050	6892	none	none
+5	5_0051	7491	none	none
+5	5_0052	8603	none	none
+5	5_0053	9100	none	none
+5	5_0054	883	none	none
+5	5_0055	5131	none	none
+5	5_0056	8152	none	none
+5	5_0057	7477	none	none
+5	5_0058	1293	none	none
+5	5_0059	3271	none	none
+5	5_0060	1135	none	none
+5	5_0061	4065	none	none
+5	5_0062	8881	none	none
+5	5_0063	6469	none	none
+5	5_0064	6803	none	none
+5	5_0065	2693	none	none
+5	5_0066	4655	none	none
+5	5_0067	9966	none	none
+5	5_0068	7211	none	none
+5	5_0069	2833	none	none
+5	5_0070	9395	none	none
+5	5_0071	5834	none	none
+5	5_0072	2148	none	none
+5	5_0073	1172	none	none
+5	5_0074	4056	none	none
+5	5_0075	8663	none	none
+5	5_0076	2440	none	none
+5	5_0077	4141	none	none
+5	5_0078	8471	none	none
+5	5_0079	5653	none	none
+5	5_0080	7149	none	none
+5	5_0081	4970	none	none
+5	5_0082	883	none	none
+5	5_0083	6624	none	none
+5	5_0084	6552	none	none
+5	5_0085	9340	none	none
+5	5_0086	9905	none	none
+5	5_0087	9525	none	none
+5	5_0088	93	none	none
+5	5_0089	9744	none	none
+5	5_0090	1283	none	none
+5	5_0091	6724	none	none
+5	5_0092	6553	none	none
+5	5_0093	5756	none	none
+5	5_0094	703	none	none
+5	5_0095	3557	none	none
+5	5_0096	8041	none	none
+5	5_0097	7822	none	none
+5	5_0098	2305	none	none
+5	5_0099	9877	none	none
+5	5_0100	7618	none	none
+5	5_0101	2535	none	none
+5	5_0102	6848	none	none
+5	5_0103	690	none	none
+5	5_0104	2401	none	none
+5	5_0105	737	none	none
+5	5_0106	2384	none	none
+5	5_0107	6254	none	none
+5	5_0108	3264	none	none
+5	5_0109	8226	none	none
+5	5_0110	1330	none	none
+5	5_0111	8055	none	none
+5	5_0112	9225	none	none
+5	5_0113	4795	none	none
+5	5_0114	5803	none	none
+5	5_0115	6648	none	none
+5	5_0116	8305	none	none
+5	5_0117	6755	none	none
+5	5_0118	2549	none	none
+5	5_0119	6600	none	none
+5	5_0120	6501	none	none
+5	5_0121	1212	none	none
+5	5_0122	9311	none	none
+5	5_0123	4567	none	none
+5	5_0124	34	none	none
+5	5_0125	4805	none	none
+5	5_0126	8169	none	none
+5	5_0127	3487	none	none
+5	5_0128	9465	none	none
+5	5_0129	865	none	none
+5	5_0130	9188	none	none
+5	5_0131	7615	none	none
+5	5_0132	6421	none	none
+5	5_0133	1696	none	none
+5	5_0134	4923	none	none
+5	5_0135	7583	none	none
+5	5_0136	4869	none	none
+5	5_0137	3008	none	none
+5	5_0138	9652	none	none
+5	5_0139	3449	none	none
+5	5_0140	5090	none	none
+5	5_0141	3894	none	none
+5	5_0142	6604	none	none
+5	5_0143	9136	none	none
+5	5_0144	2120	none	none
+5	5_0145	1152	none	none
+5	5_0146	6540	none	none
+5	5_0147	1030	none	none
+5	5_0148	6435	none	none
+5	5_0149	8008	none	none
+5	5_0150	4062	none	none
+5	5_0151	640	none	none
+5	5_0152	1294	none	none
+5	5_0153	9255	none	none
+5	5_0154	3268	none	none
+5	5_0155	6452	none	none
+5	5_0156	6521	none	none
+5	5_0157	1762	none	none
+5	5_0158	9491	none	none
+5	5_0159	3302	none	none
+5	5_0160	9194	none	none
+5	5_0161	6646	none	none
+5	5_0162	2047	none	none
+5	5_0163	498	none	none
+5	5_0164	9893	none	none
+5	5_0165	1539	none	none
+5	5_0166	3525	none	none
+5	5_0167	4277	none	none
+5	5_0168	1973	none	none
+5	5_0169	5769	none	none
+5	5_0170	3860	none	none
+5	5_0171	1828	none	none
+5	5_0172	9978	none	none
+5	5_0173	2506	none	none
+5	5_0174	1229	none	none
+5	5_0175	4885	none	none
+5	5_0176	7746	none	none
+5	5_0177	8996	none	none
+5	5_0178	782	none	none
+5	5_0179	1387	none	none
+5	5_0180	4409	none	none
+5	5_0181	2274	none	none
+5	5_0182	9746	none	none
+5	5_0183	5388	none	none
+5	5_0184	168	none	none
+5	5_0185	9850	none	none
+5	5_0186	7535	none	none
+5	5_0187	8268	none	none
+5	5_0188	8246	none	none
+5	5_0189	496	none	none
+5	5_0190	7908	none	none
+5	5_0191	8804	none	none
+5	5_0192	6235	none	none
+5	5_0193	6304	none	none
+5	5_0194	9587	none	none
+5	5_0195	8281	none	none
+5	5_0196	2044	none	none
+5	5_0197	1524	none	none
+5	5_0198	4159	none	none
+5	5_0199	5381	none	none
+5	5_0200	5094	none	none
+5	5_0201	6024	none	none
+5	5_0202	3882	none	none
+5	5_0203	4153	none	none
+5	5_0204	6324	none	none
+5	5_0205	5551	none	none
+5	5_0206	1552	none	none
+5	5_0207	5797	none	none
+5	5_0208	8779	none	none
+5	5_0209	9726	none	none
+5	5_0210	837	none	none
+5	5_0211	3454	none	none
+5	5_0212	7879	none	none
+5	5_0213	6496	none	none
+5	5_0214	4475	none	none
+5	5_0215	5808	none	none
+5	5_0216	204	none	none
+5	5_0217	9864	none	none
+5	5_0218	8298	none	none
+5	5_0219	8788	none	none
+5	5_0220	7299	none	none
+5	5_0221	2901	none	none
+5	5_0222	8351	none	none
+5	5_0223	8311	none	none
+5	5_0224	8756	none	none
+5	5_0225	3223	none	none
+5	5_0226	9842	none	none
+6	0001	9057	none	none
+6	0002	6923	none	none
+6	0003	2121	none	none
+6	0004	3126	none	none
+6	0005	5113	none	none
+6	0006	2151	none	none
+6	0007	3964	none	none
+6	0008	938	none	none
+6	0009	4604	none	none
+6	0010	8133	none	none
+6	0011	8811	none	none
+6	0012	5646	none	none
+6	0013	3380	none	none
+6	0014	4571	none	none
+6	0015	2105	none	none
+6	0016	9910	none	none
+6	0017	3190	none	none
+6	0018	877	none	none
+6	0019	4705	none	none
+6	0020	6089	none	none
+6	0021	5592	none	none
+6	0022	2539	none	none
+6	0023	8797	none	none
+6	0024	643	none	none
+6	0025	1960	none	none
+6	0026	3352	none	none
+6	0027	7188	none	none
+6	0028	592	none	none
+6	0029	8937	none	none
+6	0030	4160	none	none
+6	0031	2774	none	none
+6	0032	8118	none	none
+6	0033	489	none	none
+6	0034	3985	none	none
+6	0035	6408	none	none
+6	0036	8459	none	none
+6	0037	1352	none	none
+6	0038	3180	none	none
+6	0039	3743	none	none
+6	0040	1471	none	none
+6	0041	9814	none	none
+6	0042	9850	none	none
+6	0043	6485	none	none
+6	0044	5609	none	none
+6	0045	2043	none	none
+6	0046	3816	none	none
+6	0047	2035	none	none
+6	0048	4834	none	none
+6	0049	9980	none	none
+6	0050	6912	none	none
+6	0051	8088	none	none
+6	0052	5806	none	none
+6	0053	8555	none	none
+6	0054	9010	none	none
+6	0055	4995	none	none
+6	0056	2759	none	none
+6	0057	1975	none	none
+6	0058	1793	none	none
+6	0059	4038	none	none
+6	0060	7006	none	none
+6	0061	821	none	none
+6	0062	6106	none	none
+6	0063	688	none	none
+6	0064	5258	none	none
+6	0065	5825	none	none
+6	0066	5232	none	none
+6	0067	2818	none	none
+6	0068	1248	none	none
+6	0069	7244	none	none
+6	0070	1547	none	none
+6	0071	2893	none	none
+6	0072	599	none	none
+6	0073	730	none	none
+6	0074	987	none	none
+6	0075	2940	none	none
+6	0076	8384	none	none
+6	0077	4635	none	none
+6	0078	9116	none	none
+6	0079	8926	none	none
+6	0080	5214	none	none
+6	0081	7629	none	none
+6	0082	8764	none	none
+6	0083	6064	none	none
+6	0084	8651	none	none
+6	0085	4157	none	none
+6	0086	6754	none	none
+6	0087	1068	none	none
+6	0088	5065	none	none
+6	0089	6208	none	none
+6	0090	559	none	none
+6	0091	2317	none	none
+6	0092	5589	none	none
+6	0093	119	none	none
+6	0094	1852	none	none
+6	0095	4768	none	none
+6	0096	1501	none	none
+6	0097	6314	none	none
+6	0098	8153	none	none
+6	0099	2767	none	none
+6	0100	1758	none	none
+6	0101	5717	none	none
+6	0102	4367	none	none
+6	0103	7995	none	none
+6	0104	23	none	none
+6	0105	8821	none	none
+6	0106	2895	none	none
+6	0107	6430	none	none
+6	0108	6635	none	none
+6	0109	8299	none	none
+6	0110	41	none	none
+6	0111	2026	none	none
+6	0112	8947	none	none
+6	0113	6886	none	none
+6	0114	4714	none	none
+6	0115	4278	none	none
+6	0116	3188	none	none
+6	0117	6264	none	none
+6	0118	9840	none	none
+6	0119	708	none	none
+6	0120	4382	none	none
+6	0121	2200	none	none
+6	0122	9410	none	none
+6	0123	1201	none	none
+6	0124	3120	none	none
+6	0125	6784	none	none
+6	0126	4644	none	none
+6	0127	2844	none	none
+6	0128	2359	none	none
+6	0129	1441	none	none
+6	0130	646	none	none
+6	0131	1092	none	none
+6	0132	266	none	none
+6	0133	9822	none	none
+6	0134	9569	none	none
+6	0135	7273	none	none
+6	0136	3469	none	none
+6	0137	9438	none	none
+6	0138	7590	none	none
+6	0139	5541	none	none
+6	0140	6103	none	none
+6	0141	3066	none	none
+6	0142	8665	none	none
+6	0143	4970	none	none
+6	0144	4042	none	none
+6	0145	2473	none	none
+6	0146	1434	none	none
+6	0147	9828	none	none
+6	0148	3446	none	none
+6	0149	4285	none	none
+6	0150	3240	none	none
+6	0151	1083	none	none
+6	0152	9458	none	none
+6	0153	3196	none	none
+6	0154	6406	none	none
+6	0155	9707	none	none
+6	0156	1980	none	none
+6	0157	9314	none	none
+6	0158	3424	none	none
+6	0159	2308	none	none
+6	0160	9079	none	none
+6	0161	8655	none	none
+6	0162	7422	none	none
+6	0163	3693	none	none
+6	0164	6779	none	none
+6	0165	6652	none	none
+6	0166	1381	none	none
+6	0167	1287	none	none
+6	0168	3192	none	none
+6	0169	2096	none	none
+6	0170	7747	none	none
+6	0171	1276	none	none
+6	0172	7077	none	none
+6	0173	1023	none	none
+6	0174	9044	none	none
+6	0175	7490	none	none
+6	0176	7513	none	none
+6	0177	3137	none	none
+6	0178	7287	none	none
+6	0179	6361	none	none
+6	0180	9852	none	none
+6	0181	3089	none	none
+6	0182	366	none	none
+6	0183	9162	none	none
+6	0184	4676	none	none
+6	0185	5735	none	none
+6	0186	2376	none	none
+6	0187	6324	none	none
+6	0188	4069	none	none
+6	0189	7234	none	none
+6	0190	4383	none	none
+6	0191	9395	none	none
+6	0192	1028	none	none
+6	0193	2665	none	none
+6	0194	7655	none	none
+6	0195	691	none	none
+6	0196	4364	none	none
+6	0197	4907	none	none
+6	0198	9076	none	none
+6	0199	4912	none	none
+6	0200	7406	none	none
+6	0201	2641	none	none
+6	0202	1821	none	none
+6	0203	2472	none	none
+6	0204	4728	none	none
+6	0205	7987	none	none
+6	0206	1498	none	none
+6	0207	6485	none	none
+6	0208	7260	none	none
+6	0209	668	none	none
+6	0210	4139	none	none
+6	0211	399	none	none
+6	0212	693	none	none
+6	0213	8635	none	none
+6	0214	270	none	none
+6	0215	2261	none	none
+6	0216	3774	none	none
+6	0217	9039	none	none
+6	0218	174	none	none
+6	0219	4666	none	none
+6	0220	1857	none	none
+6	0221	3069	none	none
+6	0222	6736	none	none
+6	0223	4749	none	none
+6	0224	446	none	none
+6	0225	7495	none	none
+6	0226	2269	none	none
+6	0227	6503	none	none
+6	0228	4227	none	none
+6	0229	7776	none	none
+6	0230	4142	none	none
+6	0231	8480	none	none
+6	0232	9596	none	none
+6	0233	7185	none	none
+6	0234	5716	none	none
+6	0235	3481	none	none
+6	0236	1208	none	none
+6	0237	7784	none	none
+6	0238	1949	none	none
+6	0239	6847	none	none
+6	0240	8065	none	none
+6	0241	7246	none	none
+6	0242	683	none	none
+6	0243	3315	none	none
+6	0244	9208	none	none
+6	0245	357	none	none
+6	0246	907	none	none
+6	0247	3729	none	none
+6	0248	3441	none	none
+6	0249	8174	none	none
+6	0250	3501	none	none
+6	0251	3973	none	none
+6	0252	4873	none	none
+6	0253	7696	none	none
+6	0254	9281	none	none
+6	0255	7487	none	none
+6	0256	6449	none	none
+6	0257	1419	none	none
+6	0258	9199	none	none
+6	0259	3936	none	none
+6	0260	1695	none	none
+6	0261	4669	none	none
+6	0262	9203	none	none
+6	0263	4066	none	none
+6	0264	3307	none	none
+6	0265	767	none	none
+6	0266	2854	none	none
+6	0267	3730	none	none
+6	0268	5160	none	none
+6	0269	3996	none	none
+6	0270	8400	none	none
+6	0271	2255	none	none
+6	0272	3075	none	none
+6	0273	3092	none	none
+6	0274	3240	none	none
+6	0275	7232	none	none
+6	0276	1895	none	none
+6	0277	3552	none	none
+6	0278	4274	none	none
+6	0279	2955	none	none
+6	0280	6338	none	none
+6	0281	4736	none	none
+6	0282	8970	none	none
+6	0283	8516	none	none
+6	0284	7364	none	none
+6	0285	4467	none	none
+6	0286	6281	none	none
+6	0287	8296	none	none
+6	0288	5377	none	none
+6	0289	218	none	none
+6	0290	7581	none	none
+6	0291	2936	none	none
+6	0292	6630	none	none
+6	0293	6358	none	none
+6	0294	4736	none	none
+6	0295	7908	none	none
+6	0296	5061	none	none
+6	0297	7707	none	none
+6	0298	3601	none	none
+6	0299	9963	none	none
+6	0300	1068	none	none
+6	0301	8571	none	none
+6	0302	8854	none	none
+6	0303	6161	none	none
+6	0304	5706	none	none
+6	0305	2633	none	none
+6	0306	5805	none	none
+6	0307	9064	none	none

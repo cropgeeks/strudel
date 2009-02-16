@@ -25,10 +25,10 @@ public class MapViewer
 	    * FINEST (lowest value) 
 	    * ALL
 	    */
-	private static Level logLevel = Level.FINE;
-	public static Logger logger = Logger.getLogger("sbrn.mapviewer");
+	private static Level logLevel = Level.SEVERE;
+	public static Logger logger = Logger.getLogger("sbrn.strudel");
 	
-	private static File prefsFile = new File(System.getProperty("user.home"), ".mapviewer.xml");
+	private static File prefsFile = new File(System.getProperty("user.home"), ".strudel.xml");
 	private static Prefs prefs = new Prefs();
 	public static WinMain winMain;	
 
@@ -43,7 +43,7 @@ public class MapViewer
 		logger.setUseParentHandlers(false);
 		
 		// OS X: This has to be set before anything else
-		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Map Viewer");
+		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Strudel");
 
 		prefs.loadPreferences(prefsFile, Prefs.class);
 		Install4j.doStartUpCheck();
@@ -78,7 +78,7 @@ public class MapViewer
 		{
 			winMain = new WinMain();
 
-			TaskDialog.initialize(winMain, "MapViewer");
+			TaskDialog.initialize(winMain, "Strudel");
 
 			winMain.addWindowListener(new WindowAdapter()
 			{

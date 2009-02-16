@@ -56,7 +56,8 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 		
 		// if we are, fire up a web browser with a query for the value in the cell we clicked on
 		FoundFeatureTableModel foundFeatureTableModel = (FoundFeatureTableModel) homologResultsTable.getModel();
-		if (col == foundFeatureTableModel.findColumn(foundFeatureTableModel.homologColumnLabel))
+		if (col == foundFeatureTableModel.findColumn(foundFeatureTableModel.homologColumnLabel) || 
+						col == foundFeatureTableModel.findColumn(foundFeatureTableModel.targetNameColumnLabel))
 		{
 			launchBrowser(row, col);
 		}
@@ -92,7 +93,7 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 			
 			// get the index of the selected row but check for changes due to filtering
 			int modelRow = -1;
-			if (homologResultsTable.getSelectedRow() >= 0)
+			if (selectedRow >= 0)
 			{
 				modelRow = homologResultsTable.convertRowIndexToModel(homologResultsTable.getSelectedRow());
 			}
@@ -101,49 +102,50 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 				return;
 			}
 			
-			// extract the value of the cell clicked on
-			String homologName = (String) foundFeatureTableModel.getValueAt(modelRow, selectedCol);
-			String mapSetName = (String) foundFeatureTableModel.getValueAt(
-							modelRow,
-							foundFeatureTableModel.columnNameList.indexOf(foundFeatureTableModel.homologGenomeColumnLabel));
-			// figure out the URL we need to prefix this with
 			String url = "";
-			// find out the index of the mapset
-			int mapSetIndex = MapViewer.winMain.dataContainer.referenceGMapSets.indexOf(Utils.getGMapSetByName(mapSetName));
-			// for the canned example data that ship with the application we use this
-			if (!MapViewer.winMain.fatController.loadOwnData)
+			// extract the value of the cell clicked on
+			String featureName = (String) foundFeatureTableModel.getValueAt(modelRow, selectedCol);
+			
+			if (selectedCol == foundFeatureTableModel.findColumn(foundFeatureTableModel.homologColumnLabel))
 			{
-				if (mapSetIndex == 0)
-					url = Constants.exampleRefGenome1BaseURL + homologName;
-				else if (mapSetIndex == 1)
-					url = Constants.exampleRefGenome2BaseURL + homologName;
-			}
-			// for the users own data we use these URLs
-			else
-			{
-				if (mapSetIndex == 0)
-					url = MapViewer.winMain.openFileDialog.openFilesPanel.getRefGenome1UrlTf().getText() + homologName;
-				else if (mapSetIndex == 1)
-					url = MapViewer.winMain.openFileDialog.openFilesPanel.getRefGenome2UrlTf().getText() + homologName;
-			}
-			Desktop desktop = null;
-			if (Desktop.isDesktopSupported())
-				desktop = Desktop.getDesktop();
-			if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE))
-			{
-				try
+				String mapSetName = (String) foundFeatureTableModel.getValueAt(
+								modelRow,
+								foundFeatureTableModel.columnNameList.indexOf(foundFeatureTableModel.homologGenomeColumnLabel));
+				// figure out the URL we need to prefix this with				
+				// find out the index of the mapset
+				int mapSetIndex = MapViewer.winMain.dataContainer.referenceGMapSets.indexOf(Utils.getGMapSetByName(mapSetName));
+				// for the canned example data that ship with the application we use this
+				if (!MapViewer.winMain.fatController.loadOwnData)
 				{
-					desktop.browse(new URI(url));
+					if (mapSetIndex == 0)
+						url = Constants.exampleRefGenome1BaseURL + featureName;
+					else if (mapSetIndex == 1)
+						url = Constants.exampleRefGenome2BaseURL + featureName;
 				}
-				catch (java.net.URISyntaxException e1)
+				// for the user's own data we use these URLs
+				else
 				{
-					TaskDialog.error("Error: URL not specified or specified incorrectly", "Close");
-				}
-				catch (IOException e)
-				{
-					e.printStackTrace();
+					if (mapSetIndex == 0)
+						url = MapViewer.winMain.openFileDialog.openFilesPanel.getRefGenome1UrlTf().getText() + featureName;
+					else if (mapSetIndex == 1)
+						url = MapViewer.winMain.openFileDialog.openFilesPanel.getRefGenome2UrlTf().getText() + featureName;
 				}
 			}
+			else if (selectedCol == foundFeatureTableModel.findColumn(foundFeatureTableModel.targetNameColumnLabel))
+			{
+				// for the canned example data that ship with the application we use this
+				if (!MapViewer.winMain.fatController.loadOwnData)
+				{
+					url = Constants.exampleTargetGenomeBaseURL + featureName;
+				}
+				// for the user's own data we use this URL
+				else
+				{
+					url = MapViewer.winMain.openFileDialog.openFilesPanel.getTargetGenomeUrlTf1().getText() + featureName;
+				}
+			}
+			
+			Utils.visitURL(url);
 		}
 		
 		homologResultsTable.isFilterEvent = false;
@@ -188,7 +190,7 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 			// which map and mapset are we dealing with here
 			GMapSet owningSet1 = f1.getOwningMap().getGChromoMap().owningSet;
 			GMapSet owningSet2 = f2.getOwningMap().getGChromoMap().owningSet;
-
+			
 			//if we got here because we requested features through the find features by name dialog then we
 			//want to zoom out fully so we can see them in the broadest possible context
 			//if we got here through a range request we do nothing

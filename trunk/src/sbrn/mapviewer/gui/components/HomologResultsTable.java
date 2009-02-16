@@ -39,7 +39,8 @@ public class HomologResultsTable extends JTable
 	
 	public TableCellRenderer getCellRenderer(int row, int column)
 	{
-		if (column == ((FoundFeatureTableModel)getModel()).findColumn(FoundFeatureTableModel.homologColumnLabel))
+		if (column == ((FoundFeatureTableModel)getModel()).findColumn(FoundFeatureTableModel.homologColumnLabel) ||
+				column == ((FoundFeatureTableModel)getModel()).findColumn(FoundFeatureTableModel.targetNameColumnLabel))
 		{
 			return hyperlinkCellRenderer;
 		}

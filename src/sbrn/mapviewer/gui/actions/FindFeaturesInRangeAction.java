@@ -20,17 +20,10 @@ public class FindFeaturesInRangeAction extends AbstractAction
 		//clear the dialog
 		FindFeaturesInRangeDialog featuresInRangeDialog = MapViewer.winMain.ffInRangeDialog; 
 		
-		featuresInRangeDialog.ffInRangePanel.getIntervalStartTextField().setText("");
-		featuresInRangeDialog.ffInRangePanel.getIntervalEndTextField().setText("");
+		featuresInRangeDialog.ffInRangePanel.getRangeStartSpinner().setValue(0);
+		featuresInRangeDialog.ffInRangePanel.getRangeEndSpinner().setValue(0);
 		featuresInRangeDialog.ffInRangePanel.getGenomeCombo().setSelectedIndex(0);
 		featuresInRangeDialog.ffInRangePanel.getChromoCombo().setSelectedIndex(0);
-		
-		////////////////////////////////THIS BIT JUST FOR EASE OF TESTING////////////////////////////////
-		//TODO: remove code used for testing only
-		featuresInRangeDialog.ffInRangePanel.getGenomeCombo().setSelectedIndex(1);
-		featuresInRangeDialog.ffInRangePanel.getChromoCombo().setSelectedIndex(2);
-		featuresInRangeDialog.ffInRangePanel.getIntervalStartTextField().setText("12");
-		featuresInRangeDialog.ffInRangePanel.getIntervalEndTextField().setText("23");
 		
 		//show the dialog
 		featuresInRangeDialog.setLocationRelativeTo(MapViewer.winMain);

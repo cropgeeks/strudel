@@ -40,8 +40,6 @@ public class ExampleDataInfoPanel extends javax.swing.JPanel
 		refGen1InfoLabel = new javax.swing.JLabel();
 		refGen2InfoLabel = new javax.swing.JLabel();
 		
-		setBorder(javax.swing.BorderFactory.createTitledBorder("Example datasets used:"));
-		
 		targetDataInfoLabel.setText("jLabel1");
 		
 		refGen1InfoLabel.setText("jLabel1");
@@ -50,29 +48,8 @@ public class ExampleDataInfoPanel extends javax.swing.JPanel
 		
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
 		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-						layout.createSequentialGroup().addContainerGap().addGroup(
-										layout.createParallelGroup(
-														javax.swing.GroupLayout.Alignment.LEADING).addComponent(
-														targetDataInfoLabel,
-														javax.swing.GroupLayout.DEFAULT_SIZE,
-														115,
-														Short.MAX_VALUE).addComponent(
-														refGen1InfoLabel,
-														javax.swing.GroupLayout.DEFAULT_SIZE,
-														115,
-														Short.MAX_VALUE).addComponent(
-														refGen2InfoLabel,
-														javax.swing.GroupLayout.DEFAULT_SIZE,
-														115,
-														Short.MAX_VALUE))));
-		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-						layout.createSequentialGroup().addComponent(targetDataInfoLabel).addPreferredGap(
-										javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(
-										refGen1InfoLabel).addPreferredGap(
-										javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(
-										refGen2InfoLabel).addContainerGap(30,
-										Short.MAX_VALUE)));
+		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(targetDataInfoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE).addComponent(refGen1InfoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE).addComponent(refGen2InfoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)).addContainerGap()));
+		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap().addComponent(targetDataInfoLabel).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(refGen1InfoLabel).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(refGen2InfoLabel).addContainerGap(49, Short.MAX_VALUE)));
 	}// </editor-fold>
 	//GEN-END:initComponents
 	

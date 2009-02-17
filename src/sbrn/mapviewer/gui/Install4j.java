@@ -12,7 +12,7 @@ import scri.commons.gui.*;
 
 public class Install4j
 {
-	private static String URL = "http://bioinf.scri.ac.uk/mapviewer/installers/updates.xml";
+	private static String URL = "http://bioinf.scri.ac.uk/strudel/installers/updates.xml";
 
 	public static String VERSION = "X.XX.XX.XX";
 
@@ -82,7 +82,7 @@ public class Install4j
 					String os = URLEncoder.encode(System.getProperty("os.name"), "UTF-8");
 					String user = URLEncoder.encode(System.getProperty("user.name"), "UTF-8");
 
-					String addr = "http://bioinf.scri.ac.uk/cgi-bin/mapviewer/mapviewer.cgi"
+					String addr = "http://bioinf.scri.ac.uk/cgi-bin/strudel/strudel.cgi"
 						+ "?id=" + id
 						+ "&version=" + version
 						+ "&locale=" + locale

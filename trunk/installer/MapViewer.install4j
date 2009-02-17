@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.2.1" transformSequenceNumber="2">
   <directoryPresets config=".." />
-  <application name="Strudel" distributionSourceDir="" applicationId="6538-8163-8628-9425" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" keepModificationTimes="false" missingFilesStrategy="warn" shortName="Strudel" publisher="SCRI" publisherWeb="http://www.scri.ac.uk" version="0.09.02.16" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.5" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
+  <application name="Strudel" distributionSourceDir="" applicationId="6538-8163-8628-9425" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" keepModificationTimes="false" missingFilesStrategy="warn" shortName="Strudel" publisher="SCRI" publisherWeb="http://www.scri.ac.uk" version="0.09.02.17" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.5" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -37,7 +37,7 @@
       <executable name="strudel" type="1" iconSet="true" iconFile="" executableDir="." redirectStderr="true" stderrFile="error.log" redirectStdout="true" stdoutFile="output.log" failOnStderrOutput="true" executableMode="1" changeWorkingDirectory="true" workingDirectory="." singleInstance="false" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker" checkConsoleParameter="false">
         <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" />
       </executable>
-      <splashScreen show="true" autoOff="true" alwaysOnTop="true" width="0" height="0" bitmapFile="../res/images/splashscreen.gif" java6SplashScreen="false">
+      <splashScreen show="true" autoOff="true" alwaysOnTop="false" width="0" height="0" bitmapFile="../res/images/splashscreen.png" java6SplashScreen="false">
         <text>
           <statusLine x="20" y="20" text="" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
           <versionLine x="20" y="40" text="version ${compiler:sys.version}" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
@@ -399,7 +399,7 @@
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.update.CheckForUpdateAction">
                       <void property="updateDescriptorUrl">
-                        <string>http://bioinf.scri.ac.uk/mapviewer/installers/updates.xml</string>
+                        <string>http://bioinf.scri.ac.uk/strudel/installers/updates.xml</string>
                       </void>
                       <void property="variable">
                         <string>updateDescriptor</string>
@@ -1040,7 +1040,7 @@ if (wizardContext != null) {
     </applications>
   </installerGui>
   <mediaSets>
-    <win32 name="Windows" id="20" mediaFileName="strudel_windows_${compiler:sys.version}" installDir="Strudel" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="windows-x86-1.6.0_12" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="" runAsAdmin="false">
+    <win32 name="Windows" id="20" mediaFileName="strudel_windows_${compiler:sys.version}" installDir="Strudel" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="windows-x86-1.6.0_07" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="" runAsAdmin="false">
       <excludedLaunchers />
       <excludedComponents />
       <excludedBeans />
@@ -1055,7 +1055,7 @@ if (wizardContext != null) {
       <exclude />
       <variables />
     </macos>
-    <unixInstaller name="Linux" id="100" mediaFileName="strudel_linux_${compiler:sys.version}" installDir="Strudel" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="linux-x86-1.6.0_12" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="">
+    <unixInstaller name="Linux" id="100" mediaFileName="strudel_linux_${compiler:sys.version}" installDir="Strudel" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="linux-x86-1.6.0_07" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="">
       <excludedLaunchers />
       <excludedComponents />
       <excludedBeans />
@@ -1066,7 +1066,7 @@ if (wizardContext != null) {
         <scriptLines />
       </installerScript>
     </unixInstaller>
-    <unixInstaller name="Solaris" id="102" mediaFileName="strudel_solaris_${compiler:sys.version}" installDir="Strudel" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="solaris-sparc-1.6.0_12" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="">
+    <unixInstaller name="Solaris" id="102" mediaFileName="strudel_solaris_${compiler:sys.version}" installDir="Strudel" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="solaris-sparc-1.6.0_07" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="">
       <excludedLaunchers />
       <excludedComponents />
       <excludedBeans />
@@ -1078,7 +1078,7 @@ if (wizardContext != null) {
       </installerScript>
     </unixInstaller>
   </mediaSets>
-  <buildIds buildAll="false">
+  <buildIds buildAll="true">
     <mediaSet refId="20" />
   </buildIds>
 </install4j>

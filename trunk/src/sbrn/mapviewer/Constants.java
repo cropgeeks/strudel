@@ -42,6 +42,6 @@ public class Constants
 	public static final String exampleRefGenome2BaseURL = "http://rice.plantbiology.msu.edu/cgi-bin/gbrowse/rice/?name=";
 	
 	//documentation and download site URL for the application
-	public static final String strudelHomePage = "http://bioinf.scri.ac.uk/mapviewer/";
+	public static final String strudelHomePage = "http://bioinf.scri.ac.uk/strudel/";
 	public static final String scriHTML = "http://www.scri.ac.uk";
 }

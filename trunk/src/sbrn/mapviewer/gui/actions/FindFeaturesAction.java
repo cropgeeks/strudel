@@ -20,9 +20,6 @@ public class FindFeaturesAction extends AbstractAction
 		//show the find dialog
 		MapViewer.winMain.ffDialog.setLocationRelativeTo(MapViewer.winMain);
 		
-		//////////////////////////////FOR TESTING ONLY////////////////////////////////
-		MapViewer.winMain.ffDialog.ffPanel.getFFTextArea().setText("11_10223");
-		
 		MapViewer.winMain.ffDialog.setVisible(true);
 		
 	}

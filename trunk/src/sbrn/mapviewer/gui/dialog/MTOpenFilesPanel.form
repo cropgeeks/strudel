@@ -96,6 +96,7 @@
               <ComponentRef name="importModeButtonGroup"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Load own data files"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="ownDataRadioButtonStateChanged"/>

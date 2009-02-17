@@ -84,8 +84,8 @@ public class FindFeaturesInRangeDialog extends JDialog implements ActionListener
 			//gather the required inputs from the panel
 			String genome = (String) ffInRangePanel.getGenomeCombo().getSelectedItem();
 			String chromosome =  (String) ffInRangePanel.getChromoCombo().getSelectedItem();
-			float intervalStart = Float.parseFloat(ffInRangePanel.getIntervalStartTextField().getText());
-			float intervalEnd = Float.parseFloat(ffInRangePanel.getIntervalEndTextField().getText());
+			float intervalStart = (Float)ffInRangePanel.getRangeStartSpinner().getValue();
+			float intervalEnd = (Float)ffInRangePanel.getRangeEndSpinner().getValue();
 			
 			//get the chromo object
 			gChromoMap = Utils.getGMapByName(chromosome,genome);

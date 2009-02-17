@@ -7,6 +7,7 @@
 	<property name="lib" location="lib"/>
 
 	<property name="mapviewer.jar" value="${lib}/mapviewer.jar"/>
+	<property name="i4j" value="C:\Program Files\install4j\bin\ant.jar"/>
 
 
 	<path id="project.classpath">
@@ -49,6 +50,19 @@
 					"/>
 			</manifest>
 		</jar>
+	</target>
+	
+	<target name="install4j" depends="jar">
+		<taskdef name="install4j"
+		classname="com.install4j.Install4JTask"
+		classpath="${i4j}"/>	
+		<delete>
+			<fileset dir="installer" includes="**/*.exe"/>
+			<fileset dir="installer" includes="**/*.sh"/>
+			<fileset dir="installer" includes="**/*.dmg"/>
+		</delete>
+		<input message="Enter the version number:" addproperty="version"/>
+		<install4j projectfile="installer/MapViewer.install4j" release="${version}"/>
 	</target>
 
 	<target name="javadoc">

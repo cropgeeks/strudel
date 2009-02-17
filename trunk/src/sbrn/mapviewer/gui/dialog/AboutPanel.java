@@ -8,7 +8,6 @@ package sbrn.mapviewer.gui.dialog;
 
 import java.awt.*;
 import java.awt.event.*;
-
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
 
@@ -48,8 +47,6 @@ public class AboutPanel extends javax.swing.JPanel
 		nameLabel = new javax.swing.JLabel();
 		scriIcon = new javax.swing.JLabel();
 		
-		setBorder(javax.swing.BorderFactory.createTitledBorder("General information: "));
-		
 		versionLabel.setFont(new java.awt.Font("Tahoma", 1, 18));
 		versionLabel.setText("Strudel x.xx.xx.xx");
 		
@@ -57,39 +54,15 @@ public class AboutPanel extends javax.swing.JPanel
 		
 		copyrightLabel.setText("Copyright (C) 2009, Plant Bioinformatics Group, SCRI");
 		
-		nameLabel.setText("Iain Milne, Micha Bayer and David Marshall");
+		nameLabel.setText("Micha Bayer, Iain Milne and David Marshall");
 		
 		scriIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 		scriIcon.setText("SCRI LOGO");
 		
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
 		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-						layout.createSequentialGroup().addContainerGap().addGroup(
-										layout.createParallelGroup(
-														javax.swing.GroupLayout.Alignment.LEADING).addComponent(
-														nameLabel).addComponent(
-														copyrightLabel).addComponent(
-														versionLabel).addComponent(
-														webLabel).addComponent(
-														scriIcon,
-														javax.swing.GroupLayout.Alignment.TRAILING,
-														javax.swing.GroupLayout.DEFAULT_SIZE,
-														302,
-														Short.MAX_VALUE)).addContainerGap()));
-		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-						layout.createSequentialGroup().addComponent(versionLabel).addPreferredGap(
-										javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(
-										webLabel).addGap(14, 14, 14).addComponent(
-										copyrightLabel).addPreferredGap(
-										javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(
-										nameLabel).addPreferredGap(
-										javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-										javax.swing.GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE).addComponent(scriIcon,
-										javax.swing.GroupLayout.PREFERRED_SIZE,
-										62,
-										javax.swing.GroupLayout.PREFERRED_SIZE).addContainerGap()));
+		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(nameLabel).addComponent(copyrightLabel).addComponent(versionLabel).addComponent(webLabel).addComponent(scriIcon, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)).addContainerGap()));
+		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap().addComponent(versionLabel).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(webLabel).addGap(14, 14, 14).addComponent(copyrightLabel).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(nameLabel).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(scriIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE).addContainerGap()));
 	}// </editor-fold>
 	//GEN-END:initComponents
 	

@@ -51,11 +51,11 @@ public class MTFindFeaturesInRangePanel extends javax.swing.JPanel implements Ac
 		jLabel5 = new javax.swing.JLabel();
 		chromoCombo = new javax.swing.JComboBox();
 		jLabel6 = new javax.swing.JLabel();
-		intervalStartTextField = new javax.swing.JTextField();
 		jLabel7 = new javax.swing.JLabel();
-		intervalEndTextField = new javax.swing.JTextField();
 		displayHomologsCheckBox = new javax.swing.JCheckBox();
 		displayLabelsCheckbox = new javax.swing.JCheckBox();
+		rangeStartSpinner = new javax.swing.JSpinner();
+		rangeEndSpinner = new javax.swing.JSpinner();
 		
 		jCheckBox1.setText("jCheckBox1");
 		
@@ -102,135 +102,34 @@ public class MTFindFeaturesInRangePanel extends javax.swing.JPanel implements Ac
 			}
 		});
 		
+		rangeStartSpinner.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+		rangeStartSpinner.setPreferredSize(new java.awt.Dimension(25, 24));
+		
+		rangeEndSpinner.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+		rangeEndSpinner.setPreferredSize(new java.awt.Dimension(25, 24));
+		
 		org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
 		jPanel1.setLayout(jPanel1Layout);
-		jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(
-						org.jdesktop.layout.GroupLayout.LEADING).add(
-						jPanel1Layout.createSequentialGroup().addContainerGap().add(
-										jPanel1Layout.createParallelGroup(
-														org.jdesktop.layout.GroupLayout.LEADING).add(
-														jPanel1Layout.createSequentialGroup().add(
-																		jPanel1Layout.createParallelGroup(
-																						org.jdesktop.layout.GroupLayout.LEADING,
-																						false).add(
-																						org.jdesktop.layout.GroupLayout.TRAILING,
-																						jLabel7,
-																						org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																						org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																						Short.MAX_VALUE).add(
-																						org.jdesktop.layout.GroupLayout.TRAILING,
-																						jLabel6,
-																						org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																						org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																						Short.MAX_VALUE).add(
-																						jLabel4,
-																						org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																						org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																						Short.MAX_VALUE).add(
-																						jLabel5,
-																						org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																						org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																						Short.MAX_VALUE)).add(
-																		18,
-																		18,
-																		18).add(
-																		jPanel1Layout.createParallelGroup(
-																						org.jdesktop.layout.GroupLayout.LEADING).add(
-																						genomeCombo,
-																						org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
-																						203,
-																						org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(
-																						jPanel1Layout.createParallelGroup(
-																										org.jdesktop.layout.GroupLayout.TRAILING,
-																										false).add(
-																										org.jdesktop.layout.GroupLayout.LEADING,
-																										chromoCombo,
-																										0,
-																										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																										Short.MAX_VALUE).add(
-																										org.jdesktop.layout.GroupLayout.LEADING,
-																										intervalEndTextField).add(
-																										org.jdesktop.layout.GroupLayout.LEADING,
-																										intervalStartTextField,
-																										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																										83,
-																										Short.MAX_VALUE)))).add(
-														displayHomologsCheckBox).add(
-														displayLabelsCheckbox)).addContainerGap(
-										15, Short.MAX_VALUE)));
-		jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(
-						org.jdesktop.layout.GroupLayout.LEADING).add(
-						jPanel1Layout.createSequentialGroup().addContainerGap().add(
-										jPanel1Layout.createParallelGroup(
-														org.jdesktop.layout.GroupLayout.BASELINE).add(
-														jLabel4).add(
-														genomeCombo,
-														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
-														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
-										org.jdesktop.layout.LayoutStyle.RELATED).add(
-										jPanel1Layout.createParallelGroup(
-														org.jdesktop.layout.GroupLayout.BASELINE).add(
-														jLabel5).add(
-														chromoCombo,
-														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
-														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
-										org.jdesktop.layout.LayoutStyle.RELATED).add(
-										jPanel1Layout.createParallelGroup(
-														org.jdesktop.layout.GroupLayout.BASELINE).add(
-														jLabel6).add(
-														intervalStartTextField,
-														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
-														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
-										org.jdesktop.layout.LayoutStyle.RELATED).add(
-										jPanel1Layout.createParallelGroup(
-														org.jdesktop.layout.GroupLayout.BASELINE).add(
-														jLabel7).add(
-														intervalEndTextField,
-														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
-														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
-										org.jdesktop.layout.LayoutStyle.UNRELATED).add(
-										displayLabelsCheckbox).addPreferredGap(
-										org.jdesktop.layout.LayoutStyle.RELATED).add(
-										displayHomologsCheckBox).addContainerGap(
-										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE)));
+		jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jPanel1Layout.createSequentialGroup().addContainerGap().add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jPanel1Layout.createSequentialGroup().add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false).add(org.jdesktop.layout.GroupLayout.TRAILING, jLabel7, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.TRAILING, jLabel6, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(jLabel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).add(18, 18, 18).add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(genomeCombo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 203, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(chromoCombo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false).add(org.jdesktop.layout.GroupLayout.LEADING, rangeEndSpinner, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, rangeStartSpinner, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)))).add(displayHomologsCheckBox).add(displayLabelsCheckbox)).addContainerGap(15, Short.MAX_VALUE)));
+		jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(jPanel1Layout.createSequentialGroup().addContainerGap().add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel4).add(genomeCombo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel5).add(chromoCombo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel6).add(rangeStartSpinner, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel7).add(rangeEndSpinner, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED).add(displayLabelsCheckbox).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(displayHomologsCheckBox).addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 		
 		org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
 		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
-						layout.createSequentialGroup().addContainerGap().add(
-										jPanel1,
-										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
-										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addContainerGap(
-										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE)));
-		layout.setVerticalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
-						layout.createSequentialGroup().addContainerGap().add(
-										jPanel1,
-										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE).addContainerGap()));
+		layout.setHorizontalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(layout.createSequentialGroup().addContainerGap().add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+		layout.setVerticalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(layout.createSequentialGroup().addContainerGap().add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addContainerGap()));
 	}// </editor-fold>
 	//GEN-END:initComponents
 	
 	private void displayLabelsCheckboxActionPerformed(java.awt.event.ActionEvent evt)
 	{
-		// TODO add your handling code here:
 	}
 	
 	private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt)
 	{
-		// TODO add your handling code here:
 	}
 	
 	private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt)
 	{
-		// TODO add your handling code here:
 	}
 	
 	//GEN-BEGIN:variables
@@ -239,14 +138,14 @@ public class MTFindFeaturesInRangePanel extends javax.swing.JPanel implements Ac
 	private javax.swing.JCheckBox displayHomologsCheckBox;
 	private javax.swing.JCheckBox displayLabelsCheckbox;
 	private javax.swing.JComboBox genomeCombo;
-	private javax.swing.JTextField intervalEndTextField;
-	private javax.swing.JTextField intervalStartTextField;
 	private javax.swing.JCheckBox jCheckBox1;
 	private javax.swing.JLabel jLabel4;
 	private javax.swing.JLabel jLabel5;
 	private javax.swing.JLabel jLabel6;
 	private javax.swing.JLabel jLabel7;
 	private javax.swing.JPanel jPanel1;
+	private javax.swing.JSpinner rangeEndSpinner;
+	private javax.swing.JSpinner rangeStartSpinner;
 	
 	// End of variables declaration//GEN-END:variables
 	
@@ -258,16 +157,6 @@ public class MTFindFeaturesInRangePanel extends javax.swing.JPanel implements Ac
 	public javax.swing.JComboBox getGenomeCombo()
 	{
 		return genomeCombo;
-	}
-	
-	public javax.swing.JTextField getIntervalEndTextField()
-	{
-		return intervalEndTextField;
-	}
-	
-	public javax.swing.JTextField getIntervalStartTextField()
-	{
-		return intervalStartTextField;
 	}
 	
 	public void actionPerformed(ActionEvent e)
@@ -306,6 +195,16 @@ public class MTFindFeaturesInRangePanel extends javax.swing.JPanel implements Ac
 	public javax.swing.JCheckBox getDisplayLabelsCheckbox()
 	{
 		return displayLabelsCheckbox;
+	}
+	
+	public javax.swing.JSpinner getRangeEndSpinner()
+	{
+		return rangeEndSpinner;
+	}
+	
+	public javax.swing.JSpinner getRangeStartSpinner()
+	{
+		return rangeStartSpinner;
 	}
 	
 }

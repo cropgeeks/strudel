@@ -47,32 +47,31 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		if (SystemUtils.isMacOS() == false)
 			add(new JLabel("  "));
 		
-		//this group of buttons is related to higher level tasks in the app such as data import and export
-		add(bOpen);		
+		//buttons
+		add(bOpen);	
+		
+		addSeparator(true);		
 		add(bExport);
+
+		addSeparator(true);		
+		add(bFindFeatures);
+		add(bFindFeaturesinRange);
 		
 		addSeparator(true);
+		add(bResetAll);
 		
+		addSeparator(true);		
+		add(blastLabel);
+		add(eValueSlider);
+		
+		addSeparator(true);		
 		add(bOverview);
 		add(bDistMarkers);
 		add(bCurves);
 		add(bAntialias);
 		add(bLinkFilter);
 		
-		addSeparator(true);
-		
-		//maybe keep this group of controls on a theme of "does something with the data"
-		add(bFindFeatures);
-		add(bFindFeaturesinRange);
-		add(bResetAll);
-		
-		addSeparator(true);
-		
-		add(blastLabel);
-		add(eValueSlider);
-		
-		addSeparator(true);
-		
+		addSeparator(true);		
 		add(bHelp);
 		add(bInfo);
 		add(new JLabel("  "));
@@ -118,42 +117,42 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		
 		//configure open file dialog button
 		OpenFileDialogAction openFileDialogAction = new OpenFileDialogAction();
-		bOpen = (JButton) getButton(false, "", "Load data into Mapviewer", Icons.getIcon("FILEOPEN"), openFileDialogAction);
+		bOpen = (JButton) getButton(false, "Load data", "Load data into Mapviewer", Icons.getIcon("FILEOPEN"), openFileDialogAction);
 		KeyStroke ctrlOKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK);
 		bOpen.getInputMap(JButton.WHEN_IN_FOCUSED_WINDOW).put(ctrlOKeyStroke, "openFileDialog");
 		bOpen.getActionMap().put("openFileDialog", openFileDialogAction);
 	
 		//configure export image button
 		ExportImageAction exportImageAction = new ExportImageAction();
-		bExport = (JButton) getButton(false, "", "Export the display as an image", Icons.getIcon("EXPORTIMAGE"), exportImageAction);
+		bExport = (JButton) getButton(false, "Export image", "Export the display as an image", Icons.getIcon("EXPORTIMAGE"), exportImageAction);
 		KeyStroke ctrlEKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK);
 		bExport.getInputMap(JButton.WHEN_IN_FOCUSED_WINDOW).put(ctrlEKeyStroke, "exportImage");
 		bExport.getActionMap().put("exportImage", exportImageAction);
 		
 		//configure find features button
 		FindFeaturesAction findFeaturesAction = new FindFeaturesAction();
-		bFindFeatures = (JButton) getButton(false, "", "Find features by name", Icons.getIcon("FIND"), findFeaturesAction);
+		bFindFeatures = (JButton) getButton(false, "Find", "Find features by name", Icons.getIcon("FIND"), findFeaturesAction);
 		KeyStroke ctrlFKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK);
 		bFindFeatures.getInputMap(JButton.WHEN_IN_FOCUSED_WINDOW).put(ctrlFKeyStroke, "findFeatures");
 		bFindFeatures.getActionMap().put("findFeatures", findFeaturesAction);
 		
 		//configure find features in range button
 		FindFeaturesInRangeAction findFeaturesInRangeAction = new FindFeaturesInRangeAction();
-		bFindFeaturesinRange = (JButton) getButton(false, "", "List features in range", Icons.getIcon("RANGE"), findFeaturesInRangeAction);
+		bFindFeaturesinRange = (JButton) getButton(false, "Explore range", "List features in range", Icons.getIcon("RANGE"), findFeaturesInRangeAction);
 		KeyStroke ctrlRKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
 		bFindFeaturesinRange.getInputMap(JButton.WHEN_IN_FOCUSED_WINDOW).put(ctrlRKeyStroke, "findFeaturesInRange");
 		bFindFeaturesinRange.getActionMap().put("findFeaturesInRange", findFeaturesInRangeAction);
 		
 		//these buttons have no keyboard shortcuts associated with them as yet -- straightforward config
-		bOverview = (JToggleButton) getButton(true, "", "Toggle the overview dialog on or off", Icons.getIcon("OVERVIEW"), null);
+		bOverview = (JToggleButton) getButton(true, "Overviews", "Toggle the overview dialog on or off", Icons.getIcon("OVERVIEW"), null);
 		bOverview.setSelected(Prefs.guiOverviewVisible);
-		bDistMarkers = (JToggleButton) getButton(true, "", "Toggle the distance markers on or off", Icons.getIcon("DISTANCEMARKERS"), null);
-		bCurves = (JButton) getButton(false, "", "Cycle through straight, angled and curved links", Icons.getIcon("CURVES"), null);
-		bAntialias = (JToggleButton) getButton(true, "", "Toggle between antialiased and plain drawing styles", Icons.getIcon("ANTIALIAS"), null);
-		bLinkFilter = (JToggleButton) getButton(true, "", "Toggle between visibility-based filtering of links and no filtering", Icons.getIcon("LINKFILTER"), null);		
+		bDistMarkers = (JToggleButton) getButton(true, "Tickmarks", "Toggle the distance markers on or off", Icons.getIcon("DISTANCEMARKERS"), null);
+		bCurves = (JButton) getButton(false, "Links", "Cycle through straight, angled and curved links", Icons.getIcon("CURVES"), null);
+		bAntialias = (JToggleButton) getButton(true, "Style", "Toggle between higher quality and plain drawing styles", Icons.getIcon("ANTIALIAS"), null);
+		bLinkFilter = (JToggleButton) getButton(true, "Filter", "Toggle between visibility-based filtering of links and no filtering", Icons.getIcon("LINKFILTER"), null);		
 		bHelp =  (JButton) getButton(false, "", "Help", Icons.getIcon("HELP"), null);
 		bInfo =  (JButton) getButton(false, "", "About Strudel", Icons.getIcon("INFO"), null);
-		bResetAll =  (JButton) getButton(false, "", "Reset display", Icons.getIcon("RESET"), null);
+		bResetAll =  (JButton) getButton(false, "Reset", "Reset display", Icons.getIcon("RESET"), null);
 	}
 	
 	public void actionPerformed(ActionEvent e)

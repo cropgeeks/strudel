@@ -82,19 +82,7 @@ public class OpenFileDialog extends JDialog implements ActionListener
 		Runnable runnable = new Runnable()
 		{
 			public void run()
-			{			
-
-//				//it may seem idiotic to do this but the data loading can be so quick the user does not even get to read the message and
-//				//may then assume they have missed something important
-//				//for the sake of clarity let the thread sleep for long enough for them to at least read the message 
-//				try
-//				{
-//					Thread.sleep(1000);
-//				}
-//				catch (InterruptedException e)
-//				{
-//				}
-				
+			{							
 				//init the new data set 
 				MapViewer.winMain.fatController.initialiseNewProject();				
 
@@ -102,10 +90,11 @@ public class OpenFileDialog extends JDialog implements ActionListener
 				if(dataLoadingDialog != null)
 					dataLoadingDialog.setVisible(false);
 				
+				//enable the rest of the controls
+				MapViewer.winMain.toolbar.enableAllControls();
+				
 				// revalidate the GUI
-//				MapViewer.winMain.showStartPanel(false);
 				MapViewer.winMain.validate();
-
 			}
 		};	
 		Thread thread = new Thread(runnable);

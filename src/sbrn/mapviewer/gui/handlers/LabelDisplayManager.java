@@ -209,8 +209,8 @@ public class LabelDisplayManager
 		//then the height of the interval
 		//for this we need the interval start and end values
 		MTFindFeaturesInRangePanel ffInRangePanel = MapViewer.winMain.ffInRangeDialog.ffInRangePanel;		
-		float intervalStart = (Float)ffInRangePanel.getRangeStartSpinner().getValue();
-		float intervalEnd = (Float)ffInRangePanel.getRangeEndSpinner().getValue();
+		float intervalStart = ((Number)ffInRangePanel.getRangeStartSpinner().getValue()).floatValue();
+		float intervalEnd = ((Number)ffInRangePanel.getRangeEndSpinner().getValue()).floatValue();
 
 		//and the chromosome the interval is on
 		String genome = (String) ffInRangePanel.getGenomeCombo().getSelectedItem();

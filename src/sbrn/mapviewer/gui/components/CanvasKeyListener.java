@@ -17,7 +17,8 @@ public class CanvasKeyListener implements KeyListener
 		//ESC has been pressed
 		if(e.getKeyCode() == 27)
 		{
-			MapViewer.winMain.fatController.selectionMap.drawSelectionRect = false;
+			if(MapViewer.winMain.fatController.selectionMap != null)
+				MapViewer.winMain.fatController.selectionMap.drawSelectionRect = false;
 			mainCanvas.updateCanvas(true);
 		}
 	}

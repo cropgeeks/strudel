@@ -74,7 +74,8 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 		
 		// if we are, change the cursor to a hand
 		FoundFeatureTableModel foundFeatureTableModel = (FoundFeatureTableModel) homologResultsTable.getModel();
-		if (col == foundFeatureTableModel.findColumn(foundFeatureTableModel.homologColumnLabel))
+		if (col == foundFeatureTableModel.findColumn(foundFeatureTableModel.homologColumnLabel) ||
+						col == foundFeatureTableModel.findColumn(foundFeatureTableModel.targetNameColumnLabel))
 		{
 			homologResultsTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		}

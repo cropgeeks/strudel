@@ -84,12 +84,26 @@ public class FindFeaturesInRangeDialog extends JDialog implements ActionListener
 			//gather the required inputs from the panel
 			String genome = (String) ffInRangePanel.getGenomeCombo().getSelectedItem();
 			String chromosome =  (String) ffInRangePanel.getChromoCombo().getSelectedItem();
-			float intervalStart = (Float)ffInRangePanel.getRangeStartSpinner().getValue();
-			float intervalEnd = (Float)ffInRangePanel.getRangeEndSpinner().getValue();
+			float intervalStart = ((Number)ffInRangePanel.getRangeStartSpinner().getValue()).floatValue();
+			float intervalEnd = ((Number)ffInRangePanel.getRangeEndSpinner().getValue()).floatValue();
 			
 			//get the chromo object
 			gChromoMap = Utils.getGMapByName(chromosome,genome);
 			ChromoMap chromoMap = gChromoMap.chromoMap;
+			
+			//we need to check that we have not exceeded the maximum value of the positions on the chromosome
+			if(intervalEnd > chromoMap.getStop())
+			{
+				TaskDialog.error("The range end value exceeds the maximum position value on the chromosome.", "Close");
+				return;
+			}
+			
+			//also check the range start is less than the range end
+			if(intervalEnd < intervalStart)
+			{
+				TaskDialog.error("The range start value is greater than the range end value.", "Close");
+				return;
+			}
 			
 			//tell it to highlight the region specified
 			gChromoMap.highlightedRegionStart = intervalStart;

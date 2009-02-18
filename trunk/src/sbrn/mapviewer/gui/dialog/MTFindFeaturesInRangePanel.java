@@ -25,6 +25,8 @@ public class MTFindFeaturesInRangePanel extends javax.swing.JPanel implements Ac
 	{
 		initComponents();
 		
+		((JSpinner.DefaultEditor)rangeStartSpinner.getEditor()).getTextField().setInputVerifier(new PositiveValueVerifier());
+		((JSpinner.DefaultEditor)rangeEndSpinner.getEditor()).getTextField().setInputVerifier(new PositiveValueVerifier());
 	}
 	
 	public void initRemainingComponents()
@@ -206,5 +208,16 @@ public class MTFindFeaturesInRangePanel extends javax.swing.JPanel implements Ac
 	{
 		return rangeStartSpinner;
 	}
+	
+	class PositiveValueVerifier extends InputVerifier
+	{
+		public boolean verify(JComponent input)
+		{
+			JFormattedTextField tf = (JFormattedTextField) input;
+			MapViewer.logger.fine("(Number)tf.getValue()).floatValue() = " + ((Number)tf.getValue()).floatValue());
+			return ((Number)tf.getValue()).floatValue() >= 0;
+		}
+	}
+
 	
 }

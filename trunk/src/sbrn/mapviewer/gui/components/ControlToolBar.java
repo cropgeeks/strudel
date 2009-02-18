@@ -15,20 +15,20 @@ public class ControlToolBar extends JToolBar implements ActionListener
 {
 	private WinMain winMain;
 	
-	private JButton bOpen;
-	private JButton bExport;
-	private JToggleButton bOverview;
-	private JButton bHelp;
-	private JLabel blastLabel, blastScoreLabel;
-	private JSlider eValueSlider;
+	public JButton bOpen;
+	public JButton bExport;
+	public JToggleButton bOverview;
+	public JButton bHelp;
+	public JLabel blastLabel, blastScoreLabel;
+	public JSlider eValueSlider;
 	public JButton bFindFeatures;
 	public JButton bFindFeaturesinRange;
-	private JButton bResetAll;
-	private JToggleButton bDistMarkers;
+	public JButton bResetAll;
+	public JToggleButton bDistMarkers;
 	public JButton bCurves;
-	private JToggleButton bAntialias;
-	private JToggleButton bLinkFilter;
-	private JButton bInfo;
+	public JToggleButton bAntialias;
+	public JToggleButton bLinkFilter;
+	public JButton bInfo;
 	
 	
 	public int currentLinkShapeType = 1;
@@ -52,7 +52,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		
 		addSeparator(true);		
 		add(bExport);
-
+		
 		addSeparator(true);		
 		add(bFindFeatures);
 		add(bFindFeaturesinRange);
@@ -61,15 +61,13 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		add(bResetAll);
 		
 		addSeparator(true);		
-		add(blastLabel);
-		add(eValueSlider);
-		
-		addSeparator(true);		
 		add(bOverview);
 		add(bDistMarkers);
 		add(bCurves);
 		add(bAntialias);
 		add(bLinkFilter);
+		add(eValueSlider);
+		add(blastLabel);
 		
 		addSeparator(true);		
 		add(bHelp);
@@ -83,13 +81,12 @@ public class ControlToolBar extends JToolBar implements ActionListener
 	private void createControls()
 	{
 		blastLabel = new JLabel("BLAST Cut-off:");
-		blastScoreLabel = new JLabel("                   ");
+		blastScoreLabel = new JLabel("                   ");		
 		eValueSlider = new JSlider();
 		eValueSlider.setMaximumSize(new Dimension(125, 50));
 		eValueSlider.setMajorTickSpacing(100);
 		eValueSlider.setMaximum(300);
 		eValueSlider.setMinorTickSpacing(50);
-		//		eValueSlider.setPaintLabels(true);
 		eValueSlider.setPaintTicks(true);
 		eValueSlider.setValue(0);
 		eValueSlider.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -101,58 +98,68 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		eValueSlider.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e)
 			{
-				winMain.mainCanvas.drawBlastScore = true;
-				winMain.mainCanvas.updateCanvas(true);
+				if(winMain.mainCanvas != null)
+				{
+					winMain.mainCanvas.drawBlastScore = true;
+					winMain.mainCanvas.updateCanvas(true);
+				}
 			}
 			
 			public void mouseReleased(MouseEvent e)
 			{
-				winMain.mainCanvas.drawBlastScore = false;
-				winMain.mainCanvas.updateCanvas(true);
+				if(winMain.mainCanvas != null)
+				{
+					winMain.mainCanvas.drawBlastScore = false;
+					winMain.mainCanvas.updateCanvas(true);
+				}
 			}
 		});
+		
+		//disable the BLAST slider and label on startup initially
+		blastLabel.setEnabled(false);
+		eValueSlider.setEnabled(false);
 		
 		//for a few of the buttons we want Ctrl based keyboard shortcuts
 		//this requires some crazy configuration code, sadly
 		
 		//configure open file dialog button
 		OpenFileDialogAction openFileDialogAction = new OpenFileDialogAction();
-		bOpen = (JButton) getButton(false, "Load data", "Load data into Mapviewer", Icons.getIcon("FILEOPEN"), openFileDialogAction);
+		bOpen = (JButton) getButton(false, "Load data", "Load data into Mapviewer", Icons.getIcon("FILEOPEN"), openFileDialogAction, true);
 		KeyStroke ctrlOKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK);
 		bOpen.getInputMap(JButton.WHEN_IN_FOCUSED_WINDOW).put(ctrlOKeyStroke, "openFileDialog");
 		bOpen.getActionMap().put("openFileDialog", openFileDialogAction);
-	
+		
 		//configure export image button
 		ExportImageAction exportImageAction = new ExportImageAction();
-		bExport = (JButton) getButton(false, "Export image", "Export the display as an image", Icons.getIcon("EXPORTIMAGE"), exportImageAction);
+		bExport = (JButton) getButton(false, "Export image", "Export the display as an image", Icons.getIcon("EXPORTIMAGE"), exportImageAction, false);
 		KeyStroke ctrlEKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK);
 		bExport.getInputMap(JButton.WHEN_IN_FOCUSED_WINDOW).put(ctrlEKeyStroke, "exportImage");
 		bExport.getActionMap().put("exportImage", exportImageAction);
 		
 		//configure find features button
 		FindFeaturesAction findFeaturesAction = new FindFeaturesAction();
-		bFindFeatures = (JButton) getButton(false, "Find", "Find features by name", Icons.getIcon("FIND"), findFeaturesAction);
+		bFindFeatures = (JButton) getButton(false, "Find", "Find features by name", Icons.getIcon("FIND"), findFeaturesAction, false);
 		KeyStroke ctrlFKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK);
 		bFindFeatures.getInputMap(JButton.WHEN_IN_FOCUSED_WINDOW).put(ctrlFKeyStroke, "findFeatures");
 		bFindFeatures.getActionMap().put("findFeatures", findFeaturesAction);
 		
 		//configure find features in range button
 		FindFeaturesInRangeAction findFeaturesInRangeAction = new FindFeaturesInRangeAction();
-		bFindFeaturesinRange = (JButton) getButton(false, "Explore range", "List features in range", Icons.getIcon("RANGE"), findFeaturesInRangeAction);
+		bFindFeaturesinRange = (JButton) getButton(false, "Explore range", "List features in range", Icons.getIcon("RANGE"), findFeaturesInRangeAction, false);
 		KeyStroke ctrlRKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
 		bFindFeaturesinRange.getInputMap(JButton.WHEN_IN_FOCUSED_WINDOW).put(ctrlRKeyStroke, "findFeaturesInRange");
 		bFindFeaturesinRange.getActionMap().put("findFeaturesInRange", findFeaturesInRangeAction);
 		
 		//these buttons have no keyboard shortcuts associated with them as yet -- straightforward config
-		bOverview = (JToggleButton) getButton(true, "Overviews", "Toggle the overview dialog on or off", Icons.getIcon("OVERVIEW"), null);
+		bOverview = (JToggleButton) getButton(true, "Overviews", "Toggle the overview dialog on or off", Icons.getIcon("OVERVIEW"), null, false);
 		bOverview.setSelected(Prefs.guiOverviewVisible);
-		bDistMarkers = (JToggleButton) getButton(true, "Tickmarks", "Toggle the distance markers on or off", Icons.getIcon("DISTANCEMARKERS"), null);
-		bCurves = (JButton) getButton(false, "Links", "Cycle through straight, angled and curved links", Icons.getIcon("CURVES"), null);
-		bAntialias = (JToggleButton) getButton(true, "Style", "Toggle between higher quality and plain drawing styles", Icons.getIcon("ANTIALIAS"), null);
-		bLinkFilter = (JToggleButton) getButton(true, "Filter", "Toggle between visibility-based filtering of links and no filtering", Icons.getIcon("LINKFILTER"), null);		
-		bHelp =  (JButton) getButton(false, "", "Help", Icons.getIcon("HELP"), null);
-		bInfo =  (JButton) getButton(false, "", "About Strudel", Icons.getIcon("INFO"), null);
-		bResetAll =  (JButton) getButton(false, "Reset", "Reset display", Icons.getIcon("RESET"), null);
+		bDistMarkers = (JToggleButton) getButton(true, "Tickmarks", "Toggle the distance markers on or off", Icons.getIcon("DISTANCEMARKERS"), null, false);
+		bCurves = (JButton) getButton(false, "Links", "Cycle through straight, angled and curved links", Icons.getIcon("CURVES"), null, false);
+		bAntialias = (JToggleButton) getButton(true, "Style", "Toggle between higher quality and plain drawing styles", Icons.getIcon("ANTIALIAS"), null, false);
+		bLinkFilter = (JToggleButton) getButton(true, "Filter", "Toggle between visibility-based filtering of links and no filtering", Icons.getIcon("LINKFILTER"), null, false);		
+		bHelp =  (JButton) getButton(false, "", "Help", Icons.getIcon("HELP"), null, true);
+		bInfo =  (JButton) getButton(false, "", "About Strudel", Icons.getIcon("INFO"), null, true);
+		bResetAll =  (JButton) getButton(false, "Reset", "Reset display", Icons.getIcon("RESET"), null, false);
 	}
 	
 	public void actionPerformed(ActionEvent e)
@@ -206,7 +213,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 				linkShapeOrderAscending = true;
 			
 			MapViewer.logger.fine("MapViewer.winMain.toolbar.currentLinkShapeType after = " + MapViewer.winMain.toolbar.currentLinkShapeType);
-
+			
 			LinkShapeAnimator linkShapeAnimator = new LinkShapeAnimator(currentLinkShapeType);
 			linkShapeAnimator.start();	
 		}
@@ -219,7 +226,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		else if (e.getSource() == bHelp)
 		{
 			String url = Constants.strudelHomePage + "strudelManual.pdf";
-
+			
 			Utils.visitURL(url);
 		}
 		
@@ -246,7 +253,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 	
 	// Utility method to help create the buttons. Sets their text, tooltip, and
 	// icon, as well as adding actionListener, defining margings, etc.
-	private AbstractButton getButton(boolean toggle, String title, String tt, ImageIcon icon, Action action)
+	private AbstractButton getButton(boolean toggle, String title, String tt, ImageIcon icon, Action action, boolean enabled)
 	{
 		AbstractButton button = null;
 		
@@ -262,6 +269,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		button.setFocusable(false);
 		button.addActionListener(this);
 		button.setMargin(new Insets(2, 1, 2, 1));
+		button.setEnabled(enabled);
 		
 		if (SystemUtils.isMacOS())
 		{
@@ -303,5 +311,27 @@ public class ControlToolBar extends JToolBar implements ActionListener
 			e1.printStackTrace();
 		}
 	}
-		
+	
+	public void enableAllControls()
+	{
+		try
+		{
+			blastLabel.setEnabled(true);
+			eValueSlider.setEnabled(true);
+			bExport.setEnabled(true);
+			bOverview.setEnabled(true);
+			bFindFeatures.setEnabled(true);
+			bFindFeaturesinRange.setEnabled(true);
+			bResetAll.setEnabled(true);
+			bDistMarkers.setEnabled(true);
+			bCurves.setEnabled(true);
+			bAntialias.setEnabled(true);
+			bLinkFilter.setEnabled(true);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
 }

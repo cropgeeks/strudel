@@ -70,7 +70,7 @@ public class LabelDisplayManager
 
 			// next decide where to place the label on x
 			// the amount by which we want to move the label end away from the chromosome (in pixels)
-			int lineLength = 40;
+			int lineLength = 50;
 			int gap = 3;
 			
 			//x coords
@@ -130,6 +130,7 @@ public class LabelDisplayManager
 	public static void drawFeatureLabelsInRange(Graphics2D g2)
 	{
 		g2.setFont(new Font("Sans-serif", Font.PLAIN, fontHeight));
+		FontMetrics fm = g2.getFontMetrics();
 
 		//reset the stroke in case it has been altered elsewhere
 		g2.setStroke(new BasicStroke());
@@ -152,6 +153,7 @@ public class LabelDisplayManager
 		{
 			// get the name of the feature
 			String featureName = f.getName();
+			int stringWidth = fm.stringWidth(featureName);
 			
 			// we need these for working out the y positions
 			ChromoMap chromoMap = f.getOwningMap();
@@ -178,6 +180,15 @@ public class LabelDisplayManager
 			
 			// draw a line from the marker to the label
 			g2.drawLine(lineStartX, featureY, lineEndX, labelY - fontHeight / 2);
+			
+			//draw a rectangle as a background for the label
+			g2.setColor(Colors.foundFeatureLabelBackgroundColour);
+			float arcSize = fontHeight/1.5f;
+			int horizontalGap = 3;
+			int verticalGap = 4;
+			RoundRectangle2D.Float backGroundRect = new RoundRectangle2D.Float(labelX - horizontalGap, labelY - fontHeight, stringWidth + horizontalGap*2,
+							fontHeight + verticalGap, arcSize, arcSize);
+			g2.fill(backGroundRect);
 
 			// set the label font colour
 			g2.setColor(Colors.highlightedFeatureLabelColour);

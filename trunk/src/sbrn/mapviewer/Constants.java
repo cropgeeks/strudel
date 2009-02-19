@@ -25,16 +25,16 @@ public class Constants
 	public static final int NUM_LINKSHAPE_TYPES = 3;	
 
 	//example data file paths	
-	public static final String exampleTargetData =  "data/barleyExampleData.txt";
-	public static final String exampleRefGenome1FeatData =  "data/artificial_genome.txt";
-	public static final String exampleRefGenome2FeatData =  "data/rice_TIGR_5.txt";
-	public static final String exampleRefGenome1HomData =  "data/artificial_genome_homology data.txt";
+	public static final String exampleTargetData =  "data/Barley.txt";
+	public static final String exampleRefGenome1FeatData =  "data/Brachypodium.txt";
+	public static final String exampleRefGenome2FeatData =  "data/Rice.txt";
+	public static final String exampleRefGenome1HomData =  "data/barleyBrachyHomologyData.txt";
 	public static final String exampleRefGenome2HomData =  "data/barleyRiceHomologyData.txt";
 	
 	//example data descriptions
-	public static final String exampleTargetDataDescription = "Barley SNP data";
-	public static final String exampleRefGenome1Description  = "artificially generated data with artificial homologies -- for testing purposes only";
-	public static final String exampleRefGenome2Description  = "TIGR Rice genome version 5, see http://rice.plantbiology.msu.edu/";
+	public static final String exampleTargetDataDescription = "Barley Illumina SNPS consensus map UCR_20080416-2 (Close et al.); to be published";
+	public static final String exampleRefGenome1Description  = "Brachypodium distachyon 8x genome sequence, see http://www.brachypodium.org/";
+	public static final String exampleRefGenome2Description  = "Release 6 of the Rice Pseudomolecules and Genome Annotation, MSU Rice Genome Annotation Project, see http://rice.plantbiology.msu.edu/";
 	
 	//URLs for annotation info for the reference example files we provide with the app
 	public static final String exampleTargetGenomeBaseURL = "http://penguin.scri.ac.uk/paul/germinate/germinate_development/app/flapjack/flapjack_search/search.pl?marker=";

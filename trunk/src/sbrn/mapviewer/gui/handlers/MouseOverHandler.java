@@ -27,7 +27,7 @@ public class MouseOverHandler
 	//used for displaying feature labels when the cursor hovers over a feature
 	public Vector<Feature> detectMouseOver(int x, int y)
 	{
-		Vector<Feature> match = null;
+		Vector<Feature> matches = null;
 
 		try
 		{
@@ -43,27 +43,30 @@ public class MouseOverHandler
 					// figure out where on the chromosome the hit has occurred, in pixels from the top of the chromosome
 					int pixelNumberFromTop = (int) (y - selectedMap.boundingRectangle.getY());
 					int errorMargin = 1;
-					
+
 					// now look up this value in the feature arrays of the map
 					for (int i = 0; i < selectedMap.allLinkedFeaturePositions.length; i++)
-					{
+					{					
 						//check the current pixel number from the top against the values in the array
 						//if there is one that is the same (incl. error margin) then add the corresponding feature to the vector
 						if (selectedMap.allLinkedFeaturePositions[i] == pixelNumberFromTop || selectedMap.allLinkedFeaturePositions[i] == pixelNumberFromTop + errorMargin || selectedMap.allLinkedFeaturePositions[i] == pixelNumberFromTop - errorMargin)
 						{
-							if (match == null)
+							if (matches == null)
 							{
-								match = new Vector<Feature>();
+								matches = new Vector<Feature>();
 							}
-							match.add(selectedMap.allLinkedFeatures[i]);
+							if(selectedMap.allLinkedFeatures[i] != null)
+							{
+								matches.add(selectedMap.allLinkedFeatures[i]);
+							}
 						}
 					}
 					
 					// we have a match
-					if (match != null && selectedMap.owningSet.paintAllMarkers)
+					if (matches != null && selectedMap.owningSet.paintAllMarkers)
 					{
 						// set the vector object of the selected map and repaint
-						selectedMap.mouseOverFeatures = match;
+						selectedMap.mouseOverFeatures = matches;
 						selectedMap.drawMouseOverFeatures = true;
 						winMain.mainCanvas.updateCanvas(false);
 					}
@@ -81,7 +84,7 @@ public class MouseOverHandler
 		{
 			e.printStackTrace();
 		}
-		return match;
+		return matches;
 	}
 
 

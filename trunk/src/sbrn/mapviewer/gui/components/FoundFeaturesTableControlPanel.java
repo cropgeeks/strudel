@@ -69,7 +69,14 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 			}
 		});
 		
-		showHomologsCheckbox.setText("Show all homologies");
+		showHomologsCheckbox.setText("Show all links");
+		showHomologsCheckbox.addActionListener(new java.awt.event.ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				showHomologsCheckboxActionPerformed(evt);
+			}
+		});
 		showHomologsCheckbox.addChangeListener(new javax.swing.event.ChangeListener()
 		{
 			public void stateChanged(javax.swing.event.ChangeEvent evt)
@@ -107,102 +114,15 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 		
 		org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
 		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
-						layout.createSequentialGroup().add(
-										layout.createParallelGroup(
-														org.jdesktop.layout.GroupLayout.LEADING).add(
-														layout.createSequentialGroup().add(
-																		layout.createParallelGroup(
-																						org.jdesktop.layout.GroupLayout.LEADING).add(
-																						layout.createParallelGroup(
-																										org.jdesktop.layout.GroupLayout.TRAILING,
-																										false).add(
-																										jLabel3,
-																										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																										Short.MAX_VALUE).add(
-																										jLabel4,
-																										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																										Short.MAX_VALUE).add(
-																										jLabel5,
-																										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																										Short.MAX_VALUE).add(
-																										org.jdesktop.layout.GroupLayout.LEADING,
-																										jLabel2,
-																										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																										Short.MAX_VALUE).add(
-																										org.jdesktop.layout.GroupLayout.LEADING,
-																										jLabel1)).add(
-																						jLabel6)).addPreferredGap(
-																		org.jdesktop.layout.LayoutStyle.RELATED).add(
-																		layout.createParallelGroup(
-																						org.jdesktop.layout.GroupLayout.LEADING).add(
-																						numberFeaturesLabel).add(
-																						regionEndLabel,
-																						org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																						55,
-																						Short.MAX_VALUE).add(
-																						regionStartLabel,
-																						org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																						55,
-																						Short.MAX_VALUE).add(
-																						chromoLabel,
-																						org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																						55,
-																						Short.MAX_VALUE).add(
-																						genomeLabel,
-																						org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																						55,
-																						Short.MAX_VALUE).add(
-																						genomeFilterCombo,
-																						0,
-																						55,
-																						Short.MAX_VALUE))).add(
-														showLabelsCheckbox).add(
-														showHomologsCheckbox)).addContainerGap()));
-		layout.setVerticalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
-						layout.createSequentialGroup().add(
-										layout.createParallelGroup(
-														org.jdesktop.layout.GroupLayout.BASELINE).add(
-														jLabel1).add(
-														genomeLabel)).addPreferredGap(
-										org.jdesktop.layout.LayoutStyle.RELATED).add(
-										layout.createParallelGroup(
-														org.jdesktop.layout.GroupLayout.BASELINE).add(
-														jLabel2).add(
-														chromoLabel)).addPreferredGap(
-										org.jdesktop.layout.LayoutStyle.RELATED).add(
-										layout.createParallelGroup(
-														org.jdesktop.layout.GroupLayout.BASELINE).add(
-														jLabel3).add(
-														regionStartLabel)).addPreferredGap(
-										org.jdesktop.layout.LayoutStyle.RELATED).add(
-										layout.createParallelGroup(
-														org.jdesktop.layout.GroupLayout.BASELINE).add(
-														jLabel4).add(
-														regionEndLabel)).addPreferredGap(
-										org.jdesktop.layout.LayoutStyle.RELATED).add(
-										layout.createParallelGroup(
-														org.jdesktop.layout.GroupLayout.BASELINE).add(
-														jLabel5).add(
-														numberFeaturesLabel)).addPreferredGap(
-										org.jdesktop.layout.LayoutStyle.RELATED).add(
-										layout.createParallelGroup(
-														org.jdesktop.layout.GroupLayout.BASELINE).add(
-														jLabel6).add(
-														genomeFilterCombo,
-														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
-														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(
-										org.jdesktop.layout.LayoutStyle.RELATED).add(
-										showLabelsCheckbox).addPreferredGap(
-										org.jdesktop.layout.LayoutStyle.RELATED).add(
-										showHomologsCheckbox)));
+		layout.setHorizontalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(layout.createSequentialGroup().add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(layout.createSequentialGroup().add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false).add(jLabel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(jLabel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, jLabel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, jLabel1)).add(jLabel6)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(numberFeaturesLabel).add(regionEndLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE).add(regionStartLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE).add(chromoLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE).add(genomeLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE).add(genomeFilterCombo, 0, 55, Short.MAX_VALUE))).add(showLabelsCheckbox).add(showHomologsCheckbox)).addContainerGap()));
+		layout.setVerticalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(layout.createSequentialGroup().add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel1).add(genomeLabel)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel2).add(chromoLabel)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel3).add(regionStartLabel)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel4).add(regionEndLabel)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel5).add(numberFeaturesLabel)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel6).add(genomeFilterCombo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(showLabelsCheckbox).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(showHomologsCheckbox)));
 	}// </editor-fold>
 	//GEN-END:initComponents
+	
+	private void showHomologsCheckboxActionPerformed(java.awt.event.ActionEvent evt)
+	{
+		// TODO add your handling code here:
+	}
 	
 	private void genomeFilterComboActionPerformed(java.awt.event.ActionEvent evt)
 	{

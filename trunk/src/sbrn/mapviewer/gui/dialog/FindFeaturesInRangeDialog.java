@@ -114,7 +114,7 @@ public class FindFeaturesInRangeDialog extends JDialog implements ActionListener
 			Vector<String> containedFeatureNames = new Vector<String>();
 			for(Feature f : chromoMap.getFeatureList())
 			{
-				if((f.getStart() >= intervalStart) && (f.getStart() <= intervalEnd))
+				if((f.getStart() >= intervalStart) && (f.getStart() <= intervalEnd) && f.getLinks().size() > 0)
 				{
 					containedFeatureNames.add(f.getName());
 					MapViewer.winMain.fatController.featuresInRange.add(f);
@@ -138,30 +138,32 @@ public class FindFeaturesInRangeDialog extends JDialog implements ActionListener
 				foundFeaturesTableControlPanel.setVisible(true);
 				foundFeaturesTableControlPanel.getGenomeLabel().setText(genome);
 				foundFeaturesTableControlPanel.getChromoLabel().setText(chromosome);
-				foundFeaturesTableControlPanel.getRegionStartLabel().setText(
-								new Float(intervalStart).toString());
-				foundFeaturesTableControlPanel.getRegionEndLabel().setText(
-								new Float(intervalEnd).toString());
-				foundFeaturesTableControlPanel.getNumberFeaturesLabel().setText(
-								new Integer(containedFeatureNames.size()).toString());
+				foundFeaturesTableControlPanel.getRegionStartLabel().setText(new Float(intervalStart).toString());
+				foundFeaturesTableControlPanel.getRegionEndLabel().setText(new Float(intervalEnd).toString());
+				foundFeaturesTableControlPanel.getNumberFeaturesLabel().setText(new Integer(containedFeatureNames.size()).toString());
+				
 				//sync the checkboxes states with those in the find dialog itself to make sure they show the same value
-				foundFeaturesTableControlPanel.getShowLabelsCheckbox().setSelected(
-								ffInRangePanel.getDisplayLabelsCheckbox().isSelected());
-				foundFeaturesTableControlPanel.getShowHomologsCheckbox().setSelected(
-								ffInRangePanel.getDisplayHomologsCheckBox().isSelected());
+				foundFeaturesTableControlPanel.getShowLabelsCheckbox().setSelected(ffInRangePanel.getDisplayLabelsCheckbox().isSelected());
+				foundFeaturesTableControlPanel.getShowHomologsCheckbox().setSelected(ffInRangePanel.getDisplayHomologsCheckBox().isSelected());
+				
 				//earmark the features for drawing on repaint
 				MapViewer.winMain.mainCanvas.drawFoundFeaturesInRange = true;
+				
 				//repaint the canvas so we can see the highlighted region which should then be coloured in differently
 				MapViewer.winMain.mainCanvas.updateCanvas(true);
+				
 				//now insert the results into the JTable held by the results panel
 				LinkedList<Link> featuresFound = MapViewer.winMain.fatController.matchFeaturesToNames(allNames);
 				FoundFeatureTableModel foundFeatureTableModel = new FoundFeatureTableModel(featuresFound);
 				MapViewer.winMain.ffResultsPanel.getFFResultsTable().setModel(foundFeatureTableModel);
+				
 				//set up sorting/filtering capability
 				TableRowSorter<FoundFeatureTableModel> sorter = new TableRowSorter<FoundFeatureTableModel>(foundFeatureTableModel);
 				MapViewer.winMain.ffResultsPanel.getFFResultsTable().setRowSorter(sorter);
+				
 				//size the columns and the dialog containing the table appropriately
 				MapViewer.winMain.ffResultsPanel.initColumnSizes();
+				
 				//set the results panel to be visible 
 				this.setVisible(false);
 			}

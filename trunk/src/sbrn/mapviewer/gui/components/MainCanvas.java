@@ -322,19 +322,27 @@ public class MainCanvas extends JPanel
 				linkDisplayManager.drawHighlightedLinksInRange(g2);
 			}
 		}
+		
 		//we also want to check whether there are any links to display that are to be highlighted after a name based search for
 		//features and links originating from them
 		if (drawHighlightFeatures)
 		{
 			linkDisplayManager.drawHighlightedLink(g2, winMain.fatController.highlightFeature, winMain.fatController.highlightFeatureHomolog, true);
-			LabelDisplayManager.drawHighlightedFeatureLabels(g2, winMain.fatController.highlightFeature, winMain.fatController.highlightFeatureHomolog);
 		}
+		
 		//this draws labels of features in a contiguous range on a chromosome
 		//need to do this in this order so things are drawn on top of each other in the right sequence
 		if (drawFoundFeaturesInRange && (MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().isSelected() || MapViewer.winMain.foundFeaturesTableControlPanel.getShowLabelsCheckbox().isSelected()))
 		{
 			LabelDisplayManager.drawFeatureLabelsInRange(g2);
 		}
+		
+		//this just draws labels of single highlighted features -- need to be drawn at the very end to be on top of everything else
+		if (drawHighlightFeatures)
+		{
+			LabelDisplayManager.drawHighlightedFeatureLabels(g2, winMain.fatController.highlightFeature, winMain.fatController.highlightFeatureHomolog);
+		}
+
 		//check whether we want to display a BLAST cutoff value
 		if (drawBlastScore)
 		{

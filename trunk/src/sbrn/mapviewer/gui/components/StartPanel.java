@@ -10,7 +10,7 @@ public class StartPanel extends JPanel
 {
 	//a JLabel instructing the user to open a data file
 	JLabel openFileLabel;	
-	String openFileLabelMessage = "Open a data file using the file button on the toolbar.";
+	String openFileLabelMessage = "Open a data file using the data button on the toolbar.";
 	
 	public StartPanel()
 	{
@@ -24,7 +24,7 @@ public class StartPanel extends JPanel
 		openFileLabel = new JLabel(openFileLabelMessage);	
 		openFileLabel.setIcon(Icons.getIcon("FILEOPEN"));
 		openFileLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		openFileLabel.setFont(new Font("Sans-serif", Font.PLAIN, 14));
+		openFileLabel.setFont(new Font("Sans-serif", Font.PLAIN, 18));
 		add(openFileLabel, BorderLayout.CENTER);
 		openFileLabel.setVisible(true);
 	}

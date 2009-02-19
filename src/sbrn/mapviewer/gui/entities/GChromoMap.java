@@ -429,123 +429,123 @@ public class GChromoMap
 			// for all features in our list
 			for (Feature f : mouseOverFeatures)
 			{
-				// get the name of the feature
-				String featureName = f.getName();
-				
-				int stringWidth = fm.stringWidth(featureName);
-				
-				// we need these for working out the y positions
-				float mapEnd = chromoMap.getStop();
-				// this factor normalises the position to a value between 0 and 100
-				float scalingFactor = height / mapEnd;
-				
-				// the y position of the feature itself
-				int featureY = Math.round(y + (f.getStart() * scalingFactor));
-				
-				//if the map is inverted we need to use the inverse of this value i.e. the map end value minus the feature position
-				if(inversionInProgress || isFullyInverted)
+				if (f != null)
 				{
-					featureY = Math.round(y + ((mapEnd - f.getStart()) * scalingFactor));
-				}
-				
-				// now work out the y position of the feature label
-				// size and half size of our feature list
-				int listSize = mouseOverFeatures.size();
-				float halfListSize = listSize / 2.0f;
-				// this is where the label goes
-				int labelY = 0;
-				// the index of the feature in the list
-				int index = mouseOverFeatures.indexOf(f);
-				
-				// the offset is the amount (in px) by which we need to move the label up or down relative to the feature itself
-				float offset = 0;
-				// if the list contains only a single feature
-				if (listSize == 1)
-				{
-					offset = fontHeight / 2;
-				}
-				// more than 1 feature in the list
-				else
-				{
-					// work out whether the list size is an even or odd number
-					boolean evenNumber = listSize % 2 == 0;
-					if (evenNumber)
+					// get the name of the feature
+					String featureName = f.getName();
+					
+					MapViewer.logger.finest("mouse over feature " + featureName);
+					
+					int stringWidth = fm.stringWidth(featureName);
+					// we need these for working out the y positions
+					float mapEnd = chromoMap.getStop();
+					// this factor normalises the position to a value between 0 and 100
+					float scalingFactor = height / mapEnd;
+					// the y position of the feature itself
+					int featureY = Math.round(y + (f.getStart() * scalingFactor));
+					//if the map is inverted we need to use the inverse of this value i.e. the map end value minus the feature position
+					if (inversionInProgress || isFullyInverted)
 					{
-						// if the index is smaller than half the list size, subtract a multiple of the fontHeight from the y
-						if ((index + 1) <= halfListSize)
-						{
-							offset = -(fontHeight * (halfListSize - index - 1));
-						}
-						// if it is bigger, add it instead
-						else
-						{
-							offset = fontHeight * ((index + 1) - halfListSize);
-						}
+						featureY = Math.round(y + ((mapEnd - f.getStart()) * scalingFactor));
 					}
-					// odd number
+					// now work out the y position of the feature label
+					// size and half size of our feature list
+					int listSize = mouseOverFeatures.size();
+					float halfListSize = listSize / 2.0f;
+					// this is where the label goes
+					int labelY = 0;
+					// the index of the feature in the list
+					int index = mouseOverFeatures.indexOf(f);
+					// the offset is the amount (in px) by which we need to move the label up or down relative to the feature itself
+					float offset = 0;
+					// if the list contains only a single feature
+					
+					MapViewer.logger.finest("listSize = " + listSize);
+					
+					if (listSize == 1)
+					{
+						offset = fontHeight / 2;
+					}
+					// more than 1 feature in the list
 					else
 					{
-						// this should give us the number half way between the first and last index
-						int midPoint = (int) halfListSize;
-						
-						// if the index is the midpoint
-						if (index == midPoint)
+						// work out whether the list size is an even or odd number
+						boolean evenNumber = listSize % 2 == 0;
+						MapViewer.logger.finest("evenNumber = " + evenNumber);
+						if (evenNumber)
 						{
-							offset = fontHeight / 2;
+							// if the index is smaller than half the list size, subtract a multiple of the fontHeight from the y
+							if ((index + 1) <= halfListSize)
+							{
+								offset = -(fontHeight * (halfListSize - index - 1));
+							}
+							// if it is bigger, add it instead
+							else
+							{
+								offset = fontHeight * ((index + 1) - halfListSize);
+							}
 						}
-						// index is less than the midpoint
-						else if (index < midPoint)
-						{
-							offset = -(fontHeight * (halfListSize - index - 1));
-						}
-						// index is greater than the midpoint
+						// odd number
 						else
 						{
-							offset = fontHeight * ((index + 1) - halfListSize);
+							// this should give us the number half way between the first and last index
+							int midPoint = (int) halfListSize;
+							
+							// if the index is the midpoint
+							if (index == midPoint)
+							{
+								offset = fontHeight / 2;
+							}
+							// index is less than the midpoint
+							else if (index < midPoint)
+							{
+								offset = -(fontHeight * (halfListSize - index - 1));
+							}
+							// index is greater than the midpoint
+							else
+							{
+								offset = fontHeight * ((index + 1) - halfListSize);
+							}
 						}
 					}
+					// now set the y position of the label
+					labelY = featureY + (int) offset;
+					
+					MapViewer.logger.finest("labelY = " + labelY);
+					MapViewer.logger.finest("featureY = " + featureY);
+					MapViewer.logger.finest("offset = " + offset);
+					
+					// next decide where to place the label on x					
+					//determine whether the marker should go on the left or right
+					boolean markersRight = false;
+					int mapSetIndex = MapViewer.winMain.dataContainer.gMapSetList.indexOf(owningSet);
+					//if this is reference mapset 2 we want the label on the right
+					if ((MapViewer.winMain.dataContainer.gMapSetList.size() == 3 && mapSetIndex == 2) || (MapViewer.winMain.dataContainer.gMapSetList.size() == 2 && mapSetIndex == 1))
+						markersRight = true;
+					int labelSpacer = 60; // the amount by which we want to move the label away from the chromosome (in pixels)
+					int labelGap = 3; // the gap between the label and the line
+					//by default the labels go on the left
+					int labelX = x - stringWidth - labelSpacer; // this is where the label is drawn from
+					int lineStartX = x; // this is where the line to the label is drawn from				
+					int lineEndX = lineStartX - labelSpacer + labelGap; // the label connects to the line here
+					// draw a line for the marker on the chromosome itself
+					//first set the colour accordingly
+					g2.setColor(Colors.highlightedFeatureColour);
+					g2.drawLine(lineStartX, featureY, lineStartX + width - 1, featureY);
+					// labels only go on the right if it is the right hand genome (reference genome 1 or 2)
+					if (markersRight)
+					{
+						lineStartX = x + width;
+						labelX = lineStartX + labelSpacer + labelGap;
+						lineEndX = labelX - labelGap;
+					}
+					// set the colour to white
+					g2.setColor(Colors.featureLabelColour);
+					// draw the label
+					g2.drawString(featureName, labelX, labelY);
+					// draw a line from the marker to the label
+					g2.drawLine(lineStartX, featureY, lineEndX, labelY - fontHeight / 2);
 				}
-				
-				// now set the y position of the label
-				labelY = featureY + (int) offset;
-
-				// next decide where to place the label on x					
-				//determine whether the marker should go on the left or right
-				boolean markersRight = false;
-				int mapSetIndex = MapViewer.winMain.dataContainer.gMapSetList.indexOf(owningSet);
-				//if this is reference mapset 2 we want the label on the right
-				if((MapViewer.winMain.dataContainer.gMapSetList.size() == 3 && mapSetIndex == 2) || (MapViewer.winMain.dataContainer.gMapSetList.size() == 2 && mapSetIndex == 1))
-					markersRight = true;
-
-				int labelSpacer = 60; // the amount by which we want to move the label away from the chromosome (in pixels)
-				int labelGap = 3; // the gap between the label and the line
-				
-				//by default the labels go on the left
-				int labelX = x - stringWidth - labelSpacer; // this is where the label is drawn from
-				int lineStartX = x; // this is where the line to the label is drawn from				
-				int lineEndX = lineStartX - labelSpacer + labelGap; // the label connects to the line here
-							
-				// draw a line for the marker on the chromosome itself
-				//first set the colour accordingly
-				g2.setColor(Colors.highlightedFeatureColour);
-				g2.drawLine(lineStartX, featureY, lineStartX + width - 1, featureY);
-				
-				// labels only go on the right if it is the right hand genome (reference genome 1 or 2)
-				if (markersRight)
-				{				
-					lineStartX = x + width;		
-					labelX = lineStartX + labelSpacer + labelGap; 
-					lineEndX = labelX - labelGap;
-				}
-
-				// set the colour to white
-				g2.setColor(Colors.featureLabelColour);
-				
-				// draw the label
-				g2.drawString(featureName, labelX, labelY);
-				
-				// draw a line from the marker to the label
-				g2.drawLine(lineStartX, featureY, lineEndX, labelY - fontHeight / 2);
 
 			}
 		}

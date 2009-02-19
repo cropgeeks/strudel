@@ -64,8 +64,8 @@
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="genomeCombo" min="-2" pref="203" max="-2" attributes="1"/>
-                              <Component id="chromoCombo" alignment="0" min="-2" max="-2" attributes="1"/>
                               <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                                  <Component id="chromoCombo" alignment="0" max="32767" attributes="1"/>
                                   <Component id="rangeEndSpinner" alignment="0" max="32767" attributes="1"/>
                                   <Component id="rangeStartSpinner" alignment="0" pref="119" max="32767" attributes="1"/>
                               </Group>

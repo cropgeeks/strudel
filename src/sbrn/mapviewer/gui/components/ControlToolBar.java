@@ -51,9 +51,6 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		add(bOpen);	
 		
 		addSeparator(true);		
-		add(bExport);
-		
-		addSeparator(true);		
 		add(bFindFeatures);
 		add(bFindFeaturesinRange);
 		
@@ -61,11 +58,16 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		add(bResetAll);
 		
 		addSeparator(true);		
+		add(bExport);
+		
+		addSeparator(true);		
 		add(bOverview);
 		add(bDistMarkers);
 		add(bCurves);
 		add(bAntialias);
 		add(bLinkFilter);
+		
+		addSeparator(true);	
 		add(eValueSlider);
 		add(blastLabel);
 		
@@ -124,14 +126,14 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		
 		//configure open file dialog button
 		OpenFileDialogAction openFileDialogAction = new OpenFileDialogAction();
-		bOpen = (JButton) getButton(false, "Load data", "Load data into Mapviewer", Icons.getIcon("FILEOPEN"), openFileDialogAction, true);
+		bOpen = (JButton) getButton(false, "Load Data", "Load data into Mapviewer", Icons.getIcon("FILEOPEN"), openFileDialogAction, true);
 		KeyStroke ctrlOKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK);
 		bOpen.getInputMap(JButton.WHEN_IN_FOCUSED_WINDOW).put(ctrlOKeyStroke, "openFileDialog");
 		bOpen.getActionMap().put("openFileDialog", openFileDialogAction);
 		
 		//configure export image button
 		ExportImageAction exportImageAction = new ExportImageAction();
-		bExport = (JButton) getButton(false, "Export image", "Export the display as an image", Icons.getIcon("EXPORTIMAGE"), exportImageAction, false);
+		bExport = (JButton) getButton(false, "", "Export the display as an image", Icons.getIcon("EXPORTIMAGE"), exportImageAction, false);
 		KeyStroke ctrlEKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK);
 		bExport.getInputMap(JButton.WHEN_IN_FOCUSED_WINDOW).put(ctrlEKeyStroke, "exportImage");
 		bExport.getActionMap().put("exportImage", exportImageAction);
@@ -145,18 +147,18 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		
 		//configure find features in range button
 		FindFeaturesInRangeAction findFeaturesInRangeAction = new FindFeaturesInRangeAction();
-		bFindFeaturesinRange = (JButton) getButton(false, "Explore range", "List features in range", Icons.getIcon("RANGE"), findFeaturesInRangeAction, false);
+		bFindFeaturesinRange = (JButton) getButton(false, "Explore Range", "List features in range", Icons.getIcon("RANGE"), findFeaturesInRangeAction, false);
 		KeyStroke ctrlRKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
 		bFindFeaturesinRange.getInputMap(JButton.WHEN_IN_FOCUSED_WINDOW).put(ctrlRKeyStroke, "findFeaturesInRange");
 		bFindFeaturesinRange.getActionMap().put("findFeaturesInRange", findFeaturesInRangeAction);
 		
 		//these buttons have no keyboard shortcuts associated with them as yet -- straightforward config
-		bOverview = (JToggleButton) getButton(true, "Overviews", "Toggle the overview dialog on or off", Icons.getIcon("OVERVIEW"), null, false);
+		bOverview = (JToggleButton) getButton(true, "", "Toggle the overview dialog on or off", Icons.getIcon("OVERVIEW"), null, false);
 		bOverview.setSelected(Prefs.guiOverviewVisible);
-		bDistMarkers = (JToggleButton) getButton(true, "Tickmarks", "Toggle the distance markers on or off", Icons.getIcon("DISTANCEMARKERS"), null, false);
-		bCurves = (JButton) getButton(false, "Links", "Cycle through straight, angled and curved links", Icons.getIcon("CURVES"), null, false);
-		bAntialias = (JToggleButton) getButton(true, "Style", "Toggle between higher quality and plain drawing styles", Icons.getIcon("ANTIALIAS"), null, false);
-		bLinkFilter = (JToggleButton) getButton(true, "Filter", "Toggle between visibility-based filtering of links and no filtering", Icons.getIcon("LINKFILTER"), null, false);		
+		bDistMarkers = (JToggleButton) getButton(true, "", "Toggle the distance markers on or off", Icons.getIcon("DISTANCEMARKERS"), null, false);
+		bCurves = (JButton) getButton(false, "", "Cycle through straight, angled and curved links", Icons.getIcon("CURVES"), null, false);
+		bAntialias = (JToggleButton) getButton(true, "", "Toggle between higher quality and plain drawing styles", Icons.getIcon("ANTIALIAS"), null, false);
+		bLinkFilter = (JToggleButton) getButton(true, "", "Toggle between visibility-based filtering of links and no filtering", Icons.getIcon("LINKFILTER"), null, false);		
 		bHelp =  (JButton) getButton(false, "", "Help", Icons.getIcon("HELP"), null, true);
 		bInfo =  (JButton) getButton(false, "", "About Strudel", Icons.getIcon("INFO"), null, true);
 		bResetAll =  (JButton) getButton(false, "Reset", "Reset display", Icons.getIcon("RESET"), null, false);

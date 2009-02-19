@@ -70,6 +70,9 @@ public class WinMain extends JFrame
 	//this panel simply takes the place of the main canvas before we have loaded any data
 	//just contains a simple label with instructions for how to load data
 	public StartPanel startPanel;
+	
+	//a background panel with the SCRI logo
+	public LogoPanel logoPanel;
 		
 	//the panel with the genome labels	
 	public GenomeLabelPanel genomeLabelPanel;
@@ -174,7 +177,10 @@ public class WinMain extends JFrame
 		//this panel simply takes the place of the main canvas before we have loaded any data
 		//just contains a simple label with instructions for how to load data
 		startPanel = new StartPanel();
-		mainPanel.add(startPanel, BorderLayout.CENTER);
+		logoPanel = new LogoPanel(new BorderLayout());
+		mainPanel.add(logoPanel, BorderLayout.CENTER);
+		logoPanel.add(startPanel, BorderLayout.CENTER);
+		startPanel.setOpaque(false);
 		
 		//the control toolbar at the top of the GUI
 		toolbar = new ControlToolBar(this);
@@ -312,11 +318,13 @@ public class WinMain extends JFrame
 		if(showStartPanel)
 		{
 			startPanel.setVisible(true);
+			logoPanel.setVisible(true);
 			mainCanvas.setVisible(false);
 		}
 		else
 		{
 			startPanel.setVisible(false);
+			logoPanel.setVisible(false);
 			mainCanvas.setVisible(true);
 		}
 	}

@@ -39,8 +39,8 @@
       </executable>
       <splashScreen show="true" autoOff="true" alwaysOnTop="false" width="0" height="0" bitmapFile="../res/images/splashscreen.png" java6SplashScreen="false">
         <text>
-          <statusLine x="20" y="20" text="${compiler:sys.publisher}" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
-          <versionLine x="20" y="40" text="version ${compiler:sys.version}" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
+          <statusLine x="20" y="20" text="" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
+          <versionLine x="20" y="40" text="" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
         </text>
       </splashScreen>
       <java mainClass="sbrn.mapviewer.MapViewer" vmParameters="-Xmx512m" arguments="" allowVMPassthroughParameters="true" preferredVM="">

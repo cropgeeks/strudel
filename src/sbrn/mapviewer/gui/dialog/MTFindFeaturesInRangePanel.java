@@ -11,6 +11,7 @@ import java.util.*;
 import javax.swing.*;
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
+import sbrn.mapviewer.gui.components.*;
 import sbrn.mapviewer.gui.entities.*;
 
 /**
@@ -25,8 +26,8 @@ public class MTFindFeaturesInRangePanel extends javax.swing.JPanel implements Ac
 	{
 		initComponents();
 		
-		((JSpinner.DefaultEditor) rangeStartSpinner.getEditor()).getTextField().setInputVerifier(new PositiveValueVerifier());
-		((JSpinner.DefaultEditor) rangeEndSpinner.getEditor()).getTextField().setInputVerifier(new PositiveValueVerifier());
+		((JSpinner.DefaultEditor) rangeStartSpinner.getEditor()).getTextField().setInputVerifier(new FormattedTextFieldVerifier());
+		((JSpinner.DefaultEditor) rangeEndSpinner.getEditor()).getTextField().setInputVerifier(new FormattedTextFieldVerifier());
 	}
 	
 	public void initRemainingComponents()
@@ -207,16 +208,6 @@ public class MTFindFeaturesInRangePanel extends javax.swing.JPanel implements Ac
 	public javax.swing.JSpinner getRangeStartSpinner()
 	{
 		return rangeStartSpinner;
-	}
-	
-	class PositiveValueVerifier extends InputVerifier
-	{
-		public boolean verify(JComponent input)
-		{
-			JFormattedTextField tf = (JFormattedTextField) input;
-			MapViewer.logger.fine("(Number)tf.getValue()).floatValue() = " + ((Number) tf.getValue()).floatValue());
-			return ((Number) tf.getValue()).floatValue() >= 0;
-		}
 	}
 	
 }

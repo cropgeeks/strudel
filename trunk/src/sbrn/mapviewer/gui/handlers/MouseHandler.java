@@ -214,8 +214,8 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		int x = e.getX();
 		int y = e.getY();
 		
-		MapViewer.logger.fine("mouseDragged at (x,y) = "+ x + "," + y);
-		MapViewer.logger.fine("last mouse pressed coords (mousePressedX, mousePressedY) = " + mousePressedX + "," + mousePressedY);
+		MapViewer.logger.finest("mouseDragged at (x,y) = "+ x + "," + y);
+		MapViewer.logger.finest("last mouse pressed coords (mousePressedX, mousePressedY) = " + mousePressedX + "," + mousePressedY);
 		
 		// figure out which genome this event pertains to (i.e. which section of the canvas on x are we in)
 		int index = Utils.getSelectedSet(e);
@@ -236,8 +236,8 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			// a fixed amount seems to work best as it moves the canvas the same way across all zoom levels
 			int distanceDragged = Math.abs(lastMouseDragYPos - y);
 			
-			MapViewer.logger.fine("distanceDragged = " + distanceDragged);
-			MapViewer.logger.fine("lastMouseDragYPos when dragged = " + lastMouseDragYPos);
+			MapViewer.logger.finest("distanceDragged = " + distanceDragged);
+			MapViewer.logger.finest("lastMouseDragYPos when dragged = " + lastMouseDragYPos);
 			
 			// mouse is getting dragged up 
 			if (y < mouseDragPosY)

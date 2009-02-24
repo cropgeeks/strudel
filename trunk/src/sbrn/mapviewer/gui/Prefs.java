@@ -32,5 +32,8 @@ public class Prefs extends XMLPreferences
 	
 	//do we links to be drawn whether their orginating feature is currently visible on the canvas or not?
 	public static boolean drawOnlyLinksToVisibleFeatures = false;
+	
+	//do we want to show the distance markers
+	public static boolean showDistanceMarkers = false;
 		
 }

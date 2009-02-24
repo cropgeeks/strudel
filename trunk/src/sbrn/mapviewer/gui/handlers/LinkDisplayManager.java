@@ -24,7 +24,7 @@ public class LinkDisplayManager
 	
 	Hashtable<ChromoMap, LinkSet> allLinksLookup;
 	
-	public static double blastThreshold = 1;
+	public static double blastThreshold = Double.MAX_VALUE;
 	
 	GMapSet targetGMapSet = MapViewer.winMain.dataContainer.gMapSetList.get(MapViewer.winMain.dataContainer.targetGMapSetIndex);
 	
@@ -114,17 +114,21 @@ public class LinkDisplayManager
 	// Draws the lines between a chromosome of the reference genome and all potential homologues in the compared genome
 	public void drawAllLinks(Graphics2D g2)
 	{
+		
+		MapViewer.logger.fine("============drawing all links");
+		
 		//only do this if we have reference genomes -- otherwise there are no links to deal with
 		if(MapViewer.winMain.dataContainer.gMapSetList.size() > 1)
 		{			
 			try
-			{
-				
+			{				
 				// for each map in the selectedMaps vector of the target genome
 				for (int i = 0; i < targetGMapSet.selectedMaps.size(); i++)
 				{
 					// get the currently selected map
 					GChromoMap selectedMap = targetGMapSet.selectedMaps.get(i);
+					
+					MapViewer.logger.fine("links are from map " + selectedMap.name);
 					
 					// get the ChromoMap for the currently selected chromosome
 					ChromoMap selectedChromoMap = selectedMap.chromoMap;
@@ -137,7 +141,8 @@ public class LinkDisplayManager
 					// for all selected links
 					for (LinkSet selectedLinks : linkSets)
 					{
-						
+						int numLinksdrawn = 0;
+
 						//find out which reference mapset we are dealing with here
 						GMapSet referenceGMapSet = null;
 						for (GMapSet gMapSet : MapViewer.winMain.dataContainer.referenceGMapSets)
@@ -244,13 +249,19 @@ public class LinkDisplayManager
 														targetY,
 														referenceChromoX - 1,
 														referenceY);
+										numLinksdrawn++;
 									}
+								}
+								else
+								{
+									MapViewer.logger.fine("link e-value is above BLAST threshold");
 								}
 							}
 						}
+						MapViewer.logger.fine("numLinksdrawn = " + numLinksdrawn);
 					}
 				}
-			}
+			}			
 			catch (RuntimeException e)
 			{
 				e.printStackTrace();

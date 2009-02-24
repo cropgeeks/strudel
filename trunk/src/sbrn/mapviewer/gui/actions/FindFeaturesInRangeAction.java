@@ -14,9 +14,7 @@ public class FindFeaturesInRangeAction extends AbstractAction
 
 	public void actionPerformed(ActionEvent e)
 	{
-		//reset the main canvas view to all its defaults 
-		MapViewer.winMain.fatController.resetMainCanvasView();
-		
+	
 		//clear the dialog
 		FindFeaturesInRangeDialog featuresInRangeDialog = MapViewer.winMain.ffInRangeDialog; 
 		

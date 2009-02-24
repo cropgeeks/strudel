@@ -87,17 +87,17 @@ BUGS to fix:
 + clicking the X button on the import dialog does close it, but the data still loads
 + mousewheel scrolling is too fast (or inconsistant, depending on zoom level)
 + "BLAST Cut-off:" label should be on the left-hand side of the slider
-- none of the dialogs have keyboard accelerators
-- range-start and range-end spinner controls look like they are too tall
-- image export error message is "null" when exporting to write protected drive
-- Alt-click on a chromosome and watch the overview dialog. Don't move mouse and Alt-click again. And again...
++ none of the dialogs have keyboard accelerators
+?(not resolved) range-start and range-end spinner controls look like they are too tall
++ image export error message is "null" when exporting to write protected drive
++ Alt-click on a chromosome and watch the overview dialog. Don't move mouse and Alt-click again. And again...
   then try to drag mouse on overview dialog
-- dragging chromosomes up or down with the mouse does not move them at the same rate
++ dragging chromosomes up or down with the mouse does not move them at the same rate
   as the mouse
-- anti-aliasing is still enabling while changing the BLAST cut-off
-- the icons are inconsistant heights (select the drawing ones and look at the orange outlines)
-- the distance marker icon doesn't remember its state between sessions
-- "don't show this again" maximum-zoom level dialog continues to popup when checkbox is ticked (setting
++ anti-aliasing is still enabling while changing the BLAST cut-off
++ the icons are inconsistant heights (select the drawing ones and look at the orange outlines)
++ the distance marker icon doesn't remember its state between sessions
+?(cannot reproduce) "don't show this again" maximum-zoom level dialog continues to popup when checkbox is ticked (setting
   seems to be inversed)
 - don't reset zoom level on Find until a Find is actually done
 - Find dialog is a bit funny - you obviously don't new() it between uses, so it still has whatever the focus
@@ -117,3 +117,5 @@ BUGS to fix:
   but I thought it was meant to just be for on-screen or not
 
 - performance with hundreds of lines is actually pretty bloody good (considering the circumstances)
+
+-when maximising the window the chromosomes do not get scaled up and things sometimes generally hang then

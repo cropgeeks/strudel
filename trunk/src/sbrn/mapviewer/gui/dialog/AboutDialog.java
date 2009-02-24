@@ -51,6 +51,7 @@ public class AboutDialog extends javax.swing.JDialog
 				setVisible(false);
 			}
 		});
+		closeButton.setMnemonic(KeyEvent.VK_C);
 		
 		pack();
 		setTitle("About Strudel");

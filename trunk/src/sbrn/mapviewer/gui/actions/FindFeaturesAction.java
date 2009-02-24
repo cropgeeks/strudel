@@ -11,9 +11,6 @@ public class FindFeaturesAction extends AbstractAction
 
 	public void actionPerformed(ActionEvent e)
 	{
-		//reset the main canvas view to all its defaults 
-		MapViewer.winMain.fatController.resetMainCanvasView();
-		
 		//clear the find dialog
 		MapViewer.winMain.ffDialog.ffPanel.getFFTextArea().setText("");
 		

@@ -66,8 +66,6 @@ public class MainCanvas extends JPanel
 	
 	//true if we want to display features within a certain range the user has searched for with the find dialog
 	public boolean drawFoundFeaturesInRange = false;
-	
-	public boolean drawDistanceMarkers = false;
 
 	// ============================c'tor==================================
 	
@@ -139,7 +137,7 @@ public class MainCanvas extends JPanel
 			{
 				if(gChromoMap.isShowingOnCanvas)
 				{
-					if(drawDistanceMarkers)
+					if(Prefs.showDistanceMarkers)
 						gChromoMap.drawDistanceMarkers(g);
 					gChromoMap.drawMouseOverFeatures(g);
 					gChromoMap.drawHighlightOutline(g);

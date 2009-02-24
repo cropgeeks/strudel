@@ -17,6 +17,7 @@ public class ExportImageAction extends AbstractAction
 		JFileChooser fc = new JFileChooser();
 		fc.setDialogTitle("Save Image As");
 		fc.setAcceptAllFileFilterUsed(false);
+		fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
 		// TODO: track current directories and offer a suitable filename
 		fc.setSelectedFile(new File("mapviewer.png"));
 		
@@ -45,11 +46,19 @@ public class ExportImageAction extends AbstractAction
 				TaskDialog.info("The exported image was successfully saved "
 								+ " to " + file, "Close");
 			}
-			catch (Exception exception)
+			catch (NullPointerException npx)
+			{
+				TaskDialog.error("File could not be saved -- access denied.", "Close");	
+				
+				npx.printStackTrace();
+			}
+			catch (IOException e1)
 			{
 				TaskDialog.error("An internal error has prevented the image "
 								+ "from being exported correctly.\n\nError details: "
-								+ exception.getMessage(), "Close");
+								+ e1.getMessage(), "Close");
+				
+				e1.printStackTrace();
 			}
 			
 			return;

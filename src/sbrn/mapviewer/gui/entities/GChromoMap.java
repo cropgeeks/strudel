@@ -260,7 +260,7 @@ public class GChromoMap
 			// now draw features and labels as required
 			if (owningSet.paintAllMarkers && isShowingOnCanvas)
 			{
-				MapViewer.logger.fine("drawing features for map " + name);
+				MapViewer.logger.finest("drawing features for map " + name);
 				drawLinkedFeatures(g2);
 			}
 			
@@ -614,7 +614,7 @@ public class GChromoMap
 	// draw the markers for the features
 	private void drawLinkedFeatures(Graphics2D g2)
 	{
-		MapViewer.logger.finest("drawing linked features for map " + name);
+//		MapViewer.logger.finest("drawing linked features for map " + name);
 		
 		if (allLinkedFeaturePositions != null)
 		{

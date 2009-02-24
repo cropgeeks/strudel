@@ -59,80 +59,100 @@ public class ClickZoomAnimator extends Thread
 		float chromoHeightIncrement = (finalChromoHeight - selectedSet.chromoHeight) / totalFrames;
 		float totalYIncrement = (finalTotalY - selectedSet.totalY) / totalFrames;
 		
-		MapViewer.logger.finest("zoomFactorIncrement = " + zoomFactorIncrement);
+		MapViewer.logger.fine("=============");
+		MapViewer.logger.fine("finalZoomFactor = " + finalZoomFactor);
+		MapViewer.logger.fine("selectedSet.zoomFactor before = " + selectedSet.zoomFactor);
+		MapViewer.logger.fine("zoomFactorIncrement = " + zoomFactorIncrement);
+		MapViewer.logger.fine("totalYIncrement = " + totalYIncrement);
+		MapViewer.logger.fine("chromoHeightIncrement = " + chromoHeightIncrement);
+		MapViewer.logger.fine("finalTotalY = " + finalTotalY);
+		MapViewer.logger.fine("selectedSet.totalY = " + selectedSet.totalY);
+		
 		MapViewer.logger.finest("totalFrames = " + totalFrames);
 		MapViewer.logger.finest("fps = " + fps);
 		MapViewer.logger.finest("millis = " + millis);
+		
+		float tolerance = 0.02f;
+		boolean proceed = finalZoomFactor > (selectedSet.zoomFactor + (selectedSet.zoomFactor*tolerance)) || 
+		finalZoomFactor < (selectedSet.zoomFactor - (selectedSet.zoomFactor*tolerance));
+		boolean zoomIn = zoomFactorIncrement > 0;
 
-		// now loop for the number of total frames, zooming in by a bit each time
-		for (int i = 0; i < totalFrames; i++)
+		//only do the zoom animation if we actually have something to zoom (in or out)
+		//if the zoom factor increment is 0 we want to do nothing
+		if (proceed)
 		{
-			// sleep for the amount of animation time divided by the totalFrames value
-			try
+			MapViewer.logger.fine("+++++++++++++++++zooming");
+			// now loop for the number of total frames, zooming in by a bit each time
+			for (int i = 0; i < totalFrames; i++)
 			{
-				Thread.sleep((long) (millis / totalFrames));
+				// sleep for the amount of animation time divided by the totalFrames value
+				try
+				{
+					Thread.sleep((long) (millis / totalFrames));
+				}
+				catch (InterruptedException e)
+				{
+				}
+				
+				MapViewer.logger.finest("selectedSet.zoomFactor before adjustment = " + selectedSet.zoomFactor);
+				
+				// set the new zoom factor
+				selectedSet.zoomFactor = selectedSet.zoomFactor + zoomFactorIncrement;
+				
+				//don't let the zoom factor fall below 1
+				if (selectedSet.zoomFactor < 1)
+					selectedSet.zoomFactor = 1;
+				
+				// work out the chromo height and total genome height for when the new zoom factor will have been applied
+				int newChromoHeight = Math.round(selectedSet.chromoHeight + chromoHeightIncrement);
+				
+				// distance from the bottom of the chromosome -- is half the height of the chromosome as we want it centered
+				int distFromBottom = newChromoHeight / 2;
+				
+				// the new total Y extent of the genome in pixels
+				int newTotalY = Math.round(selectedSet.totalY + totalYIncrement);
+
+				MapViewer.logger.fine("newChromoHeight = " + newChromoHeight);
+				MapViewer.logger.fine("newTotalY = " + newTotalY);
+				MapViewer.logger.fine("distFromBottom = " + distFromBottom);
+
+				// adjust the zoom
+				// this call includes the redraw of the main canvas
+				zoomHandler.adjustZoom(selectedMap, newTotalY, newChromoHeight, distFromBottom);
+				
+				//now update the arrays with the position data
+				MapViewer.winMain.fatController.initialisePositionArrays();
+				
+				//update zoom control position
+				MapViewer.winMain.fatController.updateZoomControls();
+				
+				MapViewer.logger.fine("selectedSet.zoomFactor = " + selectedSet.zoomFactor);
 			}
-			catch (InterruptedException e)
-			{
-			}
-			
-			MapViewer.logger.finest("selectedSet.zoomFactor before adjustment = " + selectedSet.zoomFactor);
-
-			// set the new zoom factor
-			selectedSet.zoomFactor = selectedSet.zoomFactor + zoomFactorIncrement;
-
-			//don't let the zoom factor fall below 1
-			if(selectedSet.zoomFactor < 1)
-				selectedSet.zoomFactor = 1;			
-
-			// work out the chromo height and total genome height for when the new zoom factor will have been applied
-			int newChromoHeight = Math.round(selectedSet.chromoHeight + chromoHeightIncrement);
-
-			// distance from the bottom of the chromosome -- is half the height of the chromosome as we want it centered
-			int distFromBottom = newChromoHeight/2;
-
-			// the new total Y extent of the genome in pixels
-			int newTotalY = Math.round(selectedSet.totalY + totalYIncrement);
-
-			// adjust the zoom
-			// this call includes the redraw of the main canvas
-			zoomHandler.adjustZoom(selectedMap, newTotalY, newChromoHeight, distFromBottom);
-			
-			//now update the arrays with the position data
-			MapViewer.winMain.fatController.initialisePositionArrays();
-			
+			//update overviews
+			MapViewer.winMain.fatController.updateOverviewCanvases();
 			//update zoom control position
 			MapViewer.winMain.fatController.updateZoomControls();
+			//now update the arrays with the position data
+			MapViewer.winMain.fatController.initialisePositionArrays();
+			//enable drawing of markers providing we have zoomed in, not out
+			if (selectedSet.zoomFactor > 1)
+				selectedSet.thresholdAllMarkerPainting = selectedSet.zoomFactor;
+			//turn drawing of map index back on
+			selectedMap.drawChromoIndex = true;
+			//repaint with antialiasing if required
+			if (MapViewer.winMain.mainCanvas.antiAlias)
+			{
+				AntiAliasRepaintThread antiAliasRepaintThread = new AntiAliasRepaintThread();
+				antiAliasRepaintThread.start();
+			}
+			done = true;
+			zoomHandler.isClickZoomRequest = false;
+			MapViewer.logger.fine("selectedSet.zoomFactor final = " + selectedSet.zoomFactor);
 		}
-
-		//update overviews
-		MapViewer.winMain.fatController.updateOverviewCanvases();
-		
-		//update zoom control position
-		MapViewer.winMain.fatController.updateZoomControls();
-
-		//now update the arrays with the position data
-		MapViewer.winMain.fatController.initialisePositionArrays();
-		
-		//enable drawing of markers providing we have zoomed in, not out
-		if(selectedSet.zoomFactor > 1)
-			selectedSet.thresholdAllMarkerPainting = selectedSet.zoomFactor;
-
-		//turn drawing of map index back on
-		selectedMap.drawChromoIndex = true;
-
-		//repaint with antialiasing if required
-		if(MapViewer.winMain.mainCanvas.antiAlias)
+		else
 		{
-			AntiAliasRepaintThread antiAliasRepaintThread = new AntiAliasRepaintThread();
-			antiAliasRepaintThread.start();
+			MapViewer.logger.fine("already at final zoom factor (+/- tolerance) -- not zooming");
 		}
-		
-		done = true;
-		
-		zoomHandler.isClickZoomRequest = false;
-		
-		MapViewer.logger.fine("selectedSet.zoomFactor final = " + selectedSet.zoomFactor);
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------

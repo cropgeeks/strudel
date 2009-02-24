@@ -41,8 +41,11 @@ public class OpenFileDialog extends JDialog implements ActionListener
 	{
 		bOpen = SwingUtils.getButton("Load data");
 		bOpen.addActionListener(this);
+		bOpen.setMnemonic(KeyEvent.VK_L);
+		
 		bCancel = SwingUtils.getButton("Cancel");
 		bCancel.addActionListener(this);
+		bCancel.setMnemonic(KeyEvent.VK_C);
 		
 		JPanel p1 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
 		p1.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 5));

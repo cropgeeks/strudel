@@ -78,6 +78,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		
 		bAntialias.setSelected(Prefs.userPrefAntialias);
 		bLinkFilter.setSelected(Prefs.drawOnlyLinksToVisibleFeatures);
+		bDistMarkers.setSelected(Prefs.showDistanceMarkers);
 	}
 	
 	private void createControls()
@@ -172,14 +173,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		//toggles the distance markers on or off
 		else if(e.getSource() == bDistMarkers)
 		{
-			if(bDistMarkers.isSelected())
-			{
-				MapViewer.winMain.mainCanvas.drawDistanceMarkers = true;
-			}
-			else
-			{
-				MapViewer.winMain.mainCanvas.drawDistanceMarkers = false;
-			}
+			Prefs.showDistanceMarkers = bDistMarkers.isSelected();
 			MapViewer.winMain.mainCanvas.updateCanvas(true);
 		}
 		

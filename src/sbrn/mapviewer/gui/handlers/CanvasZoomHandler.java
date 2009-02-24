@@ -105,7 +105,7 @@ public class CanvasZoomHandler
 	// zooms in by a fixed amount on a chromosome the user clicked on (to fill screen with chromosome)
 	public  void processClickZoomRequest(GChromoMap selectedMap)
 	{
-		int millis = 300;
+		int millis = 400;
 		
 		// figure out the genome it belongs to and increase that genome's zoom factor so that we can
 		// just fit the chromosome on screen the next time it is painted
@@ -122,8 +122,12 @@ public class CanvasZoomHandler
 		int finalChromoHeight = (int) (mainCanvas.initialChromoHeight * finalZoomFactor);
 		// this is the combined height of all spacers -- does not change with the zoom factor
 		int combinedSpacers = mainCanvas.chromoSpacing * (selectedSet.numMaps - 1);
-		// the new total Y extent of the genome in pixels
-		int finalTotalY = (int) (((selectedSet.totalY - combinedSpacers) * finalZoomFactor) + combinedSpacers);
+		
+		// the total vertical extent of the genome at startup, excluding top and bottom spacers
+		int totalY = (selectedSet.numMaps * mainCanvas.initialChromoHeight) + ((selectedSet.numMaps - 1) * mainCanvas.chromoSpacing);
+		
+		// the new total Y extent of the genome in pixels for after the animation 
+		int finalTotalY = (int) (((totalY - combinedSpacers) * finalZoomFactor) + combinedSpacers);
 
 		ClickZoomAnimator clickZoomAnimator = new ClickZoomAnimator(fps, millis, selectedMap,
 						mainCanvas, finalZoomFactor, finalTotalY, finalChromoHeight, this);

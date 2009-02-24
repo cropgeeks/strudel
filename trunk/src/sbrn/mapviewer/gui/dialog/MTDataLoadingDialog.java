@@ -6,6 +6,9 @@
 
 package sbrn.mapviewer.gui.dialog;
 
+import sbrn.mapviewer.*;
+import scri.commons.gui.*;
+
 /**
  *
  * @author  __USER__
@@ -18,6 +21,16 @@ public class MTDataLoadingDialog extends javax.swing.JDialog
 	{
 		super(parent, modal);
 		initComponents();
+		
+		addWindowListener(new java.awt.event.WindowAdapter()
+		{
+			public void windowClosing(java.awt.event.WindowEvent e)
+			{
+				setVisible(false);
+				MapViewer.winMain.fatController.dataLoadCancelled = true;
+				TaskDialog.info("Data import canceled.", "Close");
+			}
+		});
 	}
 	
 	/** This method is called from within the constructor to
@@ -30,29 +43,65 @@ public class MTDataLoadingDialog extends javax.swing.JDialog
 	private void initComponents()
 	{
 		
-		jLabel1 = new javax.swing.JLabel();
+		dataLoadingLabel = new javax.swing.JLabel();
 		progressBar = new javax.swing.JProgressBar();
-		jButton1 = new javax.swing.JButton();
+		dataLoadcancelButton = new javax.swing.JButton();
 		
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle("Data loading");
 		
-		jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-		jLabel1.setText("Data loading - please wait...");
-		jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+		dataLoadingLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+		dataLoadingLabel.setText("Data loading - please wait...");
+		dataLoadingLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 		
 		progressBar.setIndeterminate(true);
 		
-		jButton1.setText("Cancel");
+		dataLoadcancelButton.setText("Cancel");
+		dataLoadcancelButton.addActionListener(new java.awt.event.ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				dataLoadcancelButtonActionPerformed(evt);
+			}
+		});
 		
 		org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(layout.createSequentialGroup().addContainerGap().add(progressBar, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE).addContainerGap()).add(layout.createSequentialGroup().add(12, 12, 12).add(jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE).addContainerGap(12, Short.MAX_VALUE)).add(layout.createSequentialGroup().add(111, 111, 111).add(jButton1).addContainerGap(113, Short.MAX_VALUE)));
-		layout.setVerticalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(layout.createSequentialGroup().addContainerGap().add(jLabel1).addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED).add(progressBar, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED).add(jButton1).addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+		layout.setHorizontalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
+						layout.createSequentialGroup().addContainerGap().add(
+										progressBar,
+										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+										271, Short.MAX_VALUE).addContainerGap()).add(
+						layout.createSequentialGroup().add(12, 12, 12).add(
+										dataLoadingLabel,
+										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+										271, Short.MAX_VALUE).addContainerGap(
+										12, Short.MAX_VALUE)).add(
+						layout.createSequentialGroup().add(111, 111, 111).add(
+										dataLoadcancelButton).addContainerGap(
+										113, Short.MAX_VALUE)));
+		layout.setVerticalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
+						layout.createSequentialGroup().addContainerGap().add(dataLoadingLabel).addPreferredGap(
+										org.jdesktop.layout.LayoutStyle.UNRELATED).add(
+										progressBar,
+										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
+										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(
+										org.jdesktop.layout.LayoutStyle.UNRELATED).add(
+										dataLoadcancelButton).addContainerGap(
+										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE)));
 		
 		pack();
 	}// </editor-fold>
 	//GEN-END:initComponents
+	
+	private void dataLoadcancelButtonActionPerformed(java.awt.event.ActionEvent evt)
+	{
+		setVisible(false);
+		MapViewer.winMain.fatController.dataLoadCancelled = true;
+		TaskDialog.info("Data import canceled.", "Close");
+	}
 	
 	/**
 	 * @param args the command line arguments
@@ -69,6 +118,7 @@ public class MTDataLoadingDialog extends javax.swing.JDialog
 					public void windowClosing(java.awt.event.WindowEvent e)
 					{
 						System.exit(0);
+						TaskDialog.info("dialog closed", "Close");
 					}
 				});
 				dialog.setVisible(true);
@@ -78,9 +128,19 @@ public class MTDataLoadingDialog extends javax.swing.JDialog
 	
 	//GEN-BEGIN:variables
 	// Variables declaration - do not modify
-	private javax.swing.JButton jButton1;
-	private javax.swing.JLabel jLabel1;
+	private javax.swing.JButton dataLoadcancelButton;
+	private javax.swing.JLabel dataLoadingLabel;
 	private javax.swing.JProgressBar progressBar;
+	
 	// End of variables declaration//GEN-END:variables
+	public javax.swing.JButton getDataLoadcancelButton()
+	{
+		return dataLoadcancelButton;
+	}
+
+	public javax.swing.JLabel getDataLoadingLabel()
+	{
+		return dataLoadingLabel;
+	}
 	
 }

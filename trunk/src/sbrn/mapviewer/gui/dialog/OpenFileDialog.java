@@ -2,9 +2,9 @@ package sbrn.mapviewer.gui.dialog;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
-import java.lang.reflect.*;
+
 import javax.swing.*;
+
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.handlers.*;
@@ -17,7 +17,7 @@ public class OpenFileDialog extends JDialog implements ActionListener
 	
 	private JButton bOpen, bCancel;
 	public MTOpenFilesPanel openFilesPanel = new MTOpenFilesPanel();
-	MTDataLoadingDialog dataLoadingDialog;
+	public MTDataLoadingDialog dataLoadingDialog;
 	
 	// =================================c'tor=======================================
 	
@@ -83,18 +83,69 @@ public class OpenFileDialog extends JDialog implements ActionListener
 		{
 			public void run()
 			{							
-				//init the new data set 
-				MapViewer.winMain.fatController.initialiseNewProject();				
+				// load the data			
+				//we do this by simply creating a new data container instance -- the actual data loading is done through this
+				DataContainer dataContainer = new DataContainer();
+				
+				//data is loaded now -- check whether the user has cancelled
+				if(!MapViewer.winMain.fatController.dataLoadCancelled)
+				{
+					MapViewer.logger.fine("data load successful -- proceeding");
+					
+					//point the reference in winMain at the new data container
+					MapViewer.winMain.dataContainer  = dataContainer;
+					//if users load datasets in succession we need to make sure we don't run out of memory
+					//we want any old data containers to be thrown away
+					//run the garbage collector explicitly to do this
+					System.gc();
+					
+					//build the rest of the GUI as required
+					if(!MapViewer.winMain.fatController.guiFullyAssembled)
+						MapViewer.winMain.fatController.assembleRemainingGUIComps();
+					else
+						MapViewer.winMain.reinitialiseDependentComponents();
+					
+					//also need a new link display manager because it holds the precomputed links
+					MapViewer.winMain.mainCanvas.linkDisplayManager = new LinkDisplayManager(MapViewer.winMain.mainCanvas);	
+					
+					//check if we need to enable some functionality -- depends on the number of genomes loaded
+					//cannot do comparative stuff if user one loaded one (target) genome
+					if(MapViewer.winMain.dataContainer.gMapSetList.size() == 1)
+					{
+						MapViewer.winMain.toolbar.bFindFeatures.setEnabled(false);
+						MapViewer.winMain.toolbar.bFindFeaturesinRange.setEnabled(false);
+					}
+					else
+					{
+						MapViewer.winMain.toolbar.bFindFeatures.setEnabled(true);
+						MapViewer.winMain.toolbar.bFindFeaturesinRange.setEnabled(true);
+					}
+					
+					//hide the data loading progress dialog
+					if(dataLoadingDialog != null)
+						dataLoadingDialog.setVisible(false);
+					
+					//enable the rest of the controls
+					MapViewer.winMain.toolbar.enableAllControls();
+					
+					//hide the start panel if it is still showing
+					MapViewer.winMain.showStartPanel(false);
 
-				//hide the data loading progress dialog
-				if(dataLoadingDialog != null)
-					dataLoadingDialog.setVisible(false);
+					// revalidate the GUI
+					MapViewer.winMain.validate();
+				}
+				//user has cancelled
+				else
+				{
+					MapViewer.logger.fine("data load cancelled -- nulling data container");			
+				}
 				
-				//enable the rest of the controls
-				MapViewer.winMain.toolbar.enableAllControls();
+				//check the memory situation
+				MapViewer.logger.fine("memory max (mb) = " + Runtime.getRuntime().maxMemory()/1024/1024);
+				MapViewer.logger.fine("memory available = (mb) " + Runtime.getRuntime().freeMemory()/1024/1024);
 				
-				// revalidate the GUI
-				MapViewer.winMain.validate();
+				//reset the cancel flag as the user might now want to try again
+				MapViewer.winMain.fatController.dataLoadCancelled = false;
 			}
 		};	
 		Thread thread = new Thread(runnable);

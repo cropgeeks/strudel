@@ -83,10 +83,10 @@ Menu bar support for new/infrequent users – Robbie
 BUGS to fix:
 
 
-- cancel button (while importing data) has no effect
-- clicking the X button on the import dialog does close it, but the data still loads
-- mousewheel scrolling is too fast (or inconsistant, depending on zoom level)
-- "BLAST Cut-off:" label should be on the left-hand side of the slider
++ cancel button (while importing data) has no effect
++ clicking the X button on the import dialog does close it, but the data still loads
++ mousewheel scrolling is too fast (or inconsistant, depending on zoom level)
++ "BLAST Cut-off:" label should be on the left-hand side of the slider
 - none of the dialogs have keyboard accelerators
 - range-start and range-end spinner controls look like they are too tall
 - image export error message is "null" when exporting to write protected drive

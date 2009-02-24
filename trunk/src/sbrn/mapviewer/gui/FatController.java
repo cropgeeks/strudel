@@ -39,6 +39,7 @@ public class FatController
 	//true if we have requested to find features by name
 	public boolean findFeaturesRequested = false;
 
+	public boolean dataLoadCancelled = false;
 	
 	// ===============================================c'tors===================================
 	
@@ -252,8 +253,7 @@ public class FatController
 			winMain.toolbar.bFindFeatures.setEnabled(true);
 			winMain.toolbar.bFindFeaturesinRange.setEnabled(true);
 		}
-		
-		MapViewer.winMain.showStartPanel(false);
+	
 	}
 		
 	

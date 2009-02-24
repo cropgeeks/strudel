@@ -7,6 +7,7 @@ import java.util.*;
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
+import scri.commons.gui.*;
 
 public class CMapLinkImporter
 {
@@ -35,7 +36,17 @@ public class CMapLinkImporter
 			// We load feature links by scanning the data file. Other than the first
 			// line, expect to see one link (pair of features) per line
 			
-			BufferedReader in = new BufferedReader(new FileReader(filename));		
+			BufferedReader in = null;
+			try
+			{
+				in = new BufferedReader(new FileReader(filename));
+			}
+			catch (Exception e)
+			{
+				MapViewer.winMain.openFileDialog.dataLoadingDialog.setVisible(false);
+				TaskDialog.error("File " + filename + " not found. Comparative data not loaded.", "Close");
+				e.printStackTrace();
+			}		
 			in.readLine();
 			
 			String str = in.readLine();		

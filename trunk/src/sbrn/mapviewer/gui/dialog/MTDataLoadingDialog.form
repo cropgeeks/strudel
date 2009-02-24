@@ -28,12 +28,12 @@
           </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="12" pref="12" max="12" attributes="0"/>
-              <Component id="jLabel1" pref="271" max="32767" attributes="0"/>
+              <Component id="dataLoadingLabel" pref="271" max="32767" attributes="0"/>
               <EmptySpace pref="12" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="111" max="-2" attributes="0"/>
-              <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+              <Component id="dataLoadcancelButton" min="-2" max="-2" attributes="0"/>
               <EmptySpace pref="113" max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -42,18 +42,18 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+              <Component id="dataLoadingLabel" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="progressBar" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+              <Component id="dataLoadcancelButton" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JLabel" name="jLabel1">
+    <Component class="javax.swing.JLabel" name="dataLoadingLabel">
       <Properties>
         <Property name="horizontalAlignment" type="int" value="0"/>
         <Property name="text" type="java.lang.String" value="Data loading - please wait..."/>
@@ -65,10 +65,13 @@
         <Property name="indeterminate" type="boolean" value="true"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton1">
+    <Component class="javax.swing.JButton" name="dataLoadcancelButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Cancel"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="dataLoadcancelButtonActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

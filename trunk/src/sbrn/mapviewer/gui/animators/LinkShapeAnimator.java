@@ -107,9 +107,12 @@ public class LinkShapeAnimator extends Thread
 		//re-enable the button that triggered this thread
 		MapViewer.winMain.toolbar.bCurves.setEnabled(true);
 		
-		//repaint with antialiasing on
-		AntiAliasRepaintThread antiAliasRepaintThread = new AntiAliasRepaintThread();
-		antiAliasRepaintThread.start();
+		//repaint with antialiasing if required
+		if(MapViewer.winMain.mainCanvas.antiAlias)
+		{
+			AntiAliasRepaintThread antiAliasRepaintThread = new AntiAliasRepaintThread();
+			antiAliasRepaintThread.start();
+		}
 	}
 	
 }

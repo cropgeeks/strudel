@@ -51,6 +51,8 @@ public class DataContainer
 	
 	// the maximum number of chromos in any one of the genomes involved
 	public int maxChromos;
+	
+
 
 	
 	//============================================c'tor==========================================
@@ -59,7 +61,7 @@ public class DataContainer
 	{
 		MapViewer.logger.fine("============== making new data container");
 		MapViewer.logger.fine("num mapsets prior to initing = " + gMapSetList.size());
-		initDataSets();
+		loadData();
 		setUpGenomes();
 	}
 	
@@ -67,7 +69,7 @@ public class DataContainer
 	//============================================methods==========================================
 
 	//Loads data from file using the object data model; this will populate all the relevant MapSet and LinkSet objects.
-	public void initDataSets()
+	public void loadData()
 	{
 		MapViewer.logger.fine("initing new dataset");
 		MapViewer.logger.fine("loadOwnData = "  + MapViewer.winMain.fatController.loadOwnData);

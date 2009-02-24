@@ -3,7 +3,9 @@ package sbrn.mapviewer.io;
 import java.io.*;
 import java.util.*;
 
+import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
+import scri.commons.gui.*;
 
 /** File handler class for dealing with CMap-formatted data files. */
 public class CMapImporter
@@ -37,7 +39,17 @@ public class CMapImporter
 	 */
 	public MapSet loadMapSet() throws Exception
 	{
-		BufferedReader in = new BufferedReader(new FileReader(filename));
+		BufferedReader in = null;
+		try
+		{
+			in = new BufferedReader(new FileReader(filename));
+		}
+		catch (FileNotFoundException e1)
+		{
+			MapViewer.winMain.openFileDialog.dataLoadingDialog.setVisible(false);
+			TaskDialog.error("File " + filename + " not found.", "Close");
+			e1.printStackTrace();
+		}
 		
 		// Ignore the first line of the file
 		in.readLine();

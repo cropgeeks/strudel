@@ -68,9 +68,9 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		add(bLinkFilter);
 		
 		addSeparator(true);	
-		add(eValueSlider);
 		add(blastLabel);
-		
+		add(eValueSlider);
+
 		addSeparator(true);		
 		add(bHelp);
 		add(bInfo);

@@ -23,6 +23,10 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	long timeOfMouseDown = 0;
 	
 	private boolean isOSX = SystemUtils.isMacOS();
+	
+	int scrollGenomeIncrement = 200;
+	
+	int lastMouseDragYPos = -1;
 
 	
 	// ===============================================c'tors===========================================
@@ -46,7 +50,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	public void mouseClicked(MouseEvent e)
 	{
 		MapViewer.logger.finest("mouse clicked");
-		
+
 		//place the focus on this window so we can listen to keyboard events too
 		winMain.mainCanvas.requestFocusInWindow();
 				
@@ -86,9 +90,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	{		
 		mousePressedX = e.getX();
 		mousePressedY = e.getY();
-		
-		MapViewer.logger.finest("mouse pressed at (x,y) " + mousePressedX + "," + mousePressedY);
-		
+		lastMouseDragYPos = e.getY();
 		timeOfMouseDown = System.currentTimeMillis();
 		
 		//check whether this is a popup request -- needs to be done both in mousePressed and in mouseReleased due to platform dependent nonsense
@@ -196,7 +198,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			winMain.mainCanvas.zoomHandler.processPanZoomRequest(selectedMap, mousePressedY, e.getY());
 			
 		}
-		
+
 		//turn antialiasing on and repaint		
 		MapViewer.logger.finest("repainting after mouse released");
 		winMain.mainCanvas.drawSelectionRect = false;
@@ -212,8 +214,8 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		int x = e.getX();
 		int y = e.getY();
 		
-		MapViewer.logger.finest("mouseDragged at (x,y) = "+ x + "," + y);
-		MapViewer.logger.finest("last mouse pressed coords (mousePressedX, mousePressedY) = " + mousePressedX + "," + mousePressedY);
+		MapViewer.logger.fine("mouseDragged at (x,y) = "+ x + "," + y);
+		MapViewer.logger.fine("last mouse pressed coords (mousePressedX, mousePressedY) = " + mousePressedX + "," + mousePressedY);
 		
 		// figure out which genome this event pertains to (i.e. which section of the canvas on x are we in)
 		int index = Utils.getSelectedSet(e);
@@ -232,7 +234,10 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			
 			//this is the amount by which we drag the canvas at a time
 			// a fixed amount seems to work best as it moves the canvas the same way across all zoom levels
-			int distanceDragged = 25;
+			int distanceDragged = Math.abs(lastMouseDragYPos - y);
+			
+			MapViewer.logger.fine("distanceDragged = " + distanceDragged);
+			MapViewer.logger.fine("lastMouseDragYPos when dragged = " + lastMouseDragYPos);
 			
 			// mouse is getting dragged up 
 			if (y < mouseDragPosY)
@@ -244,6 +249,8 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			{
 				winMain.mainCanvas.moveGenomeViewPort(gMapSet, gMapSet.centerPoint - distanceDragged);
 			}
+			
+			lastMouseDragYPos = y;
 		}
 		
 		
@@ -336,25 +343,29 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		int index = Utils.getSelectedSet(e);
 		GMapSet selectedSet = MapViewer.winMain.dataContainer.gMapSetList.get(index);
 		
-		// work out by how much we have moved the mouse and in which direction
+		// work out   in which direction we have moved the mouse
 		int notches = e.getWheelRotation();
-		float differential = 0;
+		
+		//this moves the genome center point up and down
+		int newCenterPoint = -1;
+
 		if (notches < 0)
 		{
-			differential = -(selectedSet.totalY / selectedSet.zoomFactor) * 0.3f;
+			newCenterPoint = (int) (selectedSet.centerPoint  - scrollGenomeIncrement);
 		}
 		else
 		{
-			differential = (selectedSet.totalY / selectedSet.zoomFactor) * 0.3f;
+			newCenterPoint = (int) (selectedSet.centerPoint  + scrollGenomeIncrement);
 		}
-		
-		//this moves the genome center point up and down
-		int newCenterPoint = (int) (selectedSet.centerPoint + differential);
+
 		winMain.mainCanvas.moveGenomeViewPort(selectedSet, newCenterPoint);
 		
-		//turn antialiasing on and repaint
-		AntiAliasRepaintThread antiAliasRepaintThread = new AntiAliasRepaintThread();
-		antiAliasRepaintThread.start();
+		//repaint with antialiasing if required
+		if(MapViewer.winMain.mainCanvas.antiAlias)
+		{
+			AntiAliasRepaintThread antiAliasRepaintThread = new AntiAliasRepaintThread();
+			antiAliasRepaintThread.start();
+		}
 		
 	}
 	

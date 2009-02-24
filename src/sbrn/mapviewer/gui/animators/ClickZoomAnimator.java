@@ -121,9 +121,12 @@ public class ClickZoomAnimator extends Thread
 		//turn drawing of map index back on
 		selectedMap.drawChromoIndex = true;
 
-		//turn antialiasing on and repaint
-		AntiAliasRepaintThread antiAliasRepaintThread = new AntiAliasRepaintThread();
-		antiAliasRepaintThread.start();
+		//repaint with antialiasing if required
+		if(MapViewer.winMain.mainCanvas.antiAlias)
+		{
+			AntiAliasRepaintThread antiAliasRepaintThread = new AntiAliasRepaintThread();
+			antiAliasRepaintThread.start();
+		}
 		
 		done = true;
 		

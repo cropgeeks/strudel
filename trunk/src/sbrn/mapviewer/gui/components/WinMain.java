@@ -140,7 +140,12 @@ public class WinMain extends JFrame
 					Prefs.guiWinMainMaximized = true;
 				
 				if(mainCanvas !=null)
+				{
+					//refresh the main canvas
+					MapViewer.winMain.validate();
 					mainCanvas.redraw = true;
+					MapViewer.winMain.mainCanvas.updateCanvas(true);				
+				}
 			}
 			
 			public void componentMoved(ComponentEvent e)
@@ -260,7 +265,13 @@ public class WinMain extends JFrame
 			{			
 				public void propertyChange(PropertyChangeEvent evt) 
 				{
+					MapViewer.logger.fine("========splitpane propertyChange");
+					MapViewer.logger.fine("splitpane resized -- updating canvas");
+					MapViewer.logger.fine("canvas size before resize event = " + MapViewer.winMain.mainCanvas.getHeight());
+					//refresh the main canvas
+					MapViewer.winMain.validate();
 					MapViewer.winMain.mainCanvas.updateCanvas(true);
+					MapViewer.logger.fine("canvas size after resize event = " + MapViewer.winMain.mainCanvas.getHeight());
 				}			
 			});
 			
@@ -280,6 +291,10 @@ public class WinMain extends JFrame
 		bottomPanel.setPreferredSize(new Dimension(0,0));
 		splitPane.setResizeWeight(1.0);
 		splitPane.setDividerSize(0);
+		
+		//refresh the main canvas
+		MapViewer.winMain.validate();
+		MapViewer.winMain.mainCanvas.updateCanvas(true);
 	}
 	
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------

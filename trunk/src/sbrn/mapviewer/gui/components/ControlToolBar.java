@@ -127,42 +127,42 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		
 		//configure open file dialog button
 		OpenFileDialogAction openFileDialogAction = new OpenFileDialogAction();
-		bOpen = (JButton) getButton(false, "Load Data", "Load data into Mapviewer", Icons.getIcon("FILEOPEN"), openFileDialogAction, true);
+		bOpen = (JButton) Utils.getButton(false, "Load Data", "Load data into Mapviewer", Icons.getIcon("FILEOPEN"), openFileDialogAction, this, true);
 		KeyStroke ctrlOKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK);
 		bOpen.getInputMap(JButton.WHEN_IN_FOCUSED_WINDOW).put(ctrlOKeyStroke, "openFileDialog");
 		bOpen.getActionMap().put("openFileDialog", openFileDialogAction);
 		
 		//configure export image button
 		ExportImageAction exportImageAction = new ExportImageAction();
-		bExport = (JButton) getButton(false, "", "Export the display as an image", Icons.getIcon("EXPORTIMAGE"), exportImageAction, false);
+		bExport = (JButton) Utils.getButton(false, "", "Export the display as an image", Icons.getIcon("EXPORTIMAGE"), exportImageAction, this, false);
 		KeyStroke ctrlEKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK);
 		bExport.getInputMap(JButton.WHEN_IN_FOCUSED_WINDOW).put(ctrlEKeyStroke, "exportImage");
 		bExport.getActionMap().put("exportImage", exportImageAction);
 		
 		//configure find features button
 		FindFeaturesAction findFeaturesAction = new FindFeaturesAction();
-		bFindFeatures = (JButton) getButton(false, "Find", "Find features by name", Icons.getIcon("FIND"), findFeaturesAction, false);
+		bFindFeatures = (JButton) Utils.getButton(false, "Find", "Find features by name", Icons.getIcon("FIND"), findFeaturesAction, this, false);
 		KeyStroke ctrlFKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK);
 		bFindFeatures.getInputMap(JButton.WHEN_IN_FOCUSED_WINDOW).put(ctrlFKeyStroke, "findFeatures");
 		bFindFeatures.getActionMap().put("findFeatures", findFeaturesAction);
 		
 		//configure find features in range button
 		FindFeaturesInRangeAction findFeaturesInRangeAction = new FindFeaturesInRangeAction();
-		bFindFeaturesinRange = (JButton) getButton(false, "Explore Range", "List features in range", Icons.getIcon("RANGE"), findFeaturesInRangeAction, false);
+		bFindFeaturesinRange = (JButton) Utils.getButton(false, "Explore Range", "List features in range", Icons.getIcon("RANGE"), findFeaturesInRangeAction, this, false);
 		KeyStroke ctrlRKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
 		bFindFeaturesinRange.getInputMap(JButton.WHEN_IN_FOCUSED_WINDOW).put(ctrlRKeyStroke, "findFeaturesInRange");
 		bFindFeaturesinRange.getActionMap().put("findFeaturesInRange", findFeaturesInRangeAction);
 		
 		//these buttons have no keyboard shortcuts associated with them as yet -- straightforward config
-		bOverview = (JToggleButton) getButton(true, "", "Toggle the overview dialog on or off", Icons.getIcon("OVERVIEW"), null, false);
+		bOverview = (JToggleButton) Utils.getButton(true, "", "Toggle the overview dialog on or off", Icons.getIcon("OVERVIEW"), null, this, false);
 		bOverview.setSelected(Prefs.guiOverviewVisible);
-		bDistMarkers = (JToggleButton) getButton(true, "", "Toggle the distance markers on or off", Icons.getIcon("DISTANCEMARKERS"), null, false);
-		bCurves = (JButton) getButton(false, "", "Cycle through straight, angled and curved links", Icons.getIcon("CURVES"), null, false);
-		bAntialias = (JToggleButton) getButton(true, "", "Toggle between higher quality and plain drawing styles", Icons.getIcon("ANTIALIAS"), null, false);
-		bLinkFilter = (JToggleButton) getButton(true, "", "Toggle between visibility-based filtering of links and no filtering", Icons.getIcon("LINKFILTER"), null, false);		
-		bHelp =  (JButton) getButton(false, "", "Help", Icons.getIcon("HELP"), null, true);
-		bInfo =  (JButton) getButton(false, "", "About Strudel", Icons.getIcon("INFO"), null, true);
-		bResetAll =  (JButton) getButton(false, "Reset", "Reset display", Icons.getIcon("RESET"), null, false);
+		bDistMarkers = (JToggleButton) Utils.getButton(true, "", "Toggle the distance markers on or off", Icons.getIcon("DISTANCEMARKERS"), null, this, false);
+		bCurves = (JButton) Utils.getButton(false, "", "Cycle through straight, angled and curved links", Icons.getIcon("CURVES"), null, this, false);
+		bAntialias = (JToggleButton) Utils.getButton(true, "", "Toggle between higher quality and plain drawing styles", Icons.getIcon("ANTIALIAS"), null, this, false);
+		bLinkFilter = (JToggleButton) Utils.getButton(true, "", "Toggle between visibility-based filtering of links and no filtering", Icons.getIcon("LINKFILTER"), null, this, false);		
+		bHelp =  (JButton) Utils.getButton(false, "", "Help", Icons.getIcon("HELP"), null, this, true);
+		bInfo =  (JButton) Utils.getButton(false, "", "About Strudel", Icons.getIcon("INFO"), null, this, true);
+		bResetAll =  (JButton) Utils.getButton(false, "Reset", "Reset display", Icons.getIcon("RESET"), null, this, false);
 	}
 	
 	public void actionPerformed(ActionEvent e)
@@ -181,6 +181,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		else if(e.getSource() == bAntialias)
 		{
 			Prefs.userPrefAntialias = bAntialias.isSelected();
+			MapViewer.winMain.mainCanvas.antiAlias = bAntialias.isSelected();
 			MapViewer.winMain.mainCanvas.updateCanvas(true);
 		}
 		
@@ -247,34 +248,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 			addSeparator();
 	}
 	
-	// Utility method to help create the buttons. Sets their text, tooltip, and
-	// icon, as well as adding actionListener, defining margings, etc.
-	private AbstractButton getButton(boolean toggle, String title, String tt, ImageIcon icon, Action action, boolean enabled)
-	{
-		AbstractButton button = null;
-		
-		if (toggle)
-			button = new JToggleButton(action);
-		else
-			button = new JButton(action);
-		
-		button.setText(title != null ? title : "");
-		button.setToolTipText(tt);
-		button.setIcon(icon);
-		button.setFocusPainted(false);
-		button.setFocusable(false);
-		button.addActionListener(this);
-		button.setMargin(new Insets(2, 1, 2, 1));
-		button.setEnabled(enabled);
-		
-		if (SystemUtils.isMacOS())
-		{
-			button.putClientProperty("JButton.buttonType", "bevel");
-			button.setMargin(new Insets(-2, -1, -2, -1));
-		}
-		
-		return button;
-	}
+
 	
 	void toggleOverviewDialog()
 	{

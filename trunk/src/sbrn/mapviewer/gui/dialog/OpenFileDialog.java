@@ -23,7 +23,7 @@ public class OpenFileDialog extends JDialog implements ActionListener
 	
 	public OpenFileDialog()
 	{
-		super(MapViewer.winMain, "Open data files", true);
+		super(MapViewer.winMain, "Load data", true);
 		
 		add(openFilesPanel);
 		add(createButtons(), BorderLayout.SOUTH);

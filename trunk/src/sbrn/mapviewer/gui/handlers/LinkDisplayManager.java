@@ -242,14 +242,17 @@ public class LinkDisplayManager
 									//otherwise we just draw every link
 									else
 									{
-										// draw the link either as a straight line or a curve
-										drawStraightOrCurvedLink(
-														g2,
-														targetChromoX + 1,
-														targetY,
-														referenceChromoX - 1,
-														referenceY);
-										numLinksdrawn++;
+										if (referenceGMapSet.selectedMaps.contains(referenceGMap))
+										{
+											// draw the link either as a straight line or a curve
+											drawStraightOrCurvedLink(
+															g2,
+															targetChromoX + 1,
+															targetY,
+															referenceChromoX - 1,
+															referenceY);
+											numLinksdrawn++;
+										}
 									}
 								}
 								else

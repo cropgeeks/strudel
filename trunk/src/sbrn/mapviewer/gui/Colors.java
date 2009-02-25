@@ -14,12 +14,12 @@ public class Colors
 	
 	//colours for links
 	public static Color linkColour = new Color(120,120,120);	
-	public static Color strongEmphasisLinkColour = new Color(0,150, 0);	
+	public static Color strongEmphasisLinkColour = new Color(255,0, 0);	
 	public static Color mildEmphasisLinkColour =  Color.WHITE;
 
 	//various labels
 	public static Color chromosomeIndexColour = Color.white;
-	public static Color featureLabelColour = Color.white;
+	public static Color featureLabelColour = Color.black;
 	public static Color genomeLabelPanelColour = new Color(170, 170, 170);
 	public static Color distanceMarkerColour = new Color(140,140,150);
 
@@ -27,8 +27,9 @@ public class Colors
 	public static Color featureColour = new Color(120,120,120);
 	public static Color highlightedFeatureColour = strongEmphasisLinkColour;
 	public static Color highlightedFeatureLabelColour = Color.WHITE;	
+	public static Color featureLabelBackgroundColour = Color.white;
 	public static Color foundFeatureLabelBackgroundColour = Color.lightGray;	
-	public static Color highlightedFeatureLabelBackgroundColour = new Color(120, 0,0);
+	public static Color highlightedFeatureLabelBackgroundColour = new Color(255, 0,0);
 	
 	//regions
 	public static Color highlightedFeatureRegionColour = new Color(30,0,0);	

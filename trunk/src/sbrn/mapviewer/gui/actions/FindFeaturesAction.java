@@ -12,12 +12,13 @@ public class FindFeaturesAction extends AbstractAction
 	public void actionPerformed(ActionEvent e)
 	{
 		//clear the find dialog
-		MapViewer.winMain.ffDialog.ffPanel.getFFTextArea().setText("");
+//		MapViewer.winMain.ffDialog.ffPanel.getFFTextArea().setText("");
 		
 		//show the find dialog
-		MapViewer.winMain.ffDialog.setLocationRelativeTo(MapViewer.winMain);
-		
+		MapViewer.winMain.ffDialog.setLocationRelativeTo(MapViewer.winMain);		
 		MapViewer.winMain.ffDialog.setVisible(true);
+		MapViewer.winMain.ffDialog.ffPanel.getFFTextArea().requestFocusInWindow();
+		
 		
 	}
 	

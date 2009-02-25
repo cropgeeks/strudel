@@ -528,6 +528,7 @@ public class GChromoMap
 					int labelX = x - stringWidth - labelSpacer; // this is where the label is drawn from
 					int lineStartX = x; // this is where the line to the label is drawn from				
 					int lineEndX = lineStartX - labelSpacer + labelGap; // the label connects to the line here
+					
 					// draw a line for the marker on the chromosome itself
 					//first set the colour accordingly
 					g2.setColor(Colors.highlightedFeatureColour);
@@ -539,11 +540,22 @@ public class GChromoMap
 						labelX = lineStartX + labelSpacer + labelGap;
 						lineEndX = labelX - labelGap;
 					}
-					// set the colour to white
-					g2.setColor(Colors.featureLabelColour);
+					
+					//draw a rounded rectangle as a background for the label
+					g2.setColor(Colors.featureLabelBackgroundColour);
+					float arcSize = fontHeight/1.5f;
+					int horizontalGap = 3;
+					int verticalGap = 4;
+					RoundRectangle2D.Float backGroundRect = new RoundRectangle2D.Float(labelX - horizontalGap, labelY - fontHeight, stringWidth + horizontalGap*2,
+									fontHeight + verticalGap, arcSize, arcSize);
+					g2.fill(backGroundRect);
+					
 					// draw the label
+					g2.setColor(Colors.featureLabelColour);
 					g2.drawString(featureName, labelX, labelY);
+					
 					// draw a line from the marker to the label
+					g2.setColor(Colors.featureLabelBackgroundColour);
 					g2.drawLine(lineStartX, featureY, lineEndX, labelY - fontHeight / 2);
 				}
 

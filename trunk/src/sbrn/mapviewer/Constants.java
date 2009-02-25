@@ -7,7 +7,7 @@ public class Constants
 	public static final int REFERENCE_GENOME = 2;
 	
 	//size of the splitpane divider when visible
-	public static final int SPLITPANE_DIVIDER_SIZE = 6;
+	public static final int SPLITPANE_DIVIDER_SIZE = 7;
 	
 	//the maximum zoom factor we will ever want to use
 	public static final int MAX_ZOOM_FACTOR = 500;

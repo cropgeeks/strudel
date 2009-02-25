@@ -52,6 +52,8 @@ public class PanZoomAnimator extends Thread implements ItemListener
 	
 	public void run()
 	{
+		MapViewer.logger.fine("pan zooming");
+		
 		zoomHandler.isPanZoomRequest = true;
 		
 		//turn antialiasing off

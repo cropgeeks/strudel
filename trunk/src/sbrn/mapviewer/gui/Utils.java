@@ -7,6 +7,8 @@ import java.lang.reflect.*;
 import java.net.*;
 import java.util.*;
 
+import javax.swing.*;
+
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.components.*;
@@ -385,4 +387,33 @@ public class Utils
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
+	
+	// Utility method to help create the buttons. Sets their text, tooltip, and
+	// icon, as well as adding actionListener, defining margings, etc.
+	public static  AbstractButton getButton(boolean toggle, String title, String tt, ImageIcon icon, Action action, ActionListener actionListener, boolean enabled)
+	{
+		AbstractButton button = null;
+		
+		if (toggle)
+			button = new JToggleButton(action);
+		else
+			button = new JButton(action);
+		
+		button.setText(title != null ? title : "");
+		button.setToolTipText(tt);
+		button.setIcon(icon);
+		button.setFocusPainted(false);
+		button.setFocusable(false);
+		button.addActionListener(actionListener);
+		button.setMargin(new Insets(2, 1, 2, 1));
+		button.setEnabled(enabled);
+		
+		if (SystemUtils.isMacOS())
+		{
+			button.putClientProperty("JButton.buttonType", "bevel");
+			button.setMargin(new Insets(-2, -1, -2, -1));
+		}
+		
+		return button;
+	}
 }

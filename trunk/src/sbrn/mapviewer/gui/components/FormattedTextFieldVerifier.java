@@ -17,7 +17,7 @@ public class FormattedTextFieldVerifier extends InputVerifier
 			{
 				String text = ftf.getText();
 
-					if(Float.parseFloat(text) > 0)
+					if(Float.parseFloat(text) >= 0)
 						return true;
 					else
 					{

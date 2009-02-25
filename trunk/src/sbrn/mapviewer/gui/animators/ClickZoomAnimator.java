@@ -60,6 +60,7 @@ public class ClickZoomAnimator extends Thread
 		float totalYIncrement = (finalTotalY - selectedSet.totalY) / totalFrames;
 		
 		MapViewer.logger.fine("=============");
+		MapViewer.logger.fine("zooming into map " + selectedMap.name);
 		MapViewer.logger.fine("finalZoomFactor = " + finalZoomFactor);
 		MapViewer.logger.fine("selectedSet.zoomFactor before = " + selectedSet.zoomFactor);
 		MapViewer.logger.fine("zoomFactorIncrement = " + zoomFactorIncrement);
@@ -67,15 +68,16 @@ public class ClickZoomAnimator extends Thread
 		MapViewer.logger.fine("chromoHeightIncrement = " + chromoHeightIncrement);
 		MapViewer.logger.fine("finalTotalY = " + finalTotalY);
 		MapViewer.logger.fine("selectedSet.totalY = " + selectedSet.totalY);
+		MapViewer.logger.fine("selectedMap.isFullyShowingOnCanvas = " + selectedMap.isFullyShowingOnCanvas);
+		
 		
 		MapViewer.logger.finest("totalFrames = " + totalFrames);
 		MapViewer.logger.finest("fps = " + fps);
 		MapViewer.logger.finest("millis = " + millis);
-		
+
 		float tolerance = 0.02f;
 		boolean proceed = finalZoomFactor > (selectedSet.zoomFactor + (selectedSet.zoomFactor*tolerance)) || 
 		finalZoomFactor < (selectedSet.zoomFactor - (selectedSet.zoomFactor*tolerance));
-		boolean zoomIn = zoomFactorIncrement > 0;
 
 		//only do the zoom animation if we actually have something to zoom (in or out)
 		//if the zoom factor increment is 0 we want to do nothing
@@ -112,9 +114,9 @@ public class ClickZoomAnimator extends Thread
 				// the new total Y extent of the genome in pixels
 				int newTotalY = Math.round(selectedSet.totalY + totalYIncrement);
 
-				MapViewer.logger.fine("newChromoHeight = " + newChromoHeight);
-				MapViewer.logger.fine("newTotalY = " + newTotalY);
-				MapViewer.logger.fine("distFromBottom = " + distFromBottom);
+//				MapViewer.logger.fine("newChromoHeight = " + newChromoHeight);
+//				MapViewer.logger.fine("newTotalY = " + newTotalY);
+//				MapViewer.logger.fine("distFromBottom = " + distFromBottom);
 
 				// adjust the zoom
 				// this call includes the redraw of the main canvas
@@ -126,33 +128,45 @@ public class ClickZoomAnimator extends Thread
 				//update zoom control position
 				MapViewer.winMain.fatController.updateZoomControls();
 				
-				MapViewer.logger.fine("selectedSet.zoomFactor = " + selectedSet.zoomFactor);
+//				MapViewer.logger.fine("selectedSet.zoomFactor = " + selectedSet.zoomFactor);
 			}
+			
 			//update overviews
 			MapViewer.winMain.fatController.updateOverviewCanvases();
+			
 			//update zoom control position
 			MapViewer.winMain.fatController.updateZoomControls();
+			
 			//now update the arrays with the position data
 			MapViewer.winMain.fatController.initialisePositionArrays();
+			
 			//enable drawing of markers providing we have zoomed in, not out
 			if (selectedSet.zoomFactor > 1)
 				selectedSet.thresholdAllMarkerPainting = selectedSet.zoomFactor;
+			
 			//turn drawing of map index back on
 			selectedMap.drawChromoIndex = true;
-			//repaint with antialiasing if required
-			if (MapViewer.winMain.mainCanvas.antiAlias)
-			{
-				AntiAliasRepaintThread antiAliasRepaintThread = new AntiAliasRepaintThread();
-				antiAliasRepaintThread.start();
-			}
+
+			//update the canvas
+			MapViewer.winMain.mainCanvas.antiAlias = true;
+			MapViewer.winMain.mainCanvas.updateCanvas(true);			
 			done = true;
 			zoomHandler.isClickZoomRequest = false;
+			
 			MapViewer.logger.fine("selectedSet.zoomFactor final = " + selectedSet.zoomFactor);
 		}
 		else
 		{
 			MapViewer.logger.fine("already at final zoom factor (+/- tolerance) -- not zooming");
 		}
+
+		
+		if(!selectedMap.isShowingOnCanvas)
+		{
+			MapViewer.logger.fine("selected map "+selectedMap.name+" is not showing on canvas -- moving viewport from old centerpoint");
+			MapViewer.winMain.mainCanvas.moveGenomeViewPort(selectedMap.owningSet, (selectedMap.y + selectedMap.owningSet.chromoHeight/2));
+		}
+		
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------

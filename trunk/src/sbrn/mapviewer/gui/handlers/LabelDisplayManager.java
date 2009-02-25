@@ -71,10 +71,9 @@ public class LabelDisplayManager
 			// next decide where to place the label on x
 			// the amount by which we want to move the label end away from the chromosome (in pixels)
 			int lineLength = 50;
-			int gap = 3;
 			
 			//x coords
-			int labelX = gChromoMap.x - lineLength - gap - stringWidth;
+			int labelX = gChromoMap.x - lineLength - stringWidth;
 			int lineStartX =  gChromoMap.x;
 			int lineEndX =  gChromoMap.x- lineLength;
 			
@@ -95,11 +94,11 @@ public class LabelDisplayManager
 			if (markersRight)
 			{				
 				lineStartX = gChromoMap.x + gChromoMap.width;		
-				labelX = lineStartX + lineLength + gap; 
-				lineEndX = labelX - gap;
+				labelX = lineStartX + lineLength; 
+				lineEndX = labelX;
 			}
 
-			//draw a rectangle as a background for the label
+			//draw a rounded rectangle as a background for the label
 			g2.setColor(Colors.highlightedFeatureLabelBackgroundColour);
 			float arcSize = fontHeight/1.5f;
 			int horizontalGap = 3;
@@ -114,7 +113,7 @@ public class LabelDisplayManager
 			g2.drawString(featureName, labelX, labelY);
 
 			// draw a line from the marker to the label
-			g2.setColor(Colors.highlightedFeatureLabelBackgroundColour);
+			g2.setColor(Colors.strongEmphasisLinkColour);
 			g2.drawLine(lineStartX, featureY, lineEndX, labelY - fontHeight / 2);
 
 			// set the feature colour
@@ -174,15 +173,10 @@ public class LabelDisplayManager
 			int lineStartX = gChromoMap.x + gChromoMap.width; // this is where the line to the label is drawn from
 			int lineEndX = labelX - 2; // the label connects to the line here
 
-			//draw a rectangle as a background for the label
 			g2.setColor(Colors.foundFeatureLabelBackgroundColour);
-//			g2.fillRect(labelX - 2, labelY - fontHeight, stringWidth + 4, fontHeight + 2);
-			
 			// draw a line from the marker to the label
-			g2.drawLine(lineStartX, featureY, lineEndX, labelY - fontHeight / 2);
-			
+			g2.drawLine(lineStartX, featureY, lineEndX, labelY - fontHeight / 2);		
 			//draw a rectangle as a background for the label
-			g2.setColor(Colors.foundFeatureLabelBackgroundColour);
 			float arcSize = fontHeight/1.5f;
 			int horizontalGap = 3;
 			int verticalGap = 4;

@@ -154,6 +154,7 @@ public class CanvasZoomHandler
 		MapViewer.winMain.mainCanvas.zoomHandler.isClickZoomRequest = false;
 		
 		//now repaint
+		MapViewer.winMain.mainCanvas.antiAlias = Prefs.userPrefAntialias;
 		MapViewer.winMain.mainCanvas.updateCanvas(true);
 	}
 

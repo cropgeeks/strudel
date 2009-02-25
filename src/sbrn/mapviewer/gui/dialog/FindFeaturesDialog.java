@@ -114,6 +114,10 @@ public class FindFeaturesDialog extends JDialog implements ActionListener
 					newDividerLocation = (int) (MapViewer.winMain.getHeight() - totalTableHeight);
 				}
 				MapViewer.winMain.splitPane.setDividerLocation(newDividerLocation);
+				
+				// validate and repaint the canvas so it knows it has been resized
+				MapViewer.winMain.validate();
+				MapViewer.winMain.mainCanvas.updateCanvas(true);
 			}
 			else
 			{

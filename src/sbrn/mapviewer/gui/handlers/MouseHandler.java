@@ -202,8 +202,10 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		//turn antialiasing on and repaint		
 		MapViewer.logger.finest("repainting after mouse released");
 		winMain.mainCanvas.drawSelectionRect = false;
-		winMain.mainCanvas.antiAlias = true;
-		winMain.mainCanvas.updateCanvas(true);
+//		winMain.mainCanvas.antiAlias = true;
+//		winMain.mainCanvas.updateCanvas(true);
+		AntiAliasRepaintThread antiAliasRepaintThread = new AntiAliasRepaintThread();
+		antiAliasRepaintThread.start();
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -361,7 +363,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		winMain.mainCanvas.moveGenomeViewPort(selectedSet, newCenterPoint);
 		
 		//repaint with antialiasing if required
-		if(MapViewer.winMain.mainCanvas.antiAlias)
+		if(Prefs.userPrefAntialias)
 		{
 			AntiAliasRepaintThread antiAliasRepaintThread = new AntiAliasRepaintThread();
 			antiAliasRepaintThread.start();

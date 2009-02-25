@@ -128,14 +128,24 @@ public class FindFeaturesInRangeDialog extends JDialog implements ActionListener
 			//if there are actually features contained in this range
 			if (containedFeatureNames.size() > 0)
 			{
+				MapViewer.logger.fine("canvas size before resize event = " + MapViewer.winMain.mainCanvas.getHeight());
+							
 				//resize the split pane so we can see the results table
 				MapViewer.winMain.splitPane.setDividerSize(Constants.SPLITPANE_DIVIDER_SIZE);
 				int newDividerLocation = (int) (MapViewer.winMain.getHeight() - MapViewer.winMain.foundFeaturesTableControlPanel.getMinimumSize().getHeight());
 				MapViewer.winMain.splitPane.setDividerLocation(newDividerLocation);
 				
+				MapViewer.logger.fine("canvas size after resize event = " + MapViewer.winMain.mainCanvas.getHeight());
+							
+				// validate and repaint the canvas so it knows it has been resized
+				MapViewer.winMain.validate();
+				MapViewer.winMain.mainCanvas.updateCanvas(true);
+				
+				MapViewer.logger.fine("canvas size after revalidation = " + MapViewer.winMain.mainCanvas.getHeight());
+
 				//now zoom into that range on the chromosome
 				MapViewer.winMain.mainCanvas.zoomHandler.zoomIntoRange(gChromoMap, intervalStart, intervalEnd);
-				
+
 				//we also need to set the labels on the control panel for the results to have the appropriate text
 				FoundFeaturesTableControlPanel foundFeaturesTableControlPanel = MapViewer.winMain.foundFeaturesTableControlPanel;
 				foundFeaturesTableControlPanel.setVisible(true);

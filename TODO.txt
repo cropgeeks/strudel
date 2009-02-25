@@ -97,25 +97,29 @@ BUGS to fix:
 + anti-aliasing is still enabling while changing the BLAST cut-off
 + the icons are inconsistant heights (select the drawing ones and look at the orange outlines)
 + the distance marker icon doesn't remember its state between sessions
+
+
 ?(cannot reproduce) "don't show this again" maximum-zoom level dialog continues to popup when checkbox is ticked (setting
   seems to be inversed)
 - don't reset zoom level on Find until a Find is actually done
-- Find dialog is a bit funny - you obviously don't new() it between uses, so it still has whatever the focus
++ Find dialog is a bit funny - you obviously don't new() it between uses, so it still has whatever the focus
   was last on when it reappears, which isn't always the text box, plus there's a flicker of what was in the
   text box then it disappears. Also, you should maybe leave the previous search there in case the user just wants
   to tweak it or remove a line or two
 - no multiple selection of Find results (maybe it's not meant to)
-- AA doesn't re-enable after a zoom reset
-- Bradi**** etc homolog URLs are throwing an error message (in Studel)
-- no obvious way to close the Find results without running another Find dialog
-- explore range results can be off the visible display (mainly at the top) - is that expected?
-- if you CTRL-multiclick multiple chromsomes (down the middle) too fast, the AA gets confused and stays
++ AA doesn't re-enable after a zoom reset
+(ok) Bradi**** etc homolog URLs are throwing an error message (in Studel)
++ no obvious way to close the Find results without running another Find dialog
++ explore range results can be off the visible display (mainly at the top) - is that expected?
+?(unresolved) if you CTRL-multiclick multiple chromsomes (down the middle) too fast, the AA gets confused and stays
   on all the times, even as new lines are being added
-- not sure if the correct expectation is seen when CTRL clicking reference chromosomes and using the two
++ not sure if the correct expectation is seen when CTRL clicking reference chromosomes and using the two
   filter options - eg, ctrl click red 3 and left-blue 3 with all lines filter on - should all the lines between
   red dataset and blue dataset really be shown when you consider CTRL selected state? The filter toggles it
   but I thought it was meant to just be for on-screen or not
 
 - performance with hundreds of lines is actually pretty bloody good (considering the circumstances)
 
--when maximising the window the chromosomes do not get scaled up and things sometimes generally hang then
+- when maximising the window the chromosomes do not get scaled up and things sometimes generally hang then
++ range explore does not zoom correctly -- sometimes selected range is partly outside the visible canvas area
++ feature label highlighting over links needs a background 

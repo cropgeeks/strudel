@@ -160,6 +160,9 @@ public class FatController
 	//restores the original view to what it looked like after loading the current dataset
 	public void resetMainCanvasView()
 	{	
+		//clear inputs to the find feature dialog
+		MapViewer.winMain.ffDialog.ffPanel.getFFTextArea().setText("");
+		
 		//hide the found features part of the split pane
 		winMain.hideSplitPaneBottomHalf();
 		winMain.splitPane.setDividerLocation(1.0);

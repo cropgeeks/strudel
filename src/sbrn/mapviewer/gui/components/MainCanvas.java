@@ -409,6 +409,7 @@ public class MainCanvas extends JPanel
 	// used to scroll up and down the canvas
 	public void moveGenomeViewPort(GMapSet gMapSet, int newCenterPoint)
 	{
+		MapViewer.logger.fine("moveGenomeViewPort for " + gMapSet.name + " to centerpoint " + newCenterPoint);
 		//the center point is an absolute value in pixels which is the offset from the top of the genome to the current
 		//point in the center of the screen on y
 		

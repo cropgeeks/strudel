@@ -88,9 +88,9 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 	
 	public void stateChanged(ChangeEvent e)
 	{
-		MapViewer.logger.finest("zoom slider state changed");
-		MapViewer.logger.finest("isClickZoomRequest = " + winMain.mainCanvas.zoomHandler.isClickZoomRequest);
-		MapViewer.logger.finest("isPanZoomRequest = " + winMain.mainCanvas.zoomHandler.isPanZoomRequest);
+		MapViewer.logger.fine("zoom slider state changed");
+//		MapViewer.logger.fine("isClickZoomRequest = " + winMain.mainCanvas.zoomHandler.isClickZoomRequest);
+//		MapViewer.logger.fine("isPanZoomRequest = " + winMain.mainCanvas.zoomHandler.isPanZoomRequest);
 		
 		JSlider source = (JSlider) e.getSource();
 		if (source.equals(zoomSlider) && !winMain.mainCanvas.zoomHandler.isClickZoomRequest && !winMain.mainCanvas.zoomHandler.isPanZoomRequest)
@@ -105,6 +105,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 	
 	public void updateSlider()
 	{
+		MapViewer.logger.fine("updating slider");
 		//update the slider
 		zoomSlider.setValue(Math.round(gMapSet.zoomFactor));
 	}

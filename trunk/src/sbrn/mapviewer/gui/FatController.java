@@ -107,7 +107,7 @@ public class FatController
 	//this is necessary because zooming changes the actual position values as the canvas grows
 	public void initialisePositionArrays()
 	{
-		MapViewer.logger.finest("indexing position arrays");
+		MapViewer.logger.fine("++++++++++indexing position arrays+++++++++++++");
 		long startTime = System.nanoTime();
 		// for all gmapsets
 		for (GMapSet gMapSet : winMain.dataContainer.gMapSetList)
@@ -158,10 +158,9 @@ public class FatController
 	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	//restores the original view to what it looked like after loading the current dataset
+	//this includes clearing any results of feature searches
 	public void resetMainCanvasView()
 	{	
-		//clear inputs to the find feature dialog
-		MapViewer.winMain.ffDialog.ffPanel.getFFTextArea().setText("");
 		
 		//hide the found features part of the split pane
 		winMain.hideSplitPaneBottomHalf();
@@ -178,6 +177,16 @@ public class FatController
 		winMain.mainCanvas.drawHighlightFeatures = false;
 		winMain.mainCanvas.drawFoundFeaturesInRange = false;
 		findFeaturesRequested = false;
+		
+		resetViewOnly();
+	}
+	
+	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	//restores the original view to what it looked like after loading the current dataset
+	//without clearing any results
+	public void resetViewOnly()
+	{
 		
 		for(GMapSet gMapSet : winMain.dataContainer.gMapSetList)
 		{

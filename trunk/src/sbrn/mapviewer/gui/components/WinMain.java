@@ -265,13 +265,13 @@ public class WinMain extends JFrame
 			{			
 				public void propertyChange(PropertyChangeEvent evt) 
 				{
-					MapViewer.logger.fine("========splitpane propertyChange");
-					MapViewer.logger.fine("splitpane resized -- updating canvas");
-					MapViewer.logger.fine("canvas size before resize event = " + MapViewer.winMain.mainCanvas.getHeight());
+					MapViewer.logger.finest("========splitpane propertyChange");
+					MapViewer.logger.finest("splitpane resized -- updating canvas");
+					MapViewer.logger.finest("canvas size before resize event = " + MapViewer.winMain.mainCanvas.getHeight());
 					//refresh the main canvas
 					MapViewer.winMain.validate();
 					MapViewer.winMain.mainCanvas.updateCanvas(true);
-					MapViewer.logger.fine("canvas size after resize event = " + MapViewer.winMain.mainCanvas.getHeight());
+					MapViewer.logger.finest("canvas size after resize event = " + MapViewer.winMain.mainCanvas.getHeight());
 				}			
 			});
 			

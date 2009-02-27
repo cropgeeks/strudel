@@ -136,6 +136,9 @@ public class OpenFileDialog extends JDialog implements ActionListener
 
 					// revalidate the GUI
 					MapViewer.winMain.validate();
+					
+					//bring the focus back on the main window -- need this in case we had an overview dialog open (which then gets focus)
+					MapViewer.winMain.requestFocus();
 				}
 				//user has cancelled
 				else

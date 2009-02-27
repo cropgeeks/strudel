@@ -19,6 +19,7 @@ public class GChromoMap
 	public int width;
 	
 	// position stuff
+	//these are relative to the canvas bounds at any one time
 	public int x;
 	public int y;
 	
@@ -26,7 +27,7 @@ public class GChromoMap
 	public String name;
 	
 	// the index of the chromosome in the genome
-	// starts at 1
+	// starts at 0
 	public int index;
 	
 	// the owning map set
@@ -40,7 +41,7 @@ public class GChromoMap
 	public ChromoMap chromoMap;
 	
 	// arrays with Feature names and positions for fast access during drawing operations
-	public float[] allLinkedFeaturePositions;
+	public int[] allLinkedFeaturePositions;
 	public Feature [] allLinkedFeatures;
 	public TreeMap<Integer, Vector<Feature>> allFeaturesPosLookup = new TreeMap<Integer, Vector<Feature>>();
 	
@@ -215,7 +216,7 @@ public class GChromoMap
 			{
 				highlightChromomapRegion(g2);
 			}
-
+			
 			
 			//if the chromosome is being inverted
 			if(angleFromVertical != 90 && angleFromVertical != -90)
@@ -269,7 +270,7 @@ public class GChromoMap
 			{
 				drawSelectionRectangle(g2);
 			}
-
+			
 			
 		}
 		catch (RuntimeException e)
@@ -284,6 +285,11 @@ public class GChromoMap
 	// draws a set of distance markers
 	public void drawDistanceMarkers(Graphics2D g2)
 	{
+		//font stuff
+		int fontHeight = 9;
+		g2.setFont(new Font("Sans-serif", Font.PLAIN, fontHeight));
+		FontMetrics fm = g2.getFontMetrics();
+		
 		if (owningSet.zoomFactor >=  distanceMarkerZoomThreshold && !inversionInProgress)
 		{
 			MapViewer.logger.finest("drawing distance markers for map " + name);
@@ -305,11 +311,6 @@ public class GChromoMap
 			
 			// need to format the number appropriately
 			NumberFormat nf = NumberFormat.getInstance();
-			
-			//font stuff
-			int fontHeight = 9;
-			g2.setFont(new Font("Sans-serif", Font.PLAIN, fontHeight));
-			FontMetrics fm = g2.getFontMetrics();
 			
 			// check first whether we are dealing with ints or floating point numbers for the chromosome distances
 			if (chromoMap.getStop() % 1 == 0) // this is an int
@@ -367,10 +368,24 @@ public class GChromoMap
 					lineEndX =  x- lineLength;
 				}
 				
+				int labelY = Math.round(currentY) + fontHeight / 2;
+				
+				//if we have links drawn we need a background for the distance markers or things will look messy
+				//just fill a continuous rectangle next to the chromosome, with the height of the chromosome and the width of the largest label	
+				if (MapViewer.winMain.mainCanvas.drawLinks)
+				{		
+					int horizontalGap = 3;
+					int verticalGap = 2;
+					int arcSize = Math.round(fontHeight/1.5f);
+					g2.setColor(Colors.distanceMarkerBackgroundColour);
+					g2.fillRoundRect(labelX - horizontalGap, labelY - fontHeight, stringWidth + horizontalGap*2, fontHeight + verticalGap, arcSize, arcSize);
+				}
+				
 				// draw a line from the marker to the label
+				g2.setColor(Colors.distanceMarkerColour);
 				g2.drawLine(lineStartX, Math.round(currentY), lineEndX, Math.round(currentY));
 				//draw the label
-				g2.drawString(label, labelX, Math.round(currentY) + fontHeight / 2);
+				g2.drawString(label, labelX, labelY);
 				
 				// increment
 				currentY += interval;
@@ -529,10 +544,6 @@ public class GChromoMap
 					int lineStartX = x; // this is where the line to the label is drawn from				
 					int lineEndX = lineStartX - labelSpacer + labelGap; // the label connects to the line here
 					
-					// draw a line for the marker on the chromosome itself
-					//first set the colour accordingly
-					g2.setColor(Colors.highlightedFeatureColour);
-					g2.drawLine(lineStartX, featureY, lineStartX + width - 1, featureY);
 					// labels only go on the right if it is the right hand genome (reference genome 1 or 2)
 					if (markersRight)
 					{
@@ -557,8 +568,12 @@ public class GChromoMap
 					// draw a line from the marker to the label
 					g2.setColor(Colors.featureLabelBackgroundColour);
 					g2.drawLine(lineStartX, featureY, lineEndX, labelY - fontHeight / 2);
+					
+					// draw a line for the marker on the chromosome itself
+					g2.setColor(Colors.highlightedFeatureColour);
+					g2.drawLine(lineStartX, featureY, lineStartX + width, featureY);
 				}
-
+				
 			}
 		}
 	}
@@ -590,7 +605,7 @@ public class GChromoMap
 			MapViewer.logger.finest("numFeatures " + numFeatures);
 			
 			allLinkedFeatures = new Feature[numFeatures];
-			allLinkedFeaturePositions = new float[numFeatures];
+			allLinkedFeaturePositions = new int[numFeatures];
 			Vector<Feature> featureList = chromoMap.getFeatureList();
 			for (int i = 0; i < featureList.size(); i++)
 			{
@@ -604,9 +619,15 @@ public class GChromoMap
 				{				
 					//the start point of this features in its own units (cM, bp, whatever)
 					float start = f.getStart();
+					
+					// this factor normalises the position to a value between 0 and 100
+					//					float scalingFactor = height / chromoMap.getStop();
+					//					int featureY = Math.round(y + (f.getStart() * scalingFactor));
+					
 					//scale this by the current map height to give us a position in pixels, between zero and the chromosome height
 					//then store this value in the array we use for drawing
-					allLinkedFeaturePositions[i] = (int) ((owningSet.chromoHeight / chromoMap.getStop()) * start);
+					allLinkedFeaturePositions[i] = Math.round((owningSet.chromoHeight / chromoMap.getStop()) * start);
+					
 					//if the map is inverted we need to store the inverse of this value i.e. the map end value minus the feature position
 					if(isFullyInverted || isPartlyInverted)
 					{
@@ -626,17 +647,17 @@ public class GChromoMap
 	// draw the markers for the features
 	private void drawLinkedFeatures(Graphics2D g2)
 	{
-//		MapViewer.logger.finest("drawing linked features for map " + name);
+		//		MapViewer.logger.finest("drawing linked features for map " + name);
 		
 		if (allLinkedFeaturePositions != null)
 		{
 			g2.setColor(Colors.featureColour);
 			for (int i = 0; i < allLinkedFeaturePositions.length; i++)
 			{
-				float yPos;
+				int yPos;
 				if (allLinkedFeaturePositions[i] == 0.0f)
 				{
-					yPos = 0.0f;
+					yPos = 0;
 				}
 				else
 				{
@@ -645,10 +666,10 @@ public class GChromoMap
 				
 				//check whether inversion in progress
 				if(inversionInProgress)
-					yPos = (yPos * (height / (float)owningSet.chromoHeight)) + currentY;
+					yPos = Math.round((yPos * (height / (float)owningSet.chromoHeight)) + currentY);
 				
 				// draw a line for the marker
-				g2.drawLine(0, (int) yPos, width, (int) yPos);
+				g2.drawLine(0, yPos, width, yPos);
 			}
 		}
 	}
@@ -685,18 +706,18 @@ public class GChromoMap
 		
 		MapViewer.logger.fine("relativeTopY = " + relativeTopY);
 		MapViewer.logger.fine("relativeBottomY = " + relativeBottomY);
-
+		
 		//now we need to convert them back to absolute ones that take into account the currrent height of the chromosome
 		//this is so we can zoom and still show the rectangle which then gets resized appropriately
 		int start = Math.round((owningSet.chromoHeight / chromoMap.getStop()) * relativeTopY) ;
 		int end =  Math.round((owningSet.chromoHeight / chromoMap.getStop()) * relativeBottomY);
 		int rectHeight = end - start;
-
+		
 		//width and x -- always the same
 		//want a tight frame round the chromo here
 		int rectWidth = Math.round(width*1.5f);
 		int rectX = Math.round(- width*0.25f);
-
+		
 		//fill the rectangle with slightly opaque paint
 		g2.setPaint(Colors.selectionRectFillColour);
 		g2.fillRect(rectX, start, rectWidth, rectHeight);

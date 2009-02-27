@@ -2,11 +2,14 @@
 
 features to implement -- general:
 
+- online documentation
 - name panel with labels for the genomes
 - show loci as filled rectangles rather than lines at higher zoom levels
 - colour selector for user 
 - separate data loading for left and right
 - x-y plots of marker positions in both genomes (Oxford grid) for a given combination of chromosomes
+- more flexible way of laying out genomes -- want to be able to show a genome more than once, and also want full functionality for all genomes regardless of whether they are classed as target or reference (do away with this distinction completely)
+
 
 ================================
 
@@ -28,6 +31,7 @@ Data:
 
 Dave's list:
 
+- colour chooser
 - scrollbar for moving entire canvas up and down (not individual genomes)
 - potentials:
 	* include in raw data putative homologs e.g. for rice loci in barley and flag every entry in the data as mapped or putative; then display these in the mapviewer, perhaps in different colours based on the value of the flag
@@ -79,6 +83,15 @@ Menu bar support for new/infrequent users – Robbie
 
 ================================
 
+REFACTORING:
+
+- handling of antialising needs to be streamlined
+- label drawing code is replicated all over the app -- needs to be merged
+- look for unnecessary repaints
+- link drawing algorithm -- review
+
+================================
+
 
 BUGS to fix:
 
@@ -99,9 +112,9 @@ BUGS to fix:
 + the distance marker icon doesn't remember its state between sessions
 
 
-?(cannot reproduce) "don't show this again" maximum-zoom level dialog continues to popup when checkbox is ticked (setting
++ "don't show this again" maximum-zoom level dialog continues to popup when checkbox is ticked (setting
   seems to be inversed)
-- don't reset zoom level on Find until a Find is actually done
++ don't reset zoom level on Find until a Find is actually done
 + Find dialog is a bit funny - you obviously don't new() it between uses, so it still has whatever the focus
   was last on when it reappears, which isn't always the text box, plus there's a flicker of what was in the
   text box then it disappears. Also, you should maybe leave the previous search there in case the user just wants
@@ -120,6 +133,10 @@ BUGS to fix:
 
 - performance with hundreds of lines is actually pretty bloody good (considering the circumstances)
 
-- when maximising the window the chromosomes do not get scaled up and things sometimes generally hang then
+- when maximising the window zoomed in chromosomes do not get scaled up fully (e.g. to fill the canvas again) and the application sometimes hangs
 + range explore does not zoom correctly -- sometimes selected range is partly outside the visible canvas area
 + feature label highlighting over links needs a background 
++ mouseover feature highlighting has discrepancies of +/- 1 pixel on y for some features -- check for rounding problems etc
+- drawing of visble regions in overview canvas is very inaccurate
+- occasionally mouse clicks on chromosome seem to go unnoticed, e.g. for single click zooming
+- in post data load stage there are unneccessary repaints when mosuing over chromosomes (although no features are showing)

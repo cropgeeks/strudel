@@ -195,7 +195,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			//get the selected set first
 			int gMapSetIndex = Utils.getSelectedSet(e);
 			GChromoMap selectedMap = Utils.getSelectedMap(winMain, gMapSetIndex, e.getY());
-			winMain.mainCanvas.zoomHandler.processPanZoomRequest(selectedMap, mousePressedY, e.getY());
+			winMain.mainCanvas.zoomHandler.processPanZoomRequest(selectedMap, mousePressedY, e.getY(), true);
 			
 		}
 

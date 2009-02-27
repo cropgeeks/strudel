@@ -27,9 +27,12 @@ public class Colors
 	public static Color featureColour = new Color(120,120,120);
 	public static Color highlightedFeatureColour = strongEmphasisLinkColour;
 	public static Color highlightedFeatureLabelColour = Color.WHITE;	
+	
+	//backgrounds
 	public static Color featureLabelBackgroundColour = Color.white;
 	public static Color foundFeatureLabelBackgroundColour = Color.lightGray;	
 	public static Color highlightedFeatureLabelBackgroundColour = new Color(255, 0,0);
+	public static Color distanceMarkerBackgroundColour = new Color(70,70,70);
 	
 	//regions
 	public static Color highlightedFeatureRegionColour = new Color(30,0,0);	

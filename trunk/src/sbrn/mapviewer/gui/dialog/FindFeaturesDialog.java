@@ -75,7 +75,10 @@ public class FindFeaturesDialog extends JDialog implements ActionListener
 	private void showResultsPanel()
 	{
 		try
-		{					
+		{		
+			//first reset the canvas to its default view
+			MapViewer.winMain.fatController.resetMainCanvasView();		
+			
 			//this array holds all the names of the features we need to display
 			String [] allNames = new String[0];
 
@@ -94,8 +97,10 @@ public class FindFeaturesDialog extends JDialog implements ActionListener
 			//hide the control panel for the results table as it is not needed with this kind of results
 			MapViewer.winMain.foundFeaturesTableControlPanel.setVisible(false);
 
+			//we have found features
 			if (featuresFound.size() > 0)
 			{
+
 				//set the results panel to be visible
 				this.setVisible(false);
 				MapViewer.winMain.splitPane.setDividerSize(Constants.SPLITPANE_DIVIDER_SIZE);
@@ -119,6 +124,7 @@ public class FindFeaturesDialog extends JDialog implements ActionListener
 				MapViewer.winMain.validate();
 				MapViewer.winMain.mainCanvas.updateCanvas(true);
 			}
+			//we have not found any features
 			else
 			{
 				TaskDialog.info("No matches found for the name(s) entered", "Close");

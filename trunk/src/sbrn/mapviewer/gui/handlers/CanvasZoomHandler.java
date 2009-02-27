@@ -83,7 +83,7 @@ public class CanvasZoomHandler
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
 	//zooms in to a region determined by user by drawing a rectangle around it
-	public synchronized void processPanZoomRequest(GChromoMap selectedMap, int mousePressedY, int mouseReleasedY)
+	public synchronized void processPanZoomRequest(GChromoMap selectedMap, int mousePressedY, int mouseReleasedY,boolean animate)
 	{
 		// animate this by zooming in gradually
 		// the length of time we want the animation to last in milliseconds
@@ -95,7 +95,7 @@ public class CanvasZoomHandler
 		if (selectedYDist > 0)
 		{
 			float finalScalingFactor = mainCanvas.getHeight() / (float) selectedYDist;
-			PanZoomAnimator panZoomAnimator = new PanZoomAnimator(fps, millis, finalScalingFactor, selectedMap, mainCanvas, mousePressedY, mouseReleasedY, this);
+			PanZoomAnimator panZoomAnimator = new PanZoomAnimator(fps, millis, finalScalingFactor, selectedMap, mainCanvas, mousePressedY, mouseReleasedY, this, animate);
 			panZoomAnimator.start();
 		}
 	}
@@ -103,7 +103,7 @@ public class CanvasZoomHandler
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
 	// zooms in by a fixed amount on a chromosome the user clicked on (to fill screen with chromosome)
-	public  void processClickZoomRequest(GChromoMap selectedMap)
+	public ClickZoomAnimator processClickZoomRequest(GChromoMap selectedMap)
 	{
 		int millis = 400;
 		
@@ -132,6 +132,8 @@ public class CanvasZoomHandler
 		ClickZoomAnimator clickZoomAnimator = new ClickZoomAnimator(fps, millis, selectedMap,
 						mainCanvas, finalZoomFactor, finalTotalY, finalChromoHeight, this);
 		clickZoomAnimator.start();
+		
+		return clickZoomAnimator;
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
@@ -194,14 +196,15 @@ public class CanvasZoomHandler
 		}
 
 		// repaint the canvas
+		mainCanvas.antiAlias = false;
 		mainCanvas.updateCanvas(true);
 	}
 
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
 	
-	//zoom into a range on a chromosome
-	public void zoomIntoRange(GChromoMap gChromoMap, float intervalStart, float intervalEnd)
+	//zoom into a range on a chromosome which is defined by biological feature positions (rather than pixel values)
+	public void zoomIntoRange(GChromoMap gChromoMap, float intervalStart, float intervalEnd, boolean animate)
 	{	
 		//the map that pertains to the gChromoMap object
 		ChromoMap chromoMap = gChromoMap.chromoMap;
@@ -215,11 +218,45 @@ public class CanvasZoomHandler
 		int topY = relativeTopY + gChromoMap.y - buffer;
 		int bottomY = relativeBottomY + gChromoMap.y + buffer;
 		MapViewer.winMain.mainCanvas.zoomHandler.processPanZoomRequest(gChromoMap, topY,
-						bottomY);
+						bottomY, animate);
 	}
 	
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
 	
+	// zoom into a range on a chromosome which is defined by biological feature positions (rather than pixel values)
+	public void zoomToPixelRange(GChromoMap selectedMap, int top, int bottom)
+	{
+		int selectedYDist = bottom - top;		
+		float finalScalingFactor = mainCanvas.getHeight() / (float) selectedYDist;		
+		GMapSet selectedSet = selectedMap.owningSet;
+		
+		// this is the combined height of all spacers -- does not change with the zoom factor
+		int combinedSpacers = mainCanvas.chromoSpacing * (selectedSet.numMaps - 1);
+		
+		// these are the values we want for the last iteration
+		float finalZoomFactor = selectedSet.zoomFactor * finalScalingFactor;
+		float finalChromoHeight = (int) (selectedSet.chromoHeight * finalScalingFactor);
+		// the distance from the top of the chromosome to the mousePressedY location, in pixels
+		float initialDistFromTop = (float) (top - selectedMap.boundingRectangle.getY() + (selectedYDist / 2));
+		float initialDistFromTopProportion = initialDistFromTop / (float) selectedMap.boundingRectangle.getHeight();
+		
+		// the new total Y extent of the genome in pixels
+		int finalTotalY = (int) (((selectedSet.totalY - combinedSpacers) * finalScalingFactor) + combinedSpacers);		
+		selectedSet.zoomFactor = finalZoomFactor;
+		adjustZoom(selectedMap, finalTotalY, (int) finalChromoHeight, (int) (finalChromoHeight - (initialDistFromTopProportion * finalChromoHeight)));
+		
+		//now update the arrays with the position data
+		MapViewer.winMain.fatController.initialisePositionArrays();
+		//update zoom control position
+		MapViewer.winMain.fatController.updateZoomControls();
+				
+		//turn antialiasing on and repaint
+		mainCanvas.antiAlias = true;
+		mainCanvas.updateCanvas(true);
+	}
+	
 
+	// -----------------------------------------------------------------------------------------------------------------------------------
+	
 }// end class

@@ -66,11 +66,7 @@ public class ClickZoomAnimator extends Thread
 		MapViewer.logger.fine("zoomFactorIncrement = " + zoomFactorIncrement);
 		MapViewer.logger.fine("totalYIncrement = " + totalYIncrement);
 		MapViewer.logger.fine("chromoHeightIncrement = " + chromoHeightIncrement);
-		MapViewer.logger.fine("finalTotalY = " + finalTotalY);
-		MapViewer.logger.fine("selectedSet.totalY = " + selectedSet.totalY);
-		MapViewer.logger.fine("selectedMap.isFullyShowingOnCanvas = " + selectedMap.isFullyShowingOnCanvas);
-		
-		
+		MapViewer.logger.fine("finalTotalY = " + finalTotalY);		
 		MapViewer.logger.finest("totalFrames = " + totalFrames);
 		MapViewer.logger.finest("fps = " + fps);
 		MapViewer.logger.finest("millis = " + millis);
@@ -114,23 +110,23 @@ public class ClickZoomAnimator extends Thread
 				// the new total Y extent of the genome in pixels
 				int newTotalY = Math.round(selectedSet.totalY + totalYIncrement);
 
-//				MapViewer.logger.fine("newChromoHeight = " + newChromoHeight);
-//				MapViewer.logger.fine("newTotalY = " + newTotalY);
-//				MapViewer.logger.fine("distFromBottom = " + distFromBottom);
+				MapViewer.logger.finest("newChromoHeight = " + newChromoHeight);
+				MapViewer.logger.finest("newTotalY = " + newTotalY);
+				MapViewer.logger.finest("distFromBottom = " + distFromBottom);
 
 				// adjust the zoom
 				// this call includes the redraw of the main canvas
 				zoomHandler.adjustZoom(selectedMap, newTotalY, newChromoHeight, distFromBottom);
 				
-				//now update the arrays with the position data
+				//update the arrays with the position data
 				MapViewer.winMain.fatController.initialisePositionArrays();
 				
 				//update zoom control position
 				MapViewer.winMain.fatController.updateZoomControls();
 				
-//				MapViewer.logger.fine("selectedSet.zoomFactor = " + selectedSet.zoomFactor);
+				MapViewer.logger.finest("selectedSet.zoomFactor = " + selectedSet.zoomFactor);
 			}
-			
+
 			//update overviews
 			MapViewer.winMain.fatController.updateOverviewCanvases();
 			
@@ -146,27 +142,23 @@ public class ClickZoomAnimator extends Thread
 			
 			//turn drawing of map index back on
 			selectedMap.drawChromoIndex = true;
-
-			//update the canvas
+			
+			//repaint canvas 
 			MapViewer.winMain.mainCanvas.antiAlias = true;
-			MapViewer.winMain.mainCanvas.updateCanvas(true);			
-			done = true;
+			MapViewer.winMain.mainCanvas.updateCanvas(true);
+
 			zoomHandler.isClickZoomRequest = false;
 			
-			MapViewer.logger.fine("selectedSet.zoomFactor final = " + selectedSet.zoomFactor);
+			MapViewer.logger.finest("selectedSet.zoomFactor final = " + selectedSet.zoomFactor);
+
+			done = true;
+
 		}
 		else
 		{
 			MapViewer.logger.fine("already at final zoom factor (+/- tolerance) -- not zooming");
 		}
 
-		
-		if(!selectedMap.isShowingOnCanvas)
-		{
-			MapViewer.logger.fine("selected map "+selectedMap.name+" is not showing on canvas -- moving viewport from old centerpoint");
-			MapViewer.winMain.mainCanvas.moveGenomeViewPort(selectedMap.owningSet, (selectedMap.y + selectedMap.owningSet.chromoHeight/2));
-		}
-		
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------

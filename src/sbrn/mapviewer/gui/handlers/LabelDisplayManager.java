@@ -119,7 +119,7 @@ public class LabelDisplayManager
 			// set the feature colour
 			g2.setColor(Colors.highlightedFeatureColour);
 			// draw a line for the marker on the chromosome itself
-			g2.drawLine(gChromoMap.x, featureY, gChromoMap.x + gChromoMap.width - 1, featureY);
+			g2.drawLine(gChromoMap.x -1, featureY, gChromoMap.x + gChromoMap.width +1, featureY);
 		}
 	}
 

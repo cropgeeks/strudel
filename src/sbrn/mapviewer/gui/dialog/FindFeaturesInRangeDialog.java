@@ -79,6 +79,8 @@ public class FindFeaturesInRangeDialog extends JDialog implements ActionListener
 	{
 		try
 		{		
+			//first reset the canvas to its default view
+			MapViewer.winMain.fatController.resetMainCanvasView();		
 			
 			//this array holds all the names of the features we need to display
 			String [] allNames = new String[0];
@@ -107,11 +109,7 @@ public class FindFeaturesInRangeDialog extends JDialog implements ActionListener
 				TaskDialog.error("The range start value is greater than the range end value.", "Close");
 				return;
 			}
-			
-			//tell it to highlight the region specified
-			gChromoMap.highlightedRegionStart = intervalStart;
-			gChromoMap.highlightedRegionEnd = intervalEnd;
-			gChromoMap.highlightChromomapRegion = true;
+
 			
 			//get a list with names for all the features contained in this interval
 			Vector<String> containedFeatureNames = new Vector<String>();
@@ -128,6 +126,12 @@ public class FindFeaturesInRangeDialog extends JDialog implements ActionListener
 			//if there are actually features contained in this range
 			if (containedFeatureNames.size() > 0)
 			{
+				
+				//tell it to highlight the region specified
+				gChromoMap.highlightedRegionStart = intervalStart;
+				gChromoMap.highlightedRegionEnd = intervalEnd;
+				gChromoMap.highlightChromomapRegion = true;
+								
 				MapViewer.logger.fine("canvas size before resize event = " + MapViewer.winMain.mainCanvas.getHeight());
 							
 				//resize the split pane so we can see the results table
@@ -144,7 +148,7 @@ public class FindFeaturesInRangeDialog extends JDialog implements ActionListener
 				MapViewer.logger.fine("canvas size after revalidation = " + MapViewer.winMain.mainCanvas.getHeight());
 
 				//now zoom into that range on the chromosome
-				MapViewer.winMain.mainCanvas.zoomHandler.zoomIntoRange(gChromoMap, intervalStart, intervalEnd);
+				MapViewer.winMain.mainCanvas.zoomHandler.zoomIntoRange(gChromoMap, intervalStart, intervalEnd, false);
 
 				//we also need to set the labels on the control panel for the results to have the appropriate text
 				FoundFeaturesTableControlPanel foundFeaturesTableControlPanel = MapViewer.winMain.foundFeaturesTableControlPanel;

@@ -66,6 +66,8 @@ public class MainCanvas extends JPanel
 	
 	//true if we want to display features within a certain range the user has searched for with the find dialog
 	public boolean drawFoundFeaturesInRange = false;
+	
+	public int topBottomSpacer = 0;
 
 	// ============================c'tor==================================
 	
@@ -92,6 +94,7 @@ public class MainCanvas extends JPanel
 	
 	public void paintComponent(Graphics graphics)
 	{
+
 		super.paintComponent(graphics);
 		
 		Graphics2D g = (Graphics2D) graphics;
@@ -116,7 +119,7 @@ public class MainCanvas extends JPanel
 		g.drawImage(buffer, 0, 0, null);
 		
 		// Render any additional overlay images (highlights, mouse-overs etc)
-		
+
 		// this optionally draws a rectangle delimiting a region we want to zoom in on
 		if (drawSelectionRect)
 		{
@@ -128,6 +131,10 @@ public class MainCanvas extends JPanel
 			g.draw(selectionRect);
 		}
 
+		
+		//the next lot of features can all be drawn with antialiasing on without too much effect on performance
+		//looks much better, especially on the distance markers
+
 		//now we need to draw the rest of the things relating to the map
 		//this needs to be done after drawing the links so it is all visible on top of the links
 		for (GMapSet gMapSet : winMain.dataContainer.gMapSetList)
@@ -138,9 +145,19 @@ public class MainCanvas extends JPanel
 				if(gChromoMap.isShowingOnCanvas)
 				{
 					if(Prefs.showDistanceMarkers)
+					{
+						g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 						gChromoMap.drawDistanceMarkers(g);
+						g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+					}
 					gChromoMap.drawMouseOverFeatures(g);
 					gChromoMap.drawHighlightOutline(g);
+					
+					//this just draws labels of single highlighted features -- need to be drawn at the very end to be on top of everything else
+					if (drawHighlightFeatures)
+					{
+						LabelDisplayManager.drawHighlightedFeatureLabels(g, winMain.fatController.highlightFeature, winMain.fatController.highlightFeatureHomolog);
+					}
 				}
 			}
 		}
@@ -151,29 +168,10 @@ public class MainCanvas extends JPanel
 	// paint the genomes or portions thereof onto this canvas
 	private void paintCanvas(Graphics2D g2)
 	{
+//		MapViewer.logger.fine("PAINT CANVAS " + System.currentTimeMillis());
 
 		// check whether we need antialiasing on
-		if (antiAlias)
-		{
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-							RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		}
-		else
-		{
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-			g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-							RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
-		}
-		
-		//this additional flag set by the user can override what we just set here
-		//if it is set to true we ignore it though and just do what we were doing above anyway
-		if(!Prefs.userPrefAntialias)
-		{
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-			g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-							RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
-		}
+		checkAntiAliasing(g2);
 		
 		//background
 		setBackground(Colors.mainCanvasBackgroundColour);
@@ -194,6 +192,7 @@ public class MainCanvas extends JPanel
 		// width of chromosomes -- set this to a fixed fraction of the screen width for now
 		int chromoWidth = Math.round(canvasWidth / 40);
 		
+		//for all maps sets
 		for (GMapSet gMapSet : winMain.dataContainer.gMapSetList)
 		{
 			checkMarkerPaintingThresholds(gMapSet);
@@ -231,7 +230,7 @@ public class MainCanvas extends JPanel
 				gMapSet.totalY = (gMapSet.numMaps * gMapSet.chromoHeight) + ((gMapSet.numMaps - 1) * chromoSpacing);
 				gMapSet.centerPoint = gMapSet.totalY / 2;
 				// the space at the top and bottom -- should be equal
-				int topBottomSpacer = (canvasHeight - gMapSet.totalY) / 2;
+				topBottomSpacer = (canvasHeight - gMapSet.totalY) / 2;
 				
 				// we want to fit all the chromosomes on at a zoom factor of 1 so we only use the top spacer when this is the case
 				currentY = topBottomSpacer;
@@ -334,12 +333,6 @@ public class MainCanvas extends JPanel
 		{
 			LabelDisplayManager.drawFeatureLabelsInRange(g2);
 		}
-		
-		//this just draws labels of single highlighted features -- need to be drawn at the very end to be on top of everything else
-		if (drawHighlightFeatures)
-		{
-			LabelDisplayManager.drawHighlightedFeatureLabels(g2, winMain.fatController.highlightFeature, winMain.fatController.highlightFeatureHomolog);
-		}
 
 		//check whether we want to display a BLAST cutoff value
 		if (drawBlastScore)
@@ -410,20 +403,21 @@ public class MainCanvas extends JPanel
 	public void moveGenomeViewPort(GMapSet gMapSet, int newCenterPoint)
 	{
 		MapViewer.logger.fine("moveGenomeViewPort for " + gMapSet.name + " to centerpoint " + newCenterPoint);
-		//the center point is an absolute value in pixels which is the offset from the top of the genome to the current
-		//point in the center of the screen on y
 		
-		// update the centerpoint to the new percentage
+		//the center point is an absolute value in pixels which is the offset from the top of the genome to the current
+		//point in the center of the screen on y		
+		//update the centerpoint to the new value
 		gMapSet.centerPoint = newCenterPoint;
 		updateCanvas(true);
 		
 		//update overviews
 		winMain.fatController.updateOverviewCanvases();
 		
-		//update drawing indices
-		winMain.fatController.initialisePositionArrays();
-		
-		updateCanvas(true);
+		//now update the arrays with the position data
+		MapViewer.winMain.fatController.initialisePositionArrays();
+
+//		//update the canvas
+		MapViewer.winMain.mainCanvas.updateCanvas(true);	
 	}
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------
@@ -453,6 +447,34 @@ public class MainCanvas extends JPanel
 	public BufferedImage getImageBuffer()
 	{
 		return buffer;
+	}
+	
+	//----------------------------------------------------------------------------------------------------------------------------------------
+	
+	private void checkAntiAliasing(Graphics2D g)
+	{
+		// first check whether we need antialiasing on
+		if (antiAlias)
+		{
+			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+							RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		}
+		else
+		{
+			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+							RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+		}
+		
+		//this additional flag set by the user can override what we just set here
+		//if it is set to true we ignore it though and just do what we were doing above anyway
+		if(!Prefs.userPrefAntialias)
+		{
+			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+							RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+		}
 	}
 	
 }// end class

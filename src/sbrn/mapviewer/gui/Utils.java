@@ -29,7 +29,7 @@ public class Utils
 		//the gmap the feature is on
 		GChromoMap gChromoMap = f.getOwningMap().getGChromoMap();
 
-		//the index of the chromo in the genome -- starts at 1
+		//the index of the chromo in the genome -- starts at 0
 		int chromoIndex = gChromoMap.index;
 				
 		//the combined height of all chromosomes up to and excluding the one the feature is on

@@ -21,6 +21,7 @@ public class PanZoomAnimator extends Thread implements ItemListener
 	int mousePressedY;
 	int mouseReleasedY;
 	CanvasZoomHandler zoomHandler;
+	boolean animate;
 	
 	//a checkbox for asking the user whether they want to be reminded each time they have reached the max zoom level through pan zooming
 	JCheckBox maxZoomMessageCheckBox = new JCheckBox("Don't show this dialog again"); 
@@ -29,7 +30,7 @@ public class PanZoomAnimator extends Thread implements ItemListener
 	
 	public PanZoomAnimator(int fps, int millis, float finalScalingFactor, GChromoMap selectedMap,
 					MainCanvas mainCanvas, int mousePressedY, int mouseReleasedY,
-					CanvasZoomHandler zoomHandler)
+					CanvasZoomHandler zoomHandler,boolean animate)
 	{
 		this.fps = fps;
 		this.millis = millis;
@@ -39,13 +40,14 @@ public class PanZoomAnimator extends Thread implements ItemListener
 		this.mousePressedY = mousePressedY;
 		this.mouseReleasedY = mouseReleasedY;
 		this.zoomHandler = zoomHandler;
+		this.animate = animate;
 		
 		//configure the maxZoomMessageCheckBox
 		maxZoomMessageCheckBox.addItemListener(this);
 		if(Prefs.showMaxZoomLevelMessage)
-			maxZoomMessageCheckBox.setSelected(true);
-		else
 			maxZoomMessageCheckBox.setSelected(false);
+		else
+			maxZoomMessageCheckBox.setSelected(true);
 	}
 	
 	// ============================================methods============================================
@@ -86,61 +88,63 @@ public class PanZoomAnimator extends Thread implements ItemListener
 		float totalYIncrement = (finalTotalY - selectedSet.totalY) / totalFrames;
 		boolean maxZoomFactorReached = false;
 		
-		// now loop for the number of total frames, zooming in by a bit each time
-		for (int i = 0; i < totalFrames; i++)
+		if (animate)
 		{
-			// sleep for the amount of animation time divided by the fps value
-			try
+			// now loop for the number of total frames, zooming in by a bit each time
+			for (int i = 0; i < totalFrames; i++)
 			{
-				Thread.sleep((long) (millis / totalFrames));
-			}
-			catch (InterruptedException e)
-			{
-			}
-			
-			// work out the current scaling factor
-			// next zoom factor divided by current zoom factor
-			float currentScalingFactor = (selectedSet.zoomFactor + zoomFactorIncrement) / selectedSet.zoomFactor;
-			
-			// set the new zoom factor
-			//if this does not exceed the max zoom factor
-			if(selectedSet.zoomFactor < Constants.MAX_ZOOM_FACTOR)
-				selectedSet.zoomFactor += zoomFactorIncrement;
-			//if this DOES exceed the max zoom factor
-			else
-			{
-				MapViewer.logger.fine("Prefs.showMaxZoomLevelMessage in run() = " + Prefs.showMaxZoomLevelMessage);
-				
-				if(Prefs.showMaxZoomLevelMessage)
+				// sleep for the amount of animation time divided by the fps value
+				try
 				{
-					TaskDialog.info("Maximum zoom level reached for map set " + selectedSet.name, "Close", maxZoomMessageCheckBox);
+					Thread.sleep((long) (millis / totalFrames));
 				}
-				zoomHandler.isPanZoomRequest = false;
-				maxZoomFactorReached = true;
+				catch (InterruptedException e)
+				{
+				}
 				
-				break;	
+				// work out the current scaling factor
+				// next zoom factor divided by current zoom factor
+				float currentScalingFactor = (selectedSet.zoomFactor + zoomFactorIncrement) / selectedSet.zoomFactor;
+				
+				// set the new zoom factor
+				//if this does not exceed the max zoom factor
+				if (selectedSet.zoomFactor < Constants.MAX_ZOOM_FACTOR)
+					selectedSet.zoomFactor += zoomFactorIncrement;
+				//if this DOES exceed the max zoom factor
+				else
+				{
+					MapViewer.logger.fine("Prefs.showMaxZoomLevelMessage in run() = " + Prefs.showMaxZoomLevelMessage);
+					
+					if (Prefs.showMaxZoomLevelMessage)
+					{
+						TaskDialog.info("Maximum zoom level reached for map set " + selectedSet.name, "Close", maxZoomMessageCheckBox);
+					}
+					zoomHandler.isPanZoomRequest = false;
+					maxZoomFactorReached = true;
+					
+					break;
+				}
+				
+				// work out the chromo height and total genome height for when the new zoom factor will have been applied
+				int newChromoHeight = Math.round(selectedSet.chromoHeight + chromoHeightIncrement);
+				
+				// the distance from the top of the chromosome to the mousePressedY location, in pixels
+				int distFromTop = Math.round(initialDistFromTopProportion * newChromoHeight);
+				// the same from the bottom of the chromosome
+				int distFromBottom = newChromoHeight - distFromTop;
+				
+				// the new total Y extent of the genome in pixels
+				int newTotalY = Math.round(selectedSet.totalY + totalYIncrement);
+				
+				// adjust the zoom and increment the scaling factor
+				// this call includes the redraw of the main canvas
+				zoomHandler.adjustZoom(selectedMap, newTotalY, newChromoHeight, distFromBottom);
+				currentScalingFactor += increment;
+				
+				//update visible zoom info
+				MapViewer.winMain.fatController.updateZoomControls();
 			}
-			
-			// work out the chromo height and total genome height for when the new zoom factor will have been applied
-			int newChromoHeight = Math.round(selectedSet.chromoHeight + chromoHeightIncrement);
-			
-			// the distance from the top of the chromosome to the mousePressedY location, in pixels
-			int distFromTop = Math.round(initialDistFromTopProportion * newChromoHeight);
-			// the same from the bottom of the chromosome
-			int distFromBottom = newChromoHeight - distFromTop;
-			
-			// the new total Y extent of the genome in pixels
-			int newTotalY = Math.round(selectedSet.totalY + totalYIncrement);
-			
-			// adjust the zoom and increment the scaling factor
-			// this call includes the redraw of the main canvas
-			zoomHandler.adjustZoom(selectedMap, newTotalY, newChromoHeight, distFromBottom);
-			currentScalingFactor += increment;
-			
-			//update visible zoom info
-			MapViewer.winMain.fatController.updateZoomControls();
 		}
-		
 		//if we have not reached the max zoom factor with this we need to do one more zoom adjust 
 		//explicitly here to make sure we have all the final intended values and have not fallen short
 		//of these due to rounding errors etc.
@@ -166,6 +170,8 @@ public class PanZoomAnimator extends Thread implements ItemListener
 		zoomHandler.isPanZoomRequest = false;
 	}
 	
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
 	//here we handle user actions for the checkbox that decides whether we show the max zoom level reached message each time
 	public void itemStateChanged(ItemEvent e)
 	{
@@ -174,9 +180,9 @@ public class PanZoomAnimator extends Thread implements ItemListener
 		if(e.getSource().equals(maxZoomMessageCheckBox))
 		{
 			if(maxZoomMessageCheckBox.isSelected())
-				Prefs.showMaxZoomLevelMessage = true;
-			else
 				Prefs.showMaxZoomLevelMessage = false;
+			else
+				Prefs.showMaxZoomLevelMessage = true;
 		}
 		
 		MapViewer.logger.fine("Prefs.showMaxZoomLevelMessage in itemStateChanged = " + Prefs.showMaxZoomLevelMessage);

@@ -10,6 +10,7 @@ import javax.swing.event.*;
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
+import sbrn.mapviewer.gui.animators.*;
 import sbrn.mapviewer.gui.entities.*;
 import scri.commons.gui.*;
 
@@ -187,14 +188,20 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 			// retrieve the Feature that corresponds to this name
 			Feature f1 = Utils.getFeatureByName(feature1Name);
 			Feature f2 = Utils.getFeatureByName(feature2Name);
+						
+			// which map and mapset are we dealing with here
+			GMapSet owningSet1 = f1.getOwningMap().getGChromoMap().owningSet;
+			GMapSet owningSet2 = f2.getOwningMap().getGChromoMap().owningSet;
 			
-			GChromoMap selectedMap1 = f1.getOwningMap().getGChromoMap();
-			GChromoMap selectedMap2 = f2.getOwningMap().getGChromoMap();
+			//if we got here because we requested features through the find features by name dialog then we
+			//want to zoom out fully so we can see them in the broadest possible context
+			//if we got here through a range request we do nothing
+			if(MapViewer.winMain.fatController.findFeaturesRequested)
+			{
+				MapViewer.winMain.mainCanvas.zoomHandler.processZoomResetRequest(owningSet1);
+				MapViewer.winMain.mainCanvas.zoomHandler.processZoomResetRequest(owningSet2);
+			}
 
-			//now zoom into that range on both chromosomes
-			MapViewer.winMain.mainCanvas.zoomHandler.processClickZoomRequest(selectedMap1);
-//			MapViewer.winMain.mainCanvas.zoomHandler.processClickZoomRequest(selectedMap2);
-			
 			// highlight the feature on the canvas
 			MapViewer.winMain.fatController.highlightFeature = f1;
 			MapViewer.winMain.fatController.highlightFeatureHomolog = f2;	

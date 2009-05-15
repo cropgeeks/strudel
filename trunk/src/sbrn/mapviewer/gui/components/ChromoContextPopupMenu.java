@@ -8,12 +8,14 @@ import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.animators.*;
 import sbrn.mapviewer.gui.entities.*;
+import sbrn.mapviewer.gui.handlers.*;
 
 
 public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 {
 	String invertChromoStr = "Invert chromosome";
-	String addAllFeaturesStr = "Add features in range to results";
+	public String addAllFeaturesStr = "Add features in range to results";
+	public String webInfoStr = "Show annotation for features in range";
 	
 	public JMenuItem invertChromoMenuItem;
 	public JMenuItem addAllFeaturesItem;
@@ -53,8 +55,14 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 			//add features from the selected region into the results table
 			if(selectedMap != null)
 			{
-				MapViewer.winMain.ffResultsPanel.resultsTable.addFeaturesFromSelectedMap(selectedMap, selectedMap.selectionRectTopY, selectedMap.selectionRectBottomY);
-	
+				//check whether we have an existing set of results
+				boolean resultExists = MapViewer.winMain.ffResultsPanel.resultsTable.getModel().getRowCount() > 0;
+				//if yes, add the features from the current selection - otherwise make a new results table
+				if(resultExists)
+					MapViewer.winMain.ffResultsPanel.resultsTable.addFeaturesFromSelectedMap(selectedMap);
+				else
+					FeatureSearchHandler.findFeaturesInRangeFromCanvasSelection();
+					
 				//this time we get the chromosome to paint the selection rectangle, not the canvas
 				//this is so we can get the selection stored against the chromosome and then repaint it if the user zooms/scrolls
 				selectedMap.drawSelectionRect = true;		

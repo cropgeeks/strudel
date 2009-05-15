@@ -416,4 +416,67 @@ public class Utils
 		
 		return button;
 	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
+	
+	public static int convertRelativeFPosToPixels(GMapSet owningSet, ChromoMap chromoMap, float fPos)
+	{
+		return Math.round((owningSet.chromoHeight / chromoMap.getStop()) * fPos);
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
+	
+	public static int getFPosOnCanvasInPixels(GMapSet owningSet, ChromoMap chromoMap, float fPos)
+	{
+		int  y = (int) chromoMap.getGChromoMap().boundingRectangle.getY();
+		return Math.round((owningSet.chromoHeight / chromoMap.getStop()) * fPos) + y;
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
+	
+	public static Vector<Feature> checkFeatureVisibility(Vector<Feature> features)
+	{
+		MapViewer.logger.fine("-------------checkFeatureVisibility");
+		MapViewer.logger.fine("features.size() before processing = " + features.size());
+		Vector<Feature> visibleFeatures = new Vector<Feature>();
+		
+		//for each feature in the array
+		for (Feature feature : features)
+		{
+			if (feature != null)
+			{
+				//get the owning map and gMap
+				ChromoMap cMap = feature.getOwningMap();
+				GChromoMap gMap = cMap.getGChromoMap();
+				GMapSet gMapSet = gMap.owningSet;
+				//get the relative position on the map
+				float fStart = feature.getStart();
+				//convert this to an absolute position on the canvas in pixels
+				int pixelPos = getFPosOnCanvasInPixels(gMapSet, cMap, fStart);
+				//work out the topmost y coord of the genome as visible on the main canvas
+				int upperCanvasMapSetIntersection = gMapSet.centerPoint - MapViewer.winMain.mainCanvas.getHeight() / 2;
+				int lowerCanvasMapSetIntersection = gMapSet.centerPoint + MapViewer.winMain.mainCanvas.getHeight() / 2;
+				
+				MapViewer.logger.fine("upperCanvasMapSetIntersection = " + upperCanvasMapSetIntersection);
+				MapViewer.logger.fine("lowerCanvasMapSetIntersection = " + lowerCanvasMapSetIntersection);
+				MapViewer.logger.fine("pixelPos for feature " +feature.getName() + " = " + pixelPos);
+				
+				
+				//check whether this position is currently showing on the canvas or not
+				if (pixelPos > upperCanvasMapSetIntersection && pixelPos < lowerCanvasMapSetIntersection)
+				{
+					//if it is, add it
+					visibleFeatures.add(feature);
+					MapViewer.logger.fine("adding feature " +feature.getName() );
+				}
+			}
+		}
+
+		MapViewer.logger.fine("visibleFeatures.size() = " + visibleFeatures.size());
+		return visibleFeatures;
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
+
+	
 }

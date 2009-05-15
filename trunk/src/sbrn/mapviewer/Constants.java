@@ -10,7 +10,7 @@ public class Constants
 	public static final int SPLITPANE_DIVIDER_SIZE = 7;
 	
 	//the maximum zoom factor we will ever want to use
-	public static final int MAX_ZOOM_FACTOR = 500;
+	public static final int MAX_ZOOM_FACTOR = 200;
 	
 	//the number of distance markers we want to draw on a chromosome -- fixed regardless of zoom factor
 	public static final int  numDistanceMarkers = 30;

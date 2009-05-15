@@ -50,7 +50,7 @@ public class HomologResultsTable extends JTable
 	
 	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	public void addFeaturesFromSelectedMap(GChromoMap selectedMap, float canvasIntervalTopY, float canvasIntervalBottomY)
+	public void addFeaturesFromSelectedMap(GChromoMap selectedMap)
 	{
 		//extract the list of features we need to insert 
 		LinkedList<Link> newFeatures = new LinkedList<Link>();

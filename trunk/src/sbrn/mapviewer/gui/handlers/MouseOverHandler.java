@@ -70,7 +70,7 @@ public class MouseOverHandler
 						selectedMap.drawMouseOverFeatures = true;
 						winMain.mainCanvas.updateCanvas(false);
 					}
-					
+
 					//remember this map for the next time
 					previousMap = selectedMap;
 				}

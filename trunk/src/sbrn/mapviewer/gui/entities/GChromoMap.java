@@ -43,14 +43,7 @@ public class GChromoMap
 	// arrays with Feature names and positions for fast access during drawing operations
 	public int[] allLinkedFeaturePositions;
 	public Feature [] allLinkedFeatures;
-	public TreeMap<Integer, Vector<Feature>> allFeaturesPosLookup = new TreeMap<Integer, Vector<Feature>>();
-	
-	// these are corresponding arrays and lists which only pertain to the features which are linked to from somewhere
-	public Vector<Feature> linkedFeatureList = new Vector<Feature>();
-	String[] linkedFeatureNames;
-	float[] linkedFeaturePositions;
-	public TreeMap<Float, Feature> linkedFeaturePosLookup = new TreeMap<Float, Feature>();
-	
+//	
 	// indicates whether this whole map or part thereof is currently drawn on the canvas
 	public boolean isShowingOnCanvas = true;
 	
@@ -356,7 +349,7 @@ public class GChromoMap
 				// right hand genome (reference genome 1 or 2)
 				if (markersRight)
 				{
-					lineStartX = x + width;
+					lineStartX = x + width +1;
 					lineEndX = x + width + lineLength;
 					labelX = lineEndX + gap;
 				}
@@ -419,7 +412,7 @@ public class GChromoMap
 		Font overviewLabelFont = new Font("Arial", Font.BOLD, smallFontSize);
 		g2.setFont(overviewLabelFont);
 		g2.setColor(Colors.chromosomeIndexColour);
-		g2.drawString(String.valueOf(index + 1), width * 2, height / 2);
+		g2.drawString(name, width * 2, Math.round(height/2.0f) + Math.round(smallFontSize/2.0f));
 		
 		if (drawHighlightOutline)
 		{
@@ -438,6 +431,9 @@ public class GChromoMap
 		int fontHeight = 12;
 		g2.setFont(new Font("Sans-serif", Font.PLAIN, fontHeight));
 		FontMetrics fm = g2.getFontMetrics();
+		
+		//a multiplier for the font height that allows us to space the labels vertically
+		float verticalSpacer = 1.2f;
 		
 		if (mouseOverFeatures.size() > 0 && drawMouseOverFeatures)
 		{
@@ -492,12 +488,12 @@ public class GChromoMap
 							// if the index is smaller than half the list size, subtract a multiple of the fontHeight from the y
 							if ((index + 1) <= halfListSize)
 							{
-								offset = -(fontHeight * (halfListSize - index - 1));
+								offset = -(fontHeight*verticalSpacer * (halfListSize - index - 1));
 							}
 							// if it is bigger, add it instead
 							else
 							{
-								offset = fontHeight * ((index + 1) - halfListSize);
+								offset = fontHeight*verticalSpacer * ((index + 1) - halfListSize);
 							}
 						}
 						// odd number
@@ -509,17 +505,17 @@ public class GChromoMap
 							// if the index is the midpoint
 							if (index == midPoint)
 							{
-								offset = fontHeight / 2;
+								offset = fontHeight*verticalSpacer / 2;
 							}
 							// index is less than the midpoint
 							else if (index < midPoint)
 							{
-								offset = -(fontHeight * (halfListSize - index - 1));
+								offset = -(fontHeight*verticalSpacer * (halfListSize - index - 1));
 							}
 							// index is greater than the midpoint
 							else
 							{
-								offset = fontHeight * ((index + 1) - halfListSize);
+								offset = fontHeight*verticalSpacer * ((index + 1) - halfListSize);
 							}
 						}
 					}
@@ -569,9 +565,9 @@ public class GChromoMap
 					g2.setColor(Colors.featureLabelBackgroundColour);
 					g2.drawLine(lineStartX, featureY, lineEndX, labelY - fontHeight / 2);
 					
-					// draw a line for the marker on the chromosome itself
+					// draw a line to highlight the marker on the chromosome itself
 					g2.setColor(Colors.highlightedFeatureColour);
-					g2.drawLine(lineStartX, featureY, lineStartX + width, featureY);
+					g2.drawLine(x, featureY, x + width, featureY);
 				}
 				
 			}
@@ -595,13 +591,14 @@ public class GChromoMap
 	// initialises the arrays we need for fast drawing
 	public void initArrays()
 	{
+		MapViewer.logger.finest("===============initing arrays for map " + name);
+		MapViewer.logger.finest("MapViewer.winMain.dataContainer.gMapSetList.size() = " + MapViewer.winMain.dataContainer.gMapSetList.size());
+		
 		if(isShowingOnCanvas)
-		{
-			
+		{			
 			// init the arrays that hold ALL the features for this map
 			int numFeatures = chromoMap.countFeatures();
-			
-			MapViewer.logger.finest("initing arrays for map " + name);
+
 			MapViewer.logger.finest("numFeatures " + numFeatures);
 			
 			allLinkedFeatures = new Feature[numFeatures];
@@ -612,27 +609,25 @@ public class GChromoMap
 				Feature f = featureList.get(i);
 				
 				//at this point we need to know whether this feature is involved in any links
-				//it it is, we add it to the arrays
+				//if it is, we add it to the arrays
 				//otherwise it's fine to just have it in the feature list of the corresponding chromomap from where we can access it for 
 				//other uses such as full feature lists for search ranges etc
-				if(f.getLinks() != null && f.getLinks().size() > 0)
+				if((f.getLinks() != null && f.getLinks().size() > 0) || MapViewer.winMain.dataContainer.gMapSetList.size() == 1)
 				{				
 					//the start point of this features in its own units (cM, bp, whatever)
 					float start = f.getStart();
 					
-					// this factor normalises the position to a value between 0 and 100
-					//					float scalingFactor = height / chromoMap.getStop();
-					//					int featureY = Math.round(y + (f.getStart() * scalingFactor));
-					
 					//scale this by the current map height to give us a position in pixels, between zero and the chromosome height
 					//then store this value in the array we use for drawing
-					allLinkedFeaturePositions[i] = Math.round((owningSet.chromoHeight / chromoMap.getStop()) * start);
+					allLinkedFeaturePositions[i] =Utils.convertRelativeFPosToPixels(owningSet, chromoMap, start);
+					MapViewer.logger.finest("allLinkedFeaturePositions[i] = " + allLinkedFeaturePositions[i]);
 					
 					//if the map is inverted we need to store the inverse of this value i.e. the map end value minus the feature position
 					if(isFullyInverted || isPartlyInverted)
 					{
 						allLinkedFeaturePositions[i] = (int) ((owningSet.chromoHeight / chromoMap.getStop()) * (chromoMap.getStop() -start));
 					}
+					
 					//also store a reference to the feature itself in a parallel array
 					allLinkedFeatures[i] = f;
 				}
@@ -647,7 +642,8 @@ public class GChromoMap
 	// draw the markers for the features
 	private void drawLinkedFeatures(Graphics2D g2)
 	{
-		//		MapViewer.logger.finest("drawing linked features for map " + name);
+		MapViewer.logger.fine("drawing linked features for map " + name);
+		MapViewer.logger.fine("allLinkedFeaturePositions.length = " + allLinkedFeaturePositions.length);
 		
 		if (allLinkedFeaturePositions != null)
 		{

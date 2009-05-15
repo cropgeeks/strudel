@@ -7,7 +7,9 @@ import java.util.*;
 import javax.swing.*;
 
 import sbrn.mapviewer.*;
+import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
+import sbrn.mapviewer.gui.dialog.*;
 import sbrn.mapviewer.gui.entities.*;
 import sbrn.mapviewer.gui.handlers.*;
 
@@ -68,6 +70,10 @@ public class MainCanvas extends JPanel
 	public boolean drawFoundFeaturesInRange = false;
 	
 	public int topBottomSpacer = 0;
+	
+	// width of chromosomes -- set this to a fixed fraction of the screen width for now
+	//gets set in the paintCanvas method
+	public int chromoWidth = 0;
 
 	// ============================c'tor==================================
 	
@@ -190,7 +196,7 @@ public class MainCanvas extends JPanel
 		g2.fillRect(0, 0, canvasWidth, canvasHeight);
 
 		// width of chromosomes -- set this to a fixed fraction of the screen width for now
-		int chromoWidth = Math.round(canvasWidth / 40);
+		chromoWidth = Math.round(canvasWidth / 40);
 		
 		//for all maps sets
 		for (GMapSet gMapSet : winMain.dataContainer.gMapSetList)
@@ -275,6 +281,8 @@ public class MainCanvas extends JPanel
 				if (!gChromoMap.arraysInitialized)
 					gChromoMap.initArrays();
 				
+				MapViewer.logger.finest("gChromoMap.arraysInitialized = " + gChromoMap.arraysInitialized);
+				
 				if (canvasBounds.contains(gChromoMap.boundingRectangle) || canvasBounds.intersects(gChromoMap.boundingRectangle))
 				{
 					gChromoMap.isShowingOnCanvas = true;
@@ -331,7 +339,23 @@ public class MainCanvas extends JPanel
 		//need to do this in this order so things are drawn on top of each other in the right sequence
 		if (drawFoundFeaturesInRange && (MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().isSelected() || MapViewer.winMain.foundFeaturesTableControlPanel.getShowLabelsCheckbox().isSelected()))
 		{
-			LabelDisplayManager.drawFeatureLabelsInRange(g2);
+			//the features we need to draw
+			Vector<Feature> features = MapViewer.winMain.fatController.featuresInRange;
+//			//sort these by position
+//			Collections.sort(features);
+			
+			//for this we need the interval start and end values
+			MTFindFeaturesInRangePanel ffInRangePanel = MapViewer.winMain.ffInRangeDialog.ffInRangePanel;		
+			float intervalStart = ((Number)ffInRangePanel.getRangeStartSpinner().getValue()).floatValue();
+			float intervalEnd = ((Number)ffInRangePanel.getRangeEndSpinner().getValue()).floatValue();
+			//and the chromosome the interval is on
+			String genome = (String) ffInRangePanel.getGenomeCombo().getSelectedItem();
+			String chromosome =  (String) ffInRangePanel.getChromoCombo().getSelectedItem();
+			GChromoMap gChromoMap = Utils.getGMapByName(chromosome,genome);
+			
+			Vector<GChromoMap> gMaps = new Vector<GChromoMap>();
+			gMaps.add(gChromoMap);
+			LabelDisplayManager.drawFeatureLabelsInRange(g2, false, gMaps, intervalStart, intervalEnd, MapViewer.winMain.fatController.featuresInRange);
 		}
 
 		//check whether we want to display a BLAST cutoff value
@@ -350,7 +374,8 @@ public class MainCanvas extends JPanel
 			{
 				//if the map is meant to be visible on the canvas at this time
 				if (gChromoMap.isShowingOnCanvas && !gChromoMap.inversionInProgress)
-				{
+				{				
+					LabelDisplayManager.drawLabelsForAllVisibleFeatures(g2, gMapSet);
 					drawMapIndex(g2, gChromoMap, gMapSet);
 				}
 			}
@@ -369,7 +394,7 @@ public class MainCanvas extends JPanel
 		int mapIndex = gChromoMap.index;
 		
 		//font stuff
-		int fontSize = Math.round(WinMain.mainCanvas.getHeight() / 30);
+		int fontSize = Math.round(WinMain.mainCanvas.getHeight() / 40);
 		Font mapLabelFont = new Font("Arial", Font.BOLD, fontSize);
 		g2.setFont(mapLabelFont);
 		g2.setColor(Colors.chromosomeIndexColour);
@@ -387,9 +412,10 @@ public class MainCanvas extends JPanel
 		
 		//draw the label
 		FontMetrics fm = g2.getFontMetrics();
-		String indexLabel = String.valueOf(mapIndex + 1);
+//		String indexLabel = String.valueOf(mapIndex + 1);
+		String indexLabel = gChromoMap.name;
 		int stringWidth = fm.stringWidth(indexLabel);
-		g2.drawString(indexLabel, gChromoMap.x + gChromoMap.width/2 - stringWidth/2, labelY);
+		g2.drawString(indexLabel, gChromoMap.x + gChromoMap.width + 10, labelY);
 		
 		//turn text antialiasing off again
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
@@ -428,17 +454,17 @@ public class MainCanvas extends JPanel
 		if (selectedSet.zoomFactor >= selectedSet.thresholdAllMarkerPainting)
 		{
 			selectedSet.paintAllMarkers = true;
-			selectedSet.paintLabels = true;
 		}
 		else if (selectedSet.zoomFactor < selectedSet.thresholdAllMarkerPainting)
 		{
-			selectedSet.paintAllMarkers = false;
-			selectedSet.paintLabels = true;
+			if(selectedSet.overrideMarkersAutoDisplay)
+				selectedSet.paintAllMarkers = true;
+			else
+				selectedSet.paintAllMarkers = false;
 		}
 		else
 		{
 			selectedSet.paintAllMarkers = false;
-			selectedSet.paintLabels = false;
 		}
 	}
 	

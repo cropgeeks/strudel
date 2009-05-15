@@ -25,7 +25,7 @@ public class MapViewer
 	    * FINEST (lowest value) 
 	    * ALL
 	    */
-	private static Level logLevel = Level.SEVERE;
+	private static Level logLevel = Level.FINE;
 	public static Logger logger = Logger.getLogger("sbrn.strudel");
 	
 	private static File prefsFile = new File(System.getProperty("user.home"), ".strudel.xml");

@@ -86,6 +86,9 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 		}
 	}
 	
+	
+	// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
 	// fire up web browser with annotation info
 	private void launchBrowser(int selectedRow, int selectedCol)
 	{

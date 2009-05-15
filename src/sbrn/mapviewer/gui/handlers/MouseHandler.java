@@ -281,6 +281,15 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 				MapViewer.winMain.fatController.selectionMap = selectedMap;
 				//let the MAP draw this rectangle -- we want to have this rect associated with the map and redrawn when the map is rendered
 				selectedMap.drawSelectionRect = true;	
+				
+				//update the context menus according to what we intend to do with this selection rectangle
+				//if we have an existing results set we want to add the features in the rectangle to this
+				//otherwise we want to create a new results table
+				if(MapViewer.winMain.ffResultsPanel.getFFResultsTable().getModel().getRowCount() > 0)
+					MapViewer.winMain.chromoContextPopupMenu.addAllFeaturesItem.setText(MapViewer.winMain.chromoContextPopupMenu.addAllFeaturesStr);
+				else
+					MapViewer.winMain.chromoContextPopupMenu.addAllFeaturesItem.setText(MapViewer.winMain.chromoContextPopupMenu.webInfoStr);
+				
 				//redraw
 				winMain.mainCanvas.updateCanvas(true);
 				winMain.mainCanvas.requestFocusInWindow();

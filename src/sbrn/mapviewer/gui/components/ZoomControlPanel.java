@@ -19,6 +19,8 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 	public JSlider zoomSlider;
 	JButton resetButton;
 	GMapSet gMapSet;
+	JToggleButton overrideMarkersAutoDisplayButton;
+	JToggleButton alwaysShowAllLabelsButton;
 	
 	
 	// ===================================================c'tor====================================
@@ -34,6 +36,8 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		setBorderPainted(false);
 		
 		setupComponents(addFiller);
+		
+		checkButtonsToEnable();
 	}
 	
 	// ==============================================methods====================================
@@ -66,16 +70,24 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		if (scri.commons.gui.SystemUtils.isMacOS() == false)
 			resetButton.setMargin(new Insets(2, 1, 2, 1));
 		
+		//marker and label display buttons
+		overrideMarkersAutoDisplayButton = (JToggleButton) Utils.getButton(true, "", "Always show all markers", Icons.getIcon("SHOWMARKERS"), null, this, true);
+		alwaysShowAllLabelsButton = (JToggleButton) Utils.getButton(true, "", "Always show all labels", Icons.getIcon("SHOWLABELS"), null, this, true);
+		
 		//we need the filler when this toolbar is the only one
 		//this is to stop it from filling the whole width of the frame
 		if(addFiller)
 			add(Box.createHorizontalGlue());
 		
 		//add the components
+		add(new JLabel("   "));
 		add(label);
-		add(new JLabel(" "));
+		add(new JLabel("   "));
 		add(zoomSlider);
 		add(resetButton);
+		add(overrideMarkersAutoDisplayButton);
+		add(alwaysShowAllLabelsButton);
+		add(new JLabel("   "));
 		
 		//we need the filler when this toolbar is the only one
 		//this is to stop it from filling the whole width of the frame
@@ -92,6 +104,8 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 //		MapViewer.logger.fine("isClickZoomRequest = " + winMain.mainCanvas.zoomHandler.isClickZoomRequest);
 //		MapViewer.logger.fine("isPanZoomRequest = " + winMain.mainCanvas.zoomHandler.isPanZoomRequest);
 		
+		checkButtonsToEnable();
+		
 		JSlider source = (JSlider) e.getSource();
 		if (source.equals(zoomSlider) && !winMain.mainCanvas.zoomHandler.isClickZoomRequest && !winMain.mainCanvas.zoomHandler.isPanZoomRequest)
 		{
@@ -99,6 +113,22 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(source.getValue(), 0, gMapSet, true);
 			updateSlider();
 		}	
+	}
+	
+	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	
+	private void checkButtonsToEnable()
+	{
+		MapViewer.logger.fine("gMapSet.singleChromoViewZoomFactor: " + gMapSet.singleChromoViewZoomFactor);
+		MapViewer.logger.fine("gMapSet.zoomFactor: " + gMapSet.zoomFactor);
+		
+		//check whether we should have the alwaysShowAllLabelsButton enabled
+		//we don't want this option if we are looking at more than one chromo on screen
+		if(gMapSet.zoomFactor >= gMapSet.singleChromoViewZoomFactor && (gMapSet.singleChromoViewZoomFactor != 0))
+			alwaysShowAllLabelsButton.setEnabled(true);
+		else
+			alwaysShowAllLabelsButton.setEnabled(false);
 	}
 	
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -118,6 +148,26 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		{
 			winMain.mainCanvas.zoomHandler.processZoomResetRequest(gMapSet);
 			updateSlider();
+		}
+		else if(e.getSource() == overrideMarkersAutoDisplayButton)
+		{
+			if(overrideMarkersAutoDisplayButton.isSelected())
+				gMapSet.overrideMarkersAutoDisplay = true;
+			else
+				gMapSet.overrideMarkersAutoDisplay = false;
+
+			MapViewer.winMain.fatController.initialisePositionArrays();
+			MapViewer.winMain.mainCanvas.updateCanvas(true);
+		}
+		else if(e.getSource() == alwaysShowAllLabelsButton)
+		{
+			if(alwaysShowAllLabelsButton.isSelected())
+				gMapSet.alwaysShowAllLabels = true;
+			else
+				gMapSet.alwaysShowAllLabels = false;
+			
+			MapViewer.winMain.fatController.initialisePositionArrays();
+			MapViewer.winMain.mainCanvas.updateCanvas(true);
 		}
 	}
 	

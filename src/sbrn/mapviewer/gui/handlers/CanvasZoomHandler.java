@@ -150,9 +150,8 @@ public class CanvasZoomHandler
 		//update zoom control position
 		MapViewer.winMain.fatController.updateZoomControls();
 
-		//now update the arrays with the position data
-		MapViewer.winMain.fatController.initialisePositionArrays();
-		
+		//update the arrays with the position data
+		MapViewer.winMain.fatController.initialisePositionArrays();		
 		MapViewer.winMain.mainCanvas.zoomHandler.isClickZoomRequest = false;
 		
 		//now repaint

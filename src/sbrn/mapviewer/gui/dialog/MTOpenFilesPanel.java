@@ -89,7 +89,6 @@ public class MTOpenFilesPanel extends javax.swing.JPanel
 		
 		importModeButtonGroup.add(ownDataRadioButton);
 		ownDataRadioButton.setText("Load own data files");
-		ownDataRadioButton.setEnabled(false);
 		ownDataRadioButton.addChangeListener(new javax.swing.event.ChangeListener()
 		{
 			public void stateChanged(javax.swing.event.ChangeEvent evt)
@@ -106,13 +105,13 @@ public class MTOpenFilesPanel extends javax.swing.JPanel
 		targetGenomeLoaderPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Select target genome feature file:"));
 		targetGenomeLoaderPanel.setEnabled(false);
 		
-		targetFeatFileLabel.setText("Target genome feature file:");
 		targetFeatFileLabel.setEnabled(false);
+		targetFeatFileLabel.setText("Target genome feature file:");
 		
 		targetfeatFileTF.setEnabled(false);
 		
-		targetFeatFileButton.setText("Browse...");
 		targetFeatFileButton.setEnabled(false);
+		targetFeatFileButton.setText("Browse...");
 		targetFeatFileButton.addActionListener(new java.awt.event.ActionListener()
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -129,13 +128,13 @@ public class MTOpenFilesPanel extends javax.swing.JPanel
 		referenceGenomeLoaderPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Optionally select one or two reference genomes:"));
 		referenceGenomeLoaderPanel.setEnabled(false);
 		
-		refGen1FeatFileLabel.setText("Reference genome 1 feature file:");
 		refGen1FeatFileLabel.setEnabled(false);
+		refGen1FeatFileLabel.setText("Reference genome 1 feature file:");
 		
 		refGen1FeatFileTF.setEnabled(false);
 		
-		ref1FeatFileButton.setText("Browse...");
 		ref1FeatFileButton.setEnabled(false);
+		ref1FeatFileButton.setText("Browse...");
 		ref1FeatFileButton.addActionListener(new java.awt.event.ActionListener()
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -144,13 +143,13 @@ public class MTOpenFilesPanel extends javax.swing.JPanel
 			}
 		});
 		
-		refGen1HomFileLabel.setText("Reference genome 1 homology file:");
 		refGen1HomFileLabel.setEnabled(false);
+		refGen1HomFileLabel.setText("Reference genome 1 homology file:");
 		
 		refGen1HomFileTF.setEnabled(false);
 		
-		ref1HomFileButton.setText("Browse...");
 		ref1HomFileButton.setEnabled(false);
+		ref1HomFileButton.setText("Browse...");
 		ref1HomFileButton.addActionListener(new java.awt.event.ActionListener()
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -159,13 +158,13 @@ public class MTOpenFilesPanel extends javax.swing.JPanel
 			}
 		});
 		
-		refGen2HomFileLabel.setText("Reference genome 2 homology file:");
 		refGen2HomFileLabel.setEnabled(false);
+		refGen2HomFileLabel.setText("Reference genome 2 homology file:");
 		
 		refGen2HomFileTF.setEnabled(false);
 		
-		ref2FeatFileButton.setText("Browse...");
 		ref2FeatFileButton.setEnabled(false);
+		ref2FeatFileButton.setText("Browse...");
 		ref2FeatFileButton.addActionListener(new java.awt.event.ActionListener()
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -174,11 +173,11 @@ public class MTOpenFilesPanel extends javax.swing.JPanel
 			}
 		});
 		
-		refGen2FeatFileLabel.setText("Reference genome 2 feature file:");
 		refGen2FeatFileLabel.setEnabled(false);
+		refGen2FeatFileLabel.setText("Reference genome 2 feature file:");
 		
-		ref2HomFileButton.setText("Browse...");
 		ref2HomFileButton.setEnabled(false);
+		ref2HomFileButton.setText("Browse...");
 		ref2HomFileButton.addActionListener(new java.awt.event.ActionListener()
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -196,18 +195,18 @@ public class MTOpenFilesPanel extends javax.swing.JPanel
 		
 		jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Annotation URLs for reference genomes:"));
 		
-		refGenome1UrlLabel.setText("URL Reference genome 1:");
 		refGenome1UrlLabel.setEnabled(false);
+		refGenome1UrlLabel.setText("URL Reference genome 1:");
 		
 		refGenome1UrlTf.setEnabled(false);
 		
-		refGenome2UrlLabel.setText("URL Reference genome 2:");
 		refGenome2UrlLabel.setEnabled(false);
+		refGenome2UrlLabel.setText("URL Reference genome 2:");
 		
 		refGenome2UrlTf.setEnabled(false);
 		
-		targetGenomeUrlLabel1.setText("URL target genome:");
 		targetGenomeUrlLabel1.setEnabled(false);
+		targetGenomeUrlLabel1.setText("URL target genome:");
 		
 		targetGenomeUrlTf1.setEnabled(false);
 		

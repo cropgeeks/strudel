@@ -3,6 +3,7 @@
 features to implement -- general:
 
 - online documentation
+- dynamically determine suitable number of distance markers to display depending on the zoom level
 - name panel with labels for the genomes
 - show loci as filled rectangles rather than lines at higher zoom levels
 - colour selector for user 
@@ -88,7 +89,8 @@ REFACTORING:
 - handling of antialising needs to be streamlined
 - label drawing code is replicated all over the app -- needs to be merged
 - look for unnecessary repaints
-- link drawing algorithm -- review
+- link drawing algorithm -- review and improve if possible
+- generally try to improve performance
 
 ================================
 

@@ -200,7 +200,8 @@ public class DataContainer
 		}
 		catch (Exception e)
 		{
-			
+			MapViewer.winMain.openFileDialog.dataLoadingDialog.setVisible(false);
+			TaskDialog.error("Data loading failed: " + e.toString(), "Close");
 			e.printStackTrace();
 		}
 	}

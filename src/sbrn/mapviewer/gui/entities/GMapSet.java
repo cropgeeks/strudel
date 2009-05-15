@@ -63,7 +63,7 @@ public class GMapSet
 
 	// these control whether we draw chromosome markers and labels
 	public boolean paintAllMarkers = false;
-	public boolean paintLabels = false;
+//	public boolean paintLabels = false;
 
 	//a zoom factor value above which we can draw all  features
 	//this is to reduce the amount of clutter on screen
@@ -75,6 +75,11 @@ public class GMapSet
 	public float singleChromoViewZoomFactor;
 	
 	public TreeMap<Feature, Integer> foundFeatures = new TreeMap<Feature, Integer>();
+	
+	//a boolean to indicate whether we should always display markers, regardless of zoom factor
+	public boolean overrideMarkersAutoDisplay = false;
+	//a boolean to indicate whether we should always display labels, regardless of zoom factor
+	public boolean alwaysShowAllLabels = false;
 
 	// ====================================c'tors========================================
 

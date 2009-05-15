@@ -160,8 +160,7 @@ public class FatController
 	//restores the original view to what it looked like after loading the current dataset
 	//this includes clearing any results of feature searches
 	public void resetMainCanvasView()
-	{	
-		
+	{		
 		//hide the found features part of the split pane
 		winMain.hideSplitPaneBottomHalf();
 		winMain.splitPane.setDividerLocation(1.0);
@@ -178,6 +177,9 @@ public class FatController
 		winMain.mainCanvas.drawFoundFeaturesInRange = false;
 		findFeaturesRequested = false;
 		
+		//this hides the selection rectangle that the user may have drawn
+		hideSelectionRect();
+		
 		resetViewOnly();
 	}
 	
@@ -186,8 +188,7 @@ public class FatController
 	//restores the original view to what it looked like after loading the current dataset
 	//without clearing any results
 	public void resetViewOnly()
-	{
-		
+	{		
 		for(GMapSet gMapSet : winMain.dataContainer.gMapSetList)
 		{
 			//reset zoom on all mapsets
@@ -195,6 +196,10 @@ public class FatController
 			
 			//reset selected maps
 			gMapSet.selectedMaps.clear();
+			
+			//marker and label display overrides
+			gMapSet.overrideMarkersAutoDisplay = false;
+			gMapSet.alwaysShowAllLabels = false;
 			
 			//for all maps within mapset
 			for(GChromoMap gMap: gMapSet.gMaps)
@@ -267,7 +272,16 @@ public class FatController
 		}
 	
 	}
-		
+	
+	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	public void hideSelectionRect()
+	{
+		if(MapViewer.winMain.fatController.selectionMap != null)
+			MapViewer.winMain.fatController.selectionMap.drawSelectionRect = false;
+		MapViewer.winMain.mainCanvas.updateCanvas(true);
+	}
+	
 	
 	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
 	

@@ -120,9 +120,6 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 	
 	private void checkButtonsToEnable()
 	{
-		MapViewer.logger.fine("gMapSet.singleChromoViewZoomFactor: " + gMapSet.singleChromoViewZoomFactor);
-		MapViewer.logger.fine("gMapSet.zoomFactor: " + gMapSet.zoomFactor);
-		
 		//check whether we should have the alwaysShowAllLabelsButton enabled
 		//we don't want this option if we are looking at more than one chromo on screen
 		if(gMapSet.zoomFactor >= gMapSet.singleChromoViewZoomFactor && (gMapSet.singleChromoViewZoomFactor != 0))
@@ -135,7 +132,6 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 	
 	public void updateSlider()
 	{
-		MapViewer.logger.fine("updating slider");
 		//update the slider
 		zoomSlider.setValue(Math.round(gMapSet.zoomFactor));
 	}

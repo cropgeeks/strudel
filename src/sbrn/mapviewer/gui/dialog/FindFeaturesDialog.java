@@ -8,7 +8,9 @@ import javax.swing.*;
 
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
+import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.components.*;
+import sbrn.mapviewer.gui.handlers.*;
 import scri.commons.gui.*;
 
 public class FindFeaturesDialog extends JDialog implements ActionListener
@@ -58,7 +60,7 @@ public class FindFeaturesDialog extends JDialog implements ActionListener
 		if (e.getSource() == bFind)
 		{
 			MapViewer.winMain.fatController.findFeaturesRequested = true;
-			showResultsPanel();
+			FeatureSearchHandler.findFeaturesByName(this);
 		}
 		
 		else if (e.getSource() == bCancel)
@@ -72,70 +74,5 @@ public class FindFeaturesDialog extends JDialog implements ActionListener
 	}
 	
 	
-	private void showResultsPanel()
-	{
-		try
-		{		
-			//first reset the canvas to its default view
-			MapViewer.winMain.fatController.resetMainCanvasView();		
-			
-			//this array holds all the names of the features we need to display
-			String [] allNames = new String[0];
 
-			//parse input and find features
-			String input =  ffPanel.getFFTextArea().getText();		
-			allNames = input.split("\n");
-			
-			JTable homologResultsTable = MapViewer.winMain.ffResultsPanel.getFFResultsTable();
-			
-			//now insert the results into the JTable held by the results panel
-			LinkedList<Link> featuresFound = MapViewer.winMain.fatController.matchFeaturesToNames(allNames);
-			FoundFeatureTableModel foundFeatureTableModel = new FoundFeatureTableModel(featuresFound);
-			homologResultsTable.setModel(foundFeatureTableModel);
-			//size the columns and the dialog containing the table appropriately
-			MapViewer.winMain.ffResultsPanel.initColumnSizes();
-			//hide the control panel for the results table as it is not needed with this kind of results
-			MapViewer.winMain.foundFeaturesTableControlPanel.setVisible(false);
-
-			//we have found features
-			if (featuresFound.size() > 0)
-			{
-
-				//set the results panel to be visible
-				this.setVisible(false);
-				MapViewer.winMain.splitPane.setDividerSize(Constants.SPLITPANE_DIVIDER_SIZE);
-				int newDividerLocation = -1;
-				//check how big the results table is
-				int tableHeight = homologResultsTable.getRowCount() * homologResultsTable.getRowHeight();
-				int spacer = 150;
-				int totalTableHeight = tableHeight + spacer;
-				//if it is more than a third of the main window we want to limit it to that size
-				if (totalTableHeight > (MapViewer.winMain.getHeight() * 0.33f))
-				{
-					newDividerLocation = (int) (MapViewer.winMain.getHeight() * 0.66f);
-				}
-				else
-				{
-					newDividerLocation = (int) (MapViewer.winMain.getHeight() - totalTableHeight);
-				}
-				MapViewer.winMain.splitPane.setDividerLocation(newDividerLocation);
-				
-				// validate and repaint the canvas so it knows it has been resized
-				MapViewer.winMain.validate();
-				MapViewer.winMain.mainCanvas.updateCanvas(true);
-			}
-			//we have not found any features
-			else
-			{
-				TaskDialog.info("No matches found for the name(s) entered", "Close");
-			}
-
-		}
-		catch (RuntimeException e1)
-		{
-			e1.printStackTrace();
-		}
-	}
-	
-	
 }

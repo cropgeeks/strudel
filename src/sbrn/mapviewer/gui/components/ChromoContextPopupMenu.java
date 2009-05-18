@@ -65,7 +65,7 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 					
 				//this time we get the chromosome to paint the selection rectangle, not the canvas
 				//this is so we can get the selection stored against the chromosome and then repaint it if the user zooms/scrolls
-				selectedMap.drawSelectionRect = true;		
+//				selectedMap.drawSelectionRect = true;		
 			}
 			
 			//turn antialiasing on and repaint			

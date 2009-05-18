@@ -128,8 +128,8 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 	{
 		JComboBox cb = (JComboBox) evt.getSource();
 		String genomeName = (String) cb.getSelectedItem();
-		FoundFeatureTableModel foundFeatureTableModel = (FoundFeatureTableModel) MapViewer.winMain.ffResultsPanel.resultsTable.getModel();
-		int genomeColumnIndex = foundFeatureTableModel.findColumn(foundFeatureTableModel.homologGenomeColumnLabel);
+		HomologResultsTableModel homologResultsTableModel = (HomologResultsTableModel) MapViewer.winMain.ffResultsPanel.resultsTable.getModel();
+		int genomeColumnIndex = homologResultsTableModel.findColumn(homologResultsTableModel.homologGenomeColumnLabel);
 		MapViewer.winMain.ffResultsPanel.resultsTable.newFilter(genomeName, genomeColumnIndex);
 	}
 	

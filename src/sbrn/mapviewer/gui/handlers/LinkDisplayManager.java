@@ -361,7 +361,7 @@ public class LinkDisplayManager
 					Feature f1 = link.getFeature1();
 					Feature f2 = link.getFeature2();
 					
-					Vector<Feature> featuresInRange = MapViewer.winMain.fatController.featuresInRange;
+					Vector<Feature> featuresInRange = FeatureSearchHandler.featuresInRange;
 					
 					Color linkColour = Colors.mildEmphasisLinkColour;
 					

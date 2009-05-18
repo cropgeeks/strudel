@@ -12,8 +12,11 @@ import scri.commons.gui.*;
 
 public class FeatureSearchHandler
 {
-
-//==========================================methods==========================================================	
+	
+	//a vector of features we have looked up by position range
+	public static Vector<Feature> featuresInRange = new Vector<Feature>();
+	
+	//==========================================methods==========================================================	
 	
 	public static void findFeaturesInRangeFromDialog(FindFeaturesInRangeDialog findFeaturesInRangeDialog)
 	{
@@ -22,7 +25,7 @@ public class FeatureSearchHandler
 		String chromosome =  (String) findFeaturesInRangeDialog.ffInRangePanel.getChromoCombo().getSelectedItem();
 		float intervalStart = ((Number)findFeaturesInRangeDialog.ffInRangePanel.getRangeStartSpinner().getValue()).floatValue();
 		float intervalEnd = ((Number)findFeaturesInRangeDialog.ffInRangePanel.getRangeEndSpinner().getValue()).floatValue();
-
+		
 		findAndDisplayFeaturesInRange(genome, chromosome, intervalStart, intervalEnd);
 	}
 	
@@ -30,6 +33,8 @@ public class FeatureSearchHandler
 	
 	public static void findFeaturesInRangeFromCanvasSelection()
 	{
+		MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(true);
+		
 		GChromoMap gMap = MapViewer.winMain.fatController.selectionMap;	
 		findAndDisplayFeaturesInRange(gMap.owningSet.name, gMap.name, gMap.relativeTopY, gMap.relativeBottomY);
 	}
@@ -43,12 +48,8 @@ public class FeatureSearchHandler
 			//first reset the canvas to its default view
 			MapViewer.winMain.fatController.resetMainCanvasView();		
 			
-			//this array holds all the names of the features we need to display
-			String [] allNames = new String[0];
-			GChromoMap gChromoMap = null;
-			
 			//get the chromo object
-			gChromoMap = Utils.getGMapByName(chromosome,genome);
+			GChromoMap gChromoMap = Utils.getGMapByName(chromosome,genome);
 			ChromoMap chromoMap = gChromoMap.chromoMap;
 			
 			//we need to check that we have not exceeded the maximum value of the positions on the chromosome
@@ -64,10 +65,9 @@ public class FeatureSearchHandler
 				TaskDialog.error("The range start value is greater than the range end value.", "Close");
 				return;
 			}
-	
+			
 			//get a list with names for all the features contained in this interval
-			Vector<String> containedFeatureNames = new Vector<String>();
-			MapViewer.logger.fine("checking for features in range");
+			Vector<Feature> containedFeatures = new Vector<Feature>();
 			for(Feature f : chromoMap.getFeatureList())
 			{
 				MapViewer.logger.fine("feature = " + f.getName() + " " + f.getStart());
@@ -75,33 +75,31 @@ public class FeatureSearchHandler
 				//add the feature only if it is in the interval and has links or if the number of mapsets loaded is 1
 				if((f.getStart() >= intervalStart) && (f.getStart() <= intervalEnd) && (featureHasLinks || MapViewer.winMain.dataContainer.gMapSetList.size() == 1))
 				{	
-					containedFeatureNames.add(f.getName());
-					MapViewer.winMain.fatController.featuresInRange.add(f);
+					containedFeatures.add(f);
+					featuresInRange.add(f);
 				}
 			}
-			allNames = containedFeatureNames.toArray(allNames);
 			
 			//if there are actually features contained in this range
-			if (containedFeatureNames.size() > 0)
-			{
-				
-				//tell it to highlight the region specified
+			if (containedFeatures.size() > 0)
+			{				
+				//highlight the region specified
 				gChromoMap.highlightedRegionStart = intervalStart;
 				gChromoMap.highlightedRegionEnd = intervalEnd;
 				gChromoMap.highlightChromomapRegion = true;
-										
+				
 				//resize the split pane so we can see the results table
 				MapViewer.winMain.splitPane.setDividerSize(Constants.SPLITPANE_DIVIDER_SIZE);
 				int newDividerLocation = (int) (MapViewer.winMain.getHeight() - MapViewer.winMain.foundFeaturesTableControlPanel.getMinimumSize().getHeight());
 				MapViewer.winMain.splitPane.setDividerLocation(newDividerLocation);
-						
+				
 				// validate and repaint the canvas so it knows it has been resized
 				MapViewer.winMain.validate();
 				MapViewer.winMain.mainCanvas.updateCanvas(true);
-
+				
 				//now zoom into that range on the chromosome
 				MapViewer.winMain.mainCanvas.zoomHandler.zoomIntoRange(gChromoMap, intervalStart, intervalEnd, false);
-	
+				
 				//we also need to set the labels on the control panel for the results to have the appropriate text
 				FoundFeaturesTableControlPanel foundFeaturesTableControlPanel = MapViewer.winMain.foundFeaturesTableControlPanel;
 				foundFeaturesTableControlPanel.setVisible(true);
@@ -109,29 +107,19 @@ public class FeatureSearchHandler
 				foundFeaturesTableControlPanel.getChromoLabel().setText(chromosome);
 				foundFeaturesTableControlPanel.getRegionStartLabel().setText(new Float(intervalStart).toString());
 				foundFeaturesTableControlPanel.getRegionEndLabel().setText(new Float(intervalEnd).toString());
-				foundFeaturesTableControlPanel.getNumberFeaturesLabel().setText(new Integer(containedFeatureNames.size()).toString());
+				foundFeaturesTableControlPanel.getNumberFeaturesLabel().setText(new Integer(containedFeatures.size()).toString());
 				
 				//sync the checkboxes states with those in the find dialog itself to make sure they show the same value
 				foundFeaturesTableControlPanel.getShowLabelsCheckbox().setSelected(MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().isSelected());
 				foundFeaturesTableControlPanel.getShowHomologsCheckbox().setSelected(MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().isSelected());
 				
 				//earmark the features for drawing on repaint
-				MapViewer.winMain.mainCanvas.drawFoundFeaturesInRange = true;
-				
+				MapViewer.winMain.mainCanvas.drawFoundFeaturesInRange = true;	
 				//repaint the canvas so we can see the highlighted region which should then be coloured in differently
 				MapViewer.winMain.mainCanvas.updateCanvas(true);
 				
-				//now insert the results into the JTable held by the results panel
-				LinkedList<Link> featuresFound = MapViewer.winMain.fatController.matchFeaturesToNames(allNames);
-				FoundFeatureTableModel foundFeatureTableModel = new FoundFeatureTableModel(featuresFound);
-				MapViewer.winMain.ffResultsPanel.getFFResultsTable().setModel(foundFeatureTableModel);
-				
-				//set up sorting/filtering capability
-				TableRowSorter<FoundFeatureTableModel> sorter = new TableRowSorter<FoundFeatureTableModel>(foundFeatureTableModel);
-				MapViewer.winMain.ffResultsPanel.getFFResultsTable().setRowSorter(sorter);
-				
-				//size the columns and the dialog containing the table appropriately
-				MapViewer.winMain.ffResultsPanel.initColumnSizes();
+				//now put the results into the JTable held by the results panel
+				setupResultsTable(containedFeatures);
 				
 				//hide the dialog
 				MapViewer.winMain.ffInRangeDialog.setVisible(false);
@@ -148,5 +136,93 @@ public class FeatureSearchHandler
 			e1.printStackTrace();
 		}
 	}
+	
+	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	public static  void findFeaturesByName(FindFeaturesDialog findFeaturesDialog)
+	{
+		try
+		{		
+			//first reset the canvas to its default view
+			MapViewer.winMain.fatController.resetMainCanvasView();		
+			
+			//this array holds all the names of the features we need to display
+			String [] allNames = new String[0];
+			String input =  findFeaturesDialog.ffPanel.getFFTextArea().getText();	
+			//parse input 
+			allNames = input.split("\n");			
+			//get the corresponding feature objects
+			Vector<Feature> features = new Vector<Feature>(allNames.length);
+			for (int i = 0; i < allNames.length; i++)
+			{
+				features.add(Utils.getFeatureByName(allNames[i]));
+			}
+			
+			ResultsTable resultsTable = (ResultsTable)MapViewer.winMain.ffResultsPanel.getFFResultsTable();			
+			//now put the results into the JTable held by the results panel
+			setupResultsTable(features);
+			
+			
+			//hide the control panel for the results table as it is not needed with this kind of results
+			MapViewer.winMain.foundFeaturesTableControlPanel.setVisible(false);
+			
+			//we have found features
+			if (features.size() > 0)
+			{				
+				//set the results panel to be visible
+				findFeaturesDialog.setVisible(false);
+				MapViewer.winMain.splitPane.setDividerSize(Constants.SPLITPANE_DIVIDER_SIZE);
+				int newDividerLocation = (int) (MapViewer.winMain.getHeight() * 0.66f);
+				MapViewer.winMain.splitPane.setDividerLocation(newDividerLocation);
+				
+				// validate and repaint the canvas so it knows it has been resized
+				MapViewer.winMain.validate();
+				MapViewer.winMain.mainCanvas.updateCanvas(true);
+			}
+			//we have not found any features
+			else
+			{
+				TaskDialog.info("No matches found for the name(s) entered", "Close");
+			}
+			
+		}
+		catch (RuntimeException e1)
+		{
+			e1.printStackTrace();
+		}
+	}
+	
+	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	
+	private static void setupResultsTable(Vector<Feature> containedFeatures)
+	{
+		//now insert the results into the JTable held by the results panel
+		//if we are in single genome mode we will not have any links so we need to use a different kind of table model
+		TableRowSorter sorter = null;
+		ResultsTable resultsTable = (ResultsTable)MapViewer.winMain.ffResultsPanel.getFFResultsTable();
+		if(MapViewer.winMain.dataContainer.gMapSetList.size() == 1)
+		{
+			LinklessFeatureTableModel linklessFeatureTableModel = new LinklessFeatureTableModel(containedFeatures);
+			resultsTable.setModel(linklessFeatureTableModel);
+			//set up sorting/filtering capability
+			sorter = new TableRowSorter<LinklessFeatureTableModel>(linklessFeatureTableModel);
+		}
+		else
+		{			
+			LinkedList<Link> linksFound = Utils.getLinksForFeatures(containedFeatures);
+			HomologResultsTableModel homologResultsTableModel = new HomologResultsTableModel(linksFound);
+			resultsTable.setModel(homologResultsTableModel);
+			//set up sorting/filtering capability
+			sorter = new TableRowSorter<HomologResultsTableModel>(homologResultsTableModel);				
+		}
+		resultsTable.addModelSpecificTableListeners();
+		MapViewer.winMain.ffResultsPanel.getFFResultsTable().setRowSorter(sorter);
+		
+		//size the columns and the dialog containing the table appropriately
+		((ResultsTable)MapViewer.winMain.ffResultsPanel.getFFResultsTable()).initColumnSizes();
+	}
+	
+	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 }

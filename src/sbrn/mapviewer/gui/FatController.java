@@ -2,6 +2,7 @@ package sbrn.mapviewer.gui;
 
 import java.awt.*;
 import java.util.*;
+import javax.swing.table.*;
 
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
@@ -16,9 +17,6 @@ public class FatController
 	
 	private WinMain winMain = MapViewer.winMain;
 	
-	//a vector of features we have looked up by position range
-	public Vector<Feature> featuresInRange = new Vector<Feature>();
-
 	//a map we are inverting
 	public static GChromoMap invertMap = null;
 	
@@ -125,35 +123,6 @@ public class FatController
 		MapViewer.logger.finest("time taken (nanos) = " + (System.nanoTime() - startTime));
 	}
 	
-	
-	
-	
-	// --------------------------------------------------------------------------------------------------------------------------------------------------------
-	
-	//sets up the data model for features we have searched for by name or range
-	public LinkedList<Link> matchFeaturesToNames(String [] featureNames)
-	{
-		LinkedList<Link> homologies = new LinkedList<Link>();
-		
-		//parse the strings out into the table model and populate as appropriate
-		for (int i = 0; i < featureNames.length; i++)
-		{
-			//retrieve the Feature that corresponds to this name
-			Feature f = Utils.getFeatureByName(featureNames[i].trim());
-			if (f != null)
-			{
-				//get all the links this feature is involved in
-				//for each link
-				for (Link link : f.getLinks())
-				{
-					//create a new entry in the homologies list
-					homologies.add(link);
-				}
-			}
-		}
-		
-		return homologies;
-	}
 
 	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
 	
@@ -165,22 +134,19 @@ public class FatController
 		winMain.hideSplitPaneBottomHalf();
 		winMain.splitPane.setDividerLocation(1.0);
 		
-		//clear the table model for the found features
-		winMain.ffResultsPanel.getFFResultsTable().setModel(new FoundFeatureTableModel());
-		
+		resetViewOnly();
+
 		//clear the found features
 		MapViewer.winMain.fatController.highlightFeature = null;
 		MapViewer.winMain.fatController.highlightFeatureHomolog = null;
-		if(featuresInRange != null)
-			featuresInRange.clear();		
+		if(FeatureSearchHandler.featuresInRange != null)
+			FeatureSearchHandler.featuresInRange.clear();		
 		winMain.mainCanvas.drawHighlightFeatures = false;
 		winMain.mainCanvas.drawFoundFeaturesInRange = false;
 		findFeaturesRequested = false;
+		//clear the table model for the found features
+		winMain.ffResultsPanel.getFFResultsTable().setModel(new DefaultTableModel());
 		
-		//this hides the selection rectangle that the user may have drawn
-		hideSelectionRect();
-		
-		resetViewOnly();
 	}
 	
 	//	--------------------------------------------------------------------------------------------------------------------------------------------------------

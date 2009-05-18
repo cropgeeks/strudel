@@ -14,8 +14,28 @@ import sbrn.mapviewer.gui.entities.*;
 public class LabelDisplayManager
 {
 	
+	//this font height is used for all labels drawn
 	private static int fontHeight = 11;
 	
+	//-------------------------------------------------------------------------------------------------------------------------------
+	
+	public static void drawLabelsForFoundFeatures(Graphics2D g2)
+	{
+		//the features we need to draw
+		Vector<Feature> features = FeatureSearchHandler.featuresInRange;
+		
+		//for this we need the interval start and end values		
+		float intervalStart = features.get(0).getStart();
+		float intervalEnd = features.get(features.size()-1).getStart();
+		
+		//all the features should be on the same map so we can just query the first element for its parent map
+		GChromoMap gChromoMap = features.get(0).getOwningMap().getGChromoMap();
+		
+		Vector<GChromoMap> gMaps = new Vector<GChromoMap>();
+		gMaps.add(gChromoMap);
+		LabelDisplayManager.drawFeatureLabelsInRange(g2, false, gMaps, intervalStart, intervalEnd, features);
+		
+	}
 	
 	//------------------------------------------------------------------------------------------------------------------------------------
 	
@@ -29,10 +49,13 @@ public class LabelDisplayManager
 		//easiest to do this with a local Vector for the two features -- saves duplication 
 		Vector<Feature> features = new Vector<Feature>();
 		features.add(f1);
-		features.add(f2);
-		
-		//work out the mapset index for the homolog
-		int mapSetIndexF2 = MapViewer.winMain.dataContainer.gMapSetList.indexOf(f2.getOwningMap().getGChromoMap().owningSet);
+		int mapSetIndexF2 = -1;
+		if(f2 != null)
+		{
+			features.add(f2);		
+			//work out the mapset index for the homolog
+			mapSetIndexF2 = MapViewer.winMain.dataContainer.gMapSetList.indexOf(f2.getOwningMap().getGChromoMap().owningSet);
+		}
 		
 		// for all features in our list
 		for (Feature f : features)
@@ -81,16 +104,21 @@ public class LabelDisplayManager
 			//determine whether the marker should go on the left or right
 			boolean markersRight = false;
 			
-			//we want the label on the right for the rightmost genome, left for the leftmost genome
-			if((features.indexOf(f) == 0 && mapSetIndexF2 == 0) ||
-							(features.indexOf(f) == 1 && mapSetIndexF2 == 2))
+			//if there are two features
+			if(f2 != null)
 			{
-				markersRight = true;	
+				//we want the label on the right for the rightmost genome, left for the leftmost genome
+				if((features.indexOf(f) == 0 && mapSetIndexF2 == 0) ||
+								(features.indexOf(f) == 1 && mapSetIndexF2 == 2))
+				{
+					markersRight = true;	
+				}
+				else
+				{
+					markersRight =  false;
+				}
 			}
-			else
-			{
-				markersRight =  false;
-			}
+			
 			if (markersRight)
 			{				
 				lineStartX = gChromoMap.x + gChromoMap.width;		
@@ -223,8 +251,6 @@ public class LabelDisplayManager
 			MapViewer.logger.fine("isMultiChromoRange = " + isMultiChromoRange);
 			//work out the positions on the canvas, in pixels, of the top end of the topmost chromo and the bottom end of the 
 			//bottom most chromo
-//			intervalStartPos = (int) gMaps.get(0).boundingRectangle.getY();
-//			intervalEndPos = (int) (gMaps.get(gMaps.size()-1).boundingRectangle.getY() + gMaps.get(gMaps.size()-1).height);
 			Feature topMostFeature = features.get(0);
 			Feature bottomMostFeature = features.get(features.size()-1);
 			
@@ -247,7 +273,7 @@ public class LabelDisplayManager
 		//the label offset on y relative to the start of the features themselves
 		//need to subtract this from each label position
 		int offset = Math.round(differential / 2.0f);	
-		
+
 		//don't want the offset to be negative
 		if(differential < 0)
 			offset = 0;
@@ -332,24 +358,25 @@ public class LabelDisplayManager
 	
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
+	
+	//draw all labels for all features on this chromosome if this has been requested at the level of the mapset
 	public static void drawLabelsForAllVisibleFeatures(Graphics2D g2, GMapSet gMapSet)
 	{
-		//draw all labels for all features on this chromosome if this has been requested at the level of the mapset
-		if(gMapSet.alwaysShowAllLabels && (gMapSet.zoomFactor >= gMapSet.singleChromoViewZoomFactor))
+		MapViewer.logger.fine("drawLabelsForAllVisibleFeatures " + gMapSet.name);
+		
+		//combine all the features from the visible maps into one
+		Vector<Feature> combinedFeatures = new Vector<Feature>();
+		Vector<GChromoMap> gMaps = gMapSet.getVisibleMaps();
+		for (GChromoMap gMap : gMaps)
 		{
-			//combine all the features from the visible maps into one
-			Vector<Feature> combinedFeatures = new Vector<Feature>();
-			Vector<GChromoMap> gMaps = gMapSet.getVisibleMaps();
-			for (GChromoMap gMap : gMaps)
-			{
-				//get all the features of this map and put them into the combined features vector
-				combinedFeatures.addAll(Arrays.asList(gMap.allLinkedFeatures));
-			}
-			
-			//now draw the labels
-			//only use those features that are actually visible on canvas
-			LabelDisplayManager.drawFeatureLabelsInRange(g2, true, gMaps , -1, -1, Utils.checkFeatureVisibility(combinedFeatures));
+			//get all the features of this map and put them into the combined features vector
+			combinedFeatures.addAll(Arrays.asList(gMap.allLinkedFeatures));
 		}
+		
+		//now draw the labels
+		boolean isMultiChromoRange = gMaps.size() > 1;
+		//only use those features that are actually visible on canvas
+		drawFeatureLabelsInRange(g2, isMultiChromoRange, gMaps , -1, -1, Utils.checkFeatureVisibility(combinedFeatures));
 	}
 	
 	

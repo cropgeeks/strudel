@@ -355,7 +355,6 @@ public class Utils
 		catch (Exception e)
 		{
 			TaskDialog.error("Error: URL not specified or specified incorrectly", "Close");
-			System.out.println(e);
 		}
 	}
 	
@@ -474,6 +473,31 @@ public class Utils
 
 		MapViewer.logger.fine("visibleFeatures.size() = " + visibleFeatures.size());
 		return visibleFeatures;
+	}
+
+	// --------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	//returns all links for features we have searched for by name or range
+	public static LinkedList<Link> getLinksForFeatures(Vector<Feature> features)
+	{
+		LinkedList<Link> homologies = new LinkedList<Link>();
+		
+		//parse the strings out into the table model and populate as appropriate
+		for (Feature f : features)
+		{
+			if (f != null)
+			{
+				//get all the links this feature is involved in
+				//for each link
+				for (Link link : f.getLinks())
+				{
+					//create a new entry in the homologies list
+					homologies.add(link);
+				}
+			}
+		}
+		
+		return homologies;
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------

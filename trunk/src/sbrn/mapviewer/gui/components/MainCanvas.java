@@ -339,23 +339,7 @@ public class MainCanvas extends JPanel
 		//need to do this in this order so things are drawn on top of each other in the right sequence
 		if (drawFoundFeaturesInRange && (MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().isSelected() || MapViewer.winMain.foundFeaturesTableControlPanel.getShowLabelsCheckbox().isSelected()))
 		{
-			//the features we need to draw
-			Vector<Feature> features = MapViewer.winMain.fatController.featuresInRange;
-//			//sort these by position
-//			Collections.sort(features);
-			
-			//for this we need the interval start and end values
-			MTFindFeaturesInRangePanel ffInRangePanel = MapViewer.winMain.ffInRangeDialog.ffInRangePanel;		
-			float intervalStart = ((Number)ffInRangePanel.getRangeStartSpinner().getValue()).floatValue();
-			float intervalEnd = ((Number)ffInRangePanel.getRangeEndSpinner().getValue()).floatValue();
-			//and the chromosome the interval is on
-			String genome = (String) ffInRangePanel.getGenomeCombo().getSelectedItem();
-			String chromosome =  (String) ffInRangePanel.getChromoCombo().getSelectedItem();
-			GChromoMap gChromoMap = Utils.getGMapByName(chromosome,genome);
-			
-			Vector<GChromoMap> gMaps = new Vector<GChromoMap>();
-			gMaps.add(gChromoMap);
-			LabelDisplayManager.drawFeatureLabelsInRange(g2, false, gMaps, intervalStart, intervalEnd, MapViewer.winMain.fatController.featuresInRange);
+			LabelDisplayManager.drawLabelsForFoundFeatures(g2);
 		}
 
 		//check whether we want to display a BLAST cutoff value
@@ -374,8 +358,9 @@ public class MainCanvas extends JPanel
 			{
 				//if the map is meant to be visible on the canvas at this time
 				if (gChromoMap.isShowingOnCanvas && !gChromoMap.inversionInProgress)
-				{				
-					LabelDisplayManager.drawLabelsForAllVisibleFeatures(g2, gMapSet);
+				{		
+					if(gMapSet.alwaysShowAllLabels && (gMapSet.zoomFactor >= gMapSet.singleChromoViewZoomFactor))
+						LabelDisplayManager.drawLabelsForAllVisibleFeatures(g2, gMapSet);
 					drawMapIndex(g2, gChromoMap, gMapSet);
 				}
 			}

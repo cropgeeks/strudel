@@ -425,10 +425,11 @@ public class Utils
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
 	
-	public static int getFPosOnCanvasInPixels(GMapSet owningSet, ChromoMap chromoMap, float fPos)
+	public static int getFPosOnScreenInPixels(GMapSet owningSet, ChromoMap chromoMap, float fPos)
 	{
-		int  y = (int) chromoMap.getGChromoMap().boundingRectangle.getY();
-		return Math.round((owningSet.chromoHeight / chromoMap.getStop()) * fPos) + y;
+		int  y = chromoMap.getGChromoMap().yOnCanvas;
+		MapViewer.logger.fine(chromoMap.getGChromoMap().name + " y = " + y);
+		return Math.round((owningSet.chromoHeight / chromoMap.getStop()) * fPos) + chromoMap.getGChromoMap().yOnCanvas;
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -451,18 +452,17 @@ public class Utils
 				//get the relative position on the map
 				float fStart = feature.getStart();
 				//convert this to an absolute position on the canvas in pixels
-				int pixelPos = getFPosOnCanvasInPixels(gMapSet, cMap, fStart);
-				//work out the topmost y coord of the genome as visible on the main canvas
-				int upperCanvasMapSetIntersection = gMapSet.centerPoint - MapViewer.winMain.mainCanvas.getHeight() / 2;
-				int lowerCanvasMapSetIntersection = gMapSet.centerPoint + MapViewer.winMain.mainCanvas.getHeight() / 2;
-				
-				MapViewer.logger.fine("upperCanvasMapSetIntersection = " + upperCanvasMapSetIntersection);
-				MapViewer.logger.fine("lowerCanvasMapSetIntersection = " + lowerCanvasMapSetIntersection);
+				int pixelPos = getFPosOnScreenInPixels(gMapSet, cMap, fStart);
+//				//work out the topmost y coord of the genome as visible on the main canvas
+//				int upperCanvasMapSetIntersection = gMapSet.centerPoint - MapViewer.winMain.mainCanvas.getHeight() / 2;
+//				int lowerCanvasMapSetIntersection = gMapSet.centerPoint + MapViewer.winMain.mainCanvas.getHeight() / 2;
+//				
+//				MapViewer.logger.fine("upperCanvasMapSetIntersection = " + upperCanvasMapSetIntersection);
+//				MapViewer.logger.fine("lowerCanvasMapSetIntersection = " + lowerCanvasMapSetIntersection);
 				MapViewer.logger.fine("pixelPos for feature " +feature.getName() + " = " + pixelPos);
-				
-				
+
 				//check whether this position is currently showing on the canvas or not
-				if (pixelPos > upperCanvasMapSetIntersection && pixelPos < lowerCanvasMapSetIntersection)
+				if (pixelPos > 0 && pixelPos < MapViewer.winMain.mainCanvas.getHeight())
 				{
 					//if it is, add it
 					visibleFeatures.add(feature);

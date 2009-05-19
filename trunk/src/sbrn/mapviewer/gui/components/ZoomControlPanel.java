@@ -31,13 +31,12 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		
 		this.winMain = winMain;
 		this.gMapSet = gMapSet;
+		gMapSet.zoomControlPanel = this;
 		
 		setFloatable(false);
 		setBorderPainted(false);
 		
 		setupComponents(addFiller);
-		
-		checkButtonsToEnable();
 	}
 	
 	// ==============================================methods====================================
@@ -101,11 +100,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 	public void stateChanged(ChangeEvent e)
 	{
 		MapViewer.logger.fine("zoom slider state changed");
-//		MapViewer.logger.fine("isClickZoomRequest = " + winMain.mainCanvas.zoomHandler.isClickZoomRequest);
-//		MapViewer.logger.fine("isPanZoomRequest = " + winMain.mainCanvas.zoomHandler.isPanZoomRequest);
-		
-		checkButtonsToEnable();
-		
+
 		JSlider source = (JSlider) e.getSource();
 		if (source.equals(zoomSlider) && !winMain.mainCanvas.zoomHandler.isClickZoomRequest && !winMain.mainCanvas.zoomHandler.isPanZoomRequest)
 		{
@@ -118,15 +113,16 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	
-	private void checkButtonsToEnable()
-	{
-		//check whether we should have the alwaysShowAllLabelsButton enabled
-		//we don't want this option if we are looking at more than one chromo on screen
-		if(gMapSet.zoomFactor >= gMapSet.singleChromoViewZoomFactor && (gMapSet.singleChromoViewZoomFactor != 0))
-			alwaysShowAllLabelsButton.setEnabled(true);
-		else
-			alwaysShowAllLabelsButton.setEnabled(false);
-	}
+//	public void checkButtonsToEnable()
+//	{
+//		//check whether we should have the alwaysShowAllLabelsButton enabled
+//		//we don't want this option if we are looking at more than one chromo on screen
+//		if((gMapSet.zoomFactor >= gMapSet.singleChromoViewZoomFactor-1 && gMapSet.singleChromoViewZoomFactor != 0)
+//						|| gMapSet.alwaysShowAllLabels)
+//			alwaysShowAllLabelsButton.setEnabled(true);
+//		else
+//			alwaysShowAllLabelsButton.setEnabled(false);
+//	}
 	
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	

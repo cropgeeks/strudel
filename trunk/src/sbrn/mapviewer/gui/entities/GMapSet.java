@@ -80,6 +80,9 @@ public class GMapSet
 	public boolean overrideMarkersAutoDisplay = false;
 	//a boolean to indicate whether we should always display labels, regardless of zoom factor
 	public boolean alwaysShowAllLabels = false;
+	
+	//the zoom control panel pertaining to this mapset
+	public ZoomControlPanel zoomControlPanel;
 
 	// ====================================c'tors========================================
 

@@ -362,7 +362,7 @@ public class WinMain extends JFrame
 	
 	private void initZoomControls()
 	{
-		MapViewer.logger.finest("initZoomControls()");
+		MapViewer.logger.info("initZoomControls()");
 		
 		zoomControlContainerPanel = new JPanel(new GridLayout(1, dataContainer.gMapSetList.size()));
 

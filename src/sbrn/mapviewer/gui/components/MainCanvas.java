@@ -202,6 +202,7 @@ public class MainCanvas extends JPanel
 		for (GMapSet gMapSet : winMain.dataContainer.gMapSetList)
 		{
 			checkMarkerPaintingThresholds(gMapSet);
+			checkForLabelDrawing(gMapSet);
 
 			//calculate the x position for this genome
 			int numGenomes = winMain.dataContainer.gMapSetList.size();
@@ -270,6 +271,8 @@ public class MainCanvas extends JPanel
 				// this is purely so we have it stored somewhere
 				gChromoMap.x = x;
 				gChromoMap.y = currentY;
+				MapViewer.logger.fine("currentY for map " + gChromoMap.name + " = "  + currentY);
+				gChromoMap.yOnCanvas = currentY;
 				gChromoMap.height = gMapSet.chromoHeight;
 				gChromoMap.width = chromoWidth;
 				// update its bounding rectangle (used for hit detection)
@@ -359,7 +362,7 @@ public class MainCanvas extends JPanel
 				//if the map is meant to be visible on the canvas at this time
 				if (gChromoMap.isShowingOnCanvas && !gChromoMap.inversionInProgress)
 				{		
-					if(gMapSet.alwaysShowAllLabels && (gMapSet.zoomFactor >= gMapSet.singleChromoViewZoomFactor))
+					if(gMapSet.alwaysShowAllLabels)
 						LabelDisplayManager.drawLabelsForAllVisibleFeatures(g2, gMapSet);
 					drawMapIndex(g2, gChromoMap, gMapSet);
 				}
@@ -451,6 +454,31 @@ public class MainCanvas extends JPanel
 		{
 			selectedSet.paintAllMarkers = false;
 		}
+	}
+	
+	// -----------------------------------------------------------------------------------------------------------------------------------
+		
+	public void checkForLabelDrawing(GMapSet gMapSet)
+	{
+		MapViewer.logger.info("================checkForLabelDrawing " + gMapSet.name);
+		MapViewer.logger.info("gMapSet.zoomFactor " + gMapSet.zoomFactor);
+		MapViewer.logger.info("gMapSet.singleChromoViewZoomFactor " + gMapSet.singleChromoViewZoomFactor);
+		MapViewer.logger.info("gMapSet.alwaysShowAllLabels = " + gMapSet.alwaysShowAllLabels);
+
+			//check whether we should have the alwaysShowAllLabelsButton enabled
+			//we don't want this option if we are looking at more than one chromo on screen
+			if ((gMapSet.zoomFactor >= gMapSet.singleChromoViewZoomFactor - 1 && gMapSet.singleChromoViewZoomFactor != 0))
+			{
+				MapViewer.logger.info("enabling button");
+				gMapSet.zoomControlPanel.alwaysShowAllLabelsButton.setEnabled(true);
+			}
+			else
+			{
+				MapViewer.logger.info("disabling button");
+				gMapSet.alwaysShowAllLabels = false;
+				gMapSet.zoomControlPanel.alwaysShowAllLabelsButton.setSelected(false);
+				gMapSet.zoomControlPanel.alwaysShowAllLabelsButton.setEnabled(false);
+			}
 	}
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------

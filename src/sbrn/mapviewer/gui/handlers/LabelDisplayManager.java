@@ -17,6 +17,9 @@ public class LabelDisplayManager
 	//this font height is used for all labels drawn
 	private static int fontHeight = 11;
 	
+	//a multiplier for the font height that allows us to space the labels vertically
+	private static float verticalSpacer = 1.3f;
+	
 	//-------------------------------------------------------------------------------------------------------------------------------
 	
 	public static void drawLabelsForFoundFeatures(Graphics2D g2)
@@ -33,7 +36,7 @@ public class LabelDisplayManager
 		
 		Vector<GChromoMap> gMaps = new Vector<GChromoMap>();
 		gMaps.add(gChromoMap);
-		LabelDisplayManager.drawFeatureLabelsInRange(g2, false, gMaps, intervalStart, intervalEnd, features);
+		LabelDisplayManager.drawFeatureLabelsInRange(g2, false, gMaps, intervalStart, intervalEnd, features, false);
 		
 	}
 	
@@ -154,7 +157,7 @@ public class LabelDisplayManager
 	//	------------------------------------------------------------------------------------------------------------------------------------
 	
 	// draws labels next to found features in a specified range only
-	public static void drawFeatureLabelsInRange(Graphics2D g2, boolean isMultiChromoRange, Vector<GChromoMap> gMaps,float intervalStart,float intervalEnd,Vector<Feature> features)
+	public static void drawFeatureLabelsInRange(Graphics2D g2, boolean isMultiChromoRange, Vector<GChromoMap> gMaps,float intervalStart,float intervalEnd,Vector<Feature> features, boolean isMouseOver)
 	{	
 		g2.setFont(new Font("Sans-serif", Font.PLAIN, fontHeight));
 		FontMetrics fm = g2.getFontMetrics();
@@ -210,10 +213,13 @@ public class LabelDisplayManager
 				// draw the label
 				g2.drawString(featureName, labelX, labelY);
 				
-				//set the highlight colour
-				g2.setColor(Colors.highlightedFeatureColour);
-				// draw a line to highlight the marker on the chromosome itself
-				g2.drawLine(mapSetX, featureY, mapSetX + MapViewer.winMain.mainCanvas.chromoWidth - 1, featureY);
+				if (isMouseOver)
+				{
+					//set the highlight colour
+					g2.setColor(Colors.highlightedFeatureColour);
+					// draw a line to highlight the marker on the chromosome itself
+					g2.drawLine(mapSetX, featureY, mapSetX + MapViewer.winMain.mainCanvas.chromoWidth - 1, featureY);
+				}
 			}
 		}
 	}
@@ -224,58 +230,21 @@ public class LabelDisplayManager
 	private static LinkedHashMap<Feature, Integer> calculateLabelPositions(boolean isMultiChromoRange, Vector<GChromoMap> gMaps,float intervalStart,float intervalEnd,Vector<Feature> features, LinkedHashMap<Feature, Integer> featurePositions)
 	{
 		LinkedHashMap<Feature, Integer> labelPositions = (LinkedHashMap<Feature, Integer>)featurePositions.clone();
-		
-		//the label's height, includes some space between text vertically
-		int gap = 1;
-		int labelHeight = fontHeight + gap;
-		
+	
+		//the label's height
+		float labelHeight = fontHeight*verticalSpacer;
+
 		//first we want to work out where we start drawing the labels relative to the range start point
 		//we want the labels fanning out evenly on y both up and downwards from the features themselves
 		//first work out the combined height of the labels
-		int totalLabelHeight = features.size() * labelHeight;
-		//then the height of the interval
-		
-		int intervalStartPos = -1;
-		int intervalEndPos = -1;
-		//all features are in a single range on a single chromosome
-		if(!isMultiChromoRange)
-		{
-			ChromoMap chromoMap = gMaps.get(0).chromoMap;
-			//convert the interval values to actual pixel positions on the canvas
-			intervalStartPos = (int) ((chromoMap.getGChromoMap().owningSet.chromoHeight / chromoMap.getStop()) * intervalStart);
-			intervalEndPos = (int) ((chromoMap.getGChromoMap().owningSet.chromoHeight / chromoMap.getStop()) * intervalEnd);
-		}
-		//features stretch out over multiple neighbouring chromosomes
-		else
-		{
-			MapViewer.logger.fine("isMultiChromoRange = " + isMultiChromoRange);
-			//work out the positions on the canvas, in pixels, of the top end of the topmost chromo and the bottom end of the 
-			//bottom most chromo
-			Feature topMostFeature = features.get(0);
-			Feature bottomMostFeature = features.get(features.size()-1);
-			
-			intervalStartPos = Utils.convertRelativeFPosToPixels(topMostFeature.getOwningMap().getGChromoMap().owningSet,
-							topMostFeature.getOwningMap(), topMostFeature.getStart());
-			intervalEndPos = Utils.convertRelativeFPosToPixels(bottomMostFeature.getOwningMap().getGChromoMap().owningSet,
-							bottomMostFeature.getOwningMap(), bottomMostFeature.getStart());
-			
-			MapViewer.logger.fine("gMaps.size() = " + gMaps.size()); 
-			MapViewer.logger.fine("features.size() = " + features.size());
-			MapViewer.logger.fine("intervalStartPos in LabelDisplayManager = " + intervalStartPos);
-			MapViewer.logger.fine("intervalEndPos in LabelDisplayManager = " + intervalEndPos);
-		}
-		
-		//size of the interval in pixels
-		int intervalHeight = intervalEndPos - intervalStartPos;
-		
-		//the difference between the total label height and the interval height
-		int differential = totalLabelHeight - intervalHeight;
+		int totalLabelHeight = Math.round(features.size() * labelHeight);	
+		//the difference between the total label height and the canvas size
+		int excess = totalLabelHeight - MapViewer.winMain.mainCanvas.getHeight();
 		//the label offset on y relative to the start of the features themselves
 		//need to subtract this from each label position
-		int offset = Math.round(differential / 2.0f);	
-
+		int offset = Math.round(excess / 2.0f);	
 		//don't want the offset to be negative
-		if(differential < 0)
+		if(excess < 0)
 			offset = 0;
 		
 		//need to check that the label interval is no less than the height of an individual label plus some space at 
@@ -297,7 +266,7 @@ public class LabelDisplayManager
 						//move the position of feature 2 down on y by the so it is at the position of feature 1 plus one label height
 						//need to make this change both to the map with the laid out positions as well as the default one because
 						//the value from the latter will be used in the next iteration
-						int newPos = labelPositions.get(f1) + labelHeight;
+						int newPos = Math.round(labelPositions.get(f1) + labelHeight);
 						labelPositions.put(f2, newPos);
 					}
 				}
@@ -376,7 +345,7 @@ public class LabelDisplayManager
 		//now draw the labels
 		boolean isMultiChromoRange = gMaps.size() > 1;
 		//only use those features that are actually visible on canvas
-		drawFeatureLabelsInRange(g2, isMultiChromoRange, gMaps , -1, -1, Utils.checkFeatureVisibility(combinedFeatures));
+		drawFeatureLabelsInRange(g2, isMultiChromoRange, gMaps , -1, -1, Utils.checkFeatureVisibility(combinedFeatures), false);
 	}
 	
 	

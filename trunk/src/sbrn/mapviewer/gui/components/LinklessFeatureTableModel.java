@@ -5,7 +5,12 @@ import javax.swing.table.*;
 import sbrn.mapviewer.data.*;
 
 
-
+/**
+ * Table model to be used for results table when we are dealing with only one genome
+ * Does not contain links (as opposed to the equivalent HomologResultsTableModel, which is used in a 
+ * comparative context)
+ * 
+ */
 public class LinklessFeatureTableModel extends AbstractTableModel
 {
 	Vector<Feature> features = new Vector<Feature>();
@@ -85,5 +90,30 @@ public class LinklessFeatureTableModel extends AbstractTableModel
 		return columnNames[col];
 	}
 	
+	public String getAllDataInTabFormat()
+	{
+		StringBuffer buf = new StringBuffer();
+		
+		//output column names first
+		for (int i = 0; i < columnNames.length; i++)
+		{
+			buf.append(columnNames[i]);
+			if(i == columnNames.length-1)
+				buf.append("\n");
+			else
+				buf.append("\t");
+		}
+		
+		//output table row data
+		for (Feature feature : features)
+		{
+			buf.append(feature.getName() + "\t");
+			buf.append(feature.getStart() + "\t");
+			buf.append(feature.getOwningMap().getName() + "\t");
+			buf.append(feature.getAnnotation() + "\n");
+			
+		}
+		return buf.toString();
+	}
 	
 }

@@ -29,6 +29,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 	public JToggleButton bAntialias;
 	public JToggleButton bLinkFilter;
 	public JButton bInfo;
+	public JButton bSave;
 	
 	
 	public int currentLinkShapeType = 1;
@@ -59,6 +60,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		
 		addSeparator(true);		
 		add(bExport);
+		add(bSave);
 		
 		addSeparator(true);		
 		add(bOverview);
@@ -138,6 +140,13 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		KeyStroke ctrlEKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK);
 		bExport.getInputMap(JButton.WHEN_IN_FOCUSED_WINDOW).put(ctrlEKeyStroke, "exportImage");
 		bExport.getActionMap().put("exportImage", exportImageAction);
+		
+		//configure save table data button
+		SaveTableDataAction saveTableDataAction = new SaveTableDataAction();
+		bSave =  (JButton) Utils.getButton(false, "", "Save results table to file", Icons.getIcon("SAVE"), saveTableDataAction, this, false);
+		KeyStroke ctrlSKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK);
+		bSave.getInputMap(JButton.WHEN_IN_FOCUSED_WINDOW).put(ctrlSKeyStroke, "saveTableData");
+		bSave.getActionMap().put("saveTableData", exportImageAction);
 		
 		//configure find features button
 		FindFeaturesAction findFeaturesAction = new FindFeaturesAction();
@@ -234,6 +243,10 @@ public class ControlToolBar extends JToolBar implements ActionListener
 			MapViewer.winMain.aboutDialog.setVisible(true);
 		}
 		
+		else if(e.getSource() == bSave)
+		{
+		}
+		
 	}
 	
 	private void addSeparator(boolean separator)
@@ -282,21 +295,39 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		}
 	}
 	
-	public void enableAllControls()
+	public void enableControls(boolean singleGenomeMode)
 	{
 		try
 		{
-			blastLabel.setEnabled(true);
-			eValueSlider.setEnabled(true);
-			bExport.setEnabled(true);
-			bOverview.setEnabled(true);
-			bFindFeatures.setEnabled(true);
-			bFindFeaturesinRange.setEnabled(true);
-			bResetAll.setEnabled(true);
-			bDistMarkers.setEnabled(true);
-			bCurves.setEnabled(true);
-			bAntialias.setEnabled(true);
-			bLinkFilter.setEnabled(true);
+			if(singleGenomeMode)
+			{
+				blastLabel.setEnabled(false);
+				eValueSlider.setEnabled(false);
+				bExport.setEnabled(true);
+				bOverview.setEnabled(true);
+				bFindFeatures.setEnabled(true);
+				bFindFeaturesinRange.setEnabled(true);
+				bResetAll.setEnabled(true);
+				bDistMarkers.setEnabled(true);
+				bCurves.setEnabled(false);
+				bAntialias.setEnabled(true);
+				bLinkFilter.setEnabled(false);
+			}
+			else
+			{
+				blastLabel.setEnabled(true);
+				eValueSlider.setEnabled(true);
+				bExport.setEnabled(true);
+				bOverview.setEnabled(true);
+				bFindFeatures.setEnabled(true);
+				bFindFeaturesinRange.setEnabled(true);
+				bResetAll.setEnabled(true);
+				bDistMarkers.setEnabled(true);
+				bCurves.setEnabled(true);
+				bAntialias.setEnabled(true);
+				bLinkFilter.setEnabled(true);
+			}
+
 		}
 		catch (Exception e)
 		{

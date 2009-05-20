@@ -1,0 +1,92 @@
+package sbrn.mapviewer.gui.actions;
+
+import java.awt.event.*;
+import java.io.*;
+
+import javax.imageio.*;
+import javax.swing.*;
+import javax.swing.table.*;
+
+import sbrn.mapviewer.*;
+import sbrn.mapviewer.gui.components.*;
+import scri.commons.file.*;
+import scri.commons.gui.*;
+
+public class SaveTableDataAction extends AbstractAction
+{
+	
+	//===========================================methods===========================================
+	
+	public void actionPerformed(ActionEvent e)
+	{
+		JFileChooser fc = new JFileChooser();
+		fc.setDialogTitle("Save table data as");
+		fc.setAcceptAllFileFilterUsed(false);
+		fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
+		File outputFile = new File("tableData.txt");
+		fc.setSelectedFile(outputFile);
+		
+		while (fc.showSaveDialog(MapViewer.winMain) == JFileChooser.APPROVE_OPTION)
+		{
+			File file = fc.getSelectedFile();
+			
+			// Confirm overwrite
+			if (file.exists())
+			{
+				String msg = file.getAbsolutePath() + " already exists.\nContinuing will "
+				+ "overwrite this file with your new file.";
+				String[] options = new String[] { "Overwrite", "Rename", "Cancel" };
+				
+				int response = TaskDialog.show(msg, MsgBox.WAR, 0, options);
+				
+				if (response == 1)
+					continue;
+				else if (response == -1 || response == 2)
+					return;
+			}
+			
+			try
+			{
+				//write table data to file
+				FileUtils.writeFile(outputFile, extractResultsTableData());				
+				
+				TaskDialog.info("The data was successfully saved "
+								+ " to " + file, "Close");
+			}
+			catch (NullPointerException npx)
+			{
+				TaskDialog.error("File could not be saved -- access denied.", "Close");	
+				
+				npx.printStackTrace();
+			}
+			catch (IOException e1)
+			{
+				TaskDialog.error("An internal error has prevented the data "
+								+ "from being exported correctly.\n\nError details: "
+								+ e1.getMessage(), "Close");
+				
+				e1.printStackTrace();
+			}
+			
+			return;
+		}
+		
+	}
+	
+	//------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	private String extractResultsTableData()
+	{
+		//get the table model first
+		TableModel model = MapViewer.winMain.ffResultsPanel.resultsTable.getModel();		
+		if(model.getClass().getName().equals("sbrn.mapviewer.gui.components.HomologResultsTableModel"))
+		{
+			return ((HomologResultsTableModel)model).getAllDataInTabFormat();
+		}		
+		return ((LinklessFeatureTableModel)model).getAllDataInTabFormat();	
+	}
+	
+	
+	//------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+}

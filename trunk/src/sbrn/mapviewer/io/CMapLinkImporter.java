@@ -27,8 +27,7 @@ public class CMapLinkImporter
 		mapSets.add(mapset);
 	}
 	
-	public LinkSet loadLinkSet()
-		throws IOException, ArrayIndexOutOfBoundsException
+	public LinkSet loadLinkSet() throws Exception
 	{ 
 		try
 		{
@@ -94,6 +93,11 @@ public class CMapLinkImporter
 		}
 		
 		MapViewer.logger.fine("returning linkset of size " + linkSet.size());
+		if(linkSet.size() == 0 && MapViewer.winMain.dataContainer.gMapSetList.size() > 1)
+		{
+			String message = "Linkset does not contain any links between the genomes specified.\n Please check your data files and retry.";
+			throw new Exception(message);
+		}
 		
 		return linkSet;
 	}

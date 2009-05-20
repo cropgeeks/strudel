@@ -54,15 +54,26 @@ public class CMapImporter
 		// Ignore the first line of the file
 		in.readLine();
 		String str = in.readLine();
+		int lineCount = 2;
 		
 		while (str != null)
 		{
 			StringTokenizer st = new StringTokenizer(str, "\t");
 			
 			// Find the map in question for this line
-			ChromoMap map = getMapByName(st.nextToken());
+			ChromoMap map;
+			try
+			{
+				map = getMapByName(st.nextToken());
+			}
+			catch (Exception e1)
+			{
+				String errorMessage = "Data on line " + lineCount + " of file " + filename + " cannot be parsed.";
+				e1.printStackTrace();
+				throw new Exception(errorMessage);
+			}
 			
-			// Read (and create) the Feature
+			// Read (and create) the Feature		
 			Feature f = new Feature(st.nextToken());
 			
 			// And its distance value
@@ -73,7 +84,7 @@ public class CMapImporter
 			}
 			catch (NumberFormatException e)
 			{
-				throw new NumberFormatException("Feature " + f.getName() + " " + "does not appear to have a valid distance");
+				throw new NumberFormatException("Feature " + f.getName() + " " + "does not appear to have a valid distance. ");
 			}
 			f.setStart(distance);
 			f.setStop(distance);
@@ -115,6 +126,7 @@ public class CMapImporter
 			map.addFeature(f);
 			
 			str = in.readLine();
+			lineCount++;
 		}
 		
 		in.close();

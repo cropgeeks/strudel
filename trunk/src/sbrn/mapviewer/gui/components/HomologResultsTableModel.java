@@ -4,8 +4,10 @@ import java.util.*;
 import javax.swing.table.*;
 import sbrn.mapviewer.data.*;
 
-
-
+/**
+ * Table model to be used for results table when we are dealing with more than one genome
+ * 
+ */
 public class HomologResultsTableModel extends AbstractTableModel
 {
 	LinkedList<Link> homologies = new LinkedList<Link>();
@@ -96,6 +98,35 @@ public class HomologResultsTableModel extends AbstractTableModel
 	public String getColumnName(int col)
 	{
 		return columnNames[col];
+	}
+	
+	public String getAllDataInTabFormat()
+	{
+		StringBuffer buf = new StringBuffer();
+		
+		//output column names first
+		for (int i = 0; i < columnNames.length; i++)
+		{
+			buf.append(columnNames[i]);
+			if(i == columnNames.length-1)
+				buf.append("\n");
+			else
+				buf.append("\t");
+		}
+				
+		//output the row data
+		for (Link link : homologies)
+		{
+			buf.append(link.getFeature1().getName() + "\t");
+			buf.append(link.getFeature1().getStart() + "\t");
+			buf.append(link.getFeature1().getOwningMap().getName() + "\t");
+			buf.append(link.getFeature2().getName() + "\t");
+			buf.append(link.getFeature2().getOwningMap().getOwningMapSet().getName() + "\t");
+			buf.append(link.getFeature2().getOwningMap().getName() + "\t");
+			buf.append(link.getFeature2().getStart() + "\t");
+			buf.append(link.getFeature2().getAnnotation() + "\n");
+		}
+		return buf.toString();
 	}
 	
 	

@@ -146,6 +146,8 @@ public class FatController
 		findFeaturesRequested = false;
 		//clear the table model for the found features
 		winMain.ffResultsPanel.getFFResultsTable().setModel(new DefaultTableModel());
+		//disable the button that allows export of this data to file
+		MapViewer.winMain.toolbar.bSave.setEnabled(false);
 		
 	}
 	
@@ -200,44 +202,6 @@ public class FatController
 		guiFullyAssembled = true;
 	}
 	
-	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
-	
-	public void initialiseNewProject()
-	{
-		// load the data			
-		//the easiest way of doing this is by simply creating a new data container instance
-		winMain.dataContainer = new DataContainer();
-		//if users load datasets in succession we need to make sure we don't run out of memory
-		//we want any old data containers to be thrown away
-		//run the garbage collector explicitly now
-		System.gc();
-		//check the memory situation
-		MapViewer.logger.fine("memory max (mb) = " + Runtime.getRuntime().maxMemory()/1024/1024);
-		MapViewer.logger.fine("memory available = (mb) " + Runtime.getRuntime().freeMemory()/1024/1024);
-		
-		//build the rest of the GUI as required
-		if(!winMain.fatController.guiFullyAssembled)
-			winMain.fatController.assembleRemainingGUIComps();
-		else
-			winMain.reinitialiseDependentComponents();
-		
-		//also need a new link display manager because it holds the precomputed links
-		winMain.mainCanvas.linkDisplayManager = new LinkDisplayManager(winMain.mainCanvas);	
-		
-		//check if we need to enable some functionality -- depends on the number of genomes loaded
-		//cannot do comparative stuff if user one loaded one (target) genome
-		if(winMain.dataContainer.gMapSetList.size() == 1)
-		{
-			winMain.toolbar.bFindFeatures.setEnabled(false);
-			winMain.toolbar.bFindFeaturesinRange.setEnabled(false);
-		}
-		else
-		{
-			winMain.toolbar.bFindFeatures.setEnabled(true);
-			winMain.toolbar.bFindFeaturesinRange.setEnabled(true);
-		}
-	
-	}
 	
 	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
 	

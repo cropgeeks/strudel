@@ -2,12 +2,10 @@ package sbrn.mapviewer.gui.dialog;
 
 import java.awt.*;
 import java.awt.event.*;
-
+import java.io.*;
 import javax.swing.*;
-
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
-import sbrn.mapviewer.gui.handlers.*;
 import scri.commons.gui.*;
 
 public class OpenFileDialog extends JDialog implements ActionListener
@@ -18,6 +16,8 @@ public class OpenFileDialog extends JDialog implements ActionListener
 	private JButton bOpen, bCancel;
 	public MTOpenFilesPanel openFilesPanel = new MTOpenFilesPanel();
 	public MTDataLoadingDialog dataLoadingDialog;
+	
+	File targetData, refGenome1FeatData, refGenome1HomData, refGenome2FeatData, refGenome2HomData;
 	
 	// =================================c'tor=======================================
 	
@@ -81,81 +81,19 @@ public class OpenFileDialog extends JDialog implements ActionListener
 	{
 		dataLoadingDialog = new MTDataLoadingDialog(MapViewer.winMain, false);
 		
-		//start the load in a separate thread
-		Runnable runnable = new Runnable()
-		{
-			public void run()
-			{							
-				// load the data			
-				//we do this by simply creating a new data container instance -- the actual data loading is done through this
-				DataContainer dataContainer = new DataContainer();
-				
-				//data is loaded now -- check whether the user has cancelled
-				if(!MapViewer.winMain.fatController.dataLoadCancelled)
-				{
-					MapViewer.logger.fine("data load successful -- proceeding");
-					
-					//point the reference in winMain at the new data container
-					MapViewer.winMain.dataContainer  = dataContainer;
-					//if users load datasets in succession we need to make sure we don't run out of memory
-					//we want any old data containers to be thrown away
-					//run the garbage collector explicitly to do this
-					System.gc();
-					
-					//build the rest of the GUI as required
-					if(!MapViewer.winMain.fatController.guiFullyAssembled)
-						MapViewer.winMain.fatController.assembleRemainingGUIComps();
-					else
-						MapViewer.winMain.reinitialiseDependentComponents();
-					
-					//also need a new link display manager because it holds the precomputed links
-					MapViewer.winMain.mainCanvas.linkDisplayManager = new LinkDisplayManager(MapViewer.winMain.mainCanvas);	
-					
-					//check if we need to enable some functionality -- depends on the number of genomes loaded
-					//cannot do comparative stuff if user one loaded one (target) genome
-					if(MapViewer.winMain.dataContainer.gMapSetList.size() == 1)
-					{
-						MapViewer.winMain.toolbar.bFindFeatures.setEnabled(false);
-						MapViewer.winMain.toolbar.bFindFeaturesinRange.setEnabled(false);
-					}
-					else
-					{
-						MapViewer.winMain.toolbar.bFindFeatures.setEnabled(true);
-						MapViewer.winMain.toolbar.bFindFeaturesinRange.setEnabled(true);
-					}
-					
-					//hide the data loading progress dialog
-					if(dataLoadingDialog != null)
-						dataLoadingDialog.setVisible(false);
-					
-					//enable the rest of the controls
-					MapViewer.winMain.toolbar.enableAllControls();
-					
-					//hide the start panel if it is still showing
-					MapViewer.winMain.showStartPanel(false);
+		//first check that we have at least one pointer at a file with target feature data -- the bare minimum to run this application
+		//missing target data file	
 
-					// revalidate the GUI
-					MapViewer.winMain.validate();
-					
-					//bring the focus back on the main window -- need this in case we had an overview dialog open (which then gets focus)
-					MapViewer.winMain.requestFocus();
-				}
-				//user has cancelled
-				else
-				{
-					MapViewer.logger.fine("data load cancelled -- nulling data container");			
-				}
-				
-				//check the memory situation
-				MapViewer.logger.fine("memory max (mb) = " + Runtime.getRuntime().maxMemory()/1024/1024);
-				MapViewer.logger.fine("memory available = (mb) " + Runtime.getRuntime().freeMemory()/1024/1024);
-				
-				//reset the cancel flag as the user might now want to try again
-				MapViewer.winMain.fatController.dataLoadCancelled = false;
-			}
-		};	
-		Thread thread = new Thread(runnable);
-		thread.start();
+		//if the user wants to load their own data we need to check they have provided the correct file combination
+		if(MapViewer.winMain.fatController.loadOwnData)
+			checkUserInput();
+		//else we just use the example data provided further down the call stack
+		
+		MapViewer.logger.fine("targetData in loadDataInThread = " + targetData);
+		
+		//then load the data in a separate thread
+		DataLoadThread dataLoadThread = new DataLoadThread(targetData, refGenome1FeatData, refGenome1HomData, refGenome2FeatData, refGenome2HomData);
+		dataLoadThread.start();
 		
 		//show a dialog with a progress bar
 		dataLoadingDialog.setLocationRelativeTo(MapViewer.winMain);
@@ -163,5 +101,45 @@ public class OpenFileDialog extends JDialog implements ActionListener
 
 	}
 	// ----------------------------------------------------------------------------------------------------------------------------------------------
+	
+	private void checkUserInput()
+	{
+		//for each file, check whether we have a file chosen by the user -- if not, the respective
+		//text field should be empty
+		if(!openFilesPanel.getTargetfeatFileTF().getText().equals(""))
+			targetData = new File(openFilesPanel.getTargetfeatFileTF().getText());				
+		if(!openFilesPanel.getRefGen1FeatFileTF().getText().equals(""))
+			refGenome1FeatData = new File(openFilesPanel.getRefGen1FeatFileTF().getText());				
+		if(!openFilesPanel.getRefGen1HomFileTF().getText().equals(""))
+			refGenome1HomData = new File(openFilesPanel.getRefGen1HomFileTF().getText());				
+		if(!openFilesPanel.getRefGen2FeatFileTF().getText().equals(""))
+			refGenome2FeatData = new File(openFilesPanel.getRefGen2FeatFileTF().getText());				
+		if(!openFilesPanel.getRefGen2HomFileTF().getText().equals(""))
+			refGenome2HomData = new File(openFilesPanel.getRefGen2HomFileTF().getText());		
+		
+		MapViewer.logger.fine("targetData in checkUserInput = " + targetData);
+		
+		//check whether user has specified files correctly				
+		//missing target data file
+		if(targetData == null)
+		{
+			String errorMessage = "The target data file has not been specified. Please try again.";
+			TaskDialog.error(errorMessage, "Close");
+			setVisible(true);
+			return;
+		}			
+		//if reference datasets are to be used, we need to have both the feature file and the homology file
+		//for each of them
+		if(refGenome1FeatData != null && refGenome1HomData == null ||
+						refGenome1FeatData == null && refGenome1HomData != null ||
+						refGenome2FeatData != null && refGenome2HomData == null ||
+						refGenome2FeatData == null && refGenome2HomData != null)
+		{
+			String errorMessage = "One of the files required for a reference genome has not been specified. Please specify both the feature file and the homology file.";
+			TaskDialog.error(errorMessage, "Close");
+			setVisible(true);
+			return;
+		}
+	}
 	
 }// end class

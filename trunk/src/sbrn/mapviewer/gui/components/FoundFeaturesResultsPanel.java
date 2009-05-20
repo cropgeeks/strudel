@@ -18,7 +18,7 @@ public class FoundFeaturesResultsPanel extends JPanel
 	
 	GChromoMap previousMap = null;
 	
-	ResultsTable resultsTable = null;
+	public ResultsTable resultsTable = null;
 	JLabel resultsLabel = null;
 	JLabel closeButton = null;
 	

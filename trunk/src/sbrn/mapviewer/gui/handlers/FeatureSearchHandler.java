@@ -157,12 +157,10 @@ public class FeatureSearchHandler
 			{
 				features.add(Utils.getFeatureByName(allNames[i]));
 			}
-			
-			ResultsTable resultsTable = (ResultsTable)MapViewer.winMain.ffResultsPanel.getFFResultsTable();			
+		
 			//now put the results into the JTable held by the results panel
 			setupResultsTable(features);
-			
-			
+
 			//hide the control panel for the results table as it is not needed with this kind of results
 			MapViewer.winMain.foundFeaturesTableControlPanel.setVisible(false);
 			
@@ -194,10 +192,9 @@ public class FeatureSearchHandler
 	
 	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	
+	//insert the results into the JTable held by the results panel
 	private static void setupResultsTable(Vector<Feature> containedFeatures)
 	{
-		//now insert the results into the JTable held by the results panel
 		//if we are in single genome mode we will not have any links so we need to use a different kind of table model
 		TableRowSorter sorter = null;
 		ResultsTable resultsTable = (ResultsTable)MapViewer.winMain.ffResultsPanel.getFFResultsTable();
@@ -221,6 +218,9 @@ public class FeatureSearchHandler
 		
 		//size the columns and the dialog containing the table appropriately
 		((ResultsTable)MapViewer.winMain.ffResultsPanel.getFFResultsTable()).initColumnSizes();
+		
+		//enable the button that allows export of this data to file
+		MapViewer.winMain.toolbar.bSave.setEnabled(true);
 	}
 	
 	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

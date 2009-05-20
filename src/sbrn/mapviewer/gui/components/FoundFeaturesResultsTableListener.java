@@ -102,9 +102,9 @@ public class FoundFeaturesResultsTableListener implements ListSelectionListener,
 			
 			if (selectedCol == linklessFeatureTableModel.findColumn(linklessFeatureTableModel.featureNameColumnLabel))
 			{		
-				url = MapViewer.winMain.openFileDialog.openFilesPanel.getRefGenome1UrlTf().getText() + featureName;
+				url = MapViewer.winMain.openFileDialog.openFilesPanel.getTargetGenomeUrlTf1().getText() + featureName;
 			}
-			
+
 			Utils.visitURL(url);
 		}
 		

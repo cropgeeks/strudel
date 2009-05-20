@@ -198,7 +198,7 @@ public class WinMain extends JFrame
 	//here we set up the components we cannot set up until data has been loaded
 	public void setupRemainingComponents()
 	{
-		MapViewer.logger.fine("initing remaining components in winMain");
+		MapViewer.logger.fine("setupRemainingComponents() in winMain");
 		
 		try
 		{		
@@ -213,9 +213,6 @@ public class WinMain extends JFrame
 			
 			//this is the main canvas which we render the genomes on
 			mainCanvas = new MainCanvas();
-			//add this but hide the start panel first -- the main canvas is going to take its place instead
-//			showStartPanel(false);
-			MapViewer.logger.fine("adding main canvas");
 			mainPanel.add(mainCanvas, BorderLayout.CENTER);	
 
 			//add mousehandler
@@ -323,6 +320,9 @@ public class WinMain extends JFrame
 		zoomControlAndGenomelabelContainer.add(zoomControlContainerPanel, BorderLayout.CENTER);		
 		
 		initOverviewDialog();
+		
+		//the labels with the genome names need to be updated
+		genomeLabelPanel.repaint();
 	}
 	
 	
@@ -362,8 +362,6 @@ public class WinMain extends JFrame
 	
 	private void initZoomControls()
 	{
-		MapViewer.logger.info("initZoomControls()");
-		
 		zoomControlContainerPanel = new JPanel(new GridLayout(1, dataContainer.gMapSetList.size()));
 
 		//if there is only one genome showing, we want a shorter zoom control that does not fill the width of  the entire canvas

@@ -20,14 +20,14 @@ public class MainCanvas extends JPanel
 	
 	// the parent component
 	WinMain winMain;
-
+	
 	// size of the canvas panel
 	int canvasHeight;
 	int canvasWidth;
-
+	
 	// space the chromosomes vertically by this fixed amount
 	public int chromoSpacing = 15;
-
+	
 	// do we need to draw links?
 	public boolean drawLinks = false;
 	// Do we need to draw blast scores?
@@ -54,7 +54,7 @@ public class MainCanvas extends JPanel
 	
 	//the canvas height at a zoom factor of 1 
 	public int initialCanvasHeight = 0;
-
+	
 	//this object handles the display of homology links
 	public LinkDisplayManager linkDisplayManager;
 	
@@ -74,7 +74,7 @@ public class MainCanvas extends JPanel
 	// width of chromosomes -- set this to a fixed fraction of the screen width for now
 	//gets set in the paintCanvas method
 	public int chromoWidth = 0;
-
+	
 	// ============================c'tor==================================
 	
 	public MainCanvas()
@@ -88,7 +88,7 @@ public class MainCanvas extends JPanel
 	}
 	
 	// ============================methods==================================
-
+	
 	public void updateCanvas(boolean invalidate)
 	{
 		redraw = invalidate;
@@ -100,7 +100,7 @@ public class MainCanvas extends JPanel
 	
 	public void paintComponent(Graphics graphics)
 	{
-
+		
 		super.paintComponent(graphics);
 		
 		Graphics2D g = (Graphics2D) graphics;
@@ -125,7 +125,7 @@ public class MainCanvas extends JPanel
 		g.drawImage(buffer, 0, 0, null);
 		
 		// Render any additional overlay images (highlights, mouse-overs etc)
-
+		
 		// this optionally draws a rectangle delimiting a region we want to zoom in on
 		if (drawSelectionRect)
 		{
@@ -136,11 +136,11 @@ public class MainCanvas extends JPanel
 			g.setColor(Colors.panZoomRectOutlineColour);
 			g.draw(selectionRect);
 		}
-
+		
 		
 		//the next lot of features can all be drawn with antialiasing on without too much effect on performance
 		//looks much better, especially on the distance markers
-
+		
 		//now we need to draw the rest of the things relating to the map
 		//this needs to be done after drawing the links so it is all visible on top of the links
 		for (GMapSet gMapSet : winMain.dataContainer.gMapSetList)
@@ -174,8 +174,8 @@ public class MainCanvas extends JPanel
 	// paint the genomes or portions thereof onto this canvas
 	private void paintCanvas(Graphics2D g2)
 	{
-//		MapViewer.logger.fine("PAINT CANVAS " + System.currentTimeMillis());
-
+		//		MapViewer.logger.fine("PAINT CANVAS " + System.currentTimeMillis());
+		
 		// check whether we need antialiasing on
 		checkAntiAliasing(g2);
 		
@@ -194,7 +194,7 @@ public class MainCanvas extends JPanel
 		Color b2 = Colors.backgroundGradientEndColour;
 		g2.setPaint(new GradientPaint(canvasWidth / 2, 0, b1, canvasWidth / 2, canvasHeight, b2));
 		g2.fillRect(0, 0, canvasWidth, canvasHeight);
-
+		
 		// width of chromosomes -- set this to a fixed fraction of the screen width for now
 		chromoWidth = Math.round(canvasWidth / 40);
 		
@@ -203,7 +203,7 @@ public class MainCanvas extends JPanel
 		{
 			checkMarkerPaintingThresholds(gMapSet);
 			checkForLabelDrawing(gMapSet);
-
+			
 			//calculate the x position for this genome
 			int numGenomes = winMain.dataContainer.gMapSetList.size();
 			int genomeInterval = getWidth()/numGenomes;
@@ -249,7 +249,7 @@ public class MainCanvas extends JPanel
 				currentY = -(gMapSet.totalY / 2) + canvasHeight / 2 - (gMapSet.centerPoint - (gMapSet.totalY / 2));
 			}
 			
-
+			
 			// check that this number is even
 			boolean evenNumber = chromoWidth % 2 == 0;
 			// if it isn't just add 1 -- otherwise we get into trouble with feature line widths exceeding the width of the chromosome
@@ -271,7 +271,6 @@ public class MainCanvas extends JPanel
 				// this is purely so we have it stored somewhere
 				gChromoMap.x = x;
 				gChromoMap.y = currentY;
-				MapViewer.logger.fine("currentY for map " + gChromoMap.name + " = "  + currentY);
 				gChromoMap.yOnCanvas = currentY;
 				gChromoMap.height = gMapSet.chromoHeight;
 				gChromoMap.width = chromoWidth;
@@ -344,7 +343,7 @@ public class MainCanvas extends JPanel
 		{
 			LabelDisplayManager.drawLabelsForFoundFeatures(g2);
 		}
-
+		
 		//check whether we want to display a BLAST cutoff value
 		if (drawBlastScore)
 		{
@@ -391,7 +390,7 @@ public class MainCanvas extends JPanel
 		int labelY = 0;	
 		//position of index with this var is in the center of the chromosome regardless of chromo position
 		int chromoCenterPos = gChromoMap.y + Math.round(gChromoMap.height / 2.0f) + (fontSize/2);
-
+		
 		//draw the index in the center of each chromosome
 		labelY = chromoCenterPos;
 		
@@ -400,7 +399,7 @@ public class MainCanvas extends JPanel
 		
 		//draw the label
 		FontMetrics fm = g2.getFontMetrics();
-//		String indexLabel = String.valueOf(mapIndex + 1);
+		//		String indexLabel = String.valueOf(mapIndex + 1);
 		String indexLabel = gChromoMap.name;
 		int stringWidth = fm.stringWidth(indexLabel);
 		g2.drawString(indexLabel, gChromoMap.x + gChromoMap.width + 10, labelY);
@@ -429,8 +428,8 @@ public class MainCanvas extends JPanel
 		
 		//now update the arrays with the position data
 		MapViewer.winMain.fatController.initialisePositionArrays();
-
-//		//update the canvas
+		
+		//		//update the canvas
 		MapViewer.winMain.mainCanvas.updateCanvas(true);	
 	}
 	
@@ -457,28 +456,21 @@ public class MainCanvas extends JPanel
 	}
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------
-		
+	
 	public void checkForLabelDrawing(GMapSet gMapSet)
 	{
-		MapViewer.logger.info("================checkForLabelDrawing " + gMapSet.name);
-		MapViewer.logger.info("gMapSet.zoomFactor " + gMapSet.zoomFactor);
-		MapViewer.logger.info("gMapSet.singleChromoViewZoomFactor " + gMapSet.singleChromoViewZoomFactor);
-		MapViewer.logger.info("gMapSet.alwaysShowAllLabels = " + gMapSet.alwaysShowAllLabels);
-
-			//check whether we should have the alwaysShowAllLabelsButton enabled
-			//we don't want this option if we are looking at more than one chromo on screen
-			if ((gMapSet.zoomFactor >= gMapSet.singleChromoViewZoomFactor - 1 && gMapSet.singleChromoViewZoomFactor != 0))
-			{
-				MapViewer.logger.info("enabling button");
-				gMapSet.zoomControlPanel.alwaysShowAllLabelsButton.setEnabled(true);
-			}
-			else
-			{
-				MapViewer.logger.info("disabling button");
-				gMapSet.alwaysShowAllLabels = false;
-				gMapSet.zoomControlPanel.alwaysShowAllLabelsButton.setSelected(false);
-				gMapSet.zoomControlPanel.alwaysShowAllLabelsButton.setEnabled(false);
-			}
+		//check whether we should have the alwaysShowAllLabelsButton enabled
+		//we don't want this option if we are looking at more than one chromo on screen
+		if ((gMapSet.zoomFactor >= gMapSet.singleChromoViewZoomFactor - 1 && gMapSet.singleChromoViewZoomFactor != 0))
+		{
+			gMapSet.zoomControlPanel.alwaysShowAllLabelsButton.setEnabled(true);
+		}
+		else
+		{
+			gMapSet.alwaysShowAllLabels = false;
+			gMapSet.zoomControlPanel.alwaysShowAllLabelsButton.setSelected(false);
+			gMapSet.zoomControlPanel.alwaysShowAllLabelsButton.setEnabled(false);
+		}
 	}
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------

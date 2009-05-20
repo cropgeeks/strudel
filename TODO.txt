@@ -66,9 +66,7 @@ Jordi's list:
  
 
 - different line colors for the best BLAST hit, second best hit, third best hit… 
-
 - plot QTL profiles along the barley chromosomes
-
 - select an interval on the rice / brachypodium side and get a list with all the genes located within the interval -- DONE
 
 ================================
@@ -85,7 +83,7 @@ Menu bar support for new/infrequent users – Robbie
 ================================
 
 Xin & Andy's List:
-Export feature lists
++ Export feature lists
 Screen found features by BLAST cutoff
 
 
@@ -94,10 +92,10 @@ Screen found features by BLAST cutoff
 REFACTORING:
 
 - handling of antialising needs to be streamlined
-- label drawing code is replicated all over the app -- needs to be merged
 - look for unnecessary repaints
 - link drawing algorithm -- review and improve if possible
-- generally try to improve performance
+- check whether any features are drawn offscreen (= unnecessarily)
+- data loading and component initialisation code looks overly complicated -- review!
 
 ================================
 

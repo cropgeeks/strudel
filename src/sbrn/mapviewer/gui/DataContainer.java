@@ -52,16 +52,14 @@ public class DataContainer
 	// the maximum number of chromos in any one of the genomes involved
 	public int maxChromos;
 	
-
-
 	
 	//============================================c'tor==========================================
 	
-	public DataContainer()
+	public DataContainer(File targetData, File refGenome1FeatData, File refGenome1HomData, File refGenome2FeatData, File refGenome2HomData)
 	{
 		MapViewer.logger.fine("============== making new data container");
 		MapViewer.logger.fine("num mapsets prior to initing = " + gMapSetList.size());
-		loadData();
+		loadData(targetData, refGenome1FeatData, refGenome1HomData, refGenome2FeatData, refGenome2HomData);
 		setUpGenomes();
 	}
 	
@@ -69,7 +67,7 @@ public class DataContainer
 	//============================================methods==========================================
 
 	//Loads data from file using the object data model; this will populate all the relevant MapSet and LinkSet objects.
-	public void loadData()
+	public void loadData(File targetData, File refGenome1FeatData, File refGenome1HomData, File refGenome2FeatData, File refGenome2HomData)
 	{
 		MapViewer.logger.fine("initing new dataset");
 		MapViewer.logger.fine("loadOwnData = "  + MapViewer.winMain.fatController.loadOwnData);
@@ -79,9 +77,8 @@ public class DataContainer
 			String workingDir = System.getProperty("user.dir");
 			String fileSep = System.getProperty("file.separator");
 			
-			//need to check where the files for loading come from
-			
-			//in the first case user wants the example data provided with the app
+			//need to check where the files for loading come from	
+			//in this case user wants the example data provided with the app
 			if(!MapViewer.winMain.fatController.loadOwnData)
 			{
 				//load the example data that ships with the application
@@ -92,46 +89,7 @@ public class DataContainer
 				refGenome2HomData = new File(workingDir + fileSep + Constants.exampleRefGenome2HomData);
 			}
 			
-			//in this next case the user wants to provide their own data files
-			else
-			{
-				MTOpenFilesPanel openFilesPanel = MapViewer.winMain.openFileDialog.openFilesPanel;
-				
-				//for each file, check whether we have a file chosen by the user -- if not, the respective
-				//text field should be empty
-				if(!openFilesPanel.getTargetfeatFileTF().getText().equals(""))
-					targetData = new File(openFilesPanel.getTargetfeatFileTF().getText());				
-				if(!openFilesPanel.getRefGen1FeatFileTF().getText().equals(""))
-					refGenome1FeatData = new File(openFilesPanel.getRefGen1FeatFileTF().getText());				
-				if(!openFilesPanel.getRefGen1HomFileTF().getText().equals(""))
-					refGenome1HomData = new File(openFilesPanel.getRefGen1HomFileTF().getText());				
-				if(!openFilesPanel.getRefGen2FeatFileTF().getText().equals(""))
-					refGenome2FeatData = new File(openFilesPanel.getRefGen2FeatFileTF().getText());				
-				if(!openFilesPanel.getRefGen2HomFileTF().getText().equals(""))
-					refGenome2HomData = new File(openFilesPanel.getRefGen2HomFileTF().getText());					
-				
-				//check whether user has specified files correctly				
-				//missing target data file
-				if(targetData == null)
-				{
-					String errorMessage = "The target data file has not been specified. Please try again.";
-					TaskDialog.error(errorMessage, "Close");
-					throw new Exception(errorMessage);
-				}			
-				//if reference datasets are to be used, we need to have both the feature file and the homology file
-				//for each of them
-				if(refGenome1FeatData != null && refGenome1HomData == null ||
-								refGenome1FeatData == null && refGenome1HomData != null ||
-								refGenome2FeatData != null && refGenome2HomData == null ||
-								refGenome2FeatData == null && refGenome2HomData != null)
-				{
-					String errorMessage = "One of the files required for a reference genome has not been specified. Please specify both the feature file and the homology file.";
-					TaskDialog.error(errorMessage, "Close");
-					throw new Exception(errorMessage);
-				}
-
-				
-			}
+			MapViewer.logger.fine("targetData in data container = " + targetData);
 			
 			//add reference data 1 if appropriate
 			if(refGenome1FeatData != null && refGenome1HomData != null)
@@ -145,16 +103,14 @@ public class DataContainer
 				referenceDataFiles.add(refGenome2FeatData);
 				compDataFiles.add(refGenome2HomData);
 			}
-			
-			
-			// load data
-			DataLoader dLoader = new DataLoader();
+
 			//load reference data sets
 			for (int i = 0; i < referenceDataFiles.size(); i++)
 			{
-				referenceMapSets.add(dLoader.loadMapData(referenceDataFiles.get(i)));
+				MapSet referenceMapset = new CMapImporter(referenceDataFiles.get(i)).loadMapSet();
+				referenceMapSets.add(referenceMapset);
 			}
-			targetMapset = dLoader.loadMapData(targetData);
+			targetMapset = new CMapImporter(targetData).loadMapSet();
 			
 			// need to set the names of the mapsets and import the links
 			// for now, set them to the names of the files they were read in from
@@ -189,8 +145,7 @@ public class DataContainer
 			{
 				MapViewer.logger.fine(mapSet.getName());
 			}
-			
-			
+
 			MapViewer.logger.fine("linkSets.size() in DC  = " + linkSets.size());
 			for (LinkSet linkSet : linkSets)
 			{
@@ -201,8 +156,8 @@ public class DataContainer
 		catch (Exception e)
 		{
 			MapViewer.winMain.openFileDialog.dataLoadingDialog.setVisible(false);
-			TaskDialog.error("Data loading failed: " + e.toString(), "Close");
 			e.printStackTrace();
+			TaskDialog.error("Data loading failed: " + e.toString() + "\nPlease check your data and try again.", "Close");
 		}
 	}
 	

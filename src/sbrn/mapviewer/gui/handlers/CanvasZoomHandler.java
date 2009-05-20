@@ -18,6 +18,10 @@ public class CanvasZoomHandler
 	// frame rate
 	int fps = 25;
 	
+	//animation times in milliseconds
+	int clickZoomMillis = 300;
+	int panZoomMillis = 400;
+
 	//this boolean is required because we need to check in the stateChanged method of the ZoomControlPanel class whether
 	//or not it was invoked manually or indirectly because we programmatically changed the value of the zoom slider
 	public boolean isClickZoomRequest = false;
@@ -86,16 +90,13 @@ public class CanvasZoomHandler
 	public synchronized void processPanZoomRequest(GChromoMap selectedMap, int mousePressedY, int mouseReleasedY,boolean animate)
 	{
 		// animate this by zooming in gradually
-		// the length of time we want the animation to last in milliseconds
-		int millis = 400;
-		
 		// figure out the genome it belongs to and increase that genome's zoom factor so that we can
 		// just fit the chromosome on screen the next time it is painted
 		int selectedYDist = mouseReleasedY - mousePressedY;
 		if (selectedYDist > 0)
 		{
 			float finalScalingFactor = mainCanvas.getHeight() / (float) selectedYDist;
-			PanZoomAnimator panZoomAnimator = new PanZoomAnimator(fps, millis, finalScalingFactor, selectedMap, mainCanvas, mousePressedY, mouseReleasedY, this, animate);
+			PanZoomAnimator panZoomAnimator = new PanZoomAnimator(fps, panZoomMillis, finalScalingFactor, selectedMap, mainCanvas, mousePressedY, mouseReleasedY, this, animate);
 			panZoomAnimator.start();
 		}
 	}
@@ -105,8 +106,7 @@ public class CanvasZoomHandler
 	// zooms in by a fixed amount on a chromosome the user clicked on (to fill screen with chromosome)
 	public ClickZoomAnimator processClickZoomRequest(GChromoMap selectedMap)
 	{
-		int millis = 400;
-		
+
 		// figure out the genome it belongs to and increase that genome's zoom factor so that we can
 		// just fit the chromosome on screen the next time it is painted
 		GMapSet selectedSet = selectedMap.owningSet;
@@ -129,7 +129,7 @@ public class CanvasZoomHandler
 		// the new total Y extent of the genome in pixels for after the animation 
 		int finalTotalY = (int) (((totalY - combinedSpacers) * finalZoomFactor) + combinedSpacers);
 
-		ClickZoomAnimator clickZoomAnimator = new ClickZoomAnimator(fps, millis, selectedMap,
+		ClickZoomAnimator clickZoomAnimator = new ClickZoomAnimator(fps, clickZoomMillis, selectedMap,
 						mainCanvas, finalZoomFactor, finalTotalY, finalChromoHeight, this);
 		clickZoomAnimator.start();
 		

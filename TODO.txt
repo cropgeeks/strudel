@@ -84,8 +84,16 @@ Menu bar support for new/infrequent users – Robbie
 
 Xin & Andy's List:
 + Export feature lists
-Screen found features by BLAST cutoff
+- Screen found features by BLAST cutoff
 
+
+================================
+
+Sylviane's list:
++ Export feature lists
++ BLAST e-value column in the feature table
+- adjust the BLAST e-value when working in a given range on a chromosome
+- adjust the BLAST e-value more accurately (spinner?)
 
 ================================
 
@@ -96,6 +104,7 @@ REFACTORING:
 - link drawing algorithm -- review and improve if possible
 - check whether any features are drawn offscreen (= unnecessarily)
 - data loading and component initialisation code looks overly complicated -- review!
+- ControlToolBar createControls(): action config code is repetitive, hive off into convenience method
 
 ================================
 
@@ -110,5 +119,3 @@ BUGS to fix:
 - drawing of visble regions in overview canvas is very inaccurate
 - occasionally mouse clicks on chromosome seem to go unnoticed, e.g. for single click zooming
 - in post data load stage there are unneccessary repaints when mosuing over chromosomes (although no features are showing)
-- results filter in results panel does not update on global reset
-- inverting chromosomes and then adding features to range explore results selects wrong region

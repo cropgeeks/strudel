@@ -2,6 +2,7 @@ package sbrn.mapviewer.gui.handlers;
 
 import java.awt.*;
 import java.awt.geom.*;
+import java.text.*;
 import java.util.*;
 
 import sbrn.mapviewer.*;
@@ -24,7 +25,7 @@ public class LinkDisplayManager
 	
 	Hashtable<ChromoMap, LinkSet> allLinksLookup;
 	
-	public static double blastThreshold = Double.MAX_VALUE;
+	private static double blastThreshold = 1;
 	
 	GMapSet targetGMapSet = MapViewer.winMain.dataContainer.gMapSetList.get(MapViewer.winMain.dataContainer.targetGMapSetIndex);
 	
@@ -142,7 +143,7 @@ public class LinkDisplayManager
 					for (LinkSet selectedLinks : linkSets)
 					{
 						int numLinksdrawn = 0;
-
+						
 						//find out which reference mapset we are dealing with here
 						GMapSet referenceGMapSet = null;
 						for (GMapSet gMapSet : MapViewer.winMain.dataContainer.referenceGMapSets)
@@ -322,11 +323,11 @@ public class LinkDisplayManager
 			int y2 = Math.round(gMap2.y + gMap2.currentY + (f2.getStart() * (gMap2.height / gMap2.chromoMap.getStop())));
 			
 			//check for chromosome inversion and invert values if necessary
-			if(gMap1.isPartlyInverted)
+			if(gMap1.isPartlyInverted || gMap1.isFullyInverted)
 			{
 				y1 = (int) ((gMap1.chromoMap.getStop() - f1.getStart()) / (gMap1.chromoMap.getStop() / gMap1.height)) + (gMap1.y + gMap1.currentY);
 			}
-			if(gMap2.isPartlyInverted)
+			if(gMap2.isPartlyInverted  || gMap2.isFullyInverted)
 			{
 				y2 = (int) ((gMap2.chromoMap.getStop() - f2.getStart()) / (gMap2.chromoMap.getStop() / gMap2.height)) + (gMap2.y + gMap2.currentY);
 			}
@@ -339,7 +340,7 @@ public class LinkDisplayManager
 			drawStraightOrCurvedLink(g2,targetChromoX, y1, referenceChromoX, y2);		
 		}
 	}
-		
+	
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
 	
@@ -366,7 +367,8 @@ public class LinkDisplayManager
 					Color linkColour = Colors.mildEmphasisLinkColour;
 					
 					//check whether either of the features for this link are included in the found features list of their maps
-					if(featuresInRange.contains(f1) ||	featuresInRange.contains(f2))
+					// we also only want to draw this link if it has a BLAST e-value smaller than the cut-off currently selected by the user
+					if((featuresInRange.contains(f1) || featuresInRange.contains(f2) ) && link.getBlastScore() <= blastThreshold)							
 					{
 						//draw the link
 						drawHighlightedLink(g2, f1, f2, false);	
@@ -539,6 +541,32 @@ public class LinkDisplayManager
 			g2.drawLine((int)ctrlx1, (int)ctrly1, (int)ctrlx2, (int)ctrly2);
 			g2.drawLine((int)ctrlx2, (int)ctrly2, endX, endY);			
 		}
+	}
+	
+	public static double getBlastThresholdExponent()
+	{
+		return Math.log(blastThreshold);
+	}
+	
+	public static void setBlastThresholdWithExponent(int exponent )
+	{
+		DecimalFormat df = new DecimalFormat("0.##E0");
+		Number score;
+		try
+		{
+			score = df.parse("1.00E" + exponent);
+			blastThreshold = score.doubleValue();
+		}
+		catch (ParseException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public static void setBlastThreshold(double blastThreshold)
+	{
+		LinkDisplayManager.blastThreshold = blastThreshold;
 	}
 	
 	

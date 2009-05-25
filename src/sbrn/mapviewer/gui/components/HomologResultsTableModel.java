@@ -19,11 +19,12 @@ public class HomologResultsTableModel extends AbstractTableModel
 	public final static String homologGenomeColumnLabel = "Homolog genome";
 	public final static String homologChromosomeColumnLabel = "Homolog chromosome";
 	public final static String homologPositionColumnLabel = "Homolog position";
+	public final static String eValueColumnLabel = "BLAST e-value";
 	public final static String homologAnnotationColumnLabel = "Homolog annotation";
 	
 	private String[] columnNames =
 	{targetNameColumnLabel, targetPositionColumnLabel, targetChromosomeColumnLabel, homologColumnLabel, 
-	homologGenomeColumnLabel, homologChromosomeColumnLabel, homologPositionColumnLabel, homologAnnotationColumnLabel};
+	homologGenomeColumnLabel, homologChromosomeColumnLabel, homologPositionColumnLabel, eValueColumnLabel, homologAnnotationColumnLabel};
 	
 	public LinkedList<String> columnNameList = new LinkedList<String>();
 	
@@ -65,7 +66,8 @@ public class HomologResultsTableModel extends AbstractTableModel
 		            case 4:  if(link.getFeature2() != null){return link.getFeature2().getOwningMap().getOwningMapSet().getName();}break;
 		            case 5:  if(link.getFeature2() != null){return link.getFeature2().getOwningMap().getName();}break;
 		            case 6:  if(link.getFeature2() != null){return (link.getFeature2().getStart());}break;
-		            case 7:  if(link.getFeature2() != null){return link.getFeature2().getAnnotation();}break;
+		            case 7:  if(link.getFeature2() != null){return ((float)link.getBlastScore());}break;
+		            case 8:  if(link.getFeature2() != null){return link.getFeature2().getAnnotation();}break;
 		  }
 
 		return null;
@@ -83,8 +85,9 @@ public class HomologResultsTableModel extends AbstractTableModel
 			            case 3:  return Class.forName("java.lang.String"); 
 			            case 4:  return Class.forName("java.lang.String"); 
 			            case 5:  return Class.forName("java.lang.String"); 
-			            case 6:  return Class.forName("java.lang.Float"); 
-			            case 7:  return Class.forName("java.lang.String"); 
+			            case 6:  return Class.forName("java.lang.Float");
+			            case 7:  return Class.forName("java.lang.Float"); 
+			            case 8:  return Class.forName("java.lang.String"); 
 			  }
 		}
 		catch (ClassNotFoundException e)
@@ -124,6 +127,7 @@ public class HomologResultsTableModel extends AbstractTableModel
 			buf.append(link.getFeature2().getOwningMap().getOwningMapSet().getName() + "\t");
 			buf.append(link.getFeature2().getOwningMap().getName() + "\t");
 			buf.append(link.getFeature2().getStart() + "\t");
+			buf.append(link.getBlastScore() + "\t");
 			buf.append(link.getFeature2().getAnnotation() + "\n");
 		}
 		return buf.toString();

@@ -144,10 +144,15 @@ public class FatController
 		winMain.mainCanvas.drawHighlightFeatures = false;
 		winMain.mainCanvas.drawFoundFeaturesInRange = false;
 		findFeaturesRequested = false;
+		winMain.foundFeaturesTableControlPanel.getGenomeFilterCombo().setSelectedIndex(0);
 		//clear the table model for the found features
 		winMain.ffResultsPanel.getFFResultsTable().setModel(new DefaultTableModel());
 		//disable the button that allows export of this data to file
 		MapViewer.winMain.toolbar.bSave.setEnabled(false);
+		
+		//reset the BLAST cut-off
+		LinkDisplayManager.setBlastThreshold(1);
+		MapViewer.winMain.toolbar.eValueSpinner.setValue(0);
 		
 	}
 	
@@ -177,6 +182,7 @@ public class FatController
 				
 				//any inverted maps have to be flagged as non-inverted
 				gMap.isPartlyInverted = false;
+				gMap.isFullyInverted = false;
 				
 				//clear any highlighted regions
 				gMap.highlightChromomapRegion = false;

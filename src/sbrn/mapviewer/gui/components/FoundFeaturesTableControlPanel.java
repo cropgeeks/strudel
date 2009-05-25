@@ -8,6 +8,7 @@ package sbrn.mapviewer.gui.components;
 
 import java.util.*;
 import javax.swing.*;
+import javax.swing.table.*;
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.entities.*;
@@ -126,11 +127,14 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 	
 	private void genomeFilterComboActionPerformed(java.awt.event.ActionEvent evt)
 	{
-		JComboBox cb = (JComboBox) evt.getSource();
-		String genomeName = (String) cb.getSelectedItem();
-		HomologResultsTableModel homologResultsTableModel = (HomologResultsTableModel) MapViewer.winMain.ffResultsPanel.resultsTable.getModel();
-		int genomeColumnIndex = homologResultsTableModel.findColumn(homologResultsTableModel.homologGenomeColumnLabel);
-		MapViewer.winMain.ffResultsPanel.resultsTable.newFilter(genomeName, genomeColumnIndex);
+		if (!(MapViewer.winMain.ffResultsPanel.resultsTable.getModel() instanceof DefaultTableModel))
+		{
+			JComboBox cb = (JComboBox) evt.getSource();
+			String genomeName = (String) cb.getSelectedItem();
+			HomologResultsTableModel homologResultsTableModel = (HomologResultsTableModel) MapViewer.winMain.ffResultsPanel.resultsTable.getModel();
+			int genomeColumnIndex = homologResultsTableModel.findColumn(homologResultsTableModel.homologGenomeColumnLabel);
+			MapViewer.winMain.ffResultsPanel.resultsTable.newFilter(genomeName, genomeColumnIndex);
+		}
 	}
 	
 	private void showHomologsCheckboxStateChanged(javax.swing.event.ChangeEvent evt)

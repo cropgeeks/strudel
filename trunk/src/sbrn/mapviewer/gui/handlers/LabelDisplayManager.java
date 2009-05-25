@@ -3,11 +3,9 @@ package sbrn.mapviewer.gui.handlers;
 import java.awt.*;
 import java.awt.geom.*;
 import java.util.*;
-
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
-import sbrn.mapviewer.gui.dialog.*;
 import sbrn.mapviewer.gui.entities.*;
 
 
@@ -43,115 +41,71 @@ public class LabelDisplayManager
 	//------------------------------------------------------------------------------------------------------------------------------------
 	
 	//this just draws labels of single highlighted features
-	public static void drawHighlightedFeatureLabels(Graphics2D g2, Feature f1, Feature f2)
+	public static void drawHighlightedFeatureLabel(Graphics2D g2, Feature f)
 	{
+		MapViewer.logger.info("drawHighlightedFeatureLabel");
+		
 		// the usual font stuff
 		g2.setFont(new Font("Sans-serif", Font.PLAIN, fontHeight));
-		FontMetrics fm = g2.getFontMetrics();
+		FontMetrics fm = g2.getFontMetrics();	
 		
-		//easiest to do this with a local Vector for the two features -- saves duplication 
-		Vector<Feature> features = new Vector<Feature>();
-		features.add(f1);
-		int mapSetIndexF2 = -1;
-		if(f2 != null)
-		{
-			features.add(f2);		
-			//work out the mapset index for the homolog
-			mapSetIndexF2 = MapViewer.winMain.dataContainer.gMapSetList.indexOf(f2.getOwningMap().getGChromoMap().owningSet);
-		}
+		// get the name of the feature
+		String featureName = f.getName();
+		int stringWidth = fm.stringWidth(featureName);
 		
-		// for all features in our list
-		for (Feature f : features)
+		// we need these for working out the y positions
+		ChromoMap chromoMap = f.getOwningMap();
+		GChromoMap gChromoMap = chromoMap.getGChromoMap();
+		float mapEnd = chromoMap.getStop();
+		// this factor normalises the position to a value between 0 and 100
+		float scalingFactor = gChromoMap.height / mapEnd;
+		
+		// the y position of the feature itself
+		int featureY;
+		if (f.getStart() == 0.0f)
 		{
-			
-			// get the name of the feature
-			String featureName = f.getName();
-			int stringWidth = fm.stringWidth(featureName);
-			
-			// we need these for working out the y positions
-			ChromoMap chromoMap = f.getOwningMap();
-			GChromoMap gChromoMap = chromoMap.getGChromoMap();
-			float mapEnd = chromoMap.getStop();
-			// this factor normalises the position to a value between 0 and 100
-			float scalingFactor = gChromoMap.height / mapEnd;
-			
-			//			// the y position of the feature itself
-			int featureY;
-			if (f.getStart() == 0.0f)
-			{
-				featureY = gChromoMap.y;
-			}
-			else
-			{
-				featureY = Math.round(gChromoMap.y + gChromoMap.currentY + (f.getStart() * scalingFactor));
-			}		
-			//check whether the map is inverted			
-			if(gChromoMap.isPartlyInverted)
-			{
-				featureY = (int) ((mapEnd - f.getStart()) / (mapEnd / gChromoMap.height)) + (gChromoMap.y + gChromoMap.currentY);
-			}
-			
-			//the y position of the feature label
-			int labelY = featureY + (fontHeight/2);
-			
-			// next decide where to place the label on x
-			// the amount by which we want to move the label end away from the chromosome (in pixels)
-			int lineLength = 50;
-			
-			//x coords
-			int labelX = gChromoMap.x - lineLength - stringWidth;
-			int lineStartX =  gChromoMap.x;
-			int lineEndX =  gChromoMap.x- lineLength;
-			
-			// next decide where to place the label on x					
-			//determine whether the marker should go on the left or right
-			boolean markersRight = false;
-			
-			//if there are two features
-			if(f2 != null)
-			{
-				//we want the label on the right for the rightmost genome, left for the leftmost genome
-				if((features.indexOf(f) == 0 && mapSetIndexF2 == 0) ||
-								(features.indexOf(f) == 1 && mapSetIndexF2 == 2))
-				{
-					markersRight = true;	
-				}
-				else
-				{
-					markersRight =  false;
-				}
-			}
-			
-			if (markersRight)
-			{				
-				lineStartX = gChromoMap.x + gChromoMap.width;		
-				labelX = lineStartX + lineLength; 
-				lineEndX = labelX;
-			}
-			
-			//draw a rounded rectangle as a background for the label
-			g2.setColor(Colors.highlightedFeatureLabelBackgroundColour);
-			float arcSize = fontHeight/1.5f;
-			int horizontalGap = 3;
-			int verticalGap = 4;
-			RoundRectangle2D.Float backGroundRect = new RoundRectangle2D.Float(labelX - horizontalGap, labelY - fontHeight, stringWidth + horizontalGap*2,
-							fontHeight + verticalGap, arcSize, arcSize);
-			g2.fill(backGroundRect);
-			
-			// set the label colour
-			g2.setColor(Colors.highlightedFeatureLabelColour);
-			// draw the label
-			g2.drawString(featureName, labelX, labelY);
-			
-			// draw a line from the marker to the label
-			g2.setColor(Colors.strongEmphasisLinkColour);
-			g2.drawLine(lineStartX, featureY, lineEndX, labelY - fontHeight / 2);
-			
-			// set the feature colour
-			g2.setColor(Colors.highlightedFeatureColour);
-			// draw a line for the marker on the chromosome itself
-			g2.drawLine(gChromoMap.x -1, featureY, gChromoMap.x + gChromoMap.width +1, featureY);
+			featureY = gChromoMap.y;
 		}
+		else
+		{
+			featureY = Math.round(gChromoMap.y + gChromoMap.currentY + (f.getStart() * scalingFactor));
+		}	
+		
+		//the y position of the feature label
+		int labelY = featureY + (fontHeight/2);
+		
+		// next decide where to place the label on x
+		// the amount by which we want to move the label end away from the chromosome (in pixels)
+		int lineLength = 50;
+		
+		//x coords
+		int labelX = gChromoMap.x - lineLength - stringWidth;
+		int lineStartX =  gChromoMap.x;
+		int lineEndX =  gChromoMap.x- lineLength;
+		
+		//draw a rounded rectangle as a background for the label
+		g2.setColor(Colors.highlightedFeatureLabelBackgroundColour);
+		float arcSize = fontHeight/1.5f;
+		int horizontalGap = 3;
+		int verticalGap = 4;
+		RoundRectangle2D.Float backGroundRect = new RoundRectangle2D.Float(labelX - horizontalGap, labelY - fontHeight, stringWidth + horizontalGap*2,
+						fontHeight + verticalGap, arcSize, arcSize);
+		g2.fill(backGroundRect);
+		
+		// set the label colour
+		g2.setColor(Colors.highlightedFeatureLabelColour);
+		// draw the label
+		g2.drawString(featureName, labelX, labelY);
+		
+		// draw a line from the marker to the label
+		g2.setColor(Colors.strongEmphasisLinkColour);
+		g2.drawLine(lineStartX, featureY, lineEndX, labelY - fontHeight / 2);
+		
+		// set the feature colour
+		g2.setColor(Colors.highlightedFeatureColour);
+		// draw a line for the marker on the chromosome itself
+		g2.drawLine(gChromoMap.x -1, featureY, gChromoMap.x + gChromoMap.width +1, featureY);
+		
 	}
 	
 	//	------------------------------------------------------------------------------------------------------------------------------------
@@ -230,10 +184,10 @@ public class LabelDisplayManager
 	private static LinkedHashMap<Feature, Integer> calculateLabelPositions(boolean isMultiChromoRange, Vector<GChromoMap> gMaps,float intervalStart,float intervalEnd,Vector<Feature> features, LinkedHashMap<Feature, Integer> featurePositions)
 	{
 		LinkedHashMap<Feature, Integer> labelPositions = (LinkedHashMap<Feature, Integer>)featurePositions.clone();
-	
+		
 		//the label's height
 		float labelHeight = fontHeight*verticalSpacer;
-
+		
 		//first we want to work out where we start drawing the labels relative to the range start point
 		//we want the labels fanning out evenly on y both up and downwards from the features themselves
 		//first work out the combined height of the labels

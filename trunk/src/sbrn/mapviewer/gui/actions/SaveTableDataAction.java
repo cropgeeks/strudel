@@ -22,7 +22,7 @@ public class SaveTableDataAction extends AbstractAction
 		JFileChooser fc = new JFileChooser();
 		fc.setDialogTitle("Save table data as");
 		fc.setAcceptAllFileFilterUsed(false);
-		fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
+		fc.setCurrentDirectory(new File(System.getProperty("user.home")));
 		File outputFile = new File("tableData.txt");
 		fc.setSelectedFile(outputFile);
 		

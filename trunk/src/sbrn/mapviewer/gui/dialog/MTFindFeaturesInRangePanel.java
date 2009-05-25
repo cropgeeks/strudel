@@ -26,8 +26,8 @@ public class MTFindFeaturesInRangePanel extends javax.swing.JPanel implements Ac
 	{
 		initComponents();
 		
-		((JSpinner.DefaultEditor) rangeStartSpinner.getEditor()).getTextField().setInputVerifier(new FormattedTextFieldVerifier());
-		((JSpinner.DefaultEditor) rangeEndSpinner.getEditor()).getTextField().setInputVerifier(new FormattedTextFieldVerifier());
+		((JSpinner.DefaultEditor) rangeStartSpinner.getEditor()).getTextField().setInputVerifier(new FormattedTextFieldVerifier("The range start must be a positive number.",0, false));
+		((JSpinner.DefaultEditor) rangeEndSpinner.getEditor()).getTextField().setInputVerifier(new FormattedTextFieldVerifier("The range end must be a positive number.",0, false));
 	}
 	
 	public void initRemainingComponents()

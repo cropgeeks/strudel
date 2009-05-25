@@ -19,8 +19,9 @@ public class ControlToolBar extends JToolBar implements ActionListener
 	public JButton bExport;
 	public JToggleButton bOverview;
 	public JButton bHelp;
-	public JLabel blastLabel, blastScoreLabel;
-	public JSlider eValueSlider;
+	public JLabel blastLabel;
+	public JSpinner eValueSpinner;
+	FormattedTextFieldVerifier eValueSpinnerInputVerifier;
 	public JButton bFindFeatures;
 	public JButton bFindFeaturesinRange;
 	public JButton bResetAll;
@@ -71,8 +72,8 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		
 		addSeparator(true);	
 		add(blastLabel);
-		add(eValueSlider);
-
+		add(eValueSpinner);
+		
 		addSeparator(true);		
 		add(bHelp);
 		add(bInfo);
@@ -85,27 +86,24 @@ public class ControlToolBar extends JToolBar implements ActionListener
 	
 	private void createControls()
 	{
-		blastLabel = new JLabel("BLAST Cut-off:");
-		blastScoreLabel = new JLabel("                   ");		
-		eValueSlider = new JSlider();
-		eValueSlider.setMaximumSize(new Dimension(125, 50));
-		eValueSlider.setMajorTickSpacing(100);
-		eValueSlider.setMaximum(300);
-		eValueSlider.setMinorTickSpacing(50);
-		eValueSlider.setPaintTicks(true);
-		eValueSlider.setValue(0);
-		eValueSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+		blastLabel = new JLabel("BLAST Cut-off: 1.00E");	
+		eValueSpinner = new JSpinner();
+		eValueSpinner.setValue(LinkDisplayManager.getBlastThresholdExponent());
+		eValueSpinner.setMaximumSize(new Dimension(60, 20));
+		
+		eValueSpinnerInputVerifier = new FormattedTextFieldVerifier("The e-value exponent must be 0 or less.",0, true);		
+		((JSpinner.DefaultEditor) eValueSpinner.getEditor()).getTextField().setInputVerifier(eValueSpinnerInputVerifier);
+		eValueSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
 			public void stateChanged(javax.swing.event.ChangeEvent evt) {
-				eValueSliderStateChanged(evt);
+				eValueSpinnerStateChanged(evt);
 			}
 		});
 		
-		eValueSlider.addMouseListener(new MouseAdapter() {
+		eValueSpinner.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e)
 			{
 				if(winMain.mainCanvas != null)
 				{
-					winMain.mainCanvas.drawBlastScore = true;
 					winMain.mainCanvas.updateCanvas(true);
 				}
 			}
@@ -114,7 +112,6 @@ public class ControlToolBar extends JToolBar implements ActionListener
 			{
 				if(winMain.mainCanvas != null)
 				{
-					winMain.mainCanvas.drawBlastScore = false;
 					winMain.mainCanvas.updateCanvas(true);
 				}
 			}
@@ -122,7 +119,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		
 		//disable the BLAST slider and label on startup initially
 		blastLabel.setEnabled(false);
-		eValueSlider.setEnabled(false);
+		eValueSpinner.setEnabled(false);
 		
 		//for a few of the buttons we want Ctrl based keyboard shortcuts
 		//this requires some crazy configuration code, sadly
@@ -261,7 +258,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 			addSeparator();
 	}
 	
-
+	
 	
 	void toggleOverviewDialog()
 	{
@@ -273,26 +270,26 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		winMain.overviewDialog.setVisible(Prefs.guiOverviewVisible);
 	}
 	
-	private void eValueSliderStateChanged(javax.swing.event.ChangeEvent e)
+	private void eValueSpinnerStateChanged(javax.swing.event.ChangeEvent e)
 	{
-		JSlider source = (JSlider) e.getSource();
+		JSpinner source = (JSpinner) e.getSource();
 		
 		//convert the value selected to the exponent of a small decimal and set this as
 		//the new BLAST threshold (which is a double)
-		int exponent = source.getValue();
-		DecimalFormat df = new DecimalFormat("0.##E0");
-		try
+		int exponent = (Integer)source.getValue();
+		
+		eValueSpinnerInputVerifier.verify(source);
+		
+		if(exponent > 0)
 		{
-			Number score = df.parse("1.00E-" + exponent);
-			LinkDisplayManager.blastThreshold = score.doubleValue();
-			blastScoreLabel.setText("" + LinkDisplayManager.blastThreshold);
-			
-			winMain.mainCanvas.updateCanvas(true);
+			TaskDialog.error("BLAST threshold exponent must be 0 or less.", "Close");
+			source.setValue(0);
+			return;
 		}
-		catch (ParseException e1)
-		{
-			e1.printStackTrace();
-		}
+		
+		LinkDisplayManager.setBlastThresholdWithExponent(exponent);
+		winMain.mainCanvas.updateCanvas(true);
+		
 	}
 	
 	public void enableControls(boolean singleGenomeMode)
@@ -302,7 +299,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 			if(singleGenomeMode)
 			{
 				blastLabel.setEnabled(false);
-				eValueSlider.setEnabled(false);
+				eValueSpinner.setEnabled(false);
 				bExport.setEnabled(true);
 				bOverview.setEnabled(true);
 				bFindFeatures.setEnabled(true);
@@ -316,7 +313,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 			else
 			{
 				blastLabel.setEnabled(true);
-				eValueSlider.setEnabled(true);
+				eValueSpinner.setEnabled(true);
 				bExport.setEnabled(true);
 				bOverview.setEnabled(true);
 				bFindFeatures.setEnabled(true);
@@ -327,7 +324,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 				bAntialias.setEnabled(true);
 				bLinkFilter.setEnabled(true);
 			}
-
+			
 		}
 		catch (Exception e)
 		{

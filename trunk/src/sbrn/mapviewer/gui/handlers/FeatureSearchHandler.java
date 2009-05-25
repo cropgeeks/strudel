@@ -70,7 +70,6 @@ public class FeatureSearchHandler
 			Vector<Feature> containedFeatures = new Vector<Feature>();
 			for(Feature f : chromoMap.getFeatureList())
 			{
-				MapViewer.logger.fine("feature = " + f.getName() + " " + f.getStart());
 				boolean featureHasLinks = f.getLinks().size() > 0;
 				//add the feature only if it is in the interval and has links or if the number of mapsets loaded is 1
 				if((f.getStart() >= intervalStart) && (f.getStart() <= intervalEnd) && (featureHasLinks || MapViewer.winMain.dataContainer.gMapSetList.size() == 1))

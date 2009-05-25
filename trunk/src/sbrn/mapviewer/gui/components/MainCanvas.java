@@ -30,8 +30,6 @@ public class MainCanvas extends JPanel
 	
 	// do we need to draw links?
 	public boolean drawLinks = false;
-	// Do we need to draw blast scores?
-	boolean drawBlastScore = false;
 	
 	// if true, antialias everything
 	//this is a flag set by code within the application 
@@ -159,13 +157,14 @@ public class MainCanvas extends JPanel
 					gChromoMap.drawMouseOverFeatures(g);
 					gChromoMap.drawHighlightOutline(g);
 					
-					//this just draws labels of single highlighted features -- need to be drawn at the very end to be on top of everything else
-					if (drawHighlightFeatures)
-					{
-						LabelDisplayManager.drawHighlightedFeatureLabels(g, winMain.fatController.highlightFeature, winMain.fatController.highlightFeatureHomolog);
-					}
 				}
 			}
+		}
+		
+		//this just draws a label for a single highlighted features -- need to be drawn at the very end to be on top of everything else
+		if (drawHighlightFeatures)
+		{
+			LabelDisplayManager.drawHighlightedFeatureLabel(g, winMain.fatController.highlightFeature);
 		}
 	}
 	
@@ -174,7 +173,7 @@ public class MainCanvas extends JPanel
 	// paint the genomes or portions thereof onto this canvas
 	private void paintCanvas(Graphics2D g2)
 	{
-		//		MapViewer.logger.fine("PAINT CANVAS " + System.currentTimeMillis());
+//		MapViewer.logger.info("PAINT CANVAS " + System.currentTimeMillis());
 		
 		// check whether we need antialiasing on
 		checkAntiAliasing(g2);
@@ -343,15 +342,7 @@ public class MainCanvas extends JPanel
 		{
 			LabelDisplayManager.drawLabelsForFoundFeatures(g2);
 		}
-		
-		//check whether we want to display a BLAST cutoff value
-		if (drawBlastScore)
-		{
-			int fontSize = canvasHeight / 40;
-			g2.setFont(new Font("Arial", Font.BOLD, fontSize));
-			g2.setColor(Colors.chromosomeIndexColour);
-			g2.drawString("BLAST e-value cut-off: " + LinkDisplayManager.blastThreshold, 50, 50);
-		}
+
 		//last we want to draw the chromosome indexes so they are painted on top of all other stuff
 		for (GMapSet gMapSet : winMain.dataContainer.gMapSetList)
 		{

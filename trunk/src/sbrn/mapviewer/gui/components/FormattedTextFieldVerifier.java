@@ -1,12 +1,24 @@
 package sbrn.mapviewer.gui.components;
 
-import java.text.*;
 import javax.swing.*;
 import javax.swing.JFormattedTextField.*;
+import sbrn.mapviewer.*;
 import scri.commons.gui.*;
 
 public class FormattedTextFieldVerifier extends InputVerifier
 {
+
+	private String negNumberMessage;
+	private float threshold;
+	private boolean isUpperThreshold;
+	
+	public FormattedTextFieldVerifier(String negNumberMessage, float threshold, boolean isUpperThreshold)
+	{
+		this.negNumberMessage = negNumberMessage;
+		this.threshold = threshold;
+		this.isUpperThreshold = isUpperThreshold;
+	}
+	
 	public boolean verify(JComponent input)
 	{
 		if (input instanceof JFormattedTextField)
@@ -16,14 +28,14 @@ public class FormattedTextFieldVerifier extends InputVerifier
 			if (formatter != null)
 			{
 				String text = ftf.getText();
-
-					if(Float.parseFloat(text) >= 0)
-						return true;
-					else
-					{
-						TaskDialog.error("This number must be positive.", "Close");
-						return false;
-					}
+				
+				if(!isUpperThreshold && (Float.parseFloat(text) >= threshold))
+					return true;
+				else if(isUpperThreshold && (Float.parseFloat(text) <= threshold))
+					return true;
+				
+				TaskDialog.error(negNumberMessage, "Close");
+				return false;
 			}
 		}
 		return true;

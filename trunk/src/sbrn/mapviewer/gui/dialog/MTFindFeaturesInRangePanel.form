@@ -163,18 +163,18 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="displayHomologsCheckBox">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Show all homologies"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
+            <Property name="text" type="java.lang.String" value="Show all homologies"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JCheckBox" name="displayLabelsCheckbox">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Show all labels"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
+            <Property name="text" type="java.lang.String" value="Show all labels"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="displayLabelsCheckboxActionPerformed"/>

@@ -21,7 +21,7 @@ public class SaveTableDataAction extends AbstractAction
 	{
 		JFileChooser fc = new JFileChooser();
 		fc.setDialogTitle("Save table data as");
-		fc.setAcceptAllFileFilterUsed(false);
+//		fc.setAcceptAllFileFilterUsed(false);
 		fc.setCurrentDirectory(new File(System.getProperty("user.home")));
 		File outputFile = new File("tableData.txt");
 		fc.setSelectedFile(outputFile);
@@ -48,10 +48,15 @@ public class SaveTableDataAction extends AbstractAction
 			try
 			{
 				//write table data to file
-				FileUtils.writeFile(outputFile, extractResultsTableData());				
+				MapViewer.logger.info("saving table data to file");
+				FileUtils.writeFile(file, extractResultsTableData());				
 				
-				TaskDialog.info("The data was successfully saved "
-								+ " to " + file, "Close");
+				if(file.exists())
+					TaskDialog.info("The data was successfully saved  to " + file, "Close");
+				else
+					TaskDialog.error("Error: data has not been saved.","Close");
+				
+				MapViewer.logger.info("file.exists() = " + file.exists());
 			}
 			catch (NullPointerException npx)
 			{

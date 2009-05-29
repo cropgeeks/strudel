@@ -43,8 +43,6 @@ public class LabelDisplayManager
 	//this just draws labels of single highlighted features
 	public static void drawHighlightedFeatureLabel(Graphics2D g2, Feature f)
 	{
-		MapViewer.logger.info("drawHighlightedFeatureLabel");
-		
 		// the usual font stuff
 		g2.setFont(new Font("Sans-serif", Font.PLAIN, fontHeight));
 		FontMetrics fm = g2.getFontMetrics();	

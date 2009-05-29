@@ -24,18 +24,14 @@ public class LabelDisplayManager
 	{
 		//the features we need to draw
 		Vector<Feature> features = FeatureSearchHandler.featuresInRange;
-		
-		//for this we need the interval start and end values		
-		float intervalStart = features.get(0).getStart();
-		float intervalEnd = features.get(features.size()-1).getStart();
-		
+
 		//all the features should be on the same map so we can just query the first element for its parent map
-		GChromoMap gChromoMap = features.get(0).getOwningMap().getGChromoMap();
-		
+		GChromoMap gChromoMap = features.get(0).getOwningMap().getGChromoMap();	
 		Vector<GChromoMap> gMaps = new Vector<GChromoMap>();
 		gMaps.add(gChromoMap);
-		LabelDisplayManager.drawFeatureLabelsInRange(g2, false, gMaps, intervalStart, intervalEnd, features, false);
 		
+		//only draw those features that are actually visible on canvas
+		drawFeatureLabelsInRange(g2, false, gMaps, -1, -1, Utils.checkFeatureVisibility(features), false);		
 	}
 	
 	//------------------------------------------------------------------------------------------------------------------------------------
@@ -196,14 +192,19 @@ public class LabelDisplayManager
 		//we want the labels fanning out evenly on y both up and downwards from the features themselves
 		//first work out the combined height of the labels
 		int totalLabelHeight = Math.round(features.size() * labelHeight);	
+		MapViewer.logger.info("totalLabelHeight = " + totalLabelHeight);
 		//the difference between the total label height and the canvas size
 		int excess = totalLabelHeight - MapViewer.winMain.mainCanvas.getHeight();
+		MapViewer.logger.info("excess = " + excess);
+		
 		//the label offset on y relative to the start of the features themselves
 		//need to subtract this from each label position
 		int offset = Math.round(excess / 2.0f);	
 		//don't want the offset to be negative
 		if(excess < 0)
 			offset = 0;
+		
+		MapViewer.logger.info("offset = " + offset);
 		
 		//need to check that the label interval is no less than the height of an individual label plus some space at 
 		//the top and bottom of it respectively	
@@ -235,7 +236,7 @@ public class LabelDisplayManager
 			}
 		}
 		
-		//now subtract from each position the offset so things fan out properly
+		//now subtract the offset  from each position so the labels fan out properly
 		for (Feature feature : labelPositions.keySet())
 		{
 			int newPos = labelPositions.get(feature) - offset;

@@ -92,8 +92,8 @@ Xin & Andy's List:
 Sylviane's list:
 + Export feature lists
 + BLAST e-value column in the feature table
-- adjust the BLAST e-value when working in a given range on a chromosome
-- adjust the BLAST e-value more accurately (spinner?)
++ adjust the BLAST e-value when working in a given range on a chromosome
++ adjust the BLAST e-value more accurately (spinner?)
 
 ================================
 

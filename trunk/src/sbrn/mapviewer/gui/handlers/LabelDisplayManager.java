@@ -167,11 +167,17 @@ public class LabelDisplayManager
 				
 				if (isMouseOver)
 				{
-					//set the highlight colour
+					//set the colour to highlight feature
 					g2.setColor(Colors.highlightedFeatureColour);
-					// draw a line to highlight the marker on the chromosome itself
-					g2.drawLine(mapSetX, featureY, mapSetX + MapViewer.winMain.mainCanvas.chromoWidth - 1, featureY);
 				}
+				else
+				{
+					//set the colour to draw feature normally
+					g2.setColor(Colors.featureColour);
+				}
+				// draw a line to highlight the marker on the chromosome itself
+				g2.drawLine(mapSetX, featureY, mapSetX + MapViewer.winMain.mainCanvas.chromoWidth - 1, featureY);
+				
 			}
 		}
 	}

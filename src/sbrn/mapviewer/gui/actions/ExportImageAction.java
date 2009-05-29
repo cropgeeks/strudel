@@ -16,7 +16,6 @@ public class ExportImageAction extends AbstractAction
 	{
 		JFileChooser fc = new JFileChooser();
 		fc.setDialogTitle("Save Image As");
-		fc.setAcceptAllFileFilterUsed(false);
 		fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
 		// TODO: track current directories and offer a suitable filename
 		fc.setSelectedFile(new File("mapviewer.png"));

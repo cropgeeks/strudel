@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<link rel="stylesheet" href="stylesheet/styles.css" type="text/css">
+
+<title>Strudel Screenshots</title>
+
+</head>
+<body>
+
+<!--#include virtual="header.html" -->
+
+
+<h2>Screenshots</h2>
+
+<p>Screenshots (click to enlarge):</p>
+
+<p>
+<a href="images/screenshot1.png">
+<img class="capture" src="images/screenshot1_small.png" alt="Strudel Screenshot"></a>
+</p>
+
+<p>
+<a href="images/screenshot2.png">
+<img class="capture" src="images/screenshot2_small.png" alt="Strudel Screenshot"></a>
+</p>
+
+
+<!--#include virtual="footer.html" -->
+
+</body>
+</html>

@@ -192,10 +192,8 @@ public class LabelDisplayManager
 		//we want the labels fanning out evenly on y both up and downwards from the features themselves
 		//first work out the combined height of the labels
 		int totalLabelHeight = Math.round(features.size() * labelHeight);	
-		MapViewer.logger.info("totalLabelHeight = " + totalLabelHeight);
 		//the difference between the total label height and the canvas size
 		int excess = totalLabelHeight - MapViewer.winMain.mainCanvas.getHeight();
-		MapViewer.logger.info("excess = " + excess);
 		
 		//the label offset on y relative to the start of the features themselves
 		//need to subtract this from each label position
@@ -203,8 +201,6 @@ public class LabelDisplayManager
 		//don't want the offset to be negative
 		if(excess < 0)
 			offset = 0;
-		
-		MapViewer.logger.info("offset = " + offset);
 		
 		//need to check that the label interval is no less than the height of an individual label plus some space at 
 		//the top and bottom of it respectively	

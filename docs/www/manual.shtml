@@ -27,6 +27,8 @@
 		<p>
 			Topics:
 			<br>
+			<a href="#mouseControls">Mouse controls</a>
+			<br>
 			<a href="#openingFiles">Opening files</a>
 			<br>
 			<a href="#dataFormat">Input data format</a>
@@ -61,6 +63,93 @@
 			<br>
 
 		</p>
+
+		<!-- --------------------------------------------- -->
+		<h4>
+			Mouse controls:
+			<a name="mouseControls"></a>
+		</h4>
+
+		<table class="outline" cellpadding="5">
+
+			<tr>
+				<td class="outline">
+					Single-click chromosome
+				</td>
+				<td class="outline">
+					Display all the links of this chromosome
+				</td>
+			</tr>
+
+			<tr>
+				<td class="outline">
+					Single-click background
+				</td>
+				<td class="outline">
+					Hide all links
+				</td>
+			</tr>
+
+			<tr>
+				<td class="outline">
+					Single-click chromosome with Alt down
+				</td>
+				<td class="outline">
+					Expand chromosome to fill the screen vertically
+				</td>
+			</tr>
+
+			<tr>
+				<td class="outline">
+					Mouse drag with Shift down, then release
+				</td>
+				<td class="outline">
+					Zoom in on region outlined by panning
+				</td>
+			</tr>
+
+			<tr>
+				<td class="outline">
+					Single-click chromosome with Ctrl down
+				</td>
+				<td class="outline">
+					Select this chromosome for link display (links -- if applicable -- show when two or more chromosomes selected)
+				</td>
+			</tr>
+
+			<tr>
+				<td class="outline">
+					Mouse drag on or next to chromosome
+				</td>
+				<td class="outline">
+					Move canvas up or down (slow)
+				</td>
+			</tr>
+
+			<tr>
+				<td class="outline">
+					Scroll wheel
+				</td>
+				<td class="outline">
+					Move canvas up or down (fast)
+				</td>
+			</tr>
+
+			<tr>
+				<td class="outline">
+					Mouse over feature on chromosome
+				</td>
+				<td class="outline">
+					Display names of features mapped to this location
+				</td>
+			</tr>
+
+		</table>
+
+
+		<br>
+		<a href="#top">Back to top</a>
+
 
 		<!-- --------------------------------------------- -->
 		<h4>

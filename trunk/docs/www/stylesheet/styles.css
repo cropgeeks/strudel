@@ -175,3 +175,21 @@ h5
 	width: 180px;
 	height: 31px;
 }
+
+TABLE
+{
+	border-collapse: collapse;
+}
+
+TABLE.outline
+{
+	border-color: #6E94B7;
+	border-style: solid;
+	border-width: 1px;
+}
+TD.outline
+{
+	border-color: #6E94B7;
+	border-style: solid;
+	border-width: 1px;
+}

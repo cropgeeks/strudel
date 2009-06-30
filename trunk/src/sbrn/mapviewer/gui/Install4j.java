@@ -1,5 +1,6 @@
 package sbrn.mapviewer.gui;
 
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -12,9 +13,10 @@ import scri.commons.gui.*;
 
 public class Install4j
 {
-	private static String URL = "http://bioinf.scri.ac.uk/strudel/installers/updates.xml";
+	private static String URL = Constants.strudelHomePage + "installers/updates.xml";
 
 	public static String VERSION = "X.XX.XX.XX";
+	public static boolean displayUpdate = false;
 
 	/**
 	 * install4j update check. This will only work when running under the full
@@ -63,6 +65,11 @@ public class Install4j
 				com.install4j.api.ApplicationRegistry.getApplicationInfoByDir(new File("."));
 
 			VERSION = info.getVersion();
+			
+			if (Prefs.lastVersion == null || !Prefs.lastVersion.equals(VERSION))
+				displayUpdate = true;
+
+			Prefs.lastVersion = VERSION;
 		}
 		catch (Exception e) {}
 		catch (Throwable e) {}

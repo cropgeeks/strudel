@@ -17,7 +17,8 @@
 
 <h2>New in the current release:</h2>
 <p>
-
+- There is now a full online manual at this URL which replaces the temporay pdf based manual.
+ This includes directions on how to load your own data. Click <a href="manual.shtml">here</a> for more details.
 
 <!--#include virtual="footer.html" -->
 

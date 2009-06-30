@@ -77,7 +77,7 @@
 					Single-click chromosome
 				</td>
 				<td class="outline">
-					Display all the links of this chromosome
+					Display all the homologies of this chromosome
 				</td>
 			</tr>
 
@@ -214,9 +214,9 @@
 		genomes of
 		<i>Brachypodium distachyon</i>, barley (
 		<i>Hordeum vulgare</i>) and rice (
-		<i>Oryza sativa</i>) (click the info button
+		<i>Oryza sativa</i>). Click the info button
 		<img src="images/info.png">
-		on the toolbar, then the "Example Data Sets" tab to see more detail).
+		on the toolbar, then the "Example Data Sets" tab to see more detail.
 		<br>
 		<a href="#top">Back to top</a>
 

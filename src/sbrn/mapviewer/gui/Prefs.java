@@ -35,5 +35,8 @@ public class Prefs extends XMLPreferences
 	
 	//do we want to show the distance markers
 	public static boolean showDistanceMarkers = false;
+	
+	//the number of the last version released
+	public static String lastVersion = null;
 		
 }

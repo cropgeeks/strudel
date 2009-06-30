@@ -1,5 +1,6 @@
 package sbrn.mapviewer;
 
+
 import java.awt.event.*;
 import java.io.*;
 import java.util.logging.*;
@@ -86,6 +87,13 @@ public class MapViewer
 					prefs.savePreferences(prefsFile, Prefs.class);
 
 					System.exit(0);
+				}
+				
+				public void windowOpened(WindowEvent e)
+				{
+					//if the version has been updated, go to the website and get the update info
+					if (Install4j.displayUpdate)
+						Utils.visitURL(Constants.strudelHomePage + "whatsnew.shtml");
 				}
 			});
 

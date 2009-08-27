@@ -12,16 +12,16 @@
 </head>
 <body>
 
-<!--#include virtual="header.html" -->
+<!--#include virtual="header.shtml" -->
 
 
 <h2>Download Strudel</h2>
 
 <!-- <p>The most recent release of Strudel is:
-<b></b> </p> 
+<b></b> </p>
 
 <p>Please use the links below to download the Strudel installer most suitable
-for your operating system. All installers come bundled with a Java Runtime Environment (JRE) and have no dependencies on any third 
+for your operating system. All installers come bundled with a Java Runtime Environment (JRE) and have no dependencies on any third
 party libraries. </p>
 -->
 
@@ -34,7 +34,7 @@ party libraries. </p>
 	<td>&nbsp;&nbsp;&nbsp;</td>
 	<td><img src="images/icon_windows.gif" alt="Windows"></td>
 	<td>
-		
+
 		Microsoft Windows
 	</td>
 </tr>

@@ -12,14 +12,14 @@
 </head>
 <body>
 
-<!--#include virtual="header.html" -->
+<!--#include virtual="header.shtml" -->
 
 
 <h2>Strudel - Comparative Map Visualization</h2>
 
-<p>Strudel is our new graphical tool for visualizing genetic and physical maps of genomes for comparative purposes. 
-The application aims to let the user examine their data at a variety of different levels of resolution, from entire maps to individual markers, 
-and explore syntenic relationships between genomes. 
+<p>Strudel is our new graphical tool for visualizing genetic and physical maps of genomes for comparative purposes.
+The application aims to let the user examine their data at a variety of different levels of resolution, from entire maps to individual markers,
+and explore syntenic relationships between genomes.
 All browsing and interaction with Strudel happens in real-time - there is no need to wait while the maps are generated.
 It is built using Java 1.6 and is shipped with its own JRE, so there is no
 need for users to install or update Java.

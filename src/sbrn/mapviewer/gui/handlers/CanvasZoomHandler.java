@@ -79,7 +79,7 @@ public class CanvasZoomHandler
 		MapViewer.winMain.fatController.initialisePositionArrays();
 
 		//update zoom control position
-		MapViewer.winMain.fatController.updateZoomControls();
+		MapViewer.winMain.fatController.updateAllZoomControls();
 
 	}
 
@@ -106,13 +106,14 @@ public class CanvasZoomHandler
 	// zooms in by a fixed amount on a chromosome the user clicked on (to fill screen with chromosome)
 	public ClickZoomAnimator processClickZoomRequest(GChromoMap selectedMap)
 	{
-
+	
 		// figure out the genome it belongs to and increase that genome's zoom factor so that we can
 		// just fit the chromosome on screen the next time it is painted
 		GMapSet selectedSet = selectedMap.owningSet;
 
 		// animate this by zooming in gradually
-		float finalZoomFactor = mainCanvas.initialCanvasHeight / mainCanvas.initialChromoHeight;
+		//this is the zoom factor we want to get to
+		float finalZoomFactor = mainCanvas.getHeight() / mainCanvas.initialChromoHeight;
 		
 		//make sure this does not exceed the max zoom factor
 		if(finalZoomFactor > Constants.MAX_ZOOM_FACTOR)
@@ -142,13 +143,14 @@ public class CanvasZoomHandler
 	public  void processZoomResetRequest(GMapSet selectedSet)
 	{
 		//this is the final zoom factor we want to have here
-		selectedSet.zoomFactor = 1;
-		
+		selectedSet.zoomFactor = 1;		
+		selectedSet.chromoHeight = MapViewer.winMain.mainCanvas.initialChromoHeight;		
+
 		//update overviews
 		MapViewer.winMain.fatController.updateOverviewCanvases();
-		
+
 		//update zoom control position
-		MapViewer.winMain.fatController.updateZoomControls();
+		MapViewer.winMain.fatController.updateAllZoomControls();
 
 		//update the arrays with the position data
 		MapViewer.winMain.fatController.initialisePositionArrays();		
@@ -157,6 +159,7 @@ public class CanvasZoomHandler
 		//now repaint
 		MapViewer.winMain.mainCanvas.antiAlias = Prefs.userPrefAntialias;
 		MapViewer.winMain.mainCanvas.updateCanvas(true);
+
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
@@ -249,7 +252,7 @@ public class CanvasZoomHandler
 		//now update the arrays with the position data
 		MapViewer.winMain.fatController.initialisePositionArrays();
 		//update zoom control position
-		MapViewer.winMain.fatController.updateZoomControls();
+		MapViewer.winMain.fatController.updateAllZoomControls();
 				
 		//turn antialiasing on and repaint
 		mainCanvas.antiAlias = true;

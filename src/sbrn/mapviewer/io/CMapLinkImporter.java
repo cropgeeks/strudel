@@ -95,7 +95,7 @@ public class CMapLinkImporter
 		MapViewer.logger.fine("returning linkset of size " + linkSet.size());
 		if(linkSet.size() == 0 && MapViewer.winMain.dataContainer.gMapSetList.size() > 1)
 		{
-			String message = "Linkset does not contain any links between the genomes specified.\n Please check your data files and retry.";
+			String message = "Linkset does not contain any links between the genomes specified.\n ";
 			throw new Exception(message);
 		}
 		

@@ -71,7 +71,7 @@ public class PanZoomAnimator extends Thread implements ItemListener
 		// this is the combined height of all spacers -- does not change with the zoom factor
 		int combinedSpacers = mainCanvas.chromoSpacing * (selectedSet.numMaps - 1);
 		
-		// these are the values we want for the last iteration
+		// these are the values we want for the final iteration
 		float finalZoomFactor = selectedSet.zoomFactor * finalScalingFactor;		
 		float finalChromoHeight = (int) (selectedSet.chromoHeight * finalScalingFactor);
 		// the distance from the top of the chromosome to the mousePressedY location, in pixels
@@ -96,7 +96,7 @@ public class PanZoomAnimator extends Thread implements ItemListener
 				// sleep for the amount of animation time divided by the fps value
 				try
 				{
-					Thread.sleep((long) (millis / totalFrames));
+					Thread.sleep(millis / totalFrames);
 				}
 				catch (InterruptedException e)
 				{
@@ -142,7 +142,7 @@ public class PanZoomAnimator extends Thread implements ItemListener
 				currentScalingFactor += increment;
 				
 				//update visible zoom info
-				MapViewer.winMain.fatController.updateZoomControls();
+				MapViewer.winMain.fatController.updateAllZoomControls();
 			}
 		}
 		//if we have not reached the max zoom factor with this we need to do one more zoom adjust 
@@ -161,7 +161,7 @@ public class PanZoomAnimator extends Thread implements ItemListener
 		//now update the arrays with the position data
 		MapViewer.winMain.fatController.initialisePositionArrays();
 		//update zoom control position
-		MapViewer.winMain.fatController.updateZoomControls();
+		MapViewer.winMain.fatController.updateAllZoomControls();
 				
 		//turn antialiasing on and repaint
 		mainCanvas.antiAlias = true;

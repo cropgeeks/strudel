@@ -26,12 +26,16 @@ public class MapViewer
 	    * FINEST (lowest value) 
 	    * ALL
 	    */
-	private static Level logLevel = Level.INFO;
+	private static Level logLevel = Level.WARNING;
 	public static Logger logger = Logger.getLogger("sbrn.strudel");
 	
 	private static File prefsFile = new File(System.getProperty("user.home"), ".strudel.xml");
 	private static Prefs prefs = new Prefs();
 	public static WinMain winMain;	
+	
+	
+	//true when data is loaded
+	public static boolean dataLoaded = false;
 
 	public static void main(String[] args)
 	{
@@ -95,6 +99,21 @@ public class MapViewer
 					if (Install4j.displayUpdate)
 						Utils.visitURL(Constants.strudelHomePage + "whatsnew.shtml");
 				}
+
+			});
+			
+			
+			winMain.addComponentListener(new ComponentAdapter()
+			{
+				public void componentResized(ComponentEvent e) 
+				{
+					if (dataLoaded)
+					{
+						winMain.mainCanvas.updateCanvas(true);
+						winMain.fatController.initialisePositionArrays();
+					}					
+				}
+
 			});
 
 			winMain.setVisible(true);

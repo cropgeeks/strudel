@@ -277,13 +277,6 @@ public class MTOpenFilesPanel extends javax.swing.JPanel
 			JButton sourceButton = (JButton) evt.getSource();
 			//find out which textfield goes with this button
 			JTextField textField = buttonMap.get(sourceButton);
-			
-			//point this file chooser at the current working directory
-			fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
-			
-			//dirty hack to stop the file chooser remembering the last opened file and offering it as a default
-			File emptyFile = new File("");
-			fc.setSelectedFile(emptyFile);
 			int returnVal = fc.showOpenDialog(MapViewer.winMain.openFileDialog);
 			if (returnVal == JFileChooser.APPROVE_OPTION)
 			{

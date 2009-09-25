@@ -35,7 +35,7 @@ public class DataLoadThread extends Thread
 				// we do this by simply creating a new data container instance -- the actual data loading is done through this
 				MapViewer.winMain.dataContainer = new DataContainer(targetData, refGenome1FeatData, refGenome1HomData, refGenome2FeatData, refGenome2HomData);
 				//check it all loaded ok
-				if(!MapViewer.winMain.dataContainer.dataLoaded)
+				if(!MapViewer.dataLoaded)
 					return;
 				
 				// if users load datasets in succession we need to make sure we don't run out of memory

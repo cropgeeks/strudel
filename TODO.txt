@@ -2,7 +2,6 @@
 
 features to implement -- general:
 
-- online documentation
 - Mac mouse control support
 - dynamically determine suitable number of distance markers to display depending on the zoom level
 - name panel with labels for the genomes
@@ -34,7 +33,6 @@ Data:
 Dave's list:
 
 - colour chooser
-- scrollbar for moving entire canvas up and down (not individual genomes)
 - potentials:
 	* include in raw data putative homologs e.g. for rice loci in barley and flag every entry in the data as mapped or putative; then display these in the mapviewer, perhaps in different colours based on the value of the flag
 	* include all reference genome features and their annotation in the feature range results table (but not on the canvas)
@@ -74,7 +72,6 @@ Jordi's list:
 List from genetics barley users' meeting:
 
 Ability to flip chromosomes and parts of chromosomes/regions  - Luke.
-Highlight links on mouseover – Linda.
 Show annotation for both target and ref  - Linda.
 Ability to move markers around. - Luke
 Save project files including current state – Luke
@@ -83,17 +80,8 @@ Menu bar support for new/infrequent users – Robbie
 ================================
 
 Xin & Andy's List:
-+ Export feature lists
 - Screen found features by BLAST cutoff
 
-
-================================
-
-Sylviane's list:
-+ Export feature lists
-+ BLAST e-value column in the feature table
-+ adjust the BLAST e-value when working in a given range on a chromosome
-+ adjust the BLAST e-value more accurately (spinner?)
 
 ================================
 
@@ -110,12 +98,13 @@ REFACTORING:
 
 
 BUGS to fix:
-?(not resolved) range-start and range-end spinner controls look like they are too tall
-- no multiple selection of Find results (maybe it's not meant to)
-?(unresolved) if you CTRL-multiclick multiple chromsomes (down the middle) too fast, the AA gets confused and stays
-  on all the times, even as new lines are being added
-- performance with hundreds of lines is actually pretty bloody good (considering the circumstances)
-- when maximising the window zoomed in chromosomes do not get scaled up fully (e.g. to fill the canvas again) and the application sometimes hangs
-- drawing of visble regions in overview canvas is very inaccurate
-- occasionally mouse clicks on chromosome seem to go unnoticed, e.g. for single click zooming
-- in post data load stage there are unneccessary repaints when mosuing over chromosomes (although no features are showing)
+
+?(unresolved) range-start and range-end spinner controls look like they are too tall
+?(unresolved) if you CTRL-multiclick multiple chromsomes (down the middle) too fast, the AA gets confused and stays on all the times, even as new lines are being added
+
+- unnecessary repaints when mousing over chromos at zoom level 1
+- drawing of visible regions in overview canvas is still quite inaccurate
+- various problems in selecting rows and clicking hyperlinks in results table
+
+- when "always show all markers" is switched on on a genome and we reset the individual zoom button, the markers are redrawn in the wrong places
+

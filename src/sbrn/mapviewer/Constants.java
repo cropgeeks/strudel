@@ -30,6 +30,7 @@ public class Constants
 	public static final String exampleRefGenome2FeatData =  "data/Rice.txt";
 	public static final String exampleRefGenome1HomData =  "data/barleyBrachyHomologyData.txt";
 	public static final String exampleRefGenome2HomData =  "data/barleyRiceHomologyData.txt";
+	public static final String exampleDataAllInOne = "data/BarleyRiceBrachySingleLineFormat.txt";
 	
 	//example data descriptions
 	public static final String exampleTargetDataDescription = "Barley Illumina SNPS consensus map UCR_20080416-2 (Close et al.); to be published";

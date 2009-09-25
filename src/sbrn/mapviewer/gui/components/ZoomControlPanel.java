@@ -104,6 +104,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		{
 			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(source.getValue(), 0, gMapSet, true);
 			updateSlider();
+			MapViewer.winMain.mainCanvas.updateCanvas(true);
 		}	
 	}
 	

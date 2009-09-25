@@ -91,14 +91,13 @@ public class MouseOverHandler
 	// ------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private void clearPreviousMap()
-	{
+	{	
 		// reset the selected map if the mouse is not over it
-		if (previousMap != null  && !previousMap.persistHighlightedFeatures)
+		if (previousMap != null  && !previousMap.persistHighlightedFeatures && previousMap.owningSet.paintAllMarkers)
 		{
 			previousMap.mouseOverFeatures.clear();
 			previousMap.drawMouseOverFeatures = false;
 			previousMap = null;
-
 			winMain.mainCanvas.updateCanvas(false);
 		}
 	}

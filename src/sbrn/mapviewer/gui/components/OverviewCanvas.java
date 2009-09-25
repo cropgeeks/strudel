@@ -122,14 +122,14 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener, Mouse
 			//work out the topmost y coord of the genome as visible on the main canvas
 			int topY = Math.round(gMapSet.centerPoint - winMain.mainCanvas.getHeight()/2.0f);
 			//scale this by the overall height of the genome on the main canvas
-			float offsetProportionAtTop = topY/(float)gMapSet.totalY;
+			double offsetProportionAtTop = topY/(float)gMapSet.totalY;
 			//work out the equivalent point on this overview canvas in pixels
-			rectY = Math.round(getHeight()  *offsetProportionAtTop );
+			rectY = (int)Math.round(getHeight()*offsetProportionAtTop);
 			
 			//work out the vertical extent of the visible area of the main canvas as a proportion of the total y
-			float offsetProportionVisibleArea = winMain.mainCanvas.getHeight()/(float)gMapSet.totalY;
+			double offsetProportionVisibleArea = winMain.mainCanvas.getHeight()/(float)gMapSet.totalY;
 			//set the rect height accordingly
-			rectHeight = Math.round(getHeight() * offsetProportionVisibleArea);
+			rectHeight = (int)Math.round(getHeight() * offsetProportionVisibleArea);
 		}
 
 		//set this all up
@@ -159,7 +159,7 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener, Mouse
 	private void processLineDragRequest(int newY)
 	{
 		// work out what percentage offset from the top of the topmost chromosome this y position is equal to
-		float offsetProportion = ((newY - chromoSpacing) / (float)(getHeight()-chromoSpacing));
+		float offsetProportion = (newY - chromoSpacing) / (float)(getHeight()-chromoSpacing);
 
 		//now convert this to an actual Y value which is what we need to pass to the next method
 		int newYCoord = Math.round(offsetProportion*gMapSet.totalY);

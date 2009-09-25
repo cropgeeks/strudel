@@ -102,9 +102,4 @@ BUGS to fix:
 ?(unresolved) range-start and range-end spinner controls look like they are too tall
 ?(unresolved) if you CTRL-multiclick multiple chromsomes (down the middle) too fast, the AA gets confused and stays on all the times, even as new lines are being added
 
-- unnecessary repaints when mousing over chromos at zoom level 1
-- drawing of visible regions in overview canvas is still quite inaccurate
-- various problems in selecting rows and clicking hyperlinks in results table
-
-- when "always show all markers" is switched on on a genome and we reset the individual zoom button, the markers are redrawn in the wrong places
 

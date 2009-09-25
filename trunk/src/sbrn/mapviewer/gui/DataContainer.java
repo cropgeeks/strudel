@@ -56,7 +56,7 @@ public class DataContainer
 	{
 		MapViewer.logger.fine("============== making new data container");
 		MapViewer.logger.fine("num mapsets prior to initing = " + gMapSetList.size());
-		loadData(targetData, refGenome1FeatData, refGenome1HomData, refGenome2FeatData, refGenome2HomData);
+		loadDataFromMultipleFiles(targetData, refGenome1FeatData, refGenome1HomData, refGenome2FeatData, refGenome2HomData);
 		setUpGenomes();
 	}
 	
@@ -64,7 +64,7 @@ public class DataContainer
 	//============================================methods==========================================
 
 	//Loads data from file using the object data model; this will populate all the relevant MapSet and LinkSet objects.
-	public void loadData(File targetData, File refGenome1FeatData, File refGenome1HomData, File refGenome2FeatData, File refGenome2HomData)
+	public void loadDataFromMultipleFiles(File targetData, File refGenome1FeatData, File refGenome1HomData, File refGenome2FeatData, File refGenome2HomData)
 	{
 		MapViewer.logger.fine("initing new dataset");
 		MapViewer.logger.fine("loadOwnData = "  + MapViewer.winMain.fatController.loadOwnData);

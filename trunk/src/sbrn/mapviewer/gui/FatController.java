@@ -60,13 +60,14 @@ public class FatController
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	//update visible zoom info
-	public void updateZoomControls()
+	public void updateAllZoomControls()
 	{
 		for (ZoomControlPanel zoomControlPanel : winMain.zoomControlPanels)
 		{
 			zoomControlPanel.updateSlider();
 		}
 	}
+	
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
 	
@@ -105,7 +106,6 @@ public class FatController
 	//this is necessary because zooming changes the actual position values as the canvas grows
 	public void initialisePositionArrays()
 	{
-		MapViewer.logger.fine("++++++++++indexing position arrays+++++++++++++");
 		long startTime = System.nanoTime();
 		// for all gmapsets
 		for (GMapSet gMapSet : winMain.dataContainer.gMapSetList)
@@ -116,9 +116,7 @@ public class FatController
 				gChromoMap.initArrays();
 			}
 		}
-		
-		// update the display
-		winMain.mainCanvas.updateCanvas(true);
+
 		MapViewer.logger.finest(" done indexing position arrays");
 		MapViewer.logger.finest("time taken (nanos) = " + (System.nanoTime() - startTime));
 	}

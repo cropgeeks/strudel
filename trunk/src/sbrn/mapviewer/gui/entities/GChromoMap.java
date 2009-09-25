@@ -253,11 +253,10 @@ public class GChromoMap
 				g2.setColor(Color.getHSBColor(hsbCentreColour[0], hsbCentreColour[1], undersideBrightness));
 				g2.fill(bottomEllipse2D);
 			}
-			
+
 			// now draw features and labels as required
 			if (owningSet.paintAllMarkers && isShowingOnCanvas)
 			{
-				MapViewer.logger.finest("drawing features for map " + name);
 				drawLinkedFeatures(g2);
 			}
 			
@@ -438,16 +437,13 @@ public class GChromoMap
 	// initialises the arrays we need for fast drawing
 	public void initArrays()
 	{
-		MapViewer.logger.finest("===============initing arrays for map " + name);
 		MapViewer.logger.finest("MapViewer.winMain.dataContainer.gMapSetList.size() = " + MapViewer.winMain.dataContainer.gMapSetList.size());
 		
-		if(isShowingOnCanvas)
-		{			
+		if(true)
+		{		
 			// init the arrays that hold ALL the features for this map
 			int numFeatures = chromoMap.countFeatures();
-			
-			MapViewer.logger.finest("numFeatures " + numFeatures);
-			
+
 			allLinkedFeatures = new Feature[numFeatures];
 			allLinkedFeaturePositions = new int[numFeatures];
 			Vector<Feature> featureList = chromoMap.getFeatureList();
@@ -467,8 +463,7 @@ public class GChromoMap
 					//scale this by the current map height to give us a position in pixels, between zero and the chromosome height
 					//then store this value in the array we use for drawing
 					allLinkedFeaturePositions[i] =Utils.convertRelativeFPosToPixels(owningSet, chromoMap, start);
-					MapViewer.logger.finest("allLinkedFeaturePositions[i] = " + allLinkedFeaturePositions[i]);
-					
+
 					//if the map is inverted we need to store the inverse of this value i.e. the map end value minus the feature position
 					if(isFullyInverted || isPartlyInverted)
 					{

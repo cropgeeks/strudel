@@ -2,14 +2,9 @@ package sbrn.mapviewer.gui.components;
 
 import java.awt.*;
 import java.awt.image.*;
-import java.util.*;
-
 import javax.swing.*;
-
 import sbrn.mapviewer.*;
-import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
-import sbrn.mapviewer.gui.dialog.*;
 import sbrn.mapviewer.gui.entities.*;
 import sbrn.mapviewer.gui.handlers.*;
 
@@ -22,8 +17,8 @@ public class MainCanvas extends JPanel
 	WinMain winMain;
 	
 	// size of the canvas panel
-	int canvasHeight;
-	int canvasWidth;
+	public int canvasHeight;
+	public int canvasWidth;
 	
 	// space the chromosomes vertically by this fixed amount
 	public int chromoSpacing = 15;
@@ -98,7 +93,6 @@ public class MainCanvas extends JPanel
 	
 	public void paintComponent(Graphics graphics)
 	{
-		
 		super.paintComponent(graphics);
 		
 		Graphics2D g = (Graphics2D) graphics;
@@ -173,8 +167,6 @@ public class MainCanvas extends JPanel
 	// paint the genomes or portions thereof onto this canvas
 	private void paintCanvas(Graphics2D g2)
 	{
-//		MapViewer.logger.info("PAINT CANVAS " + System.currentTimeMillis());
-		
 		// check whether we need antialiasing on
 		checkAntiAliasing(g2);
 		
@@ -234,7 +226,7 @@ public class MainCanvas extends JPanel
 				
 				// the total vertical extent of the genome, excluding top and bottom spacers
 				gMapSet.totalY = (gMapSet.numMaps * gMapSet.chromoHeight) + ((gMapSet.numMaps - 1) * chromoSpacing);
-				gMapSet.centerPoint = gMapSet.totalY / 2;
+				gMapSet.centerPoint = Math.round(gMapSet.totalY / 2.0f);
 				// the space at the top and bottom -- should be equal
 				topBottomSpacer = (canvasHeight - gMapSet.totalY) / 2;
 				
@@ -277,11 +269,6 @@ public class MainCanvas extends JPanel
 				gChromoMap.boundingRectangle.setBounds(gChromoMap.x, gChromoMap.y,
 								gChromoMap.width, gChromoMap.height);
 				
-				//check whether the arrays that hold the data for drawing features etc have been inited
-				//if not, do it now (only needs to be done here once, at startup)
-				if (!gChromoMap.arraysInitialized)
-					gChromoMap.initArrays();
-				
 				MapViewer.logger.finest("gChromoMap.arraysInitialized = " + gChromoMap.arraysInitialized);
 				
 				if (canvasBounds.contains(gChromoMap.boundingRectangle) || canvasBounds.intersects(gChromoMap.boundingRectangle))
@@ -300,6 +287,11 @@ public class MainCanvas extends JPanel
 				{
 					gChromoMap.isShowingOnCanvas = false;
 				}
+
+				//check whether the arrays that hold the data for drawing features etc have been inited
+				//if not, do it now (only needs to be done here once, at startup)
+				if (!gChromoMap.arraysInitialized)
+					gChromoMap.initArrays();				
 				
 				//if the map is meant to be visible on the canvas at this time
 				if (gChromoMap.isShowingOnCanvas)

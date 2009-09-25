@@ -24,10 +24,10 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	
 	private boolean isOSX = SystemUtils.isMacOS();
 	
-	int scrollGenomeIncrement = 200;
+	int scrollGenomeIncrement = 100;
 	
 	int lastMouseDragYPos = -1;
-
+	
 	
 	// ===============================================c'tors===========================================
 	
@@ -50,10 +50,10 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	public void mouseClicked(MouseEvent e)
 	{
 		MapViewer.logger.finest("mouse clicked");
-
+		
 		//place the focus on this window so we can listen to keyboard events too
 		winMain.mainCanvas.requestFocusInWindow();
-				
+		
 		//mouse click with alt held down means zoom into single chromo so it fills the screen
 		if (e.isAltDown())
 		{
@@ -194,16 +194,18 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			//request zooming for the selected map with the given set of coordinates
 			//get the selected set first
 			int gMapSetIndex = Utils.getSelectedSet(e);
-			GChromoMap selectedMap = Utils.getSelectedMap(winMain, gMapSetIndex, e.getY());
-			winMain.mainCanvas.zoomHandler.processPanZoomRequest(selectedMap, mousePressedY, e.getY(), true);
-			
+			GChromoMap selectedMap = Utils.getSelectedMap(winMain, gMapSetIndex, mousePressedY);
+			//if this has not selected a map we need to see whether the map to be selected is under the point where the mouse button was released
+			//this can happen if we start drawing the selection rectangle above a chromosome
+			if(selectedMap == null)
+				selectedMap = Utils.getSelectedMap(winMain, gMapSetIndex, e.getY());
+			winMain.mainCanvas.zoomHandler.processPanZoomRequest(selectedMap, mousePressedY, e.getY(), true);			
 		}
-
+		
 		//turn antialiasing on and repaint		
 		MapViewer.logger.finest("repainting after mouse released");
 		winMain.mainCanvas.drawSelectionRect = false;
-//		winMain.mainCanvas.antiAlias = true;
-//		winMain.mainCanvas.updateCanvas(true);
+
 		AntiAliasRepaintThread antiAliasRepaintThread = new AntiAliasRepaintThread();
 		antiAliasRepaintThread.start();
 	}
@@ -339,7 +341,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	
 	public void mouseMoved(MouseEvent e)
 	{
-			mouseOverHandler.detectMouseOver(e.getX(), e.getY());
+		mouseOverHandler.detectMouseOver(e.getX(), e.getY());
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -354,22 +356,42 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		int index = Utils.getSelectedSet(e);
 		GMapSet selectedSet = MapViewer.winMain.dataContainer.gMapSetList.get(index);
 		
-		// work out   in which direction we have moved the mouse
-		int notches = e.getWheelRotation();
-		
 		//this moves the genome center point up and down
 		int newCenterPoint = -1;
-
+		
+		//this boolean dictates whether we should actually move the viewport or not
+		//it is set to false if moving the viewport would make all maps disappear from the canvas completely
+		boolean moveViewport = false;
+		
+		// work out in which direction we have moved the mouse
+		int notches = e.getWheelRotation();
+		
+		//scrolling up
 		if (notches < 0)
 		{
-			newCenterPoint = (int) (selectedSet.centerPoint  - scrollGenomeIncrement);
+			newCenterPoint = selectedSet.centerPoint  - scrollGenomeIncrement;	
+			//don't let the centerpoint become negative or the first chromosome will disappear off the canvas
+			if(newCenterPoint > 0)
+				moveViewport = true;
 		}
+		//scrolling down
 		else
 		{
-			newCenterPoint = (int) (selectedSet.centerPoint  + scrollGenomeIncrement);
+			newCenterPoint = selectedSet.centerPoint  + scrollGenomeIncrement;	
+			//this buffer is a hack that allows us to keep the last chromosome in the set visible on the canvas at all times
+			//if we don't apply this then it can disappear altogether, which we want to avoid
+			//the buffer needs to be proportional to the size of the genome or else it won't 
+			float buffer = selectedSet.totalY*0.005f;
+			if(newCenterPoint < (selectedSet.totalY - buffer))
+				moveViewport = true;
 		}
-
-		winMain.mainCanvas.moveGenomeViewPort(selectedSet, newCenterPoint);
+		
+		//move the genome viewport but make sure we do not scroll off the canvas
+		//i.e. we want to be able to always see at least one chromosome	
+		if(moveViewport)
+		{
+			winMain.mainCanvas.moveGenomeViewPort(selectedSet, newCenterPoint);
+		}
 		
 		//repaint with antialiasing if required
 		if(Prefs.userPrefAntialias)

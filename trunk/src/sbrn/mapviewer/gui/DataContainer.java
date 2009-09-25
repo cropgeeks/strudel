@@ -30,9 +30,6 @@ public class DataContainer
 	
 	// these link sets hold the all the possible links between all chromos in the target set and all chromos in the reference sets
 	public LinkedList<LinkSet> linkSets = new LinkedList<LinkSet>();
-	
-	//true when data is loaded
-	public boolean dataLoaded = false;
 
 	// these Mapsets hold  the data we want to compare the target genome to
 	public LinkedList<MapSet> referenceMapSets = new LinkedList<MapSet>();
@@ -137,7 +134,7 @@ public class DataContainer
 				}
 			}
 			
-			dataLoaded = true;
+			MapViewer.dataLoaded = true;
 			
 			MapViewer.logger.fine("mapsets loaded:");
 			MapViewer.logger.fine(targetData.getName());

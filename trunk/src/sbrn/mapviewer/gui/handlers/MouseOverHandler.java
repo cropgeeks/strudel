@@ -14,6 +14,10 @@ public class MouseOverHandler
 	WinMain winMain;
 	public GChromoMap selectedMap;
 	GChromoMap previousMap;
+	
+	//the margin of error used for allowing detects during mouseover, in pixels
+	//a feature will be detected if the mouse is over its position +/- the errorMargin value
+	int errorMargin = 1;
 
 	// =========================================c'tors=======================================
 
@@ -42,7 +46,6 @@ public class MouseOverHandler
 					
 					// figure out where on the chromosome the hit has occurred, in pixels from the top of the chromosome
 					int pixelNumberFromTop = (int) (y - selectedMap.boundingRectangle.getY());
-					int errorMargin = 1;
 
 					// now look up this value in the feature arrays of the map
 					for (int i = 0; i < selectedMap.allLinkedFeaturePositions.length; i++)

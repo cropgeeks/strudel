@@ -91,6 +91,7 @@ public class DataLoadThread extends Thread
 			// check the memory situation
 			MapViewer.logger.fine("memory max (mb) = " + Runtime.getRuntime().maxMemory() / 1024 / 1024);
 			MapViewer.logger.fine("memory available = (mb) " + Runtime.getRuntime().freeMemory() / 1024 / 1024);
+			MapViewer.logger.fine("total JVM memory  = (mb) " + Runtime.getRuntime().totalMemory() / 1024 / 1024);
 			
 			// reset the cancel flag as the user might now want to try again
 			MapViewer.winMain.fatController.dataLoadCancelled = false;

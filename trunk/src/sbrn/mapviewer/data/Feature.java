@@ -114,7 +114,7 @@ public class Feature implements Comparable<Feature>
 	 * Sets the owning ChromoMap object for this feature.
 	 * @param owner the new owning ChromoMap object for this feature
 	 */
-	void setOwningMap(ChromoMap owner)
+	public void setOwningMap(ChromoMap owner)
 		{ this.owner = owner; }
 
 	/**

@@ -8,6 +8,7 @@ public class Link
 	private Feature feature1;
 	private Feature feature2;	
 	private double blastScore;
+	private String annotation;
 	
 	public Link(Feature feature1, Feature feature2)
 	{
@@ -32,5 +33,15 @@ public class Link
 	public void setBlastScore(double blastScore)
 	{
 		this.blastScore = blastScore;
+	}
+
+	public String getAnnotation()
+	{
+		return annotation;
+	}
+
+	public void setAnnotation(String annotation)
+	{
+		this.annotation = annotation;
 	}
 }

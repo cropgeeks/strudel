@@ -109,7 +109,7 @@ public class MapSet implements Iterable<ChromoMap>
 	/**
 	 * Returns a LinkedList which contains the ChromoMap objects held in this mapset
 	 */
-	public Vector getMaps()
+	public Vector<ChromoMap> getMaps()
 	{
 		return maps;
 	}

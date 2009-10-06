@@ -14,7 +14,7 @@ public class DataContainer
 {
 	
 	//============================================vars==========================================
-
+	
 	
 	// data files
 	public LinkedList<File>  referenceDataFiles = new  LinkedList<File>();
@@ -30,12 +30,12 @@ public class DataContainer
 	
 	// these link sets hold the all the possible links between all chromos in the target set and all chromos in the reference sets
 	public LinkedList<LinkSet> linkSets = new LinkedList<LinkSet>();
-
+	
 	// these Mapsets hold  the data we want to compare the target genome to
 	public LinkedList<MapSet> referenceMapSets = new LinkedList<MapSet>();
 	
 	//a list that holds all the mapsets
-	public Vector<GMapSet> gMapSetList = new Vector<GMapSet>();
+	public LinkedList<GMapSet> gMapSetList = new LinkedList<GMapSet>();
 	
 	// a subset of these that contains only the reference mapsets
 	public LinkedList<GMapSet> referenceGMapSets = new LinkedList<GMapSet>();
@@ -62,7 +62,7 @@ public class DataContainer
 	
 	
 	//============================================methods==========================================
-
+	
 	//Loads data from file using the object data model; this will populate all the relevant MapSet and LinkSet objects.
 	public void loadDataFromMultipleFiles(File targetData, File refGenome1FeatData, File refGenome1HomData, File refGenome2FeatData, File refGenome2HomData)
 	{
@@ -78,12 +78,15 @@ public class DataContainer
 			//in this case user wants the example data provided with the app
 			if(!MapViewer.winMain.fatController.loadOwnData)
 			{
-				//load the example data that ships with the application
-				targetData = new File(workingDir + fileSep + Constants.exampleTargetData);
-				refGenome1FeatData = new File(workingDir + fileSep + Constants.exampleRefGenome1FeatData);
-				refGenome1HomData = new File(workingDir + fileSep + Constants.exampleRefGenome1HomData);
-				refGenome2FeatData = new File(workingDir + fileSep + Constants.exampleRefGenome2FeatData);
-				refGenome2HomData = new File(workingDir + fileSep + Constants.exampleRefGenome2HomData);
+				loadDataFromSingleFile();
+				return;
+				
+				//				//load the example data that ships with the application
+				//				targetData = new File(workingDir + fileSep + Constants.exampleTargetData);
+				//				refGenome1FeatData = new File(workingDir + fileSep + Constants.exampleRefGenome1FeatData);
+				//				refGenome1HomData = new File(workingDir + fileSep + Constants.exampleRefGenome1HomData);
+				//				refGenome2FeatData = new File(workingDir + fileSep + Constants.exampleRefGenome2FeatData);
+				//				refGenome2HomData = new File(workingDir + fileSep + Constants.exampleRefGenome2HomData);
 			}
 			
 			MapViewer.logger.fine("targetData in data container = " + targetData);
@@ -100,8 +103,8 @@ public class DataContainer
 				referenceDataFiles.add(refGenome2FeatData);
 				compDataFiles.add(refGenome2HomData);
 			}
-
-			//load reference data sets
+			
+			//load data sets
 			for (int i = 0; i < referenceDataFiles.size(); i++)
 			{
 				MapSet referenceMapset = new CMapImporter(referenceDataFiles.get(i)).loadMapSet();
@@ -142,7 +145,7 @@ public class DataContainer
 			{
 				MapViewer.logger.fine(mapSet.getName());
 			}
-
+			
 			MapViewer.logger.fine("linkSets.size() in DC  = " + linkSets.size());
 			for (LinkSet linkSet : linkSets)
 			{
@@ -165,6 +168,7 @@ public class DataContainer
 	// initialises the genome objects we want to draw
 	public void setUpGenomes()
 	{
+		MapViewer.logger.fine("setting up genomes");
 		// make new GMapSets from the map sets passed in and add them to the list
 		//the order is significant here
 		//if we have no reference mapsets
@@ -210,4 +214,34 @@ public class DataContainer
 		
 	}
 	
+	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
+	
+	private void loadDataFromSingleFile()
+	{
+		File combinedDataFile = null;
+		
+		if(!MapViewer.winMain.fatController.loadOwnData)
+		{		
+			//load the example data that ships with the application
+			String workingDir = System.getProperty("user.dir");
+			String fileSep = System.getProperty("file.separator");
+			combinedDataFile = new File(workingDir + fileSep + Constants.exampleDataAllInOne);
+		}
+		
+		SingleFileImporter singleFileImporter = new SingleFileImporter();
+		singleFileImporter.parseCombinedFile(combinedDataFile);
+		LinkedList<MapSet> allMapSets = singleFileImporter.getAllMapSets();
+		linkSets = singleFileImporter.getAllLinkSets();
+		
+		//set up the mapsets
+		//the target mapset will be -- for now anyway -- the first one we added to the vector
+		targetMapset = allMapSets.get(0);
+		//the rest are reference mapsets
+		for (int i = 1; i < allMapSets.size(); i++)
+		{
+			referenceMapSets.add(allMapSets.get(i));
+		}
+	}
+	
+	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 }

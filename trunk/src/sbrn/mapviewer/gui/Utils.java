@@ -5,6 +5,7 @@ import java.awt.color.*;
 import java.awt.event.*;
 import java.lang.reflect.*;
 import java.net.*;
+import java.text.*;
 import java.util.*;
 
 import javax.swing.*;
@@ -50,6 +51,24 @@ public class Utils
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	//finds a genome by name
+	public static MapSet getMapSetByName(String name, LinkedList<MapSet> mapsetList)
+	{
+		MapSet foundSet = null;
+		
+		//we need to search all chromomaps in all mapsets for this	
+		// for all gmapsets
+		for (MapSet mapSet : mapsetList)
+		{
+			if(mapSet.getName().equalsIgnoreCase(name))
+				foundSet = mapSet;
+		}
+		
+		return foundSet	;
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	//finds a GMapSet by name
 	public static GMapSet getGMapSetByName(String name)
 	{
 		GMapSet foundSet = null;
@@ -88,7 +107,7 @@ public class Utils
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	//finds a Feature by name
+	//finds a Feature by name in the centrally held set of GMapSets
 	public static Feature getFeatureByName(String featureName)
 	{
 		Feature f = null;
@@ -111,6 +130,77 @@ public class Utils
 		}
 		
 		return f;
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
+	
+	public static void buildLinkSetFromFeatureLists(LinkSet linkSet, LinkedList<Feature> f1List, LinkedList<Feature> f2List, String blastScoreStr, String linkAnnotation) throws ParseException
+	{
+		// Pair up every instance of f1 with f2
+		for (Feature f1: f1List)
+			for (Feature f2: f2List)
+			{
+				Link link = new Link(f1, f2);
+				linkSet.addLink(link);
+//				System.out.println("link added to linkset: " + link.toString());
+								
+				// We also add the Link to each Feature so the Feature
+				// itself knows about the links it has with others
+				f1.getLinks().add(link);
+				f2.getLinks().add(link);
+				
+				//add the BLAST score as evidence
+				 DecimalFormat df = new DecimalFormat("0.###E0");
+				Number blastScore = df.parse(blastScoreStr);
+				link.setBlastScore(blastScore.doubleValue());
+				
+				//add the annotation, if there is any
+				if(linkAnnotation != null)
+					link.setAnnotation(linkAnnotation);
+									
+				// TODO: Do we want to add a list of references Features to the Feature object itself, so it knows who it links to?
+				// If so, how do we deal with, eg removing MapSets andkeeping these lists (and the LinkSet!) up to date.
+			}
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
+	
+	// Searches over all MapSets to find every feature whose name matches the one given.
+	public static LinkedList<Feature> getFeaturesByName(String name, LinkedList<MapSet> mapSets ) throws Exception
+	{		
+
+		LinkedList<Feature> list = new LinkedList<Feature>();
+		Feature feature = null;
+		
+		//System.out.println("looking for feature " + name);
+		
+		try
+		{
+			for (MapSet mapset: mapSets)
+			{
+				//System.out.println("searching mapset " + mapset.getName());
+				for (ChromoMap map: mapset.getMaps())
+				{ 
+					//System.out.println("searching map " + map.getName());
+					feature = map.getFeature(name);
+					if (feature != null)
+					{
+						list.add(feature);
+						//System.out.println("feature found");
+					}
+					else
+					{
+						//System.out.println("nothing found");
+					}
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return list;
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -198,7 +288,7 @@ public class Utils
 	
 	
 	//check whether we have a map at the coordinates x and y 
-	public static GChromoMap getSelectedMap(Vector<GMapSet> gMapSetList, int x, int y)
+	public static GChromoMap getSelectedMap(LinkedList<GMapSet> gMapSetList, int x, int y)
 	{
 		GChromoMap selectedMap = null;
 		

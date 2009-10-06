@@ -54,33 +54,16 @@ public class CMapLinkImporter
 				String[] t = str.split("\\t");
 
 				// Find all features with the first name and all with the second
-				LinkedList<Feature> f1List = getFeaturesByName(t[0]);
-				LinkedList<Feature> f2List = getFeaturesByName(t[1]);
-
-				// Pair up every instance of f1 with f2
-				for (Feature f1: f1List)
-					for (Feature f2: f2List)
-					{
-						Link link = new Link(f1, f2);
-						linkSet.addLink(link);
-						
-						// We also add the Link to each Feature so the Feature
-						// itself knows about the links it has with others
-						f1.getLinks().add(link);
-						f2.getLinks().add(link);
-						
-						//add the BLAST score as evidence
-						 DecimalFormat df = new DecimalFormat("0.###E0");
-						Number blastScore = df.parse(t[2]);
-						MapViewer.logger.finest("link between " + f1.getName() + " and " + f2.getName());
-						 MapViewer.logger.finest("blastScore = "+ blastScore.toString());
-						link.setBlastScore(blastScore.doubleValue());
-											
-						// TODO: Do we want to add a list of references Features to
-						// the Feature object itself, so it knows who it links to?
-						// If so, how do we deal with, eg removing MapSets and
-						// keeping these lists (and the LinkSet!) up to date.
-					}
+				LinkedList<Feature> f1List = Utils.getFeaturesByName(t[0], mapSets);
+				LinkedList<Feature> f2List = Utils.getFeaturesByName(t[1], mapSets);
+				
+				//the last token in the array contains the annotation but for the user's convenience this may just be left blank
+				//need to check for this
+				String annotation = null;
+				if(t.length == 4)
+					annotation = t[3].trim();
+				
+				Utils.buildLinkSetFromFeatureLists(linkSet, f1List, f2List, t[2], annotation);
 				
 				str = in.readLine();
 			}
@@ -100,38 +83,5 @@ public class CMapLinkImporter
 		}
 		
 		return linkSet;
-	}
-	
-	// Searches over all MapSets to find every feature whose name matches the
-	// one given.
-	private LinkedList<Feature> getFeaturesByName(String name) throws Exception
-	{		
-
-		LinkedList<Feature> list = new LinkedList<Feature>();
-		Feature feature = null;
-				
-		try
-		{
-			for (MapSet mapset: mapSets)
-			{
-				for (ChromoMap map: mapset)
-				{ 
-					// TODO: Should this be a case-insensitive search?
-//					MapViewer.logger.fine("looking for  feature " + name );
-					feature = map.getFeature(name);
-					if (feature != null)
-					{
-//						MapViewer.logger.fine("adding feature " + feature.getName());
-						list.add(feature);
-					}
-				}
-			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		
-		return list;
 	}
 }

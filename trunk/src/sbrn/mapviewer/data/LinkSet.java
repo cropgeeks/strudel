@@ -232,7 +232,9 @@ public class LinkSet implements Iterable<Link>
 	private void addMapSet(MapSet mapset)
 	{
 		if (mapSets.contains(mapset) == false)
+		{
 			mapSets.add(mapset);
+		}
 	}
 	
 	/**

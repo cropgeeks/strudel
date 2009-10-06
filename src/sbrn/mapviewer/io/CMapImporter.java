@@ -89,7 +89,7 @@ public class CMapImporter
 			f.setStart(distance);
 			f.setStop(distance);
 			
-//			MapViewer.logger.finest("new feature found: " + f.getName() + ", start: " + distance);
+			MapViewer.logger.finest("new feature found: " + f.getName() + ", start: " + distance);
 			
 			try
 			{
@@ -103,8 +103,7 @@ public class CMapImporter
 						for (String s : aliasArr)
 							f.addAlias(s);
 					}
-				}
-				
+				}				
 			}
 			catch (NoSuchElementException e)
 			{

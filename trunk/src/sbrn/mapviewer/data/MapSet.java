@@ -12,6 +12,10 @@ public class MapSet implements Iterable<ChromoMap>
 	// The name of this MapSet
 	private String name;
 	
+	//the annotation URL for this genome
+	//must allow appending of feature names to be searched for
+	private String URL = null;
+	
 	// Holds a list of all the maps in this set
 	private Vector<ChromoMap> maps = new Vector<ChromoMap>();
 	
@@ -112,5 +116,15 @@ public class MapSet implements Iterable<ChromoMap>
 	public Vector<ChromoMap> getMaps()
 	{
 		return maps;
+	}
+
+	public String getURL()
+	{
+		return URL;
+	}
+
+	public void setURL(String url)
+	{
+		URL = url;
 	}
 }

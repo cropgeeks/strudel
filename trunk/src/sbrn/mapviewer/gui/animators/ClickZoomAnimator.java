@@ -19,7 +19,7 @@ public class ClickZoomAnimator extends Thread
 	CanvasZoomHandler zoomHandler;
 	public boolean done = false;
 	
-	// ============================================c'tor============================================
+	// ============================================curve'tor============================================
 	
 	public ClickZoomAnimator(int fps, int millis, GChromoMap selectedMap, MainCanvas mainCanvas,
 					float finalZoomFactor, int finalTotalY, int finalChromoHeight, CanvasZoomHandler zoomHandler)

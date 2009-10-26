@@ -18,17 +18,13 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="jPanel1" alignment="0" max="32767" attributes="1"/>
-                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                      <Component id="targetGenomeLoaderPanel" alignment="0" min="0" max="32767" attributes="1"/>
-                      <Component id="referenceGenomeLoaderPanel" alignment="0" max="32767" attributes="1"/>
-                      <Component id="dataImportModePanel" alignment="0" max="32767" attributes="1"/>
-                  </Group>
+              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                  <Component id="targetGenomeLoaderPanel" alignment="0" min="0" max="32767" attributes="1"/>
+                  <Component id="dataImportModePanel" alignment="0" max="32767" attributes="1"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -39,10 +35,6 @@
               <Component id="dataImportModePanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="targetGenomeLoaderPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="referenceGenomeLoaderPanel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -117,11 +109,11 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <Component id="targetFeatFileLabel" min="-2" pref="222" max="-2" attributes="0"/>
+                  <Component id="inputFileLabel" min="-2" pref="222" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="targetfeatFileTF" pref="274" max="32767" attributes="0"/>
+                  <Component id="inputFileTF" pref="274" max="32767" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="targetFeatFileButton" min="-2" max="-2" attributes="0"/>
+                  <Component id="browseButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -129,26 +121,26 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="targetFeatFileButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="targetfeatFileTF" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="targetFeatFileLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="browseButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="inputFileTF" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="inputFileLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="targetFeatFileLabel">
+        <Component class="javax.swing.JLabel" name="inputFileLabel">
           <Properties>
             <Property name="enabled" type="boolean" value="false"/>
-            <Property name="text" type="java.lang.String" value="Target genome feature file:"/>
+            <Property name="text" type="java.lang.String" value="Input data file:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="targetfeatFileTF">
+        <Component class="javax.swing.JTextField" name="inputFileTF">
           <Properties>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="targetFeatFileButton">
+        <Component class="javax.swing.JButton" name="browseButton">
           <Properties>
             <Property name="enabled" type="boolean" value="false"/>
             <Property name="text" type="java.lang.String" value="Browse..."/>
@@ -156,267 +148,6 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="actionPerformed"/>
           </Events>
-        </Component>
-      </SubComponents>
-    </Container>
-    <Container class="javax.swing.JPanel" name="referenceGenomeLoaderPanel">
-      <Properties>
-        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Optionally select one or two reference genomes:"/>
-          </Border>
-        </Property>
-        <Property name="enabled" type="boolean" value="false"/>
-      </Properties>
-
-      <Layout>
-        <DimensionLayout dim="0">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="refGen2FeatFileLabel" alignment="0" pref="222" max="32767" attributes="1"/>
-                              <Component id="refGen1FeatFileLabel" alignment="0" pref="222" max="32767" attributes="1"/>
-                              <Component id="refGen1HomFileLabel" alignment="0" pref="222" max="32767" attributes="1"/>
-                          </Group>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="refGen2FeatFileTF" alignment="0" pref="274" max="32767" attributes="0"/>
-                                      <Component id="refGen2HomFileTF" alignment="0" pref="274" max="32767" attributes="0"/>
-                                  </Group>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="refGen1FeatFileTF" alignment="0" pref="274" max="32767" attributes="1"/>
-                                      <Component id="refGen1HomFileTF" alignment="0" pref="274" max="32767" attributes="0"/>
-                                  </Group>
-                              </Group>
-                          </Group>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <Component id="refGen2HomFileLabel" pref="501" max="32767" attributes="1"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="ref1HomFileButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="ref1FeatFileButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="ref2FeatFileButton" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="ref2HomFileButton" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
-              </Group>
-          </Group>
-        </DimensionLayout>
-        <DimensionLayout dim="1">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="refGen1FeatFileLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="refGen1FeatFileTF" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="ref1FeatFileButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="refGen1HomFileLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="refGen1HomFileTF" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="ref1HomFileButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="refGen2FeatFileLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="refGen2FeatFileTF" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="ref2FeatFileButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="refGen2HomFileLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="refGen2HomFileTF" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="ref2HomFileButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-              </Group>
-          </Group>
-        </DimensionLayout>
-      </Layout>
-      <SubComponents>
-        <Component class="javax.swing.JLabel" name="refGen1FeatFileLabel">
-          <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
-            <Property name="text" type="java.lang.String" value="Reference genome 1 feature file:"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JTextField" name="refGen1FeatFileTF">
-          <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JButton" name="ref1FeatFileButton">
-          <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
-            <Property name="text" type="java.lang.String" value="Browse..."/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="actionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JLabel" name="refGen1HomFileLabel">
-          <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
-            <Property name="text" type="java.lang.String" value="Reference genome 1 homology file:"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JTextField" name="refGen1HomFileTF">
-          <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JButton" name="ref1HomFileButton">
-          <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
-            <Property name="text" type="java.lang.String" value="Browse..."/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="actionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JLabel" name="refGen2HomFileLabel">
-          <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
-            <Property name="text" type="java.lang.String" value="Reference genome 2 homology file:"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JTextField" name="refGen2HomFileTF">
-          <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JButton" name="ref2FeatFileButton">
-          <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
-            <Property name="text" type="java.lang.String" value="Browse..."/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="actionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JLabel" name="refGen2FeatFileLabel">
-          <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
-            <Property name="text" type="java.lang.String" value="Reference genome 2 feature file:"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JButton" name="ref2HomFileButton">
-          <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
-            <Property name="text" type="java.lang.String" value="Browse..."/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="actionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JTextField" name="refGen2FeatFileTF">
-          <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
-          </Properties>
-        </Component>
-      </SubComponents>
-    </Container>
-    <Container class="javax.swing.JPanel" name="jPanel1">
-      <Properties>
-        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Annotation URLs:"/>
-          </Border>
-        </Property>
-      </Properties>
-
-      <Layout>
-        <DimensionLayout dim="0">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Component id="refGenome2UrlLabel" min="-2" pref="223" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="refGenome2UrlTf" pref="378" max="32767" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="refGenome1UrlLabel" alignment="0" min="-2" pref="223" max="-2" attributes="0"/>
-                              <Component id="targetGenomeUrlLabel1" alignment="0" min="-2" pref="223" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="targetGenomeUrlTf1" alignment="0" pref="378" max="32767" attributes="0"/>
-                              <Component id="refGenome1UrlTf" alignment="0" pref="378" max="32767" attributes="0"/>
-                          </Group>
-                      </Group>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-              </Group>
-          </Group>
-        </DimensionLayout>
-        <DimensionLayout dim="1">
-          <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="targetGenomeUrlLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="targetGenomeUrlTf1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="refGenome1UrlLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="refGenome1UrlTf" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="refGenome2UrlLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="refGenome2UrlTf" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="32767" attributes="0"/>
-              </Group>
-          </Group>
-        </DimensionLayout>
-      </Layout>
-      <SubComponents>
-        <Component class="javax.swing.JLabel" name="refGenome1UrlLabel">
-          <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
-            <Property name="text" type="java.lang.String" value="URL Reference genome 1:"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JTextField" name="refGenome1UrlTf">
-          <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="refGenome2UrlLabel">
-          <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
-            <Property name="text" type="java.lang.String" value="URL Reference genome 2:"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JTextField" name="refGenome2UrlTf">
-          <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="targetGenomeUrlLabel1">
-          <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
-            <Property name="text" type="java.lang.String" value="URL target genome:"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JTextField" name="targetGenomeUrlTf1">
-          <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
-          </Properties>
         </Component>
       </SubComponents>
     </Container>

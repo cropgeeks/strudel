@@ -107,7 +107,7 @@ public class GChromoMap
 	public float relativeBottomY;
 	
 	
-	// ============================c'tors==================================
+	// ============================curve'tors==================================
 	
 	public GChromoMap(Color colour, String name, int index, GMapSet owningSet)
 	{
@@ -437,7 +437,7 @@ public class GChromoMap
 	// initialises the arrays we need for fast drawing
 	public void initArrays()
 	{
-		MapViewer.logger.finest("MapViewer.winMain.dataContainer.gMapSetList.size() = " + MapViewer.winMain.dataContainer.gMapSetList.size());
+		MapViewer.logger.finest("MapViewer.winMain.dataContainer.gMapSetList.size() = " + MapViewer.winMain.dataContainer.gMapSets.size());
 		
 		if(true)
 		{		
@@ -455,7 +455,7 @@ public class GChromoMap
 				//if it is, we add it to the arrays
 				//otherwise it's fine to just have it in the feature list of the corresponding chromomap from where we can access it for 
 				//other uses such as full feature lists for search ranges etc
-				if((f.getLinks() != null && f.getLinks().size() > 0) || MapViewer.winMain.dataContainer.gMapSetList.size() == 1)
+				if((f.getLinks() != null && f.getLinks().size() > 0) || MapViewer.winMain.dataContainer.gMapSets.size() == 1)
 				{				
 					//the start point of this features in its own units (cM, bp, whatever)
 					float start = f.getStart();

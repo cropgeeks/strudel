@@ -68,6 +68,24 @@ public class Utils
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
 	
+	//finds a MapSet by name
+	public static MapSet getMapSetByName(String name)
+	{
+		MapSet foundSet = null;
+		
+		//we need to search all chromomaps in all mapsets for this	
+		// for all gmapsets
+		for (MapSet mapSet : MapViewer.winMain.dataContainer.allMapSets)
+		{
+			if(mapSet.getName().equals(name))
+				foundSet = mapSet;
+		}
+		
+		return foundSet	;
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------------------------------
+	
 	//finds a GMapSet by name
 	public static GMapSet getGMapSetByName(String name)
 	{
@@ -75,7 +93,7 @@ public class Utils
 		
 		//we need to search all chromomaps in all mapsets for this	
 		// for all gmapsets
-		for (GMapSet gMapSet : MapViewer.winMain.dataContainer.gMapSetList)
+		for (GMapSet gMapSet : MapViewer.winMain.dataContainer.gMapSets)
 		{
 			if(gMapSet.name.equals(name))
 				foundSet = gMapSet;
@@ -114,7 +132,7 @@ public class Utils
 		
 		//we need to search all chromomaps in all mapsets for this	
 		// for all gmapsets
-		for (GMapSet gMapSet : MapViewer.winMain.dataContainer.gMapSetList)
+		for (GMapSet gMapSet : MapViewer.winMain.dataContainer.gMapSets)
 		{
 			// for all gchromomaps within each mapset
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
@@ -269,7 +287,7 @@ public class Utils
 		
 		// check whether the point x,y lies within one of the bounding rectangles of our chromosomes
 		// for each chromosome in each genome
-		for (GMapSet gMapSet : MapViewer.winMain.dataContainer.gMapSetList)
+		for (GMapSet gMapSet : MapViewer.winMain.dataContainer.gMapSets)
 		{
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
 			{
@@ -317,7 +335,7 @@ public class Utils
 		GChromoMap selectedMap = null;
 		
 		// for each genome
-		for (GMapSet gMapSet : MapViewer.winMain.dataContainer.gMapSetList)
+		for (GMapSet gMapSet : MapViewer.winMain.dataContainer.gMapSets)
 		{
 			// check whether a line drawn at y intersects within one of the bounding rectangles of our chromosomes
 			//we can just use a rectangle a single pixel wide for this purpose so we can use the existing API for the Rectangle class
@@ -326,14 +344,14 @@ public class Utils
 			//we need to set the intersect line up so it extends only over the part of the screen we want to test for intersection in
 			//this depends on the index of the mapset in the list
 			//if we have one genome only
-			if(MapViewer.winMain.dataContainer.gMapSetList.size() == 1)
+			if(MapViewer.winMain.dataContainer.gMapSets.size() == 1)
 			{
 				intersectLine = new Rectangle(0,y,winMain.mainCanvas.getWidth(),1);
 			}
 			//if we have two genomes
-			else if(MapViewer.winMain.dataContainer.gMapSetList.size() == 2)
+			else if(MapViewer.winMain.dataContainer.gMapSets.size() == 2)
 			{
-				//gMapSetList at 0 is target genome (left), at 1 is reference genome (right)
+				//gMapSets at 0 is target genome (left), at 1 is reference genome (right)
 				if(gMapSetIndex == 0)
 				{
 					intersectLine = new Rectangle(0,y,winMain.mainCanvas.getWidth()/2,1);
@@ -344,9 +362,9 @@ public class Utils
 				}
 			}
 			//if we have three genomes
-			else if(MapViewer.winMain.dataContainer.gMapSetList.size() == 3)
+			else if(MapViewer.winMain.dataContainer.gMapSets.size() == 3)
 			{
-				//gMapSetList at 0 is target genome (left), at 1 is reference genome (right)
+				//gMapSets at 0 is target genome (left), at 1 is reference genome (right)
 				if(gMapSetIndex == 0)
 				{
 					intersectLine = new Rectangle(0,y,winMain.mainCanvas.getWidth()/3,1);
@@ -386,12 +404,12 @@ public class Utils
 		int index = -1;
 		
 		// if we have one genome (target) only
-		if (MapViewer.winMain.dataContainer.gMapSetList.size() == 1)
+		if (MapViewer.winMain.dataContainer.gMapSets.size() == 1)
 		{
 			index = 0;
 		}
 		// if we have two genomes 
-		else if (MapViewer.winMain.dataContainer.gMapSetList.size() == 2)
+		else if (MapViewer.winMain.dataContainer.gMapSets.size() == 2)
 		{
 			// simply divide the canvas in two halves for this and figure out where on the x axis the hit has occurred
 			if (e.getX() < MapViewer.winMain.mainCanvas.getWidth() / 2)
@@ -406,7 +424,7 @@ public class Utils
 			}
 		}
 		//if we have three genomes
-		else if (MapViewer.winMain.dataContainer.gMapSetList.size() == 3)
+		else if (MapViewer.winMain.dataContainer.gMapSets.size() == 3)
 		{
 			int oneThirdCanvas = Math.round(MapViewer.winMain.mainCanvas.getWidth() / 3);
 			

@@ -29,7 +29,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	int lastMouseDragYPos = -1;
 	
 	
-	// ===============================================c'tors===========================================
+	// ===============================================curve'tors===========================================
 	
 	public MouseHandler(WinMain winMain)
 	{
@@ -57,7 +57,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		//mouse click with alt held down means zoom into single chromo so it fills the screen
 		if (e.isAltDown())
 		{
-			GChromoMap selectedMap = Utils.getSelectedMap(MapViewer.winMain.dataContainer.gMapSetList, e.getX(),
+			GChromoMap selectedMap = Utils.getSelectedMap(MapViewer.winMain.dataContainer.gMapSets, e.getX(),
 							e.getY());
 			
 			if (selectedMap != null)
@@ -113,7 +113,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		if (!isMetaClick(e) && !e.isAltDown() && !e.isShiftDown())
 		{
 			// first figure out which chromosome we are in
-			GChromoMap selectedMap = Utils.getSelectedMap(MapViewer.winMain.dataContainer.gMapSetList, e.getX(), e.getY());
+			GChromoMap selectedMap = Utils.getSelectedMap(MapViewer.winMain.dataContainer.gMapSets, e.getX(), e.getY());
 			//if we have clicked on a map, display links between this map and all others
 			if(selectedMap != null)
 			{
@@ -122,7 +122,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			//otherwise -- if we clicked on the background -- clear all links displayed
 			else
 			{
-				for(GMapSet gMapSet : MapViewer.winMain.dataContainer.gMapSetList)
+				for(GMapSet gMapSet : MapViewer.winMain.dataContainer.gMapSets)
 				{
 					//reset selected maps
 					gMapSet.selectedMaps.clear();
@@ -223,10 +223,10 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		
 		// figure out which genome this event pertains to (i.e. which section of the canvas on x are we in)
 		int index = Utils.getSelectedSet(e);
-		GMapSet gMapSet = MapViewer.winMain.dataContainer.gMapSetList.get(index);
+		GMapSet gMapSet = MapViewer.winMain.dataContainer.gMapSets.get(index);
 		
 		//the chromosome -- if any - this event pertains to (i.e. where on the canvas on y are we)
-		GChromoMap selectedMap = Utils.getSelectedMap(MapViewer.winMain.dataContainer.gMapSetList, (int)(gMapSet.xPosition), y);
+		GChromoMap selectedMap = Utils.getSelectedMap(MapViewer.winMain.dataContainer.gMapSets, (int)(gMapSet.xPosition), y);
 		
 		//mouse is getting dragged without shift held down -- scroll the canvas up or down
 		if (!e.isShiftDown())
@@ -354,7 +354,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		
 		// figure out which genome we are moving
 		int index = Utils.getSelectedSet(e);
-		GMapSet selectedSet = MapViewer.winMain.dataContainer.gMapSetList.get(index);
+		GMapSet selectedSet = MapViewer.winMain.dataContainer.gMapSets.get(index);
 		
 		//this moves the genome center point up and down
 		int newCenterPoint = -1;

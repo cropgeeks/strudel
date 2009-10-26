@@ -7,19 +7,11 @@ import sbrn.mapviewer.gui.handlers.*;
 public class DataLoadThread extends Thread
 {
 
-	File targetData;
-	File refGenome1FeatData;
-	File refGenome1HomData;
-	File refGenome2FeatData;
-	File refGenome2HomData;
+	File inputFile;
 	
-	public DataLoadThread(File targetData, File refGenome1FeatData, File refGenome1HomData, File refGenome2FeatData, File refGenome2HomData)
+	public DataLoadThread(String inputFileName)
 	{
-		this.targetData = targetData;
-		this.refGenome1FeatData = refGenome1FeatData;
-		this.refGenome1HomData = refGenome1HomData;
-		this.refGenome2FeatData = refGenome2FeatData;
-		this.refGenome2HomData = refGenome2HomData;
+		inputFile = new File (inputFileName);
 	}
 
 	public void run()
@@ -33,7 +25,7 @@ public class DataLoadThread extends Thread
 
 				// load the data
 				// we do this by simply creating a new data container instance -- the actual data loading is done through this
-				MapViewer.winMain.dataContainer = new DataContainer(targetData, refGenome1FeatData, refGenome1HomData, refGenome2FeatData, refGenome2HomData);
+				MapViewer.winMain.dataContainer = new DataContainer(inputFile);
 				//check it all loaded ok
 				if(!MapViewer.dataLoaded)
 					return;
@@ -54,7 +46,7 @@ public class DataLoadThread extends Thread
 				
 				// check if we need to enable some functionality -- depends on the number of genomes loaded
 				// cannot do comparative stuff if user one loaded one (target) genome
-				if (MapViewer.winMain.dataContainer.gMapSetList.size() == 1)
+				if (MapViewer.winMain.dataContainer.gMapSets.size() == 1)
 				{		
 					//enables toolbar controls selectively
 					MapViewer.winMain.toolbar.enableControls(true);				
@@ -70,8 +62,8 @@ public class DataLoadThread extends Thread
 				}
 				
 				// hide the data loading progress dialog
-				if (MapViewer.winMain.openFileDialog.dataLoadingDialog != null)
-					MapViewer.winMain.openFileDialog.dataLoadingDialog.setVisible(false);
+				if (MapViewer.winMain.dataLoadingDialog != null)
+					MapViewer.winMain.dataLoadingDialog.setVisible(false);
 				
 				// hide the start panel if it is still showing
 				MapViewer.winMain.showStartPanel(false);

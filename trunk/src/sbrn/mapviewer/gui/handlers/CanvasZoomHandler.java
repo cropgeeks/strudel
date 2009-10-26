@@ -27,7 +27,7 @@ public class CanvasZoomHandler
 	public boolean isClickZoomRequest = false;
 	public boolean isPanZoomRequest = false;
 
-	// =====================================c'tors===================================
+	// =====================================curve'tors===================================
 
 	public CanvasZoomHandler(MainCanvas mainCanvas)
 	{

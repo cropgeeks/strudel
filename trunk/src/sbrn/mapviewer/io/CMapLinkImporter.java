@@ -42,7 +42,7 @@ public class CMapLinkImporter
 			}
 			catch (Exception e)
 			{
-				MapViewer.winMain.openFileDialog.dataLoadingDialog.setVisible(false);
+				MapViewer.winMain.dataLoadingDialog.setVisible(false);
 				TaskDialog.error("File " + filename + " not found. Comparative data not loaded.", "Close");
 				e.printStackTrace();
 			}		
@@ -76,7 +76,7 @@ public class CMapLinkImporter
 		}
 		
 		MapViewer.logger.fine("returning linkset of size " + linkSet.size());
-		if(linkSet.size() == 0 && MapViewer.winMain.dataContainer.gMapSetList.size() > 1)
+		if(linkSet.size() == 0 && MapViewer.winMain.dataContainer.gMapSets.size() > 1)
 		{
 			String message = "Linkset does not contain any links between the genomes specified.\n ";
 			throw new Exception(message);

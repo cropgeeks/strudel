@@ -22,7 +22,7 @@ public class FoundFeaturesResultsPanel extends JPanel
 	JLabel resultsLabel = null;
 	JLabel closeButton = null;
 	
-	//===========================================c'tor===========================================		
+	//===========================================curve'tor===========================================		
 	
 	/** Creates new form MTFindFeaturesResultsPanel */
 	public FoundFeaturesResultsPanel()

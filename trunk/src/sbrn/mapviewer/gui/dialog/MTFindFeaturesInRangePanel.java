@@ -34,7 +34,7 @@ public class MTFindFeaturesInRangePanel extends javax.swing.JPanel implements Ac
 	{
 		//set up the combo boxes with their data models
 		Vector<String> genomes = new Vector<String>();
-		for (GMapSet gMapSet : MapViewer.winMain.dataContainer.gMapSetList)
+		for (GMapSet gMapSet : MapViewer.winMain.dataContainer.gMapSets)
 		{
 			genomes.add(gMapSet.name);
 		}

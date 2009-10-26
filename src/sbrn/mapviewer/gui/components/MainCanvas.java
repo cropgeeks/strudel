@@ -68,7 +68,7 @@ public class MainCanvas extends JPanel
 	//gets set in the paintCanvas method
 	public int chromoWidth = 0;
 	
-	// ============================c'tor==================================
+	// ============================curve'tor==================================
 	
 	public MainCanvas()
 	{
@@ -135,7 +135,7 @@ public class MainCanvas extends JPanel
 		
 		//now we need to draw the rest of the things relating to the map
 		//this needs to be done after drawing the links so it is all visible on top of the links
-		for (GMapSet gMapSet : winMain.dataContainer.gMapSetList)
+		for (GMapSet gMapSet : winMain.dataContainer.gMapSets)
 		{
 			// for each chromosome in the genome
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
@@ -190,16 +190,16 @@ public class MainCanvas extends JPanel
 		chromoWidth = Math.round(canvasWidth / 40);
 		
 		//for all maps sets
-		for (GMapSet gMapSet : winMain.dataContainer.gMapSetList)
+		for (GMapSet gMapSet : winMain.dataContainer.gMapSets)
 		{
 			checkMarkerPaintingThresholds(gMapSet);
 			checkForLabelDrawing(gMapSet);
 			
 			//calculate the x position for this genome
-			int numGenomes = winMain.dataContainer.gMapSetList.size();
+			int numGenomes = winMain.dataContainer.gMapSets.size();
 			int genomeInterval = getWidth()/numGenomes;
 			int spacerLeft = genomeInterval/2;
-			gMapSet.xPosition = (genomeInterval * winMain.dataContainer.gMapSetList.indexOf(gMapSet)) + spacerLeft - chromoWidth/2;				
+			gMapSet.xPosition = (genomeInterval * winMain.dataContainer.gMapSets.indexOf(gMapSet)) + spacerLeft - chromoWidth/2;				
 			
 			// work out the other coordinates needed
 			// these are genome specific because we can have a different zoom factor for each genome
@@ -336,7 +336,7 @@ public class MainCanvas extends JPanel
 		}
 
 		//last we want to draw the chromosome indexes so they are painted on top of all other stuff
-		for (GMapSet gMapSet : winMain.dataContainer.gMapSetList)
+		for (GMapSet gMapSet : winMain.dataContainer.gMapSets)
 		{
 			// for each chromosome in the genome
 			for (GChromoMap gChromoMap : gMapSet.gMaps)

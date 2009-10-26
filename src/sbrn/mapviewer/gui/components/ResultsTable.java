@@ -20,7 +20,7 @@ public class ResultsTable extends JTable
 	
 	public boolean isFilterEvent = false;
 	
-	//===============================================c'tor=========================================	
+	//===============================================curve'tor=========================================	
 	
 	public ResultsTable()
 	{

@@ -101,8 +101,11 @@ public class FoundFeaturesResultsTableListener implements ListSelectionListener,
 			String featureName = (String) linklessFeatureTableModel.getValueAt(modelRow, selectedCol);
 			
 			if (selectedCol == linklessFeatureTableModel.findColumn(linklessFeatureTableModel.featureNameColumnLabel))
-			{		
-				url = MapViewer.winMain.openFileDialog.openFilesPanel.getTargetGenomeUrlTf1().getText() + featureName;
+			{	
+				//if we have an instance of this model this implies we only have a single genome loaded
+				String mapSetName = MapViewer.winMain.dataContainer.allMapSets.get(0).getName();
+				// figure out the URL we need to prefix this with				
+				url = Utils.getMapSetByName(mapSetName).getURL();
 			}
 
 			Utils.visitURL(url);

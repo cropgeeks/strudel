@@ -39,7 +39,7 @@ public class FatController
 
 	public boolean dataLoadCancelled = false;
 	
-	// ===============================================c'tors===================================
+	// ===============================================curve'tors===================================
 	
 	public FatController(WinMain winMain)
 	{
@@ -108,7 +108,7 @@ public class FatController
 	{
 		long startTime = System.nanoTime();
 		// for all gmapsets
-		for (GMapSet gMapSet : winMain.dataContainer.gMapSetList)
+		for (GMapSet gMapSet : winMain.dataContainer.gMapSets)
 		{
 			// for all gchromomaps within each mapset
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
@@ -160,7 +160,7 @@ public class FatController
 	//without clearing any results
 	public void resetViewOnly()
 	{		
-		for(GMapSet gMapSet : winMain.dataContainer.gMapSetList)
+		for(GMapSet gMapSet : winMain.dataContainer.gMapSets)
 		{
 			//reset zoom on all mapsets
 			winMain.mainCanvas.zoomHandler.processZoomResetRequest(gMapSet);

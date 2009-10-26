@@ -1,6 +1,7 @@
 package sbrn.mapviewer.gui.components;
 
 import java.awt.*;
+import java.awt.dnd.*;
 import java.awt.event.*;
 import java.beans.*;
 import java.util.*;
@@ -8,6 +9,7 @@ import java.util.*;
 import javax.swing.*;
 
 import sbrn.mapviewer.*;
+import sbrn.mapviewer.io.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.dialog.*;
 import sbrn.mapviewer.gui.entities.*;
@@ -83,9 +85,11 @@ public class WinMain extends JFrame
 	public OpenFileDialog openFileDialog;
 	public AboutDialog aboutDialog = new AboutDialog(this, true);
 
+	public MTDataLoadingDialog dataLoadingDialog;
+
 	
 	
-	//	=================================================c'tor=====================================
+	//	=================================================curve'tor=====================================
 	
 	public WinMain()
 	{
@@ -190,6 +194,10 @@ public class WinMain extends JFrame
 		//the control toolbar at the top of the GUI
 		toolbar = new ControlToolBar(this);
 		add(toolbar, BorderLayout.NORTH);
+		
+		//drag and drop support
+		FileDropAdapter dropAdapter = new FileDropAdapter(this);
+		setDropTarget(new DropTarget(this, dropAdapter));
 
 	}
 	
@@ -348,7 +356,7 @@ public class WinMain extends JFrame
 	private void initOverviewDialog()
 	{
 		//the overviews for the genomes
-		for (GMapSet gMapSet : dataContainer.gMapSetList)
+		for (GMapSet gMapSet : dataContainer.gMapSets)
 		{
 			OverviewCanvas overviewCanvas = new OverviewCanvas(this,gMapSet);
 			overviewCanvas.setPreferredSize(new Dimension(0,250));
@@ -362,12 +370,12 @@ public class WinMain extends JFrame
 	
 	private void initZoomControls()
 	{
-		zoomControlContainerPanel = new JPanel(new GridLayout(1, dataContainer.gMapSetList.size()));
+		zoomControlContainerPanel = new JPanel(new GridLayout(1, dataContainer.gMapSets.size()));
 
 		//if there is only one genome showing, we want a shorter zoom control that does not fill the width of  the entire canvas
-		if(dataContainer.gMapSetList.size() == 1)
+		if(dataContainer.gMapSets.size() == 1)
 		{				
-			ZoomControlPanel zoomControlPanel = new ZoomControlPanel(this, dataContainer.gMapSetList.get(0), true);
+			ZoomControlPanel zoomControlPanel = new ZoomControlPanel(this, dataContainer.gMapSets.get(0), true);
 			zoomControlPanel.zoomSlider.setMaximumSize(new Dimension(500, Short.MAX_VALUE));
 			zoomControlContainerPanel.add(zoomControlPanel);
 			zoomControlPanels.add(zoomControlPanel);
@@ -375,7 +383,7 @@ public class WinMain extends JFrame
 		else
 		{			
 			//the panels with the zoom control sliders
-			for (GMapSet gMapSet : dataContainer.gMapSetList)
+			for (GMapSet gMapSet : dataContainer.gMapSets)
 			{
 				ZoomControlPanel zoomControlPanel = new ZoomControlPanel(this, gMapSet, false);
 				zoomControlContainerPanel.add(zoomControlPanel);

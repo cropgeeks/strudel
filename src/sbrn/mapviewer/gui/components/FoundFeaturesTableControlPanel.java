@@ -164,7 +164,7 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 		//set up the combo box with its data model
 		Vector<String> genomes = new Vector<String>();
 		genomes.add("<none>");
-		for (GMapSet gMapSet : MapViewer.winMain.dataContainer.referenceGMapSets)
+		for (GMapSet gMapSet : MapViewer.winMain.dataContainer.gMapSets)
 		{
 			genomes.add(gMapSet.name);
 		}

@@ -105,44 +105,16 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 			// extract the value of the cell clicked on
 			String featureName = (String) homologResultsTableModel.getValueAt(modelRow, selectedCol);
 			
-			if (selectedCol == homologResultsTableModel.findColumn(homologResultsTableModel.homologColumnLabel))
+			if (selectedCol == homologResultsTableModel.findColumn(homologResultsTableModel.homologColumnLabel) || 
+							selectedCol == homologResultsTableModel.findColumn(homologResultsTableModel.targetNameColumnLabel))
 			{
 				String mapSetName = (String) homologResultsTableModel.getValueAt(
 								modelRow,
 								homologResultsTableModel.columnNameList.indexOf(homologResultsTableModel.homologGenomeColumnLabel));
 				// figure out the URL we need to prefix this with				
-				// find out the index of the mapset
-				int mapSetIndex = MapViewer.winMain.dataContainer.referenceGMapSets.indexOf(Utils.getGMapSetByName(mapSetName));
-				// for the canned example data that ship with the application we use this
-				if (!MapViewer.winMain.fatController.loadOwnData)
-				{
-					if (mapSetIndex == 0)
-						url = Constants.exampleRefGenome1BaseURL + featureName;
-					else if (mapSetIndex == 1)
-						url = Constants.exampleRefGenome2BaseURL + featureName;
-				}
-				// for the user's own data we use these URLs
-				else
-				{
-					if (mapSetIndex == 0)
-						url = MapViewer.winMain.openFileDialog.openFilesPanel.getRefGenome1UrlTf().getText() + featureName;
-					else if (mapSetIndex == 1)
-						url = MapViewer.winMain.openFileDialog.openFilesPanel.getRefGenome2UrlTf().getText() + featureName;
-				}
+				url = Utils.getMapSetByName(mapSetName).getURL();
 			}
-			else if (selectedCol == homologResultsTableModel.findColumn(homologResultsTableModel.targetNameColumnLabel))
-			{
-				// for the canned example data that ship with the application we use this
-				if (!MapViewer.winMain.fatController.loadOwnData)
-				{
-					url = Constants.exampleTargetGenomeBaseURL + featureName;
-				}
-				// for the user's own data we use this URL
-				else
-				{
-					url = MapViewer.winMain.openFileDialog.openFilesPanel.getTargetGenomeUrlTf1().getText() + featureName;
-				}
-			}
+
 			
 			Utils.visitURL(url);
 		}

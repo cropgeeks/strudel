@@ -29,7 +29,7 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener, Mouse
 	//the rectangle we draw around the currently zoomed in area
 	Rectangle regionRect;
 
-//	========================================c'tor=====================================
+//	========================================curve'tor=====================================
 
 	public OverviewCanvas(WinMain winMain, GMapSet gMapSet)
 	{

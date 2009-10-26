@@ -23,7 +23,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 	JToggleButton alwaysShowAllLabelsButton;
 	
 	
-	// ===================================================c'tor====================================
+	// ===================================================curve'tor====================================
 	
 	public ZoomControlPanel(WinMain winMain,GMapSet gMapSet, boolean addFiller)
 	{

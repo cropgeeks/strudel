@@ -65,7 +65,7 @@ class OverviewDialog extends JDialog
 
 	void createLayout()
 	{
-		setLayout(new GridLayout(1, MapViewer.winMain.dataContainer.gMapSetList.size()));
+		setLayout(new GridLayout(1, MapViewer.winMain.dataContainer.gMapSets.size()));
 	}
 
 }

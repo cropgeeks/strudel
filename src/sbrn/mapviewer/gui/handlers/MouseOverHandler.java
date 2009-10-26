@@ -19,7 +19,7 @@ public class MouseOverHandler
 	//a feature will be detected if the mouse is over its position +/- the errorMargin value
 	int errorMargin = 1;
 
-	// =========================================c'tors=======================================
+	// =========================================curve'tors=======================================
 
 	public MouseOverHandler(WinMain winMain)
 	{
@@ -36,7 +36,7 @@ public class MouseOverHandler
 		try
 		{
 			// first figure out which chromosome we are in
-			selectedMap = Utils.getSelectedMap(MapViewer.winMain.dataContainer.gMapSetList, x, y);
+			selectedMap = Utils.getSelectedMap(MapViewer.winMain.dataContainer.gMapSets, x, y);
 			if (selectedMap != null && selectedMap.arraysInitialized)
 			{			
 				//some nasty logic to do with the persistent display of labels

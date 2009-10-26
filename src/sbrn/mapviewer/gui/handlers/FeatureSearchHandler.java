@@ -72,7 +72,7 @@ public class FeatureSearchHandler
 			{
 				boolean featureHasLinks = f.getLinks().size() > 0;
 				//add the feature only if it is in the interval and has links or if the number of mapsets loaded is 1
-				if((f.getStart() >= intervalStart) && (f.getStart() <= intervalEnd) && (featureHasLinks || MapViewer.winMain.dataContainer.gMapSetList.size() == 1))
+				if((f.getStart() >= intervalStart) && (f.getStart() <= intervalEnd) && (featureHasLinks || MapViewer.winMain.dataContainer.gMapSets.size() == 1))
 				{	
 					containedFeatures.add(f);
 					featuresInRange.add(f);
@@ -148,7 +148,7 @@ public class FeatureSearchHandler
 			//this array holds all the names of the features we need to display
 			String [] allNames = new String[0];
 			String input =  findFeaturesDialog.ffPanel.getFFTextArea().getText();	
-			//parse input 
+			//parse inputFile 
 			allNames = input.split("\n");			
 			//get the corresponding feature objects
 			Vector<Feature> features = new Vector<Feature>(allNames.length);
@@ -197,7 +197,7 @@ public class FeatureSearchHandler
 		//if we are in single genome mode we will not have any links so we need to use a different kind of table model
 		TableRowSorter sorter = null;
 		ResultsTable resultsTable = (ResultsTable)MapViewer.winMain.ffResultsPanel.getFFResultsTable();
-		if(MapViewer.winMain.dataContainer.gMapSetList.size() == 1)
+		if(MapViewer.winMain.dataContainer.gMapSets.size() == 1)
 		{
 			LinklessFeatureTableModel linklessFeatureTableModel = new LinklessFeatureTableModel(containedFeatures);
 			resultsTable.setModel(linklessFeatureTableModel);

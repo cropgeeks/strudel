@@ -25,12 +25,6 @@ public class GMapSet
 	// the map set that contains the data we want to show
 	public MapSet mapSet;
 
-	// the type of genome for the purpose of this application
-	// can be either "target" i.e. the genome we have little info for and only a genetic map, or
-	// "reference", i.e. the genome we have a physical map and annotation for
-	// see Constants.java for options
-	public int type;
-
 	// the name of the genome
 	public String name;
 
@@ -40,9 +34,6 @@ public class GMapSet
 	// the x position of this genome on the canvas
 	// i.e. an x coordinate in pixels which denotes the left most edge of the genome drawn
 	public float xPosition;
-
-	// true if this is the target genome, false if it the reference genome
-	public boolean isTargetGenome = false;
 
 	// the percent offset from the top of the genome that represents the topmost point of the genome visible on the canvas
 	public int drawingOffset = 0;
@@ -84,16 +75,14 @@ public class GMapSet
 	//the zoom control panel pertaining to this mapset
 	public ZoomControlPanel zoomControlPanel;
 
-	// ====================================c'tors========================================
 
-	public GMapSet(Color mapSetColour, MapSet mapSet, int type, boolean isTargetGenome, 
-					Hashtable<ChromoMap, GChromoMap> gMapLookup)
+	// ====================================curve'tors========================================
+
+	public GMapSet(Color mapSetColour, MapSet mapSet, Hashtable<ChromoMap, GChromoMap> gMapLookup)
 	{
 		this.colour = mapSetColour;
 		this.mapSet = mapSet;
-		this.type = type;
 		this.name = mapSet.getName();
-		this.isTargetGenome = isTargetGenome;
 		numMaps = mapSet.size();
 
 		// init the list of maps contained in this genome

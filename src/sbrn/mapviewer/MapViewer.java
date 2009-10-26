@@ -51,6 +51,7 @@ public class MapViewer
 		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Strudel");
 
 		prefs.loadPreferences(prefsFile, Prefs.class);
+		prefs.savePreferences(prefsFile, Prefs.class);
 		Install4j.doStartUpCheck();
 
 		new MapViewer();

@@ -2,10 +2,7 @@ package sbrn.mapviewer;
 
 public class Constants
 {
-	//types of genome represented by this app
-	public static final int TARGET_GENOME = 1;
-	public static final int REFERENCE_GENOME = 2;
-	
+
 	//size of the splitpane divider when visible
 	public static final int SPLITPANE_DIVIDER_SIZE = 7;
 	
@@ -25,11 +22,6 @@ public class Constants
 	public static final int NUM_LINKSHAPE_TYPES = 3;	
 
 	//example data file paths	
-	public static final String exampleTargetData =  "data/Barley.txt";
-	public static final String exampleRefGenome1FeatData =  "data/Brachypodium.txt";
-	public static final String exampleRefGenome2FeatData =  "data/Rice.txt";
-	public static final String exampleRefGenome1HomData =  "data/barleyBrachyHomologyData.txt";
-	public static final String exampleRefGenome2HomData =  "data/barleyRiceHomologyData.txt";
 	public static final String exampleDataAllInOne = "data/BarleyRiceBrachySingleLineFormat.txt";
 	
 	//example data descriptions

@@ -26,7 +26,7 @@ public class PanZoomAnimator extends Thread implements ItemListener
 	//a checkbox for asking the user whether they want to be reminded each time they have reached the max zoom level through pan zooming
 	JCheckBox maxZoomMessageCheckBox = new JCheckBox("Don't show this dialog again"); 
 	
-	// ============================================c'tor============================================
+	// ============================================curve'tor============================================
 	
 	public PanZoomAnimator(int fps, int millis, float finalScalingFactor, GChromoMap selectedMap,
 					MainCanvas mainCanvas, int mousePressedY, int mouseReleasedY,

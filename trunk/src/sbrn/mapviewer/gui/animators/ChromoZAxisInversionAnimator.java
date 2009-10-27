@@ -40,10 +40,9 @@ public class ChromoZAxisInversionAnimator extends Thread
 			{
 				//increment angle
 				currentAngle = currentAngle + interval;
-				MapViewer.logger.finest("currentAngle = " + currentAngle);
 				//set the angle for drawing the map on the map object itself
 				invertMap.angleFromVertical = currentAngle;
-				
+
 				if(invertMap.isFullyInverted)
 				{
 					if(currentAngle > 0)
@@ -58,7 +57,7 @@ public class ChromoZAxisInversionAnimator extends Thread
 					else
 						invertMap.isPartlyInverted = false;
 				}
-
+				
 				//repaint
 				MapViewer.winMain.mainCanvas.updateCanvas(true);
 				
@@ -78,17 +77,16 @@ public class ChromoZAxisInversionAnimator extends Thread
 				invertMap.isFullyInverted = false;
 			else
 				invertMap.isFullyInverted = true;
-
+			
 			invertMap.inversionInProgress = false;		
-
+			
+			//update the position lookup arrays for mouseover
+			MapViewer.winMain.fatController.initialisePositionArrays();			
+			
 			//turn antialiasing back on
 			MapViewer.winMain.mainCanvas.antiAlias = true;	
 			//repaint
-			MapViewer.winMain.mainCanvas.updateCanvas(true);
-
-			//update the position lookup arrays for mouseover
-			MapViewer.winMain.fatController.initialisePositionArrays();
-
+			MapViewer.winMain.mainCanvas.updateCanvas(true);			
 		}
 		catch (RuntimeException e)
 		{

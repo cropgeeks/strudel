@@ -537,7 +537,7 @@ public class Utils
 	{
 		int  y = chromoMap.getGChromoMap().yOnCanvas;
 		MapViewer.logger.fine(chromoMap.getGChromoMap().name + " y = " + y);
-		return Math.round((owningSet.chromoHeight / chromoMap.getStop()) * fPos) + chromoMap.getGChromoMap().yOnCanvas;
+		return Math.round((chromoMap.getGChromoMap().height / chromoMap.getStop()) * fPos) + chromoMap.getGChromoMap().yOnCanvas;
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------

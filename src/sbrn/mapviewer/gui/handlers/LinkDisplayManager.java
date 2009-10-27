@@ -234,13 +234,13 @@ public class LinkDisplayManager
 									int referenceChromoY = referenceGMap.y + referenceGMap.currentY;
 																	
 									// convert the y value to scaled coordinates on the canvas by obtaining the coords of the appropriate chromosome object and scaling them appropriately
-									int targetY = Utils.getFPosOnScreenInPixels(targetGMapSet, selectedMap.chromoMap, targetFeatureStart);
-									int referenceY = Utils.getFPosOnScreenInPixels(referenceGMapSet,  referenceGMap.chromoMap, referenceFeatureStart);
+									int targetY = (int) (targetFeatureStart / (targetMapStop / selectedMap.height)) + selectedChromoY;
+									int referenceY = (int) (referenceFeatureStart / (referenceMapStop / referenceGMap.height)) + referenceChromoY;
 
 									//check for chromosome inversion and invert values if necessary
 									if(targetGMap.isPartlyInverted)
 									{
-										targetY = (int) ((targetMapStop - targetFeatureStart) / (targetMapStop / selectedMap.height)) + selectedChromoY;
+										targetY = (int) ((targetMapStop - targetFeatureStart) / (targetMapStop / targetGMap.height)) + selectedChromoY;
 									}
 									if(referenceGMap.isPartlyInverted)
 									{

@@ -78,7 +78,7 @@ public class GChromoMap
 	
 	//true if this chromosome is shown fully inverted
 	public boolean isFullyInverted = false;
-	//true if this chromosome is shown fully inverted
+	//true if this chromosome is shown partly inverted
 	public boolean isPartlyInverted = false;
 	//true while the inversion of the chromosome is in progress
 	public boolean inversionInProgress = false;

@@ -36,6 +36,8 @@ public class SingleFileImporter
 					processFeatureLine(line);
 				else if(line.startsWith("homolog"))
 					processLink(line);
+				else if(line.startsWith("URL"))
+					processURL(line);
 				lineCount++;
 			}
 			
@@ -236,4 +238,23 @@ public class SingleFileImporter
 	}
 	
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	private void processURL(String line)
+	{
+		try
+		{
+			//the file format is tab delimited text
+			String [] tokens = line.split("\t");
+			String mapsetName = tokens[1].trim();
+			String URL = tokens[2].trim();
+			
+			MapSet mapset = Utils.getMapSetByName(mapsetName, allMapSets);
+			mapset.setURL(URL);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+	}
 }

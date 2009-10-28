@@ -56,21 +56,7 @@ public class ClickZoomAnimator extends Thread
 		float zoomFactorIncrement = (finalZoomFactor - selectedSet.zoomFactor) / totalFrames;
 		float chromoHeightIncrement = (finalChromoHeight - selectedSet.chromoHeight) / totalFrames;
 		float totalYIncrement = (finalTotalY - selectedSet.totalY) / totalFrames;
-		
-		//System.out.println("=============");
-		//System.out.println("zooming into map " + selectedMap.name);
-		//System.out.println("finalZoomFactor = " + finalZoomFactor);
-		//System.out.println("selectedSet.zoomFactor before = " + selectedSet.zoomFactor);
-		//System.out.println("zoomFactorIncrement = " + zoomFactorIncrement);
-		//System.out.println("totalYIncrement = " + totalYIncrement);
-		//System.out.println("chromoHeightIncrement = " + chromoHeightIncrement);
-		//System.out.println("finalTotalY = " + finalTotalY);		
-		//System.out.println("totalFrames = " + totalFrames);
-		//System.out.println("fps = " + fps);
-		//System.out.println("millis = " + millis);
-		
-		
-		//System.out.println("+++++++++++++++++zooming");
+
 		// now loop for the number of total frames, zooming in by a bit each time
 		for (int i = 0; i < totalFrames; i++)
 		{
@@ -82,8 +68,6 @@ public class ClickZoomAnimator extends Thread
 			catch (InterruptedException e)
 			{
 			}
-			
-			//System.out.println("selectedSet.zoomFactor before adjustment = " + selectedSet.zoomFactor);
 			
 			// set the new zoom factor
 			selectedSet.zoomFactor = selectedSet.zoomFactor + zoomFactorIncrement;
@@ -101,10 +85,6 @@ public class ClickZoomAnimator extends Thread
 			// the new total Y extent of the genome in pixels
 			int newTotalY = Math.round(selectedSet.totalY + totalYIncrement);
 			
-			//System.out.println("newChromoHeight = " + newChromoHeight);
-			//System.out.println("newTotalY = " + newTotalY);
-			//System.out.println("distFromBottom = " + distFromBottom);
-			
 			// adjust the zoom
 			// this call includes the redraw of the main canvas
 			zoomHandler.adjustZoom(selectedMap, newTotalY, newChromoHeight, distFromBottom);
@@ -114,8 +94,6 @@ public class ClickZoomAnimator extends Thread
 			
 			//update zoom control position
 			MapViewer.winMain.fatController.updateAllZoomControls();
-			
-			//System.out.println("selectedSet.zoomFactor = " + selectedSet.zoomFactor);
 		}
 		
 		
@@ -146,9 +124,7 @@ public class ClickZoomAnimator extends Thread
 		MapViewer.winMain.mainCanvas.updateCanvas(true);
 		
 		zoomHandler.isClickZoomRequest = false;
-		
-		//System.out.println("selectedSet.zoomFactor final = " + selectedSet.zoomFactor);
-		
+
 		done = true;
 		
 		

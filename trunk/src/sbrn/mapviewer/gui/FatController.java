@@ -39,6 +39,9 @@ public class FatController
 
 	public boolean dataLoadCancelled = false;
 	
+	//true if we are using drag and drop to specify the input file
+	public boolean dragAndDropDataLoad = false;
+	
 	// ===============================================curve'tors===================================
 	
 	public FatController(WinMain winMain)

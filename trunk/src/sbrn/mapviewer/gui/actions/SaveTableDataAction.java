@@ -81,11 +81,7 @@ public class SaveTableDataAction extends AbstractAction
 	{
 		//get the table model first
 		TableModel model = MapViewer.winMain.ffResultsPanel.resultsTable.getModel();		
-		if(model.getClass().getName().equals("sbrn.mapviewer.gui.components.HomologResultsTableModel"))
-		{
-			return ((HomologResultsTableModel)model).getAllDataInTabFormat();
-		}		
-		return ((LinklessFeatureTableModel)model).getAllDataInTabFormat();	
+		return ((HomologResultsTableModel)model).getAllDataInTabFormat();	
 	}
 	
 	

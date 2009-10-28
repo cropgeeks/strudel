@@ -119,6 +119,7 @@ public class FoundFeaturesResultsTableListener implements ListSelectionListener,
 	
 	private void highlightFeature()
 	{	
+
 		LinklessFeatureTableModel linklessFeatureTableModel = (LinklessFeatureTableModel) resultsTable.getModel();
 		// get the index of the selected row but check for changes due to filtering
 		int modelRow = -1;

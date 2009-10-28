@@ -28,35 +28,24 @@ public class ResultsTable extends JTable
 		setRowSelectionAllowed(true);
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);	
 		
-	        //for centering text in table
-	        setDefaultRenderer(String.class, new LeftAlignedRenderer());
-	        setDefaultRenderer(Integer.class, new LeftAlignedRenderer());
-	        setDefaultRenderer(Float.class, new LeftAlignedRenderer());
-
+		//for centering text in table
+		setDefaultRenderer(String.class, new LeftAlignedRenderer());
+		setDefaultRenderer(Integer.class, new LeftAlignedRenderer());
+		setDefaultRenderer(Float.class, new LeftAlignedRenderer());		
+		
+		//set up sorting/filtering capability
+		TableRowSorter sorter = new TableRowSorter(this.getModel());				
+		setRowSorter(sorter);
+		
+		//add listener
+		HomologResultsTableListener homologResultsTableListener = new HomologResultsTableListener(this);
+		addMouseMotionListener(homologResultsTableListener);
+		addMouseListener(homologResultsTableListener);
+		getSelectionModel().addListSelectionListener(homologResultsTableListener);
+		
 	}
 	
 	//===============================================methods=========================================	
-	
-	public void addModelSpecificTableListeners()
-	{
-		//type of listener depends on the model we use for the results table
-		if(getModel() instanceof sbrn.mapviewer.gui.components.HomologResultsTableModel)
-		{
-			HomologResultsTableListener homologResultsTableListener = new HomologResultsTableListener(this);
-			addMouseMotionListener(homologResultsTableListener);
-			addMouseListener(homologResultsTableListener);
-			getSelectionModel().addListSelectionListener(homologResultsTableListener);
-		}
-		else if (getModel() instanceof  sbrn.mapviewer.gui.components.LinklessFeatureTableModel)
-		{
-			FoundFeaturesResultsTableListener foundFeaturesResultsTableListener = new FoundFeaturesResultsTableListener(this);
-			addMouseMotionListener(foundFeaturesResultsTableListener);
-			addMouseListener(foundFeaturesResultsTableListener);
-			getSelectionModel().addListSelectionListener(foundFeaturesResultsTableListener);
-		}
-	}
-	
-	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	
 	public TableCellRenderer getCellRenderer(int row, int column)
@@ -85,7 +74,7 @@ public class ResultsTable extends JTable
 	public void addFeaturesFromSelectedMap(GChromoMap selectedMap)
 	{
 		//extract the list of features we need to insert 
-		LinkedList<Link> newFeatures = new LinkedList<Link>();
+		Vector<Feature> newFeatures = new Vector<Feature>();
 		
 		//the table's model
 		HomologResultsTableModel homologResultsTableModel = (HomologResultsTableModel)getModel();
@@ -97,38 +86,22 @@ public class ResultsTable extends JTable
 			{
 				boolean featureExists = false;
 				//first check this feature is not already contained in the table
-				for(Link link : homologResultsTableModel.homologies)
+				for(ResultsTableEntry  resultsTableEntry : homologResultsTableModel.tableEntries)
 				{
-					if(link.getFeature1() != null)
-					{
-						if(link.getFeature1().equals(f))
-							featureExists = true;
-					}
-					if(link.getFeature2() != null)
-					{
-						if(link.getFeature2().equals(f))
-							featureExists = true;
-					}
+					if(f == resultsTableEntry.getTargetFeature())
+						featureExists = true;
 				}
 				
 				//if the feature is not in the table yet
 				if(!featureExists)
-				{
-					//include this feature but turn it into half a link for now to make it match the data type used by the table
-					Link link = new Link(null,f);
-					newFeatures.add(link);
-				}
-				else
-				{
-					MapViewer.logger.finest("feature already exists -- not added" );
-				}
+					newFeatures.add(f);
 			}
 			
 		}		
 		MapViewer.logger.fine("num new features extracted = " + newFeatures.size());
 		
 		//add the new features/links to the table's data model
-		homologResultsTableModel.homologies.addAll(0, newFeatures);
+		homologResultsTableModel.tableEntries.addAll(0, TableEntriesGenerator.makeTableEntries(newFeatures));
 		
 		//now fire a table change event to update the table
 		homologResultsTableModel.fireTableRowsInserted(0, newFeatures.size()-1);
@@ -154,7 +127,13 @@ public class ResultsTable extends JTable
 			setHorizontalAlignment(LEFT);
 			
 			// this is what we want to print to the cell
-			setText((String) table.getModel().getValueAt(modelRow, column));
+			String cellContent = "";
+			Object obj = table.getModel().getValueAt(modelRow, column);
+			if(obj instanceof String)
+				cellContent = (String)obj;
+			else if (obj instanceof Float)
+				cellContent = ((Float)obj).toString();
+			setText(cellContent); 
 			
 			// selection colors etc
 			if (isSelected)
@@ -176,7 +155,7 @@ public class ResultsTable extends JTable
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	
-	    /*
+	/*
 	 * Center the text
 	 */
 	class LeftAlignedRenderer extends DefaultTableCellRenderer
@@ -219,7 +198,7 @@ public class ResultsTable extends JTable
 		else
 			((DefaultRowSorter<TableModel, Integer>) getRowSorter()).setRowFilter(rf);
 	}
-
+	
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
 	
 	public void initColumnSizes()
@@ -241,7 +220,9 @@ public class ResultsTable extends JTable
 			// get the data in this column and check their width
 			for (int j = 0; j < getModel().getRowCount(); j++)
 			{
-				String cellContent = getModel().getValueAt(j, i).toString();
+				String cellContent = "";
+				if(getModel().getValueAt(j, i) != null)
+					cellContent = getModel().getValueAt(j, i).toString();
 				int cellWidth = fm.stringWidth(cellContent);
 				if (cellWidth > maxWidth)
 					maxWidth = cellWidth;

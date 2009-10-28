@@ -26,7 +26,7 @@ public class LinkDisplayManager
 	Hashtable<ChromoMap, LinkSet> allLinksLookup;
 	
 	private static double blastThreshold = 1;
-
+	
 	//degree of link curvature
 	public float linkShapeCoeff = Constants.MAX_CURVEDLINK_COEFF;
 	
@@ -44,7 +44,7 @@ public class LinkDisplayManager
 	{
 		this.mainCanvas = mainCanvas;
 		makeTargetLinkSubSets();
-//		precomputeAllLinks();
+		//		precomputeAllLinks();
 	}
 	
 	//	=====================================methods===========================================
@@ -83,26 +83,26 @@ public class LinkDisplayManager
 				// this is just a normal single click -- user wants to do overviews of links from individual target chromosomes, one at a time
 				else
 				{
-
-						// in that case we first clear out the existing vector of selected maps in the target genome
-						selectedSet.deselectAllMaps();
-						
-						// then we add the selected map only
-						selectedSet.addSelectedMap(selectedMap);
-						
-						// now add all maps from all the other genomes into the vector of selected elements for the reference genome so the links can be drawn
-						for (GMapSet gMapSet : MapViewer.winMain.dataContainer.gMapSets)
+					
+					// in that case we first clear out the existing vector of selected maps in the target genome
+					selectedSet.deselectAllMaps();
+					
+					// then we add the selected map only
+					selectedSet.addSelectedMap(selectedMap);
+					
+					// now add all maps from all the other genomes into the vector of selected elements for the reference genome so the links can be drawn
+					for (GMapSet gMapSet : MapViewer.winMain.dataContainer.gMapSets)
+					{
+						//check that we are not adding maps from mapsets that would require us to draw across another mapset
+						int indexDifference = Math.abs(MapViewer.winMain.dataContainer.gMapSets.indexOf(selectedSet) - 
+										MapViewer.winMain.dataContainer.gMapSets.indexOf(gMapSet));
+						if (!gMapSet.equals(selectedSet) && indexDifference < 2)
 						{
-							//check that we are not adding maps from mapsets that would require us to draw across another mapset
-							int indexDifference = Math.abs(MapViewer.winMain.dataContainer.gMapSets.indexOf(selectedSet) - 
-							MapViewer.winMain.dataContainer.gMapSets.indexOf(gMapSet));
-							if (!gMapSet.equals(selectedSet) && indexDifference < 2)
-							{
-								gMapSet.selectAllMaps();
-							}
+							gMapSet.selectAllMaps();
 						}
-						mainCanvas.drawLinks = true;
-
+					}
+					mainCanvas.drawLinks = true;
+					
 				}
 				
 				// now check whether we have selected chromosomes in the target genome
@@ -124,7 +124,7 @@ public class LinkDisplayManager
 	// Draws the lines between a chromosome of the reference genome and all potential homologues in the compared genome
 	public void drawAllLinks(Graphics2D g2)
 	{
-
+		
 		//only do this if we have at least genomes -- otherwise there are no links to deal with
 		if(MapViewer.winMain.dataContainer.gMapSets.size() > 1)
 		{			
@@ -135,7 +135,7 @@ public class LinkDisplayManager
 				{
 					// get the currently selected map
 					GChromoMap selectedMap = selectedSet.selectedMaps.get(i);
-
+					
 					// get the ChromoMap for the currently selected chromosome
 					ChromoMap selectedChromoMap = selectedMap.chromoMap;
 					
@@ -160,7 +160,7 @@ public class LinkDisplayManager
 							referenceGMapSet = mapset2;
 						else
 							referenceGMapSet = mapset1;
-
+						
 						// get the real coordinates for the selected chromo and the reference chromo
 						int selectedChromoY = selectedMap.y + selectedMap.currentY;
 						// the x coordinates have to be worked out
@@ -232,11 +232,11 @@ public class LinkDisplayManager
 									float referenceFeatureStart = referenceFeature.getStart();
 									float referenceMapStop = referenceGMap.chromoMap.getStop();							
 									int referenceChromoY = referenceGMap.y + referenceGMap.currentY;
-																	
+									
 									// convert the y value to scaled coordinates on the canvas by obtaining the coords of the appropriate chromosome object and scaling them appropriately
 									int targetY = (int) (targetFeatureStart / (targetMapStop / selectedMap.height)) + selectedChromoY;
 									int referenceY = (int) (referenceFeatureStart / (referenceMapStop / referenceGMap.height)) + referenceChromoY;
-
+									
 									//check for chromosome inversion and invert values if necessary
 									if(targetGMap.isPartlyInverted)
 									{
@@ -300,59 +300,54 @@ public class LinkDisplayManager
 	// --------------------------------------------------------------------------------------------------------------------------------
 	
 	public void drawHighlightedLink(Graphics2D g2, Feature f1, Feature f2, boolean strongEmphasis)
-	{
-		//only do this if we have at least 2 genomes -- otherwise there are no links to deal with
-		if(MapViewer.winMain.dataContainer.gMapSets.size() > 1)
-		{					
-			//get the owning GChromoMap objects associated with this link
-			GChromoMap gMap1 = f1.getOwningMap().getGChromoMap();
-			GChromoMap gMap2 = f2.getOwningMap().getGChromoMap();
-			
-			GMapSet targetGMapSet = gMap1.owningSet;
-			GMapSet referenceGMapSet = gMap2.owningSet;
+	{	
+		//get the owning GChromoMap objects associated with this link
+		GChromoMap gMap1 = f1.getOwningMap().getGChromoMap();
+		GChromoMap gMap2 = f2.getOwningMap().getGChromoMap();
+		
+		GMapSet targetGMapSet = gMap1.owningSet;
+		GMapSet referenceGMapSet = gMap2.owningSet;
+		
+		//work out the x and y coords for drawing the link
+		int targetChromoX = -1;
+		int referenceChromoX = -1;
 
-			//work out the x and y coords for drawing the link
-			int targetChromoX = -1;
-			int referenceChromoX = -1;
-			
-			// if we have only one reference genome we want the targetChromoX to be that chromo'sx plus its width and
-			// the referenceChromoX to be the reference chromo's x
-			if (MapViewer.winMain.dataContainer.gMapSets.size() == 1 || (MapViewer.winMain.dataContainer.gMapSets.size() == 2 && MapViewer.winMain.dataContainer.gMapSets.indexOf(referenceGMapSet) == 1))
-			{
-				targetChromoX = Math.round(targetGMapSet.xPosition + targetGMapSet.gMaps.get(0).width);
-				referenceChromoX = Math.round(referenceGMapSet.xPosition);
-			}
-			
-			// if we have two reference genomes and this is the first reference genome
-			else if (MapViewer.winMain.dataContainer.gMapSets.size() == 2 && MapViewer.winMain.dataContainer.gMapSets.indexOf(referenceGMapSet) == 0)
-			{
-				// we want the referenceChromoX to be the mapsets x plus its width
-				referenceChromoX = Math.round(referenceGMapSet.xPosition + referenceGMapSet.gMaps.get(0).width);
-				// and we want the target genome's x to be the targetChromoX
-				targetChromoX = Math.round(targetGMapSet.xPosition);
-			}
-			
-			//y coords
-			int y1 = Math.round(gMap1.y + gMap1.currentY + (f1.getStart() * (gMap1.height / gMap1.chromoMap.getStop())));
-			int y2 = Math.round(gMap2.y + gMap2.currentY + (f2.getStart() * (gMap2.height / gMap2.chromoMap.getStop())));
-			
-			//check for chromosome inversion and invert values if necessary
-			if(gMap1.isPartlyInverted || gMap1.isFullyInverted)
-			{
-				y1 = (int) ((gMap1.chromoMap.getStop() - f1.getStart()) / (gMap1.chromoMap.getStop() / gMap1.height)) + (gMap1.y + gMap1.currentY);
-			}
-			if(gMap2.isPartlyInverted  || gMap2.isFullyInverted)
-			{
-				y2 = (int) ((gMap2.chromoMap.getStop() - f2.getStart()) / (gMap2.chromoMap.getStop() / gMap2.height)) + (gMap2.y + gMap2.currentY);
-			}
-			
-			// draw the link either as a straight line or a curve
-			if(strongEmphasis)
-				g2.setColor(Colors.strongEmphasisLinkColour);
-			else
-				g2.setColor(Colors.mildEmphasisLinkColour);
-			drawStraightOrCurvedLink(g2,targetChromoX, y1, referenceChromoX, y2);		
+		//need to adjust the x positions of the links here
+		//if the reference genome is to the right of the target genome (indicated by their positions in the list of mapsets held inthe datacontainer)
+		if (MapViewer.winMain.dataContainer.gMapSets.indexOf(targetGMapSet) < MapViewer.winMain.dataContainer.gMapSets.indexOf(referenceGMapSet) )
+		{
+			targetChromoX = Math.round(targetGMapSet.xPosition + targetGMapSet.gMaps.get(0).width);
+			referenceChromoX = Math.round(referenceGMapSet.xPosition);
 		}
+		//the ref genome is to the left of the target genome
+		else 
+		{
+			// we want the referenceChromoX to be the mapsets x plus its width
+			referenceChromoX = Math.round(referenceGMapSet.xPosition + referenceGMapSet.gMaps.get(0).width);
+			// and we want the target genome's x to be the targetChromoX
+			targetChromoX = Math.round(targetGMapSet.xPosition);
+		}
+		
+		//y coords
+		int y1 = Math.round(gMap1.y + gMap1.currentY + (f1.getStart() * (gMap1.height / gMap1.chromoMap.getStop())));
+		int y2 = Math.round(gMap2.y + gMap2.currentY + (f2.getStart() * (gMap2.height / gMap2.chromoMap.getStop())));
+		
+		//check for chromosome inversion and invert values if necessary
+		if(gMap1.isPartlyInverted || gMap1.isFullyInverted)
+		{
+			y1 = (int) ((gMap1.chromoMap.getStop() - f1.getStart()) / (gMap1.chromoMap.getStop() / gMap1.height)) + (gMap1.y + gMap1.currentY);
+		}
+		if(gMap2.isPartlyInverted  || gMap2.isFullyInverted)
+		{
+			y2 = (int) ((gMap2.chromoMap.getStop() - f2.getStart()) / (gMap2.chromoMap.getStop() / gMap2.height)) + (gMap2.y + gMap2.currentY);
+		}
+		
+		// draw the link either as a straight line or a curve
+		if(strongEmphasis)
+			g2.setColor(Colors.strongEmphasisLinkColour);
+		else
+			g2.setColor(Colors.mildEmphasisLinkColour);
+		drawStraightOrCurvedLink(g2,targetChromoX, y1, referenceChromoX, y2);	
 	}
 	
 	
@@ -426,7 +421,7 @@ public class LinkDisplayManager
 	}
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------
-		
+	
 	private void makeSingleLinkSubset(MapSet targetMapSet, MapSet referenceMapSet,LinkSet links)
 	{
 		// for each chromosome in the target mapset
@@ -455,7 +450,7 @@ public class LinkDisplayManager
 			{			
 				// make a linkset that contains only the links between this chromo and the target chromo
 				LinkSet linkSubset = links.getLinksBetweenMaps(targetMap, refMap);
-
+				
 				// add the linkset to the list but only if it has links in it
 				if(linkSubset.size() > 0)
 					linkSets.add(linkSubset);
@@ -465,72 +460,10 @@ public class LinkDisplayManager
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------
 	
-//	/**
-//	 * This method precomputes subsets of links between each target chromosome and each reference genome so that drawing them is quicker.
-//	 */
-//	private void precomputeAllLinks()
-//	{
-//		//only do this if we have reference genomes -- otherwise there are no links to deal with
-//		if(MapViewer.winMain.dataContainer.gMapSets.size() > 1)
-//		{			
-//			
-//			try
-//			{
-//				allLinksLookup = new Hashtable<ChromoMap, LinkSet>();
-//				
-//				//we need to do this for all linksets between the target and each of the reference genomes
-//				for (LinkSet links : MapViewer.winMain.dataContainer.allLinkSets)
-//				{
-//					MapSet targetMapSet = links.getMapSets().get(0);
-//					MapSet referenceMapSet = links.getMapSets().get(1);
-//					
-//					// for each chromosome in the target mapset
-//					for (ChromoMap targetMap : targetMapSet)
-//					{
-//						LinkSet linkSet = null;
-//						
-//						//check whether this target map already has a linkset in the lookup table
-//						if(allLinksLookup.get(targetMap) == null)
-//						{
-//							//if it doesn't exist , create it here
-//							// create a  single linkset of links between this chromosome and the reference chromosomes
-//							linkSet = new LinkSet();
-//							//add the linkset as the value for this targetMap in the lookup table
-//							allLinksLookup.put(targetMap, linkSet);
-//						}
-//						else // it already exists, just retrieve it
-//						{
-//							linkSet = allLinksLookup.get(targetMap);
-//						}
-//						
-//						// for each reference chromosome
-//						for (ChromoMap refMap : referenceMapSet)
-//						{						
-//							// make a linkset that contains only the links between this chromo and the target chromo
-//							LinkSet linkSubset = links.getLinksBetweenMaps(targetMap, refMap);
-//							
-//							// add the linkset to the list but only if it has links in it
-//							if(linkSubset.getLinks().size() > 0)
-//								linkSet.combineWithLinkSet(linkSubset);
-//						}
-//					}
-//				}
-//			}
-//			catch (Exception e)
-//			{
-//				e.printStackTrace();
-//			}
-//		}
-//	}
-	
-	
-	
-	// -----------------------------------------------------------------------------------------------------------------------------------
-	
 	//draws a single link, either as a straight line or a curve depending on the value of the linkCurvatureCoeff set at class level
 	private void drawStraightOrCurvedLink(Graphics2D g2, int startX, int startY, int endX, int endY)
 	{	
-
+		
 		//if the linkCurvatureCoeff is 0 then the line will be straight and the control points are simply moved to either end of the line	
 		//ctrlx1 - the X coordinate used to set the first control point of this CubicCurve2D
 		//ctrly1 - the Y coordinate used to set the first control point of this CubicCurve2D
@@ -588,7 +521,7 @@ public class LinkDisplayManager
 			e.printStackTrace();
 		}
 	}
-
+	
 	public static void setBlastThreshold(double blastThreshold)
 	{
 		LinkDisplayManager.blastThreshold = blastThreshold;

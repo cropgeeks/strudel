@@ -37,21 +37,20 @@ public class DataContainer
 	{
 		MapViewer.logger.fine("============== making new data container");
 		MapViewer.logger.fine("num mapsets prior to initing = " + gMapSets.size());
-		loadDataFromMultipleFiles(inputFile);
+		loadDataFromSingleFile(inputFile);
 		setUpGMapSets();
 	}
 	
 	// ============================================methods==========================================
 	
 	// Loads data from file using the object data model; this will populate all the relevant MapSet and LinkSet objects.
-	public void loadDataFromMultipleFiles(File inputFile)
+	public void loadDataFromSingleFile(File inputFile)
 	{
 		MapViewer.logger.fine("initing new dataset");
 		MapViewer.logger.fine("loadOwnData = " + MapViewer.winMain.fatController.loadOwnData);
 		
 		try
-		{
-			
+		{		
 			SingleFileImporter singleFileImporter = new SingleFileImporter();
 			singleFileImporter.parseCombinedFile(inputFile);
 			allMapSets = singleFileImporter.getAllMapSets();

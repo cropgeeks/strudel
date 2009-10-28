@@ -2,7 +2,6 @@ package sbrn.mapviewer.gui.components;
 
 import java.util.*;
 import javax.swing.table.*;
-import sbrn.mapviewer.data.*;
 
 /**
  * Table model to be used for results table when we are dealing with more than one genome
@@ -10,7 +9,7 @@ import sbrn.mapviewer.data.*;
  */
 public class HomologResultsTableModel extends AbstractTableModel
 {
-	LinkedList<Link> homologies = new LinkedList<Link>();
+	public LinkedList<ResultsTableEntry> tableEntries;
 	
 	public final static String targetNameColumnLabel =  "Target name";
 	public final static String targetPositionColumnLabel = "Target position";
@@ -24,52 +23,46 @@ public class HomologResultsTableModel extends AbstractTableModel
 	
 	private String[] columnNames =
 	{targetNameColumnLabel, targetPositionColumnLabel, targetChromosomeColumnLabel, homologColumnLabel, 
-	homologGenomeColumnLabel, homologChromosomeColumnLabel, homologPositionColumnLabel, eValueColumnLabel, homologAnnotationColumnLabel};
+					homologGenomeColumnLabel, homologChromosomeColumnLabel, homologPositionColumnLabel, eValueColumnLabel, homologAnnotationColumnLabel};
 	
 	public LinkedList<String> columnNameList = new LinkedList<String>();
 	
-	public HomologResultsTableModel()
-	{		
-	}
-	
-
-	public HomologResultsTableModel(LinkedList<Link> homologies)
+	public HomologResultsTableModel(LinkedList<ResultsTableEntry> tableEntries)
 	{
 		super();
-		this.homologies = homologies;
+		this.tableEntries = tableEntries;
 		for (int i = 0; i < columnNames.length; i++)
 		{
 			columnNameList.add(columnNames[i]);
 		}
 	}
-
+	
 	public int getColumnCount()
 	{
 		return columnNames.length;
 	}
-
+	
 	public int getRowCount()
 	{
-		return homologies.size();
+		return tableEntries.size();
 	}
-
+	
 	public Object getValueAt(int rowIndex, int columnIndex)
 	{
-		Link link = homologies.get(rowIndex);
 		
 		switch (columnIndex) 
 		{
-		            case 0:  if(link.getFeature1() != null){return link.getFeature1().getName();}break;
-		            case 1:  if(link.getFeature1() != null){return link.getFeature1().getStart();}break;
-		            case 2: if(link.getFeature1() != null){ return link.getFeature1().getOwningMap().getName();}break;
-		            case 3:  if(link.getFeature2() != null){return link.getFeature2().getName();}break;
-		            case 4:  if(link.getFeature2() != null){return link.getFeature2().getOwningMap().getOwningMapSet().getName();}break;
-		            case 5:  if(link.getFeature2() != null){return link.getFeature2().getOwningMap().getName();}break;
-		            case 6:  if(link.getFeature2() != null){return (link.getFeature2().getStart());}break;
-		            case 7:  if(link.getFeature2() != null){return ((float)link.getBlastScore());}break;
-		            case 8:  if(link.getFeature2() != null){return link.getFeature2().getAnnotation();}break;
-		  }
-
+			case 0: return tableEntries.get(rowIndex).getTargetFeatureName();
+			case 1: return tableEntries.get(rowIndex).getTargetFeatureStart();
+			case 2: return tableEntries.get(rowIndex).getTargetFeatureMap();
+			case 3: return tableEntries.get(rowIndex).getHomologFeatureName();
+			case 4: return tableEntries.get(rowIndex).getHomologFeatureMapset();
+			case 5: return tableEntries.get(rowIndex).getHomologFeatureMap();
+			case 6: return tableEntries.get(rowIndex).getHomologFeatureStart();
+			case 7: return tableEntries.get(rowIndex).getLinkEValue();
+			case 8: return tableEntries.get(rowIndex).getHomologFeatureAnnotation();
+		}
+		
 		return null;
 	}
 	
@@ -79,16 +72,16 @@ public class HomologResultsTableModel extends AbstractTableModel
 		{
 			switch (columnIndex) 
 			{
-			            case 0:  return Class.forName("java.lang.String"); 
-			            case 1:  return Class.forName("java.lang.Float"); 
-			            case 2:  return Class.forName("java.lang.String"); 
-			            case 3:  return Class.forName("java.lang.String"); 
-			            case 4:  return Class.forName("java.lang.String"); 
-			            case 5:  return Class.forName("java.lang.String"); 
-			            case 6:  return Class.forName("java.lang.Float");
-			            case 7:  return Class.forName("java.lang.Float"); 
-			            case 8:  return Class.forName("java.lang.String"); 
-			  }
+				case 0:  return Class.forName("java.lang.String"); 
+				case 1:  return Class.forName("java.lang.String"); 
+				case 2:  return Class.forName("java.lang.String"); 
+				case 3:  return Class.forName("java.lang.String"); 
+				case 4:  return Class.forName("java.lang.String"); 
+				case 5:  return Class.forName("java.lang.String"); 
+				case 6:  return Class.forName("java.lang.String");
+				case 7:  return Class.forName("java.lang.String"); 
+				case 8:  return Class.forName("java.lang.String"); 
+			}
 		}
 		catch (ClassNotFoundException e)
 		{
@@ -118,20 +111,18 @@ public class HomologResultsTableModel extends AbstractTableModel
 		}
 				
 		//output the row data
-		for (Link link : homologies)
+		for (ResultsTableEntry tableEntry : tableEntries)
 		{
-			buf.append(link.getFeature1().getName() + "\t");
-			buf.append(link.getFeature1().getStart() + "\t");
-			buf.append(link.getFeature1().getOwningMap().getName() + "\t");
-			buf.append(link.getFeature2().getName() + "\t");
-			buf.append(link.getFeature2().getOwningMap().getOwningMapSet().getName() + "\t");
-			buf.append(link.getFeature2().getOwningMap().getName() + "\t");
-			buf.append(link.getFeature2().getStart() + "\t");
-			buf.append(link.getBlastScore() + "\t");
-			buf.append(link.getAnnotation() + "\n");
+			buf.append(tableEntry.getTargetFeatureName() + "\t");
+			buf.append(tableEntry.getTargetFeatureStart() + "\t");
+			buf.append(tableEntry.getTargetFeatureMap() + "\t");
+			buf.append(tableEntry.getHomologFeatureName()+ "\t");
+			buf.append(tableEntry.getHomologFeatureMapset() + "\t");
+			buf.append(tableEntry.getHomologFeatureMap() + "\t");
+			buf.append(tableEntry.getHomologFeatureStart() + "\t");
+			buf.append(tableEntry.getLinkEValue() + "\t");
+			buf.append(tableEntry.getHomologFeatureAnnotation() + "\n");
 		}
 		return buf.toString();
 	}
-	
-	
 }

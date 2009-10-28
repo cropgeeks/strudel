@@ -35,7 +35,7 @@ public class FileDropAdapter extends DropTargetAdapter
 					List<?> list = (List<?>) t.getTransferData(dataFlavors[i]);
 
 					//open the file
-					MapViewer.logger.fine("file drag'n'dropped: " + list.get(0).toString());
+					MapViewer.winMain.fatController.dragAndDropDataLoad = true;
 					DataLoadUtils.loadDataInThread(list.get(0).toString());
 					
 					dtde.dropComplete(true);

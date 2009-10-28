@@ -24,7 +24,7 @@ public class LabelDisplayManager
 	{
 		//the features we need to draw
 		Vector<Feature> features = FeatureSearchHandler.featuresInRange;
-
+		
 		//all the features should be on the same map so we can just query the first element for its parent map
 		GChromoMap gChromoMap = features.get(0).getOwningMap().getGChromoMap();	
 		Vector<GChromoMap> gMaps = new Vector<GChromoMap>();
@@ -37,7 +37,7 @@ public class LabelDisplayManager
 	//------------------------------------------------------------------------------------------------------------------------------------
 	
 	//this just draws labels of single highlighted features
-	public static void drawHighlightedFeatureLabel(Graphics2D g2, Feature f)
+	public static void drawHighlightedFeatureLabel(Graphics2D g2, Feature f, Feature homolog)
 	{
 		// the usual font stuff
 		g2.setFont(new Font("Sans-serif", Font.PLAIN, fontHeight));
@@ -69,13 +69,40 @@ public class LabelDisplayManager
 		int labelY = featureY + (fontHeight/2);
 		
 		// next decide where to place the label on x
-		// the amount by which we want to move the label end away from the chromosome (in pixels)
-		int lineLength = 50;
 		
+		// the amount by which we want to move the label end away from the chromosome (in pixels)
+		int lineLength = 50;	
 		//x coords
-		int labelX = gChromoMap.x - lineLength - stringWidth;
-		int lineStartX =  gChromoMap.x;
-		int lineEndX =  gChromoMap.x- lineLength;
+		int labelX = -1;
+		int lineStartX =  -1;
+		int lineEndX =  -1;
+		
+		//the indices of the mapsets involved in our central list of mapsets
+		
+		//if we have no homologs that we are drawing links to we can just place the label to the left of the chromo always
+		//it will not get in the way of anything there		
+		lineStartX =  gChromoMap.x;
+		lineEndX =  lineStartX - lineLength;
+		labelX = lineEndX - stringWidth;
+		
+		//if we do have a homolog we need to work out where it is in relation to this feature and place the label out of the way of the link line
+		if(homolog != null)
+		{
+			int targetGenomeIndex = MapViewer.winMain.dataContainer.allMapSets.indexOf(f.getOwningMap().getOwningMapSet());
+			int referenceGenomeIndex = MapViewer.winMain.dataContainer.allMapSets.indexOf(homolog.getOwningMap().getOwningMapSet());
+			
+			if(targetGenomeIndex > referenceGenomeIndex)
+			{
+				//place label to the right of the chromo
+				lineStartX =  gChromoMap.x + gChromoMap.width;
+				lineEndX =  lineStartX + lineLength;
+				labelX = lineEndX;
+			}
+		}
+		
+		// draw a line from the marker to the label
+		g2.setColor(Colors.strongEmphasisLinkColour);
+		g2.drawLine(lineStartX, featureY, lineEndX , labelY - fontHeight / 2);
 		
 		//draw a rounded rectangle as a background for the label
 		g2.setColor(Colors.highlightedFeatureLabelBackgroundColour);
@@ -90,10 +117,6 @@ public class LabelDisplayManager
 		g2.setColor(Colors.highlightedFeatureLabelColour);
 		// draw the label
 		g2.drawString(featureName, labelX, labelY);
-		
-		// draw a line from the marker to the label
-		g2.setColor(Colors.strongEmphasisLinkColour);
-		g2.drawLine(lineStartX, featureY, lineEndX, labelY - fontHeight / 2);
 		
 		// set the feature colour
 		g2.setColor(Colors.highlightedFeatureColour);

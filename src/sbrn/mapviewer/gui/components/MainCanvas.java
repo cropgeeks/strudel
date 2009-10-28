@@ -157,8 +157,16 @@ public class MainCanvas extends JPanel
 		
 		//this just draws a label for a single highlighted features -- need to be drawn at the very end to be on top of everything else
 		if (drawHighlightFeatures)
-		{
-			LabelDisplayManager.drawHighlightedFeatureLabel(g, winMain.fatController.highlightFeature);
+		{			
+			if(winMain.fatController.highlightFeatureHomolog != null)
+			{
+				LabelDisplayManager.drawHighlightedFeatureLabel(g, winMain.fatController.highlightFeatureHomolog, winMain.fatController.highlightFeature);
+				LabelDisplayManager.drawHighlightedFeatureLabel(g, winMain.fatController.highlightFeature,winMain.fatController.highlightFeatureHomolog);
+			}
+			else
+			{
+				LabelDisplayManager.drawHighlightedFeatureLabel(g, winMain.fatController.highlightFeature, null);
+			}
 		}
 	}
 	
@@ -287,7 +295,7 @@ public class MainCanvas extends JPanel
 				{
 					gChromoMap.isShowingOnCanvas = false;
 				}
-
+				
 				//check whether the arrays that hold the data for drawing features etc have been inited
 				//if not, do it now (only needs to be done here once, at startup)
 				if (!gChromoMap.arraysInitialized)
@@ -323,7 +331,7 @@ public class MainCanvas extends JPanel
 		
 		//we also want to check whether there are any links to display that are to be highlighted after a name based search for
 		//features and links originating from them
-		if (drawHighlightFeatures)
+		if (drawHighlightFeatures && winMain.fatController.highlightFeatureHomolog != null && MapViewer.winMain.dataContainer.gMapSets.size() > 1)
 		{
 			linkDisplayManager.drawHighlightedLink(g2, winMain.fatController.highlightFeature, winMain.fatController.highlightFeatureHomolog, true);
 		}
@@ -334,7 +342,7 @@ public class MainCanvas extends JPanel
 		{
 			LabelDisplayManager.drawLabelsForFoundFeatures(g2);
 		}
-
+		
 		//last we want to draw the chromosome indexes so they are painted on top of all other stuff
 		for (GMapSet gMapSet : winMain.dataContainer.gMapSets)
 		{

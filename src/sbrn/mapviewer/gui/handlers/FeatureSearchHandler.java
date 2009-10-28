@@ -118,7 +118,7 @@ public class FeatureSearchHandler
 				MapViewer.winMain.mainCanvas.updateCanvas(true);
 				
 				//now put the results into the JTable held by the results panel
-				setupResultsTable(containedFeatures);
+				updateResultsTable(containedFeatures);
 				
 				//hide the dialog
 				MapViewer.winMain.ffInRangeDialog.setVisible(false);
@@ -149,19 +149,14 @@ public class FeatureSearchHandler
 			String [] allNames = new String[0];
 			String input =  findFeaturesDialog.ffPanel.getFFTextArea().getText();	
 			//parse inputFile 
-			allNames = input.split("\n");			
+			allNames = input.split("\n");	
+			
 			//get the corresponding feature objects
 			Vector<Feature> features = new Vector<Feature>(allNames.length);
 			for (int i = 0; i < allNames.length; i++)
 			{
-				features.add(Utils.getFeatureByName(allNames[i]));
+				features.add(Utils.getFeatureByName(allNames[i].trim()));
 			}
-		
-			//now put the results into the JTable held by the results panel
-			setupResultsTable(features);
-
-			//hide the control panel for the results table as it is not needed with this kind of results
-			MapViewer.winMain.foundFeaturesTableControlPanel.setVisible(false);
 			
 			//we have found features
 			if (features.size() > 0)
@@ -171,6 +166,12 @@ public class FeatureSearchHandler
 				MapViewer.winMain.splitPane.setDividerSize(Constants.SPLITPANE_DIVIDER_SIZE);
 				int newDividerLocation = (int) (MapViewer.winMain.getHeight() * 0.66f);
 				MapViewer.winMain.splitPane.setDividerLocation(newDividerLocation);
+				
+				//now put the results into the JTable held by the results panel
+				updateResultsTable(features);
+				
+				//hide the control panel for the results table as it is not needed with this kind of results
+				MapViewer.winMain.foundFeaturesTableControlPanel.setVisible(false);
 				
 				// validate and repaint the canvas so it knows it has been resized
 				MapViewer.winMain.validate();
@@ -192,28 +193,14 @@ public class FeatureSearchHandler
 	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	//insert the results into the JTable held by the results panel
-	private static void setupResultsTable(Vector<Feature> containedFeatures)
+	private static void updateResultsTable(Vector<Feature> features)
 	{
-		//if we are in single genome mode we will not have any links so we need to use a different kind of table model
-		TableRowSorter sorter = null;
+		LinkedList<Link> linksFound = Utils.getLinksForFeatures(features);
+
+		LinkedList<ResultsTableEntry> tableEntries = TableEntriesGenerator.makeTableEntries(features);
+		HomologResultsTableModel homologResultsTableModel = new HomologResultsTableModel(tableEntries);
 		ResultsTable resultsTable = (ResultsTable)MapViewer.winMain.ffResultsPanel.getFFResultsTable();
-		if(MapViewer.winMain.dataContainer.gMapSets.size() == 1)
-		{
-			LinklessFeatureTableModel linklessFeatureTableModel = new LinklessFeatureTableModel(containedFeatures);
-			resultsTable.setModel(linklessFeatureTableModel);
-			//set up sorting/filtering capability
-			sorter = new TableRowSorter<LinklessFeatureTableModel>(linklessFeatureTableModel);
-		}
-		else
-		{			
-			LinkedList<Link> linksFound = Utils.getLinksForFeatures(containedFeatures);
-			HomologResultsTableModel homologResultsTableModel = new HomologResultsTableModel(linksFound);
-			resultsTable.setModel(homologResultsTableModel);
-			//set up sorting/filtering capability
-			sorter = new TableRowSorter<HomologResultsTableModel>(homologResultsTableModel);				
-		}
-		resultsTable.addModelSpecificTableListeners();
-		MapViewer.winMain.ffResultsPanel.getFFResultsTable().setRowSorter(sorter);
+		resultsTable.setModel(homologResultsTableModel);
 		
 		//size the columns and the dialog containing the table appropriately
 		((ResultsTable)MapViewer.winMain.ffResultsPanel.getFFResultsTable()).initColumnSizes();

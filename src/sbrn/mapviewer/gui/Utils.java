@@ -160,7 +160,6 @@ public class Utils
 			{
 				Link link = new Link(f1, f2);
 				linkSet.addLink(link);
-//				System.out.println("link added to linkset: " + link.toString());
 								
 				// We also add the Link to each Feature so the Feature
 				// itself knows about the links it has with others
@@ -190,21 +189,16 @@ public class Utils
 		LinkedList<Feature> list = new LinkedList<Feature>();
 		Feature feature = null;
 		
-		//System.out.println("looking for feature " + name);
-		
 		try
 		{
 			for (MapSet mapset: mapSets)
 			{
-				//System.out.println("searching mapset " + mapset.getName());
 				for (ChromoMap map: mapset.getMaps())
 				{ 
-					//System.out.println("searching map " + map.getName());
 					feature = map.getFeature(name);
 					if (feature != null)
 					{
 						list.add(feature);
-						//System.out.println("feature found");
 					}
 					else
 					{

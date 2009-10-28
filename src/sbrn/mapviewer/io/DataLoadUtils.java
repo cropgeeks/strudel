@@ -22,7 +22,8 @@ public class DataLoadUtils
 		{
 			inputFileName = getUserInputFile();
 		}
-		else
+		//load example data if user has not specified own data or dragged and dropped a file
+		else if(!MapViewer.winMain.fatController.loadOwnData && !MapViewer.winMain.fatController.dragAndDropDataLoad)
 		{
 			// load the example data that ships with the application
 			String workingDir = System.getProperty("user.dir");

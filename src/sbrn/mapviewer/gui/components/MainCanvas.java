@@ -201,7 +201,7 @@ public class MainCanvas extends JPanel
 		for (GMapSet gMapSet : winMain.dataContainer.gMapSets)
 		{
 			checkMarkerPaintingThresholds(gMapSet);
-			checkForLabelDrawing(gMapSet);
+//			checkForLabelDrawing(gMapSet);
 			
 			//calculate the x position for this genome
 			int numGenomes = winMain.dataContainer.gMapSets.size();

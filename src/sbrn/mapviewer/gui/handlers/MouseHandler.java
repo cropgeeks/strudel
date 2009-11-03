@@ -81,7 +81,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	
 	public void mouseExited(MouseEvent e)
 	{
-		
+		MapViewer.winMain.fatController.clearMouseOverLabels();
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -101,6 +101,11 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			{
 				// get the selected set first
 				GChromoMap selectedMap = Utils.getSelectedMap(winMain, Utils.getSelectedSet(e), mousePressedY);
+				
+				//clear any feature labels that might be hanging around here
+				selectedMap.drawMouseOverFeatures = false;
+				MapViewer.winMain.mainCanvas.updateCanvas(true);
+				
 				winMain.fatController.invertMap = selectedMap;
 				winMain.chromoContextPopupMenu.show(winMain.mainCanvas, e.getX(), e.getY());		
 			}
@@ -139,7 +144,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			}
 		}
 		//CTRL+click on a chromosome means display all links between this and all other clicked chromos
-		else if (isMetaClick(e))
+		else if (isMetaClick(e) && !e.isShiftDown())
 		{
 			winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(e.getX(), e.getY(), true);
 		}

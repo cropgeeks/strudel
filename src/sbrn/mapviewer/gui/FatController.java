@@ -156,6 +156,26 @@ public class FatController
 		MapViewer.winMain.toolbar.eValueSpinner.setValue(0);
 		
 	}
+	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	//restores the original view to what it looked like after loading the current dataset
+	//without clearing any results
+	public void clearMouseOverLabels()
+	{		
+		for(GMapSet gMapSet : winMain.dataContainer.gMapSets)
+		{
+			//for all maps within mapset
+			for(GChromoMap gMap: gMapSet.gMaps)
+			{			
+				//don't draw mouseover feature labels
+				gMap.drawMouseOverFeatures = false;
+			}			
+		}	
+
+		
+		//repaint
+		winMain.mainCanvas.updateCanvas(true);
+	}
 	
 	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
 	
@@ -190,6 +210,9 @@ public class FatController
 				
 				//don't draw selection rectangle
 				gMap.drawSelectionRect = false;
+				
+				//don't draw mouseover feature labels
+				gMap.drawMouseOverFeatures = false;
 			}			
 		}	
 		

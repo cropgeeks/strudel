@@ -8,7 +8,7 @@ import sbrn.mapviewer.gui.*;
 public class GenomeLabelPanel extends JPanel
 {
 	
-	int fontHeight = 10;
+	int fontHeight = 12;
 	
 	public GenomeLabelPanel()
 	{

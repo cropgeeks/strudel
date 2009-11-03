@@ -4,13 +4,11 @@ features to implement -- general:
 
 - Mac mouse control support
 - dynamically determine suitable number of distance markers to display depending on the zoom level
-- name panel with labels for the genomes
 - show loci as filled rectangles rather than lines at higher zoom levels
 - colour selector for user 
 - separate data loading for left and right
 - x-y plots of marker positions in both genomes (Oxford grid) for a given combination of chromosomes
-- more flexible way of laying out genomes -- want to be able to show a genome more than once, and also want full functionality for all genomes regardless of whether they are classed as target or reference (do away with this distinction completely)
-
+- more flexible way of laying out genomes -- want to be able to show a genome more than once
 
 ================================
 
@@ -39,6 +37,7 @@ Dave's list:
 	* have feature range results table sortable by at least position of target features and position of reference features but also chromosome
 	* as a user defined option, have separate result tables for homologies with each reference genome and combine these in a tabbed pane
 	* auto-arrange function for inverting all features on a chromosome in the same order as its homologs on another chromosome (or manual or combination of both?)
+- svg/ps/pdf export
 
 
 

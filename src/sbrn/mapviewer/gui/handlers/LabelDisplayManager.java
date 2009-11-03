@@ -167,7 +167,19 @@ public class LabelDisplayManager
 				int labelX = mapSetX + chromoWidth + lineLength; // this is where the label is drawn from
 				int lineStartX = mapSetX + chromoWidth; // this is where the line to the label is drawn from
 				int lineEndX = labelX - 2; // the label connects to the line here
-				g2.setColor(Colors.foundFeatureLabelBackgroundColour);
+
+				if (isMouseOver)
+				{
+					//set the colour to highlight feature
+					g2.setColor(Colors.highlightedFeatureColour);
+				}
+				else
+				{
+					//set the colour to draw feature normally
+					g2.setColor(Colors.featureColour);
+				}
+				// draw a line to highlight the marker on the chromosome itself
+				g2.drawLine(mapSetX, featureY, mapSetX + MapViewer.winMain.mainCanvas.chromoWidth - 1, featureY);				
 				
 				// draw a line from the marker to the label
 				g2.drawLine(lineStartX, featureY, lineEndX, labelY - fontHeight / 2);
@@ -184,18 +196,7 @@ public class LabelDisplayManager
 				// draw the label
 				g2.drawString(featureName, labelX, labelY);
 				
-				if (isMouseOver)
-				{
-					//set the colour to highlight feature
-					g2.setColor(Colors.highlightedFeatureColour);
-				}
-				else
-				{
-					//set the colour to draw feature normally
-					g2.setColor(Colors.featureColour);
-				}
-				// draw a line to highlight the marker on the chromosome itself
-				g2.drawLine(mapSetX, featureY, mapSetX + MapViewer.winMain.mainCanvas.chromoWidth - 1, featureY);
+
 				
 			}
 		}

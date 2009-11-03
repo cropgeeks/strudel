@@ -23,9 +23,13 @@ public class FindFeaturesInRangeAction extends AbstractAction
 		featuresInRangeDialog.ffInRangePanel.getGenomeCombo().setSelectedIndex(0);
 		featuresInRangeDialog.ffInRangePanel.getChromoCombo().setSelectedIndex(0);
 		
+		//reset the main canvas
+		MapViewer.winMain.fatController.resetMainCanvasView();	
+		
 		//show the dialog
 		featuresInRangeDialog.setLocationRelativeTo(MapViewer.winMain);
 		featuresInRangeDialog.setVisible(true);
+
 	}
 	
 }

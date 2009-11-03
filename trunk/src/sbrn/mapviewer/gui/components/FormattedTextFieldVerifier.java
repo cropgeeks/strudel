@@ -1,5 +1,7 @@
 package sbrn.mapviewer.gui.components;
 
+import java.text.*;
+import java.util.*;
 import javax.swing.*;
 import javax.swing.JFormattedTextField.*;
 import sbrn.mapviewer.*;
@@ -27,11 +29,21 @@ public class FormattedTextFieldVerifier extends InputVerifier
 			AbstractFormatter formatter = ftf.getFormatter();
 			if (formatter != null)
 			{
-				String text = ftf.getText();
 				
-				if(!isUpperThreshold && (Float.parseFloat(text) >= threshold))
+				NumberFormat nf = NumberFormat.getInstance(Locale.getDefault());
+				float value = 0;
+				try
+				{
+					value = nf.parse(ftf.getText()).floatValue();
+				}
+				catch (ParseException e)
+				{
+					e.printStackTrace();
+				}
+				
+				if(!isUpperThreshold && (value >= threshold))
 					return true;
-				else if(isUpperThreshold && (Float.parseFloat(text) <= threshold))
+				else if(isUpperThreshold && (value <= threshold))
 					return true;
 				
 				TaskDialog.error(negNumberMessage, "Close");

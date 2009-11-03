@@ -71,6 +71,9 @@ public class DataLoadThread extends Thread
 				// revalidate the GUI
 				MapViewer.winMain.validate();
 				
+				//repaint the main canvas
+				MapViewer.winMain.mainCanvas.updateCanvas(true);
+				
 				// bring the focus back on the main window -- need this in case we had an overview dialog open (which then gets focus)
 				MapViewer.winMain.requestFocus();
 			}

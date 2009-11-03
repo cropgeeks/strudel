@@ -1,6 +1,7 @@
 package sbrn.mapviewer;
 
 
+import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.logging.*;
@@ -32,6 +33,9 @@ public class MapViewer
 	private static File prefsFile = new File(System.getProperty("user.home"), ".strudel.xml");
 	private static Prefs prefs = new Prefs();
 	public static WinMain winMain;	
+	
+	// Returns value for "CTRL" under most OSs, and the "apple" key for OS X
+	public static int ctrlMenuShortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 	
 	
 	//true when data is loaded

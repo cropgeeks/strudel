@@ -195,7 +195,7 @@ public class CanvasZoomHandler
 		if (selectedMap.isShowingOnCanvas)
 		{
 			mainCanvas.checkMarkerPaintingThresholds(selectedSet);
-			mainCanvas.checkForLabelDrawing(selectedSet);
+//			mainCanvas.checkForLabelDrawing(selectedSet);
 		}
 
 		// repaint the canvas

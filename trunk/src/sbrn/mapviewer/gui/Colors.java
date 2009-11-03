@@ -7,14 +7,15 @@ public class Colors
 
 	//genomes and chromosomes
 	public static Color targetGenomeColour = new Color(80,0,0);
-	public static Color referenceGenomeColour = new Color(0, 50, 155);
+	public static Color referenceGenomeColour = new Color(0, 50, 155);	
+//	public static Color [] genomeColours = new Color [] {new Color(0, 40, 155),new Color(0, 80, 155), new Color(0, 120,155), new Color(0,160,155)};
 	public static Color outlineColour = Color.white;
 	public static Color chromosomeCenterColour = new Color(130, 130, 130);	
 	public static Color chromosomeInversionColour = new Color(0,36,18);
 	
 	//colours for links
 	public static Color linkColour = new Color(120,120,120);	
-	public static Color strongEmphasisLinkColour = new Color(255,0, 0);	
+	public static Color strongEmphasisLinkColour = new Color(130,0, 0);	
 	public static Color mildEmphasisLinkColour =  Color.WHITE;
 
 	//various labels
@@ -31,7 +32,7 @@ public class Colors
 	//backgrounds
 	public static Color featureLabelBackgroundColour = Color.white;
 	public static Color foundFeatureLabelBackgroundColour = Color.lightGray;	
-	public static Color highlightedFeatureLabelBackgroundColour = new Color(255, 0,0);
+	public static Color highlightedFeatureLabelBackgroundColour = strongEmphasisLinkColour;
 	public static Color distanceMarkerBackgroundColour = new Color(70,70,70);
 	
 	//regions

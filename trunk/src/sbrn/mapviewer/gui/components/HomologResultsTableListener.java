@@ -106,7 +106,7 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 			Feature feature = Utils.getFeatureByName(featureName);
 			MapSet 	mapSet = feature.getOwningMapSet();
 	
-			Utils.visitURL(mapSet.getURL());
+			Utils.visitURL(mapSet.getURL() + feature.getName());
 			
 		}
 

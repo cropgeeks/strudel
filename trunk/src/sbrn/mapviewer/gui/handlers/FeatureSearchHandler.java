@@ -26,7 +26,7 @@ public class FeatureSearchHandler
 		float intervalStart = ((Number)findFeaturesInRangeDialog.ffInRangePanel.getRangeStartSpinner().getValue()).floatValue();
 		float intervalEnd = ((Number)findFeaturesInRangeDialog.ffInRangePanel.getRangeEndSpinner().getValue()).floatValue();
 		
-		findAndDisplayFeaturesInRange(genome, chromosome, intervalStart, intervalEnd);
+		findAndDisplayFeaturesInRange(genome, chromosome, intervalStart, intervalEnd, false);
 	}
 	
 	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -36,18 +36,16 @@ public class FeatureSearchHandler
 		MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(true);
 		
 		GChromoMap gMap = MapViewer.winMain.fatController.selectionMap;	
-		findAndDisplayFeaturesInRange(gMap.owningSet.name, gMap.name, gMap.relativeTopY, gMap.relativeBottomY);
+		findAndDisplayFeaturesInRange(gMap.owningSet.name, gMap.name, gMap.relativeTopY, gMap.relativeBottomY, true);
 	}
 	
 	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	private  static void findAndDisplayFeaturesInRange(String genome, String chromosome,float intervalStart, float intervalEnd)
+	private  static void findAndDisplayFeaturesInRange(String genome, String chromosome,float intervalStart, float intervalEnd, boolean isCanvasSelection)
 	{
 		try
 		{		
-			//first reset the canvas to its default view
-			MapViewer.winMain.fatController.resetMainCanvasView();		
-			
+
 			//get the chromo object
 			GChromoMap gChromoMap = Utils.getGMapByName(chromosome,genome);
 			ChromoMap chromoMap = gChromoMap.chromoMap;
@@ -87,6 +85,12 @@ public class FeatureSearchHandler
 				gChromoMap.highlightedRegionEnd = intervalEnd;
 				gChromoMap.highlightChromomapRegion = true;
 				
+				//turn off potential mouseover highlight feature label drawing
+				gChromoMap.drawMouseOverFeatures = false;
+
+				//don't draw selection rectangle
+				gChromoMap.drawSelectionRect = false;
+				
 				//resize the split pane so we can see the results table
 				MapViewer.winMain.splitPane.setDividerSize(Constants.SPLITPANE_DIVIDER_SIZE);
 				int newDividerLocation = (int) (MapViewer.winMain.getHeight() - MapViewer.winMain.foundFeaturesTableControlPanel.getMinimumSize().getHeight());
@@ -96,8 +100,9 @@ public class FeatureSearchHandler
 				MapViewer.winMain.validate();
 				MapViewer.winMain.mainCanvas.updateCanvas(true);
 				
-				//now zoom into that range on the chromosome
-				MapViewer.winMain.mainCanvas.zoomHandler.zoomIntoRange(gChromoMap, intervalStart, intervalEnd, false);
+				//now zoom into that range on the chromosome, but only if we got here through the dialog rather than the canvas selection route
+				if(!isCanvasSelection)
+					MapViewer.winMain.mainCanvas.zoomHandler.zoomIntoRange(gChromoMap, intervalStart, intervalEnd, false);
 				
 				//we also need to set the labels on the control panel for the results to have the appropriate text
 				FoundFeaturesTableControlPanel foundFeaturesTableControlPanel = MapViewer.winMain.foundFeaturesTableControlPanel;

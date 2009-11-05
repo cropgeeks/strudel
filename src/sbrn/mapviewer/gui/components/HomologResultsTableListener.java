@@ -25,8 +25,6 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 	
 	public void valueChanged(ListSelectionEvent e)
 	{
-		MapViewer.logger.fine("=========valueChanged");
-		
 		if (e.getValueIsAdjusting())
 		{
 			return;
@@ -64,12 +62,15 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 	{
 		// check whether we are in any of the cells containing hyperlinks
 		point.setLocation(e.getX(), e.getY());
+		int row = resultsTable.rowAtPoint(point);
 		int col = resultsTable.columnAtPoint(point);
 		
 		// if we are, change the cursor to a hand
 		HomologResultsTableModel homologResultsTableModel = (HomologResultsTableModel) resultsTable.getModel();
-		if (col == homologResultsTableModel.findColumn(homologResultsTableModel.homologColumnLabel) ||
-						col == homologResultsTableModel.findColumn(homologResultsTableModel.targetNameColumnLabel))
+		boolean isURLColumn = col == homologResultsTableModel.findColumn(homologResultsTableModel.homologColumnLabel) ||
+		col == homologResultsTableModel.findColumn(homologResultsTableModel.targetNameColumnLabel);
+
+		if (isURLColumn && resultsTable.cellHasURLSet(row, col))
 		{
 			resultsTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		}
@@ -106,8 +107,8 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 			Feature feature = Utils.getFeatureByName(featureName);
 			MapSet 	mapSet = feature.getOwningMapSet();
 	
-			Utils.visitURL(mapSet.getURL() + feature.getName());
-			
+			if(mapSet.getURL() != null)
+				Utils.visitURL(mapSet.getURL() + feature.getName());			
 		}
 
 		resultsTable.isFilterEvent = false;

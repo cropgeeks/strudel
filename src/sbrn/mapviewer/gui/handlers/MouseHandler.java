@@ -49,8 +49,6 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	// used for selecting chromosomes for display of links and for zooming
 	public void mouseClicked(MouseEvent e)
 	{
-		MapViewer.logger.finest("mouse clicked");
-		
 		//place the focus on this window so we can listen to keyboard events too
 		winMain.mainCanvas.requestFocusInWindow();
 		
@@ -159,8 +157,6 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	
 	public void mouseReleased(MouseEvent e)
 	{
-		MapViewer.logger.finest("mouse released at " + e.getY());
-		
 		//check whether this is a popup request -- needs to be done both in mousePressed and in mouseReleased due to platform dependent nonsense
 		if (e.isPopupTrigger())
 		{
@@ -208,7 +204,6 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		}
 		
 		//turn antialiasing on and repaint		
-		MapViewer.logger.finest("repainting after mouse released");
 		winMain.mainCanvas.drawSelectionRect = false;
 
 		AntiAliasRepaintThread antiAliasRepaintThread = new AntiAliasRepaintThread();
@@ -222,10 +217,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	{
 		int x = e.getX();
 		int y = e.getY();
-		
-		MapViewer.logger.finest("mouseDragged at (x,y) = "+ x + "," + y);
-		MapViewer.logger.finest("last mouse pressed coords (mousePressedX, mousePressedY) = " + mousePressedX + "," + mousePressedY);
-		
+
 		// figure out which genome this event pertains to (i.e. which section of the canvas on x are we in)
 		int index = Utils.getSelectedSet(e);
 		GMapSet gMapSet = MapViewer.winMain.dataContainer.gMapSets.get(index);
@@ -244,10 +236,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			//this is the amount by which we drag the canvas at a time
 			// a fixed amount seems to work best as it moves the canvas the same way across all zoom levels
 			int distanceDragged = Math.abs(lastMouseDragYPos - y);
-			
-			MapViewer.logger.finest("distanceDragged = " + distanceDragged);
-			MapViewer.logger.finest("lastMouseDragYPos when dragged = " + lastMouseDragYPos);
-			
+
 			// mouse is getting dragged up 
 			if (y < mouseDragPosY)
 			{

@@ -88,9 +88,7 @@ public class CMapImporter
 			}
 			f.setStart(distance);
 			f.setStop(distance);
-			
-			MapViewer.logger.finest("new feature found: " + f.getName() + ", start: " + distance);
-			
+
 			try
 			{
 				// Feature aliases (if any)

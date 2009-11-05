@@ -119,9 +119,6 @@ public class FatController
 				gChromoMap.initArrays();
 			}
 		}
-
-		MapViewer.logger.finest(" done indexing position arrays");
-		MapViewer.logger.finest("time taken (nanos) = " + (System.nanoTime() - startTime));
 	}
 	
 
@@ -228,7 +225,6 @@ public class FatController
 	public void assembleRemainingGUIComps()
 	{	
 		winMain.setupRemainingComponents();
-		winMain.ffInRangeDialog.ffInRangePanel.initRemainingComponents();
 		guiFullyAssembled = true;
 	}
 	

@@ -21,8 +21,6 @@ public class DataLoadThread extends Thread
 			// data is loaded now -- check whether the user has cancelled
 			if (!MapViewer.winMain.fatController.dataLoadCancelled)
 			{
-				MapViewer.logger.fine("loading data in thread");
-
 				// load the data
 				// we do this by simply creating a new data container instance -- the actual data loading is done through this
 				MapViewer.winMain.dataContainer = new DataContainer(inputFile);
@@ -59,6 +57,10 @@ public class DataLoadThread extends Thread
 				{
 					//enables toolbar controls selectively
 					MapViewer.winMain.toolbar.enableControls(false);
+					//enable the comparative mode controls in the results table's control panel
+					MapViewer.winMain.foundFeaturesTableControlPanel.getFilterLabel().setEnabled(true);
+					MapViewer.winMain.foundFeaturesTableControlPanel.getGenomeFilterCombo().setEnabled(true);
+					MapViewer.winMain.foundFeaturesTableControlPanel.getShowHomologsCheckbox().setEnabled(true);
 				}
 				
 				// hide the data loading progress dialog
@@ -80,13 +82,8 @@ public class DataLoadThread extends Thread
 			// user has cancelled
 			else
 			{
-				MapViewer.logger.fine("data load cancelled");
+
 			}
-			
-			// check the memory situation
-			MapViewer.logger.fine("memory max (mb) = " + Runtime.getRuntime().maxMemory() / 1024 / 1024);
-			MapViewer.logger.fine("memory available = (mb) " + Runtime.getRuntime().freeMemory() / 1024 / 1024);
-			MapViewer.logger.fine("total JVM memory  = (mb) " + Runtime.getRuntime().totalMemory() / 1024 / 1024);
 			
 			// reset the cancel flag as the user might now want to try again
 			MapViewer.winMain.fatController.dataLoadCancelled = false;

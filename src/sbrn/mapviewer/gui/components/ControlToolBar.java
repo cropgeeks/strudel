@@ -201,8 +201,6 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		//toggle the link shape between straight, angled and curved
 		else if(e.getSource() == bCurves)
 		{		
-			MapViewer.logger.fine("\n\n++++++++++MapViewer.winMain.toolbar.currentLinkShapeType before = " + MapViewer.winMain.toolbar.currentLinkShapeType);
-			
 			//increment the currentLinkShapeType held by the tool bar or decrement as appropriate
 			if(linkShapeOrderAscending)
 				MapViewer.winMain.toolbar.currentLinkShapeType ++;
@@ -214,9 +212,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 				linkShapeOrderAscending = false;
 			if(currentLinkShapeType == 1)
 				linkShapeOrderAscending = true;
-			
-			MapViewer.logger.fine("MapViewer.winMain.toolbar.currentLinkShapeType after = " + MapViewer.winMain.toolbar.currentLinkShapeType);
-			
+
 			LinkShapeAnimator linkShapeAnimator = new LinkShapeAnimator(currentLinkShapeType);
 			linkShapeAnimator.start();	
 		}

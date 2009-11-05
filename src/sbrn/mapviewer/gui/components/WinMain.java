@@ -171,8 +171,6 @@ public class WinMain extends JFrame
 	//here we set up the components that we require at startup, before any data has been loaded
 	public void setupInitialComponents()
 	{
-		MapViewer.logger.fine("initing initial components in winMain");
-		
 		//the fat controller
 		fatController = new FatController(this);
 		
@@ -206,8 +204,6 @@ public class WinMain extends JFrame
 	//here we set up the components we cannot set up until data has been loaded
 	public void setupRemainingComponents()
 	{
-		MapViewer.logger.fine("setupRemainingComponents() in winMain");
-		
 		try
 		{		
 			//control panel for found features
@@ -248,6 +244,7 @@ public class WinMain extends JFrame
 			//these dialogs can only be instantiated now because they rely on data having been loaded previously
 			ffDialog = new FindFeaturesDialog();
 			ffInRangeDialog = new FindFeaturesInRangeDialog();
+			ffInRangeDialog.ffInRangePanel.initRemainingComponents();
 			
 			//assemble everything
 			
@@ -270,13 +267,9 @@ public class WinMain extends JFrame
 			{			
 				public void propertyChange(PropertyChangeEvent evt) 
 				{
-					MapViewer.logger.finest("========splitpane propertyChange");
-					MapViewer.logger.finest("splitpane resized -- updating canvas");
-					MapViewer.logger.finest("canvas size before resize event = " + MapViewer.winMain.mainCanvas.getHeight());
 					//refresh the main canvas
 					MapViewer.winMain.validate();
 					MapViewer.winMain.mainCanvas.updateCanvas(true);
-					MapViewer.logger.finest("canvas size after resize event = " + MapViewer.winMain.mainCanvas.getHeight());
 				}			
 			});
 			
@@ -308,8 +301,6 @@ public class WinMain extends JFrame
 	//needs to be done when users load different datasets in succession
 	public void reinitialiseDependentComponents()
 	{
-		MapViewer.logger.finest("reinitialiseDependentComponents()");
-		
 		//remove existing components
 		zoomControlAndGenomelabelContainer.remove(zoomControlContainerPanel);
 		for(OverviewCanvas overviewCanvas : overviewCanvases)
@@ -328,6 +319,8 @@ public class WinMain extends JFrame
 		zoomControlAndGenomelabelContainer.add(zoomControlContainerPanel, BorderLayout.CENTER);		
 		
 		initOverviewDialog();
+		
+		MapViewer.winMain.ffInRangeDialog.ffInRangePanel.initRemainingComponents();
 		
 		//the labels with the genome names need to be updated
 		genomeLabelPanel.repaint();

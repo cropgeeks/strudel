@@ -12,8 +12,6 @@ public class AntiAliasRepaintThread extends Thread
 	{
 		try{Thread.sleep(delayMillis);}catch(InterruptedException x){}
 
-		MapViewer.logger.fine("AntiAliasRepaintThread redraw");
-		
 		MapViewer.winMain.mainCanvas.antiAlias = true;
 		MapViewer.winMain.mainCanvas.updateCanvas(true);
 	}

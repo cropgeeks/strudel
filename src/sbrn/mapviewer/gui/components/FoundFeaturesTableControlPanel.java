@@ -71,13 +71,6 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 		});
 		
 		showHomologsCheckbox.setText("Show all links");
-		showHomologsCheckbox.addActionListener(new java.awt.event.ActionListener()
-		{
-			public void actionPerformed(java.awt.event.ActionEvent evt)
-			{
-				showHomologsCheckboxActionPerformed(evt);
-			}
-		});
 		showHomologsCheckbox.addChangeListener(new javax.swing.event.ChangeListener()
 		{
 			public void stateChanged(javax.swing.event.ChangeEvent evt)
@@ -119,11 +112,6 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 		layout.setVerticalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(layout.createSequentialGroup().add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel1).add(genomeLabel)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel2).add(chromoLabel)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel3).add(regionStartLabel)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel4).add(regionEndLabel)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel5).add(numberFeaturesLabel)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(filterLabel).add(genomeFilterCombo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(showLabelsCheckbox).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(showHomologsCheckbox)));
 	}// </editor-fold>
 	//GEN-END:initComponents
-	
-	private void showHomologsCheckboxActionPerformed(java.awt.event.ActionEvent evt)
-	{
-		// TODO add your handling code here:
-	}
 	
 	private void genomeFilterComboActionPerformed(java.awt.event.ActionEvent evt)
 	{
@@ -223,12 +211,12 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 	{
 		return showLabelsCheckbox;
 	}
-
+	
 	public javax.swing.JLabel getFilterLabel()
 	{
 		return filterLabel;
 	}
-
+	
 	public javax.swing.JComboBox getGenomeFilterCombo()
 	{
 		return genomeFilterCombo;

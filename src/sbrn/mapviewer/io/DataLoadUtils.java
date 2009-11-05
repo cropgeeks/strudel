@@ -56,8 +56,6 @@ public class DataLoadUtils
 		if(!openFilesPanel.getInputFileTF().getText().equals(""))
 			inputFileName = openFilesPanel.getInputFileTF().getText();				
 
-		MapViewer.logger.fine("inputFileName in checkUserInput = " + inputFileName);
-		
 		//check whether user has specified files correctly				
 		//missing target data file
 		if(inputFileName == null && MapViewer.winMain.fatController.loadOwnData)

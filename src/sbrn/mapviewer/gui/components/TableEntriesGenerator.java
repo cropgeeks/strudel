@@ -32,6 +32,9 @@ public class TableEntriesGenerator
 						resultsTableEntry.setHomologFeature(link.getFeature1());
 					}
 					
+					//set the link itself
+					resultsTableEntry.setLink(link);
+					
 					//add to our list
 					tableEntries.add(resultsTableEntry);
 				}

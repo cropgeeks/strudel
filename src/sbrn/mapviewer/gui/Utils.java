@@ -530,7 +530,6 @@ public class Utils
 	public static int getFPosOnScreenInPixels(GMapSet owningSet, ChromoMap chromoMap, float fPos)
 	{
 		int  y = chromoMap.getGChromoMap().yOnCanvas;
-		MapViewer.logger.fine(chromoMap.getGChromoMap().name + " y = " + y);
 		return Math.round((chromoMap.getGChromoMap().height / chromoMap.getStop()) * fPos) + chromoMap.getGChromoMap().yOnCanvas;
 	}
 	
@@ -538,8 +537,6 @@ public class Utils
 	
 	public static Vector<Feature> checkFeatureVisibility(Vector<Feature> features)
 	{
-		MapViewer.logger.fine("-------------checkFeatureVisibility");
-		MapViewer.logger.fine("features.size() before processing = " + features.size());
 		Vector<Feature> visibleFeatures = new Vector<Feature>();
 		
 		//for each feature in the array
@@ -555,25 +552,16 @@ public class Utils
 				float fStart = feature.getStart();
 				//convert this to an absolute position on the canvas in pixels
 				int pixelPos = getFPosOnScreenInPixels(gMapSet, cMap, fStart);
-//				//work out the topmost y coord of the genome as visible on the main canvas
-//				int upperCanvasMapSetIntersection = gMapSet.centerPoint - MapViewer.winMain.mainCanvas.getHeight() / 2;
-//				int lowerCanvasMapSetIntersection = gMapSet.centerPoint + MapViewer.winMain.mainCanvas.getHeight() / 2;
-//				
-//				MapViewer.logger.fine("upperCanvasMapSetIntersection = " + upperCanvasMapSetIntersection);
-//				MapViewer.logger.fine("lowerCanvasMapSetIntersection = " + lowerCanvasMapSetIntersection);
-				MapViewer.logger.fine("pixelPos for feature " +feature.getName() + " = " + pixelPos);
 
 				//check whether this position is currently showing on the canvas or not
 				if (pixelPos > 0 && pixelPos < MapViewer.winMain.mainCanvas.getHeight())
 				{
 					//if it is, add it
 					visibleFeatures.add(feature);
-					MapViewer.logger.fine("adding feature " +feature.getName() );
 				}
 			}
 		}
 
-		MapViewer.logger.fine("visibleFeatures.size() = " + visibleFeatures.size());
 		return visibleFeatures;
 	}
 

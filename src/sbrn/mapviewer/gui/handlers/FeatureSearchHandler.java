@@ -45,7 +45,6 @@ public class FeatureSearchHandler
 	{
 		try
 		{		
-
 			//get the chromo object
 			GChromoMap gChromoMap = Utils.getGMapByName(chromosome,genome);
 			ChromoMap chromoMap = gChromoMap.chromoMap;
@@ -100,22 +99,21 @@ public class FeatureSearchHandler
 				MapViewer.winMain.validate();
 				MapViewer.winMain.mainCanvas.updateCanvas(true);
 				
-				//now zoom into that range on the chromosome, but only if we got here through the dialog rather than the canvas selection route
-				if(!isCanvasSelection)
-					MapViewer.winMain.mainCanvas.zoomHandler.zoomIntoRange(gChromoMap, intervalStart, intervalEnd, false);
+				//now zoom into that range on the chromosome
+				MapViewer.winMain.mainCanvas.zoomHandler.zoomIntoRange(gChromoMap, intervalStart, intervalEnd, false);
 				
 				//we also need to set the labels on the control panel for the results to have the appropriate text
-				FoundFeaturesTableControlPanel foundFeaturesTableControlPanel = MapViewer.winMain.foundFeaturesTableControlPanel;
-				foundFeaturesTableControlPanel.setVisible(true);
-				foundFeaturesTableControlPanel.getGenomeLabel().setText(genome);
-				foundFeaturesTableControlPanel.getChromoLabel().setText(chromosome);
-				foundFeaturesTableControlPanel.getRegionStartLabel().setText(new Float(intervalStart).toString());
-				foundFeaturesTableControlPanel.getRegionEndLabel().setText(new Float(intervalEnd).toString());
-				foundFeaturesTableControlPanel.getNumberFeaturesLabel().setText(new Integer(containedFeatures.size()).toString());
+				FoundFeaturesTableControlPanel controlPanel = MapViewer.winMain.foundFeaturesTableControlPanel;
+				controlPanel.setVisible(true);
+				controlPanel.getGenomeLabel().setText(genome);
+				controlPanel.getChromoLabel().setText(chromosome);
+				controlPanel.getRegionStartLabel().setText(new Float(intervalStart).toString());
+				controlPanel.getRegionEndLabel().setText(new Float(intervalEnd).toString());
+				controlPanel.getNumberFeaturesLabel().setText(new Integer(containedFeatures.size()).toString());
 				
 				//sync the checkboxes states with those in the find dialog itself to make sure they show the same value
-				foundFeaturesTableControlPanel.getShowLabelsCheckbox().setSelected(MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().isSelected());
-				foundFeaturesTableControlPanel.getShowHomologsCheckbox().setSelected(MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().isSelected());
+				controlPanel.getShowLabelsCheckbox().setSelected(MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().isSelected());
+				controlPanel.getShowHomologsCheckbox().setSelected(MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().isSelected());
 				
 				//earmark the features for drawing on repaint
 				MapViewer.winMain.mainCanvas.drawFoundFeaturesInRange = true;	

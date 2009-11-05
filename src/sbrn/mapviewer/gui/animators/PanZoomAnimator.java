@@ -54,8 +54,6 @@ public class PanZoomAnimator extends Thread implements ItemListener
 	
 	public void run()
 	{
-		MapViewer.logger.fine("pan zooming");
-		
 		zoomHandler.isPanZoomRequest = true;
 		
 		//turn antialiasing off
@@ -113,8 +111,6 @@ public class PanZoomAnimator extends Thread implements ItemListener
 				//if this DOES exceed the max zoom factor
 				else
 				{
-					MapViewer.logger.fine("Prefs.showMaxZoomLevelMessage in run() = " + Prefs.showMaxZoomLevelMessage);
-					
 					if (Prefs.showMaxZoomLevelMessage)
 					{
 						TaskDialog.info("Maximum zoom level reached for map set " + selectedSet.name, "Close", maxZoomMessageCheckBox);
@@ -175,8 +171,6 @@ public class PanZoomAnimator extends Thread implements ItemListener
 	//here we handle user actions for the checkbox that decides whether we show the max zoom level reached message each time
 	public void itemStateChanged(ItemEvent e)
 	{
-		MapViewer.logger.fine("maxZoomMessageCheckBox itemStateChanged");
-		
 		if(e.getSource().equals(maxZoomMessageCheckBox))
 		{
 			if(maxZoomMessageCheckBox.isSelected())
@@ -184,8 +178,6 @@ public class PanZoomAnimator extends Thread implements ItemListener
 			else
 				Prefs.showMaxZoomLevelMessage = true;
 		}
-		
-		MapViewer.logger.fine("Prefs.showMaxZoomLevelMessage in itemStateChanged = " + Prefs.showMaxZoomLevelMessage);
 	}
 	
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------

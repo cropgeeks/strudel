@@ -3,11 +3,8 @@ package sbrn.mapviewer.gui.components;
 import java.awt.*;
 import java.awt.font.*;
 import java.util.*;
-
 import javax.swing.*;
 import javax.swing.table.*;
-
-import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.entities.*;
 
@@ -34,7 +31,7 @@ public class ResultsTable extends JTable
 		setDefaultRenderer(Float.class, new LeftAlignedRenderer());		
 		
 		//set up sorting/filtering capability
-		TableRowSorter sorter = new TableRowSorter(this.getModel());				
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(this.getModel());				
 		setRowSorter(sorter);
 		
 		//add listener
@@ -50,20 +47,15 @@ public class ResultsTable extends JTable
 	
 	public TableCellRenderer getCellRenderer(int row, int column)
 	{
-		boolean isURLColumn = false;
-		if(getModel().getClass().getName().equals("sbrn.mapviewer.gui.components.HomologResultsTableModel"))
-		{
-			if (column == ((HomologResultsTableModel)getModel()).findColumn(HomologResultsTableModel.homologColumnLabel) ||
-							column == ((HomologResultsTableModel)getModel()).findColumn(HomologResultsTableModel.targetNameColumnLabel))
-				isURLColumn = true;
-		}
-		else if (getModel().getClass().getName().equals("sbrn.mapviewer.gui.components.LinklessFeatureTableModel"))
-		{
-			if (column == ((LinklessFeatureTableModel)getModel()).findColumn(LinklessFeatureTableModel.featureNameColumnLabel))
-				isURLColumn = true;
-		}
+		HomologResultsTableModel model = (HomologResultsTableModel)getModel();
 		
-		if(isURLColumn)
+		//find out whether user clicked on column potentially containing a URL
+		boolean isURLColumn = false;		
+		if (column == (model.findColumn(HomologResultsTableModel.homologColumnLabel)) ||
+						column == (model.findColumn(HomologResultsTableModel.targetNameColumnLabel)))
+			isURLColumn = true;
+
+		if(isURLColumn && cellHasURLSet(row, column))
 			return hyperlinkCellRenderer;
 		
 		return super.getCellRenderer(row, column);
@@ -98,8 +90,7 @@ public class ResultsTable extends JTable
 			}
 			
 		}		
-		MapViewer.logger.fine("num new features extracted = " + newFeatures.size());
-		
+
 		//add the new features/links to the table's data model
 		homologResultsTableModel.tableEntries.addAll(0, TableEntriesGenerator.makeTableEntries(newFeatures));
 		
@@ -244,6 +235,29 @@ public class ResultsTable extends JTable
 		}
 		return width;
 	}
+	
+	//	---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	//checks whether mapset with feature in cell in this table at row,column has a URL or not
+	public boolean cellHasURLSet(int row, int column)
+	{
+		HomologResultsTableModel model = (HomologResultsTableModel)getModel();
+		
+		//get the feature that was clicked on
+		Feature feature = null;
+		if(column == model.findColumn(HomologResultsTableModel.targetNameColumnLabel))
+			feature = model.tableEntries.get(row).getTargetFeature();
+		else if (column == model.findColumn(HomologResultsTableModel.homologColumnLabel))
+			feature = model.tableEntries.get(row).getHomologFeature();
+		
+		//find out whether the mapset containing the feature that was clicked on actually had a URL supplied
+		boolean urlAvailable = false;
+		if(feature != null)
+			urlAvailable = feature.getOwningMapSet().getURL() != null;
+		
+		return urlAvailable;
+	}
+	
 	
 	//	---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	

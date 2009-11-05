@@ -35,8 +35,6 @@ public class DataContainer
 	
 	public DataContainer(File inputFile)
 	{
-		MapViewer.logger.fine("============== making new data container");
-		MapViewer.logger.fine("num mapsets prior to initing = " + gMapSets.size());
 		loadDataFromSingleFile(inputFile);
 		setUpGMapSets();
 	}
@@ -45,27 +43,13 @@ public class DataContainer
 	
 	// Loads data from file using the object data model; this will populate all the relevant MapSet and LinkSet objects.
 	public void loadDataFromSingleFile(File inputFile)
-	{
-		MapViewer.logger.fine("initing new dataset");
-		MapViewer.logger.fine("loadOwnData = " + MapViewer.winMain.fatController.loadOwnData);
-		
+	{		
 		try
 		{		
 			SingleFileImporter singleFileImporter = new SingleFileImporter();
 			singleFileImporter.parseCombinedFile(inputFile);
 			allMapSets = singleFileImporter.getAllMapSets();
 			allLinkSets = singleFileImporter.getAllLinkSets();
-			
-			for (MapSet mapSet : allMapSets)
-			{
-				MapViewer.logger.fine(mapSet.getName());
-			}
-			
-			MapViewer.logger.fine("allLinkSets.size() in DC  = " + allLinkSets.size());
-			for (LinkSet linkSet : allLinkSets)
-			{
-				MapViewer.logger.fine(linkSet.getMapSets().get(0).getName() + ", " + linkSet.getMapSets().get(1).getName());
-			}
 		}
 		catch (Exception e)
 		{
@@ -80,7 +64,6 @@ public class DataContainer
 	// initialises the genome objects we want to draw
 	public void setUpGMapSets()
 	{
-		MapViewer.logger.fine("setting up genomes");
 		// make new GMapSets from the map sets passed in and add them to the list
 		// the order is significant here
 		// if we have no reference mapsets

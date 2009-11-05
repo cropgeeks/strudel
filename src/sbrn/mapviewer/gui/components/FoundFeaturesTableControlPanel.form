@@ -136,7 +136,6 @@
         <Property name="text" type="java.lang.String" value="Show all links"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="showHomologsCheckboxActionPerformed"/>
         <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="showHomologsCheckboxStateChanged"/>
       </Events>
     </Component>

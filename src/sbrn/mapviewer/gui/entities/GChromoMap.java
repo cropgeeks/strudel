@@ -253,7 +253,7 @@ public class GChromoMap
 				g2.setColor(Color.getHSBColor(hsbCentreColour[0], hsbCentreColour[1], undersideBrightness));
 				g2.fill(bottomEllipse2D);
 			}
-
+			
 			// now draw features and labels as required
 			if (owningSet.paintAllMarkers && isShowingOnCanvas)
 			{
@@ -287,14 +287,14 @@ public class GChromoMap
 		
 		if (owningSet.zoomFactor >=  distanceMarkerZoomThreshold && !inversionInProgress)
 		{
-			MapViewer.logger.finest("drawing distance markers for map " + name);
-			
 			//the number of markers we want to draw at any one time, regardless of our zoom level
 			float numMarkers = Constants.numDistanceMarkers;
 			
 			// this is the number of pixels by which the markers get spaced
 			float interval = owningSet.chromoHeight / numMarkers;
 			float currentY = y;
+			if(isFullyInverted)
+				currentY = y + height;
 			
 			// this is the numerical amount by which we want to separate the marker values
 			// this gets scaled by the maximum value at the chromosome end and can be in
@@ -338,6 +338,9 @@ public class GChromoMap
 			{
 				//the label we want to draw
 				String label = String.valueOf(nf.format(currentVal));
+				if(isFullyInverted)
+					label = String.valueOf(nf.format(Math.abs(currentVal)));
+				
 				int stringWidth = fm.stringWidth(label); 
 				
 				//x coords
@@ -364,9 +367,17 @@ public class GChromoMap
 				//draw the label
 				g2.drawString(label, labelX, labelY);
 				
-				// increment
-				currentY += interval;
-				currentVal += increment;
+				// increment/decrement
+				if(isFullyInverted)
+				{
+					currentY -= interval;
+					currentVal -= increment;
+				}
+				else
+				{
+					currentY += interval;
+					currentVal += increment;
+				}
 			}
 		}
 	}
@@ -437,13 +448,11 @@ public class GChromoMap
 	// initialises the arrays we need for fast drawing
 	public void initArrays()
 	{
-		MapViewer.logger.finest("MapViewer.winMain.dataContainer.gMapSetList.size() = " + MapViewer.winMain.dataContainer.gMapSets.size());
-		
 		if(true)
 		{		
 			// init the arrays that hold ALL the features for this map
 			int numFeatures = chromoMap.countFeatures();
-
+			
 			allLinkedFeatures = new Feature[numFeatures];
 			allLinkedFeaturePositions = new int[numFeatures];
 			Vector<Feature> featureList = chromoMap.getFeatureList();
@@ -463,7 +472,7 @@ public class GChromoMap
 					//scale this by the current map height to give us a position in pixels, between zero and the chromosome height
 					//then store this value in the array we use for drawing
 					allLinkedFeaturePositions[i] =Utils.convertRelativeFPosToPixels(owningSet, chromoMap, start);
-
+					
 					//if the map is inverted we need to store the inverse of this value i.e. the map end value minus the feature position
 					if(isFullyInverted || isPartlyInverted)
 					{
@@ -484,9 +493,6 @@ public class GChromoMap
 	// draw the markers for the features
 	private void drawLinkedFeatures(Graphics2D g2)
 	{
-		MapViewer.logger.fine("drawing linked features for map " + name);
-		MapViewer.logger.fine("allLinkedFeaturePositions.length = " + allLinkedFeaturePositions.length);
-		
 		if (allLinkedFeaturePositions != null)
 		{
 			g2.setColor(Colors.featureColour);
@@ -541,9 +547,6 @@ public class GChromoMap
 		//convert the absolute values of the y coords of the selection rectangle to relative ones (relative to the chromo) 
 		relativeTopY = (selectionRectTopY / chromoHeightOnSelection) * chromoMap.getStop();
 		relativeBottomY = (selectionRectBottomY / chromoHeightOnSelection) * chromoMap.getStop();
-		
-		MapViewer.logger.fine("relativeTopY = " + relativeTopY);
-		MapViewer.logger.fine("relativeBottomY = " + relativeBottomY);
 		
 		//now we need to convert them back to absolute ones that take into account the currrent height of the chromosome
 		//this is so we can zoom and still show the rectangle which then gets resized appropriately

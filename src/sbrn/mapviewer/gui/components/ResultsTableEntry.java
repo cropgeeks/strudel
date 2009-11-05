@@ -61,7 +61,9 @@ public class ResultsTableEntry
 	public String getLinkEValue()
 	{
 		if(link != null)
+		{
 			return String.valueOf(link.getBlastScore());
+		}
 		
 		return "";
 	}

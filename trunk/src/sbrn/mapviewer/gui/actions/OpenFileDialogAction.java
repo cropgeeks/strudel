@@ -18,8 +18,6 @@ public class OpenFileDialogAction extends AbstractAction
 	
 	public void actionPerformed(ActionEvent e)
 	{
-		MapViewer.logger.fine("action event triggered -- opening file");
-		
 		//open the file dialog
 		OpenFileDialog openFileDialog = MapViewer.winMain.openFileDialog;
 		openFileDialog.setLocationRelativeTo(MapViewer.winMain);

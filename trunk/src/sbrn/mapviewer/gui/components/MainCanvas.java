@@ -103,7 +103,6 @@ public class MainCanvas extends JPanel
 			// Do we need to create a new buffer (if the screen size has changed)
 			if (buffer == null || buffer.getWidth() != getWidth() || buffer.getHeight() != getHeight())
 			{
-				MapViewer.logger.fine("Creating buffer of " + ((getWidth()*getHeight()*3)/1024) + " kB");
 				buffer = (BufferedImage) createImage(getWidth(), getHeight());
 			}
 			
@@ -276,9 +275,7 @@ public class MainCanvas extends JPanel
 				// update its bounding rectangle (used for hit detection)
 				gChromoMap.boundingRectangle.setBounds(gChromoMap.x, gChromoMap.y,
 								gChromoMap.width, gChromoMap.height);
-				
-				MapViewer.logger.finest("gChromoMap.arraysInitialized = " + gChromoMap.arraysInitialized);
-				
+
 				if (canvasBounds.contains(gChromoMap.boundingRectangle) || canvasBounds.intersects(gChromoMap.boundingRectangle))
 				{
 					gChromoMap.isShowingOnCanvas = true;
@@ -406,8 +403,6 @@ public class MainCanvas extends JPanel
 	// used to scroll up and down the canvas
 	public void moveGenomeViewPort(GMapSet gMapSet, int newCenterPoint)
 	{
-		MapViewer.logger.fine("moveGenomeViewPort for " + gMapSet.name + " to centerpoint " + newCenterPoint);
-		
 		//the center point is an absolute value in pixels which is the offset from the top of the genome to the current
 		//point in the center of the screen on y		
 		//update the centerpoint to the new value

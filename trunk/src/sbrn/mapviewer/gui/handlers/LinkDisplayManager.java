@@ -38,13 +38,12 @@ public class LinkDisplayManager
 	GMapSet selectedSet = null;
 	
 	
-	//	=====================================curve'tor==============================================
+	//	=====================================c'tor==============================================
 	
 	public LinkDisplayManager(MainCanvas mainCanvas)
 	{
 		this.mainCanvas = mainCanvas;
 		makeTargetLinkSubSets();
-		//		precomputeAllLinks();
 	}
 	
 	//	=====================================methods===========================================
@@ -58,10 +57,7 @@ public class LinkDisplayManager
 			// first figure out which chromosome we are in
 			selectedMap = Utils.getSelectedMap(MapViewer.winMain.dataContainer.gMapSets, x, y);
 			selectedSet = selectedMap.owningSet;
-			
-			MapViewer.logger.info("selectedMap = " + selectedMap.name);
-			MapViewer.logger.info("selectedSet = " + selectedSet.name);
-			
+
 			// the click has hit a chromosome
 			if (selectedMap != null)
 			{
@@ -123,8 +119,7 @@ public class LinkDisplayManager
 	
 	// Draws the lines between a chromosome of the reference genome and all potential homologues in the compared genome
 	public void drawAllLinks(Graphics2D g2)
-	{
-		
+	{		
 		//only do this if we have at least genomes -- otherwise there are no links to deal with
 		if(MapViewer.winMain.dataContainer.gMapSets.size() > 1)
 		{			
@@ -282,11 +277,10 @@ public class LinkDisplayManager
 								}
 								else
 								{
-									MapViewer.logger.fine("link e-value is above BLAST threshold");
+
 								}
 							}
 						}
-						MapViewer.logger.fine("numLinksdrawn = " + numLinksdrawn);
 					}
 				}
 			}			
@@ -370,16 +364,33 @@ public class LinkDisplayManager
 					Feature f1 = link.getFeature1();
 					Feature f2 = link.getFeature2();
 					
-					Vector<Feature> featuresInRange = FeatureSearchHandler.featuresInRange;
+					//make a vector with the features in this link so we can test for their visibility
+					Vector<Feature> featuresInLink = new Vector<Feature>();
+					featuresInLink.add(f1);
+					featuresInLink.add(f2);
+					boolean bothFeaturesVisible = Utils.checkFeatureVisibility(featuresInLink).size() == 2;
 					
-					Color linkColour = Colors.mildEmphasisLinkColour;
+					Vector<Feature> featuresInRange = FeatureSearchHandler.featuresInRange;
 					
 					//check whether either of the features for this link are included in the found features list of their maps
 					// we also only want to draw this link if it has a BLAST e-value smaller than the cut-off currently selected by the user
-					if((featuresInRange.contains(f1) || featuresInRange.contains(f2) ) && link.getBlastScore() <= blastThreshold)							
+					boolean eValueBelowThreshold = (featuresInRange.contains(f1) || featuresInRange.contains(f2) ) && link.getBlastScore() <= blastThreshold;
+
+					if(eValueBelowThreshold)							
 					{
-						//draw the link
-						drawHighlightedLink(g2, f1, f2, false);	
+						if (Prefs.drawOnlyLinksToVisibleFeatures)
+						{
+							if(bothFeaturesVisible)
+							{
+								//draw the link
+								drawHighlightedLink(g2, f1, f2, false);	
+							}
+						}
+						else
+						{
+							//draw the link
+							drawHighlightedLink(g2, f1, f2, false);	
+						}
 					}
 				}
 			}
@@ -438,7 +449,6 @@ public class LinkDisplayManager
 				//add the vector as the value for this targetMap in the lookup table
 				// then add the list to the hashtable
 				linkSetLookup.put(targetMap, linkSets);
-				MapViewer.logger.info("adding to linkSetLookup targetMap = " + targetMap.getName()); 
 			}
 			else // it already exists, just retrieve it
 			{

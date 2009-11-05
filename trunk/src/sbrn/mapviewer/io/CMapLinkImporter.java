@@ -31,7 +31,6 @@ public class CMapLinkImporter
 	{ 
 		try
 		{
-			MapViewer.logger.fine("loadLinkSet()");
 			// We load feature links by scanning the data file. Other than the first
 			// line, expect to see one link (pair of features) per line
 			
@@ -74,8 +73,7 @@ public class CMapLinkImporter
 		{
 			e.printStackTrace();
 		}
-		
-		MapViewer.logger.fine("returning linkset of size " + linkSet.size());
+
 		if(linkSet.size() == 0 && MapViewer.winMain.dataContainer.gMapSets.size() > 1)
 		{
 			String message = "Linkset does not contain any links between the genomes specified.\n ";

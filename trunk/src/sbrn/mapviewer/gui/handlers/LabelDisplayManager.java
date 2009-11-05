@@ -310,8 +310,6 @@ public class LabelDisplayManager
 	//draw all labels for all features on this chromosome if this has been requested at the level of the mapset
 	public static void drawLabelsForAllVisibleFeatures(Graphics2D g2, GMapSet gMapSet)
 	{
-		MapViewer.logger.fine("drawLabelsForAllVisibleFeatures " + gMapSet.name);
-		
 		//combine all the features from the visible maps into one
 		Vector<Feature> combinedFeatures = new Vector<Feature>();
 		Vector<GChromoMap> gMaps = gMapSet.getVisibleMaps();

@@ -21,15 +21,6 @@ public class JoinMapImporter
 		JoinMapImporter importer = new JoinMapImporter(new File(args[0]));
 		
 		MapSet mapset = importer.loadMapSet();
-		
-		
-		for (ChromoMap map: mapset)
-		{
-			MapViewer.logger.fine("\n");
-			MapViewer.logger.fine(map.getName());
-			for (Feature feature: map)
-				MapViewer.logger.fine("  " + feature.getName() + "\t" + feature.getStart());
-		}
 	}
 	
 	public JoinMapImporter(File filename)
@@ -52,8 +43,6 @@ public class JoinMapImporter
 		String str = in.readLine();
 		while (str != null)
 		{
-			MapViewer.logger.fine(str);
-			
 			StringTokenizer st = new StringTokenizer(str);
 			
 			if (st.countTokens() == 2)

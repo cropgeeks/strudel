@@ -98,7 +98,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			if(mouseOverHandler.selectedMap != null)
 			{
 				// get the selected set first
-				GChromoMap selectedMap = Utils.getSelectedMap(winMain, Utils.getSelectedSet(e), mousePressedY);
+				GChromoMap selectedMap = Utils.getSelectedMap(winMain, Utils.getSelectedSetIndex(e), mousePressedY);
 				
 				//clear any feature labels that might be hanging around here
 				selectedMap.drawMouseOverFeatures = false;
@@ -125,18 +125,11 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			//otherwise -- if we clicked on the background -- clear all links displayed
 			else
 			{
-				for(GMapSet gMapSet : MapViewer.winMain.dataContainer.gMapSets)
-				{
-					//reset selected maps
-					gMapSet.selectedMaps.clear();
-					
-					//for all maps within mapset
-					for(GChromoMap gMap: gMapSet.gMaps)
-					{			
-						//clear the outline
-						gMap.drawHighlightOutline = false;
-					}
-				}
+				MapViewer.winMain.fatController.clearMapOutlines();
+				
+				//reset selected maps
+				MapViewer.winMain.fatController.selectedMaps.clear();
+								
 				winMain.mainCanvas.drawLinks = false;
 				winMain.mainCanvas.updateCanvas(true);
 			}
@@ -164,7 +157,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			if(mouseOverHandler.selectedMap != null)
 			{
 				// get the selected map first
-				GChromoMap selectedMap = Utils.getSelectedMap(winMain, Utils.getSelectedSet(e), mousePressedY);
+				GChromoMap selectedMap = Utils.getSelectedMap(winMain, Utils.getSelectedSetIndex(e), mousePressedY);
 				winMain.fatController.invertMap = selectedMap;
 				
 				//if we have got here because we had first drawn a selection rectangle for including all features in a range for inclusion 
@@ -194,7 +187,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		{	
 			//request zooming for the selected map with the given set of coordinates
 			//get the selected set first
-			int gMapSetIndex = Utils.getSelectedSet(e);
+			int gMapSetIndex = Utils.getSelectedSetIndex(e);
 			GChromoMap selectedMap = Utils.getSelectedMap(winMain, gMapSetIndex, mousePressedY);
 			//if this has not selected a map we need to see whether the map to be selected is under the point where the mouse button was released
 			//this can happen if we start drawing the selection rectangle above a chromosome
@@ -205,7 +198,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		
 		//turn antialiasing on and repaint		
 		winMain.mainCanvas.drawSelectionRect = false;
-
+		
 		AntiAliasRepaintThread antiAliasRepaintThread = new AntiAliasRepaintThread();
 		antiAliasRepaintThread.start();
 	}
@@ -217,9 +210,9 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	{
 		int x = e.getX();
 		int y = e.getY();
-
+		
 		// figure out which genome this event pertains to (i.e. which section of the canvas on x are we in)
-		int index = Utils.getSelectedSet(e);
+		int index = Utils.getSelectedSetIndex(e);
 		GMapSet gMapSet = MapViewer.winMain.dataContainer.gMapSets.get(index);
 		
 		//the chromosome -- if any - this event pertains to (i.e. where on the canvas on y are we)
@@ -236,7 +229,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			//this is the amount by which we drag the canvas at a time
 			// a fixed amount seems to work best as it moves the canvas the same way across all zoom levels
 			int distanceDragged = Math.abs(lastMouseDragYPos - y);
-
+			
 			// mouse is getting dragged up 
 			if (y < mouseDragPosY)
 			{
@@ -347,7 +340,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		winMain.mainCanvas.antiAlias = false;
 		
 		// figure out which genome we are moving
-		int index = Utils.getSelectedSet(e);
+		int index = Utils.getSelectedSetIndex(e);
 		GMapSet selectedSet = MapViewer.winMain.dataContainer.gMapSets.get(index);
 		
 		//this moves the genome center point up and down

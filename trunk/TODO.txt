@@ -38,6 +38,7 @@ Dave's list:
 	* as a user defined option, have separate result tables for homologies with each reference genome and combine these in a tabbed pane
 	* auto-arrange function for inverting all features on a chromosome in the same order as its homologs on another chromosome (or manual or combination of both?)
 - svg/ps/pdf export
+- differential colouring of links e.g. by BLAST hit order
 
 
 

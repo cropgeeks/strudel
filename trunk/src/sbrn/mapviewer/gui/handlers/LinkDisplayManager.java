@@ -51,6 +51,8 @@ public class LinkDisplayManager
 	// display the homologies between chromosomes as lines
 	public void processLinkDisplayRequest(int x, int y, boolean isCtrlClickSelection)
 	{
+		Vector<GChromoMap> selectedMaps = MapViewer.winMain.fatController.selectedMaps;
+		
 		//only do this if we have reference genomes -- otherwise there are no links to deal with
 		if(MapViewer.winMain.dataContainer.gMapSets.size() > 1)
 		{			
@@ -66,25 +68,27 @@ public class LinkDisplayManager
 				if (isCtrlClickSelection)
 				{
 					// if the map is already added we need to remove it (this is toggle-style functionality)
-					if (selectedSet.selectedMaps.contains(selectedMap))
+					if (selectedMaps.contains(selectedMap))
 					{
-						selectedSet.removeSelectedMap(selectedMap);
+						selectedMaps.remove(selectedMap);
 					}
 					// otherwise we add it
 					else
 					{
-						selectedSet.addSelectedMap(selectedMap);
+						selectedMaps.add(selectedMap);
+						selectedMap.drawHighlightOutline = true;
 					}
 				}
 				// this is just a normal single click -- user wants to do overviews of links from individual target chromosomes, one at a time
 				else
 				{
-					
 					// in that case we first clear out the existing vector of selected maps in the target genome
-					selectedSet.deselectAllMaps();
+					selectedMaps.clear();
+					MapViewer.winMain.fatController.clearMapOutlines();
 					
 					// then we add the selected map only
-					selectedSet.addSelectedMap(selectedMap);
+					selectedMaps.add(selectedMap);
+					selectedMap.drawHighlightOutline = true;
 					
 					// now add all maps from all the other genomes into the vector of selected elements for the reference genome so the links can be drawn
 					for (GMapSet gMapSet : MapViewer.winMain.dataContainer.gMapSets)
@@ -94,23 +98,26 @@ public class LinkDisplayManager
 										MapViewer.winMain.dataContainer.gMapSets.indexOf(gMapSet));
 						if (!gMapSet.equals(selectedSet) && indexDifference < 2)
 						{
-							gMapSet.selectAllMaps();
+							selectedMaps.addAll(gMapSet.gMaps);
+							for (GChromoMap chromoMap : gMapSet.gMaps)
+							{
+								chromoMap.drawHighlightOutline = true;
+							}
 						}
 					}
-					mainCanvas.drawLinks = true;
-					
+					mainCanvas.drawLinks = true;					
 				}
 				
 				// now check whether we have selected chromosomes in the target genome
-				if (selectedSet.selectedMaps.size() > 0)
+				if (selectedMaps.size() > 0)
 				{
 					mainCanvas.drawLinks = true;
 				}
-				// if not, we don't want to draw links, just display the selected outlines of the reference genome chromsomes
+				// if not, we don't want to draw links, just display the selected outlines of the reference genome chromosomes
 				else
 				{
 					mainCanvas.drawLinks = false;
-				}
+				}			
 			}			
 		}
 	}
@@ -126,10 +133,10 @@ public class LinkDisplayManager
 			try
 			{				
 				// for each map in the selectedMaps vector of the target genome
-				for (int i = 0; i < selectedSet.selectedMaps.size(); i++)
+				for (int i = 0; i < MapViewer.winMain.fatController.selectedMaps.size(); i++)
 				{
 					// get the currently selected map
-					GChromoMap selectedMap = selectedSet.selectedMaps.get(i);
+					GChromoMap selectedMap = MapViewer.winMain.fatController.selectedMaps.get(i);
 					
 					// get the ChromoMap for the currently selected chromosome
 					ChromoMap selectedChromoMap = selectedMap.chromoMap;
@@ -179,11 +186,8 @@ public class LinkDisplayManager
 						}
 						
 						// check whether this is a linkset we want to draw
-						// this depends on which chromosome in the reference genome it points to
-						// the linksets are ordered by chromosome index
-						// check whether this index matches one of the ones in the vector of selected maps in the reference genome
 						boolean draw = false;
-						for (GChromoMap gMap : referenceGMapSet.selectedMaps)
+						for (GChromoMap gMap : MapViewer.winMain.fatController.selectedMaps)
 						{
 							if (gMap.isShowingOnCanvas)
 								draw = true;
@@ -247,7 +251,7 @@ public class LinkDisplayManager
 									if (Prefs.drawOnlyLinksToVisibleFeatures)
 									{
 										//this next condition ensures we only draw links to reference features that are showing on the canvas
-										if ((referenceY > 0 && referenceY < mainCanvas.getHeight()) && (targetY > 0 && targetY < mainCanvas.getHeight()) && referenceGMapSet.selectedMaps.contains(referenceGMap))
+										if ((referenceY > 0 && referenceY < mainCanvas.getHeight()) && (targetY > 0 && targetY < mainCanvas.getHeight()) && MapViewer.winMain.fatController.selectedMaps.contains(referenceGMap))
 										{
 											// draw the link either as a straight line or a curve
 											drawStraightOrCurvedLink(
@@ -262,7 +266,7 @@ public class LinkDisplayManager
 									//otherwise we just draw every link
 									else
 									{
-										if (referenceGMapSet.selectedMaps.contains(referenceGMap))
+										if (MapViewer.winMain.fatController.selectedMaps.contains(referenceGMap))
 										{
 											// draw the link either as a straight line or a curve
 											drawStraightOrCurvedLink(

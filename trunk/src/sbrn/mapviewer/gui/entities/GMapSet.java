@@ -50,7 +50,7 @@ public class GMapSet
 	public int chromoHeight;
 
 	// a vector containing GChromoMap objects that have been selected by the user through mouse clicks
-	public Vector<GChromoMap> selectedMaps = new Vector<GChromoMap>();
+//	public Vector<GChromoMap> selectedMaps = new Vector<GChromoMap>();
 
 	// these control whether we draw chromosome markers and labels
 	public boolean paintAllMarkers = false;
@@ -108,45 +108,45 @@ public class GMapSet
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
-	public void addSelectedMap(GChromoMap map)
-	{
-		if (!selectedMaps.contains(map))
-		{
-			selectedMaps.add(map);
-			map.drawHighlightOutline = true;
-		}
-	}
+//	public void addSelectedMap(GChromoMap map)
+//	{
+//		if (!selectedMaps.contains(map))
+//		{
+//			selectedMaps.add(map);
+//			map.drawHighlightOutline = true;
+//		}
+//	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
-	public void removeSelectedMap(GChromoMap map)
-	{
-		if (selectedMaps.contains(map))
-		{
-			selectedMaps.remove(map);
-			map.drawHighlightOutline = false;
-		}
-	}
+//	public void removeSelectedMap(GChromoMap map)
+//	{
+//		if (selectedMaps.contains(map))
+//		{
+//			selectedMaps.remove(map);
+//			map.drawHighlightOutline = false;
+//		}
+//	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
-	public void selectAllMaps()
-	{
-		for (GChromoMap gMap : gMaps)
-		{
-			addSelectedMap(gMap);
-		}
-	}
+//	public void selectAllMaps()
+//	{
+//		for (GChromoMap gMap : gMaps)
+//		{
+//			addSelectedMap(gMap);
+//		}
+//	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 
-	public void deselectAllMaps()
-	{
-		for (GChromoMap gMap : gMaps)
-		{
-			removeSelectedMap(gMap);
-		}
-	}
+//	public void deselectAllMaps()
+//	{
+//		for (GChromoMap gMap : gMaps)
+//		{
+//			removeSelectedMap(gMap);
+//		}
+//	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
 	

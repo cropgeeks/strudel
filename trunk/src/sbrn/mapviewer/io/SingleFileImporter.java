@@ -5,6 +5,8 @@ import java.util.*;
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
+import sbrn.mapviewer.gui.dialog.*;
+import scri.commons.gui.*;
 
 public class SingleFileImporter
 {
@@ -12,6 +14,8 @@ public class SingleFileImporter
 	
 	private LinkedList<MapSet> allMapSets = new LinkedList<MapSet>();
 	private LinkedList<LinkSet> allLinkSets = new LinkedList<LinkSet>();
+	
+	private LinkedList<String> missingFeatures = new LinkedList<String>();
 	
 	//==========================================methods==================================================	
 	
@@ -22,7 +26,7 @@ public class SingleFileImporter
 	//features should be in blocks
 	public void parseCombinedFile(File file)
 	{
-		int lineCount = 0;
+		int lineCount = 1;
 		
 		try
 		{
@@ -41,11 +45,32 @@ public class SingleFileImporter
 				lineCount++;
 			}
 			
-			MapViewer.dataLoaded = true;			
+			if (missingFeatures.size() > 0)
+			{
+				MapViewer.winMain.dataLoadingDialog.setVisible(false);
+				
+				//list the features that were missing, if any
+				StringBuilder missingFeatureList = new StringBuilder();
+				for (String featureName : missingFeatures)
+				{
+					missingFeatureList.append(featureName.trim() + "\n");
+				}
+				MissingFeaturesDialog missingFeaturesDialog = new MissingFeaturesDialog(MapViewer.winMain, true, missingFeatureList.toString());
+			}
+			
+			MapViewer.dataLoaded = true;		
+			
 		}
 		catch (Exception e)
 		{
-			System.out.println("error reading line " + lineCount);
+			// reset the cancel flag as the user might now want to try again
+			MapViewer.winMain.fatController.dataLoadCancelled = true;			
+			// hide the data loading progress dialog
+			if (MapViewer.winMain.dataLoadingDialog != null)
+				MapViewer.winMain.dataLoadingDialog.setVisible(false);
+			
+			String errorMessage = "Error reading line " + lineCount + ".\n" + e.getMessage();
+			TaskDialog.error(errorMessage, "Close");	
 			e.printStackTrace();
 		}		
 	}
@@ -65,13 +90,13 @@ public class SingleFileImporter
 	}
 	
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+	
 	//processes a single feature and adds it to the appropriate mapset
 	private void processFeatureLine(String line)
 	{
 		//the file format is tab delimited text
 		String [] tokens = line.split("\t");
-
+		
 		//the order of columns for a feature is:
 		//type - genome - chromosome - featureName - featureStart - featureEnd - annotation
 		//e.g.: feature	Barley	1H	12_30969	0	<blank>	<blank>
@@ -124,7 +149,7 @@ public class SingleFileImporter
 			throw new NumberFormatException("Feature " + feature.getName() + " " + "does not appear to have a valid start position. ");
 		}
 		feature.setStart(start);
-
+		
 		//feature stop and annotation -- several possible scenarios here:	
 		
 		//if the array is length 7 then either both fields are used or field 5 is not but field 6 is
@@ -186,55 +211,66 @@ public class SingleFileImporter
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	//processes a single link (homolog) and add its it to the appropriate link set
-	private void processLink(String line)
+	private void processLink(String line) throws Exception
 	{
-		try
-		{
-			//the file format is tab delimited text
-			String [] tokens = line.split("\t");
+		//the file format is tab delimited text
+		String [] tokens = line.split("\t");
+		
+		//order of columns for a homolog/link:
+		//type("homolog") - feature1Genome - feature1Name -feature2Genome - feature2Name - eValue - annotation
+		//e.g.: homolog	Barley	11_20879	Brachypodium	Bradi3g41470	8.00E-59	none
+		
+		//extract the names of the genomes involved in this link 
+		String genome1Name = tokens[1].trim();
+		String genome2Name = tokens[3].trim();
+		
+		// Find the features involved in the link
+		MapSet mapSet1 = Utils.getMapSetByName(genome1Name, allMapSets);
+		MapSet mapSet2 = Utils.getMapSetByName(genome2Name, allMapSets);
+		
+		String featureName1 = tokens[2].trim();
+		String featureName2 = tokens[4].trim();
+		
+		Feature feature1 = Utils.getFeatureByName(featureName1, mapSet1);
+		Feature feature2 = Utils.getFeatureByName(featureName2, mapSet2);
+
+		if( feature1 == null)
+			missingFeatures.add(featureName1);
+		
+		if( feature2 == null)
+			missingFeatures.add(featureName2);
+		
+		LinkSet linkSet = null;
+		//check whether a linkset between these two genomes exists already
+		for (LinkSet ls : allLinkSets)
+		{		
+			if(ls.getMapSets().size() == 0 || ls.getMapSets() == null)
+				throw new Exception("Homology cannot be processed - check the feature names involved in this homology.");
 			
-			//order of columns for a homolog/link:
-			//type("homolog") - feature1Genome - feature1Name -feature2Genome - feature2Name - eValue - annotation
-			//e.g.: homolog	Barley	11_20879	Brachypodium	Bradi3g41470	8.00E-59	none
-			
-			// Find all features with the first name and all with the second
-			LinkedList<Feature> f1List = Utils.getFeaturesByName(tokens[2].trim(), allMapSets);
-			LinkedList<Feature> f2List = Utils.getFeaturesByName(tokens[4].trim(), allMapSets);
-			
-			//extract the names of the genomes involved in this link 
-			String genome1Name = tokens[1].trim();
-			String genome2Name = tokens[3].trim();
-			LinkSet linkSet = null;
-			//check whether a linkset between these two genomes exists already
-			for (LinkSet ls : allLinkSets)
-			{				
-				String mapset1 = ls.getMapSets().get(0).getName();
-				String mapset2 = ls.getMapSets().get(1).getName();
-				if (mapset1.equalsIgnoreCase(genome1Name) && mapset2.equalsIgnoreCase(genome2Name))
-				{
-					linkSet = ls;
-				}
-			}
-			//if not, make a new linkset and add it to our local list 
-			if(linkSet == null)
+			String mapset1 = ls.getMapSets().get(0).getName();
+			String mapset2 = ls.getMapSets().get(1).getName();
+
+			if (mapset1.equalsIgnoreCase(genome1Name) && mapset2.equalsIgnoreCase(genome2Name))
 			{
-				linkSet = new LinkSet();
-				allLinkSets.add(linkSet);
+				linkSet = ls;
 			}
-			
-			//the last token in the array contains the annotation but for the user's convenience this may just be left blank
-			//need to check for this
-			String annotation = null;
-			if(tokens.length == 7)
-				annotation = tokens[6].trim();
-			
-			//this method adds the link between the two features to the linkset
-			Utils.buildLinkSetFromFeatureLists(linkSet, f1List, f2List, tokens[5].trim(), annotation);
 		}
-		catch (Exception e)
+		//if not, make a new linkset and add it to our local list 
+		if(linkSet == null)
 		{
-			e.printStackTrace();
+			linkSet = new LinkSet();
+			allLinkSets.add(linkSet);
 		}
+		
+		//the last token in the array contains the annotation but for the user's convenience this may just be left blank
+		//need to check for this
+		String annotation = null;
+		if(tokens.length == 7)
+			annotation = tokens[6].trim();
+		
+		//this method adds the link between the two features to the linkset
+		if(linkSet != null && feature1 != null && feature2 != null)
+			Utils.buildLinkSetFromFeatures(linkSet, feature1, feature2, tokens[5].trim(), annotation);
 	}
 	
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------

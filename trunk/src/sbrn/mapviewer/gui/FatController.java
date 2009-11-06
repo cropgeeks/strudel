@@ -42,6 +42,8 @@ public class FatController
 	//true if we are using drag and drop to specify the input file
 	public boolean dragAndDropDataLoad = false;
 	
+	public Vector<GChromoMap> selectedMaps = new Vector<GChromoMap>(); 
+	
 	// ===============================================curve'tors===================================
 	
 	public FatController(WinMain winMain)
@@ -186,7 +188,7 @@ public class FatController
 			winMain.mainCanvas.zoomHandler.processZoomResetRequest(gMapSet);
 			
 			//reset selected maps
-			gMapSet.selectedMaps.clear();
+			selectedMaps.clear();
 			
 			//marker and label display overrides
 			gMapSet.overrideMarkersAutoDisplay = false;
@@ -240,6 +242,36 @@ public class FatController
 	
 	
 	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	public void addSelectedMap(GChromoMap chromoMap)
+	{
+		selectedMaps.add(chromoMap);
+		chromoMap.drawHighlightOutline = true;
+	}
+	
+	
+	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	//restores the original view to what it looked like after loading the current dataset
+	//without clearing any results
+	public void clearMapOutlines()
+	{		
+		for(GMapSet gMapSet : winMain.dataContainer.gMapSets)
+		{
+			//for all maps within mapset
+			for(GChromoMap gMap: gMapSet.gMaps)
+			{			
+				//clear the outline
+				gMap.drawHighlightOutline = false;
+			}			
+		}	
+		
+		//repaint
+		winMain.mainCanvas.updateCanvas(true);
+	}
+	
+	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
+	
 	
 }// end class
 

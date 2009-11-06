@@ -26,13 +26,13 @@ public class Utils
 	public static int getFeatureYInGenomeSpace(Feature f)
 	{
 		int featureYInGenomeSpace = -1;
-
+		
 		//the gmap the feature is on
 		GChromoMap gChromoMap = f.getOwningMap().getGChromoMap();
-
+		
 		//the index of the chromo in the genome -- starts at 0
 		int chromoIndex = gChromoMap.index;
-				
+		
 		//the combined height of all chromosomes up to and excluding the one the feature is on
 		int combinedChromoHeight = (chromoIndex-1) * gChromoMap.height;
 		
@@ -73,8 +73,7 @@ public class Utils
 	{
 		MapSet foundSet = null;
 		
-		//we need to search all chromomaps in all mapsets for this	
-		// for all gmapsets
+		// for all mapsets
 		for (MapSet mapSet : MapViewer.winMain.dataContainer.allMapSets)
 		{
 			if(mapSet.getName().equals(name))
@@ -160,32 +159,85 @@ public class Utils
 			{
 				Link link = new Link(f1, f2);
 				linkSet.addLink(link);
-								
+				
 				// We also add the Link to each Feature so the Feature
 				// itself knows about the links it has with others
 				f1.getLinks().add(link);
 				f2.getLinks().add(link);
 				
 				//add the BLAST score as evidence
-				 DecimalFormat df = new DecimalFormat("0.###E0");
+				DecimalFormat df = new DecimalFormat("0.###E0");
 				Number blastScore = df.parse(blastScoreStr);
 				link.setBlastScore(blastScore.doubleValue());
 				
 				//add the annotation, if there is any
 				if(linkAnnotation != null)
 					link.setAnnotation(linkAnnotation);
-									
+				
 				// TODO: Do we want to add a list of references Features to the Feature object itself, so it knows who it links to?
 				// If so, how do we deal with, eg removing MapSets andkeeping these lists (and the LinkSet!) up to date.
 			}
 	}
 	
+	
+	
 	// --------------------------------------------------------------------------------------------------------------------------------
 	
-	// Searches over all MapSets to find every feature whose name matches the one given.
+	public static void buildLinkSetFromFeatures(LinkSet linkSet, Feature feature1, Feature feature2, String blastScoreStr, String linkAnnotation) throws ParseException
+	{
+		// Pair up every instance of f1 with f2
+		Link link = new Link(feature1, feature2);
+		linkSet.addLink(link);
+		
+		// We also add the Link to each Feature so the Feature
+		// itself knows about the links it has with others
+		feature1.getLinks().add(link);
+		feature2.getLinks().add(link);
+		
+		//add the BLAST score as evidence
+		DecimalFormat df = new DecimalFormat("0.###E0");
+		Number blastScore = df.parse(blastScoreStr);
+		link.setBlastScore(blastScore.doubleValue());
+		
+		//add the annotation, if there is any
+		if(linkAnnotation != null)
+			link.setAnnotation(linkAnnotation);
+		
+		// TODO: Do we want to add a list of references Features to the Feature object itself, so it knows who it links to?
+		// If so, how do we deal with, eg removing MapSets andkeeping these lists (and the LinkSet!) up to date.
+		
+	}
+	// --------------------------------------------------------------------------------------------------------------------------------
+	
+	// Searches over single MapSet to find a feature whose name matches the one given.
+	public static Feature getFeatureByName(String name, MapSet mapSet ) throws Exception
+	{		
+		Feature feature = null;
+		
+		try
+		{		
+			for (ChromoMap map: mapSet.getMaps())
+			{ 
+				Feature checkFeature = map.getFeature(name);
+				if(checkFeature != null)
+					feature = checkFeature;
+			}
+			
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return feature;
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
+	
+	// Searches over list of  MapSets to find every feature whose name matches the one given.
 	public static LinkedList<Feature> getFeaturesByName(String name, LinkedList<MapSet> mapSets ) throws Exception
 	{		
-
+		
 		LinkedList<Feature> list = new LinkedList<Feature>();
 		Feature feature = null;
 		
@@ -199,10 +251,6 @@ public class Utils
 					if (feature != null)
 					{
 						list.add(feature);
-					}
-					else
-					{
-						//System.out.println("nothing found");
 					}
 				}
 			}
@@ -328,60 +376,24 @@ public class Utils
 	{
 		GChromoMap selectedMap = null;
 		
-		// for each genome
-		for (GMapSet gMapSet : MapViewer.winMain.dataContainer.gMapSets)
+		//the number of genomes we have loaded
+		int numGenomes = MapViewer.winMain.dataContainer.gMapSets.size();
+		//the size of the sectors occupied by each of the genomes on the main canvas
+		int interValSize = Math.round(MapViewer.winMain.mainCanvas.getWidth() / numGenomes);
+		
+		// check whether a line drawn at y intersects within one of the bounding rectangles of our chromosomes
+		//we can just use a rectangle a single pixel wide for this purpose so we can use the existing API for the Rectangle class
+		int xLeft = gMapSetIndex * interValSize;
+		Rectangle intersectLine = new Rectangle(xLeft, y, interValSize, 1);
+		
+		//now check all the chromosomes' bounding rectangles in this mapset for intersection			
+		for (GChromoMap gChromoMap : MapViewer.winMain.dataContainer.gMapSets.get(gMapSetIndex).gMaps)
 		{
-			// check whether a line drawn at y intersects within one of the bounding rectangles of our chromosomes
-			//we can just use a rectangle a single pixel wide for this purpose so we can use the existing API for the Rectangle class
-			Rectangle intersectLine = null;
-			
-			//we need to set the intersect line up so it extends only over the part of the screen we want to test for intersection in
-			//this depends on the index of the mapset in the list
-			//if we have one genome only
-			if(MapViewer.winMain.dataContainer.gMapSets.size() == 1)
+			// check whether the hit falls within its current bounding rectangle
+			if (gChromoMap.boundingRectangle.intersects(intersectLine))
 			{
-				intersectLine = new Rectangle(0,y,winMain.mainCanvas.getWidth(),1);
-			}
-			//if we have two genomes
-			else if(MapViewer.winMain.dataContainer.gMapSets.size() == 2)
-			{
-				//gMapSets at 0 is target genome (left), at 1 is reference genome (right)
-				if(gMapSetIndex == 0)
-				{
-					intersectLine = new Rectangle(0,y,winMain.mainCanvas.getWidth()/2,1);
-				}
-				else //index ==1
-				{
-					intersectLine = new Rectangle(winMain.mainCanvas.getWidth()/2,y,winMain.mainCanvas.getWidth(),1);
-				}
-			}
-			//if we have three genomes
-			else if(MapViewer.winMain.dataContainer.gMapSets.size() == 3)
-			{
-				//gMapSets at 0 is target genome (left), at 1 is reference genome (right)
-				if(gMapSetIndex == 0)
-				{
-					intersectLine = new Rectangle(0,y,winMain.mainCanvas.getWidth()/3,1);
-				}
-				else if(gMapSetIndex == 1)
-				{
-					intersectLine = new Rectangle(winMain.mainCanvas.getWidth()/3,y,winMain.mainCanvas.getWidth()/3,1);
-				}
-				else if(gMapSetIndex == 2)
-				{
-					intersectLine = new Rectangle((winMain.mainCanvas.getWidth()/3)*2,y,winMain.mainCanvas.getWidth()/3,1);
-				}
-			}
-			
-			//now check all the chromosomes' bounding rectangles in this mapset for intersection			
-			for (GChromoMap gChromoMap : gMapSet.gMaps)
-			{
-				// check whether the hit falls within its current bounding rectangle
-				if (gChromoMap.boundingRectangle.intersects(intersectLine))
-				{
-					selectedMap = gChromoMap;
-					return selectedMap;
-				}
+				selectedMap = gChromoMap;
+				return selectedMap;
 			}
 		}		
 		return selectedMap;
@@ -390,61 +402,25 @@ public class Utils
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	// finds out which of the two genomes the current selection relates to
-	public static int getSelectedSet(MouseEvent e)
+	// finds out which of the genomes the current selection relates to and return its index in the list of mapsets
+	public static int getSelectedSetIndex(MouseEvent e)
 	{
-		// figure out which genome the user is zooming
-		
+		//the index of the mapset in the list kept by the DataContainer object
 		int index = -1;
-		
-		// if we have one genome (target) only
-		if (MapViewer.winMain.dataContainer.gMapSets.size() == 1)
-		{
-			index = 0;
-		}
-		// if we have two genomes 
-		else if (MapViewer.winMain.dataContainer.gMapSets.size() == 2)
-		{
-			// simply divide the canvas in two halves for this and figure out where on the x axis the hit has occurred
-			if (e.getX() < MapViewer.winMain.mainCanvas.getWidth() / 2)
-			{
-				// left hand side hit
-				index = 0;
-			}
-			else
-			{
-				// right hand side hit
-				index = 1;
-			}
-		}
-		//if we have three genomes
-		else if (MapViewer.winMain.dataContainer.gMapSets.size() == 3)
-		{
-			int oneThirdCanvas = Math.round(MapViewer.winMain.mainCanvas.getWidth() / 3);
-			
-			// simply divide the canvas in two halves for this and figure out where on the x axis the hit has occurred
-			if (e.getX() <= oneThirdCanvas)
-			{
-				// left hand side hit
-				index = 0;
-			}
-			else if(e.getX() > oneThirdCanvas && e.getX() <= oneThirdCanvas*2)
-			{
-				// middle hit
-				index = 1;
-			}
-			else if(e.getX() > oneThirdCanvas*2)
-			{
-				//right hand side hit
-				index = 2;
-			}
-		}
+		//the number of genomes we have loaded
+		int numGenomes = MapViewer.winMain.dataContainer.gMapSets.size();
+		//the size of the sectors occupied by each of the genomes on the main canvas
+		int interValSize = Math.round(MapViewer.winMain.mainCanvas.getWidth() / numGenomes);
+		//where we had our mouse hit
+		int xHit = e.getX();
+		//now simply return the value we get by dividing the x location by the interval size, while throwing the remainder away
+		index = xHit/interValSize;
 		
 		return index;
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------
-
+	
 	public static void visitURL(String html)
 	{
 		try
@@ -461,29 +437,29 @@ public class Utils
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
-
+	
 	// Java6 method for visiting a URL
 	private static void visitURL6(String html)
-		throws Exception
+	throws Exception
 	{
 		Desktop desktop = Desktop.getDesktop();
-
+		
 		URI uri = new URI(html);
 		desktop.browse(uri);
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
-
+	
 	// Java5 (OS X only) method for visiting a URL
 	private static void visitURL5(String html)
-		throws Exception
+	throws Exception
 	{
 		// See: http://www.centerkey.com/java/browser/
-
+		
 		Class<?> fileMgr = Class.forName("com.apple.eio.FileManager");
 		Method openURL = fileMgr.getDeclaredMethod("openURL",
-			new Class[] {String.class});
-
+						new Class[] {String.class});
+		
 		openURL.invoke(null, new Object[] {html});
 	}
 	
@@ -552,7 +528,7 @@ public class Utils
 				float fStart = feature.getStart();
 				//convert this to an absolute position on the canvas in pixels
 				int pixelPos = getFPosOnScreenInPixels(gMapSet, cMap, fStart);
-
+				
 				//check whether this position is currently showing on the canvas or not
 				if (pixelPos > 0 && pixelPos < MapViewer.winMain.mainCanvas.getHeight())
 				{
@@ -561,10 +537,10 @@ public class Utils
 				}
 			}
 		}
-
+		
 		return visibleFeatures;
 	}
-
+	
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	//returns all links for features we have searched for by name or range
@@ -591,6 +567,6 @@ public class Utils
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
-
+	
 	
 }

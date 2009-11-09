@@ -10,7 +10,7 @@ public class DataLoadUtils
 {
 	
 	
-	public static void loadDataInThread(String inputFileName)
+	public static void loadDataInThread(String inputFileName, boolean commandLineLoad)
 	{
 		MapViewer.winMain.dataLoadingDialog = new MTDataLoadingDialog(MapViewer.winMain, false);
 
@@ -20,7 +20,10 @@ public class DataLoadUtils
 		//if the user wants to load their own data we need to check they have provided the correct file combination
 		if(MapViewer.winMain.fatController.loadOwnData)
 		{
-			inputFileName = getUserInputFile();
+			if(!commandLineLoad)
+				inputFileName = getUserInputFile();
+			else
+				inputFileName = MapViewer.initialFile;
 		}
 		//load example data if user has not specified own data or dragged and dropped a file
 		else if(!MapViewer.winMain.fatController.loadOwnData && !MapViewer.winMain.fatController.dragAndDropDataLoad)

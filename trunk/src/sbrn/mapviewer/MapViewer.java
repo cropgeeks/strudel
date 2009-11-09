@@ -9,6 +9,7 @@ import javax.swing.*;
 
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.components.*;
+import sbrn.mapviewer.io.*;
 import scri.commons.gui.*;
 import scri.commons.*;
 
@@ -36,10 +37,13 @@ public class MapViewer
 	
 	// Returns value for "CTRL" under most OSs, and the "apple" key for OS X
 	public static int ctrlMenuShortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-	
-	
+
 	//true when data is loaded
 	public static boolean dataLoaded = false;
+	
+	// Optional path to a file to be loaded when app opens
+	public static String initialFile = null;
+
 
 	public static void main(String[] args)
 	{
@@ -57,6 +61,12 @@ public class MapViewer
 		prefs.loadPreferences(prefsFile, Prefs.class);
 		prefs.savePreferences(prefsFile, Prefs.class);
 		Install4j.doStartUpCheck();
+		
+		if (args.length == 1)
+		{
+			initialFile = args[0].trim();
+			System.out.println("initialFile = " + initialFile);
+		}
 
 		new MapViewer();
 
@@ -100,6 +110,13 @@ public class MapViewer
 				
 				public void windowOpened(WindowEvent e)
 				{
+					// Do we want to open an initial project?
+					if (initialFile != null)
+					{
+						winMain.fatController.loadOwnData = true;
+						DataLoadUtils.loadDataInThread(initialFile, true);
+					}
+					
 					//if the version has been updated, go to the website and get the update info
 					if (Install4j.displayUpdate)
 						Utils.visitURL(Constants.strudelHomePage + "whatsnew.shtml");

@@ -64,7 +64,7 @@ public class OpenFileDialog extends JDialog implements ActionListener
 			setVisible(false);
 					
 			//load the data in a separate thread
-			DataLoadUtils.loadDataInThread(DataLoadUtils.getUserInputFile());
+			DataLoadUtils.loadDataInThread(DataLoadUtils.getUserInputFile(), false);
 		}
 		
 		else if (e.getSource() == bCancel)

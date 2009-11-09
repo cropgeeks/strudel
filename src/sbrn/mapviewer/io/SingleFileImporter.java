@@ -235,10 +235,15 @@ public class SingleFileImporter
 		Feature feature2 = Utils.getFeatureByName(featureName2, mapSet2);
 
 		if( feature1 == null)
+		{ 	
 			missingFeatures.add(featureName1);
+		}
+		
 		
 		if( feature2 == null)
+		{
 			missingFeatures.add(featureName2);
+		}
 		
 		LinkSet linkSet = null;
 		//check whether a linkset between these two genomes exists already

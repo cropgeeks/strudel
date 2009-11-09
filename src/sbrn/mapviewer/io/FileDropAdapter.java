@@ -36,7 +36,7 @@ public class FileDropAdapter extends DropTargetAdapter
 
 					//open the file
 					MapViewer.winMain.fatController.dragAndDropDataLoad = true;
-					DataLoadUtils.loadDataInThread(list.get(0).toString());
+					DataLoadUtils.loadDataInThread(list.get(0).toString(), false);
 					
 					dtde.dropComplete(true);
 					return;

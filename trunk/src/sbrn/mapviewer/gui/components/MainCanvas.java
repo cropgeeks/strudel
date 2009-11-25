@@ -147,9 +147,7 @@ public class MainCanvas extends JPanel
 						gChromoMap.drawDistanceMarkers(g);
 						g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 					}
-					gChromoMap.drawMouseOverFeatures(g);
-					gChromoMap.drawHighlightOutline(g);
-					
+					gChromoMap.drawMouseOverFeatures(g);			
 				}
 			}
 		}

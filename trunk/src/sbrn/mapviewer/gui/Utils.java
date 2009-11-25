@@ -183,7 +183,7 @@ public class Utils
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
 	
-	public static void buildLinkSetFromFeatures(LinkSet linkSet, Feature feature1, Feature feature2, String blastScoreStr, String linkAnnotation) throws ParseException
+	public static void addLinkToLinkset(LinkSet linkSet, Feature feature1, Feature feature2, String blastScoreStr, String linkAnnotation) throws ParseException
 	{
 		// Pair up every instance of f1 with f2
 		Link link = new Link(feature1, feature2);

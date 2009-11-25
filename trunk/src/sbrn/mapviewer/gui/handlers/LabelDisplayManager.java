@@ -69,16 +69,13 @@ public class LabelDisplayManager
 		int labelY = featureY + (fontHeight/2);
 		
 		// next decide where to place the label on x
-		
 		// the amount by which we want to move the label end away from the chromosome (in pixels)
 		int lineLength = 50;	
 		//x coords
 		int labelX = -1;
 		int lineStartX =  -1;
 		int lineEndX =  -1;
-		
-		//the indices of the mapsets involved in our central list of mapsets
-		
+
 		//if we have no homologs that we are drawing links to we can just place the label to the left of the chromo always
 		//it will not get in the way of anything there		
 		lineStartX =  gChromoMap.x;
@@ -136,78 +133,88 @@ public class LabelDisplayManager
 		//first work out the features' y positions
 		//we need to create a LinkedHashMap withe the default positons
 		//these will all be at the featureY of the Feature
-		LinkedHashMap<Feature, Integer> featurePositions = calculateFeaturePositions(features);
+		TreeMap<Feature, Integer> featurePositions = calculateFeaturePositions(features);
 		
 		//now work out the actual positions after correction for collision of labels
-		LinkedHashMap<Feature, Integer> laidoutPositions = calculateLabelPositions(isMultiChromoRange, gMaps,intervalStart,intervalEnd,features, featurePositions);
+		TreeMap<Feature, Integer> laidoutPositions = calculateLabelPositions(isMultiChromoRange, gMaps,intervalStart,intervalEnd,features, featurePositions);
 		
 		// for all features in our list
 		for (Feature f : features)
 		{
 			if (f != null)
 			{
-				// get the name of the feature
-				String featureName = f.getName();
-				int stringWidth = fm.stringWidth(featureName);
-				
-				// this is where the label goes
-				int labelY = laidoutPositions.get(f);
-				int featureY = featurePositions.get(f);
-				
-				//apply a correction factor to move the label down by half a label height relative to the feature's y pos so
-				//that the label's center on y is aligned with the feature y
-				labelY = labelY + (fontHeight / 2);
-				
-				// next decide where to place the label on x
-				int mapSetX = Math.round(f.getOwningMap().getGChromoMap().owningSet.xPosition);
-				int chromoWidth = MapViewer.winMain.mainCanvas.chromoWidth;
-				
-				// the amount by which we want to move the label end away from the chromosome (in pixels)
-				int lineLength = 50;
-				int labelX = mapSetX + chromoWidth + lineLength; // this is where the label is drawn from
-				int lineStartX = mapSetX + chromoWidth; // this is where the line to the label is drawn from
-				int lineEndX = labelX - 2; // the label connects to the line here
-
-				if (isMouseOver)
-				{
-					//set the colour to highlight feature
-					g2.setColor(Colors.highlightedFeatureColour);
+//				//first decide whether we want to draw this feature or not 
+//				boolean drawLabel = false;				
+//				//get the owning map and gMap
+//				ChromoMap cMap = f.getOwningMap();
+//				GChromoMap gMap = cMap.getGChromoMap();
+//				GMapSet gMapSet = gMap.owningSet;
+//				//get the relative position on the map
+//				float fStart = f.getStart();
+//				//convert this to an absolute position on the canvas in pixels
+//				int pixelPos = Utils.getFPosOnScreenInPixels(gMapSet, cMap, fStart);
+//				
+//				//check whether this position is currently showing on the canvas or not
+//				if (pixelPos > 0 && pixelPos < MapViewer.winMain.mainCanvas.getHeight())
+//				{
+//					drawLabel = true;
+//				}
+//				
+//				if (drawLabel)
+//				{
+					// get the name of the feature
+					String featureName = f.getName();
+					int stringWidth = fm.stringWidth(featureName);
+					// this is where the label goes
+					int labelY = laidoutPositions.get(f);
+					int featureY = featurePositions.get(f);
+					//apply a correction factor to move the label down by half a label height relative to the feature's y pos so
+					//that the label's center on y is aligned with the feature y
+					labelY = labelY + (fontHeight / 2);
+					// next decide where to place the label on x
+					int mapSetX = Math.round(f.getOwningMap().getGChromoMap().owningSet.xPosition);
+					int chromoWidth = MapViewer.winMain.mainCanvas.chromoWidth;
+					// the amount by which we want to move the label end away from the chromosome (in pixels)
+					int lineLength = 50;
+					int labelX = mapSetX + chromoWidth + lineLength; // this is where the label is drawn from
+					int lineStartX = mapSetX + chromoWidth; // this is where the line to the label is drawn from
+					int lineEndX = labelX - 2; // the label connects to the line here
+					if (isMouseOver)
+					{
+						//set the colour to highlight feature
+						g2.setColor(Colors.highlightedFeatureColour);
+					}
+					else
+					{
+						//set the colour to draw feature normally
+						g2.setColor(Colors.featureColour);
+					}
+					// draw a line to highlight the marker on the chromosome itself
+					g2.drawLine(mapSetX, featureY, mapSetX + MapViewer.winMain.mainCanvas.chromoWidth - 1, featureY);
+					// draw a line from the marker to the label
+					g2.drawLine(lineStartX, featureY, lineEndX, labelY - fontHeight / 2);
+					//draw a rectangle as a background for the label
+					float arcSize = fontHeight / 1.5f;
+					int horizontalGap = 3;
+					int verticalGap = 4;
+					RoundRectangle2D.Float backGroundRect = new RoundRectangle2D.Float(labelX - horizontalGap, labelY - fontHeight, stringWidth + horizontalGap * 2, fontHeight + verticalGap, arcSize, arcSize);
+					g2.fill(backGroundRect);
+					// set the label font colour
+					g2.setColor(Colors.highlightedFeatureLabelColour);
+					// draw the label
+					g2.drawString(featureName, labelX, labelY);
 				}
-				else
-				{
-					//set the colour to draw feature normally
-					g2.setColor(Colors.featureColour);
-				}
-				// draw a line to highlight the marker on the chromosome itself
-				g2.drawLine(mapSetX, featureY, mapSetX + MapViewer.winMain.mainCanvas.chromoWidth - 1, featureY);				
-				
-				// draw a line from the marker to the label
-				g2.drawLine(lineStartX, featureY, lineEndX, labelY - fontHeight / 2);
-				
-				//draw a rectangle as a background for the label
-				float arcSize = fontHeight / 1.5f;
-				int horizontalGap = 3;
-				int verticalGap = 4;
-				RoundRectangle2D.Float backGroundRect = new RoundRectangle2D.Float(labelX - horizontalGap, labelY - fontHeight, stringWidth + horizontalGap * 2, fontHeight + verticalGap, arcSize, arcSize);
-				g2.fill(backGroundRect);
-				
-				// set the label font colour
-				g2.setColor(Colors.highlightedFeatureLabelColour);
-				// draw the label
-				g2.drawString(featureName, labelX, labelY);
-				
-
-				
 			}
-		}
+//		}
 	}
 	
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	@SuppressWarnings("unchecked")
-	private static LinkedHashMap<Feature, Integer> calculateLabelPositions(boolean isMultiChromoRange, Vector<GChromoMap> gMaps,float intervalStart,float intervalEnd,Vector<Feature> features, LinkedHashMap<Feature, Integer> featurePositions)
+	private static TreeMap<Feature, Integer> calculateLabelPositions(boolean isMultiChromoRange, Vector<GChromoMap> gMaps,float intervalStart,float intervalEnd,Vector<Feature> features, TreeMap<Feature, Integer> featurePositions)
 	{
-		LinkedHashMap<Feature, Integer> labelPositions = (LinkedHashMap<Feature, Integer>)featurePositions.clone();
+		//we want to start off with the same kind of order and positions as the feature positions
+		TreeMap<Feature, Integer> labelPositions = (TreeMap<Feature, Integer>)featurePositions.clone();
 		
 		//the label's height
 		float labelHeight = fontHeight*verticalSpacer;
@@ -268,9 +275,9 @@ public class LabelDisplayManager
 	
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	private static LinkedHashMap<Feature, Integer> calculateFeaturePositions(Vector<Feature> features)
+	private static TreeMap<Feature, Integer> calculateFeaturePositions(Vector<Feature> features)
 	{
-		LinkedHashMap<Feature, Integer> featurePositions = new LinkedHashMap<Feature, Integer>();
+		TreeMap<Feature, Integer> featurePositions = new TreeMap<Feature, Integer>();
 		
 		for (Feature f : features)
 		{
@@ -322,7 +329,12 @@ public class LabelDisplayManager
 		//now draw the labels
 		boolean isMultiChromoRange = gMaps.size() > 1;
 		//only use those features that are actually visible on canvas
-		drawFeatureLabelsInRange(g2, isMultiChromoRange, gMaps , -1, -1, Utils.checkFeatureVisibility(combinedFeatures), false);
+		combinedFeatures = Utils.checkFeatureVisibility(combinedFeatures);
+		
+		//sort by position 
+		Collections.sort(combinedFeatures);
+		
+		drawFeatureLabelsInRange(g2, isMultiChromoRange, gMaps , -1, -1, combinedFeatures, false);
 	}
 	
 	

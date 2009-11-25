@@ -255,18 +255,18 @@ public class LinkSet implements Iterable<Link>
 	 * to return details on each link; one per line.
 	 * @return a string representation of this link set
 	 */
-	public String toString()
-	{
-		StringBuffer str = new StringBuffer();
-		
-		for (Link link: links)
-		{
-			str.append("Link between " + link.getFeature1() + " and "
-				+ link.getFeature2() + "\n");
-		}
-		
-		return str.toString();
-	}
+//	public String toString()
+//	{
+//		StringBuffer str = new StringBuffer();
+//		
+//		for (Link link: links)
+//		{
+//			str.append("Link between " + link.getFeature1() + " and "
+//				+ link.getFeature2() + "\n");
+//		}
+//		
+//		return str.toString();
+//	}
 	
 	/**
 	 * Adds all the links from the Linkset passed in to the current Linkset.

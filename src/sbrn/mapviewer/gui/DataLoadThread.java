@@ -38,10 +38,7 @@ public class DataLoadThread extends Thread
 					MapViewer.winMain.fatController.assembleRemainingGUIComps();
 				else
 					MapViewer.winMain.reinitialiseDependentComponents();
-				
-				// also need a new link display manager because it holds the precomputed links
-				MapViewer.winMain.mainCanvas.linkDisplayManager = new LinkDisplayManager(MapViewer.winMain.mainCanvas);
-				
+
 				// check if we need to enable some functionality -- depends on the number of genomes loaded
 				// cannot do comparative stuff if user one loaded one (target) genome
 				if (MapViewer.winMain.dataContainer.gMapSets.size() == 1)
@@ -61,6 +58,10 @@ public class DataLoadThread extends Thread
 					MapViewer.winMain.foundFeaturesTableControlPanel.getFilterLabel().setEnabled(true);
 					MapViewer.winMain.foundFeaturesTableControlPanel.getGenomeFilterCombo().setEnabled(true);
 					MapViewer.winMain.foundFeaturesTableControlPanel.getShowHomologsCheckbox().setEnabled(true);
+					
+					
+					// also need a new link display manager because it holds the precomputed links
+					MapViewer.winMain.mainCanvas.linkDisplayManager = new LinkDisplayManager(MapViewer.winMain.mainCanvas);
 				}
 				
 				// hide the data loading progress dialog

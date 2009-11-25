@@ -44,6 +44,10 @@ public class FatController
 	
 	public Vector<GChromoMap> selectedMaps = new Vector<GChromoMap>(); 
 	
+	//true if the user is adding maps to their selection by Ctrl clicking 
+	public boolean isCtrlClickSelection = false;
+	
+	
 	// ===============================================curve'tors===================================
 	
 	public FatController(WinMain winMain)
@@ -198,7 +202,7 @@ public class FatController
 			for(GChromoMap gMap: gMapSet.gMaps)
 			{			
 				//clear the outline
-				gMap.drawHighlightOutline = false;
+				gMap.highlight = false;
 				
 				//any inverted maps have to be flagged as non-inverted
 				gMap.isPartlyInverted = false;
@@ -246,7 +250,7 @@ public class FatController
 	public void addSelectedMap(GChromoMap chromoMap)
 	{
 		selectedMaps.add(chromoMap);
-		chromoMap.drawHighlightOutline = true;
+		chromoMap.highlight = true;
 	}
 	
 	
@@ -262,12 +266,9 @@ public class FatController
 			for(GChromoMap gMap: gMapSet.gMaps)
 			{			
 				//clear the outline
-				gMap.drawHighlightOutline = false;
+				gMap.highlight = false;
 			}			
 		}	
-		
-		//repaint
-		winMain.mainCanvas.updateCanvas(true);
 	}
 	
 	//	--------------------------------------------------------------------------------------------------------------------------------------------------------

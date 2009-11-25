@@ -120,29 +120,25 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			//if we have clicked on a map, display links between this map and all others
 			if(selectedMap != null)
 			{
-				winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(e.getX(), e.getY(), false);
+				MapViewer.winMain.fatController.isCtrlClickSelection = false;
+				winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(e.getX(), e.getY());
 			}
 			//otherwise -- if we clicked on the background -- clear all links displayed
 			else
 			{
+				MapViewer.winMain.fatController.isCtrlClickSelection = false;
 				MapViewer.winMain.fatController.clearMapOutlines();
 				
 				//reset selected maps
 				MapViewer.winMain.fatController.selectedMaps.clear();
-								
-				winMain.mainCanvas.drawLinks = false;
-				winMain.mainCanvas.updateCanvas(true);
 			}
 		}
 		//CTRL+click on a chromosome means display all links between this and all other clicked chromos
 		else if (isMetaClick(e) && !e.isShiftDown())
 		{
-			winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(e.getX(), e.getY(), true);
+			MapViewer.winMain.fatController.isCtrlClickSelection = true;
+			winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(e.getX(), e.getY());
 		}
-		
-		//turn antialiasing off and repaint
-		winMain.mainCanvas.antiAlias = false;
-		winMain.mainCanvas.updateCanvas(true);
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -195,12 +191,8 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 				selectedMap = Utils.getSelectedMap(winMain, gMapSetIndex, e.getY());
 			winMain.mainCanvas.zoomHandler.processPanZoomRequest(selectedMap, mousePressedY, e.getY(), true);			
 		}
-		
-		//turn antialiasing on and repaint		
+			
 		winMain.mainCanvas.drawSelectionRect = false;
-		
-		AntiAliasRepaintThread antiAliasRepaintThread = new AntiAliasRepaintThread();
-		antiAliasRepaintThread.start();
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------

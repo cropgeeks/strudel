@@ -12,6 +12,7 @@ public class Colors
 	public static Color outlineColour = Color.white;
 	public static Color chromosomeCenterColour = new Color(130, 130, 130);	
 	public static Color chromosomeInversionColour = new Color(0,36,18);
+	public static Color chromosomeHighlightColour = new Color(80,0,0);
 	
 	//colours for links
 	public static Color linkColour = new Color(120,120,120);	

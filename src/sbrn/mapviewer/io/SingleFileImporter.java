@@ -13,6 +13,8 @@ public class SingleFileImporter
 	//==========================================methods==================================================	
 	
 	private LinkedList<MapSet> allMapSets = new LinkedList<MapSet>();
+	
+	//a list of linksets between genomes
 	private LinkedList<LinkSet> allLinkSets = new LinkedList<LinkSet>();
 	
 	private LinkedList<String> missingFeatures = new LinkedList<String>();
@@ -275,7 +277,7 @@ public class SingleFileImporter
 		
 		//this method adds the link between the two features to the linkset
 		if(linkSet != null && feature1 != null && feature2 != null)
-			Utils.buildLinkSetFromFeatures(linkSet, feature1, feature2, tokens[5].trim(), annotation);
+			Utils.addLinkToLinkset(linkSet, feature1, feature2, tokens[5].trim(), annotation);
 	}
 	
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------

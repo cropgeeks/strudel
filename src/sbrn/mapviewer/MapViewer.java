@@ -65,7 +65,6 @@ public class MapViewer
 		if (args.length == 1)
 		{
 			initialFile = args[0].trim();
-			System.out.println("initialFile = " + initialFile);
 		}
 
 		new MapViewer();

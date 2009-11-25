@@ -60,7 +60,7 @@ public class GChromoMap
 	public boolean drawMouseOverFeatures = false;
 	
 	// do we have to draw a highlighted outline for this map
-	public boolean drawHighlightOutline = false;
+	public boolean highlight = false;
 	
 	//this gets set to true when we have selected a set of features for which we want annotation info to
 	//be displayed until we deselect it
@@ -134,15 +134,14 @@ public class GChromoMap
 			
 			//determine the fill colour first
 			if(isPartlyInverted)
-			{
 				colour = Colors.chromosomeInversionColour;
-				centreColour = Colors.chromosomeInversionColour.brighter().brighter().brighter().brighter();
-			}
+			else if(highlight)
+				colour = Colors.chromosomeHighlightColour;
 			else
-			{
-				colour = owningSet.colour;
-				centreColour = owningSet.colour.brighter().brighter().brighter().brighter();
-			}
+				colour = owningSet.colour;				
+			
+			//this is the colour of the centre of the chromo -- needs to be brighter so we can get the 3d effect
+			centreColour = colour.brighter().brighter().brighter().brighter();
 			
 			distanceMarkerZoomThreshold = owningSet.thresholdAllMarkerPainting;
 			
@@ -409,7 +408,7 @@ public class GChromoMap
 		g2.setColor(Colors.chromosomeIndexColour);
 		g2.drawString(name, width * 2, Math.round(height/2.0f) + Math.round(smallFontSize/2.0f));
 		
-		if (drawHighlightOutline)
+		if (highlight)
 		{
 			g2.setColor(Colors.outlineColour);
 			g2.drawRect(0, 0, width - 1, height);
@@ -428,18 +427,6 @@ public class GChromoMap
 		if (mouseOverFeatures.size() > 0 && drawMouseOverFeatures && !owningSet.alwaysShowAllLabels)
 		{
 			LabelDisplayManager.drawFeatureLabelsInRange(g2, false, gMaps,-1,-1,mouseOverFeatures, true);
-		}
-	}
-	
-	// ----------------------------------------------------------------------------------------------------------------------------------------------
-	
-	// draw a coloured outline using the bounding rectangle of this map
-	public void drawHighlightOutline(Graphics2D g2)
-	{
-		if (drawHighlightOutline && !inversionInProgress)
-		{
-			g2.setColor(Colors.outlineColour);
-			g2.draw(boundingRectangle);
 		}
 	}
 	

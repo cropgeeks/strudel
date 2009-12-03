@@ -27,7 +27,6 @@ public class ControlToolBar extends JToolBar implements ActionListener
 	public JButton bResetAll;
 	public JToggleButton bDistMarkers;
 	public JButton bCurves;
-	public JToggleButton bAntialias;
 	public JToggleButton bLinkFilter;
 	public JButton bInfo;
 	public JButton bSave;
@@ -67,7 +66,6 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		add(bOverview);
 		add(bDistMarkers);
 		add(bCurves);
-		add(bAntialias);
 		add(bLinkFilter);
 		
 		addSeparator(true);	
@@ -79,7 +77,6 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		add(bInfo);
 		add(new JLabel("  "));
 		
-		bAntialias.setSelected(Prefs.userPrefAntialias);
 		bLinkFilter.setSelected(Prefs.drawOnlyLinksToVisibleFeatures);
 		bDistMarkers.setSelected(Prefs.showDistanceMarkers);
 	}
@@ -164,7 +161,6 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		bOverview.setSelected(Prefs.guiOverviewVisible);
 		bDistMarkers = (JToggleButton) Utils.getButton(true, "", "Toggle the distance markers on or off", Icons.getIcon("DISTANCEMARKERS"), null, this, false);
 		bCurves = (JButton) Utils.getButton(false, "", "Cycle through straight, angled and curved links", Icons.getIcon("CURVES"), null, this, false);
-		bAntialias = (JToggleButton) Utils.getButton(true, "", "Toggle between higher quality and plain drawing styles", Icons.getIcon("ANTIALIAS"), null, this, false);
 		bLinkFilter = (JToggleButton) Utils.getButton(true, "", "Toggle between visibility-based filtering of links and no filtering", Icons.getIcon("LINKFILTER"), null, this, false);		
 		bHelp =  (JButton) Utils.getButton(false, "", "Help", Icons.getIcon("HELP"), null, this, true);
 		bInfo =  (JButton) Utils.getButton(false, "", "About Strudel", Icons.getIcon("INFO"), null, this, true);
@@ -183,15 +179,8 @@ public class ControlToolBar extends JToolBar implements ActionListener
 			MapViewer.winMain.mainCanvas.updateCanvas(true);
 		}
 		
-		//toggle between antialias and none
-		else if(e.getSource() == bAntialias)
-		{
-			Prefs.userPrefAntialias = bAntialias.isSelected();
-			MapViewer.winMain.mainCanvas.antiAlias = bAntialias.isSelected();
-			MapViewer.winMain.mainCanvas.updateCanvas(true);
-		}
 		
-		//toggle between antialias and none
+		//toggle between link filter and none
 		else if(e.getSource() == bLinkFilter)
 		{
 			Prefs.drawOnlyLinksToVisibleFeatures = bLinkFilter.isSelected();
@@ -303,7 +292,6 @@ public class ControlToolBar extends JToolBar implements ActionListener
 				bResetAll.setEnabled(true);
 				bDistMarkers.setEnabled(true);
 				bCurves.setEnabled(false);
-				bAntialias.setEnabled(true);
 				bLinkFilter.setEnabled(false);
 			}
 			else
@@ -317,7 +305,6 @@ public class ControlToolBar extends JToolBar implements ActionListener
 				bResetAll.setEnabled(true);
 				bDistMarkers.setEnabled(true);
 				bCurves.setEnabled(true);
-				bAntialias.setEnabled(true);
 				bLinkFilter.setEnabled(true);
 			}
 			

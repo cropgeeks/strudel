@@ -159,9 +159,8 @@ public class PanZoomAnimator extends Thread implements ItemListener
 		//update zoom control position
 		MapViewer.winMain.fatController.updateAllZoomControls();
 				
-		//turn antialiasing on and repaint
-		mainCanvas.antiAlias = true;
-		mainCanvas.updateCanvas(true);
+		//repaint
+		Utils.repaintAntiAliased();		
 		
 		zoomHandler.isPanZoomRequest = false;
 	}

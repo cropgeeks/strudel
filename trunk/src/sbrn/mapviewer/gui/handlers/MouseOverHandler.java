@@ -52,7 +52,8 @@ public class MouseOverHandler
 					{					
 						//check the current pixel number from the top against the values in the array
 						//if there is one that is the same (incl. error margin) then add the corresponding feature to the vector
-						if (selectedMap.allLinkedFeaturePositions[i] == pixelNumberFromTop || selectedMap.allLinkedFeaturePositions[i] == pixelNumberFromTop + errorMargin || selectedMap.allLinkedFeaturePositions[i] == pixelNumberFromTop - errorMargin)
+						if (selectedMap.allLinkedFeaturePositions[i] <= pixelNumberFromTop + errorMargin && 
+										selectedMap.allLinkedFeaturePositions[i] >= pixelNumberFromTop - errorMargin)
 						{
 							if (matches == null)
 							{

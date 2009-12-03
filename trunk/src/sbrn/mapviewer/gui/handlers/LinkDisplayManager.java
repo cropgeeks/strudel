@@ -174,7 +174,7 @@ public class LinkDisplayManager
 							int targetChromoX = 0;
 							int referenceChromoX = 0;
 							//need to adjust the x positions of the links here
-							//if the reference genome is to the right of the target genome (indicated by their positions in the list of mapsets held inthe datacontainer)
+							//if the reference genome is to the right of the target genome (indicated by their positions in the list of mapsets held in the datacontainer)
 							if (MapViewer.winMain.dataContainer.gMapSets.indexOf(targetGMapSet) < MapViewer.winMain.dataContainer.gMapSets.indexOf(referenceGMapSet))
 							{
 								targetChromoX = Math.round(targetGMapSet.xPosition + targetGMapSet.gMaps.get(0).width) + 1;
@@ -231,22 +231,25 @@ public class LinkDisplayManager
 										int referenceChromoY = referenceGMap.y + referenceGMap.currentY;
 										
 										// convert the y value to scaled coordinates on the canvas by obtaining the coords of the appropriate chromosome object and scaling them appropriately
-										int targetY = (int) (targetFeatureStart / (targetMapStop / selectedMap.height)) + selectedChromoY;
-										int referenceY = (int) (referenceFeatureStart / (referenceMapStop / referenceGMap.height)) + referenceChromoY;
+//										int targetY = (int) (targetFeatureStart / (targetMapStop / selectedMap.height)) + selectedChromoY;
+//										int referenceY = (int) (referenceFeatureStart / (referenceMapStop / referenceGMap.height)) + referenceChromoY;										
+										int targetY = Utils.getFPosOnScreenInPixels(targetGMap.chromoMap, targetFeatureStart, false);
+										int referenceY = Utils.getFPosOnScreenInPixels(referenceGMap.chromoMap, referenceFeatureStart, false);										
 										
 										//check for chromosome inversion and invert values if necessary
 										if (targetGMap.isPartlyInverted)
 										{
-											targetY = (int) ((targetMapStop - targetFeatureStart) / (targetMapStop / targetGMap.height)) + selectedChromoY;
+											targetY = Utils.getFPosOnScreenInPixels(targetGMap.chromoMap, targetFeatureStart, true);
 										}
 										if (referenceGMap.isPartlyInverted)
 										{
-											referenceY = (int) ((referenceMapStop - referenceFeatureStart) / (referenceMapStop / referenceGMap.height)) + referenceChromoY;
+											referenceY = Utils.getFPosOnScreenInPixels(referenceGMap.chromoMap, referenceFeatureStart, true);
 										}
 										
 										//decide whether this link should be drawn or not
 										boolean drawLink = false;
-										//this is a user preference for filtering the number of links by whether their originating feature is visible on canvas or not
+										//there is a user preference for filtering the number of links by whether their originating feature is visible on canvas or not (Prefs.drawOnlyLinksToVisibleFeatures)
+										//we also only want to draw the links that fall within the canvas boundaries
 										if ((Prefs.drawOnlyLinksToVisibleFeatures && (referenceY > 0 && referenceY < mainCanvas.getHeight()) && (targetY > 0 && targetY < mainCanvas.getHeight())) || !Prefs.drawOnlyLinksToVisibleFeatures)
 										{
 											drawLink = true;

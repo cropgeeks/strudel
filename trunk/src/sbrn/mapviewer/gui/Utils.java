@@ -503,10 +503,17 @@ public class Utils
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
 	
-	public static int getFPosOnScreenInPixels(GMapSet owningSet, ChromoMap chromoMap, float fPos)
+	public static int getFPosOnScreenInPixels(ChromoMap chromoMap, float fPos, boolean inverted)
 	{
-		int  y = chromoMap.getGChromoMap().yOnCanvas;
-		return Math.round((chromoMap.getGChromoMap().height / chromoMap.getStop()) * fPos) + chromoMap.getGChromoMap().yOnCanvas;
+		GChromoMap gMap = chromoMap.getGChromoMap();
+		int fDist = Math.round((gMap.height / chromoMap.getStop()) * fPos);
+		int fPosOnScreen =  fDist + gMap.yOnCanvas + gMap.currentY;
+
+		if(inverted)
+			return gMap.yOnCanvas + gMap.currentY + gMap.height - fDist;
+		
+		return fPosOnScreen;
+
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -527,7 +534,7 @@ public class Utils
 				//get the relative position on the map
 				float fStart = feature.getStart();
 				//convert this to an absolute position on the canvas in pixels
-				int pixelPos = getFPosOnScreenInPixels(gMapSet, cMap, fStart);
+				int pixelPos = getFPosOnScreenInPixels(cMap, fStart, false);
 				
 				//check whether this position is currently showing on the canvas or not
 				if (pixelPos > 0 && pixelPos < MapViewer.winMain.mainCanvas.getHeight())
@@ -567,6 +574,15 @@ public class Utils
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
+	
+	//do a single repaint of the main canvas with antialiasing on, then reset to antialias off in readiness for the 
+	//next paint operation
+	public static void repaintAntiAliased()
+	{
+		AntiAliasRepaintThread antiAliasRepaintThread = new AntiAliasRepaintThread();
+		SwingUtilities.invokeLater(antiAliasRepaintThread);		
+	}
+	
 	
 	
 }

@@ -175,6 +175,8 @@ public class MainCanvas extends JPanel
 		// check whether we need antialiasing on
 		checkAntiAliasing(g2);
 		
+//		System.out.println("antialias = " + antiAlias);
+		
 		//background
 		setBackground(Colors.mainCanvasBackgroundColour);
 		
@@ -482,14 +484,14 @@ public class MainCanvas extends JPanel
 							RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
 		}
 		
-		//this additional flag set by the user can override what we just set here
-		//if it is set to true we ignore it though and just do what we were doing above anyway
-		if(!Prefs.userPrefAntialias)
-		{
-			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-							RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
-		}
+//		//this additional flag set by the user can override what we just set here
+//		//if it is set to true we ignore it though and just do what we were doing above anyway
+//		if(!Prefs.userPrefAntialias)
+//		{
+//			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+//			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+//							RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+//		}
 	}
 	
 }// end class

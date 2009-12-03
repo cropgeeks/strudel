@@ -35,10 +35,10 @@ public class FileDropAdapter extends DropTargetAdapter
 					List<?> list = (List<?>) t.getTransferData(dataFlavors[i]);
 
 					//open the file
-					MapViewer.winMain.fatController.dragAndDropDataLoad = true;
+					Strudel.winMain.fatController.dragAndDropDataLoad = true;
 					DataLoadUtils.loadDataInThread(list.get(0).toString(), false);
 					//now reset this flag so that user can open another file by different means
-					MapViewer.winMain.fatController.dragAndDropDataLoad = false;
+					Strudel.winMain.fatController.dragAndDropDataLoad = false;
 					
 					
 					dtde.dropComplete(true);

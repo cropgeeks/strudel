@@ -20,7 +20,7 @@ public class ExportImageAction extends AbstractAction
 		// TODO: track current directories and offer a suitable filename
 		fc.setSelectedFile(new File("mapviewer.png"));
 		
-		while (fc.showSaveDialog(MapViewer.winMain) == JFileChooser.APPROVE_OPTION)
+		while (fc.showSaveDialog(Strudel.winMain) == JFileChooser.APPROVE_OPTION)
 		{
 			File file = fc.getSelectedFile();
 			
@@ -41,7 +41,7 @@ public class ExportImageAction extends AbstractAction
 			
 			try
 			{
-				ImageIO.write(MapViewer.winMain.mainCanvas.getImageBuffer(), "png", file);
+				ImageIO.write(Strudel.winMain.mainCanvas.getImageBuffer(), "png", file);
 				TaskDialog.info("The exported image was successfully saved "
 								+ " to " + file, "Close");
 			}

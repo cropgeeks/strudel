@@ -116,13 +116,13 @@ public class MTOpenFilesPanel extends javax.swing.JPanel
 		{
 			//enable the components required for specifying own file locations				
 			setOwnFileCompsEnabled(true);
-			MapViewer.winMain.fatController.loadOwnData = true;
+			Strudel.winMain.fatController.loadOwnData = true;
 		}
 		else
 		{
 			//disable the components required for specifying own file locations				
 			setOwnFileCompsEnabled(false);
-			MapViewer.winMain.fatController.loadOwnData = false;
+			Strudel.winMain.fatController.loadOwnData = false;
 		}
 	}
 	
@@ -145,7 +145,7 @@ public class MTOpenFilesPanel extends javax.swing.JPanel
 			JButton sourceButton = (JButton) evt.getSource();
 			//find out which textfield goes with this button
 			JTextField textField = buttonMap.get(sourceButton);
-			int returnVal = fc.showOpenDialog(MapViewer.winMain.openFileDialog);
+			int returnVal = fc.showOpenDialog(Strudel.winMain.openFileDialog);
 			if (returnVal == JFileChooser.APPROVE_OPTION)
 			{
 				textField.setText(fc.getSelectedFile().getAbsolutePath());

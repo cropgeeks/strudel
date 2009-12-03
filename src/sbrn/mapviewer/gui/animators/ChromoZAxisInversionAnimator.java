@@ -23,7 +23,7 @@ public class ChromoZAxisInversionAnimator extends Thread
 		try
 		{
 			//turn antialiasing off
-			MapViewer.winMain.mainCanvas.antiAlias = false;		
+			Strudel.winMain.mainCanvas.antiAlias = false;		
 			
 			//the total number of frames we need to render
 			int totalFrames = Math.round(fps * (millis / 1000.0f));
@@ -59,7 +59,7 @@ public class ChromoZAxisInversionAnimator extends Thread
 				}
 				
 				//repaint
-				MapViewer.winMain.mainCanvas.updateCanvas(true);
+				Strudel.winMain.mainCanvas.updateCanvas(true);
 				
 				// sleep for the amount of animation time divided by the totalFrames value
 				try
@@ -81,7 +81,7 @@ public class ChromoZAxisInversionAnimator extends Thread
 			invertMap.inversionInProgress = false;		
 			
 			//update the position lookup arrays for mouseover
-			MapViewer.winMain.fatController.initialisePositionArrays();			
+			Strudel.winMain.fatController.initialisePositionArrays();			
 
 			//repaint
 			Utils.repaintAntiAliased();		

@@ -27,7 +27,7 @@ public class MTDataLoadingDialog extends javax.swing.JDialog
 			public void windowClosing(java.awt.event.WindowEvent e)
 			{
 				setVisible(false);
-				MapViewer.winMain.fatController.dataLoadCancelled = true;
+				Strudel.winMain.fatController.dataLoadCancelled = true;
 				TaskDialog.info("Data import canceled.", "Close");
 			}
 		});
@@ -99,7 +99,7 @@ public class MTDataLoadingDialog extends javax.swing.JDialog
 	private void dataLoadcancelButtonActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		setVisible(false);
-		MapViewer.winMain.fatController.dataLoadCancelled = true;
+		Strudel.winMain.fatController.dataLoadCancelled = true;
 		TaskDialog.info("Data import canceled.", "Close");
 	}
 	

@@ -146,9 +146,9 @@ public class WinMain extends JFrame
 				if(mainCanvas !=null)
 				{
 					//refresh the main canvas
-					MapViewer.winMain.validate();
+					Strudel.winMain.validate();
 					mainCanvas.redraw = true;
-					MapViewer.winMain.mainCanvas.updateCanvas(true);				
+					Strudel.winMain.mainCanvas.updateCanvas(true);				
 				}
 			}
 			
@@ -268,8 +268,8 @@ public class WinMain extends JFrame
 				public void propertyChange(PropertyChangeEvent evt) 
 				{
 					//refresh the main canvas
-					MapViewer.winMain.validate();
-					MapViewer.winMain.mainCanvas.updateCanvas(true);
+					Strudel.winMain.validate();
+					Strudel.winMain.mainCanvas.updateCanvas(true);
 				}			
 			});
 			
@@ -291,8 +291,8 @@ public class WinMain extends JFrame
 		splitPane.setDividerSize(0);
 		
 		//refresh the main canvas
-		MapViewer.winMain.validate();
-		MapViewer.winMain.mainCanvas.updateCanvas(true);
+		Strudel.winMain.validate();
+		Strudel.winMain.mainCanvas.updateCanvas(true);
 	}
 	
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -320,7 +320,7 @@ public class WinMain extends JFrame
 		
 		initOverviewDialog();
 		
-		MapViewer.winMain.ffInRangeDialog.ffInRangePanel.initRemainingComponents();
+		Strudel.winMain.ffInRangeDialog.ffInRangePanel.initRemainingComponents();
 		
 		//the labels with the genome names need to be updated
 		genomeLabelPanel.repaint();

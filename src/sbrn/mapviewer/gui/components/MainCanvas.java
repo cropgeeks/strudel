@@ -72,7 +72,7 @@ public class MainCanvas extends JPanel
 	
 	public MainCanvas()
 	{
-		this.winMain = MapViewer.winMain;
+		this.winMain = Strudel.winMain;
 		zoomHandler = new CanvasZoomHandler(this);
 		
 		//this is for detecting key events
@@ -320,7 +320,7 @@ public class MainCanvas extends JPanel
 		//this draws homologies for features in a contiguous range on a chromosome
 		if (drawFoundFeaturesInRange)
 		{
-			if (MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().isSelected() || MapViewer.winMain.foundFeaturesTableControlPanel.getShowHomologsCheckbox().isSelected())
+			if (Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().isSelected() || Strudel.winMain.foundFeaturesTableControlPanel.getShowHomologsCheckbox().isSelected())
 			{
 				linkDisplayManager.drawHighlightedLinksInRange(g2);
 			}
@@ -328,14 +328,14 @@ public class MainCanvas extends JPanel
 		
 		//we also want to check whether there are any links to display that are to be highlighted after a name based search for
 		//features and links originating from them
-		if (drawHighlightFeatures && winMain.fatController.highlightFeatureHomolog != null && MapViewer.winMain.dataContainer.gMapSets.size() > 1)
+		if (drawHighlightFeatures && winMain.fatController.highlightFeatureHomolog != null && Strudel.winMain.dataContainer.gMapSets.size() > 1)
 		{
 			linkDisplayManager.drawHighlightedLink(g2, winMain.fatController.highlightFeature, winMain.fatController.highlightFeatureHomolog, true);
 		}
 		
 		//this draws labels of features in a contiguous range on a chromosome
 		//need to do this in this order so things are drawn on top of each other in the right sequence
-		if (drawFoundFeaturesInRange && (MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().isSelected() || MapViewer.winMain.foundFeaturesTableControlPanel.getShowLabelsCheckbox().isSelected()))
+		if (drawFoundFeaturesInRange && (Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().isSelected() || Strudel.winMain.foundFeaturesTableControlPanel.getShowLabelsCheckbox().isSelected()))
 		{
 			LabelDisplayManager.drawLabelsForFoundFeatures(g2);
 		}
@@ -413,10 +413,10 @@ public class MainCanvas extends JPanel
 		winMain.fatController.updateOverviewCanvases();
 		
 		//now update the arrays with the position data
-		MapViewer.winMain.fatController.initialisePositionArrays();
+		Strudel.winMain.fatController.initialisePositionArrays();
 		
 		//		//update the canvas
-		MapViewer.winMain.mainCanvas.updateCanvas(true);	
+		Strudel.winMain.mainCanvas.updateCanvas(true);	
 	}
 	
 	// -----------------------------------------------------------------------------------------------------------------------------------

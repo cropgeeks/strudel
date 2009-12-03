@@ -124,35 +124,35 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		//configure open file dialog button
 		OpenFileDialogAction openFileDialogAction = new OpenFileDialogAction();
 		bOpen = (JButton) Utils.getButton(false, "Load Data", "Load data into Mapviewer", Icons.getIcon("FILEOPEN"), openFileDialogAction, this, true);
-		KeyStroke ctrlOKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_O, MapViewer.ctrlMenuShortcut);
+		KeyStroke ctrlOKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_O, Strudel.ctrlMenuShortcut);
 		bOpen.getInputMap(JButton.WHEN_IN_FOCUSED_WINDOW).put(ctrlOKeyStroke, "openFileDialog");
 		bOpen.getActionMap().put("openFileDialog", openFileDialogAction);
 		
 		//configure export image button
 		ExportImageAction exportImageAction = new ExportImageAction();
 		bExport = (JButton) Utils.getButton(false, "", "Export the display as an image", Icons.getIcon("EXPORTIMAGE"), exportImageAction, this, false);
-		KeyStroke ctrlEKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_E, MapViewer.ctrlMenuShortcut);
+		KeyStroke ctrlEKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_E, Strudel.ctrlMenuShortcut);
 		bExport.getInputMap(JButton.WHEN_IN_FOCUSED_WINDOW).put(ctrlEKeyStroke, "exportImage");
 		bExport.getActionMap().put("exportImage", exportImageAction);
 		
 		//configure save table data button
 		SaveTableDataAction saveTableDataAction = new SaveTableDataAction();
 		bSave =  (JButton) Utils.getButton(false, "", "Save results table to file", Icons.getIcon("SAVE"), saveTableDataAction, this, false);
-		KeyStroke ctrlSKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_S, MapViewer.ctrlMenuShortcut);
+		KeyStroke ctrlSKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_S, Strudel.ctrlMenuShortcut);
 		bSave.getInputMap(JButton.WHEN_IN_FOCUSED_WINDOW).put(ctrlSKeyStroke, "saveTableData");
 		bSave.getActionMap().put("saveTableData", exportImageAction);
 		
 		//configure find features button
 		FindFeaturesAction findFeaturesAction = new FindFeaturesAction();
 		bFindFeatures = (JButton) Utils.getButton(false, "Find", "Find features by name", Icons.getIcon("FIND"), findFeaturesAction, this, false);
-		KeyStroke ctrlFKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_F, MapViewer.ctrlMenuShortcut);
+		KeyStroke ctrlFKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_F, Strudel.ctrlMenuShortcut);
 		bFindFeatures.getInputMap(JButton.WHEN_IN_FOCUSED_WINDOW).put(ctrlFKeyStroke, "findFeatures");
 		bFindFeatures.getActionMap().put("findFeatures", findFeaturesAction);
 		
 		//configure find features in range button
 		FindFeaturesInRangeAction findFeaturesInRangeAction = new FindFeaturesInRangeAction();
 		bFindFeaturesinRange = (JButton) Utils.getButton(false, "Explore Range", "List features in range", Icons.getIcon("RANGE"), findFeaturesInRangeAction, this, false);
-		KeyStroke ctrlRKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_R, MapViewer.ctrlMenuShortcut);
+		KeyStroke ctrlRKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_R, Strudel.ctrlMenuShortcut);
 		bFindFeaturesinRange.getInputMap(JButton.WHEN_IN_FOCUSED_WINDOW).put(ctrlRKeyStroke, "findFeaturesInRange");
 		bFindFeaturesinRange.getActionMap().put("findFeaturesInRange", findFeaturesInRangeAction);
 		
@@ -176,7 +176,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		else if(e.getSource() == bDistMarkers)
 		{
 			Prefs.showDistanceMarkers = bDistMarkers.isSelected();
-			MapViewer.winMain.mainCanvas.updateCanvas(true);
+			Strudel.winMain.mainCanvas.updateCanvas(true);
 		}
 		
 		
@@ -184,7 +184,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		else if(e.getSource() == bLinkFilter)
 		{
 			Prefs.drawOnlyLinksToVisibleFeatures = bLinkFilter.isSelected();
-			MapViewer.winMain.mainCanvas.updateCanvas(true);
+			Strudel.winMain.mainCanvas.updateCanvas(true);
 		}
 		
 		//toggle the link shape between straight, angled and curved
@@ -192,9 +192,9 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		{		
 			//increment the currentLinkShapeType held by the tool bar or decrement as appropriate
 			if(linkShapeOrderAscending)
-				MapViewer.winMain.toolbar.currentLinkShapeType ++;
+				Strudel.winMain.toolbar.currentLinkShapeType ++;
 			else
-				MapViewer.winMain.toolbar.currentLinkShapeType --;
+				Strudel.winMain.toolbar.currentLinkShapeType --;
 			
 			//reset the index of the current link shape type back to 1 if it is greater than the max number so we can keep cycling through the options
 			if(currentLinkShapeType >= Constants.NUM_LINKSHAPE_TYPES)
@@ -208,7 +208,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		
 		//reset the main canvas view and deselect all features
 		else if (e.getSource() == bResetAll)
-			MapViewer.winMain.fatController.resetMainCanvasView();
+			Strudel.winMain.fatController.resetMainCanvasView();
 		
 		//help menu
 		else if (e.getSource() == bHelp)
@@ -221,8 +221,8 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		//"about" dialog
 		else if(e.getSource() == bInfo)
 		{
-			MapViewer.winMain.aboutDialog.setLocationRelativeTo(MapViewer.winMain);
-			MapViewer.winMain.aboutDialog.setVisible(true);
+			Strudel.winMain.aboutDialog.setLocationRelativeTo(Strudel.winMain);
+			Strudel.winMain.aboutDialog.setVisible(true);
 		}
 		
 		else if(e.getSource() == bSave)

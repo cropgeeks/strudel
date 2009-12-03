@@ -91,10 +91,10 @@ public class ClickZoomAnimator extends Thread
 			zoomHandler.adjustZoom(selectedMap, newTotalY, newChromoHeight, distFromBottom);
 			
 			//update the arrays with the position data
-			MapViewer.winMain.fatController.initialisePositionArrays();
+			Strudel.winMain.fatController.initialisePositionArrays();
 			
 			//update zoom control position
-			MapViewer.winMain.fatController.updateAllZoomControls();
+			Strudel.winMain.fatController.updateAllZoomControls();
 		}
 		
 		
@@ -105,13 +105,13 @@ public class ClickZoomAnimator extends Thread
 		zoomHandler.adjustZoom(selectedMap, finalTotalY, finalChromoHeight,	 Math.round(finalChromoHeight/2.0f));
 
 		//update overviews
-		MapViewer.winMain.fatController.updateOverviewCanvases();
+		Strudel.winMain.fatController.updateOverviewCanvases();
 		
 		//update zoom control position
-		MapViewer.winMain.fatController.updateAllZoomControls();
+		Strudel.winMain.fatController.updateAllZoomControls();
 		
 		//now update the arrays with the position data
-		MapViewer.winMain.fatController.initialisePositionArrays();
+		Strudel.winMain.fatController.initialisePositionArrays();
 		
 		//enable drawing of markers providing we have zoomed in, not out
 		if (selectedSet.zoomFactor > 1)

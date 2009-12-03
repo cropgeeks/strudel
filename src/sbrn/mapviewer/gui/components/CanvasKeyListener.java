@@ -17,7 +17,7 @@ public class CanvasKeyListener implements KeyListener
 		//ESC has been pressed
 		if(e.getKeyCode() == 27)
 		{
-			MapViewer.winMain.fatController.hideSelectionRect();
+			Strudel.winMain.fatController.hideSelectionRect();
 		}
 	}
 	

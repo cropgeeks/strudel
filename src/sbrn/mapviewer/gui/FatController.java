@@ -15,7 +15,7 @@ public class FatController
 	
 	// ===============================================vars===================================
 	
-	private WinMain winMain = MapViewer.winMain;
+	private WinMain winMain = Strudel.winMain;
 	
 	//a map we are inverting
 	public static GChromoMap invertMap = null;
@@ -141,8 +141,8 @@ public class FatController
 		resetViewOnly();
 
 		//clear the found features
-		MapViewer.winMain.fatController.highlightFeature = null;
-		MapViewer.winMain.fatController.highlightFeatureHomolog = null;
+		Strudel.winMain.fatController.highlightFeature = null;
+		Strudel.winMain.fatController.highlightFeatureHomolog = null;
 		if(FeatureSearchHandler.featuresInRange != null)
 			FeatureSearchHandler.featuresInRange.clear();		
 		winMain.mainCanvas.drawHighlightFeatures = false;
@@ -152,11 +152,11 @@ public class FatController
 		//clear the table model for the found features
 		winMain.ffResultsPanel.getFFResultsTable().setModel(new DefaultTableModel());
 		//disable the button that allows export of this data to file
-		MapViewer.winMain.toolbar.bSave.setEnabled(false);
+		Strudel.winMain.toolbar.bSave.setEnabled(false);
 		
 		//reset the BLAST cut-off
 		LinkDisplayManager.setBlastThreshold(1);
-		MapViewer.winMain.toolbar.eValueSpinner.setValue(0);
+		Strudel.winMain.toolbar.eValueSpinner.setValue(0);
 		
 	}
 	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -239,9 +239,9 @@ public class FatController
 	
 	public void hideSelectionRect()
 	{
-		if(MapViewer.winMain.fatController.selectionMap != null)
-			MapViewer.winMain.fatController.selectionMap.drawSelectionRect = false;
-		MapViewer.winMain.mainCanvas.updateCanvas(true);
+		if(Strudel.winMain.fatController.selectionMap != null)
+			Strudel.winMain.fatController.selectionMap.drawSelectionRect = false;
+		Strudel.winMain.mainCanvas.updateCanvas(true);
 	}
 	
 	

@@ -16,7 +16,7 @@ public class FindFeaturesInRangeAction extends AbstractAction
 	{
 	
 		//clear the dialog
-		FindFeaturesInRangeDialog featuresInRangeDialog = MapViewer.winMain.ffInRangeDialog; 
+		FindFeaturesInRangeDialog featuresInRangeDialog = Strudel.winMain.ffInRangeDialog; 
 		
 		featuresInRangeDialog.ffInRangePanel.getRangeStartSpinner().setValue(0);
 		featuresInRangeDialog.ffInRangePanel.getRangeEndSpinner().setValue(0);
@@ -24,10 +24,10 @@ public class FindFeaturesInRangeAction extends AbstractAction
 		featuresInRangeDialog.ffInRangePanel.getChromoCombo().setSelectedIndex(0);
 		
 		//reset the main canvas
-		MapViewer.winMain.fatController.resetMainCanvasView();	
+		Strudel.winMain.fatController.resetMainCanvasView();	
 		
 		//show the dialog
-		featuresInRangeDialog.setLocationRelativeTo(MapViewer.winMain);
+		featuresInRangeDialog.setLocationRelativeTo(Strudel.winMain);
 		featuresInRangeDialog.setVisible(true);
 
 	}

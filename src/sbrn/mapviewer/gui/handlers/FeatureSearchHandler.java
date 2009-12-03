@@ -33,9 +33,9 @@ public class FeatureSearchHandler
 	
 	public static void findFeaturesInRangeFromCanvasSelection()
 	{
-		MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(true);
+		Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(true);
 		
-		GChromoMap gMap = MapViewer.winMain.fatController.selectionMap;	
+		GChromoMap gMap = Strudel.winMain.fatController.selectionMap;	
 		findAndDisplayFeaturesInRange(gMap.owningSet.name, gMap.name, gMap.relativeTopY, gMap.relativeBottomY, true);
 	}
 	
@@ -69,7 +69,7 @@ public class FeatureSearchHandler
 			{
 				boolean featureHasLinks = f.getLinks().size() > 0;
 				//add the feature only if it is in the interval and has links or if the number of mapsets loaded is 1
-				if((f.getStart() >= intervalStart) && (f.getStart() <= intervalEnd) && (featureHasLinks || MapViewer.winMain.dataContainer.gMapSets.size() == 1))
+				if((f.getStart() >= intervalStart) && (f.getStart() <= intervalEnd) && (featureHasLinks || Strudel.winMain.dataContainer.gMapSets.size() == 1))
 				{	
 					containedFeatures.add(f);
 					featuresInRange.add(f);
@@ -91,19 +91,19 @@ public class FeatureSearchHandler
 				gChromoMap.drawSelectionRect = false;
 				
 				//resize the split pane so we can see the results table
-				MapViewer.winMain.splitPane.setDividerSize(Constants.SPLITPANE_DIVIDER_SIZE);
-				int newDividerLocation = (int) (MapViewer.winMain.getHeight() - MapViewer.winMain.foundFeaturesTableControlPanel.getMinimumSize().getHeight());
-				MapViewer.winMain.splitPane.setDividerLocation(newDividerLocation);
+				Strudel.winMain.splitPane.setDividerSize(Constants.SPLITPANE_DIVIDER_SIZE);
+				int newDividerLocation = (int) (Strudel.winMain.getHeight() - Strudel.winMain.foundFeaturesTableControlPanel.getMinimumSize().getHeight());
+				Strudel.winMain.splitPane.setDividerLocation(newDividerLocation);
 				
 				// validate and repaint the canvas so it knows it has been resized
-				MapViewer.winMain.validate();
-				MapViewer.winMain.mainCanvas.updateCanvas(true);
+				Strudel.winMain.validate();
+				Strudel.winMain.mainCanvas.updateCanvas(true);
 				
 				//now zoom into that range on the chromosome
-				MapViewer.winMain.mainCanvas.zoomHandler.zoomIntoRange(gChromoMap, intervalStart, intervalEnd, false);
+				Strudel.winMain.mainCanvas.zoomHandler.zoomIntoRange(gChromoMap, intervalStart, intervalEnd, false);
 				
 				//we also need to set the labels on the control panel for the results to have the appropriate text
-				FoundFeaturesTableControlPanel controlPanel = MapViewer.winMain.foundFeaturesTableControlPanel;
+				FoundFeaturesTableControlPanel controlPanel = Strudel.winMain.foundFeaturesTableControlPanel;
 				controlPanel.setVisible(true);
 				controlPanel.getGenomeLabel().setText(genome);
 				controlPanel.getChromoLabel().setText(chromosome);
@@ -112,19 +112,19 @@ public class FeatureSearchHandler
 				controlPanel.getNumberFeaturesLabel().setText(new Integer(containedFeatures.size()).toString());
 				
 				//sync the checkboxes states with those in the find dialog itself to make sure they show the same value
-				controlPanel.getShowLabelsCheckbox().setSelected(MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().isSelected());
-				controlPanel.getShowHomologsCheckbox().setSelected(MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().isSelected());
+				controlPanel.getShowLabelsCheckbox().setSelected(Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().isSelected());
+				controlPanel.getShowHomologsCheckbox().setSelected(Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().isSelected());
 				
 				//earmark the features for drawing on repaint
-				MapViewer.winMain.mainCanvas.drawFoundFeaturesInRange = true;	
+				Strudel.winMain.mainCanvas.drawFoundFeaturesInRange = true;	
 				//repaint the canvas so we can see the highlighted region which should then be coloured in differently
-				MapViewer.winMain.mainCanvas.updateCanvas(true);
+				Strudel.winMain.mainCanvas.updateCanvas(true);
 				
 				//now put the results into the JTable held by the results panel
 				updateResultsTable(containedFeatures);
 				
 				//hide the dialog
-				MapViewer.winMain.ffInRangeDialog.setVisible(false);
+				Strudel.winMain.ffInRangeDialog.setVisible(false);
 			}
 			//no features in the range specified
 			else
@@ -146,7 +146,7 @@ public class FeatureSearchHandler
 		try
 		{		
 			//first reset the canvas to its default view
-			MapViewer.winMain.fatController.resetMainCanvasView();		
+			Strudel.winMain.fatController.resetMainCanvasView();		
 			
 			//this array holds all the names of the features we need to display
 			String [] allNames = new String[0];
@@ -166,19 +166,19 @@ public class FeatureSearchHandler
 			{				
 				//set the results panel to be visible
 				findFeaturesDialog.setVisible(false);
-				MapViewer.winMain.splitPane.setDividerSize(Constants.SPLITPANE_DIVIDER_SIZE);
-				int newDividerLocation = (int) (MapViewer.winMain.getHeight() * 0.66f);
-				MapViewer.winMain.splitPane.setDividerLocation(newDividerLocation);
+				Strudel.winMain.splitPane.setDividerSize(Constants.SPLITPANE_DIVIDER_SIZE);
+				int newDividerLocation = (int) (Strudel.winMain.getHeight() * 0.66f);
+				Strudel.winMain.splitPane.setDividerLocation(newDividerLocation);
 				
 				//now put the results into the JTable held by the results panel
 				updateResultsTable(features);
 				
 				//hide the control panel for the results table as it is not needed with this kind of results
-				MapViewer.winMain.foundFeaturesTableControlPanel.setVisible(false);
+				Strudel.winMain.foundFeaturesTableControlPanel.setVisible(false);
 				
 				// validate and repaint the canvas so it knows it has been resized
-				MapViewer.winMain.validate();
-				MapViewer.winMain.mainCanvas.updateCanvas(true);
+				Strudel.winMain.validate();
+				Strudel.winMain.mainCanvas.updateCanvas(true);
 			}
 			//we have not found any features
 			else
@@ -202,14 +202,14 @@ public class FeatureSearchHandler
 
 		LinkedList<ResultsTableEntry> tableEntries = TableEntriesGenerator.makeTableEntries(features);
 		HomologResultsTableModel homologResultsTableModel = new HomologResultsTableModel(tableEntries);
-		ResultsTable resultsTable = (ResultsTable)MapViewer.winMain.ffResultsPanel.getFFResultsTable();
+		ResultsTable resultsTable = (ResultsTable)Strudel.winMain.ffResultsPanel.getFFResultsTable();
 		resultsTable.setModel(homologResultsTableModel);
 		
 		//size the columns and the dialog containing the table appropriately
-		((ResultsTable)MapViewer.winMain.ffResultsPanel.getFFResultsTable()).initColumnSizes();
+		((ResultsTable)Strudel.winMain.ffResultsPanel.getFFResultsTable()).initColumnSizes();
 		
 		//enable the button that allows export of this data to file
-		MapViewer.winMain.toolbar.bSave.setEnabled(true);
+		Strudel.winMain.toolbar.bSave.setEnabled(true);
 	}
 	
 	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

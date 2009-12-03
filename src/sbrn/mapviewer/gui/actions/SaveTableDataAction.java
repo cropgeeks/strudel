@@ -25,7 +25,7 @@ public class SaveTableDataAction extends AbstractAction
 		File outputFile = new File("tableData.txt");
 		fc.setSelectedFile(outputFile);
 		
-		while (fc.showSaveDialog(MapViewer.winMain) == JFileChooser.APPROVE_OPTION)
+		while (fc.showSaveDialog(Strudel.winMain) == JFileChooser.APPROVE_OPTION)
 		{
 			File file = fc.getSelectedFile();
 			
@@ -80,7 +80,7 @@ public class SaveTableDataAction extends AbstractAction
 	private String extractResultsTableData()
 	{
 		//get the table model first
-		TableModel model = MapViewer.winMain.ffResultsPanel.resultsTable.getModel();		
+		TableModel model = Strudel.winMain.ffResultsPanel.resultsTable.getModel();		
 		return ((HomologResultsTableModel)model).getAllDataInTabFormat();	
 	}
 	

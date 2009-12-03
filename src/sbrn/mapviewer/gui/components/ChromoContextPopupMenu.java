@@ -44,22 +44,22 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 			int fps = 25;
 			// the length of time we want the animation to last in milliseconds
 			int millis = 1000;
-			ChromoZAxisInversionAnimator chromoInversionAnimator = new ChromoZAxisInversionAnimator(MapViewer.winMain.fatController.invertMap, fps, millis);
+			ChromoZAxisInversionAnimator chromoInversionAnimator = new ChromoZAxisInversionAnimator(Strudel.winMain.fatController.invertMap, fps, millis);
 			chromoInversionAnimator.start();
 		}
 		else if(source.equals(addAllFeaturesItem))
 		{
 			//first find out what chromosome this relates to
-			GChromoMap selectedMap = MapViewer.winMain.fatController.selectionMap;
+			GChromoMap selectedMap = Strudel.winMain.fatController.selectionMap;
 
 			//add features from the selected region into the results table
 			if(selectedMap != null)
 			{
 				//check whether we have an existing set of results
-				boolean resultExists = MapViewer.winMain.ffResultsPanel.resultsTable.getModel().getRowCount() > 0;
+				boolean resultExists = Strudel.winMain.ffResultsPanel.resultsTable.getModel().getRowCount() > 0;
 				//if yes, add the features from the current selection - otherwise make a new results table
 				if(resultExists)
-					MapViewer.winMain.ffResultsPanel.resultsTable.addFeaturesFromSelectedMap(selectedMap);
+					Strudel.winMain.ffResultsPanel.resultsTable.addFeaturesFromSelectedMap(selectedMap);
 				else
 					FeatureSearchHandler.findFeaturesInRangeFromCanvasSelection();
 					
@@ -69,8 +69,8 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 			}
 			
 			//turn antialiasing on and repaint			
-			MapViewer.winMain.mainCanvas.antiAlias = true;
-			MapViewer.winMain.mainCanvas.updateCanvas(true);			
+			Strudel.winMain.mainCanvas.antiAlias = true;
+			Strudel.winMain.mainCanvas.updateCanvas(true);			
 		}
 		
 	}

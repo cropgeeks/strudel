@@ -23,7 +23,7 @@ public class FindFeaturesInRangeDialog extends JDialog implements ActionListener
 	
 	public FindFeaturesInRangeDialog()
 	{
-		super(MapViewer.winMain, "List features in range", true);
+		super(Strudel.winMain, "List features in range", true);
 		
 		add(ffInRangePanel);
 		add(createButtons(), BorderLayout.SOUTH);
@@ -31,7 +31,7 @@ public class FindFeaturesInRangeDialog extends JDialog implements ActionListener
 		getRootPane().setDefaultButton(bFind);
 		SwingUtils.addCloseHandler(this, bCancel);
 		
-		setLocationRelativeTo(MapViewer.winMain);
+		setLocationRelativeTo(Strudel.winMain);
 		pack();
 		setResizable(true);
 	
@@ -70,8 +70,8 @@ public class FindFeaturesInRangeDialog extends JDialog implements ActionListener
 			//hide the find dialog
 			setVisible(false);
 			//clear the found features
-			MapViewer.winMain.fatController.highlightFeature = null;
-			MapViewer.winMain.fatController.highlightFeatureHomolog = null;
+			Strudel.winMain.fatController.highlightFeature = null;
+			Strudel.winMain.fatController.highlightFeatureHomolog = null;
 		}
 	}
 	

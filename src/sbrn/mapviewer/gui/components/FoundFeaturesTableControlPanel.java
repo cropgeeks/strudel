@@ -115,13 +115,13 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 	
 	private void genomeFilterComboActionPerformed(java.awt.event.ActionEvent evt)
 	{
-		if (!(MapViewer.winMain.ffResultsPanel.resultsTable.getModel() instanceof DefaultTableModel))
+		if (!(Strudel.winMain.ffResultsPanel.resultsTable.getModel() instanceof DefaultTableModel))
 		{
 			JComboBox cb = (JComboBox) evt.getSource();
 			String genomeName = (String) cb.getSelectedItem();
-			HomologResultsTableModel homologResultsTableModel = (HomologResultsTableModel) MapViewer.winMain.ffResultsPanel.resultsTable.getModel();
+			HomologResultsTableModel homologResultsTableModel = (HomologResultsTableModel) Strudel.winMain.ffResultsPanel.resultsTable.getModel();
 			int genomeColumnIndex = homologResultsTableModel.findColumn(homologResultsTableModel.homologGenomeColumnLabel);
-			MapViewer.winMain.ffResultsPanel.resultsTable.newFilter(genomeName, genomeColumnIndex);
+			Strudel.winMain.ffResultsPanel.resultsTable.newFilter(genomeName, genomeColumnIndex);
 		}
 	}
 	
@@ -129,22 +129,22 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 	{
 		//synchronise this checkbox with the corresponding one in the find features in range panel
 		if (showHomologsCheckbox.isSelected())
-			MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().setSelected(true);
+			Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().setSelected(true);
 		else
-			MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().setSelected(false);
+			Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().setSelected(false);
 		
-		MapViewer.winMain.mainCanvas.updateCanvas(true);
+		Strudel.winMain.mainCanvas.updateCanvas(true);
 	}
 	
 	private void showLabelsCheckboxStateChanged(javax.swing.event.ChangeEvent evt)
 	{
 		//synchronise this checkbox with the corresponding one in the find features in range panel
 		if (showLabelsCheckbox.isSelected())
-			MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(true);
+			Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(true);
 		else
-			MapViewer.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(false);
+			Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(false);
 		
-		MapViewer.winMain.mainCanvas.updateCanvas(true);
+		Strudel.winMain.mainCanvas.updateCanvas(true);
 	}
 	
 	public void setupGenomeFilterCombo()
@@ -152,7 +152,7 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 		//set up the combo box with its data model
 		Vector<String> genomes = new Vector<String>();
 		genomes.add("<none>");
-		for (GMapSet gMapSet : MapViewer.winMain.dataContainer.gMapSets)
+		for (GMapSet gMapSet : Strudel.winMain.dataContainer.gMapSets)
 		{
 			genomes.add(gMapSet.name);
 		}

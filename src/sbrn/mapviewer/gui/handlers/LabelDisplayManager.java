@@ -88,8 +88,8 @@ public class LabelDisplayManager
 		//if we do have a homolog we need to work out where it is in relation to this feature and place the label out of the way of the link line
 		if(homolog != null)
 		{
-			int targetGenomeIndex = MapViewer.winMain.dataContainer.allMapSets.indexOf(f.getOwningMap().getOwningMapSet());
-			int referenceGenomeIndex = MapViewer.winMain.dataContainer.allMapSets.indexOf(homolog.getOwningMap().getOwningMapSet());
+			int targetGenomeIndex = Strudel.winMain.dataContainer.allMapSets.indexOf(f.getOwningMap().getOwningMapSet());
+			int referenceGenomeIndex = Strudel.winMain.dataContainer.allMapSets.indexOf(homolog.getOwningMap().getOwningMapSet());
 			
 			if(targetGenomeIndex > referenceGenomeIndex)
 			{
@@ -149,7 +149,7 @@ public class LabelDisplayManager
 			if (f != null)
 			{				
 				// get the name of the feature
-				String featureName = f.getName();
+				String featureName = f.getName() + " (" + f.getType() + ")";
 				int stringWidth = fm.stringWidth(featureName);
 				// this is where the label goes
 				int labelY = laidoutPositions.get(f);
@@ -157,7 +157,7 @@ public class LabelDisplayManager
 				
 				// next decide where to place the label on x
 				int mapSetX = Math.round(f.getOwningMap().getGChromoMap().owningSet.xPosition);
-				int chromoWidth = MapViewer.winMain.mainCanvas.chromoWidth;
+				int chromoWidth = Strudel.winMain.mainCanvas.chromoWidth;
 				// the amount by which we want to move the label end away from the chromosome (in pixels)
 				int lineLength = 50;
 				int labelX = mapSetX + chromoWidth + lineLength; // this is where the label is drawn from
@@ -175,7 +175,7 @@ public class LabelDisplayManager
 				}
 				
 				// draw a line to highlight the marker on the chromosome itself
-				g2.drawLine(mapSetX, featureY, mapSetX + MapViewer.winMain.mainCanvas.chromoWidth - 1, featureY);
+				g2.drawLine(mapSetX, featureY, mapSetX + Strudel.winMain.mainCanvas.chromoWidth - 1, featureY);
 				// draw a line from the marker to the label
 				g2.drawLine(lineStartX, featureY, lineEndX, labelY - fontHeight / 2);
 				//draw a rectangle as a background for the label
@@ -240,7 +240,7 @@ public class LabelDisplayManager
 		//first work out the combined height of the labels
 		int totalLabelHeight = Math.round(features.size() * labelHeight);	
 		//the difference between the total label height and the canvas size
-		int excess = totalLabelHeight - MapViewer.winMain.mainCanvas.getHeight();
+		int excess = totalLabelHeight - Strudel.winMain.mainCanvas.getHeight();
 		
 		//the label offset on y relative to the start of the features themselves
 		//need to subtract this from each label position

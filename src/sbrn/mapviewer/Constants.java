@@ -22,7 +22,7 @@ public class Constants
 	public static final int NUM_LINKSHAPE_TYPES = 3;	
 
 	//example data file paths	
-	public static final String exampleDataAllInOne = "data/BarleyRiceBrachySingleLineFormat.txt";
+	public static final String exampleDataAllInOne = "data/BarleyRiceBrachySingleLineFormat.strudel";
 	
 	//example data descriptions
 	public static final String exampleTargetDataDescription = "Barley Illumina SNPS consensus map UCR_20080416-2 (Close et al.); to be published";

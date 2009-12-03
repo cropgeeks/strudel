@@ -20,11 +20,11 @@ public class Scroller extends JScrollBar implements AdjustmentListener
 	
 	public void adjustmentValueChanged(AdjustmentEvent e)
 	{
-		for (GMapSet gMapSet : MapViewer.winMain.dataContainer.gMapSets)
+		for (GMapSet gMapSet : Strudel.winMain.dataContainer.gMapSets)
 		{
 			//work out the new scroller position and the corresponding position on the mapset's genome in y
 			int newCenterPoint = (int) (gMapSet.totalY * (e.getValue()/100.0f));
-			MapViewer.winMain.mainCanvas.moveGenomeViewPort(gMapSet, newCenterPoint);
+			Strudel.winMain.mainCanvas.moveGenomeViewPort(gMapSet, newCenterPoint);
 		} 
 
 	}

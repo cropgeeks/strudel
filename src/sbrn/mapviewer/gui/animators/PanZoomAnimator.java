@@ -138,7 +138,7 @@ public class PanZoomAnimator extends Thread implements ItemListener
 				currentScalingFactor += increment;
 				
 				//update visible zoom info
-				MapViewer.winMain.fatController.updateAllZoomControls();
+				Strudel.winMain.fatController.updateAllZoomControls();
 			}
 		}
 		//if we have not reached the max zoom factor with this we need to do one more zoom adjust 
@@ -155,9 +155,9 @@ public class PanZoomAnimator extends Thread implements ItemListener
 		}
 		
 		//now update the arrays with the position data
-		MapViewer.winMain.fatController.initialisePositionArrays();
+		Strudel.winMain.fatController.initialisePositionArrays();
 		//update zoom control position
-		MapViewer.winMain.fatController.updateAllZoomControls();
+		Strudel.winMain.fatController.updateAllZoomControls();
 				
 		//repaint
 		Utils.repaintAntiAliased();		

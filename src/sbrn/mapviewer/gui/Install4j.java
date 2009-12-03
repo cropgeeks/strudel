@@ -101,10 +101,16 @@ public class Install4j
 
 					// Nudges the cgi script to log the run
 					URL url = new URL(addr);
-					HttpURLConnection c = (HttpURLConnection) url.openConnection();
+					try
+					{
+						HttpURLConnection c = (HttpURLConnection) url.openConnection();
 
-					c.getResponseCode();
-					c.disconnect();
+						c.getResponseCode();
+						c.disconnect();
+					}
+					catch (Exception ukhe)
+					{
+					}
 				}
 				catch (Exception e) { e.printStackTrace();}
 			}

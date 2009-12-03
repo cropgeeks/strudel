@@ -1,6 +1,7 @@
 package sbrn.mapviewer.gui.animators;
 
 import sbrn.mapviewer.*;
+import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.components.*;
 
 public class LinkShapeAnimator extends Thread
@@ -107,12 +108,8 @@ public class LinkShapeAnimator extends Thread
 		//re-enable the button that triggered this thread
 		MapViewer.winMain.toolbar.bCurves.setEnabled(true);
 		
-		//repaint with antialiasing if required
-		if(MapViewer.winMain.mainCanvas.antiAlias)
-		{
-			AntiAliasRepaintThread antiAliasRepaintThread = new AntiAliasRepaintThread();
-			antiAliasRepaintThread.start();
-		}
+		//repaint
+		Utils.repaintAntiAliased();		
 	}
 	
 }

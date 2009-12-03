@@ -1,6 +1,7 @@
 package sbrn.mapviewer.gui.animators;
 
 import sbrn.mapviewer.*;
+import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.entities.*;
 
 public class ChromoZAxisInversionAnimator extends Thread
@@ -81,11 +82,9 @@ public class ChromoZAxisInversionAnimator extends Thread
 			
 			//update the position lookup arrays for mouseover
 			MapViewer.winMain.fatController.initialisePositionArrays();			
-			
-			//turn antialiasing back on
-			MapViewer.winMain.mainCanvas.antiAlias = true;	
+
 			//repaint
-			MapViewer.winMain.mainCanvas.updateCanvas(true);			
+			Utils.repaintAntiAliased();		
 		}
 		catch (RuntimeException e)
 		{

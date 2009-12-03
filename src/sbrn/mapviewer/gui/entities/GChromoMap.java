@@ -264,8 +264,6 @@ public class GChromoMap
 			{
 				drawSelectionRectangle(g2);
 			}
-			
-			
 		}
 		catch (RuntimeException e)
 		{
@@ -426,7 +424,7 @@ public class GChromoMap
 		
 		if (mouseOverFeatures.size() > 0 && drawMouseOverFeatures && !owningSet.alwaysShowAllLabels)
 		{
-			LabelDisplayManager.drawFeatureLabelsInRange(g2, false, gMaps,-1,-1,mouseOverFeatures, true);
+			LabelDisplayManager.drawFeatureLabelsInRange(g2, mouseOverFeatures, true);
 		}
 	}
 	

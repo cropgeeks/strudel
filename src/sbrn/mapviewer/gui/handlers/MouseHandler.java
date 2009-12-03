@@ -61,11 +61,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			if (selectedMap != null)
 				winMain.mainCanvas.zoomHandler.processClickZoomRequest(selectedMap);
 			return;
-		}
-		
-		//turn antialiasing on and repaint
-		winMain.mainCanvas.antiAlias = true;
-		winMain.mainCanvas.updateCanvas(true);
+		}	
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -139,6 +135,9 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			MapViewer.winMain.fatController.isCtrlClickSelection = true;
 			winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(e.getX(), e.getY());
 		}
+		
+		MapViewer.winMain.mainCanvas.antiAlias = false;
+		MapViewer.winMain.mainCanvas.updateCanvas(true);
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -190,6 +189,13 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			if(selectedMap == null)
 				selectedMap = Utils.getSelectedMap(winMain, gMapSetIndex, e.getY());
 			winMain.mainCanvas.zoomHandler.processPanZoomRequest(selectedMap, mousePressedY, e.getY(), true);			
+		}
+		
+		//simple click on a target genome chromosome means display all links between this and all the reference chromos
+		if ((!isMetaClick(e) && !e.isAltDown() && !e.isShiftDown()) || (isMetaClick(e) && !e.isShiftDown()))
+		{
+			//repaint
+			Utils.repaintAntiAliased();	
 		}
 			
 		winMain.mainCanvas.drawSelectionRect = false;
@@ -372,13 +378,8 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			winMain.mainCanvas.moveGenomeViewPort(selectedSet, newCenterPoint);
 		}
 		
-		//repaint with antialiasing if required
-		if(Prefs.userPrefAntialias)
-		{
-			AntiAliasRepaintThread antiAliasRepaintThread = new AntiAliasRepaintThread();
-			antiAliasRepaintThread.start();
-		}
-		
+		//repaint
+		Utils.repaintAntiAliased();			
 	}
 	
 	

@@ -2,11 +2,9 @@ package sbrn.mapviewer.gui.handlers;
 
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
-import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.animators.*;
 import sbrn.mapviewer.gui.components.*;
-import sbrn.mapviewer.gui.entities.GChromoMap;
-import sbrn.mapviewer.gui.entities.GMapSet;
+import sbrn.mapviewer.gui.entities.*;
 
 public class CanvasZoomHandler
 {
@@ -19,8 +17,8 @@ public class CanvasZoomHandler
 	int fps = 25;
 	
 	//animation times in milliseconds
-	int clickZoomMillis = 300;
-	int panZoomMillis = 400;
+	int clickZoomMillis = 200;
+	int panZoomMillis = 300;
 
 	//this boolean is required because we need to check in the stateChanged method of the ZoomControlPanel class whether
 	//or not it was invoked manually or indirectly because we programmatically changed the value of the zoom slider
@@ -157,7 +155,6 @@ public class CanvasZoomHandler
 		MapViewer.winMain.mainCanvas.zoomHandler.isClickZoomRequest = false;
 		
 		//now repaint
-		MapViewer.winMain.mainCanvas.antiAlias = Prefs.userPrefAntialias;
 		MapViewer.winMain.mainCanvas.updateCanvas(true);
 
 	}
@@ -195,11 +192,9 @@ public class CanvasZoomHandler
 		if (selectedMap.isShowingOnCanvas)
 		{
 			mainCanvas.checkMarkerPaintingThresholds(selectedSet);
-//			mainCanvas.checkForLabelDrawing(selectedSet);
 		}
 
 		// repaint the canvas
-		mainCanvas.antiAlias = false;
 		mainCanvas.updateCanvas(true);
 	}
 

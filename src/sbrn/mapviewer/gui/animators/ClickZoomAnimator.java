@@ -1,6 +1,7 @@
 package sbrn.mapviewer.gui.animators;
 
 import sbrn.mapviewer.*;
+import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.components.*;
 import sbrn.mapviewer.gui.entities.*;
 import sbrn.mapviewer.gui.handlers.*;
@@ -119,9 +120,8 @@ public class ClickZoomAnimator extends Thread
 		//turn drawing of map index back on
 		selectedMap.drawChromoIndex = true;
 		
-		//repaint canvas 
-		MapViewer.winMain.mainCanvas.antiAlias = true;
-		MapViewer.winMain.mainCanvas.updateCanvas(true);
+		//repaint
+		Utils.repaintAntiAliased();		
 		
 		zoomHandler.isClickZoomRequest = false;
 

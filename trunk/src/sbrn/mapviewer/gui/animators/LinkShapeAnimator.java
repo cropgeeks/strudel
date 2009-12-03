@@ -22,10 +22,10 @@ public class LinkShapeAnimator extends Thread
 	public void run()
 	{
 		//first of all disable the button that triggered this thread so that the user cannot start multiple instances of this
-		MapViewer.winMain.toolbar.bCurves.setEnabled(false);
+		Strudel.winMain.toolbar.bCurves.setEnabled(false);
 		
 		//turn antialiasing off
-		MapViewer.winMain.mainCanvas.antiAlias = false;
+		Strudel.winMain.mainCanvas.antiAlias = false;
 
 		//the total number of frames we need to render
 		int totalFrames = Math.round(fps * (millis / 1000.0f));
@@ -49,10 +49,10 @@ public class LinkShapeAnimator extends Thread
 
 		//work out the curvature coefficient increment over the range we need to cover
 		float differential;
-		if(MapViewer.winMain.mainCanvas.linkDisplayManager.linkShapeCoeff > curvatureCoefficient)
-			differential = MapViewer.winMain.mainCanvas.linkDisplayManager.linkShapeCoeff - curvatureCoefficient;
+		if(Strudel.winMain.mainCanvas.linkDisplayManager.linkShapeCoeff > curvatureCoefficient)
+			differential = Strudel.winMain.mainCanvas.linkDisplayManager.linkShapeCoeff - curvatureCoefficient;
 		else
-			differential = curvatureCoefficient - MapViewer.winMain.mainCanvas.linkDisplayManager.linkShapeCoeff;
+			differential = curvatureCoefficient - Strudel.winMain.mainCanvas.linkDisplayManager.linkShapeCoeff;
 		float coefficientIncrement = differential / totalFrames;
 
 		// now loop for the number of total frames, zooming in by a bit each time
@@ -70,43 +70,43 @@ public class LinkShapeAnimator extends Thread
 			//straight links
 			if(linkType == Constants.LINKTYPE_STRAIGHT)
 			{
-				MapViewer.winMain.mainCanvas.linkDisplayManager.linkShapeCoeff -= coefficientIncrement;
+				Strudel.winMain.mainCanvas.linkDisplayManager.linkShapeCoeff -= coefficientIncrement;
 				
 				//as a precaution, make sure that the last iteration of this loop will set the value of the link shape coefficient to the
 				// minimum so that the lines are definitely straight
 				//this is so we don't ever exceed the value in either direction
 				if(i == totalFrames -1)
-					MapViewer.winMain.mainCanvas.linkDisplayManager.linkShapeCoeff = 0;
+					Strudel.winMain.mainCanvas.linkDisplayManager.linkShapeCoeff = 0;
 			}
 			//angled links
 			else  if(linkType == Constants.LINKTYPE_ANGLED)
 			{
-				MapViewer.winMain.mainCanvas.linkDisplayManager.linkShapeCoeff += coefficientIncrement;
+				Strudel.winMain.mainCanvas.linkDisplayManager.linkShapeCoeff += coefficientIncrement;
 				
 				//as a precaution, make sure that the last iteration of this loop will set the value of the link shape coefficient to the
 				// maximum so that the lines are definitely angled
 				//this is so we don't ever exceed the value in either direction
 				if(i == totalFrames -1)
-					MapViewer.winMain.mainCanvas.linkDisplayManager.linkShapeCoeff = curvatureCoefficient;
+					Strudel.winMain.mainCanvas.linkDisplayManager.linkShapeCoeff = curvatureCoefficient;
 			}
 			//curved links
 			else
 			{
-				MapViewer.winMain.mainCanvas.linkDisplayManager.linkShapeCoeff += coefficientIncrement;
+				Strudel.winMain.mainCanvas.linkDisplayManager.linkShapeCoeff += coefficientIncrement;
 				
 				//as a precaution, make sure that the last iteration of this loop will set the value of the link shape coefficient to the
 				// maximum so that the lines are definitely curved
 				//this is so we don't ever exceed the value in either direction
 				if(i == totalFrames -1)
-					MapViewer.winMain.mainCanvas.linkDisplayManager.linkShapeCoeff = Constants.MAX_CURVEDLINK_COEFF;
+					Strudel.winMain.mainCanvas.linkDisplayManager.linkShapeCoeff = Constants.MAX_CURVEDLINK_COEFF;
 			}
 
 			//do the repaint
-			MapViewer.winMain.mainCanvas.updateCanvas(true);		
+			Strudel.winMain.mainCanvas.updateCanvas(true);		
 		}
 		
 		//re-enable the button that triggered this thread
-		MapViewer.winMain.toolbar.bCurves.setEnabled(true);
+		Strudel.winMain.toolbar.bCurves.setEnabled(true);
 		
 		//repaint
 		Utils.repaintAntiAliased();		

@@ -37,7 +37,7 @@ public class Utils
 		int combinedChromoHeight = (chromoIndex-1) * gChromoMap.height;
 		
 		//the combined height of all spaces between chromos up to the one the feature is on
-		int combinedSpacerHeight = (chromoIndex-1) * MapViewer.winMain.mainCanvas.chromoSpacing;
+		int combinedSpacerHeight = (chromoIndex-1) * Strudel.winMain.mainCanvas.chromoSpacing;
 		
 		//the offset of the feature position from the top of the chromosome
 		int featureOffset = Math.round((f.getStart() / f.getOwningMap().getStop()) * gChromoMap.height);
@@ -74,7 +74,7 @@ public class Utils
 		MapSet foundSet = null;
 		
 		// for all mapsets
-		for (MapSet mapSet : MapViewer.winMain.dataContainer.allMapSets)
+		for (MapSet mapSet : Strudel.winMain.dataContainer.allMapSets)
 		{
 			if(mapSet.getName().equals(name))
 				foundSet = mapSet;
@@ -92,7 +92,7 @@ public class Utils
 		
 		//we need to search all chromomaps in all mapsets for this	
 		// for all gmapsets
-		for (GMapSet gMapSet : MapViewer.winMain.dataContainer.gMapSets)
+		for (GMapSet gMapSet : Strudel.winMain.dataContainer.gMapSets)
 		{
 			if(gMapSet.name.equals(name))
 				foundSet = gMapSet;
@@ -131,7 +131,7 @@ public class Utils
 		
 		//we need to search all chromomaps in all mapsets for this	
 		// for all gmapsets
-		for (GMapSet gMapSet : MapViewer.winMain.dataContainer.gMapSets)
+		for (GMapSet gMapSet : Strudel.winMain.dataContainer.gMapSets)
 		{
 			// for all gchromomaps within each mapset
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
@@ -329,7 +329,7 @@ public class Utils
 		
 		// check whether the point x,y lies within one of the bounding rectangles of our chromosomes
 		// for each chromosome in each genome
-		for (GMapSet gMapSet : MapViewer.winMain.dataContainer.gMapSets)
+		for (GMapSet gMapSet : Strudel.winMain.dataContainer.gMapSets)
 		{
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
 			{
@@ -377,9 +377,9 @@ public class Utils
 		GChromoMap selectedMap = null;
 		
 		//the number of genomes we have loaded
-		int numGenomes = MapViewer.winMain.dataContainer.gMapSets.size();
+		int numGenomes = Strudel.winMain.dataContainer.gMapSets.size();
 		//the size of the sectors occupied by each of the genomes on the main canvas
-		int interValSize = Math.round(MapViewer.winMain.mainCanvas.getWidth() / numGenomes);
+		int interValSize = Math.round(Strudel.winMain.mainCanvas.getWidth() / numGenomes);
 		
 		// check whether a line drawn at y intersects within one of the bounding rectangles of our chromosomes
 		//we can just use a rectangle a single pixel wide for this purpose so we can use the existing API for the Rectangle class
@@ -387,7 +387,7 @@ public class Utils
 		Rectangle intersectLine = new Rectangle(xLeft, y, interValSize, 1);
 		
 		//now check all the chromosomes' bounding rectangles in this mapset for intersection			
-		for (GChromoMap gChromoMap : MapViewer.winMain.dataContainer.gMapSets.get(gMapSetIndex).gMaps)
+		for (GChromoMap gChromoMap : Strudel.winMain.dataContainer.gMapSets.get(gMapSetIndex).gMaps)
 		{
 			// check whether the hit falls within its current bounding rectangle
 			if (gChromoMap.boundingRectangle.intersects(intersectLine))
@@ -408,9 +408,9 @@ public class Utils
 		//the index of the mapset in the list kept by the DataContainer object
 		int index = -1;
 		//the number of genomes we have loaded
-		int numGenomes = MapViewer.winMain.dataContainer.gMapSets.size();
+		int numGenomes = Strudel.winMain.dataContainer.gMapSets.size();
 		//the size of the sectors occupied by each of the genomes on the main canvas
-		int interValSize = Math.round(MapViewer.winMain.mainCanvas.getWidth() / numGenomes);
+		int interValSize = Math.round(Strudel.winMain.mainCanvas.getWidth() / numGenomes);
 		//where we had our mouse hit
 		int xHit = e.getX();
 		//now simply return the value we get by dividing the x location by the interval size, while throwing the remainder away
@@ -537,7 +537,7 @@ public class Utils
 				int pixelPos = getFPosOnScreenInPixels(cMap, fStart, false);
 				
 				//check whether this position is currently showing on the canvas or not
-				if (pixelPos > 0 && pixelPos < MapViewer.winMain.mainCanvas.getHeight())
+				if (pixelPos > 0 && pixelPos < Strudel.winMain.mainCanvas.getHeight())
 				{
 					//if it is, add it
 					visibleFeatures.add(feature);

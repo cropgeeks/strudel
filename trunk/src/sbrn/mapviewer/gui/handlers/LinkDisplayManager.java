@@ -51,13 +51,13 @@ public class LinkDisplayManager
 	// display the homologies between chromosomes as lines
 	public void processLinkDisplayRequest(int x, int y)
 	{
-		Vector<GChromoMap> selectedMaps = MapViewer.winMain.fatController.selectedMaps;
+		Vector<GChromoMap> selectedMaps = Strudel.winMain.fatController.selectedMaps;
 		
 		//only do this if we have reference genomes -- otherwise there are no links to deal with
-		if(MapViewer.winMain.dataContainer.gMapSets.size() > 1)
+		if(Strudel.winMain.dataContainer.gMapSets.size() > 1)
 		{			
 			// first figure out which chromosome we are in
-			selectedMap = Utils.getSelectedMap(MapViewer.winMain.dataContainer.gMapSets, x, y);
+			selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, x, y);
 			selectedSet = selectedMap.owningSet;
 			
 			// the click has hit a chromosome
@@ -65,7 +65,7 @@ public class LinkDisplayManager
 			{
 				// single click with Ctrl down -- user wants to select individual maps
 				// in that case we just add or remove maps to the vector of selected maps as requested
-				if (MapViewer.winMain.fatController.isCtrlClickSelection)
+				if (Strudel.winMain.fatController.isCtrlClickSelection)
 				{
 					// if the map is already added we need to remove it (this is toggle-style functionality)
 					if (selectedMaps.contains(selectedMap))
@@ -85,7 +85,7 @@ public class LinkDisplayManager
 				{
 					// in that case we first clear out the existing vector of selected maps in the target genome
 					selectedMaps.clear();
-					MapViewer.winMain.fatController.clearMapOutlines();
+					Strudel.winMain.fatController.clearMapOutlines();
 					
 					// then we add the selected map only
 					selectedMaps.add(selectedMap);
@@ -116,7 +116,7 @@ public class LinkDisplayManager
 		int numLinksDrawn = 0;
 
 		//only do this if we have at least 2 genomes -- otherwise there are no links to deal with
-		if(MapViewer.winMain.dataContainer.gMapSets.size() > 1)
+		if(Strudel.winMain.dataContainer.gMapSets.size() > 1)
 		{			
 			try
 			{		
@@ -125,10 +125,10 @@ public class LinkDisplayManager
 				Vector<LinkSet> drawnLinkSets = new Vector<LinkSet>();
 
 				// for each map in the selectedMaps vector 
-				for (int i = 0; i < MapViewer.winMain.fatController.selectedMaps.size(); i++)
+				for (int i = 0; i < Strudel.winMain.fatController.selectedMaps.size(); i++)
 				{
 					// get the currently selected map
-					GChromoMap selectedMap = MapViewer.winMain.fatController.selectedMaps.get(i);
+					GChromoMap selectedMap = Strudel.winMain.fatController.selectedMaps.get(i);
 					
 					// get the ChromoMap for the currently selected chromosome
 					ChromoMap selectedChromoMap = selectedMap.chromoMap;
@@ -162,9 +162,9 @@ public class LinkDisplayManager
 							//if the user is doing Ctrl click selection of maps they will only want to see links between the ones they selected
 							//so if we don't have both of the maps in this map set selected, just skip to the next one
 							boolean drawLinkSet = true;
-							if (MapViewer.winMain.fatController.isCtrlClickSelection)
+							if (Strudel.winMain.fatController.isCtrlClickSelection)
 							{
-								if (!(MapViewer.winMain.fatController.selectedMaps.contains(gMap1) && MapViewer.winMain.fatController.selectedMaps.contains(gMap2)) || drawnLinkSets.contains(selectedLinks))
+								if (!(Strudel.winMain.fatController.selectedMaps.contains(gMap1) && Strudel.winMain.fatController.selectedMaps.contains(gMap2)) || drawnLinkSets.contains(selectedLinks))
 									drawLinkSet = false;
 							}
 													
@@ -175,7 +175,7 @@ public class LinkDisplayManager
 							int referenceChromoX = 0;
 							//need to adjust the x positions of the links here
 							//if the reference genome is to the right of the target genome (indicated by their positions in the list of mapsets held in the datacontainer)
-							if (MapViewer.winMain.dataContainer.gMapSets.indexOf(targetGMapSet) < MapViewer.winMain.dataContainer.gMapSets.indexOf(referenceGMapSet))
+							if (Strudel.winMain.dataContainer.gMapSets.indexOf(targetGMapSet) < Strudel.winMain.dataContainer.gMapSets.indexOf(referenceGMapSet))
 							{
 								targetChromoX = Math.round(targetGMapSet.xPosition + targetGMapSet.gMaps.get(0).width) + 1;
 								referenceChromoX = Math.round(referenceGMapSet.xPosition) -1;
@@ -292,7 +292,7 @@ public class LinkDisplayManager
 		
 		//need to adjust the x positions of the links here
 		//if the reference genome is to the right of the target genome (indicated by their positions in the list of mapsets held inthe datacontainer)
-		if (MapViewer.winMain.dataContainer.gMapSets.indexOf(targetGMapSet) < MapViewer.winMain.dataContainer.gMapSets.indexOf(referenceGMapSet) )
+		if (Strudel.winMain.dataContainer.gMapSets.indexOf(targetGMapSet) < Strudel.winMain.dataContainer.gMapSets.indexOf(referenceGMapSet) )
 		{
 			targetChromoX = Math.round(targetGMapSet.xPosition + targetGMapSet.gMaps.get(0).width);
 			referenceChromoX = Math.round(referenceGMapSet.xPosition);
@@ -336,10 +336,10 @@ public class LinkDisplayManager
 	public void drawHighlightedLinksInRange(Graphics2D g2)
 	{		
 		//only do this if we have at least 2 genomes -- otherwise there are no links to deal with
-		if(MapViewer.winMain.dataContainer.gMapSets.size() > 1)
+		if(Strudel.winMain.dataContainer.gMapSets.size() > 1)
 		{					
 			// for all  links sets
-			for (LinkSet selectedLinks : MapViewer.winMain.dataContainer.allLinkSets)
+			for (LinkSet selectedLinks : Strudel.winMain.dataContainer.allLinkSets)
 			{
 				// for each link in the linkset
 				for (Link link : selectedLinks)
@@ -392,7 +392,7 @@ public class LinkDisplayManager
 			linkSetLookup = new Hashtable<ChromoMap, Vector<LinkSet>>();
 			
 			//we need to do this for all linksets we have
-			for (LinkSet links : MapViewer.winMain.dataContainer.allLinkSets)
+			for (LinkSet links : Strudel.winMain.dataContainer.allLinkSets)
 			{
 				MapSet mapset1 = links.getMapSets().get(0);
 				MapSet mapset2 = links.getMapSets().get(1);
@@ -520,8 +520,8 @@ public class LinkDisplayManager
 		double ctrly2 = endY;
 		
 		//this is what we do for straight or curved lines
-		if(MapViewer.winMain.toolbar.currentLinkShapeType == Constants.LINKTYPE_CURVED || 
-						MapViewer.winMain.toolbar.currentLinkShapeType == Constants.LINKTYPE_STRAIGHT)
+		if(Strudel.winMain.toolbar.currentLinkShapeType == Constants.LINKTYPE_CURVED || 
+						Strudel.winMain.toolbar.currentLinkShapeType == Constants.LINKTYPE_STRAIGHT)
 		{
 			//if the linkCurvatureCoeff is greater than 0 we make this line into a curve by moving the control points towards the centre	
 			if (linkShapeCoeff > 0)
@@ -535,7 +535,7 @@ public class LinkDisplayManager
 			g2.draw(curve);
 		}
 		//this is what we do for angled lines
-		else if(MapViewer.winMain.toolbar.currentLinkShapeType == Constants.LINKTYPE_ANGLED)
+		else if(Strudel.winMain.toolbar.currentLinkShapeType == Constants.LINKTYPE_ANGLED)
 		{
 			ctrlx1 = startX + ((endX - startX) * linkShapeCoeff);
 			ctrlx2 = endX - ((endX - startX) * linkShapeCoeff);

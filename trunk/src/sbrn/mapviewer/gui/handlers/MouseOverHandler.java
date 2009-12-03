@@ -36,7 +36,7 @@ public class MouseOverHandler
 		try
 		{
 			// first figure out which chromosome we are in
-			selectedMap = Utils.getSelectedMap(MapViewer.winMain.dataContainer.gMapSets, x, y);
+			selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, x, y);
 			if (selectedMap != null && selectedMap.arraysInitialized)
 			{			
 				//some nasty logic to do with the persistent display of labels

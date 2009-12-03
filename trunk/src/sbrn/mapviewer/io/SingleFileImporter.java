@@ -8,6 +8,9 @@ import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.dialog.*;
 import scri.commons.gui.*;
 
+/**
+ * Used for importing data in the single file Strudel format. For example see data/singleLineFileFormatExample.xlsx.
+ */
 public class SingleFileImporter
 {
 	//==========================================methods==================================================	
@@ -19,6 +22,8 @@ public class SingleFileImporter
 	
 	private LinkedList<String> missingFeatures = new LinkedList<String>();
 	
+	int numFeaturesLoaded = 0;
+	
 	//==========================================methods==================================================	
 	
 	//Reads a file which contains all mapsets and links to be imported
@@ -26,7 +31,7 @@ public class SingleFileImporter
 	//the first field says which type it is
 	//features are expected first in the file, then links
 	//features should be in blocks
-	public void parseCombinedFile(File file)
+	public void parseCombinedFile(File file) throws Exception
 	{
 		int lineCount = 1;
 		
@@ -49,7 +54,7 @@ public class SingleFileImporter
 			
 			if (missingFeatures.size() > 0)
 			{
-				MapViewer.winMain.dataLoadingDialog.setVisible(false);
+				Strudel.winMain.dataLoadingDialog.setVisible(false);
 				
 				//list the features that were missing, if any
 				StringBuilder missingFeatureList = new StringBuilder();
@@ -57,23 +62,17 @@ public class SingleFileImporter
 				{
 					missingFeatureList.append(featureName.trim() + "\n");
 				}
-				MissingFeaturesDialog missingFeaturesDialog = new MissingFeaturesDialog(MapViewer.winMain, true, missingFeatureList.toString());
+				MissingFeaturesDialog missingFeaturesDialog = new MissingFeaturesDialog(Strudel.winMain, true, missingFeatureList.toString());
 			}
 			
-			MapViewer.dataLoaded = true;		
+			Strudel.dataLoaded = true;		
 			
 		}
 		catch (Exception e)
-		{
-			// reset the cancel flag as the user might now want to try again
-			MapViewer.winMain.fatController.dataLoadCancelled = true;			
-			// hide the data loading progress dialog
-			if (MapViewer.winMain.dataLoadingDialog != null)
-				MapViewer.winMain.dataLoadingDialog.setVisible(false);
-			
+		{		
 			String errorMessage = "Error reading line " + lineCount + ".\n" + e.getMessage();
-			TaskDialog.error(errorMessage, "Close");	
 			e.printStackTrace();
+			throw  new IOException(errorMessage);
 		}		
 	}
 	
@@ -94,7 +93,7 @@ public class SingleFileImporter
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	//processes a single feature and adds it to the appropriate mapset
-	private void processFeatureLine(String line)
+	private void processFeatureLine(String line) throws Exception
 	{
 		//the file format is tab delimited text
 		String [] tokens = line.split("\t");
@@ -140,29 +139,38 @@ public class SingleFileImporter
 		
 		//set the other feature parameters
 		
+		//feature type
+		String featureType = tokens[4].trim();
+		if(featureType != null)
+			feature.setType(featureType);
+		
 		//start position
 		float start = -1;
 		try
 		{			
-			start = Float.parseFloat(tokens[4].trim());		
+			start = Float.parseFloat(tokens[5].trim());		
 		}
 		catch (NumberFormatException e)
 		{
 			throw new NumberFormatException("Feature " + feature.getName() + " " + "does not appear to have a valid start position. ");
 		}
+		catch(ArrayIndexOutOfBoundsException aix)
+		{
+			throw new IOException("The number of columns in the input file does not conform to the expected file format.");
+		}
 		feature.setStart(start);
 		
 		//feature stop and annotation -- several possible scenarios here:	
 		
-		//if the array is length 7 then either both fields are used or field 5 is not but field 6 is
-		if(tokens.length == 7)
+		//if the array is length 8 then either both fields are used or field 6 is not but field 7 is
+		if(tokens.length == 8)
 		{
-			//featureStop(tokens[5]) is blank + annotation(tokens[6]) is not 
-			//if this is the case the length of the tokens array will still be 7
-			//tokens[5] should return an empty string in that case
-			if(!tokens[5].equals(""))
+			//featureStop(tokens[6]) is blank + annotation(tokens[7]) is not 
+			//if this is the case the length of the tokens array will still be 8
+			//tokens[6] should return an empty string in that case
+			if(!tokens[6].equals(""))
 			{
-				feature.setStop(Float.parseFloat(tokens[5].trim()));
+				feature.setStop(Float.parseFloat(tokens[6].trim()));
 			}
 			//else the stop field is blank
 			//the implication of that is that the feature has a length of 1
@@ -173,18 +181,18 @@ public class SingleFileImporter
 			}
 			
 			//set the annotation
-			feature.setAnnotation(tokens[6].trim());
+			feature.setAnnotation(tokens[7].trim());
 		}	
 		
 		//OR:
-		//featureStop(tokens[5]) contains a value but annotation(tokens[6]) is blank
-		//if the annotation column (tokens[6]) is blank the length of the tokens array will be 6, rather than 7
-		else if(tokens.length == 6)
+		//featureStop(tokens[6]) contains a value but annotation(tokens[7]) is blank
+		//if the annotation column (tokens[7]) is blank the length of the tokens array will be 7, rather than 8
+		else if(tokens.length == 7)
 		{
 			float stop = -1;
 			try
 			{			
-				stop = Float.parseFloat(tokens[5].trim());		
+				stop = Float.parseFloat(tokens[6].trim());		
 			}
 			catch (NumberFormatException e)
 			{
@@ -195,10 +203,10 @@ public class SingleFileImporter
 		
 		//OR:
 		//both are blank
-		//in that case tokens.length should be 5
+		//in that case tokens.length should be 6
 		//the implication of an empty stop field is that the feature has a length of 1
 		//in this case we also set the stop to be the same as the start
-		else if(tokens.length == 5)
+		else if(tokens.length == 6)
 		{
 			feature.setStop(start);
 		}
@@ -208,6 +216,8 @@ public class SingleFileImporter
 		chromoMap.addFeature(feature);
 		//and vice versa
 		feature.setOwningMap(chromoMap);	
+		
+		numFeaturesLoaded++;
 	}
 	
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------

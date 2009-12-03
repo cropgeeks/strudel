@@ -21,7 +21,7 @@ public class FindFeaturesDialog extends JDialog implements ActionListener
 	
 	public FindFeaturesDialog()
 	{
-		super(MapViewer.winMain, "Find features by name", true);
+		super(Strudel.winMain, "Find features by name", true);
 		
 		add(ffPanel);
 		add(createButtons(), BorderLayout.SOUTH);
@@ -59,7 +59,7 @@ public class FindFeaturesDialog extends JDialog implements ActionListener
 	{
 		if (e.getSource() == bFind)
 		{
-			MapViewer.winMain.fatController.findFeaturesRequested = true;
+			Strudel.winMain.fatController.findFeaturesRequested = true;
 			FeatureSearchHandler.findFeaturesByName(this);
 		}
 		
@@ -68,8 +68,8 @@ public class FindFeaturesDialog extends JDialog implements ActionListener
 			//hide the find dialog
 			setVisible(false);
 			//clear the found features
-			MapViewer.winMain.fatController.highlightFeature = null;
-			MapViewer.winMain.fatController.highlightFeatureHomolog = null;
+			Strudel.winMain.fatController.highlightFeature = null;
+			Strudel.winMain.fatController.highlightFeatureHomolog = null;
 		}
 	}
 	

@@ -10,7 +10,7 @@ public class AntiAliasRepaintThread extends Thread
 	//used for prettier redraws after aliased drawing (in some situations)
 	public void run()
 	{
-		MapViewer.winMain.mainCanvas.antiAlias = true;
-		MapViewer.winMain.mainCanvas.updateCanvas(true);
+		Strudel.winMain.mainCanvas.antiAlias = true;
+		Strudel.winMain.mainCanvas.updateCanvas(true);
 	}
 }

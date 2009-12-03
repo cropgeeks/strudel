@@ -12,15 +12,15 @@ public class FindFeaturesAction extends AbstractAction
 	public void actionPerformed(ActionEvent e)
 	{
 		//reset the main canvas
-		MapViewer.winMain.fatController.resetMainCanvasView();	
+		Strudel.winMain.fatController.resetMainCanvasView();	
 		
 		//clear the find dialog
-		MapViewer.winMain.ffDialog.ffPanel.getFFTextArea().setText("");
+		Strudel.winMain.ffDialog.ffPanel.getFFTextArea().setText("");
 		
 		//show the find dialog
-		MapViewer.winMain.ffDialog.setLocationRelativeTo(MapViewer.winMain);		
-		MapViewer.winMain.ffDialog.setVisible(true);
-		MapViewer.winMain.ffDialog.ffPanel.getFFTextArea().requestFocusInWindow();
+		Strudel.winMain.ffDialog.setLocationRelativeTo(Strudel.winMain);		
+		Strudel.winMain.ffDialog.setVisible(true);
+		Strudel.winMain.ffDialog.ffPanel.getFFTextArea().requestFocusInWindow();
 		
 		
 	}

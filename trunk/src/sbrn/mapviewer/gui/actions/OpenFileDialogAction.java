@@ -19,8 +19,8 @@ public class OpenFileDialogAction extends AbstractAction
 	public void actionPerformed(ActionEvent e)
 	{
 		//open the file dialog
-		OpenFileDialog openFileDialog = MapViewer.winMain.openFileDialog;
-		openFileDialog.setLocationRelativeTo(MapViewer.winMain);
+		OpenFileDialog openFileDialog = Strudel.winMain.openFileDialog;
+		openFileDialog.setLocationRelativeTo(Strudel.winMain);
 		openFileDialog.setVisible(true);
 		
 		//clear the text fields, in case they had text showing previously

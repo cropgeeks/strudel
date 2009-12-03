@@ -74,10 +74,10 @@ public class CanvasZoomHandler
 		selectedSet.chromoHeight = newChromoHeight;
 
 		//update the position lookup arrays for mouseover
-		MapViewer.winMain.fatController.initialisePositionArrays();
+		Strudel.winMain.fatController.initialisePositionArrays();
 
 		//update zoom control position
-		MapViewer.winMain.fatController.updateAllZoomControls();
+		Strudel.winMain.fatController.updateAllZoomControls();
 
 	}
 
@@ -142,20 +142,20 @@ public class CanvasZoomHandler
 	{
 		//this is the final zoom factor we want to have here
 		selectedSet.zoomFactor = 1;		
-		selectedSet.chromoHeight = MapViewer.winMain.mainCanvas.initialChromoHeight;		
+		selectedSet.chromoHeight = Strudel.winMain.mainCanvas.initialChromoHeight;		
 
 		//update overviews
-		MapViewer.winMain.fatController.updateOverviewCanvases();
+		Strudel.winMain.fatController.updateOverviewCanvases();
 
 		//update zoom control position
-		MapViewer.winMain.fatController.updateAllZoomControls();
+		Strudel.winMain.fatController.updateAllZoomControls();
 
 		//update the arrays with the position data
-		MapViewer.winMain.fatController.initialisePositionArrays();		
-		MapViewer.winMain.mainCanvas.zoomHandler.isClickZoomRequest = false;
+		Strudel.winMain.fatController.initialisePositionArrays();		
+		Strudel.winMain.mainCanvas.zoomHandler.isClickZoomRequest = false;
 		
 		//now repaint
-		MapViewer.winMain.mainCanvas.updateCanvas(true);
+		Strudel.winMain.mainCanvas.updateCanvas(true);
 
 	}
 
@@ -215,7 +215,7 @@ public class CanvasZoomHandler
 		int buffer = 4;
 		int topY = relativeTopY + gChromoMap.y - buffer;
 		int bottomY = relativeBottomY + gChromoMap.y + buffer;
-		MapViewer.winMain.mainCanvas.zoomHandler.processPanZoomRequest(gChromoMap, topY,
+		Strudel.winMain.mainCanvas.zoomHandler.processPanZoomRequest(gChromoMap, topY,
 						bottomY, animate);
 	}
 	
@@ -245,9 +245,9 @@ public class CanvasZoomHandler
 		adjustZoom(selectedMap, finalTotalY, (int) finalChromoHeight, (int) (finalChromoHeight - (initialDistFromTopProportion * finalChromoHeight)));
 		
 		//now update the arrays with the position data
-		MapViewer.winMain.fatController.initialisePositionArrays();
+		Strudel.winMain.fatController.initialisePositionArrays();
 		//update zoom control position
-		MapViewer.winMain.fatController.updateAllZoomControls();
+		Strudel.winMain.fatController.updateAllZoomControls();
 				
 		//turn antialiasing on and repaint
 		mainCanvas.antiAlias = true;

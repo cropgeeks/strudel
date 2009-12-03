@@ -44,7 +44,7 @@ public class FoundFeaturesResultsPanel extends JPanel
 						{
 							public void mouseClicked(MouseEvent e)
 							{
-								MapViewer.winMain.fatController.resetMainCanvasView();
+								Strudel.winMain.fatController.resetMainCanvasView();
 							}
 							
 							public void mouseEntered(MouseEvent e)

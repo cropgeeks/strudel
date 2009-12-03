@@ -30,42 +30,42 @@ public class CMapLinkImporterTest
 			links.addMapSet(mapSet2);
 			
 			long e = System.currentTimeMillis();
-			MapViewer.logger.fine("Time to load data: " + (e-s) + "ms");
+			Strudel.logger.fine("Time to load data: " + (e-s) + "ms");
 			
 			s = System.currentTimeMillis();
 			LinkSet linkSet = links.loadLinkSet();
 			e = System.currentTimeMillis();
-			MapViewer.logger.fine("Time to associate links: " + (e-s) + "ms");
+			Strudel.logger.fine("Time to associate links: " + (e-s) + "ms");
 			
-			MapViewer.logger.fine(linkSet.toString());
+			Strudel.logger.fine(linkSet.toString());
 						
-			MapViewer.logger.fine("LinkSet contains " + linkSet.getLinks().size() + " links");
+			Strudel.logger.fine("LinkSet contains " + linkSet.getLinks().size() + " links");
 			
 			
 			for (Link link: linkSet)
 			{
-				MapViewer.logger.fine(link.toString());
-				MapViewer.logger.fine("  " + linkSet.isLinkUniqueToMapSet(link));
+				Strudel.logger.fine(link.toString());
+				Strudel.logger.fine("  " + linkSet.isLinkUniqueToMapSet(link));
 			}
 			
-			MapViewer.logger.fine("\n");
+			Strudel.logger.fine("\n");
 			
 			LinkSet newSet = linkSet.getLinksBetweenAllMapSets();
 			for (Link link: newSet)
 			{
-				MapViewer.logger.fine(link.toString());
+				Strudel.logger.fine(link.toString());
 			}
 			
-			MapViewer.logger.fine("\n");
+			Strudel.logger.fine("\n");
 			
 			newSet = linkSet.getLinksBetweenMaps(mapSet1.getMap(0), mapSet2.getMap(1));
 			for (Link link: newSet)
 			{
-				MapViewer.logger.fine(link.toString());
+				Strudel.logger.fine(link.toString());
 			}
 		
 		}
-		catch (Exception e) { MapViewer.logger.fine(e.toString()); }
+		catch (Exception e) { Strudel.logger.fine(e.toString()); }
 	}
 		
 	private static void cmapTest(String[] args)
@@ -78,7 +78,7 @@ public class CMapLinkImporterTest
 			long s = System.currentTimeMillis();
 			
 			Runtime rt = Runtime.getRuntime();
-			MapViewer.logger.fine("Mem = " + (rt.totalMemory() - rt.freeMemory()));
+			Strudel.logger.fine("Mem = " + (rt.totalMemory() - rt.freeMemory()));
 			
 			importer = new CMapImporter(new File("D:\\Projects\\MapViewer\\cmap formatted files\\new_mxb_edited.maps"));			
 			MapSet mapSet1 = importer.loadMapSet();
@@ -95,32 +95,32 @@ public class CMapLinkImporterTest
 			mapSet3.printSummary();
 			links.addMapSet(mapSet3);
 			
-			MapViewer.logger.fine("Mem = " + (rt.totalMemory() - rt.freeMemory()));
+			Strudel.logger.fine("Mem = " + (rt.totalMemory() - rt.freeMemory()));
 			
 			importer = new CMapImporter(new File("D:\\Projects\\MapViewer\\cmap formatted files\\rice_pseudo4_os.maps"));			
 			MapSet mapSet4 = importer.loadMapSet();
 			mapSet4.printSummary();
 			links.addMapSet(mapSet4);
 			
-			MapViewer.logger.fine("Mem = " + (rt.totalMemory() - rt.freeMemory()));
+			Strudel.logger.fine("Mem = " + (rt.totalMemory() - rt.freeMemory()));
 			
 			long e = System.currentTimeMillis();
-			MapViewer.logger.fine("Time to load data: " + (e-s) + "ms");
+			Strudel.logger.fine("Time to load data: " + (e-s) + "ms");
 			
 			s = System.currentTimeMillis();
 			LinkSet linkSet = links.loadLinkSet();
 			e = System.currentTimeMillis();
-			MapViewer.logger.fine("Time to associate links: " + (e-s) + "ms");
+			Strudel.logger.fine("Time to associate links: " + (e-s) + "ms");
 			
-			MapViewer.logger.fine(linkSet.toString());
+			Strudel.logger.fine(linkSet.toString());
 			
-			MapViewer.logger.fine("Mem = " + (rt.totalMemory() - rt.freeMemory()));
+			Strudel.logger.fine("Mem = " + (rt.totalMemory() - rt.freeMemory()));
 			
-			MapViewer.logger.fine("LinkSet contains " + linkSet.getLinks().size() + " links");
+			Strudel.logger.fine("LinkSet contains " + linkSet.getLinks().size() + " links");
 		
 			
 			
 		}
-		catch (Exception e) { MapViewer.logger.fine(e.toString()); }
+		catch (Exception e) { Strudel.logger.fine(e.toString()); }
 	}
 }

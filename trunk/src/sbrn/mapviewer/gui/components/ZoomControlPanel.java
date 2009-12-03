@@ -104,7 +104,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		{
 			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(source.getValue(), 0, gMapSet, true);
 			updateSlider();
-			MapViewer.winMain.mainCanvas.updateCanvas(true);
+			Strudel.winMain.mainCanvas.updateCanvas(true);
 		}	
 	}
 	
@@ -132,7 +132,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 			else
 				gMapSet.overrideMarkersAutoDisplay = false;
 
-			MapViewer.winMain.mainCanvas.updateCanvas(true);
+			Strudel.winMain.mainCanvas.updateCanvas(true);
 		}
 		else if(e.getSource() == alwaysShowAllLabelsButton)
 		{
@@ -141,7 +141,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 			else
 				gMapSet.alwaysShowAllLabels = false;
 	
-			MapViewer.winMain.mainCanvas.updateCanvas(true);
+			Strudel.winMain.mainCanvas.updateCanvas(true);
 		}
 	}
 	
@@ -149,8 +149,8 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 	
 	public void mouseReleased(MouseEvent e)
 	{
-		MapViewer.winMain.mainCanvas.antiAlias = true;
-		MapViewer.winMain.mainCanvas.updateCanvas(true);		
+		Strudel.winMain.mainCanvas.antiAlias = true;
+		Strudel.winMain.mainCanvas.updateCanvas(true);		
 	}
 	
 	//these are currently not needed

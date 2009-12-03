@@ -46,7 +46,7 @@ public class CMapImporter
 		}
 		catch (FileNotFoundException e1)
 		{
-			MapViewer.winMain.dataLoadingDialog.setVisible(false);
+			Strudel.winMain.dataLoadingDialog.setVisible(false);
 			TaskDialog.error("File " + filename + " not found.", "Close");
 			e1.printStackTrace();
 		}

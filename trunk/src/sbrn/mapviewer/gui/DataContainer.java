@@ -31,7 +31,7 @@ public class DataContainer
 	// the maximum number of chromos in any one of the genomes involved
 	public int maxChromos;
 	
-	// ============================================curve'tor==========================================
+	// ============================================c'tor==========================================
 	
 	public DataContainer(File inputFile)
 	{
@@ -53,9 +53,15 @@ public class DataContainer
 		}
 		catch (Exception e)
 		{
-			MapViewer.winMain.dataLoadingDialog.setVisible(false);
+			// reset the cancel flag as the user might now want to try again
+			Strudel.winMain.fatController.dataLoadCancelled = false;	
+			Strudel.winMain.dataContainer = null;
+			// hide the data loading progress dialog
+			if (Strudel.winMain.dataLoadingDialog != null)
+				Strudel.winMain.dataLoadingDialog.setVisible(false);
+
 			e.printStackTrace();
-			TaskDialog.error("Data loading failed: " + e.toString() + "\nPlease check your data and try again.", "Close");
+			TaskDialog.error("Data load failed: " + e.toString() + "\nPlease check your data and try again.", "Close");
 		}
 	}
 	

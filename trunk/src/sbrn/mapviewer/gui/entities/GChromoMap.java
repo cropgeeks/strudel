@@ -349,7 +349,7 @@ public class GChromoMap
 				
 				//if we have links drawn we need a background for the distance markers or things will look messy
 				//just fill a continuous rectangle next to the chromosome, with the height of the chromosome and the width of the largest label	
-				if (MapViewer.winMain.mainCanvas.drawLinks)
+				if (Strudel.winMain.mainCanvas.drawLinks)
 				{		
 					int horizontalGap = 3;
 					int verticalGap = 2;
@@ -449,7 +449,7 @@ public class GChromoMap
 				//if it is, we add it to the arrays
 				//otherwise it's fine to just have it in the feature list of the corresponding chromomap from where we can access it for 
 				//other uses such as full feature lists for search ranges etc
-				if((f.getLinks() != null && f.getLinks().size() > 0) || MapViewer.winMain.dataContainer.gMapSets.size() == 1)
+				if((f.getLinks() != null && f.getLinks().size() > 0) || Strudel.winMain.dataContainer.gMapSets.size() == 1)
 				{				
 					//the start point of this features in its own units (cM, bp, whatever)
 					float start = f.getStart();

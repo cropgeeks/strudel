@@ -55,7 +55,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		//mouse click with alt held down means zoom into single chromo so it fills the screen
 		if (e.isAltDown())
 		{
-			GChromoMap selectedMap = Utils.getSelectedMap(MapViewer.winMain.dataContainer.gMapSets, e.getX(),
+			GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, e.getX(),
 							e.getY());
 			
 			if (selectedMap != null)
@@ -75,7 +75,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	
 	public void mouseExited(MouseEvent e)
 	{
-		MapViewer.winMain.fatController.clearMouseOverLabels();
+		Strudel.winMain.fatController.clearMouseOverLabels();
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -98,7 +98,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 				
 				//clear any feature labels that might be hanging around here
 				selectedMap.drawMouseOverFeatures = false;
-				MapViewer.winMain.mainCanvas.updateCanvas(true);
+				Strudel.winMain.mainCanvas.updateCanvas(true);
 				
 				winMain.fatController.invertMap = selectedMap;
 				winMain.chromoContextPopupMenu.show(winMain.mainCanvas, e.getX(), e.getY());		
@@ -112,32 +112,32 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		if (!isMetaClick(e) && !e.isAltDown() && !e.isShiftDown())
 		{
 			// first figure out which chromosome we are in
-			GChromoMap selectedMap = Utils.getSelectedMap(MapViewer.winMain.dataContainer.gMapSets, e.getX(), e.getY());
+			GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, e.getX(), e.getY());
 			//if we have clicked on a map, display links between this map and all others
 			if(selectedMap != null)
 			{
-				MapViewer.winMain.fatController.isCtrlClickSelection = false;
+				Strudel.winMain.fatController.isCtrlClickSelection = false;
 				winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(e.getX(), e.getY());
 			}
 			//otherwise -- if we clicked on the background -- clear all links displayed
 			else
 			{
-				MapViewer.winMain.fatController.isCtrlClickSelection = false;
-				MapViewer.winMain.fatController.clearMapOutlines();
+				Strudel.winMain.fatController.isCtrlClickSelection = false;
+				Strudel.winMain.fatController.clearMapOutlines();
 				
 				//reset selected maps
-				MapViewer.winMain.fatController.selectedMaps.clear();
+				Strudel.winMain.fatController.selectedMaps.clear();
 			}
 		}
 		//CTRL+click on a chromosome means display all links between this and all other clicked chromos
 		else if (isMetaClick(e) && !e.isShiftDown())
 		{
-			MapViewer.winMain.fatController.isCtrlClickSelection = true;
+			Strudel.winMain.fatController.isCtrlClickSelection = true;
 			winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(e.getX(), e.getY());
 		}
 		
-		MapViewer.winMain.mainCanvas.antiAlias = false;
-		MapViewer.winMain.mainCanvas.updateCanvas(true);
+		Strudel.winMain.mainCanvas.antiAlias = false;
+		Strudel.winMain.mainCanvas.updateCanvas(true);
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -211,10 +211,10 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		
 		// figure out which genome this event pertains to (i.e. which section of the canvas on x are we in)
 		int index = Utils.getSelectedSetIndex(e);
-		GMapSet gMapSet = MapViewer.winMain.dataContainer.gMapSets.get(index);
+		GMapSet gMapSet = Strudel.winMain.dataContainer.gMapSets.get(index);
 		
 		//the chromosome -- if any - this event pertains to (i.e. where on the canvas on y are we)
-		GChromoMap selectedMap = Utils.getSelectedMap(MapViewer.winMain.dataContainer.gMapSets, (int)(gMapSet.xPosition), y);
+		GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, (int)(gMapSet.xPosition), y);
 		
 		//mouse is getting dragged without shift held down -- scroll the canvas up or down
 		if (!e.isShiftDown())
@@ -265,17 +265,17 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 					selectedMap.chromoHeightOnSelection = selectedMap.boundingRectangle.height;
 				}
 				
-				MapViewer.winMain.fatController.selectionMap = selectedMap;
+				Strudel.winMain.fatController.selectionMap = selectedMap;
 				//let the MAP draw this rectangle -- we want to have this rect associated with the map and redrawn when the map is rendered
 				selectedMap.drawSelectionRect = true;	
 				
 				//update the context menus according to what we intend to do with this selection rectangle
 				//if we have an existing results set we want to add the features in the rectangle to this
 				//otherwise we want to create a new results table
-				if(MapViewer.winMain.ffResultsPanel.getFFResultsTable().getModel().getRowCount() > 0)
-					MapViewer.winMain.chromoContextPopupMenu.addAllFeaturesItem.setText(MapViewer.winMain.chromoContextPopupMenu.addAllFeaturesStr);
+				if(Strudel.winMain.ffResultsPanel.getFFResultsTable().getModel().getRowCount() > 0)
+					Strudel.winMain.chromoContextPopupMenu.addAllFeaturesItem.setText(Strudel.winMain.chromoContextPopupMenu.addAllFeaturesStr);
 				else
-					MapViewer.winMain.chromoContextPopupMenu.addAllFeaturesItem.setText(MapViewer.winMain.chromoContextPopupMenu.webInfoStr);
+					Strudel.winMain.chromoContextPopupMenu.addAllFeaturesItem.setText(Strudel.winMain.chromoContextPopupMenu.webInfoStr);
 				
 				//redraw
 				winMain.mainCanvas.updateCanvas(true);
@@ -339,7 +339,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		
 		// figure out which genome we are moving
 		int index = Utils.getSelectedSetIndex(e);
-		GMapSet selectedSet = MapViewer.winMain.dataContainer.gMapSets.get(index);
+		GMapSet selectedSet = Strudel.winMain.dataContainer.gMapSets.get(index);
 		
 		//this moves the genome center point up and down
 		int newCenterPoint = -1;

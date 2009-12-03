@@ -15,6 +15,7 @@ public class Feature implements Comparable<Feature>
 	public final static int MARKER = 1;
 	public final static int SSR = 2;
 	public final static int SNP = 3;
+	public final static int GENE = 4;
 	//etc
 
 	// Owning ChromoMap for this Feature
@@ -34,7 +35,7 @@ public class Feature implements Comparable<Feature>
 	private String annotation;
 
 	// Feature type
-	private int type = GENERIC;
+	private String type = "generic";
 
 	/**
 	 * Constructs a new feature with the given name.
@@ -71,10 +72,10 @@ public class Feature implements Comparable<Feature>
 	public float getStop()
 		{ return stop; }
 
-	public int getType()
+	public String getType()
 		{ return type; }
 
-	public void setType(int type)
+	public void setType(String type)
 		{ this.type = type; }
 
 	/**

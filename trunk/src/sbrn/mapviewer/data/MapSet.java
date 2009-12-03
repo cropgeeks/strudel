@@ -104,10 +104,10 @@ public class MapSet implements Iterable<ChromoMap>
 	
 	public void printSummary()
 	{
-		MapViewer.logger.fine("MapSet Summary:");
-		MapViewer.logger.fine("  Number of maps: " + maps.size());
+		Strudel.logger.fine("MapSet Summary:");
+		Strudel.logger.fine("  Number of maps: " + maps.size());
 		for (ChromoMap map: maps)
-			MapViewer.logger.fine("    Map: " + map.getName() + " with " + map.countFeatures() + " feature(s) " + map.getStop());
+			Strudel.logger.fine("    Map: " + map.getName() + " with " + map.countFeatures() + " feature(s) " + map.getStop());
 	}
 	
 	/**

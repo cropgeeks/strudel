@@ -141,23 +141,23 @@ private void highlightFeature()
 		//if we got here because we requested features through the find features by name dialog then we
 		//want to zoom out fully so we can see them in the broadest possible context
 		//if we got here through a range request we do nothing
-		if(MapViewer.winMain.fatController.findFeaturesRequested)
+		if(Strudel.winMain.fatController.findFeaturesRequested)
 		{
-			MapViewer.winMain.mainCanvas.zoomHandler.processZoomResetRequest(targetFeature.getOwningMap().getGChromoMap().owningSet);
+			Strudel.winMain.mainCanvas.zoomHandler.processZoomResetRequest(targetFeature.getOwningMap().getGChromoMap().owningSet);
 			if(homolog != null)
-				MapViewer.winMain.mainCanvas.zoomHandler.processZoomResetRequest(homolog.getOwningMap().getGChromoMap().owningSet);
+				Strudel.winMain.mainCanvas.zoomHandler.processZoomResetRequest(homolog.getOwningMap().getGChromoMap().owningSet);
 		}
 		
 		// highlight the feature on the canvas
-		MapViewer.winMain.fatController.highlightFeature = targetFeature;
+		Strudel.winMain.fatController.highlightFeature = targetFeature;
 		if(homolog != null)
-			MapViewer.winMain.fatController.highlightFeatureHomolog = homolog;	
+			Strudel.winMain.fatController.highlightFeatureHomolog = homolog;	
 		else
-			MapViewer.winMain.fatController.highlightFeatureHomolog = null;
-		MapViewer.winMain.mainCanvas.drawHighlightFeatures = true;
+			Strudel.winMain.fatController.highlightFeatureHomolog = null;
+		Strudel.winMain.mainCanvas.drawHighlightFeatures = true;
 		
 		//update the canvas
-		MapViewer.winMain.mainCanvas.updateCanvas(true);	
+		Strudel.winMain.mainCanvas.updateCanvas(true);	
 	}
 }
 

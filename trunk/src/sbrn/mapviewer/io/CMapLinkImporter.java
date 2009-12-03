@@ -41,7 +41,7 @@ public class CMapLinkImporter
 			}
 			catch (Exception e)
 			{
-				MapViewer.winMain.dataLoadingDialog.setVisible(false);
+				Strudel.winMain.dataLoadingDialog.setVisible(false);
 				TaskDialog.error("File " + filename + " not found. Comparative data not loaded.", "Close");
 				e.printStackTrace();
 			}		
@@ -74,7 +74,7 @@ public class CMapLinkImporter
 			e.printStackTrace();
 		}
 
-		if(linkSet.size() == 0 && MapViewer.winMain.dataContainer.gMapSets.size() > 1)
+		if(linkSet.size() == 0 && Strudel.winMain.dataContainer.gMapSets.size() > 1)
 		{
 			String message = "Linkset does not contain any links between the genomes specified.\n ";
 			throw new Exception(message);

@@ -101,6 +101,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 				Strudel.winMain.mainCanvas.updateCanvas(true);
 				
 				winMain.fatController.invertMap = selectedMap;
+				winMain.fatController.selectionMap = selectedMap;
 				winMain.chromoContextPopupMenu.show(winMain.mainCanvas, e.getX(), e.getY());		
 			}
 			return;
@@ -153,6 +154,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			{
 				// get the selected map first
 				GChromoMap selectedMap = Utils.getSelectedMap(winMain, Utils.getSelectedSetIndex(e), mousePressedY);
+				winMain.fatController.selectionMap = selectedMap;
 				winMain.fatController.invertMap = selectedMap;
 				
 				//if we have got here because we had first drawn a selection rectangle for including all features in a range for inclusion 
@@ -161,11 +163,13 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 				{
 					winMain.chromoContextPopupMenu.addAllFeaturesItem.setVisible(true);
 					winMain.chromoContextPopupMenu.invertChromoMenuItem.setVisible(false);
+					winMain.chromoContextPopupMenu.fitChromoMenuItem.setVisible(false);
 				}
 				else
 				{
 					winMain.chromoContextPopupMenu.addAllFeaturesItem.setVisible(false);
 					winMain.chromoContextPopupMenu.invertChromoMenuItem.setVisible(true);
+					winMain.chromoContextPopupMenu.fitChromoMenuItem.setVisible(true);
 				}
 				
 				//show the context menu

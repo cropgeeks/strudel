@@ -19,8 +19,8 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 	public JSlider zoomSlider;
 	JButton resetButton;
 	GMapSet gMapSet;
-	JToggleButton overrideMarkersAutoDisplayButton;
-	JToggleButton alwaysShowAllLabelsButton;
+	public JToggleButton overrideMarkersAutoDisplayButton;
+	public JToggleButton alwaysShowAllLabelsButton;
 	
 	
 	// ===================================================curve'tor====================================
@@ -104,7 +104,6 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		{
 			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(source.getValue(), 0, gMapSet, true);
 			updateSlider();
-			Strudel.winMain.mainCanvas.updateCanvas(true);
 		}	
 	}
 	

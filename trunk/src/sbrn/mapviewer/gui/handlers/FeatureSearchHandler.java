@@ -198,8 +198,6 @@ public class FeatureSearchHandler
 	//insert the results into the JTable held by the results panel
 	private static void updateResultsTable(Vector<Feature> features)
 	{
-		LinkedList<Link> linksFound = Utils.getLinksForFeatures(features);
-
 		LinkedList<ResultsTableEntry> tableEntries = TableEntriesGenerator.makeTableEntries(features);
 		HomologResultsTableModel homologResultsTableModel = new HomologResultsTableModel(tableEntries);
 		ResultsTable resultsTable = (ResultsTable)Strudel.winMain.ffResultsPanel.getFFResultsTable();

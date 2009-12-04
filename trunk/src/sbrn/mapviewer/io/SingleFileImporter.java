@@ -65,6 +65,9 @@ public class SingleFileImporter
 				MissingFeaturesDialog missingFeaturesDialog = new MissingFeaturesDialog(Strudel.winMain, true, missingFeatureList.toString());
 			}
 			
+			//this sorts the features within their maps
+			sortFeatures();
+			
 			Strudel.dataLoaded = true;		
 			
 		}
@@ -309,5 +312,18 @@ public class SingleFileImporter
 			e.printStackTrace();
 		}
 		
+	}
+	
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	private void sortFeatures()
+	{
+		for (MapSet mapset : allMapSets)
+		{
+			for(ChromoMap cMap : mapset.getMaps())
+			{
+				Collections.sort(cMap.getFeatureList());
+			}
+		}
 	}
 }

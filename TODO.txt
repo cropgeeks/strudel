@@ -60,8 +60,7 @@ Luke Ramsay's list (in descending order of priority):
 
 ================================
 
-Jordi's list:
- 
+Jordi's list: 
 
 - different line colors for the best BLAST hit, second best hit, third best hit… 
 - plot QTL profiles along the barley chromosomes
@@ -91,7 +90,6 @@ REFACTORING:
 - look for unnecessary repaints
 - link drawing algorithm -- review and improve if possible, change straight line drawing to use drawLine method instead of draw(Shape)
 - check whether any features are drawn offscreen (= unnecessarily)
-- data loading and component initialisation code looks overly complicated -- review!
 - ControlToolBar createControls(): action config code is repetitive, hive off into convenience method
 
 ================================
@@ -99,7 +97,4 @@ REFACTORING:
 
 BUGS to fix:
 
-- label drawing code for when drawing all labels has gone to pot during refactoring; to reproduce, export data from Germinate and  have two barley mapsets side by side, then switch on all labels when zoomed into chromo; is to do with ordering of features in file
-- each link is drawn twice, once in each direction
-- 
 

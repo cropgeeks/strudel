@@ -78,7 +78,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		add(new JLabel("  "));
 		
 		bLinkFilter.setSelected(Prefs.drawOnlyLinksToVisibleFeatures);
-		bDistMarkers.setSelected(Prefs.showDistanceMarkers);
+		bDistMarkers.setEnabled(false);
 	}
 	
 	private void createControls()
@@ -303,7 +303,9 @@ public class ControlToolBar extends JToolBar implements ActionListener
 				bFindFeatures.setEnabled(true);
 				bFindFeaturesinRange.setEnabled(true);
 				bResetAll.setEnabled(true);
-				bDistMarkers.setEnabled(true);
+				//this button we want to be always disabled at the lowest zoom level as we don't want markers displayed then
+				//it becomes enabled when a chromosome is fitted on screen
+				bDistMarkers.setEnabled(false);
 				bCurves.setEnabled(true);
 				bLinkFilter.setEnabled(true);
 			}

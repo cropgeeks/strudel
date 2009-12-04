@@ -49,12 +49,8 @@ public class GMapSet
 	//the height of a chromosome in this genome, in pixels (all chromos are the same height, always)
 	public int chromoHeight;
 
-	// a vector containing GChromoMap objects that have been selected by the user through mouse clicks
-//	public Vector<GChromoMap> selectedMaps = new Vector<GChromoMap>();
-
-	// these control whether we draw chromosome markers and labels
+	// this controls whether we draw chromosome markers 
 	public boolean paintAllMarkers = false;
-//	public boolean paintLabels = false;
 
 	//a zoom factor value above which we can draw all  features
 	//this is to reduce the amount of clutter on screen

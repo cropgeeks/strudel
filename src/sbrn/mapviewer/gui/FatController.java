@@ -151,12 +151,20 @@ public class FatController
 		winMain.foundFeaturesTableControlPanel.getGenomeFilterCombo().setSelectedIndex(0);
 		//clear the table model for the found features
 		winMain.ffResultsPanel.getFFResultsTable().setModel(new DefaultTableModel());
+		
 		//disable the button that allows export of this data to file
 		Strudel.winMain.toolbar.bSave.setEnabled(false);
 		
 		//reset the BLAST cut-off
 		LinkDisplayManager.setBlastThreshold(1);
 		Strudel.winMain.toolbar.eValueSpinner.setValue(0);
+		
+		//deselect the buttons on the zoom control panels
+		for (ZoomControlPanel zoomControlPanel : winMain.zoomControlPanels)
+		{
+			zoomControlPanel.overrideMarkersAutoDisplayButton.setSelected(false);
+			zoomControlPanel.alwaysShowAllLabelsButton.setSelected(false);
+		}
 		
 	}
 	//	--------------------------------------------------------------------------------------------------------------------------------------------------------

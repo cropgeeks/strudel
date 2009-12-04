@@ -246,7 +246,7 @@ public class LabelDisplayManager
 		//need to subtract this from each label position
 		int offset = Math.round(excess / 2.0f);	
 		//if we are just doing the mouse overs we want the labels to fan out in the usual "butterfly" shape
-		if(excess < 0 && !features.get(0).getOwningMap().getGChromoMap().owningSet.alwaysShowAllLabels)
+		if(excess < 0 && !features.get(0).getOwningMap().getGChromoMap().owningSet.alwaysShowAllLabels && !Strudel.winMain.ffResultsPanel.isVisible())
 			offset = Math.round(totalLabelHeight/2) - Math.round(labelHeight/2);
 		//if we are showing all labels for this genome we need to fan them out downwards from the topmost feature
 		//don't want the offset to be negative because this will put labels in the wrong place
@@ -323,6 +323,7 @@ public class LabelDisplayManager
 		//now draw the labels
 		//only use those features that are actually visible on canvas
 		combinedFeatures = Utils.checkFeatureVisibility(combinedFeatures);
+		
 		drawFeatureLabelsInRange(g2, combinedFeatures, false);
 	}
 	

@@ -26,7 +26,7 @@ public class Colors
 	public static Color distanceMarkerColour = new Color(140,140,150);
 
 	//features
-	public static Color featureColour = new Color(120,120,120);
+	public static Color featureColour = new Color(180,180,180);
 	public static Color highlightedFeatureColour = strongEmphasisLinkColour;
 	public static Color highlightedFeatureLabelColour = Color.WHITE;	
 	

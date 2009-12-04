@@ -14,11 +14,14 @@ import sbrn.mapviewer.gui.handlers.*;
 public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 {
 	String invertChromoStr = "Invert chromosome";
+	String fitChromoStr = "Fit chromosome on screen";
 	public String addAllFeaturesStr = "Add features in range to results";
 	public String webInfoStr = "Show annotation for features in range";
 	
 	public JMenuItem invertChromoMenuItem;
+	public JMenuItem fitChromoMenuItem;
 	public JMenuItem addAllFeaturesItem;
+	
 	
 	
 	public ChromoContextPopupMenu()
@@ -26,6 +29,10 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 		invertChromoMenuItem = new JMenuItem(invertChromoStr);
 		invertChromoMenuItem.addActionListener(this);
 		add(invertChromoMenuItem);
+		
+		fitChromoMenuItem = new JMenuItem(fitChromoStr);
+		fitChromoMenuItem.addActionListener(this);
+		add(fitChromoMenuItem);
 		
 		addAllFeaturesItem = new JMenuItem(addAllFeaturesStr);
 		addAllFeaturesItem.addActionListener(this);
@@ -47,6 +54,14 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 			ChromoZAxisInversionAnimator chromoInversionAnimator = new ChromoZAxisInversionAnimator(Strudel.winMain.fatController.invertMap, fps, millis);
 			chromoInversionAnimator.start();
 		}
+		else if (source.equals(fitChromoMenuItem))
+		{
+			//fill the screen with the chromosome
+			GChromoMap selectedMap = Strudel.winMain.fatController.selectionMap;
+
+			if (selectedMap != null)
+				Strudel.winMain.mainCanvas.zoomHandler.processClickZoomRequest(selectedMap);
+		}
 		else if(source.equals(addAllFeaturesItem))
 		{
 			//first find out what chromosome this relates to
@@ -61,11 +76,7 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 				if(resultExists)
 					Strudel.winMain.ffResultsPanel.resultsTable.addFeaturesFromSelectedMap(selectedMap);
 				else
-					FeatureSearchHandler.findFeaturesInRangeFromCanvasSelection();
-					
-				//this time we get the chromosome to paint the selection rectangle, not the canvas
-				//this is so we can get the selection stored against the chromosome and then repaint it if the user zooms/scrolls
-//				selectedMap.drawSelectionRect = true;		
+					FeatureSearchHandler.findFeaturesInRangeFromCanvasSelection();	
 			}
 			
 			//turn antialiasing on and repaint			

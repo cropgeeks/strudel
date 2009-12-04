@@ -62,7 +62,7 @@
 			<fileset dir="installer" includes="**/*.dmg"/>
 		</delete>
 		<input message="Enter the version number:" addproperty="version"/>
-		<install4j projectfile="installer/MapViewer.install4j" release="${version}"/>
+		<install4j projectfile="installer/Strudel.install4j" release="${version}"/>
 	</target>
 
 	<target name="javadoc">

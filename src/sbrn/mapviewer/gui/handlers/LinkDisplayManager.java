@@ -135,8 +135,6 @@ public class LinkDisplayManager
 					
 					// get all the linksets between the selected chromosome and the reference maps selected
 					Vector<LinkSet> linkSets = linkSetLookup.get(selectedChromoMap);
-					
-					float targetMapStop = selectedChromoMap.getStop();
 
 					// for each set of links between the selected chromosome and a reference map
 					for (LinkSet selectedLinks : linkSets)
@@ -168,8 +166,6 @@ public class LinkDisplayManager
 									drawLinkSet = false;
 							}
 													
-							// get the real y coordinates for the selected chromo 
-							int selectedChromoY = selectedMap.y + selectedMap.currentY;
 							// the x coordinates have to be worked out
 							int targetChromoX = 0;
 							int referenceChromoX = 0;
@@ -227,12 +223,8 @@ public class LinkDisplayManager
 										// get the positional data of the features and the end point of the map
 										float targetFeatureStart = targetfeature.getStart();
 										float referenceFeatureStart = referenceFeature.getStart();
-										float referenceMapStop = referenceGMap.chromoMap.getStop();
-										int referenceChromoY = referenceGMap.y + referenceGMap.currentY;
 										
-										// convert the y value to scaled coordinates on the canvas by obtaining the coords of the appropriate chromosome object and scaling them appropriately
-//										int targetY = (int) (targetFeatureStart / (targetMapStop / selectedMap.height)) + selectedChromoY;
-//										int referenceY = (int) (referenceFeatureStart / (referenceMapStop / referenceGMap.height)) + referenceChromoY;										
+										// convert the y value to scaled coordinates on the canvas by obtaining the coords of the appropriate chromosome object and scaling them appropriately									
 										int targetY = Utils.getFPosOnScreenInPixels(targetGMap.chromoMap, targetFeatureStart, false);
 										int referenceY = Utils.getFPosOnScreenInPixels(referenceGMap.chromoMap, referenceFeatureStart, false);										
 										

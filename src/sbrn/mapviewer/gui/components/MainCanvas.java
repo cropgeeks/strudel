@@ -174,9 +174,7 @@ public class MainCanvas extends JPanel
 	{
 		// check whether we need antialiasing on
 		checkAntiAliasing(g2);
-		
-//		System.out.println("antialias = " + antiAlias);
-		
+
 		//background
 		setBackground(Colors.mainCanvasBackgroundColour);
 		

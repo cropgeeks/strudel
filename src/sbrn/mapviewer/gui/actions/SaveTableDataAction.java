@@ -36,7 +36,7 @@ public class SaveTableDataAction extends AbstractAction
 				+ "overwrite this file with your new file.";
 				String[] options = new String[] { "Overwrite", "Rename", "Cancel" };
 				
-				int response = TaskDialog.show(msg, MsgBox.WAR, 0, options);
+				int response = TaskDialog.show(msg, TaskDialog.WAR, 0, options);
 				
 				if (response == 1)
 					continue;

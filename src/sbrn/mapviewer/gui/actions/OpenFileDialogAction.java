@@ -24,8 +24,7 @@ public class OpenFileDialogAction extends AbstractAction
 		openFileDialog.setVisible(true);
 		
 		//clear the text fields, in case they had text showing previously
-		openFileDialog.openFilesPanel.getInputFileTF().setText("");
-	
+		openFileDialog.openFilesPanel.getInputFileTF().setText("");	
 	}
 	
 }

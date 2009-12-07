@@ -15,22 +15,28 @@ public class SingleFileImporter
 {
 	//==========================================methods==================================================	
 	
+	//a list of all the mapsets parsed
 	private LinkedList<MapSet> allMapSets = new LinkedList<MapSet>();
 	
 	//a list of linksets between genomes
 	private LinkedList<LinkSet> allLinkSets = new LinkedList<LinkSet>();
 	
+	//a list of all the features that were supposed to be part of links but did not have a feature entry
 	private LinkedList<String> missingFeatures = new LinkedList<String>();
 	
 	int numFeaturesLoaded = 0;
 	
+	//a boolean to indicate that we have parsed all feature lines and are into the homologs section of the file
+	//this is used to check whether the file contains any more features after the homologs
+	boolean firstFeatureParsed = false;
+	boolean allFeaturesParsed = false;
+	
 	//==========================================methods==================================================	
 	
 	//Reads a file which contains all mapsets and links to be imported
-	//the file format has a single line entry for either a feature or a homology
+	//the file format has a single line entry for either a feature, homology or URL
 	//the first field says which type it is
 	//features are expected first in the file, then links
-	//features should be in blocks
 	public void parseCombinedFile(File file) throws Exception
 	{
 		int lineCount = 1;
@@ -43,12 +49,30 @@ public class SingleFileImporter
 			String line = null;
 			while((line = reader.readLine()) != null)
 			{
+				//				System.out.println("processing line " + lineCount);
+				//				System.out.println("line: " + line);
 				if(line.startsWith("feature"))
+				{
+					firstFeatureParsed = true;
+					//check whether this feature liine appears after the homologs section
+					//if it does, throw an exception as we need all features parsed to process the homologs unless
+					//we want to have everything kept in memory
+					if(allFeaturesParsed)
+						throw new IOException("Features found after homologs block.");
 					processFeatureLine(line);
+				}
 				else if(line.startsWith("homolog"))
+				{
+					allFeaturesParsed = true;
+					if(!firstFeatureParsed)
+						throw new IOException("No features found -- cannot process homologs.");
 					processLink(line);
+				}
 				else if(line.startsWith("URL"))
 					processURL(line);
+				else
+					throw  new IOException("Missing type field at start of line.");
+				
 				lineCount++;
 			}
 			
@@ -65,16 +89,14 @@ public class SingleFileImporter
 				MissingFeaturesDialog missingFeaturesDialog = new MissingFeaturesDialog(Strudel.winMain, true, missingFeatureList.toString());
 			}
 			
-			//this sorts the features within their maps
+			//this sorts the features within their maps, by start position
 			sortFeatures();
 			
-			Strudel.dataLoaded = true;		
-			
+			Strudel.dataLoaded = true;					
 		}
 		catch (Exception e)
 		{		
 			String errorMessage = "Error reading line " + lineCount + ".\n" + e.getMessage();
-			e.printStackTrace();
 			throw  new IOException(errorMessage);
 		}		
 	}
@@ -102,11 +124,14 @@ public class SingleFileImporter
 		String [] tokens = line.split("\t");
 		
 		//the order of columns for a feature is:
-		//type - genome - chromosome - featureName - featureStart - featureEnd - annotation
-		//e.g.: feature	Barley	1H	12_30969	0	<blank>	<blank>
+		//type - genome - chromosome - featureName - feature type -  featureStart - featureEnd - annotation
+		//e.g.: feature	Barley	1H	12_30969	SNP	0	<blank>	<blank>
 		
 		//find out whether the feature's genome (mapset) exists
 		String mapsetName = tokens[1].trim();
+		if(mapsetName.equals(""))
+			throw new IOException("Missing genome name.");
+		
 		MapSet mapset = null;
 		for (MapSet ms : allMapSets)
 		{
@@ -123,6 +148,9 @@ public class SingleFileImporter
 		
 		//do the same  for the chromosome (ChromoMap)
 		String chromoName = tokens[2].trim();
+		if(chromoName.equals(""))
+			throw new IOException("Missing chromosome name.");
+		
 		ChromoMap chromoMap = null;
 		for (ChromoMap cm : mapset.getMaps())
 		{
@@ -138,11 +166,15 @@ public class SingleFileImporter
 		}		
 		
 		//make a new Feature object
-		Feature feature = new Feature(tokens[3].trim());		
+		String featureName = tokens[3].trim();
+		Feature feature = new Feature(featureName);	
+		if(featureName.equals(""))
+			throw new IOException("Missing feature name.");
 		
 		//set the other feature parameters
 		
 		//feature type
+		//don't need any error handling here because type is set to "generic" by default
 		String featureType = tokens[4].trim();
 		if(featureType != null)
 			feature.setType(featureType);
@@ -159,7 +191,7 @@ public class SingleFileImporter
 		}
 		catch(ArrayIndexOutOfBoundsException aix)
 		{
-			throw new IOException("The number of columns in the input file does not conform to the expected file format.");
+			throw new IOException("Missing feature start position.");
 		}
 		feature.setStart(start);
 		
@@ -237,24 +269,27 @@ public class SingleFileImporter
 		
 		//extract the names of the genomes involved in this link 
 		String genome1Name = tokens[1].trim();
-		String genome2Name = tokens[3].trim();
+		String genome2Name = tokens[3].trim();		
+		if(genome1Name.equals("") || genome2Name.equals(""))
+			throw new IOException("Missing genome name in homology.");
 		
 		// Find the features involved in the link
 		MapSet mapSet1 = Utils.getMapSetByName(genome1Name, allMapSets);
 		MapSet mapSet2 = Utils.getMapSetByName(genome2Name, allMapSets);
 		
 		String featureName1 = tokens[2].trim();
-		String featureName2 = tokens[4].trim();
+		String featureName2 = tokens[4].trim();		
+		if(featureName1.equals("") || featureName2.equals(""))
+			throw new IOException("Missing feature name in homology.");
 		
 		Feature feature1 = Utils.getFeatureByName(featureName1, mapSet1);
 		Feature feature2 = Utils.getFeatureByName(featureName2, mapSet2);
-
+		
+		//here we record any missing features so we can report these later
 		if( feature1 == null)
 		{ 	
 			missingFeatures.add(featureName1);
 		}
-		
-		
 		if( feature2 == null)
 		{
 			missingFeatures.add(featureName2);
@@ -265,11 +300,11 @@ public class SingleFileImporter
 		for (LinkSet ls : allLinkSets)
 		{		
 			if(ls.getMapSets().size() == 0 || ls.getMapSets() == null)
-				throw new Exception("Homology cannot be processed - check the feature names involved in this homology.");
+				throw new Exception("Homology cannot be processed - check the features involved have feature entries in the file.");
 			
 			String mapset1 = ls.getMapSets().get(0).getName();
 			String mapset2 = ls.getMapSets().get(1).getName();
-
+			
 			if (mapset1.equalsIgnoreCase(genome1Name) && mapset2.equalsIgnoreCase(genome2Name))
 			{
 				linkSet = ls;
@@ -288,34 +323,50 @@ public class SingleFileImporter
 		if(tokens.length == 7)
 			annotation = tokens[6].trim();
 		
+		//parse the BLAST e-Value
+		String eValueStr = tokens[5].trim();
+		if(eValueStr.equals(""))
+			throw new IOException("Missing e-Value in homology.");
+		
 		//this method adds the link between the two features to the linkset
 		if(linkSet != null && feature1 != null && feature2 != null)
-			Utils.addLinkToLinkset(linkSet, feature1, feature2, tokens[5].trim(), annotation);
+			Utils.addLinkToLinkset(linkSet, feature1, feature2, eValueStr, annotation);
 	}
 	
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	private void processURL(String line)
+	//parses a line that contains a URL
+	private void processURL(String line) throws Exception
 	{
+		//the file format is tab delimited text
+		String [] tokens = line.split("\t");
+		
+		//the name of the genome
+		String mapsetName = tokens[1].trim();
+		if(mapsetName.equals(""))
+			throw new IOException("Missing genome name in URL.");
+		
 		try
 		{
-			//the file format is tab delimited text
-			String [] tokens = line.split("\t");
-			String mapsetName = tokens[1].trim();
+			//the URL for this genome
 			String URL = tokens[2].trim();
-			
+			if (URL.equals(""))
+				throw new IOException("Missing URL.");
+			if (!URL.startsWith("http://"))
+				throw new IOException("URL is misformatted.");
+			//set this on the mapset object
 			MapSet mapset = Utils.getMapSetByName(mapsetName, allMapSets);
 			mapset.setURL(URL);
 		}
-		catch (Exception e)
+		catch (ArrayIndexOutOfBoundsException e)
 		{
-			e.printStackTrace();
+			throw new IOException("Missing URL.");
 		}
-		
 	}
 	
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
+	//sorts all features imported by the start position within their map
 	private void sortFeatures()
 	{
 		for (MapSet mapset : allMapSets)
@@ -326,4 +377,7 @@ public class SingleFileImporter
 			}
 		}
 	}
+	
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
 }

@@ -14,7 +14,8 @@ import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.dialog.*;
 import sbrn.mapviewer.gui.entities.*;
 import sbrn.mapviewer.gui.handlers.*;
-import scri.commons.gui.*;
+//import scri.commons.gui.Icons;
+import scri.commons.gui.SwingUtils;
 
 public class WinMain extends JFrame
 {

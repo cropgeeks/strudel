@@ -183,7 +183,7 @@ public class Utils
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
 	
-	public static void addLinkToLinkset(LinkSet linkSet, Feature feature1, Feature feature2, String blastScoreStr, String linkAnnotation) throws ParseException
+	public static void addLinkToLinkset(LinkSet linkSet, Feature feature1, Feature feature2, String blastScoreStr, String linkAnnotation) 
 	{
 		// Pair up every instance of f1 with f2
 		Link link = new Link(feature1, feature2);
@@ -195,9 +195,16 @@ public class Utils
 		feature2.getLinks().add(link);
 		
 		//add the BLAST score as evidence
-		DecimalFormat df = new DecimalFormat("0.###E0");
-		Number blastScore = df.parse(blastScoreStr);
-		link.setBlastScore(blastScore.doubleValue());
+		try
+		{
+			DecimalFormat df = new DecimalFormat("0.###E0");
+			Number blastScore = df.parse(blastScoreStr);
+			link.setBlastScore(blastScore.doubleValue());
+		}
+		catch (ParseException e)
+		{
+			throw new NumberFormatException("The homology between " + feature1 + " and " + feature2 + " contains an invalid e-Value. ");
+		}
 		
 		//add the annotation, if there is any
 		if(linkAnnotation != null)
@@ -226,7 +233,6 @@ public class Utils
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
 		}
 		
 		return feature;
@@ -508,12 +514,12 @@ public class Utils
 		GChromoMap gMap = chromoMap.getGChromoMap();
 		int fDist = Math.round((gMap.height / chromoMap.getStop()) * fPos);
 		int fPosOnScreen =  fDist + gMap.yOnCanvas + gMap.currentY;
-
+		
 		if(inverted)
 			return gMap.yOnCanvas + gMap.currentY + gMap.height - fDist;
 		
 		return fPosOnScreen;
-
+		
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -584,5 +590,33 @@ public class Utils
 	}
 	
 	
+	// --------------------------------------------------------------------------------------------------------------------------------
 	
+	public static void labelToHyperlink(JLabel label, String url)
+	{
+		final String URL = url;
+		// Turns the label into a blue mouse-over clickable link to a website
+		label.setForeground(Color.blue);
+		label.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		label.addMouseListener(new MouseAdapter()
+		{
+			public void mouseClicked(MouseEvent event)
+			{
+				Utils.visitURL(URL);
+			}
+		});	
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
+	
+	public static void labelToAction(JLabel label, Action action, String actionMapKey)
+	{
+		// Turns the label into a blue mouse-over clickable link to a website
+		label.setForeground(Color.blue);
+		label.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		label.getActionMap().put(actionMapKey, action);
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
+		
 }

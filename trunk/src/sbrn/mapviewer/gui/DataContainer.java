@@ -60,8 +60,7 @@ public class DataContainer
 			if (Strudel.winMain.dataLoadingDialog != null)
 				Strudel.winMain.dataLoadingDialog.setVisible(false);
 
-			e.printStackTrace();
-			TaskDialog.error("Data load failed: " + e.toString() + "\nPlease check your data and try again.", "Close");
+			TaskDialog.error("Data load failed: " + e.toString() + "\nPlease correct your data and try again.", "Close");
 		}
 	}
 	

@@ -10,6 +10,7 @@ import sbrn.mapviewer.gui.actions.*;
 import sbrn.mapviewer.gui.animators.*;
 import sbrn.mapviewer.gui.handlers.*;
 import scri.commons.gui.*;
+import sbrn.mapviewer.gui.Icons;
 
 public class ControlToolBar extends JToolBar implements ActionListener
 {

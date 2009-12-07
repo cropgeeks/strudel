@@ -17,7 +17,7 @@ public class MissingFeaturesDialog extends JDialog
 		
 		setBackground(Color.white);
 		
-		String text = "<html>The following features form part of homologies <br>but no corresponding feature entries were found in the file. <br>" +
+		String text = "<html>The following features form part of homologies but <br>no corresponding feature entries were found in the file. <br>" +
 		"The homologies in question have therefore been omitted. <p>  </html>";
 		
 		int width = 150;

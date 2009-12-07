@@ -78,26 +78,8 @@ public class AboutPanel extends javax.swing.JPanel
 	
 	private void initWebStuff()
 	{
-		
-		// Turns the label into a blue mouse-over clickable link to a website
-		webLabel.setForeground(Color.blue);
-		webLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		webLabel.addMouseListener(new MouseAdapter()
-		{
-			public void mouseClicked(MouseEvent event)
-			{
-				Utils.visitURL(Constants.strudelHomePage);
-			}
-		});
-		
-		scriIcon.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		scriIcon.addMouseListener(new MouseAdapter()
-		{
-			public void mouseClicked(MouseEvent event)
-			{
-				Utils.visitURL(Constants.scriHTML);
-			}
-		});
+		Utils.labelToHyperlink(webLabel, Constants.strudelHomePage);		
+		Utils.labelToHyperlink(scriIcon, Constants.scriHTML);
 	}
 	
 }

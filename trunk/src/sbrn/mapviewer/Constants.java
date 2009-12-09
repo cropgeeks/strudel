@@ -36,5 +36,7 @@ public class Constants
 	
 	//documentation and download site URL for the application
 	public static final String strudelHomePage = "http://bioinf.scri.ac.uk/strudel/";
+	public static final String strudelManualPage = "http://bioinf.scri.ac.uk/strudel/help/quickstart.shtml";
+	public static final String strudelQuickStartPage = "http://bioinf.scri.ac.uk/strudel/help/quickstart.shtml";
 	public static final String scriHTML = "http://www.scri.ac.uk";
 }

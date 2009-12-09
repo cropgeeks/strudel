@@ -91,10 +91,19 @@ REFACTORING:
 - link drawing algorithm -- review and improve if possible, change straight line drawing to use drawLine method instead of draw(Shape)
 - check whether any features are drawn offscreen (= unnecessarily)
 - ControlToolBar createControls(): action config code is repetitive, hive off into convenience method
+- maincanvas paintCanvas(): drawlinks before genomes
+- maincanvas paintcomponent: backbuffer drawing of distance markers
+- don't duplicate markers already drawn
+- GChromoMap paintMap(): looks like lots of code here does noly need to be run once rather than at every repaint (e.g. colours etc)
+- GChromoMap  drawLinkedFeatures is drawing linked features whether they are on screen or not
+
 
 ================================
 
 
 BUGS to fix:
+
+- highlighted features: red highlight box does not match grey box behind it and leaves out feature type
+
 
 

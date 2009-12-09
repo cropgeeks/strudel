@@ -214,7 +214,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		//help menu
 		else if (e.getSource() == bHelp)
 		{
-			String url = Constants.strudelHomePage + "manual.shtml";
+			String url = Constants.strudelManualPage;
 			
 			Utils.visitURL(url);
 		}

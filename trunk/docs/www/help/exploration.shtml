@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+	<head>
+		<meta http-equiv="Content-Language" content="en-gb">
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+		<link rel="stylesheet" href="../stylesheet/styles.css" type="text/css">
+
+		<title>Strudel Manual</title>
+
+	</head>
+	<body>
+	<a name="top"></a>
+
+		<!--#include virtual="header.shtml" -->
+
+
+		<h2>
+			Feature exploration
+		</h2>
+
+		<!-- --------------------------------------------- -->
+
+		<a href="#findFeatures">Finding one or more features by their name</a>
+		<br>
+		<a href="#exploreRange">Discovering features in a given range on a chromosome</a>
+		<br>
+		<a href="#addFeatures">Adding features from a user defined region into the results table</a>
+
+
+		<!-- --------------------------------------------- -->
+		<h4>
+			Finding one or more features by their name:
+			<a name="findFeatures"></a>
+		</h4>
+		Click on the find features button
+		<img src="../images/find.png">
+		on the toolbar. Enter one or more feature names (one per line) and click the “Find” button in the dialog. A table with
+		features found will display at the bottom of the screen. Click rows in the table to display the features on the
+		canvas.
+		<p>
+			Currently this feature only supports exact name matches.
+		<p>
+			<a href="#top">Back to top</a>
+		</p>
+
+		<!-- --------------------------------------------- -->
+		<h4>
+			Discovering features in a given range on a chromosome:
+			<a name="exploreRange"></a>
+		</h4>
+		Click on the range button
+		<img src="../images/range.png">
+		on the toolbar. A dialog will appear where you can specify a genome, chromosome and range end points for a range you
+		want to explore. Click the “find” button in the dialog and a results table will appear at the bottom of the window.
+		Click rows in the table to display the features on the canvas.
+		<p>
+			You can filter the results in the list by genome by using the drop-down menu in the results table’s control panel at
+			the bottom left. You can also click the checkboxes to display labels and links for the features in the range.
+			Clicking on the feature name hyperlinks will bring up a web browser with annotation information if a target URL was
+			specified at in the load data dialog for the genome in question. The feature name is appended to the URL and a web
+			browser will open with the corresponding page loaded. Sort the table by clicking on one header at a time.
+		<p>
+			Results tables from this procedure and the find features by name procedure can be saved to a tab delimited text file
+			by clicking the save
+			<img src="../images/save.png">
+			button on the toolbar, which opens a file save dialog.
+			<p>
+			A region for disaplying all features can also be defined through the view itself. Hold down the Ctrl and Shift keys together, 
+			then click and drag next to ta chromosome along the region of interest. This will draw a selection rectangle. Right-click and 
+			choose "Show annotation for features in range" from the context menu. This will bring up a results table such as the one 
+			 described above.
+		<p>
+			<a href="#top">Back to top</a>
+		</p>
+
+		<!-- --------------------------------------------- -->
+		<h4>
+			Adding features from a user defined region into the results table:
+			<a name="addFeatures"></a>
+		</h4>
+		Users can also insert additional features from a reference genome into the results table. This is done by holding down
+		Ctrl and Shift together and left-clicking and dragging down next to a chromosome. This draws a slightly opaque box
+		around the region of interest. Right-click within the selected area and select “Add features in range to results” from
+		the context menu that appears. This will add all available features in the range (not just those with homologs) to the
+		results table which can then be filtered, sorted and explored as required. Please note that there is currently no
+		support for drawing all of the additional features on the canvas simultaneously – with very dense maps this would make
+		the display all but unusable.
+		<p>
+			<a href="#top">Back to top</a>
+		</p>
+
+		<!-- --------------------------------------------- -->
+
+		<!--#include virtual="footer.html" -->
+	</body>
+</html>

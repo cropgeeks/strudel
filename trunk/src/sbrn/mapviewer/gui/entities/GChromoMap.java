@@ -433,43 +433,41 @@ public class GChromoMap
 	// initialises the arrays we need for fast drawing
 	public void initArrays()
 	{
-		if(true)
-		{		
-			// init the arrays that hold ALL the features for this map
-			int numFeatures = chromoMap.countFeatures();
+		
+		// init the arrays that hold ALL the features for this map
+		int numFeatures = chromoMap.countFeatures();
+		
+		allLinkedFeatures = new Feature[numFeatures];
+		allLinkedFeaturePositions = new int[numFeatures];
+		Vector<Feature> featureList = chromoMap.getFeatureList();
+		for (int i = 0, n=featureList.size(); i < n; i++)
+		{
+			Feature f = featureList.get(i);
 			
-			allLinkedFeatures = new Feature[numFeatures];
-			allLinkedFeaturePositions = new int[numFeatures];
-			Vector<Feature> featureList = chromoMap.getFeatureList();
-			for (int i = 0; i < featureList.size(); i++)
-			{
-				Feature f = featureList.get(i);
+			//at this point we need to know whether this feature is involved in any links
+			//if it is, we add it to the arrays
+			//otherwise it's fine to just have it in the feature list of the corresponding chromomap from where we can access it for 
+			//other uses such as full feature lists for search ranges etc
+			if((f.getLinks() != null && f.getLinks().size() > 0) || Strudel.winMain.dataContainer.gMapSets.size() == 1)
+			{				
+				//the start point of this features in its own units (cM, bp, whatever)
+				float start = f.getStart();
 				
-				//at this point we need to know whether this feature is involved in any links
-				//if it is, we add it to the arrays
-				//otherwise it's fine to just have it in the feature list of the corresponding chromomap from where we can access it for 
-				//other uses such as full feature lists for search ranges etc
-				if((f.getLinks() != null && f.getLinks().size() > 0) || Strudel.winMain.dataContainer.gMapSets.size() == 1)
-				{				
-					//the start point of this features in its own units (cM, bp, whatever)
-					float start = f.getStart();
-					
-					//scale this by the current map height to give us a position in pixels, between zero and the chromosome height
-					//then store this value in the array we use for drawing
-					allLinkedFeaturePositions[i] =Utils.convertRelativeFPosToPixels(owningSet, chromoMap, start);
-					
-					//if the map is inverted we need to store the inverse of this value i.e. the map end value minus the feature position
-					if(isFullyInverted || isPartlyInverted)
-					{
-						allLinkedFeaturePositions[i] = (int) ((owningSet.chromoHeight / chromoMap.getStop()) * (chromoMap.getStop() -start));
-					}
-					
-					//also store a reference to the feature itself in a parallel array
-					allLinkedFeatures[i] = f;
+				//scale this by the current map height to give us a position in pixels, between zero and the chromosome height
+				//then store this value in the array we use for drawing
+				allLinkedFeaturePositions[i] =Utils.convertRelativeFPosToPixels(owningSet, chromoMap, start);
+				
+				//if the map is inverted we need to store the inverse of this value i.e. the map end value minus the feature position
+				if(isFullyInverted || isPartlyInverted)
+				{
+					allLinkedFeaturePositions[i] = (int) ((owningSet.chromoHeight / chromoMap.getStop()) * (chromoMap.getStop() -start));
 				}
+				
+				//also store a reference to the feature itself in a parallel array
+				allLinkedFeatures[i] = f;
 			}
-			arraysInitialized = true;
 		}
+		arraysInitialized = true;
 	}
 	
 	
@@ -478,6 +476,8 @@ public class GChromoMap
 	// draw the markers for the features
 	private void drawLinkedFeatures(Graphics2D g2)
 	{
+		int lastY = -1;
+		
 		if (allLinkedFeaturePositions != null)
 		{
 			g2.setColor(Colors.featureColour);
@@ -498,7 +498,11 @@ public class GChromoMap
 					yPos = Math.round((yPos * (height / (float)owningSet.chromoHeight)) + currentY);
 				
 				// draw a line for the marker
-				g2.drawLine(0, yPos, width, yPos);
+				if (yPos != lastY)
+				{
+					g2.drawLine(0, yPos, width, yPos);
+					lastY = yPos;
+				}
 			}
 		}
 	}

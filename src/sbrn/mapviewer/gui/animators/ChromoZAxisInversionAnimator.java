@@ -9,7 +9,7 @@ public class ChromoZAxisInversionAnimator extends Thread
 	GChromoMap invertMap;
 	int fps;
 	int millis;
-	
+
 	public ChromoZAxisInversionAnimator(GChromoMap invertMap, int fps, int millis)
 	{
 		super();
@@ -17,24 +17,25 @@ public class ChromoZAxisInversionAnimator extends Thread
 		this.fps = fps;
 		this.millis = millis;
 	}
-	
+
+	@Override
 	public void run()
 	{
 		try
 		{
 			//turn antialiasing off
-			Strudel.winMain.mainCanvas.antiAlias = false;		
-			
+			Strudel.winMain.mainCanvas.antiAlias = false;
+
 			//the total number of frames we need to render
 			int totalFrames = Math.round(fps * (millis / 1000.0f));
-			
+
 			//angle we want to draw at
 			float currentAngle = 90;
 			float endAngle = -90;
 			float interval = (endAngle - currentAngle) / totalFrames;
-			
+
 			invertMap.inversionInProgress = true;
-			
+
 			// now loop for the number of total frames, zooming in by a bit each time
 			for (int i = 0; i < totalFrames; i++)
 			{
@@ -57,34 +58,34 @@ public class ChromoZAxisInversionAnimator extends Thread
 					else
 						invertMap.isPartlyInverted = false;
 				}
-				
+
 				//repaint
 				Strudel.winMain.mainCanvas.updateCanvas(true);
-				
+
 				// sleep for the amount of animation time divided by the totalFrames value
 				try
 				{
-					Thread.sleep((long) (millis / totalFrames));
+					Thread.sleep((millis / totalFrames));
 				}
 				catch (InterruptedException e)
 				{
 				}
 			}
-			
+
 			//flag up the fact that this chromoMap is now inverted but check first whether it is already inverted
 			//in that case it will now be the right way up again
 			if(invertMap.isFullyInverted)
 				invertMap.isFullyInverted = false;
 			else
 				invertMap.isFullyInverted = true;
-			
-			invertMap.inversionInProgress = false;		
-			
+
+			invertMap.inversionInProgress = false;
+
 			//update the position lookup arrays for mouseover
-			Strudel.winMain.fatController.initialisePositionArrays();			
+			Strudel.winMain.fatController.initialisePositionArrays();
 
 			//repaint
-			Utils.repaintAntiAliased();		
+			Utils.repaintAntiAliased();
 		}
 		catch (RuntimeException e)
 		{

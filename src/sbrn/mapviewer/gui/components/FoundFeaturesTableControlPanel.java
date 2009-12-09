@@ -19,19 +19,19 @@ import sbrn.mapviewer.gui.entities.*;
  */
 public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 {
-	
+
 	/** Creates new form FoundFeaturesTableControlPanel */
 	public FoundFeaturesTableControlPanel()
 	{
 		initComponents();
 		setupGenomeFilterCombo();
 	}
-	
+
 	//GEN-BEGIN:initComponents
 	// <editor-fold defaultstate="collapsed" desc="Generated Code">
 	private void initComponents()
 	{
-		
+
 		genomeLabel = new javax.swing.JLabel();
 		chromoLabel = new javax.swing.JLabel();
 		regionStartLabel = new javax.swing.JLabel();
@@ -46,21 +46,21 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 		jLabel5 = new javax.swing.JLabel();
 		filterLabel = new javax.swing.JLabel();
 		genomeFilterCombo = new javax.swing.JComboBox();
-		
+
 		setBorder(javax.swing.BorderFactory.createTitledBorder("Highlighted region: "));
 		setMinimumSize(new java.awt.Dimension(250, 300));
 		setPreferredSize(new java.awt.Dimension(250, 300));
-		
+
 		genomeLabel.setText("genome");
-		
+
 		chromoLabel.setText("chromo");
-		
+
 		regionStartLabel.setText("start");
-		
+
 		regionEndLabel.setText("end");
-		
+
 		numberFeaturesLabel.setText("num");
-		
+
 		showLabelsCheckbox.setText("Show all labels");
 		showLabelsCheckbox.addChangeListener(new javax.swing.event.ChangeListener()
 		{
@@ -69,7 +69,7 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 				showLabelsCheckboxStateChanged(evt);
 			}
 		});
-		
+
 		showHomologsCheckbox.setText("Show all links");
 		showHomologsCheckbox.addChangeListener(new javax.swing.event.ChangeListener()
 		{
@@ -78,24 +78,24 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 				showHomologsCheckboxStateChanged(evt);
 			}
 		});
-		
+
 		jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12));
 		jLabel1.setText("Genome:");
-		
+
 		jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12));
 		jLabel2.setText("Chromosome:");
-		
+
 		jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12));
 		jLabel3.setText("Region start:");
-		
+
 		jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12));
 		jLabel4.setText("Region end:");
-		
+
 		jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12));
 		jLabel5.setText("No. of features:");
-		
+
 		filterLabel.setText("Filter by reference genome:");
-		
+
 		genomeFilterCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[]
 		{ "Item 1", "Item 2", "Item 3", "Item 4" }));
 		genomeFilterCombo.addActionListener(new java.awt.event.ActionListener()
@@ -105,14 +105,14 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 				genomeFilterComboActionPerformed(evt);
 			}
 		});
-		
+
 		org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
 		this.setLayout(layout);
 		layout.setHorizontalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(layout.createSequentialGroup().add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(layout.createSequentialGroup().add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false).add(jLabel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(jLabel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(jLabel5, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, jLabel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, jLabel1)).add(filterLabel)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(numberFeaturesLabel).add(regionEndLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE).add(regionStartLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE).add(chromoLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE).add(genomeLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE).add(genomeFilterCombo, 0, 55, Short.MAX_VALUE))).add(showLabelsCheckbox).add(showHomologsCheckbox)).addContainerGap()));
 		layout.setVerticalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(layout.createSequentialGroup().add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel1).add(genomeLabel)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel2).add(chromoLabel)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel3).add(regionStartLabel)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel4).add(regionEndLabel)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(jLabel5).add(numberFeaturesLabel)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(filterLabel).add(genomeFilterCombo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(showLabelsCheckbox).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(showHomologsCheckbox)));
 	}// </editor-fold>
 	//GEN-END:initComponents
-	
+
 	private void genomeFilterComboActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		if (!(Strudel.winMain.ffResultsPanel.resultsTable.getModel() instanceof DefaultTableModel))
@@ -124,7 +124,7 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 			Strudel.winMain.ffResultsPanel.resultsTable.newFilter(genomeName, genomeColumnIndex);
 		}
 	}
-	
+
 	private void showHomologsCheckboxStateChanged(javax.swing.event.ChangeEvent evt)
 	{
 		//synchronise this checkbox with the corresponding one in the find features in range panel
@@ -132,10 +132,10 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 			Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().setSelected(true);
 		else
 			Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().setSelected(false);
-		
+
 		Strudel.winMain.mainCanvas.updateCanvas(true);
 	}
-	
+
 	private void showLabelsCheckboxStateChanged(javax.swing.event.ChangeEvent evt)
 	{
 		//synchronise this checkbox with the corresponding one in the find features in range panel
@@ -143,10 +143,10 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 			Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(true);
 		else
 			Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(false);
-		
+
 		Strudel.winMain.mainCanvas.updateCanvas(true);
 	}
-	
+
 	public void setupGenomeFilterCombo()
 	{
 		//set up the combo box with its data model
@@ -158,7 +158,7 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 		}
 		genomeFilterCombo.setModel(new DefaultComboBoxModel(genomes));
 	}
-	
+
 	//GEN-BEGIN:variables
 	// Variables declaration - do not modify
 	private javax.swing.JLabel chromoLabel;
@@ -175,51 +175,51 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 	private javax.swing.JLabel regionStartLabel;
 	private javax.swing.JCheckBox showHomologsCheckbox;
 	private javax.swing.JCheckBox showLabelsCheckbox;
-	
+
 	// End of variables declaration//GEN-END:variables
 	public javax.swing.JLabel getChromoLabel()
 	{
 		return chromoLabel;
 	}
-	
+
 	public javax.swing.JLabel getGenomeLabel()
 	{
 		return genomeLabel;
 	}
-	
+
 	public javax.swing.JLabel getNumberFeaturesLabel()
 	{
 		return numberFeaturesLabel;
 	}
-	
+
 	public javax.swing.JLabel getRegionEndLabel()
 	{
 		return regionEndLabel;
 	}
-	
+
 	public javax.swing.JLabel getRegionStartLabel()
 	{
 		return regionStartLabel;
 	}
-	
+
 	public javax.swing.JCheckBox getShowHomologsCheckbox()
 	{
 		return showHomologsCheckbox;
 	}
-	
+
 	public javax.swing.JCheckBox getShowLabelsCheckbox()
 	{
 		return showLabelsCheckbox;
 	}
-	
+
 	public javax.swing.JLabel getFilterLabel()
 	{
 		return filterLabel;
 	}
-	
+
 	public javax.swing.JComboBox getGenomeFilterCombo()
 	{
 		return genomeFilterCombo;
 	}
-	
+
 }

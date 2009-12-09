@@ -12,7 +12,7 @@ public class MapDataException extends Exception
 	{
 		super();
 	}
-	
+
 	/**
 	 * Constructs an MapDataException with the specified detail message.
 	 * @param s the detail message

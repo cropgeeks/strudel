@@ -15,7 +15,7 @@ import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
 
 /**
- * 
+ *
  * @author imilne
  */
 public class AboutDialog extends javax.swing.JDialog
@@ -23,19 +23,19 @@ public class AboutDialog extends javax.swing.JDialog
 	ExampleDataInfoPanel exampleDataInfoPanel = new ExampleDataInfoPanel();
 	AboutPanel aboutPanel = new AboutPanel();
 	JButton closeButton = new JButton("Close");
-	
-	
+
+
 	/** Creates new form AboutDialog */
 	public AboutDialog(java.awt.Frame parent, boolean modal)
 	{
 		super(parent, modal);
-		
+
 		JTabbedPane tabbedPane = new JTabbedPane();
 		tabbedPane.add("About Strudel", aboutPanel);
 		tabbedPane.add("Example Data Sets", exampleDataInfoPanel);
 		tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
 		add(BorderLayout.CENTER, tabbedPane);
-		
+
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
 		buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
@@ -43,7 +43,7 @@ public class AboutDialog extends javax.swing.JDialog
 		buttonPanel.add(closeButton);
 		add(BorderLayout.SOUTH, buttonPanel);
 
-		
+
 		closeButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -52,14 +52,14 @@ public class AboutDialog extends javax.swing.JDialog
 			}
 		});
 		closeButton.setMnemonic(KeyEvent.VK_C);
-		
+
 		pack();
 		setTitle("About Strudel");
 		setResizable(true);
 		setLocationRelativeTo(parent);
 	}
 
-	
+
 	/**
 	 * @param args
 	 *                the command lie arguments
@@ -73,6 +73,7 @@ public class AboutDialog extends javax.swing.JDialog
 				AboutDialog dialog = new AboutDialog(new javax.swing.JFrame(), true);
 				dialog.addWindowListener(new java.awt.event.WindowAdapter()
 				{
+					@Override
 					public void windowClosing(java.awt.event.WindowEvent e)
 					{
 						System.exit(0);
@@ -83,5 +84,5 @@ public class AboutDialog extends javax.swing.JDialog
 		});
 	}
 
-	
+
 }

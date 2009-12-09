@@ -15,15 +15,16 @@ import scri.commons.gui.*;
  */
 public class MTDataLoadingDialog extends javax.swing.JDialog
 {
-	
+
 	/** Creates new form MTDataLoadingDialog */
 	public MTDataLoadingDialog(java.awt.Frame parent, boolean modal)
 	{
 		super(parent, modal);
 		initComponents();
-		
+
 		addWindowListener(new java.awt.event.WindowAdapter()
 		{
+			@Override
 			public void windowClosing(java.awt.event.WindowEvent e)
 			{
 				setVisible(false);
@@ -32,7 +33,7 @@ public class MTDataLoadingDialog extends javax.swing.JDialog
 			}
 		});
 	}
-	
+
 	/** This method is called from within the constructor to
 	 * initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is
@@ -42,20 +43,20 @@ public class MTDataLoadingDialog extends javax.swing.JDialog
 	// <editor-fold defaultstate="collapsed" desc="Generated Code">
 	private void initComponents()
 	{
-		
+
 		dataLoadingLabel = new javax.swing.JLabel();
 		progressBar = new javax.swing.JProgressBar();
 		dataLoadcancelButton = new javax.swing.JButton();
-		
+
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setTitle("Data loading");
-		
+
 		dataLoadingLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 		dataLoadingLabel.setText("Data loading - please wait...");
 		dataLoadingLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-		
+
 		progressBar.setIndeterminate(true);
-		
+
 		dataLoadcancelButton.setText("Cancel");
 		dataLoadcancelButton.addActionListener(new java.awt.event.ActionListener()
 		{
@@ -64,7 +65,7 @@ public class MTDataLoadingDialog extends javax.swing.JDialog
 				dataLoadcancelButtonActionPerformed(evt);
 			}
 		});
-		
+
 		org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
 		layout.setHorizontalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
@@ -91,18 +92,18 @@ public class MTDataLoadingDialog extends javax.swing.JDialog
 										dataLoadcancelButton).addContainerGap(
 										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
 										Short.MAX_VALUE)));
-		
+
 		pack();
 	}// </editor-fold>
 	//GEN-END:initComponents
-	
+
 	private void dataLoadcancelButtonActionPerformed(java.awt.event.ActionEvent evt)
 	{
 		setVisible(false);
 		Strudel.winMain.fatController.dataLoadCancelled = true;
 		TaskDialog.info("Data import canceled.", "Close");
 	}
-	
+
 	/**
 	 * @param args the command line arguments
 	 */
@@ -115,6 +116,7 @@ public class MTDataLoadingDialog extends javax.swing.JDialog
 				MTDataLoadingDialog dialog = new MTDataLoadingDialog(new javax.swing.JFrame(), true);
 				dialog.addWindowListener(new java.awt.event.WindowAdapter()
 				{
+					@Override
 					public void windowClosing(java.awt.event.WindowEvent e)
 					{
 						System.exit(0);
@@ -125,13 +127,13 @@ public class MTDataLoadingDialog extends javax.swing.JDialog
 			}
 		});
 	}
-	
+
 	//GEN-BEGIN:variables
 	// Variables declaration - do not modify
 	private javax.swing.JButton dataLoadcancelButton;
 	private javax.swing.JLabel dataLoadingLabel;
 	private javax.swing.JProgressBar progressBar;
-	
+
 	// End of variables declaration//GEN-END:variables
 	public javax.swing.JButton getDataLoadcancelButton()
 	{
@@ -142,5 +144,5 @@ public class MTDataLoadingDialog extends javax.swing.JDialog
 	{
 		return dataLoadingLabel;
 	}
-	
+
 }

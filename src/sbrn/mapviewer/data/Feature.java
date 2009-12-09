@@ -22,11 +22,11 @@ public class Feature implements Comparable<Feature>
 	private ChromoMap owner;
 
 	// The name of this Feature
-	private String name;
+	private final String name;
 	// And any aliases
-	private Vector<String> aliases = new Vector<String>();
+	private final Vector<String> aliases = new Vector<String>();
 	// And any links its involved in
-	private Vector<Link> links = new Vector<Link>();
+	private final Vector<Link> links = new Vector<Link>();
 
 	// Its start and stop positions (in whatever distance format) on the map
 	private float start, stop;
@@ -50,6 +50,7 @@ public class Feature implements Comparable<Feature>
 	 * Returns a string representation of this feature. Currently its name.
 	 * @return a string representation of this feature.
 	 */
+	@Override
 	public String toString()
 		{ return name; }
 

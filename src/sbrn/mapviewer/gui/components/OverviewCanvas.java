@@ -49,6 +49,7 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener, Mouse
 	// ========================================methods=============================
 
 	// paint the genome onto this canvas
+	@Override
 	public void paintComponent(Graphics g)
 	{
 		// need to clear the canvas before we draw
@@ -62,7 +63,7 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener, Mouse
 
 		// width of chromosomes -- set this to a fixed fraction of the screen width for now
 		int chromoWidth = canvasWidth / 10;
-		
+
 		// x position of genome
 		int genomeX = (canvasWidth/2) - (chromoWidth/2);
 
@@ -125,7 +126,7 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener, Mouse
 			double offsetProportionAtTop = topY/(float)gMapSet.totalY;
 			//work out the equivalent point on this overview canvas in pixels
 			rectY = (int)Math.round(getHeight()*offsetProportionAtTop);
-			
+
 			//work out the vertical extent of the visible area of the main canvas as a proportion of the total y
 			double offsetProportionVisibleArea = winMain.mainCanvas.getHeight()/(float)gMapSet.totalY;
 			//set the rect height accordingly

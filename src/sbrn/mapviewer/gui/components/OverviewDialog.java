@@ -10,7 +10,7 @@ import scri.commons.gui.*;
 
 class OverviewDialog extends JDialog
 {
-	private WinMain winMain;
+	private final WinMain winMain;
 
 	OverviewDialog(WinMain winMain)
 	{
@@ -37,6 +37,7 @@ class OverviewDialog extends JDialog
 		// Monitor the size and location of the dialog on screen
 		addComponentListener(new ComponentAdapter()
 		{
+			@Override
 			public void componentResized(ComponentEvent e)
 			{
 				Prefs.guiOverviewWidth  = getSize().width;
@@ -45,6 +46,7 @@ class OverviewDialog extends JDialog
 				Prefs.guiOverviewY = getLocation().y;
 			}
 
+			@Override
 			public void componentMoved(ComponentEvent e)
 			{
 				Prefs.guiOverviewX = getLocation().x;
@@ -56,6 +58,7 @@ class OverviewDialog extends JDialog
 		// we still need to track the event
 		addWindowListener(new WindowAdapter()
 		{
+			@Override
 			public void windowClosing(WindowEvent e)
 			{
 				winMain.toolbar.toggleOverviewDialog();

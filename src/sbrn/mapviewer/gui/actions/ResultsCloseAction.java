@@ -10,7 +10,7 @@ public class ResultsCloseAction extends AbstractAction
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		
+
 	}
-	
+
 }

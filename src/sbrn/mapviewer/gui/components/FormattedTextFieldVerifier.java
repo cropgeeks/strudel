@@ -10,17 +10,18 @@ import scri.commons.gui.*;
 public class FormattedTextFieldVerifier extends InputVerifier
 {
 
-	private String negNumberMessage;
-	private float threshold;
-	private boolean isUpperThreshold;
-	
+	private final String negNumberMessage;
+	private final float threshold;
+	private final boolean isUpperThreshold;
+
 	public FormattedTextFieldVerifier(String negNumberMessage, float threshold, boolean isUpperThreshold)
 	{
 		this.negNumberMessage = negNumberMessage;
 		this.threshold = threshold;
 		this.isUpperThreshold = isUpperThreshold;
 	}
-	
+
+	@Override
 	public boolean verify(JComponent input)
 	{
 		if (input instanceof JFormattedTextField)
@@ -29,7 +30,7 @@ public class FormattedTextFieldVerifier extends InputVerifier
 			AbstractFormatter formatter = ftf.getFormatter();
 			if (formatter != null)
 			{
-				
+
 				NumberFormat nf = NumberFormat.getInstance(Locale.getDefault());
 				float value = 0;
 				try
@@ -40,19 +41,20 @@ public class FormattedTextFieldVerifier extends InputVerifier
 				{
 					e.printStackTrace();
 				}
-				
+
 				if(!isUpperThreshold && (value >= threshold))
 					return true;
 				else if(isUpperThreshold && (value <= threshold))
 					return true;
-				
+
 				TaskDialog.error(negNumberMessage, "Close");
 				return false;
 			}
 		}
 		return true;
 	}
-	
+
+	@Override
 	public boolean shouldYieldFocus(JComponent input)
 	{
 		return verify(input);

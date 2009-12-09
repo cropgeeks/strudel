@@ -4,5 +4,5 @@ import javax.swing.JPanel;
 
 public class LinkListPanel extends JPanel
 {
-	
+
 }

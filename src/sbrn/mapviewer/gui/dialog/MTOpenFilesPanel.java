@@ -78,7 +78,7 @@ public class MTOpenFilesPanel extends javax.swing.JPanel
 		dataImportModePanelLayout.setHorizontalGroup(dataImportModePanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(dataImportModePanelLayout.createSequentialGroup().add(dataImportModePanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false).add(org.jdesktop.layout.GroupLayout.LEADING, ownDataRadioButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(org.jdesktop.layout.GroupLayout.LEADING, exampleDataRadioButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addContainerGap(192, Short.MAX_VALUE)));
 		dataImportModePanelLayout.setVerticalGroup(dataImportModePanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(dataImportModePanelLayout.createSequentialGroup().add(exampleDataRadioButton).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).add(ownDataRadioButton)));
 		
-		targetGenomeLoaderPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Select Strudel format combined input file:"));
+		targetGenomeLoaderPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Select input file (Strudel format):"));
 		targetGenomeLoaderPanel.setEnabled(false);
 		
 		inputFileLabel.setEnabled(false);
@@ -172,7 +172,7 @@ public class MTOpenFilesPanel extends javax.swing.JPanel
 	{
 		return inputFileTF;
 	}
-
+	
 	public javax.swing.JRadioButton getOwnDataRadioButton()
 	{
 		return ownDataRadioButton;

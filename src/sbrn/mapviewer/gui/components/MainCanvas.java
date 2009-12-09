@@ -93,7 +93,11 @@ public class MainCanvas extends JPanel
 	
 	public void paintComponent(Graphics graphics)
 	{
+		
 		super.paintComponent(graphics);
+		long s = System.nanoTime();
+		
+//		System.out.println("paint component  " + System.currentTimeMillis());
 		
 		Graphics2D g = (Graphics2D) graphics;
 		
@@ -127,11 +131,7 @@ public class MainCanvas extends JPanel
 			g.setColor(Colors.panZoomRectOutlineColour);
 			g.draw(selectionRect);
 		}
-		
-		
-		//the next lot of features can all be drawn with antialiasing on without too much effect on performance
-		//looks much better, especially on the distance markers
-		
+
 		//now we need to draw the rest of the things relating to the map
 		//this needs to be done after drawing the links so it is all visible on top of the links
 		for (GMapSet gMapSet : winMain.dataContainer.gMapSets)
@@ -165,6 +165,8 @@ public class MainCanvas extends JPanel
 				LabelDisplayManager.drawHighlightedFeatureLabel(g, winMain.fatController.highlightFeature, null);
 			}
 		}
+		
+		System.out.println("render time (ms) = " + (System.nanoTime() - s)/1000000.0f);
 	}
 	
 	//------------------------------------------------------------------------------------------------------------------------------------------------
@@ -193,12 +195,17 @@ public class MainCanvas extends JPanel
 		
 		// width of chromosomes -- set this to a fixed fraction of the screen width for now
 		chromoWidth = Math.round(canvasWidth / 40);
+
+		// check that this number is even
+		boolean evenNumber = chromoWidth % 2 == 0;
+		// if it isn't just add 1 -- otherwise we get into trouble with feature line widths exceeding the width of the chromosome
+		if (!evenNumber)
+			chromoWidth += 1;
 		
 		//for all maps sets
 		for (GMapSet gMapSet : winMain.dataContainer.gMapSets)
 		{
 			checkMarkerPaintingThresholds(gMapSet);
-//			checkForLabelDrawing(gMapSet);
 			
 			//calculate the x position for this genome
 			int numGenomes = winMain.dataContainer.gMapSets.size();
@@ -244,14 +251,7 @@ public class MainCanvas extends JPanel
 				// start drawing at minus half the total height of the entire genome plus half the canvasheight
 				currentY = -(gMapSet.totalY / 2) + canvasHeight / 2 - (gMapSet.centerPoint - (gMapSet.totalY / 2));
 			}
-			
-			
-			// check that this number is even
-			boolean evenNumber = chromoWidth % 2 == 0;
-			// if it isn't just add 1 -- otherwise we get into trouble with feature line widths exceeding the width of the chromosome
-			if (!evenNumber)
-				chromoWidth += 1;
-			
+						
 			// now paint the chromosomes in this genome
 			// for each chromosome in the genome
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
@@ -277,14 +277,7 @@ public class MainCanvas extends JPanel
 				if (canvasBounds.contains(gChromoMap.boundingRectangle) || canvasBounds.intersects(gChromoMap.boundingRectangle))
 				{
 					gChromoMap.isShowingOnCanvas = true;
-					if (canvasBounds.contains(gChromoMap.boundingRectangle))
-					{
-						gChromoMap.isFullyShowingOnCanvas = true;
-					}
-					else
-					{
-						gChromoMap.isFullyShowingOnCanvas = false;
-					}
+					gChromoMap.isFullyShowingOnCanvas = canvasBounds.contains(gChromoMap.boundingRectangle);
 				}
 				else
 				{

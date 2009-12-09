@@ -115,7 +115,6 @@ public class FatController
 	//this is necessary because zooming changes the actual position values as the canvas grows
 	public void initialisePositionArrays()
 	{
-		long startTime = System.nanoTime();
 		// for all gmapsets
 		for (GMapSet gMapSet : winMain.dataContainer.gMapSets)
 		{

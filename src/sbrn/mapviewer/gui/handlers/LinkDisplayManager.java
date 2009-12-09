@@ -113,8 +113,10 @@ public class LinkDisplayManager
 	// Draws the lines between a chromosome of the reference genome and all potential homologues in the compared genome
 	public void drawAllLinks(Graphics2D g2)
 	{		
+		HashMap<String, Boolean> hash = new HashMap<String, Boolean>();		
+		
 		int numLinksDrawn = 0;
-
+		
 		//only do this if we have at least 2 genomes -- otherwise there are no links to deal with
 		if(Strudel.winMain.dataContainer.gMapSets.size() > 1)
 		{			
@@ -123,7 +125,7 @@ public class LinkDisplayManager
 				//potentially each linkset could be drawn from map A to map B and in the reverse direction too
 				//this object helps keep track of the linksets already drawn so we don't duplicate the effort
 				Vector<LinkSet> drawnLinkSets = new Vector<LinkSet>();
-
+				
 				// for each map in the selectedMaps vector 
 				for (int i = 0; i < Strudel.winMain.fatController.selectedMaps.size(); i++)
 				{
@@ -135,128 +137,126 @@ public class LinkDisplayManager
 					
 					// get all the linksets between the selected chromosome and the reference maps selected
 					Vector<LinkSet> linkSets = linkSetLookup.get(selectedChromoMap);
-
+					
 					// for each set of links between the selected chromosome and a reference map
 					for (LinkSet selectedLinks : linkSets)
 					{
-						if (selectedLinks != null)
+						if(selectedLinks == null)
+							continue;
+						//find out which mapsets we are dealing with here
+						//we know that what was clicked on is our target map and its owning mapset is therefore the target mapset
+						GMapSet targetGMapSet = selectedMap.owningSet;
+						GMapSet mapset1 = Utils.getGMapSetByName(selectedLinks.getMapSets().get(0).getName());
+						GMapSet mapset2 = Utils.getGMapSetByName(selectedLinks.getMapSets().get(1).getName());
+						//now find out which mapset the other one is in the current set of links
+						GMapSet referenceGMapSet = null;
+						if (mapset1 == targetGMapSet)
+							referenceGMapSet = mapset2;
+						else
+							referenceGMapSet = mapset1;
+						
+						//find out the maps involved in this linkset
+						GChromoMap gMap1 = selectedLinks.getLinks().get(0).getFeature1().getOwningMap().getGChromoMap();
+						GChromoMap gMap2 = selectedLinks.getLinks().get(0).getFeature2().getOwningMap().getGChromoMap();
+						//need to check whether there is any point in proceeding here
+						//if the user is doing Ctrl click selection of maps they will only want to see links between the ones they selected
+						//so if we don't have both of the maps in this map set selected, just skip to the next one
+						if (Strudel.winMain.fatController.isCtrlClickSelection)
 						{
-							//find out which mapsets we are dealing with here
-							//we know that what was clicked on is our target map and its owning mapset is therefore the target mapset
-							GMapSet targetGMapSet = selectedMap.owningSet;
-							GMapSet mapset1 = Utils.getGMapSetByName(selectedLinks.getMapSets().get(0).getName());
-							GMapSet mapset2 = Utils.getGMapSetByName(selectedLinks.getMapSets().get(1).getName());
-							//now find out which mapset the other one is in the current set of links
-							GMapSet referenceGMapSet = null;
-							if (mapset1 == targetGMapSet)
-								referenceGMapSet = mapset2;
-							else
-								referenceGMapSet = mapset1;
-							
-							//find out the maps involved in this linkset
-							GChromoMap gMap1 = selectedLinks.getLinks().get(0).getFeature1().getOwningMap().getGChromoMap();
-							GChromoMap gMap2 = selectedLinks.getLinks().get(0).getFeature2().getOwningMap().getGChromoMap();
-							//need to check whether there is any point in proceeding here
-							//if the user is doing Ctrl click selection of maps they will only want to see links between the ones they selected
-							//so if we don't have both of the maps in this map set selected, just skip to the next one
-							boolean drawLinkSet = true;
-							if (Strudel.winMain.fatController.isCtrlClickSelection)
-							{
-								if (!(Strudel.winMain.fatController.selectedMaps.contains(gMap1) && Strudel.winMain.fatController.selectedMaps.contains(gMap2)) || drawnLinkSets.contains(selectedLinks))
-									drawLinkSet = false;
-							}
-													
-							// the x coordinates have to be worked out
-							int targetChromoX = 0;
-							int referenceChromoX = 0;
-							//need to adjust the x positions of the links here
-							//if the reference genome is to the right of the target genome (indicated by their positions in the list of mapsets held in the datacontainer)
-							if (Strudel.winMain.dataContainer.gMapSets.indexOf(targetGMapSet) < Strudel.winMain.dataContainer.gMapSets.indexOf(referenceGMapSet))
-							{
-								targetChromoX = Math.round(targetGMapSet.xPosition + targetGMapSet.gMaps.get(0).width) + 1;
-								referenceChromoX = Math.round(referenceGMapSet.xPosition) -1;
-							}
-							//the ref genome is to the left of the target genome
-							else
-							{
-								// we want the referenceChromoX to be the mapsets x plus its width
-								referenceChromoX = Math.round(referenceGMapSet.xPosition + referenceGMapSet.gMaps.get(0).width) + 1;
-								// and we want the target genome's x to be the targetChromoX
-								targetChromoX = Math.round(targetGMapSet.xPosition) -1;
-							}
-							
-							// set the colour
-							g2.setColor(Colors.linkColour);
-							if (drawLinkSet)
-							{
-								//add this linkset to our vector of linksets we have drawn already, for tracking
-								drawnLinkSets.add(selectedLinks);
-								
-								// for each link in the linkset
-								for (Link link : selectedLinks)
+							if (!(Strudel.winMain.fatController.selectedMaps.contains(gMap1) && Strudel.winMain.fatController.selectedMaps.contains(gMap2)) || drawnLinkSets.contains(selectedLinks))
+								continue;
+						}
+						
+						// the x coordinates have to be worked out
+						int targetChromoX = 0;
+						int referenceChromoX = 0;
+						//need to adjust the x positions of the links here
+						//if the reference genome is to the right of the target genome (indicated by their positions in the list of mapsets held in the datacontainer)
+						if (Strudel.winMain.dataContainer.gMapSets.indexOf(targetGMapSet) < Strudel.winMain.dataContainer.gMapSets.indexOf(referenceGMapSet))
+						{
+							targetChromoX = Math.round(targetGMapSet.xPosition + targetGMapSet.gMaps.get(0).width) + 1;
+							referenceChromoX = Math.round(referenceGMapSet.xPosition) -1;
+						}
+						//the ref genome is to the left of the target genome
+						else
+						{
+							// we want the referenceChromoX to be the mapsets x plus its width
+							referenceChromoX = Math.round(referenceGMapSet.xPosition + referenceGMapSet.gMaps.get(0).width) + 1;
+							// and we want the target genome's x to be the targetChromoX
+							targetChromoX = Math.round(targetGMapSet.xPosition) -1;
+						}
+						
+						// set the colour
+						g2.setColor(Colors.linkColour);
+						
+						//add this linkset to our vector of linksets we have drawn already, for tracking
+						drawnLinkSets.add(selectedLinks);
+						
+						// for each link in the linkset
+						for (Link link : selectedLinks)
+						{
+							// we only want to draw this link if it has a BLAST e-value smaller than the cut-off currently selected by the user
+							if (link.getBlastScore() <= blastThreshold)
+							{									
+								//we can't make any assumptions about the ordering of the links because we use the same link to 
+								//display homologies going either way
+								//so we need to figure out here which is the target feature and which the reference	
+								GChromoMap targetGMap = selectedMap;
+								GChromoMap referenceGMap = null;
+								Feature targetfeature, referenceFeature;
+								//if feature 1 is on the target map
+								if (link.getFeature1().getOwningMap() == targetGMap.chromoMap)
 								{
-									// we only want to draw this link if it has a BLAST e-value smaller than the cut-off currently selected by the user
-									if (link.getBlastScore() <= blastThreshold)
-									{									
-										//we can't make any assumptions about the ordering of the links because we use the same link to 
-										//display homologies going either way
-										//so we need to figure out here which is the target feature and which the reference	
-										GChromoMap targetGMap = selectedMap;
-										GChromoMap referenceGMap = null;
-										Feature targetfeature, referenceFeature;
-										//if feature 1 is on the target map
-										if (link.getFeature1().getOwningMap() == targetGMap.chromoMap)
-										{
-											referenceGMap = link.getFeature2().getOwningMap().getGChromoMap();
-											targetfeature = link.getFeature1();
-											referenceFeature = link.getFeature2();
-										}
-										else
-											//if feature 2 is on the target map, feat 1 on the reference
-										{
-											referenceGMap = link.getFeature1().getOwningMap().getGChromoMap();
-											targetfeature = link.getFeature2();
-											referenceFeature = link.getFeature1();
-										}
-
-										//now we can get on with working out coordinates
-										// get the positional data of the features and the end point of the map
-										float targetFeatureStart = targetfeature.getStart();
-										float referenceFeatureStart = referenceFeature.getStart();
-										
-										// convert the y value to scaled coordinates on the canvas by obtaining the coords of the appropriate chromosome object and scaling them appropriately									
-										int targetY = Utils.getFPosOnScreenInPixels(targetGMap.chromoMap, targetFeatureStart, false);
-										int referenceY = Utils.getFPosOnScreenInPixels(referenceGMap.chromoMap, referenceFeatureStart, false);										
-										
-										//check for chromosome inversion and invert values if necessary
-										if (targetGMap.isPartlyInverted)
-										{
-											targetY = Utils.getFPosOnScreenInPixels(targetGMap.chromoMap, targetFeatureStart, true);
-										}
-										if (referenceGMap.isPartlyInverted)
-										{
-											referenceY = Utils.getFPosOnScreenInPixels(referenceGMap.chromoMap, referenceFeatureStart, true);
-										}
-										
-										//decide whether this link should be drawn or not
-										boolean drawLink = false;
-										//there is a user preference for filtering the number of links by whether their originating feature is visible on canvas or not (Prefs.drawOnlyLinksToVisibleFeatures)
-										//we also only want to draw the links that fall within the canvas boundaries
-										if ((Prefs.drawOnlyLinksToVisibleFeatures && (referenceY > 0 && referenceY < mainCanvas.getHeight()) && (targetY > 0 && targetY < mainCanvas.getHeight())) || !Prefs.drawOnlyLinksToVisibleFeatures)
-										{
-											drawLink = true;
-										}
-										
-										if (drawLink)
-										{
-											// draw the link either as a straight line or a curve
-											drawStraightOrCurvedLink(g2, targetChromoX, targetY, referenceChromoX, referenceY);
-											numLinksDrawn++;
-										}
-									}
+									referenceGMap = link.getFeature2().getOwningMap().getGChromoMap();
+									targetfeature = link.getFeature1();
+									referenceFeature = link.getFeature2();
+								}
+								else
+									//if feature 2 is on the target map, feat 1 on the reference
+								{
+									referenceGMap = link.getFeature1().getOwningMap().getGChromoMap();
+									targetfeature = link.getFeature2();
+									referenceFeature = link.getFeature1();
+								}
+								
+								//now we can get on with working out coordinates
+								// get the positional data of the features and the end point of the map
+								float targetFeatureStart = targetfeature.getStart();
+								float referenceFeatureStart = referenceFeature.getStart();
+								
+								// convert the y value to scaled coordinates on the canvas by obtaining the coords of the appropriate chromosome object and scaling them appropriately									
+								int targetY = Utils.getFPosOnScreenInPixels(targetGMap.chromoMap, targetFeatureStart, false);
+								int referenceY = Utils.getFPosOnScreenInPixels(referenceGMap.chromoMap, referenceFeatureStart, false);										
+								
+								//check for chromosome inversion and invert values if necessary
+								if (targetGMap.isPartlyInverted)
+								{
+									targetY = Utils.getFPosOnScreenInPixels(targetGMap.chromoMap, targetFeatureStart, true);
+								}
+								if (referenceGMap.isPartlyInverted)
+								{
+									referenceY = Utils.getFPosOnScreenInPixels(referenceGMap.chromoMap, referenceFeatureStart, true);
+								}
+								
+								//decide whether this link should be drawn or not
+								boolean drawLink = false;
+								//there is a user preference for filtering the number of links by whether their originating feature is visible on canvas or not (Prefs.drawOnlyLinksToVisibleFeatures)
+								//we also only want to draw the links that fall within the canvas boundaries
+								if ((Prefs.drawOnlyLinksToVisibleFeatures && (referenceY > 0 && referenceY < mainCanvas.getHeight()) && (targetY > 0 && targetY < mainCanvas.getHeight())) || !Prefs.drawOnlyLinksToVisibleFeatures)
+								{
+									drawLink = true;
+								}
+								
+								String key = ""+targetChromoX+ targetY+ referenceChromoX+ referenceY;
+								if(hash.get(key) == null && drawLink)
+								{
+									// draw the link either as a straight line or a curve
+									drawStraightOrCurvedLink(g2, targetChromoX, targetY, referenceChromoX, referenceY);
+									numLinksDrawn++;									
+									hash.put(key, true);
 								}
 							}
-						}	
+						}
 					}
 				}				
 			}			
@@ -430,7 +430,7 @@ public class LinkDisplayManager
 				if(targetRefLinkSubset.size() > 0 )
 				{
 					allTargetMapLinksets.add(targetRefLinkSubset);		
-	
+					
 					numLinkSetsMade++;
 					numLinkSetsAdded++;
 				}

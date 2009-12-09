@@ -38,5 +38,8 @@ public class Prefs extends XMLPreferences
 	
 	//the number of the last version released
 	public static String lastVersion = null;
+	
+	// A list of previously accessed documents
+	public static String[] guiRecentDocs = new String[10];
 		
 }

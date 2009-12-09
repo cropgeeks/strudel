@@ -42,6 +42,7 @@ public class StartPanel extends javax.swing.JPanel implements ActionListener
 		quickStartLabel = new scri.commons.gui.matisse.HyperLinkLabel();
 		exampleDataLabel = new scri.commons.gui.matisse.HyperLinkLabel();
 		ownDataLabel = new scri.commons.gui.matisse.HyperLinkLabel();
+		manualLabel = new scri.commons.gui.matisse.HyperLinkLabel();
 		
 		jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18));
 		jLabel1.setText("Welcome to Strudel");
@@ -61,10 +62,13 @@ public class StartPanel extends javax.swing.JPanel implements ActionListener
 		ownDataLabel.setFont(new java.awt.Font("Tahoma", 0, 15));
 		ownDataLabel.setText("Open own dataset...");
 		
+		manualLabel.setFont(new java.awt.Font("Tahoma", 0, 15));
+		manualLabel.setText("Visit online manual");
+		
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
 		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(exampleDataLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE).addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE).addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE).addComponent(jLabel1).addComponent(jLabel4).addComponent(ownDataLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE).addComponent(jLabel2).addComponent(quickStartLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE)).addContainerGap()));
-		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap().addComponent(jLabel1).addGap(11, 11, 11).addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addGap(10, 10, 10).addComponent(jLabel2).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(quickStartLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE).addGap(18, 18, 18).addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jLabel4).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(exampleDataLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(ownDataLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addContainerGap(220, Short.MAX_VALUE)));
+		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(exampleDataLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE).addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE).addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE).addComponent(jLabel1).addComponent(jLabel4).addComponent(ownDataLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE).addComponent(jLabel2).addComponent(quickStartLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE).addComponent(manualLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE)).addContainerGap()));
+		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap().addComponent(jLabel1).addGap(11, 11, 11).addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addGap(10, 10, 10).addComponent(jLabel2).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(quickStartLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE).addGap(18, 18, 18).addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(jLabel4).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(exampleDataLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(ownDataLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(manualLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addContainerGap(194, Short.MAX_VALUE)));
 	}// </editor-fold>
 	//GEN-END:initComponents
 	
@@ -81,6 +85,7 @@ public class StartPanel extends javax.swing.JPanel implements ActionListener
 	private javax.swing.JLabel jLabel4;
 	private javax.swing.JSeparator jSeparator1;
 	private javax.swing.JSeparator jSeparator2;
+	private scri.commons.gui.matisse.HyperLinkLabel manualLabel;
 	private scri.commons.gui.matisse.HyperLinkLabel ownDataLabel;
 	private scri.commons.gui.matisse.HyperLinkLabel quickStartLabel;
 	
@@ -91,6 +96,7 @@ public class StartPanel extends javax.swing.JPanel implements ActionListener
 		quickStartLabel.addActionListener(this);
 		ownDataLabel.addActionListener(this);
 		exampleDataLabel.addActionListener(this);
+		manualLabel.addActionListener(this);
 	}
 	
 	@Override
@@ -98,7 +104,7 @@ public class StartPanel extends javax.swing.JPanel implements ActionListener
 	{
 		if (e.getSource() == quickStartLabel)
 		{
-			Utils.visitURL(Constants.strudelHomePage);
+			Utils.visitURL(Constants.strudelQuickStartPage);
 		}
 		else if (e.getSource() == ownDataLabel)
 		{
@@ -115,6 +121,10 @@ public class StartPanel extends javax.swing.JPanel implements ActionListener
 		{
 			Strudel.winMain.fatController.loadOwnData = false;
 			DataLoadUtils.loadDataInThread(null, false);
+		}
+		else if (e.getSource() == manualLabel)
+		{
+			Utils.visitURL(Constants.strudelManualPage);
 		}
 		
 	}

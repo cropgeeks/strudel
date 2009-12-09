@@ -33,11 +33,11 @@ its correct functioning. </p>
 <p>Features: </p>
 
 <ul>
-<li>Visualize up to three genomes and their homologies </li>
+<li>Visualize multiple genomes and their homologies </li>
 <li>Explore intervals such as QTLs and list annotation for features</li>
 <li>Search for features by name</li>
 <li>Filter homologies on display by BLAST e-value</li>
-<li>Single genome mode supported</li>
+<li>Single genome mode also supported</li>
 </ul>
 
 <!--#include virtual="footer.html" -->

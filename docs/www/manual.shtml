@@ -11,18 +11,15 @@
 
 	</head>
 	<body>
+	<a name="top"></a>
 
 		<!--#include virtual="header.shtml" -->
 
 
 		<h2>
-			Manual
+			Strudel Manual
 		</h2>
 
-		<h3>
-			Instructions for use
-			<a name="top"> </a>
-		</h3>
 
 		<p>
 			Topics:
@@ -42,8 +39,6 @@
 			<a href="#distanceMarkers">Distance markers</a>
 			<br>
 			<a href="#linkShapes">Changing the shape of the homology links</a>
-			<br>
-			<a href="#antialiasing">Turning antialiased drawing on and off</a>
 			<br>
 			<a href="#filterByVis">Filtering of links by visibility of features</a>
 			<br>
@@ -272,21 +267,6 @@
 		<br>
 		<a href="#top">Back to top</a>
 
-
-		<!-- --------------------------------------------- -->
-		<h4>
-			Turning antialiased drawing on and off
-			<a name="antialiasing"></a>
-		</h4>
-		Links can be drawn either with or without antialiasing. Antialiased links look cleaner and smoother and in some cases
-		things might be more visible. There is however a significant performance overhead to antialiased drawing and for this
-		reason the default setting is for antialiasing to be switched off by the application itself during animations or
-		scrolling, with an antialiased redraw being performed after the operation. Users can override this and turn
-		antialiasing off completely -- which results in better drawing performance – by toggling the antialias button
-		<img src="images/antialias.png">
-		on the toolbar on and off.
-		<br>
-		<a href="#top">Back to top</a>
 
 		<!-- --------------------------------------------- -->
 		<h4>

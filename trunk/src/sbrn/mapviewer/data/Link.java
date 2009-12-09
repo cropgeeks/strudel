@@ -5,23 +5,24 @@ package sbrn.mapviewer.data;
  */
 public class Link
 {
-	private Feature feature1;
-	private Feature feature2;	
+	private final Feature feature1;
+	private final Feature feature2;
 	private double blastScore;
 	private String annotation;
-	
+
 	public Link(Feature feature1, Feature feature2)
 	{
 		this.feature1 = feature1;
 		this.feature2 = feature2;
 	}
-	
+
 	public Feature getFeature1()
 		{ return feature1; }
-	
+
 	public Feature getFeature2()
 		{ return feature2; }
 
+	@Override
 	public String toString()
 		{ return feature1 + " and " + feature2; }
 

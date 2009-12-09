@@ -21,8 +21,8 @@ public class ChromoMap implements Iterable<Feature>
 	//the graphical object representing this map
 	private GChromoMap gChromoMap;
 
-	private Vector<Feature> features = new Vector<Feature>();
-	private Hashtable<String,Feature> nameLookup = new Hashtable<String,Feature>();
+	private final Vector<Feature> features = new Vector<Feature>();
+	private final Hashtable<String,Feature> nameLookup = new Hashtable<String,Feature>();
 
 	private float start = Integer.MAX_VALUE, stop = Integer.MIN_VALUE;
 
@@ -49,6 +49,7 @@ public class ChromoMap implements Iterable<Feature>
 	 * name.
 	 * @return a string representation of this chromosome map.
 	 */
+	@Override
 	public String toString()
 		{ return name; }
 

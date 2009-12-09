@@ -5,11 +5,11 @@ import sbrn.mapviewer.data.*;
 
 public class TableEntriesGenerator
 {
-	
+
 	public static LinkedList<ResultsTableEntry> makeTableEntries(Vector<Feature> features)
 	{
 		LinkedList<ResultsTableEntry> tableEntries = new LinkedList<ResultsTableEntry>();
-		
+
 		for (Feature feature : features)
 		{
 			//check whether this feature is involved in any links
@@ -21,7 +21,7 @@ public class TableEntriesGenerator
 				{
 					ResultsTableEntry resultsTableEntry = new ResultsTableEntry();
 					resultsTableEntry.setTargetFeature(feature);
-					//our feature could be feature 1 or feature 2 in the link 
+					//our feature could be feature 1 or feature 2 in the link
 					//set the homolog feature accordingly
 					if(feature == link.getFeature1())
 					{
@@ -31,10 +31,10 @@ public class TableEntriesGenerator
 					{
 						resultsTableEntry.setHomologFeature(link.getFeature1());
 					}
-					
+
 					//set the link itself
 					resultsTableEntry.setLink(link);
-					
+
 					//add to our list
 					tableEntries.add(resultsTableEntry);
 				}
@@ -48,10 +48,10 @@ public class TableEntriesGenerator
 				tableEntries.add(resultsTableEntry);
 			}
 		}
-		
-		
+
+
 		return tableEntries;
 	}
-	
-	
+
+
 }

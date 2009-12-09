@@ -14,24 +14,24 @@ import sbrn.mapviewer.gui.entities.*;
 
 public class FoundFeaturesResultsPanel extends JPanel
 {
-	//===========================================vars===========================================	
-	
+	//===========================================vars===========================================
+
 	GChromoMap previousMap = null;
-	
+
 	public ResultsTable resultsTable = null;
 	JLabel resultsLabel = null;
 	JLabel closeButton = null;
-	
-	//===========================================curve'tor===========================================		
-	
+
+	//===========================================curve'tor===========================================
+
 	/** Creates new form MTFindFeaturesResultsPanel */
 	public FoundFeaturesResultsPanel()
 	{
 		super(new BorderLayout());
-		
+
 		String title = "Click on a row to highlight a homolog. Click on a homolog name to show annotation in a web browser: ";
 		setBorder(BorderFactory.createTitledBorder(title));
-		
+
 		//this button closes the results table panel and resets the main canvas view to the original settings
 		closeButton = new JLabel();
 		closeButton.setIcon(Icons.getIcon("FILECLOSE"));
@@ -42,49 +42,52 @@ public class FoundFeaturesResultsPanel extends JPanel
 		closeButton.setBorder(BorderFactory.createEmptyBorder(0, 5, 5, 5));
 		closeButton.addMouseListener(new MouseInputAdapter()
 						{
+							@Override
 							public void mouseClicked(MouseEvent e)
 							{
 								Strudel.winMain.fatController.resetMainCanvasView();
 							}
-							
+
+							@Override
 							public void mouseEntered(MouseEvent e)
 							{
 								closeButton.setIcon(Icons.getIcon("FILECLOSEHIGHLIGHTED"));
 							}
+							@Override
 							public void mouseExited(MouseEvent e)
 							{
 								closeButton.setIcon(Icons.getIcon("FILECLOSE"));
 							}
 						}
 		);
-		
+
 		//the results table
 		resultsTable = new ResultsTable();
-		
+
 		JScrollPane scrollPane = new JScrollPane(resultsTable);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 		this.add(scrollPane, BorderLayout.CENTER);
 		//set the table up for sorting
 		resultsTable.setAutoCreateRowSorter(true);
 	}
-	
-	//===========================================methods===========================================		
-	
+
+	//===========================================methods===========================================
+
 	public JTable getFFResultsTable()
 	{
 		return resultsTable;
 	}
-	
 
-	
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------	
-	
+
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 	public JLabel getResultsLabel()
 	{
 		return resultsLabel;
 	}
 
-	
+
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 }//end class

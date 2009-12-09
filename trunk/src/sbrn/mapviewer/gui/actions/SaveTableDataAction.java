@@ -14,9 +14,9 @@ import scri.commons.gui.*;
 
 public class SaveTableDataAction extends AbstractAction
 {
-	
+
 	//===========================================methods===========================================
-	
+
 	public void actionPerformed(ActionEvent e)
 	{
 		JFileChooser fc = new JFileChooser();
@@ -24,41 +24,41 @@ public class SaveTableDataAction extends AbstractAction
 		fc.setCurrentDirectory(new File(System.getProperty("user.home")));
 		File outputFile = new File("tableData.txt");
 		fc.setSelectedFile(outputFile);
-		
+
 		while (fc.showSaveDialog(Strudel.winMain) == JFileChooser.APPROVE_OPTION)
 		{
 			File file = fc.getSelectedFile();
-			
+
 			// Confirm overwrite
 			if (file.exists())
 			{
 				String msg = file.getAbsolutePath() + " already exists.\nContinuing will "
 				+ "overwrite this file with your new file.";
 				String[] options = new String[] { "Overwrite", "Rename", "Cancel" };
-				
+
 				int response = TaskDialog.show(msg, TaskDialog.WAR, 0, options);
-				
+
 				if (response == 1)
 					continue;
 				else if (response == -1 || response == 2)
 					return;
 			}
-			
+
 			try
 			{
 				//write table data to file
-				FileUtils.writeFile(file, extractResultsTableData());				
-				
+				FileUtils.writeFile(file, extractResultsTableData());
+
 				if(file.exists())
 					TaskDialog.info("The data was successfully saved  to " + file, "Close");
 				else
 					TaskDialog.error("Error: data has not been saved.","Close");
-				
+
 			}
 			catch (NullPointerException npx)
 			{
-				TaskDialog.error("File could not be saved -- access denied.", "Close");	
-				
+				TaskDialog.error("File could not be saved -- access denied.", "Close");
+
 				npx.printStackTrace();
 			}
 			catch (IOException e1)
@@ -66,25 +66,25 @@ public class SaveTableDataAction extends AbstractAction
 				TaskDialog.error("An internal error has prevented the data "
 								+ "from being exported correctly.\n\nError details: "
 								+ e1.getMessage(), "Close");
-				
+
 				e1.printStackTrace();
 			}
-			
+
 			return;
 		}
-		
+
 	}
-	
+
 	//------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	private String extractResultsTableData()
 	{
 		//get the table model first
-		TableModel model = Strudel.winMain.ffResultsPanel.resultsTable.getModel();		
-		return ((HomologResultsTableModel)model).getAllDataInTabFormat();	
+		TableModel model = Strudel.winMain.ffResultsPanel.resultsTable.getModel();
+		return ((HomologResultsTableModel)model).getAllDataInTabFormat();
 	}
-	
-	
+
+
 	//------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 }

@@ -1,6 +1,5 @@
 package sbrn.mapviewer.gui.components;
 
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -17,33 +16,33 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 	String fitChromoStr = "Fit chromosome on screen";
 	public String addAllFeaturesStr = "Add features in range to results";
 	public String webInfoStr = "Show annotation for features in range";
-	
+
 	public JMenuItem invertChromoMenuItem;
 	public JMenuItem fitChromoMenuItem;
 	public JMenuItem addAllFeaturesItem;
-	
-	
-	
+
+
+
 	public ChromoContextPopupMenu()
 	{
 		invertChromoMenuItem = new JMenuItem(invertChromoStr);
 		invertChromoMenuItem.addActionListener(this);
 		add(invertChromoMenuItem);
-		
+
 		fitChromoMenuItem = new JMenuItem(fitChromoStr);
 		fitChromoMenuItem.addActionListener(this);
 		add(fitChromoMenuItem);
-		
+
 		addAllFeaturesItem = new JMenuItem(addAllFeaturesStr);
 		addAllFeaturesItem.addActionListener(this);
 		add(addAllFeaturesItem);
 	}
-	
-	
+
+
 	public void actionPerformed(ActionEvent e)
 	{
 		JMenuItem source = (JMenuItem)(e.getSource());
-		
+
 		if(source.equals(invertChromoMenuItem))
 		{
 			//invert the whole chromosome
@@ -76,14 +75,14 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 				if(resultExists)
 					Strudel.winMain.ffResultsPanel.resultsTable.addFeaturesFromSelectedMap(selectedMap);
 				else
-					FeatureSearchHandler.findFeaturesInRangeFromCanvasSelection();	
+					FeatureSearchHandler.findFeaturesInRangeFromCanvasSelection();
 			}
-			
-			//turn antialiasing on and repaint			
+
+			//turn antialiasing on and repaint
 			Strudel.winMain.mainCanvas.antiAlias = true;
-			Strudel.winMain.mainCanvas.updateCanvas(true);			
+			Strudel.winMain.mainCanvas.updateCanvas(true);
 		}
-		
+
 	}
-	
+
 }

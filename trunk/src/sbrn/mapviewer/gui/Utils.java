@@ -18,118 +18,118 @@ import scri.commons.gui.*;
 
 public class Utils
 {
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	//returns the y coordinate of a feature in genome space rather than canvas space
 	//genome space = the extent of the genome as calculated by the application (can be greater than the visible canvas height)
 	public static int getFeatureYInGenomeSpace(Feature f)
 	{
 		int featureYInGenomeSpace = -1;
-		
+
 		//the gmap the feature is on
 		GChromoMap gChromoMap = f.getOwningMap().getGChromoMap();
-		
+
 		//the index of the chromo in the genome -- starts at 0
 		int chromoIndex = gChromoMap.index;
-		
+
 		//the combined height of all chromosomes up to and excluding the one the feature is on
 		int combinedChromoHeight = (chromoIndex-1) * gChromoMap.height;
-		
+
 		//the combined height of all spaces between chromos up to the one the feature is on
 		int combinedSpacerHeight = (chromoIndex-1) * Strudel.winMain.mainCanvas.chromoSpacing;
-		
+
 		//the offset of the feature position from the top of the chromosome
 		int featureOffset = Math.round((f.getStart() / f.getOwningMap().getStop()) * gChromoMap.height);
-		
+
 		//add it all up
 		featureYInGenomeSpace = combinedChromoHeight  + combinedSpacerHeight + featureOffset;
-		
+
 		return featureYInGenomeSpace;
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	//finds a genome by name
 	public static MapSet getMapSetByName(String name, LinkedList<MapSet> mapsetList)
 	{
 		MapSet foundSet = null;
-		
-		//we need to search all chromomaps in all mapsets for this	
+
+		//we need to search all chromomaps in all mapsets for this
 		// for all gmapsets
 		for (MapSet mapSet : mapsetList)
 		{
 			if(mapSet.getName().equalsIgnoreCase(name))
 				foundSet = mapSet;
 		}
-		
+
 		return foundSet	;
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	//finds a MapSet by name
 	public static MapSet getMapSetByName(String name)
 	{
 		MapSet foundSet = null;
-		
+
 		// for all mapsets
 		for (MapSet mapSet : Strudel.winMain.dataContainer.allMapSets)
 		{
 			if(mapSet.getName().equals(name))
 				foundSet = mapSet;
 		}
-		
+
 		return foundSet	;
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	//finds a GMapSet by name
 	public static GMapSet getGMapSetByName(String name)
 	{
 		GMapSet foundSet = null;
-		
-		//we need to search all chromomaps in all mapsets for this	
+
+		//we need to search all chromomaps in all mapsets for this
 		// for all gmapsets
 		for (GMapSet gMapSet : Strudel.winMain.dataContainer.gMapSets)
 		{
 			if(gMapSet.name.equals(name))
 				foundSet = gMapSet;
 		}
-		
+
 		return foundSet	;
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	//finds a map by name
 	public static GChromoMap getGMapByName(String gMapName, String gMapSetName)
 	{
 		GChromoMap foundMap = null;
-		
-		//we need to search all chromomaps in all mapsets for this	
+
+		//we need to search all chromomaps in all mapsets for this
 		// for all gmapsets
 		GMapSet gMapSet =  getGMapSetByName(gMapSetName);
-		
+
 		// for all gchromomaps within each mapset
 		for (GChromoMap gChromoMap : gMapSet.gMaps)
 		{
 			if(gChromoMap.name.equals(gMapName))
 				foundMap = gChromoMap;
 		}
-		
+
 		return foundMap;
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	//finds a Feature by name in the centrally held set of GMapSets
 	public static Feature getFeatureByName(String featureName)
 	{
 		Feature f = null;
-		
-		//we need to search all chromomaps in all mapsets for this	
+
+		//we need to search all chromomaps in all mapsets for this
 		// for all gmapsets
 		for (GMapSet gMapSet : Strudel.winMain.dataContainer.gMapSets)
 		{
@@ -145,12 +145,12 @@ public class Utils
 				}
 			}
 		}
-		
+
 		return f;
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------
-	
+
 	public static void buildLinkSetFromFeatureLists(LinkSet linkSet, LinkedList<Feature> f1List, LinkedList<Feature> f2List, String blastScoreStr, String linkAnnotation) throws ParseException
 	{
 		// Pair up every instance of f1 with f2
@@ -159,41 +159,41 @@ public class Utils
 			{
 				Link link = new Link(f1, f2);
 				linkSet.addLink(link);
-				
+
 				// We also add the Link to each Feature so the Feature
 				// itself knows about the links it has with others
 				f1.getLinks().add(link);
 				f2.getLinks().add(link);
-				
+
 				//add the BLAST score as evidence
 				DecimalFormat df = new DecimalFormat("0.###E0");
 				Number blastScore = df.parse(blastScoreStr);
 				link.setBlastScore(blastScore.doubleValue());
-				
+
 				//add the annotation, if there is any
 				if(linkAnnotation != null)
 					link.setAnnotation(linkAnnotation);
-				
+
 				// TODO: Do we want to add a list of references Features to the Feature object itself, so it knows who it links to?
 				// If so, how do we deal with, eg removing MapSets andkeeping these lists (and the LinkSet!) up to date.
 			}
 	}
-	
-	
-	
+
+
+
 	// --------------------------------------------------------------------------------------------------------------------------------
-	
-	public static void addLinkToLinkset(LinkSet linkSet, Feature feature1, Feature feature2, String blastScoreStr, String linkAnnotation) 
+
+	public static void addLinkToLinkset(LinkSet linkSet, Feature feature1, Feature feature2, String blastScoreStr, String linkAnnotation)
 	{
 		// Pair up every instance of f1 with f2
 		Link link = new Link(feature1, feature2);
 		linkSet.addLink(link);
-		
+
 		// We also add the Link to each Feature so the Feature
 		// itself knows about the links it has with others
 		feature1.getLinks().add(link);
 		feature2.getLinks().add(link);
-		
+
 		//add the BLAST score as evidence
 		try
 		{
@@ -205,54 +205,54 @@ public class Utils
 		{
 			throw new NumberFormatException("The homology between " + feature1 + " and " + feature2 + " contains an invalid e-Value. ");
 		}
-		
+
 		//add the annotation, if there is any
 		if(linkAnnotation != null)
 			link.setAnnotation(linkAnnotation);
-		
+
 		// TODO: Do we want to add a list of references Features to the Feature object itself, so it knows who it links to?
 		// If so, how do we deal with, eg removing MapSets andkeeping these lists (and the LinkSet!) up to date.
-		
+
 	}
 	// --------------------------------------------------------------------------------------------------------------------------------
-	
+
 	// Searches over single MapSet to find a feature whose name matches the one given.
 	public static Feature getFeatureByName(String name, MapSet mapSet ) throws Exception
-	{		
+	{
 		Feature feature = null;
-		
+
 		try
-		{		
+		{
 			for (ChromoMap map: mapSet.getMaps())
-			{ 
+			{
 				Feature checkFeature = map.getFeature(name);
 				if(checkFeature != null)
 					feature = checkFeature;
 			}
-			
+
 		}
 		catch (Exception e)
 		{
 		}
-		
+
 		return feature;
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------
-	
+
 	// Searches over list of  MapSets to find every feature whose name matches the one given.
 	public static LinkedList<Feature> getFeaturesByName(String name, LinkedList<MapSet> mapSets ) throws Exception
-	{		
-		
+	{
+
 		LinkedList<Feature> list = new LinkedList<Feature>();
 		Feature feature = null;
-		
+
 		try
 		{
 			for (MapSet mapset: mapSets)
 			{
 				for (ChromoMap map: mapset.getMaps())
-				{ 
+				{
 					feature = map.getFeature(name);
 					if (feature != null)
 					{
@@ -265,12 +265,12 @@ public class Utils
 		{
 			e.printStackTrace();
 		}
-		
+
 		return list;
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------
-	
+
 	/*
 	 * Makes an array of colours that can be used to draw the lines between chromosomes. Uses some random numbers but also restricts the range of colours so the overall pallette is not too garish.
 	 */
@@ -286,16 +286,16 @@ public class Utils
 		}
 		return colours;
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------
-	
-	//returns a toned down (strongly darkened) version of the Color colour, with the dominant 
+
+	//returns a toned down (strongly darkened) version of the Color colour, with the dominant
 	//primary colour being picked out and then a dark version of this being returned
 	public static Color getTonedDownColour(Color colour)
 	{
 		Color darkenedColour = null;
 		int darkValue = 30;
-		
+
 		//extract the current RGB values
 		float maxValue = 0;
 		int maxChannel = -1;
@@ -308,7 +308,7 @@ public class Utils
 				maxChannel = i;
 			}
 		}
-		
+
 		switch (maxChannel)
 		{
 			case 0:
@@ -317,22 +317,22 @@ public class Utils
 			case 1:
 				darkenedColour = new Color(0, darkValue, 0);
 				break;
-			case 2: 
+			case 2:
 				darkenedColour = new Color(0, 0, darkValue);
 				break;
 		}
-		
+
 		return darkenedColour;
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------
-	
-	
+
+
 	//check whether we have a map that intersects with the rectangle passed in
 	public static GChromoMap getSelectedMap(Rectangle intersectionRect)
 	{
 		GChromoMap selectedMap = null;
-		
+
 		// check whether the point x,y lies within one of the bounding rectangles of our chromosomes
 		// for each chromosome in each genome
 		for (GMapSet gMapSet : Strudel.winMain.dataContainer.gMapSets)
@@ -346,18 +346,18 @@ public class Utils
 					break;
 				}
 			}
-		}		
+		}
 		return selectedMap;
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------
-	
-	
-	//check whether we have a map at the coordinates x and y 
+
+
+	//check whether we have a map at the coordinates x and y
 	public static GChromoMap getSelectedMap(LinkedList<GMapSet> gMapSetList, int x, int y)
 	{
 		GChromoMap selectedMap = null;
-		
+
 		// check whether the point x,y lies within one of the bounding rectangles of our chromosomes
 		// for each chromosome in each genome
 		for (GMapSet gMapSet : gMapSetList)
@@ -371,28 +371,28 @@ public class Utils
 					break;
 				}
 			}
-		}		
+		}
 		return selectedMap;
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------
-	
-	//check whether there is a map intersecting with a horizontal line drawn across part of the canvas at the level of  the coordinate y 
+
+	//check whether there is a map intersecting with a horizontal line drawn across part of the canvas at the level of  the coordinate y
 	public static GChromoMap getSelectedMap(WinMain winMain, int gMapSetIndex, int y)
 	{
 		GChromoMap selectedMap = null;
-		
+
 		//the number of genomes we have loaded
 		int numGenomes = Strudel.winMain.dataContainer.gMapSets.size();
 		//the size of the sectors occupied by each of the genomes on the main canvas
 		int interValSize = Math.round(Strudel.winMain.mainCanvas.getWidth() / numGenomes);
-		
+
 		// check whether a line drawn at y intersects within one of the bounding rectangles of our chromosomes
 		//we can just use a rectangle a single pixel wide for this purpose so we can use the existing API for the Rectangle class
 		int xLeft = gMapSetIndex * interValSize;
 		Rectangle intersectLine = new Rectangle(xLeft, y, interValSize, 1);
-		
-		//now check all the chromosomes' bounding rectangles in this mapset for intersection			
+
+		//now check all the chromosomes' bounding rectangles in this mapset for intersection
 		for (GChromoMap gChromoMap : Strudel.winMain.dataContainer.gMapSets.get(gMapSetIndex).gMaps)
 		{
 			// check whether the hit falls within its current bounding rectangle
@@ -401,13 +401,13 @@ public class Utils
 				selectedMap = gChromoMap;
 				return selectedMap;
 			}
-		}		
+		}
 		return selectedMap;
 	}
-	
-	
+
+
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	// finds out which of the genomes the current selection relates to and return its index in the list of mapsets
 	public static int getSelectedSetIndex(MouseEvent e)
 	{
@@ -421,12 +421,12 @@ public class Utils
 		int xHit = e.getX();
 		//now simply return the value we get by dividing the x location by the interval size, while throwing the remainder away
 		index = xHit/interValSize;
-		
+
 		return index;
 	}
-	
+
 	// ---------------------------------------------------------------------------------------------------------------------
-	
+
 	public static void visitURL(String html)
 	{
 		try
@@ -441,47 +441,47 @@ public class Utils
 			TaskDialog.error("Error: URL not specified or specified incorrectly", "Close");
 		}
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------
-	
+
 	// Java6 method for visiting a URL
 	private static void visitURL6(String html)
 	throws Exception
 	{
 		Desktop desktop = Desktop.getDesktop();
-		
+
 		URI uri = new URI(html);
 		desktop.browse(uri);
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------
-	
+
 	// Java5 (OS X only) method for visiting a URL
 	private static void visitURL5(String html)
 	throws Exception
 	{
 		// See: http://www.centerkey.com/java/browser/
-		
+
 		Class<?> fileMgr = Class.forName("com.apple.eio.FileManager");
 		Method openURL = fileMgr.getDeclaredMethod("openURL",
 						new Class[] {String.class});
-		
+
 		openURL.invoke(null, new Object[] {html});
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------
-	
+
 	// Utility method to help create the buttons. Sets their text, tooltip, and
 	// icon, as well as adding actionListener, defining margings, etc.
 	public static  AbstractButton getButton(boolean toggle, String title, String tt, ImageIcon icon, Action action, ActionListener actionListener, boolean enabled)
 	{
 		AbstractButton button = null;
-		
+
 		if (toggle)
 			button = new JToggleButton(action);
 		else
 			button = new JButton(action);
-		
+
 		button.setText(title != null ? title : "");
 		button.setToolTipText(tt);
 		button.setIcon(icon);
@@ -490,44 +490,44 @@ public class Utils
 		button.addActionListener(actionListener);
 		button.setMargin(new Insets(2, 1, 2, 1));
 		button.setEnabled(enabled);
-		
+
 		if (SystemUtils.isMacOS())
 		{
 			button.putClientProperty("JButton.buttonType", "bevel");
 			button.setMargin(new Insets(-2, -1, -2, -1));
 		}
-		
+
 		return button;
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------
-	
+
 	public static int convertRelativeFPosToPixels(GMapSet owningSet, ChromoMap chromoMap, float fPos)
 	{
 		return Math.round((owningSet.chromoHeight / chromoMap.getStop()) * fPos);
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------
-	
+
 	public static int getFPosOnScreenInPixels(ChromoMap chromoMap, float fPos, boolean inverted)
 	{
 		GChromoMap gMap = chromoMap.getGChromoMap();
 		int fDist = Math.round((gMap.height / chromoMap.getStop()) * fPos);
 		int fPosOnScreen =  fDist + gMap.yOnCanvas + gMap.currentY;
-		
+
 		if(inverted)
 			return gMap.yOnCanvas + gMap.currentY + gMap.height - fDist;
-		
+
 		return fPosOnScreen;
-		
+
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------
-	
+
 	public static Vector<Feature> checkFeatureVisibility(Vector<Feature> features)
 	{
 		Vector<Feature> visibleFeatures = new Vector<Feature>();
-		
+
 		//for each feature in the array
 		for (Feature feature : features)
 		{
@@ -541,7 +541,7 @@ public class Utils
 				float fStart = feature.getStart();
 				//convert this to an absolute position on the canvas in pixels
 				int pixelPos = getFPosOnScreenInPixels(cMap, fStart, false);
-				
+
 				//check whether this position is currently showing on the canvas or not
 				if (pixelPos > 0 && pixelPos < Strudel.winMain.mainCanvas.getHeight())
 				{
@@ -550,17 +550,17 @@ public class Utils
 				}
 			}
 		}
-		
+
 		return visibleFeatures;
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	//returns all links for features we have searched for by name or range
 	public static LinkedList<Link> getLinksForFeatures(Vector<Feature> features)
 	{
 		LinkedList<Link> homologies = new LinkedList<Link>();
-		
+
 		//parse the strings out into the table model and populate as appropriate
 		for (Feature f : features)
 		{
@@ -575,23 +575,23 @@ public class Utils
 				}
 			}
 		}
-		
+
 		return homologies;
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------
-	
-	//do a single repaint of the main canvas with antialiasing on, then reset to antialias off in readiness for the 
+
+	//do a single repaint of the main canvas with antialiasing on, then reset to antialias off in readiness for the
 	//next paint operation
 	public static void repaintAntiAliased()
 	{
 		AntiAliasRepaintThread antiAliasRepaintThread = new AntiAliasRepaintThread();
-		SwingUtilities.invokeLater(antiAliasRepaintThread);		
+		SwingUtilities.invokeLater(antiAliasRepaintThread);
 	}
-	
-	
+
+
 	// --------------------------------------------------------------------------------------------------------------------------------
-	
+
 	public static void labelToHyperlink(JLabel label, String url)
 	{
 		final String URL = url;
@@ -600,15 +600,16 @@ public class Utils
 		label.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		label.addMouseListener(new MouseAdapter()
 		{
+			@Override
 			public void mouseClicked(MouseEvent event)
 			{
 				Utils.visitURL(URL);
 			}
-		});	
+		});
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------
-	
+
 	public static void labelToAction(JLabel label, Action action, String actionMapKey)
 	{
 		// Turns the label into a blue mouse-over clickable link to a website
@@ -616,7 +617,7 @@ public class Utils
 		label.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		label.getActionMap().put(actionMapKey, action);
 	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------
-		
+
 }

@@ -101,6 +101,7 @@ public class MainCanvas extends JPanel
 	// ---------------------------------------------------------------------------------------------------------------------------------
 
 
+	@Override
 	public void paintComponent(Graphics graphics)
 	{
 

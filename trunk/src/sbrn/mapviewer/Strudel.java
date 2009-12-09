@@ -17,51 +17,51 @@ import apple.dts.samplecode.osxadapter.*;
 
 public class Strudel
 {
-	
-	/*set logging level to one of     
+
+	/*set logging level to one of
 	    * SEVERE (highest value)
 	    * WARNING
 	    * INFO
 	    * CONFIG
 	    * FINE
 	    * FINER
-	    * FINEST (lowest value) 
+	    * FINEST (lowest value)
 	    * ALL
 	    */
 	private static Level logLevel = Level.WARNING;
 	public static Logger logger = Logger.getLogger("sbrn.strudel");
-	
+
 	private static File prefsFile = new File(System.getProperty("user.home"), ".strudel.xml");
 	private static Prefs prefs = new Prefs();
-	public static WinMain winMain;	
-	
+	public static WinMain winMain;
+
 	// Returns value for "CTRL" under most OSs, and the "apple" key for OS X
 	public static int ctrlMenuShortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
 	//true when data is loaded
 	public static boolean dataLoaded = false;
-	
+
 	// Optional path to a file to be loaded when app opens
 	public static String initialFile = null;
 
 
 	public static void main(String[] args)
 	{
-		//logging stuff		
+		//logging stuff
 		ConsoleHandler consoleHandler = new ConsoleHandler();
 		consoleHandler.setFormatter(FormatterFactory.getBasicFormatter());
 		consoleHandler.setLevel(logLevel);
 		logger.setLevel(logLevel);
 		logger.addHandler(consoleHandler);
 		logger.setUseParentHandlers(false);
-		
+
 		// OS X: This has to be set before anything else
 		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Strudel");
 
 		prefs.loadPreferences(prefsFile, Prefs.class);
 		prefs.savePreferences(prefsFile, Prefs.class);
 		Install4j.doStartUpCheck();
-		
+
 		if (args.length == 1)
 		{
 			initialFile = args[0].trim();
@@ -99,6 +99,7 @@ public class Strudel
 
 			winMain.addWindowListener(new WindowAdapter()
 			{
+				@Override
 				public void windowClosing(WindowEvent e)
 				{
 					prefs.isFirstRun = false;
@@ -106,7 +107,8 @@ public class Strudel
 
 					System.exit(0);
 				}
-				
+
+				@Override
 				public void windowOpened(WindowEvent e)
 				{
 					// Do we want to open an initial project?
@@ -115,30 +117,31 @@ public class Strudel
 						winMain.fatController.loadOwnData = true;
 						DataLoadUtils.loadDataInThread(initialFile, true);
 					}
-					
+
 					//if the version has been updated, go to the website and get the update info
 					if (Install4j.displayUpdate)
 						Utils.visitURL(Constants.strudelHomePage + "whatsnew.shtml");
 				}
 
 			});
-			
-			
+
+
 			winMain.addComponentListener(new ComponentAdapter()
 			{
-				public void componentResized(ComponentEvent e) 
+				@Override
+				public void componentResized(ComponentEvent e)
 				{
 					if (dataLoaded)
 					{
 						winMain.mainCanvas.updateCanvas(true);
 						winMain.fatController.initialisePositionArrays();
-					}					
+					}
 				}
 
 			});
 
 			winMain.setVisible(true);
-			
+
 		}
 		catch (Exception e)
 		{

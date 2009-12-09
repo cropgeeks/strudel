@@ -1,6 +1,5 @@
 package sbrn.mapviewer.gui;
 
-
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -65,7 +64,7 @@ public class Install4j
 				com.install4j.api.ApplicationRegistry.getApplicationInfoByDir(new File("."));
 
 			VERSION = info.getVersion();
-			
+
 			if (Prefs.lastVersion == null || !Prefs.lastVersion.equals(VERSION))
 				displayUpdate = true;
 

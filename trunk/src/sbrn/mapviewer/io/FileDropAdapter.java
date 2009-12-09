@@ -11,7 +11,7 @@ import sbrn.mapviewer.gui.components.*;
 
 public class FileDropAdapter extends DropTargetAdapter
 {
-	private WinMain winMain;
+	private final WinMain winMain;
 
 	public FileDropAdapter(WinMain winMain)
 	{
@@ -39,8 +39,8 @@ public class FileDropAdapter extends DropTargetAdapter
 					DataLoadUtils.loadDataInThread(list.get(0).toString(), false);
 					//now reset this flag so that user can open another file by different means
 					Strudel.winMain.fatController.dragAndDropDataLoad = false;
-					
-					
+
+
 					dtde.dropComplete(true);
 					return;
 				}

@@ -10,9 +10,9 @@ import java.util.*;
  */
 public class LinkSet implements Iterable<Link>
 {
-	private ArrayList<Link> links = new ArrayList<Link>();
+	private final ArrayList<Link> links = new ArrayList<Link>();
 
-	private Vector<MapSet> mapSets = new Vector<MapSet>();
+	private final Vector<MapSet> mapSets = new Vector<MapSet>();
 
 	/**
 	 * Constructs a new LinkSet.

@@ -14,7 +14,7 @@ public class MouseOverHandler
 	WinMain winMain;
 	public GChromoMap selectedMap;
 	GChromoMap previousMap;
-	
+
 	//the margin of error used for allowing detects during mouseover, in pixels
 	//a feature will be detected if the mouse is over its position +/- the errorMargin value
 	int errorMargin = 1;
@@ -38,21 +38,21 @@ public class MouseOverHandler
 			// first figure out which chromosome we are in
 			selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, x, y);
 			if (selectedMap != null && selectedMap.arraysInitialized)
-			{			
+			{
 				//some nasty logic to do with the persistent display of labels
 				if (previousMap == null || (previousMap != null && !previousMap.persistHighlightedFeatures))
 				{
 					clearPreviousMap();
-					
+
 					// figure out where on the chromosome the hit has occurred, in pixels from the top of the chromosome
 					int pixelNumberFromTop = (int) (y - selectedMap.boundingRectangle.getY());
 
 					// now look up this value in the feature arrays of the map
 					for (int i = 0; i < selectedMap.allLinkedFeaturePositions.length; i++)
-					{					
+					{
 						//check the current pixel number from the top against the values in the array
 						//if there is one that is the same (incl. error margin) then add the corresponding feature to the vector
-						if (selectedMap.allLinkedFeaturePositions[i] <= pixelNumberFromTop + errorMargin && 
+						if (selectedMap.allLinkedFeaturePositions[i] <= pixelNumberFromTop + errorMargin &&
 										selectedMap.allLinkedFeaturePositions[i] >= pixelNumberFromTop - errorMargin)
 						{
 							if (matches == null)
@@ -65,7 +65,7 @@ public class MouseOverHandler
 							}
 						}
 					}
-					
+
 					// we have a match
 					if (matches != null && selectedMap.owningSet.paintAllMarkers)
 					{
@@ -95,7 +95,7 @@ public class MouseOverHandler
 	// ------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private void clearPreviousMap()
-	{	
+	{
 		// reset the selected map if the mouse is not over it
 		if (previousMap != null  && !previousMap.persistHighlightedFeatures && previousMap.owningSet.paintAllMarkers)
 		{

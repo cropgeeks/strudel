@@ -39,7 +39,7 @@ public class GMapSet
 	public int drawingOffset = 0;
 
 	// the point on the genome that is currently seen in the center of the canvas, in pixels, measured from the top of the genome
-	//n.b. when we are zoomed in to beyond a level where we can see the entire genome the genome height will be 
+	//n.b. when we are zoomed in to beyond a level where we can see the entire genome the genome height will be
 	//greater than the canvas height
 	public int centerPoint = 0;
 
@@ -49,7 +49,7 @@ public class GMapSet
 	//the height of a chromosome in this genome, in pixels (all chromos are the same height, always)
 	public int chromoHeight;
 
-	// this controls whether we draw chromosome markers 
+	// this controls whether we draw chromosome markers
 	public boolean paintAllMarkers = false;
 
 	//a zoom factor value above which we can draw all  features
@@ -60,14 +60,14 @@ public class GMapSet
 
 	//the zoom factor at which we would fit a single chromosome (but nothing else) on the visible portion of the canvas
 	public float singleChromoViewZoomFactor;
-	
+
 	public TreeMap<Feature, Integer> foundFeatures = new TreeMap<Feature, Integer>();
-	
+
 	//a boolean to indicate whether we should always display markers, regardless of zoom factor
 	public boolean overrideMarkersAutoDisplay = false;
 	//a boolean to indicate whether we should always display labels, regardless of zoom factor
 	public boolean alwaysShowAllLabels = false;
-	
+
 	//the zoom control panel pertaining to this mapset
 	public ZoomControlPanel zoomControlPanel;
 
@@ -94,7 +94,7 @@ public class GMapSet
 
 		for (int i = 0; i < mapSet.size(); i++)
 		{
-			ChromoMap cMap = (ChromoMap) mapSet.getMaps().get(i);
+			ChromoMap cMap = mapSet.getMaps().get(i);
 			GChromoMap gMap = new GChromoMap(colour, cMap.getName(), i, this);
 			gMaps.add(gMap);
 
@@ -143,9 +143,9 @@ public class GMapSet
 //			removeSelectedMap(gMap);
 //		}
 //	}
-	
+
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	public Vector<GChromoMap> getVisibleMaps()
 	{
 		Vector<GChromoMap> visibleMaps = new Vector<GChromoMap>();

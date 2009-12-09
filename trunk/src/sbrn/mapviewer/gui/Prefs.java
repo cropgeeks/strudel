@@ -23,23 +23,23 @@ public class Prefs extends XMLPreferences
 	public static int guiOverviewX = 0;
 	public static int guiOverviewY = 0;
 	public static boolean guiOverviewVisible = true;
-	
+
 	//a boolean indicating whether we need to show the "max zoom level reached " taskdialog when user has pan zoomed to the max
 	public static boolean showMaxZoomLevelMessage = true;
-	
+
 	//this boolean is set by the user through a button and indicates a global preference for antialiased or plain darwing styles
-//	public static boolean userPrefAntialias = false;	
-	
+//	public static boolean userPrefAntialias = false;
+
 	//do we links to be drawn whether their orginating feature is currently visible on the canvas or not?
 	public static boolean drawOnlyLinksToVisibleFeatures = false;
-	
+
 	//do we want to show the distance markers
 	public static boolean showDistanceMarkers = false;
-	
+
 	//the number of the last version released
 	public static String lastVersion = null;
-	
+
 	// A list of previously accessed documents
 	public static String[] guiRecentDocs = new String[10];
-		
+
 }

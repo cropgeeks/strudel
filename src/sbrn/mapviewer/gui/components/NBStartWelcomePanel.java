@@ -19,7 +19,7 @@ public class NBStartWelcomePanel extends javax.swing.JPanel implements ActionLis
 		setOpaque(false);
 
 		tabletLabel.setText("<html>Version " + Install4j.VERSION);
-		feedbackLabel.setText("Feedback");
+		feedbackLabel.setText("Email feedback ");
 		feedbackLabel.setIcon(Icons.getIcon("FEEDBACK"));
 		feedbackLabel.addActionListener(this);
     }
@@ -28,7 +28,7 @@ public class NBStartWelcomePanel extends javax.swing.JPanel implements ActionLis
 	{
 		if(e.getSource() == feedbackLabel)
 		{
-//			Utils.sendFeedback();
+			Utils.sendFeedback();
 		}
 	}
 

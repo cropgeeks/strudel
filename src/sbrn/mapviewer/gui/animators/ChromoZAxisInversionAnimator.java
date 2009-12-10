@@ -87,7 +87,6 @@ public class ChromoZAxisInversionAnimator extends Thread
 		}
 		catch (RuntimeException e)
 		{
-			e.printStackTrace();
 		}
 	}
 }

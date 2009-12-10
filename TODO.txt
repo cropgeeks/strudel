@@ -104,6 +104,7 @@ REFACTORING:
 BUGS to fix:
 
 - highlighted features: red highlight box does not match grey box behind it and leaves out feature type
+- data loading: if a dataset is already loaded and a new one is loaded on top that does not load successfully then the current data container is invalidated (although it shouldn't be) and the application crashes
 
 
 

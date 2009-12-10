@@ -58,16 +58,12 @@ public class SaveTableDataAction extends AbstractAction
 			catch (NullPointerException npx)
 			{
 				TaskDialog.error("File could not be saved -- access denied.", "Close");
-
-				npx.printStackTrace();
 			}
 			catch (IOException e1)
 			{
 				TaskDialog.error("An internal error has prevented the data "
 								+ "from being exported correctly.\n\nError details: "
 								+ e1.getMessage(), "Close");
-
-				e1.printStackTrace();
 			}
 
 			return;

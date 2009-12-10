@@ -317,7 +317,6 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
 		}
 	}
 

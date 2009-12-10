@@ -158,7 +158,11 @@ public class FeatureSearchHandler
 			Vector<Feature> features = new Vector<Feature>(allNames.length);
 			for (int i = 0; i < allNames.length; i++)
 			{
-				features.add(Utils.getFeatureByName(allNames[i].trim()));
+				Feature f = Utils.getFeatureByName(allNames[i].trim());
+				if(f !=null)
+				{
+					features.add(f);
+				}
 			}
 
 			//we have found features

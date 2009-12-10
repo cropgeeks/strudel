@@ -291,7 +291,6 @@ public class LinkDisplayManager
 			}
 			catch (RuntimeException e)
 			{
-				e.printStackTrace();
 			}
 		}
 	}

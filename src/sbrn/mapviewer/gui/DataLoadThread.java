@@ -19,7 +19,7 @@ public class DataLoadThread extends Thread
 	{
 		try
 		{
-			// data is loaded now -- check whether the user has cancelled
+			// data is loading now -- check whether the user has cancelled
 			if (!Strudel.winMain.fatController.dataLoadCancelled)
 			{
 				// load the data

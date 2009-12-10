@@ -39,4 +39,10 @@ public class Constants
 	public static final String strudelManualPage = "http://bioinf.scri.ac.uk/strudel/help/quickstart.shtml";
 	public static final String strudelQuickStartPage = "http://bioinf.scri.ac.uk/strudel/help/quickstart.shtml";
 	public static final String scriHTML = "http://www.scri.ac.uk";
+	//these are the individual help links that are listed on the front page
+	public static final String [] helpLabels = new String[]{"Data format and data loading", "General Controls", "View Settings", "Feature Exploration"};
+	public static final String manual0 = "http://bioinf.scri.ac.uk/strudel/help/data.shtml";
+	public static final String manual1 = "http://bioinf.scri.ac.uk/strudel/help/controls.shtml";
+	public static final String manual2 = "http://bioinf.scri.ac.uk/strudel/help/view.shtml";
+	public static final String manual3= "http://bioinf.scri.ac.uk/strudel/help/exploration.shtml";
 }

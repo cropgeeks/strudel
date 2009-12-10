@@ -107,8 +107,6 @@ public class MainCanvas extends JPanel
 		super.paintComponent(graphics);
 		long s = System.nanoTime();
 
-//		System.out.println("paint component  " + System.currentTimeMillis());
-
 		Graphics2D g = (Graphics2D) graphics;
 
 		// Does the back-buffer need to be re-created before use
@@ -186,7 +184,7 @@ public class MainCanvas extends JPanel
 			}
 		}
 
-		System.out.println("render time (ms) = " + (System.nanoTime() - s)/1000000.0f);
+//		System.out.println("render time (ms) = " + (System.nanoTime() - s)/1000000.0f);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------------------------------------

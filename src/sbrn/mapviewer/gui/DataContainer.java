@@ -37,6 +37,7 @@ public class DataContainer
 	{
 		loadDataFromSingleFile(inputFile);
 		setUpGMapSets();
+		Prefs.setRecentDocument(inputFile.getAbsolutePath());
 	}
 
 	// ============================================methods==========================================

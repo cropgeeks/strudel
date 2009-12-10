@@ -26,7 +26,8 @@ public class DataLoadUtils
 				inputFileName = Strudel.initialFile;
 		}
 		//load example data if user has not specified own data or dragged and dropped a file
-		else if(!Strudel.winMain.fatController.loadOwnData && !Strudel.winMain.fatController.dragAndDropDataLoad)
+		else if(!Strudel.winMain.fatController.loadOwnData && !Strudel.winMain.fatController.dragAndDropDataLoad &&
+						!Strudel.winMain.fatController.recentFileLoad)
 		{
 			// load the example data that ships with the application
 			String workingDir = System.getProperty("user.dir");

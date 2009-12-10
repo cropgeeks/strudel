@@ -1,5 +1,6 @@
 package sbrn.mapviewer.gui;
 
+import java.util.*;
 import scri.commons.gui.*;
 
 public class Prefs extends XMLPreferences
@@ -40,6 +41,23 @@ public class Prefs extends XMLPreferences
 	public static String lastVersion = null;
 
 	// A list of previously accessed documents
-	public static String[] guiRecentDocs = new String[10];
+	public static String[] guiRecentDocs = new String[8];
+
+	// Updates the array of recently accessed documents so that 'document' is
+	// the first element, even if it has been accessed previously
+	public static void setRecentDocument(String filePath)
+	{
+		LinkedList<String> list = new LinkedList<String>();
+		for (String file: guiRecentDocs)
+			list.add(file);
+
+		if (list.contains(filePath))
+			list.remove(filePath);
+
+		list.addFirst(filePath);
+
+		for (int i = 0; i < guiRecentDocs.length; i++)
+			guiRecentDocs[i] = list.get(i);
+	}
 
 }

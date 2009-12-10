@@ -89,6 +89,7 @@ public class DataLoadThread extends Thread
 
 			// reset the cancel flag as the user might now want to try again
 			Strudel.winMain.fatController.dataLoadCancelled = false;
+			Strudel.winMain.fatController.recentFileLoad = false;
 		}
 		catch (Exception e)
 		{

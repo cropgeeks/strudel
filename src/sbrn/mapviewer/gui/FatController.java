@@ -184,7 +184,7 @@ public class FatController
 
 
 		//repaint
-		winMain.mainCanvas.updateCanvas(true);
+		winMain.mainCanvas.updateCanvas(false);
 	}
 
 	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -248,6 +248,7 @@ public class FatController
 	{
 		if(Strudel.winMain.fatController.selectionMap != null)
 			Strudel.winMain.fatController.selectionMap.drawSelectionRect = false;
+		// TODO: update true or false?
 		Strudel.winMain.mainCanvas.updateCanvas(true);
 	}
 

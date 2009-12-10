@@ -57,9 +57,6 @@ public class PanZoomAnimator extends Thread implements ItemListener
 	{
 		zoomHandler.isPanZoomRequest = true;
 
-		//turn antialiasing off
-		mainCanvas.antiAlias = false;
-
 		int totalFrames = Math.round(fps * (millis / 1000.0f));
 
 		// divide the difference between a scaling factor of 1 and the final scaling factor by the number of frames we want to use for this
@@ -161,7 +158,8 @@ public class PanZoomAnimator extends Thread implements ItemListener
 		Strudel.winMain.fatController.updateAllZoomControls();
 
 		//repaint
-		Utils.repaintAntiAliased();
+		// TODO: AA check
+		Strudel.winMain.mainCanvas.updateCanvas(true);
 
 		zoomHandler.isPanZoomRequest = false;
 	}

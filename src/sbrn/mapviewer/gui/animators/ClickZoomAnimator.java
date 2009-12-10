@@ -44,9 +44,6 @@ public class ClickZoomAnimator extends Thread
 
 		zoomHandler.isClickZoomRequest = true;
 
-		//turn antialiasing off
-		mainCanvas.antiAlias = false;
-
 		//turn drawing of map index off
 		selectedMap.drawChromoIndex = false;
 
@@ -122,7 +119,8 @@ public class ClickZoomAnimator extends Thread
 		selectedMap.drawChromoIndex = true;
 
 		//repaint
-		Utils.repaintAntiAliased();
+		// TODO: AA check
+		Strudel.winMain.mainCanvas.updateCanvas(true);
 
 		zoomHandler.isClickZoomRequest = false;
 

@@ -137,7 +137,6 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(e.getX(), e.getY());
 		}
 
-		Strudel.winMain.mainCanvas.antiAlias = false;
 		Strudel.winMain.mainCanvas.updateCanvas(true);
 	}
 
@@ -199,7 +198,8 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		if ((!isMetaClick(e) && !e.isAltDown() && !e.isShiftDown()) || (isMetaClick(e) && !e.isShiftDown()))
 		{
 			//repaint
-			Utils.repaintAntiAliased();
+			// TODO: AA check
+			winMain.mainCanvas.updateCanvas(true);
 		}
 
 		winMain.mainCanvas.drawSelectionRect = false;
@@ -338,9 +338,6 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	// mouse scrolling of canvas
 	public void mouseWheelMoved(MouseWheelEvent e)
 	{
-		//turn antialiasing off for faster scrolling
-		winMain.mainCanvas.antiAlias = false;
-
 		// figure out which genome we are moving
 		int index = Utils.getSelectedSetIndex(e);
 		GMapSet selectedSet = Strudel.winMain.dataContainer.gMapSets.get(index);
@@ -383,7 +380,8 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		}
 
 		//repaint
-		Utils.repaintAntiAliased();
+		// TODO: AA check
+		winMain.mainCanvas.updateCanvas(true);
 	}
 
 

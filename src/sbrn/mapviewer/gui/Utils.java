@@ -581,17 +581,6 @@ public class Utils
 
 	// --------------------------------------------------------------------------------------------------------------------------------
 
-	//do a single repaint of the main canvas with antialiasing on, then reset to antialias off in readiness for the
-	//next paint operation
-	public static void repaintAntiAliased()
-	{
-		AntiAliasRepaintThread antiAliasRepaintThread = new AntiAliasRepaintThread();
-		SwingUtilities.invokeLater(antiAliasRepaintThread);
-	}
-
-
-	// --------------------------------------------------------------------------------------------------------------------------------
-
 	public static void labelToHyperlink(JLabel label, String url)
 	{
 		final String URL = url;

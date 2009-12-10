@@ -47,6 +47,9 @@ public class FatController
 	//true if the user is adding maps to their selection by Ctrl clicking
 	public boolean isCtrlClickSelection = false;
 
+	//true if we are laoding a file from the recent docs list
+	public boolean recentFileLoad = false;
+
 
 	// ===============================================curve'tors===================================
 

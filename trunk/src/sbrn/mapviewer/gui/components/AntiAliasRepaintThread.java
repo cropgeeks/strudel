@@ -10,10 +10,12 @@ public class AntiAliasRepaintThread extends Thread
 {
 	public static boolean hasImage = false;
 
-	private BufferedImage buffer;
+	private final BufferedImage buffer;
 
 	private Boolean killMe = false;
 	private static AntiAliasRepaintThread previousThread;
+
+	int delay = 100;
 
 	public AntiAliasRepaintThread(BufferedImage buffer)
 	{
@@ -38,7 +40,7 @@ public class AntiAliasRepaintThread extends Thread
 	{
 		setPriority(Thread.MIN_PRIORITY);
 
-		try { Thread.sleep(750); }
+		try { Thread.sleep(delay); }
 		catch (InterruptedException e) {}
 
 		if (killMe)
@@ -53,7 +55,7 @@ public class AntiAliasRepaintThread extends Thread
 
 		if (killMe == false)
 		{
-			System.out.println("AA render time (ms) = " + (System.nanoTime() - s)/1000000.0f);
+//			System.out.println("AA render time (ms) = " + (System.nanoTime() - s)/1000000.0f);
 
 			hasImage = true;
 			Strudel.winMain.mainCanvas.updateCanvas(false);

@@ -49,8 +49,6 @@ public class SingleFileImporter
 			String line = null;
 			while((line = reader.readLine()) != null)
 			{
-				//				System.out.println("processing line " + lineCount);
-				//				System.out.println("line: " + line);
 				if(line.startsWith("feature"))
 				{
 					firstFeatureParsed = true;

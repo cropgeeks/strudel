@@ -9,6 +9,7 @@ import javax.swing.event.*;
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.entities.*;
+import scri.commons.gui.*;
 
 public class ZoomControlPanel extends JToolBar implements ChangeListener, ActionListener, MouseListener
 {

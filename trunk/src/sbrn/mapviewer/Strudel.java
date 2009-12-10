@@ -55,6 +55,8 @@ public class Strudel
 		logger.addHandler(consoleHandler);
 		logger.setUseParentHandlers(false);
 
+		Icons.initialize("/res/icons", ".png");
+
 		// OS X: This has to be set before anything else
 		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Strudel");
 

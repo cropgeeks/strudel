@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.*;
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
+import scri.commons.gui.*;
 
 /**
  *

@@ -6,7 +6,6 @@ import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.dialog.*;
-import scri.commons.gui.*;
 
 /**
  * Used for importing data in the single file Strudel format. For example see data/singleLineFileFormatExample.xlsx.

@@ -5,9 +5,9 @@ package sbrn.mapviewer.gui.components;
 
 import java.awt.event.*;
 
+import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
 import scri.commons.gui.*;
-import scri.commons.gui.Icons;
 
 class NBStartPublicationPanel extends javax.swing.JPanel implements ActionListener
 {
@@ -26,7 +26,7 @@ class NBStartPublicationPanel extends javax.swing.JPanel implements ActionListen
 	{
 		if(e.getSource() == linkLabel)
 		{
-			Utils.visitURL("http://bioinf.scri.ac.uk/tablet/papers.shtml");
+			Utils.visitURL(Constants.strudelPublicationsPage);
 		}
 	}
 

@@ -597,14 +597,18 @@ public class Utils
 		});
 	}
 
+
+
 	// --------------------------------------------------------------------------------------------------------------------------------
 
-	public static void labelToAction(JLabel label, Action action, String actionMapKey)
+	public static void sendFeedback()
 	{
-		// Turns the label into a blue mouse-over clickable link to a website
-		label.setForeground(Color.blue);
-		label.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		label.getActionMap().put(actionMapKey, action);
+		try
+		{
+			Desktop desktop = Desktop.getDesktop();
+			desktop.mail(new URI("mailto:bioinf@scri.ac.uk?subject=Strudel%20Feedback"));
+		}
+		catch (Exception e) { System.out.println(e); }
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------

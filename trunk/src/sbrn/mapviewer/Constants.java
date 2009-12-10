@@ -38,6 +38,7 @@ public class Constants
 	public static final String strudelHomePage = "http://bioinf.scri.ac.uk/strudel/";
 	public static final String strudelManualPage = "http://bioinf.scri.ac.uk/strudel/help/quickstart.shtml";
 	public static final String strudelQuickStartPage = "http://bioinf.scri.ac.uk/strudel/help/quickstart.shtml";
+	public static final String strudelPublicationsPage = "http://bioinf.scri.ac.uk/strudel/publications.shtml";
 	public static final String scriHTML = "http://www.scri.ac.uk";
 	//these are the individual help links that are listed on the front page
 	public static final String [] helpLabels = new String[]{"Data format and data loading", "General Controls", "View Settings", "Feature Exploration"};

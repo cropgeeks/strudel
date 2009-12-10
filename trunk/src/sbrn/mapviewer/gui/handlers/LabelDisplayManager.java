@@ -47,7 +47,7 @@ public class LabelDisplayManager
 		FontMetrics fm = g2.getFontMetrics();
 
 		// get the name of the feature
-		String featureName = f.getName();
+		String featureName = f.getName() + " (" + f.getType() + ")";
 		int stringWidth = fm.stringWidth(featureName);
 
 		// we need these for working out the y positions
@@ -185,7 +185,9 @@ public class LabelDisplayManager
 				RoundRectangle2D.Float backGroundRect = new RoundRectangle2D.Float(labelX - horizontalGap, labelY - fontHeight, stringWidth + horizontalGap * 2, fontHeight + verticalGap, arcSize, arcSize);
 				g2.fill(backGroundRect);
 				// set the label font colour
-				g2.setColor(Colors.highlightedFeatureLabelColour);
+				g2.setColor(Colors.featureLabelColour);
+				if(isMouseOver)
+					g2.setColor(Colors.highlightedFeatureLabelColour);
 				// draw the label
 				g2.drawString(featureName, labelX, labelY);
 			}

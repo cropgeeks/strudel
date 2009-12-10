@@ -25,9 +25,6 @@ public class LinkShapeAnimator extends Thread
 		//first of all disable the button that triggered this thread so that the user cannot start multiple instances of this
 		Strudel.winMain.toolbar.bCurves.setEnabled(false);
 
-		//turn antialiasing off
-		Strudel.winMain.mainCanvas.antiAlias = false;
-
 		//the total number of frames we need to render
 		int totalFrames = Math.round(fps * (millis / 1000.0f));
 
@@ -110,7 +107,8 @@ public class LinkShapeAnimator extends Thread
 		Strudel.winMain.toolbar.bCurves.setEnabled(true);
 
 		//repaint
-		Utils.repaintAntiAliased();
+		// TODO: AA check
+		Strudel.winMain.mainCanvas.updateCanvas(true);
 	}
 
 }

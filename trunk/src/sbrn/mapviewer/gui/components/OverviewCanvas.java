@@ -202,7 +202,6 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener, Mouse
 		//turn antialiasing on and repaint
 		//we do this so we can move the selection rectangle on the overview without antialias for better performance, and then
 		//we want to redraw when we are done moving it
-		winMain.mainCanvas.antiAlias = true;
 		winMain.mainCanvas.updateCanvas(true);
 	}
 
@@ -211,7 +210,6 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener, Mouse
 	public void mouseDragged(MouseEvent e)
 	{
 		//turn off antialias on the main canvas while moving the selection rectangle
-		winMain.mainCanvas.antiAlias = false;
 		processLineDragRequest(e.getY());
 	}
 

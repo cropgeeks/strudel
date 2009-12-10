@@ -105,7 +105,7 @@ public class LinkDisplayManager
 
 	// --------------------------------------------------------------------------------------------------------------------------------
 
-	public void multicoreDrawAllLinks(final Graphics2D g)
+	public void multicoreDrawAllLinks(final Graphics2D g, final Boolean killMe)
 	{
 		linesDrawn = new Hashtable<String, Boolean>();
 
@@ -118,7 +118,7 @@ public class LinkDisplayManager
 
 				MainCanvas.tasks[i] = MainCanvas.executor.submit(new Runnable() {
 					public void run() {
-						drawAllLinks(g, startIndex);
+						drawAllLinks(g, startIndex, killMe);
 				}});
 			}
 
@@ -130,7 +130,7 @@ public class LinkDisplayManager
 	}
 
 	// Draws the lines between a chromosome of the reference genome and all potential homologues in the compared genome
-	private void drawAllLinks(Graphics2D g2, int startIndex)
+	private void drawAllLinks(Graphics2D g2, int startIndex, Boolean killMe)
 	{
 		int numLinksDrawn = 0;
 
@@ -146,6 +146,9 @@ public class LinkDisplayManager
 				// for each map in the selectedMaps vector
 				for (int i = 0; i < Strudel.winMain.fatController.selectedMaps.size(); i++)
 				{
+					if (killMe)
+						return;
+
 					// get the currently selected map
 					GChromoMap selectedMap = Strudel.winMain.fatController.selectedMaps.get(i);
 
@@ -158,8 +161,12 @@ public class LinkDisplayManager
 					// for each set of links between the selected chromosome and a reference map
 					for (LinkSet selectedLinks : linkSets)
 					{
+						if (killMe)
+							return;
+
 						if(selectedLinks == null)
 							continue;
+
 						//find out which mapsets we are dealing with here
 						//we know that what was clicked on is our target map and its owning mapset is therefore the target mapset
 						GMapSet targetGMapSet = selectedMap.owningSet;
@@ -212,6 +219,9 @@ public class LinkDisplayManager
 						// for each link in the linkset
 						for (int li = startIndex, n = selectedLinks.size(); li < n; li += MainCanvas.cores)
 						{
+							if (killMe)
+								return;
+
 							Link link = selectedLinks.getLinks().get(li);
 
 							// we only want to draw this link if it has a BLAST e-value smaller than the cut-off currently selected by the user

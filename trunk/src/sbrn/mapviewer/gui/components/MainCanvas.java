@@ -27,9 +27,6 @@ public class MainCanvas extends JPanel
 	// do we need to draw links?
 	public boolean drawLinks = false;
 
-	// if true, antialias everything
-	//this is a flag set by code within the application
-	public boolean antiAlias = false;
 	//in addition we have a flag set by the user (through a button) -- userPrefAntialias
 	//stored in the Prefs
 	//this overrides the local flag if it is set to false
@@ -54,6 +51,8 @@ public class MainCanvas extends JPanel
 
 	// Back-buffer for rendering
 	private BufferedImage buffer;
+	// Back-buffer for AA-rendering
+	private BufferedImage aaBuffer;
 	// Does the buffer need redrawn before use?
 	boolean redraw = true;
 
@@ -115,20 +114,30 @@ public class MainCanvas extends JPanel
 		// Does the back-buffer need to be re-created before use
 		if (redraw || buffer == null)
 		{
+			int w = getWidth();
+			int h = getHeight();
+
 			// Do we need to create a new buffer (if the screen size has changed)
-			if (buffer == null || buffer.getWidth() != getWidth() || buffer.getHeight() != getHeight())
+			if (buffer == null || buffer.getWidth() != w || buffer.getHeight() != h)
 			{
-				buffer = (BufferedImage) createImage(getWidth(), getHeight());
+				buffer = (BufferedImage) createImage(w, h);
+				aaBuffer = (BufferedImage) createImage(w, h);
 			}
 
 			// Render an image to the buffer
 			Graphics2D bufferGraphics = buffer.createGraphics();
-			paintCanvas(bufferGraphics);
+			paintCanvas(bufferGraphics, false);
 			bufferGraphics.dispose();
+
+			// Set up a post-render AA thread for a pretty repaint when ready
+			new AntiAliasRepaintThread(aaBuffer);
 		}
 
 		// Render the back-buffer
-		g.drawImage(buffer, 0, 0, null);
+		if (AntiAliasRepaintThread.hasImage)
+			g.drawImage(aaBuffer, 0, 0, null);
+		else
+			g.drawImage(buffer, 0, 0, null);
 
 		// Render any additional overlay images (highlights, mouse-overs etc)
 
@@ -183,11 +192,8 @@ public class MainCanvas extends JPanel
 	//------------------------------------------------------------------------------------------------------------------------------------------------
 
 	// paint the genomes or portions thereof onto this canvas
-	private void paintCanvas(Graphics2D g2)
+	public void paintCanvas(Graphics2D g2, Boolean killMe)
 	{
-		// check whether we need antialiasing on
-		checkAntiAliasing(g2);
-
 		//background
 		setBackground(Colors.mainCanvasBackgroundColour);
 
@@ -216,6 +222,8 @@ public class MainCanvas extends JPanel
 		//for all maps sets
 		for (GMapSet gMapSet : winMain.dataContainer.gMapSets)
 		{
+			if (killMe) return;
+
 			checkMarkerPaintingThresholds(gMapSet);
 
 			//calculate the x position for this genome
@@ -267,6 +275,8 @@ public class MainCanvas extends JPanel
 			// for each chromosome in the genome
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
 			{
+				if (killMe) return;
+
 				// we use the same x position for all chromosomes in this genome
 				int x = Math.round(gMapSet.xPosition);
 
@@ -315,12 +325,12 @@ public class MainCanvas extends JPanel
 			}
 		}
 		// optionally draw all the currently selected links between chromos
-		if (drawLinks)
+		if (drawLinks && !killMe)
 		{
-			linkDisplayManager.multicoreDrawAllLinks(g2);
+			linkDisplayManager.multicoreDrawAllLinks(g2, killMe);
 		}
 		//this draws homologies for features in a contiguous range on a chromosome
-		if (drawFoundFeaturesInRange)
+		if (drawFoundFeaturesInRange && !killMe)
 		{
 			if (Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().isSelected() || Strudel.winMain.foundFeaturesTableControlPanel.getShowHomologsCheckbox().isSelected())
 			{
@@ -330,14 +340,14 @@ public class MainCanvas extends JPanel
 
 		//we also want to check whether there are any links to display that are to be highlighted after a name based search for
 		//features and links originating from them
-		if (drawHighlightFeatures && winMain.fatController.highlightFeatureHomolog != null && Strudel.winMain.dataContainer.gMapSets.size() > 1)
+		if (!killMe && drawHighlightFeatures && winMain.fatController.highlightFeatureHomolog != null && Strudel.winMain.dataContainer.gMapSets.size() > 1)
 		{
 			linkDisplayManager.drawHighlightedLink(g2, winMain.fatController.highlightFeature, winMain.fatController.highlightFeatureHomolog, true);
 		}
 
 		//this draws labels of features in a contiguous range on a chromosome
 		//need to do this in this order so things are drawn on top of each other in the right sequence
-		if (drawFoundFeaturesInRange && (Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().isSelected() || Strudel.winMain.foundFeaturesTableControlPanel.getShowLabelsCheckbox().isSelected()))
+		if (!killMe && drawFoundFeaturesInRange && (Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().isSelected() || Strudel.winMain.foundFeaturesTableControlPanel.getShowLabelsCheckbox().isSelected()))
 		{
 			LabelDisplayManager.drawLabelsForFoundFeatures(g2);
 		}
@@ -348,6 +358,8 @@ public class MainCanvas extends JPanel
 			// for each chromosome in the genome
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
 			{
+				if (killMe) return;
+
 				//if the map is meant to be visible on the canvas at this time
 				if (gChromoMap.isShowingOnCanvas && !gChromoMap.inversionInProgress)
 				{
@@ -359,6 +371,8 @@ public class MainCanvas extends JPanel
 		}
 		// also need to update the overview canvases from here
 		winMain.fatController.updateOverviewCanvases();
+
+		redraw = false;
 	}
 
 
@@ -418,7 +432,7 @@ public class MainCanvas extends JPanel
 		Strudel.winMain.fatController.initialisePositionArrays();
 
 		//		//update the canvas
-		Strudel.winMain.mainCanvas.updateCanvas(true);
+		updateCanvas(true);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
@@ -470,30 +484,5 @@ public class MainCanvas extends JPanel
 
 	//----------------------------------------------------------------------------------------------------------------------------------------
 
-	private void checkAntiAliasing(Graphics2D g)
-	{
-		// first check whether we need antialiasing on
-		if (antiAlias)
-		{
-			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-							RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		}
-		else
-		{
-			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-							RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
-		}
-
-//		//this additional flag set by the user can override what we just set here
-//		//if it is set to true we ignore it though and just do what we were doing above anyway
-//		if(!Prefs.userPrefAntialias)
-//		{
-//			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-//			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-//							RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
-//		}
-	}
 
 }// end class

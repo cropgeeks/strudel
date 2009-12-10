@@ -79,7 +79,6 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 			}
 
 			//turn antialiasing on and repaint
-			Strudel.winMain.mainCanvas.antiAlias = true;
 			Strudel.winMain.mainCanvas.updateCanvas(true);
 		}
 

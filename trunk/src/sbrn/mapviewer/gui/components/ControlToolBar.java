@@ -31,7 +31,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 	public JToggleButton bLinkFilter;
 	public JButton bInfo;
 	public JButton bSave;
-
+	public JLabel memLabel = new JLabel();
 
 	public int currentLinkShapeType = 1;
 	public boolean linkShapeOrderAscending = true;
@@ -76,6 +76,8 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		addSeparator(true);
 		add(bHelp);
 		add(bInfo);
+		addSeparator(true);
+		add(memLabel);
 		add(new JLabel("  "));
 
 		bLinkFilter.setSelected(Prefs.drawOnlyLinksToVisibleFeatures);

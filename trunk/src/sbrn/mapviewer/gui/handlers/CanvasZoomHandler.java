@@ -38,9 +38,6 @@ public class CanvasZoomHandler
 	// adjusts the zoom factor and checks whether we need to display markers and labels
 	public void processContinuousZoomRequest(float newZoomFactor, float multiplier, GMapSet selectedSet, boolean isSliderRequest)
 	{
-		//make sure antialiasing is off
-		mainCanvas.antiAlias = false;
-
 		//for a request from the sliders we need to work out the multiplier but not the zoom factor
 		if(isSliderRequest)
 		{
@@ -257,7 +254,6 @@ public class CanvasZoomHandler
 		Strudel.winMain.fatController.updateAllZoomControls();
 
 		//turn antialiasing on and repaint
-		mainCanvas.antiAlias = true;
 		mainCanvas.updateCanvas(true);
 	}
 

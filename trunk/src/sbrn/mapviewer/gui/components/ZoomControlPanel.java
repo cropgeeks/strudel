@@ -148,7 +148,6 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 
 	public void mouseReleased(MouseEvent e)
 	{
-		Strudel.winMain.mainCanvas.antiAlias = true;
 		Strudel.winMain.mainCanvas.updateCanvas(true);
 	}
 

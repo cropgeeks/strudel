@@ -23,9 +23,6 @@ public class ChromoZAxisInversionAnimator extends Thread
 	{
 		try
 		{
-			//turn antialiasing off
-			Strudel.winMain.mainCanvas.antiAlias = false;
-
 			//the total number of frames we need to render
 			int totalFrames = Math.round(fps * (millis / 1000.0f));
 
@@ -85,7 +82,8 @@ public class ChromoZAxisInversionAnimator extends Thread
 			Strudel.winMain.fatController.initialisePositionArrays();
 
 			//repaint
-			Utils.repaintAntiAliased();
+			// TODO: AA check
+			Strudel.winMain.mainCanvas.updateCanvas(true);
 		}
 		catch (RuntimeException e)
 		{

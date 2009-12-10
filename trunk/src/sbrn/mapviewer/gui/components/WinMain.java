@@ -4,7 +4,9 @@ import java.awt.*;
 import java.awt.dnd.*;
 import java.awt.event.*;
 import java.beans.*;
+import java.lang.management.*;
 import java.util.*;
+import java.text.*;
 
 import javax.swing.*;
 
@@ -122,7 +124,7 @@ public class WinMain extends JFrame
 		// Window listeners are added last so they don't interfere with the
 		// maximization from above
 		addListeners();
-
+		createMemoryTimer();
 	}
 
 	//=================================================methods=====================================
@@ -150,7 +152,6 @@ public class WinMain extends JFrame
 					//refresh the main canvas
 					Strudel.winMain.validate();
 					mainCanvas.redraw = true;
-					Strudel.winMain.mainCanvas.updateCanvas(true);
 				}
 			}
 
@@ -162,9 +163,6 @@ public class WinMain extends JFrame
 					Prefs.guiWinMainX = getLocation().x;
 					Prefs.guiWinMainY = getLocation().y;
 				}
-
-				if(mainCanvas !=null)
-					mainCanvas.redraw = true;
 			}
 		});
 	}
@@ -391,5 +389,28 @@ public class WinMain extends JFrame
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	private void createMemoryTimer()
+	{
+		final DecimalFormat df = new DecimalFormat("0.00");
+		final MemoryMXBean mBean = ManagementFactory.getMemoryMXBean();
+		final ThreadMXBean tBean = ManagementFactory.getThreadMXBean();
+
+		ActionListener listener = new ActionListener() {
+			public void actionPerformed(ActionEvent evt)
+			{
+				long used = mBean.getHeapMemoryUsage().getUsed()
+					+ mBean.getNonHeapMemoryUsage().getUsed();
+
+				String label = df.format(used/1024f/1024f) + "MB (" +
+					(tBean.getThreadCount()-tBean.getDaemonThreadCount()) + ")";
+				toolbar.memLabel.setText(label);
+			}
+		};
+
+		javax.swing.Timer timer = new javax.swing.Timer(1000, listener);
+		timer.setInitialDelay(0);
+		timer.start();
+	}
 
 }//end class

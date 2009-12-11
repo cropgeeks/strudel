@@ -261,17 +261,6 @@ public class WinMain extends JFrame
 
 			add(splitPane, BorderLayout.CENTER);
 
-			//add a property change listener to the split pane so we know to repaint the canvas when it gets resized
-			splitPane.addPropertyChangeListener( new PropertyChangeListener ()
-			{
-				public void propertyChange(PropertyChangeEvent evt)
-				{
-					//refresh the main canvas
-					Strudel.winMain.validate();
-					Strudel.winMain.mainCanvas.updateCanvas(true);
-				}
-			});
-
 			repaint();
 		}
 		catch (Exception e)

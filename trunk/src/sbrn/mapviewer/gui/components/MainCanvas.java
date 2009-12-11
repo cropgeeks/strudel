@@ -109,13 +109,12 @@ public class MainCanvas extends JPanel
 
 		Graphics2D g = (Graphics2D) graphics;
 
-		// Does the back-buffer need to be re-created before use
-		if (redraw || buffer == null)
-		{
-			int w = getWidth();
-			int h = getHeight();
+		int w = getWidth();
+		int h = getHeight();
 
-			// Do we need to create a new buffer (if the screen size has changed)
+		// Does the back-buffer need to be re-created before use
+		if (redraw || buffer == null || buffer.getWidth() != w || buffer.getHeight() != h)
+		{
 			if (buffer == null || buffer.getWidth() != w || buffer.getHeight() != h)
 			{
 				buffer = (BufferedImage) createImage(w, h);

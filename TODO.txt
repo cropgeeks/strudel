@@ -94,7 +94,7 @@ REFACTORING:
 - maincanvas paintCanvas(): drawlinks before genomes
 - maincanvas paintcomponent: backbuffer drawing of distance markers
 - don't duplicate markers already drawn
-- GChromoMap paintMap(): looks like lots of code here does noly need to be run once rather than at every repaint (e.g. colours etc)
+- GChromoMap paintMap(): looks like lots of code here does only need to be run once rather than at every repaint (e.g. colours etc)
 - GChromoMap  drawLinkedFeatures is drawing linked features whether they are on screen or not
 
 
@@ -103,8 +103,8 @@ REFACTORING:
 
 BUGS to fix:
 
-- highlighted features: red highlight box does not match grey box behind it and leaves out feature type
-- data loading: if a dataset is already loaded and a new one is loaded on top that does not load successfully then the current data container is invalidated (although it shouldn't be) and the application crashes
+- need colour for chromosome that is selected and inverted
+- need to clear results when new data is being loaded and results table is still up
 
 
 

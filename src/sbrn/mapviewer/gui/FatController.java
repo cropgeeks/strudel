@@ -136,11 +136,11 @@ public class FatController
 	//this includes clearing any results of feature searches
 	public void resetMainCanvasView()
 	{
+		resetViewOnly();
+
 		//hide the found features part of the split pane
 		winMain.hideSplitPaneBottomHalf();
 		winMain.splitPane.setDividerLocation(1.0);
-
-		resetViewOnly();
 
 		//clear the found features
 		Strudel.winMain.fatController.highlightFeature = null;
@@ -165,7 +165,7 @@ public class FatController
 		for (ZoomControlPanel zoomControlPanel : winMain.zoomControlPanels)
 		{
 			zoomControlPanel.overrideMarkersAutoDisplayButton.setSelected(false);
-			zoomControlPanel.alwaysShowAllLabelsButton.setSelected(false);
+//			zoomControlPanel.alwaysShowAllLabelsButton.setSelected(false);
 		}
 
 	}
@@ -184,7 +184,6 @@ public class FatController
 				gMap.drawMouseOverFeatures = false;
 			}
 		}
-
 
 		//repaint
 		winMain.mainCanvas.updateCanvas(false);
@@ -207,6 +206,8 @@ public class FatController
 			//marker and label display overrides
 			gMapSet.overrideMarkersAutoDisplay = false;
 			gMapSet.alwaysShowAllLabels = false;
+			gMapSet.mapWithAllLabelsShowing = null;
+			winMain.chromoContextPopupMenu.showAllLabelsItem.setText(winMain.chromoContextPopupMenu.showAllLabelsStr);
 
 			//for all maps within mapset
 			for(GChromoMap gMap: gMapSet.gMaps)

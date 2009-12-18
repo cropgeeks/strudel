@@ -18,7 +18,7 @@ public class NBStartWelcomePanel extends javax.swing.JPanel implements ActionLis
         initComponents();
 		setOpaque(false);
 
-		tabletLabel.setText("<html>Version " + Install4j.VERSION);
+		versionLabel.setText("<html>Version " + Install4j.VERSION);
 		feedbackLabel.setText("Email feedback ");
 		feedbackLabel.setIcon(Icons.getIcon("FEEDBACK"));
 		feedbackLabel.addActionListener(this);
@@ -41,10 +41,10 @@ public class NBStartWelcomePanel extends javax.swing.JPanel implements ActionLis
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        tabletLabel = new javax.swing.JLabel();
+        versionLabel = new javax.swing.JLabel();
         feedbackLabel = new scri.commons.gui.matisse.HyperLinkLabel();
 
-        tabletLabel.setText("<html>Tablet x.xx.xx.xx - &copy; Plant Bioinformatics Group, SCRI.");
+        versionLabel.setText("<html>Tablet x.xx.xx.xx - &copy; Plant Bioinformatics Group, SCRI.");
 
         feedbackLabel.setForeground(new java.awt.Color(68, 106, 156));
         feedbackLabel.setText("Send feedback");
@@ -56,7 +56,7 @@ public class NBStartWelcomePanel extends javax.swing.JPanel implements ActionLis
             .addGap(0, 379, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tabletLabel)
+                .addComponent(versionLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(feedbackLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -67,7 +67,7 @@ public class NBStartWelcomePanel extends javax.swing.JPanel implements ActionLis
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tabletLabel)
+                    .addComponent(versionLabel)
                     .addComponent(feedbackLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -76,7 +76,7 @@ public class NBStartWelcomePanel extends javax.swing.JPanel implements ActionLis
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private scri.commons.gui.matisse.HyperLinkLabel feedbackLabel;
-    private javax.swing.JLabel tabletLabel;
+    private javax.swing.JLabel versionLabel;
     // End of variables declaration//GEN-END:variables
 
 

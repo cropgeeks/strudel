@@ -1,10 +1,8 @@
 package sbrn.mapviewer.gui.components;
 
-import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import sbrn.mapviewer.*;
-import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.animators.*;
 import sbrn.mapviewer.gui.entities.*;
 import sbrn.mapviewer.gui.handlers.*;
@@ -12,15 +10,17 @@ import sbrn.mapviewer.gui.handlers.*;
 
 public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 {
-	String invertChromoStr = "Invert chromosome";
-	String fitChromoStr = "Fit chromosome on screen";
+	public String invertChromoStr = "Invert chromosome";
+	public String fitChromoStr = "Fit chromosome on screen";
+	public String showAllLabelsStr = "Show all labels";
+//	public String hideAllLabelsStr = "Hide all labels";
 	public String addAllFeaturesStr = "Add features in range to results";
 	public String webInfoStr = "Show annotation for features in range";
 
 	public JMenuItem invertChromoMenuItem;
 	public JMenuItem fitChromoMenuItem;
 	public JMenuItem addAllFeaturesItem;
-
+	public JCheckBoxMenuItem showAllLabelsItem;
 
 
 	public ChromoContextPopupMenu()
@@ -36,12 +36,27 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 		addAllFeaturesItem = new JMenuItem(addAllFeaturesStr);
 		addAllFeaturesItem.addActionListener(this);
 		add(addAllFeaturesItem);
+
+		showAllLabelsItem = new JCheckBoxMenuItem(showAllLabelsStr);
+		showAllLabelsItem.addActionListener(this);
+		add(showAllLabelsItem);
 	}
 
 
 	public void actionPerformed(ActionEvent e)
 	{
 		JMenuItem source = (JMenuItem)(e.getSource());
+
+		//first find out what chromosome this relates to
+		GChromoMap selectedMap = Strudel.winMain.fatController.selectionMap;
+		GMapSet gMapSet = selectedMap.owningSet;
+
+//		//check whether we want to display the option for showing all labels
+//		if ((gMapSet.zoomFactor >= gMapSet.singleChromoViewZoomFactor - 1 && gMapSet.singleChromoViewZoomFactor != 0))
+//			showAllLabelsItem.setVisible(true);
+//		else
+//			showAllLabelsItem.setVisible(false);
+
 
 		if(source.equals(invertChromoMenuItem))
 		{
@@ -56,16 +71,11 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 		else if (source.equals(fitChromoMenuItem))
 		{
 			//fill the screen with the chromosome
-			GChromoMap selectedMap = Strudel.winMain.fatController.selectionMap;
-
 			if (selectedMap != null)
 				Strudel.winMain.mainCanvas.zoomHandler.processClickZoomRequest(selectedMap);
 		}
 		else if(source.equals(addAllFeaturesItem))
 		{
-			//first find out what chromosome this relates to
-			GChromoMap selectedMap = Strudel.winMain.fatController.selectionMap;
-
 			//add features from the selected region into the results table
 			if(selectedMap != null)
 			{
@@ -78,10 +88,25 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 					FeatureSearchHandler.findFeaturesInRangeFromCanvasSelection();
 			}
 
-			//turn antialiasing on and repaint
+			//repaint
 			Strudel.winMain.mainCanvas.updateCanvas(true);
 		}
-
+		else if(source.equals(showAllLabelsItem))
+		{
+			if(gMapSet.mapWithAllLabelsShowing==null)
+			{
+				gMapSet.mapWithAllLabelsShowing = selectedMap;
+				gMapSet.alwaysShowAllLabels = true;
+				showAllLabelsItem.setSelected(true);
+			}
+			else if(gMapSet.mapWithAllLabelsShowing!=null)
+			{
+				gMapSet.mapWithAllLabelsShowing = null;
+				gMapSet.alwaysShowAllLabels = false;
+				showAllLabelsItem.setSelected(false);
+			}
+			//repaint
+			Strudel.winMain.mainCanvas.updateCanvas(true);
+		}
 	}
-
 }

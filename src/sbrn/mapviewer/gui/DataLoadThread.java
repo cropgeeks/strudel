@@ -3,6 +3,7 @@ package sbrn.mapviewer.gui;
 import java.io.*;
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.handlers.*;
+import sbrn.mapviewer.io.*;
 
 public class DataLoadThread extends Thread
 {
@@ -23,16 +24,14 @@ public class DataLoadThread extends Thread
 			if (!Strudel.winMain.fatController.dataLoadCancelled)
 			{
 				// load the data
-				// we do this by simply creating a new data container instance -- the actual data loading is done through this
-				Strudel.winMain.dataContainer = new DataContainer(inputFile);
+				boolean success = DataLoadUtils.loadDataFromSingleFile(inputFile);
+
 				//check it all loaded ok
-				if(!Strudel.dataLoaded)
+				if(!success)
 					return;
 
-				// if users load datasets in succession we need to make sure we don't run out of memory
-				// so we want any old data containers to be thrown away -- just run the garbage collector explicitly to do this
-				System.gc();
-
+				//store the input file int he recent files list
+				Prefs.setRecentDocument(inputFile.getAbsolutePath());
 
 				// build the rest of the GUI as required
 				if (!Strudel.winMain.fatController.guiFullyAssembled)
@@ -60,7 +59,6 @@ public class DataLoadThread extends Thread
 					Strudel.winMain.foundFeaturesTableControlPanel.getGenomeFilterCombo().setEnabled(true);
 					Strudel.winMain.foundFeaturesTableControlPanel.getShowHomologsCheckbox().setEnabled(true);
 
-
 					// also need a new link display manager because it holds the precomputed links
 					Strudel.winMain.mainCanvas.linkDisplayManager = new LinkDisplayManager(Strudel.winMain.mainCanvas);
 				}
@@ -80,11 +78,6 @@ public class DataLoadThread extends Thread
 
 				// bring the focus back on the main window -- need this in case we had an overview dialog open (which then gets focus)
 				Strudel.winMain.requestFocus();
-			}
-			// user has cancelled
-			else
-			{
-
 			}
 
 			// reset the cancel flag as the user might now want to try again

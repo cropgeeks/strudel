@@ -106,6 +106,8 @@ public class GChromoMap
 	public float relativeTopY;
 	public float relativeBottomY;
 
+	public boolean linkedFeaturesReversed = false;
+
 
 	// ============================curve'tors==================================
 

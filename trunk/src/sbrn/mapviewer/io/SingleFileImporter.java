@@ -89,6 +89,9 @@ public class SingleFileImporter
 			//this sorts the features within their maps, by start position
 			sortFeatures();
 
+			//set up the mapsets
+			Strudel.winMain.dataContainer.setUpGMapSets(allLinkSets, allMapSets);
+
 			Strudel.dataLoaded = true;
 		}
 		catch (Exception e)

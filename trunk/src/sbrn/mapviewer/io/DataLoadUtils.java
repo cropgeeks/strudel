@@ -9,7 +9,6 @@ import scri.commons.gui.*;
 public class DataLoadUtils
 {
 
-
 	public static void loadDataInThread(String inputFileName, boolean commandLineLoad)
 	{
 		Strudel.winMain.dataLoadingDialog = new MTDataLoadingDialog(Strudel.winMain, false);
@@ -25,7 +24,7 @@ public class DataLoadUtils
 			else
 				inputFileName = Strudel.initialFile;
 		}
-		//load example data if user has not specified own data or dragged and dropped a file
+		//load example data if user has not specified own data or drag-and-dropped a file
 		else if(!Strudel.winMain.fatController.loadOwnData && !Strudel.winMain.fatController.dragAndDropDataLoad &&
 						!Strudel.winMain.fatController.recentFileLoad)
 		{
@@ -45,6 +44,31 @@ public class DataLoadUtils
 
 	}
 
+
+	// ----------------------------------------------------------------------------------------------------------------------------------------------
+
+	// Loads data from file using the object data model; this will populate all the relevant MapSet and LinkSet objects.
+	public static boolean loadDataFromSingleFile(File inputFile)
+	{
+		boolean success = true;
+		try
+		{
+			SingleFileImporter singleFileImporter = new SingleFileImporter();
+			singleFileImporter.parseCombinedFile(inputFile);
+		}
+		catch (Exception e)
+		{
+			success = false;
+			// reset the cancel flag as the user might now want to try again
+			Strudel.winMain.fatController.dataLoadCancelled = false;
+			// hide the data loading progress dialog
+			if (Strudel.winMain.dataLoadingDialog != null)
+				Strudel.winMain.dataLoadingDialog.setVisible(false);
+
+			TaskDialog.error("Data load failed: " + e.toString() + "\nPlease correct your data and try again.", "Close");
+		}
+		return success;
+	}
 
 
 	// ----------------------------------------------------------------------------------------------------------------------------------------------

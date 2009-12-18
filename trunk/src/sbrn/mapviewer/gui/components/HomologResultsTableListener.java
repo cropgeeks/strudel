@@ -60,24 +60,24 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 
 	public void mouseMoved(MouseEvent e)
 	{
-		// check whether we are in any of the cells containing hyperlinks
-		point.setLocation(e.getX(), e.getY());
-		int row = resultsTable.rowAtPoint(point);
-		int col = resultsTable.columnAtPoint(point);
-
-		// if we are, change the cursor to a hand
-		HomologResultsTableModel homologResultsTableModel = (HomologResultsTableModel) resultsTable.getModel();
-		boolean isURLColumn = col == homologResultsTableModel.findColumn(homologResultsTableModel.homologColumnLabel) ||
-		col == homologResultsTableModel.findColumn(homologResultsTableModel.targetNameColumnLabel);
-
-		if (isURLColumn && resultsTable.cellHasURLSet(row, col))
-		{
-			resultsTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		}
-		else
-		{
-			resultsTable.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-		}
+//		// check whether we are in any of the cells containing hyperlinks
+//		point.setLocation(e.getX(), e.getY());
+//		int row = resultsTable.rowAtPoint(point);
+//		int col = resultsTable.columnAtPoint(point);
+//
+//		// if we are, change the cursor to a hand
+//		HomologResultsTableModel homologResultsTableModel = (HomologResultsTableModel) resultsTable.getModel();
+//		boolean isURLColumn = col == homologResultsTableModel.findColumn(homologResultsTableModel.homologColumnLabel) ||
+//		col == homologResultsTableModel.findColumn(homologResultsTableModel.targetNameColumnLabel);
+//
+//		if (isURLColumn && resultsTable.cellHasURLSet(row, col))
+//		{
+//			resultsTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+//		}
+//		else
+//		{
+//			resultsTable.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+//		}
 	}
 
 
@@ -157,7 +157,7 @@ private void highlightFeature()
 		Strudel.winMain.mainCanvas.drawHighlightFeatures = true;
 
 		//update the canvas
-		Strudel.winMain.mainCanvas.updateCanvas(true);
+		Strudel.winMain.mainCanvas.updateCanvas(false);
 	}
 }
 

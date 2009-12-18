@@ -21,7 +21,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 	JButton resetButton;
 	GMapSet gMapSet;
 	public JToggleButton overrideMarkersAutoDisplayButton;
-	public JToggleButton alwaysShowAllLabelsButton;
+//	public JToggleButton alwaysShowAllLabelsButton;
 
 
 	// ===================================================curve'tor====================================
@@ -72,7 +72,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 
 		//marker and label display buttons
 		overrideMarkersAutoDisplayButton = (JToggleButton) Utils.getButton(true, "", "Always show all markers", Icons.getIcon("SHOWMARKERS"), null, this, true);
-		alwaysShowAllLabelsButton = (JToggleButton) Utils.getButton(true, "", "Always show all labels", Icons.getIcon("SHOWLABELS"), null, this, true);
+//		alwaysShowAllLabelsButton = (JToggleButton) Utils.getButton(true, "", "Always show all labels", Icons.getIcon("SHOWLABELS"), null, this, true);
 
 		//we need the filler when this toolbar is the only one
 		//this is to stop it from filling the whole width of the frame
@@ -86,7 +86,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		add(zoomSlider);
 		add(resetButton);
 		add(overrideMarkersAutoDisplayButton);
-		add(alwaysShowAllLabelsButton);
+//		add(alwaysShowAllLabelsButton);
 		add(new JLabel("   "));
 
 		//we need the filler when this toolbar is the only one
@@ -134,15 +134,15 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 
 			Strudel.winMain.mainCanvas.updateCanvas(true);
 		}
-		else if(e.getSource() == alwaysShowAllLabelsButton)
-		{
-			if(alwaysShowAllLabelsButton.isSelected())
-				gMapSet.alwaysShowAllLabels = true;
-			else
-				gMapSet.alwaysShowAllLabels = false;
-
-			Strudel.winMain.mainCanvas.updateCanvas(true);
-		}
+//		else if(e.getSource() == alwaysShowAllLabelsButton)
+//		{
+//			if(alwaysShowAllLabelsButton.isSelected())
+//				gMapSet.alwaysShowAllLabels = true;
+//			else
+//				gMapSet.alwaysShowAllLabels = false;
+//
+//			Strudel.winMain.mainCanvas.updateCanvas(true);
+//		}
 	}
 
 

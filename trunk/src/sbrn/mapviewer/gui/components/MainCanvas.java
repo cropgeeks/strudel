@@ -105,7 +105,6 @@ public class MainCanvas extends JPanel
 	{
 
 		super.paintComponent(graphics);
-		long s = System.nanoTime();
 
 		Graphics2D g = (Graphics2D) graphics;
 
@@ -149,6 +148,8 @@ public class MainCanvas extends JPanel
 			g.draw(selectionRect);
 		}
 
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
 		//now we need to draw the rest of the things relating to the map
 		//this needs to be done after drawing the links so it is all visible on top of the links
 		for (GMapSet gMapSet : winMain.dataContainer.gMapSets)
@@ -160,9 +161,7 @@ public class MainCanvas extends JPanel
 				{
 					if(Prefs.showDistanceMarkers)
 					{
-						g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 						gChromoMap.drawDistanceMarkers(g);
-						g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 					}
 					gChromoMap.drawMouseOverFeatures(g);
 				}
@@ -176,14 +175,16 @@ public class MainCanvas extends JPanel
 			{
 				LabelDisplayManager.drawHighlightedFeatureLabel(g, winMain.fatController.highlightFeatureHomolog, winMain.fatController.highlightFeature);
 				LabelDisplayManager.drawHighlightedFeatureLabel(g, winMain.fatController.highlightFeature,winMain.fatController.highlightFeatureHomolog);
+
+				//we also want to check whether there are any links to display that are to be highlighted after a name based search for
+				//features and links originating from them
+				linkDisplayManager.drawHighlightedLink(g, winMain.fatController.highlightFeature, winMain.fatController.highlightFeatureHomolog, true);
 			}
 			else
 			{
 				LabelDisplayManager.drawHighlightedFeatureLabel(g, winMain.fatController.highlightFeature, null);
 			}
 		}
-
-//		System.out.println("render time (ms) = " + (System.nanoTime() - s)/1000000.0f);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------------------------------------
@@ -335,12 +336,12 @@ public class MainCanvas extends JPanel
 			}
 		}
 
-		//we also want to check whether there are any links to display that are to be highlighted after a name based search for
-		//features and links originating from them
-		if (!killMe && drawHighlightFeatures && winMain.fatController.highlightFeatureHomolog != null && Strudel.winMain.dataContainer.gMapSets.size() > 1)
-		{
-			linkDisplayManager.drawHighlightedLink(g2, winMain.fatController.highlightFeature, winMain.fatController.highlightFeatureHomolog, true);
-		}
+//		//we also want to check whether there are any links to display that are to be highlighted after a name based search for
+//		//features and links originating from them
+//		if (!killMe && drawHighlightFeatures && winMain.fatController.highlightFeatureHomolog != null && Strudel.winMain.dataContainer.gMapSets.size() > 1)
+//		{
+//			linkDisplayManager.drawHighlightedLink(g2, winMain.fatController.highlightFeature, winMain.fatController.highlightFeatureHomolog, true);
+//		}
 
 		//this draws labels of features in a contiguous range on a chromosome
 		//need to do this in this order so things are drawn on top of each other in the right sequence
@@ -456,21 +457,21 @@ public class MainCanvas extends JPanel
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
-	public void checkForLabelDrawing(GMapSet gMapSet)
-	{
-		//check whether we should have the alwaysShowAllLabelsButton enabled
-		//we don't want this option if we are looking at more than one chromo on screen
-		if ((gMapSet.zoomFactor >= gMapSet.singleChromoViewZoomFactor - 1 && gMapSet.singleChromoViewZoomFactor != 0))
-		{
-			gMapSet.zoomControlPanel.alwaysShowAllLabelsButton.setEnabled(true);
-		}
-		else
-		{
-			gMapSet.alwaysShowAllLabels = false;
-			gMapSet.zoomControlPanel.alwaysShowAllLabelsButton.setSelected(false);
-			gMapSet.zoomControlPanel.alwaysShowAllLabelsButton.setEnabled(false);
-		}
-	}
+//	public void checkForLabelDrawing(GMapSet gMapSet)
+//	{
+//		//check whether we should have the alwaysShowAllLabelsButton enabled
+//		//we don't want this option if we are looking at more than one chromo on screen
+//		if ((gMapSet.zoomFactor >= gMapSet.singleChromoViewZoomFactor - 1 && gMapSet.singleChromoViewZoomFactor != 0))
+//		{
+//			gMapSet.zoomControlPanel.alwaysShowAllLabelsButton.setEnabled(true);
+//		}
+//		else
+//		{
+//			gMapSet.alwaysShowAllLabels = false;
+//			gMapSet.zoomControlPanel.alwaysShowAllLabelsButton.setSelected(false);
+//			gMapSet.zoomControlPanel.alwaysShowAllLabelsButton.setEnabled(false);
+//		}
+//	}
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
 

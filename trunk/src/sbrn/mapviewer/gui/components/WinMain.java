@@ -25,7 +25,7 @@ public class WinMain extends JFrame
 	//	=================================================vars=====================================
 
 	//this is where we hold the genome data
-	public DataContainer dataContainer;
+	public DataContainer dataContainer = new DataContainer();
 
 	//a list of the zoom control panels
 	public LinkedList<ZoomControlPanel> zoomControlPanels = new LinkedList<ZoomControlPanel>();

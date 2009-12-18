@@ -3,6 +3,7 @@ package sbrn.mapviewer.gui.handlers;
 import java.awt.*;
 import java.awt.geom.*;
 import java.util.*;
+import java.util.List;
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
@@ -130,67 +131,74 @@ public class LabelDisplayManager
 	//	------------------------------------------------------------------------------------------------------------------------------------
 
 	// draws labels next to found features in a specified range only
-	public static void drawFeatureLabelsInRange(Graphics2D g2, Vector<Feature> features, boolean isMouseOver)
+	public static void drawFeatureLabelsInRange(Graphics2D g2, List<Feature> features, boolean isMouseOver)
 	{
-		g2.setFont(new Font("Sans-serif", Font.PLAIN, fontHeight));
-		FontMetrics fm = g2.getFontMetrics();
-
-		//first work out the features' y positions
-		//we need to create a LinkedHashMap withe the default positons
-		//these will all be at the featureY of the Feature
-		HashMap<Feature, Integer> featurePositions = calculateFeaturePositions(features);
-
-		//now work out the actual positions after correction for collision of labels
-		HashMap<Feature, Integer> laidoutPositions = calculateLabelPositions(features, featurePositions);
-
-		// for all features in our list
-		for (Feature f : features)
+		try
 		{
-			if (f != null)
+			g2.setFont(new Font("Sans-serif", Font.PLAIN, fontHeight));
+			FontMetrics fm = g2.getFontMetrics();
+
+			//first work out the features' y positions
+			//we need to create a LinkedHashMap with the default positons
+			//these will all be at the featureY of the Feature
+			HashMap<Feature, Integer> featurePositions = calculateFeaturePositions(features);
+
+			//System.out.println("=======drawing num labels = "+ featurePositions.size());
+
+			//now work out the actual positions after correction for collision of labels
+			HashMap<Feature, Integer> laidoutPositions = calculateLabelPositions(features, featurePositions);
+
+			// for all features in our list
+			for (Feature f : features)
 			{
-				// get the name of the feature
-				String featureName = f.getName() + " (" + f.getType() + ")";
-				int stringWidth = fm.stringWidth(featureName);
-				// this is where the label goes
-				int labelY = laidoutPositions.get(f);
-				int featureY = featurePositions.get(f);
-
-				// next decide where to place the label on x
-				int mapSetX = Math.round(f.getOwningMap().getGChromoMap().owningSet.xPosition);
-				int chromoWidth = Strudel.winMain.mainCanvas.chromoWidth;
-				// the amount by which we want to move the label end away from the chromosome (in pixels)
-				int lineLength = 50;
-				int labelX = mapSetX + chromoWidth + lineLength; // this is where the label is drawn from
-				int lineStartX = mapSetX + chromoWidth; // this is where the line to the label is drawn from
-				int lineEndX = labelX - 2; // the label connects to the line here
-				if (isMouseOver)
+				if (f != null)
 				{
-					//set the colour to highlight feature
-					g2.setColor(Colors.highlightedFeatureColour);
-				}
-				else
-				{
-					//set the colour to draw feature normally
-					g2.setColor(Colors.featureColour);
-				}
+					// get the name of the feature
+					String featureName = f.getName() + " (" + f.getType() + ")";
+					int stringWidth = fm.stringWidth(featureName);
+					// this is where the label goes
+					int labelY = laidoutPositions.get(f);
+					int featureY = featurePositions.get(f);
 
-				// draw a line to highlight the marker on the chromosome itself
-				g2.drawLine(mapSetX, featureY, mapSetX + Strudel.winMain.mainCanvas.chromoWidth - 1, featureY);
-				// draw a line from the marker to the label
-				g2.drawLine(lineStartX, featureY, lineEndX, labelY - fontHeight / 2);
-				//draw a rectangle as a background for the label
-				float arcSize = fontHeight / 1.5f;
-				int horizontalGap = 3;
-				int verticalGap = 4;
-				RoundRectangle2D.Float backGroundRect = new RoundRectangle2D.Float(labelX - horizontalGap, labelY - fontHeight, stringWidth + horizontalGap * 2, fontHeight + verticalGap, arcSize, arcSize);
-				g2.fill(backGroundRect);
-				// set the label font colour
-				g2.setColor(Colors.featureLabelColour);
-				if(isMouseOver)
-					g2.setColor(Colors.highlightedFeatureLabelColour);
-				// draw the label
-				g2.drawString(featureName, labelX, labelY);
+					// next decide where to place the label on x
+					int mapSetX = Math.round(f.getOwningMap().getGChromoMap().owningSet.xPosition);
+					int chromoWidth = Strudel.winMain.mainCanvas.chromoWidth;
+					// the amount by which we want to move the label end away from the chromosome (in pixels)
+					int lineLength = 50;
+					int labelX = mapSetX + chromoWidth + lineLength; // this is where the label is drawn from
+					int lineStartX = mapSetX + chromoWidth + 1; // this is where the line to the label is drawn from
+					int lineEndX = labelX - 2; // the label connects to the line here
+					if (isMouseOver)
+					{
+						//set the colour to highlight feature
+						g2.setColor(Colors.highlightedFeatureColour);
+					}
+					else
+					{
+						//set the colour to draw feature normally
+						g2.setColor(Colors.featureColour);
+					}
+
+					// draw a line from the marker to the label
+					g2.drawLine(lineStartX, featureY, lineEndX, labelY - fontHeight / 2);
+					//draw a rectangle as a background for the label
+					float arcSize = fontHeight / 1.5f;
+					int horizontalGap = 3;
+					int verticalGap = 4;
+					RoundRectangle2D.Float backGroundRect = new RoundRectangle2D.Float(labelX - horizontalGap, labelY - fontHeight, stringWidth + horizontalGap * 2, fontHeight + verticalGap, arcSize, arcSize);
+					g2.fill(backGroundRect);
+					// set the label font colour
+					g2.setColor(Colors.featureLabelColour);
+					if(isMouseOver)
+						g2.setColor(Colors.highlightedFeatureLabelColour);
+					// draw the label
+					g2.drawString(featureName, labelX, labelY);
+				}
 			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
 		}
 	}
 
@@ -198,7 +206,7 @@ public class LabelDisplayManager
 
 	//calculates the label positions for a set of features by  -- if necessary -- shuffling labels downwards
 	@SuppressWarnings("unchecked")
-	private static HashMap<Feature, Integer> calculateLabelPositions(Vector<Feature> features, HashMap<Feature, Integer> featurePositions)
+	private static HashMap<Feature, Integer> calculateLabelPositions(List<Feature> features, HashMap<Feature, Integer> featurePositions)
 	{
 		//we want to start off with the same kind of order and positions as the feature positions
 		HashMap<Feature, Integer> labelPositions = (HashMap<Feature, Integer>)featurePositions.clone();
@@ -206,7 +214,23 @@ public class LabelDisplayManager
 		//the label's height
 		float labelHeight = fontHeight*verticalSpacer;
 
-		//this is where we shuffle the label positions downwards relative to the feature positions
+		//now we want to work out where we start drawing the labels relative to the range start point
+		//we want the labels fanning out evenly on y both up and downwards from the features themselves
+		//first work out the combined height of the labels
+		int totalLabelHeight = Math.round(features.size() * labelHeight);
+		//the difference between the total label height and the canvas size
+		int excess = totalLabelHeight - Strudel.winMain.mainCanvas.getHeight();
+
+		//the label offset on y relative to the start of the features themselves
+		//need to subtract this from each label position
+		int offset = -1;
+		if(excess > 0)
+			offset = Math.round(excess / 2.0f);
+		//don't want the offset to be negative because this will put labels in the wrong place
+		else
+			offset = 0;
+
+		//this is where we shuffle the label positions  relative to the feature positions
 		//need to check that the label interval is no less than the height of an individual label plus some space at
 		//the top and bottom of it respectively
 		for (int i = 0; i < features.size(); i++)
@@ -224,11 +248,11 @@ public class LabelDisplayManager
 			if (f1 != null && f2 != null)
 			{
 				//if the difference between the feature y pos of this feature and that of the next one is less than the labelheight
-				//then we need to shuffle them downwards
+				//then we need to shuffle them along
 				int yDistance = labelPositions.get(f2) - labelPositions.get(f1);
 				if (yDistance < labelHeight)
 				{
-					//move the position of feature 2 down on y by the so it is at the position of feature 1 plus one label height
+					//move the position of feature 2  on y by the so it is at the position of feature 1 plus one label height
 					//need to make this change both to the map with the laid out positions as well as the default one because
 					//the value from the latter will be used in the next iteration
 					int newPos = Math.round(labelPositions.get(f1) + labelHeight);
@@ -237,29 +261,13 @@ public class LabelDisplayManager
 			}
 		}
 
-		//now we want to work out where we start drawing the labels relative to the range start point
-		//we want the labels fanning out evenly on y both up and downwards from the features themselves
-		//first work out the combined height of the labels
-		int totalLabelHeight = Math.round(features.size() * labelHeight);
-		//the difference between the total label height and the canvas size
-		int excess = totalLabelHeight - Strudel.winMain.mainCanvas.getHeight();
-
-		//the label offset on y relative to the start of the features themselves
-		//need to subtract this from each label position
-		int offset = Math.round(excess / 2.0f);
-		//if we are just doing the mouse overs we want the labels to fan out in the usual "butterfly" shape
-		if(excess < 0 && !features.get(0).getOwningMap().getGChromoMap().owningSet.alwaysShowAllLabels && !Strudel.winMain.ffResultsPanel.isVisible())
-			offset = Math.round(totalLabelHeight/2) - Math.round(labelHeight/2);
-		//if we are showing all labels for this genome we need to fan them out downwards from the topmost feature
-		//don't want the offset to be negative because this will put labels in the wrong place
-		else
-			offset = 0;
-
 		//now subtract the offset  from each position so the labels fan out properly
 		//also apply a correction factor to move the label down by half a label height relative to the feature's y pos so
 		//that the label's center on y is aligned with the feature y
 		for (Feature feature : labelPositions.keySet())
 		{
+			//if the difference between the feature y pos of this feature and that of the next one is less than the labelheight
+			//then we need to shuffle them along
 			int newPos = labelPositions.get(feature) - offset + (fontHeight / 2);
 			//put the adjusted value back
 			labelPositions.put(feature, newPos);
@@ -271,7 +279,7 @@ public class LabelDisplayManager
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	//works out the feature positions for a set of features
-	private static HashMap<Feature, Integer> calculateFeaturePositions(Vector<Feature> features)
+	private static HashMap<Feature, Integer> calculateFeaturePositions(List<Feature> features)
 	{
 		HashMap<Feature, Integer> featurePositions = new HashMap<Feature, Integer>();
 
@@ -285,21 +293,33 @@ public class LabelDisplayManager
 				float mapEnd = chromoMap.getStop();
 				// this factor normalises the position to a value between 0 and 100
 				float scalingFactor = gChromoMap.height / mapEnd;
-				// the y position of the feature itself
+				// the y position of the feature itself on the canvas, in pixel coords relative to the canvas boundaries
 				int featureY;
 				if (f.getStart() == 0.0f)
 				{
-					featureY = gChromoMap.y;
+					if (gChromoMap.isPartlyInverted || gChromoMap.isFullyInverted)
+					{
+						featureY = gChromoMap.y + gChromoMap.height;
+						//System.out.println("feature start at 0 and map inverted");
+					}
+					else
+					{
+						featureY = gChromoMap.y;
+					}
 				}
 				else
 				{
-					featureY = Math.round(gChromoMap.y + gChromoMap.currentY + (f.getStart() * scalingFactor));
+					//check whether the map is inverted
+					if (gChromoMap.isPartlyInverted || gChromoMap.isFullyInverted)
+					{
+						featureY = Math.round(gChromoMap.y + gChromoMap.currentY + gChromoMap.height - (f.getStart() * scalingFactor));
+					}
+					else
+					{
+						featureY = Math.round(gChromoMap.y + gChromoMap.currentY + (f.getStart() * scalingFactor));
+					}
 				}
-				//check whether the map is inverted
-				if (gChromoMap.isPartlyInverted)
-				{
-					featureY = (int) ((mapEnd - f.getStart()) / (mapEnd / gChromoMap.height)) + (gChromoMap.y + gChromoMap.currentY);
-				}
+
 				featurePositions.put(f, featureY);
 			}
 		}
@@ -310,23 +330,29 @@ public class LabelDisplayManager
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-	//draw all labels for all features on this chromosome if this has been requested at the level of the mapset
+	//draw all labels for all features on this mapset's selected chromosome if this has been requested
 	public static void drawLabelsForAllVisibleFeatures(Graphics2D g2, GMapSet gMapSet)
 	{
-		//combine all the features from the visible maps into one
-		Vector<Feature> combinedFeatures = new Vector<Feature>();
-		Vector<GChromoMap> gMaps = gMapSet.getVisibleMaps();
-		for (GChromoMap gMap : gMaps)
+		GChromoMap gMap = gMapSet.mapWithAllLabelsShowing;
+
+		//make a separate vector object with all the lniked features for this chromo
+		Vector<Feature> vec = new Vector<Feature>();
+		for (int i = 0; i < gMap.allLinkedFeatures.length; i++)
 		{
-			//get all the features of this map and put them into the combined features vector
-			combinedFeatures.addAll(Arrays.asList(gMap.allLinkedFeatures));
+			vec.add(gMap.allLinkedFeatures[i]);
+		}
+
+		//check whether all these features are showing
+		vec = Utils.checkFeatureVisibility(vec);
+
+		//reverse the order of the feature
+		if((gMap.isFullyInverted || gMap.isPartlyInverted))
+		{
+			Collections.reverse(vec);
 		}
 
 		//now draw the labels
-		//only use those features that are actually visible on canvas
-		combinedFeatures = Utils.checkFeatureVisibility(combinedFeatures);
-
-		drawFeatureLabelsInRange(g2, combinedFeatures, false);
+		drawFeatureLabelsInRange(g2, vec, false);
 	}
 
 

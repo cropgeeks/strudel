@@ -53,7 +53,6 @@ public class LinkDisplayManager
 		{
 			// first figure out which chromosome we are in
 			GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, x, y);
-			GMapSet selectedSet = selectedMap.owningSet;
 
 			// the click has hit a chromosome
 			if (selectedMap != null)

@@ -536,18 +536,22 @@ public class Utils
 				//get the owning map and gMap
 				ChromoMap cMap = feature.getOwningMap();
 				GChromoMap gMap = cMap.getGChromoMap();
-				GMapSet gMapSet = gMap.owningSet;
+
 				//get the relative position on the map
 				float fStart = feature.getStart();
 				//convert this to an absolute position on the canvas in pixels
-				int pixelPos = getFPosOnScreenInPixels(cMap, fStart, false);
+				int pixelPos = -1;
+				if(!gMap.isFullyInverted || !gMap.isPartlyInverted)
+					pixelPos = getFPosOnScreenInPixels(cMap, fStart, false);
+				else
+					pixelPos = getFPosOnScreenInPixels(cMap, fStart, true);
 
-				//check whether this position is currently showing on the canvas or not
-				if (pixelPos > 0 && pixelPos < Strudel.winMain.mainCanvas.getHeight())
-				{
-					//if it is, add it
-					visibleFeatures.add(feature);
-				}
+					//check whether this position is currently showing on the canvas or not
+					if (pixelPos > 0 && pixelPos < Strudel.winMain.mainCanvas.getHeight())
+					{
+						//if it is, add it
+						visibleFeatures.add(feature);
+					}
 			}
 		}
 
@@ -606,7 +610,7 @@ public class Utils
 		try
 		{
 			Desktop desktop = Desktop.getDesktop();
-			desktop.mail(new URI("mailto:bioinf@scri.ac.uk?subject=Strudel%20Feedback"));
+			desktop.mail(new URI("mailto:strudel@scri.ac.uk?subject=Strudel%20Feedback"));
 		}
 		catch (Exception e) { System.out.println(e); }
 	}

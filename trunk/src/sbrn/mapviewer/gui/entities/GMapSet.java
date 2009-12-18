@@ -71,6 +71,8 @@ public class GMapSet
 	//the zoom control panel pertaining to this mapset
 	public ZoomControlPanel zoomControlPanel;
 
+	//the one and only chromosome in this mapset for which we want to be displaying labels -- if requested -- at all times
+	public GChromoMap mapWithAllLabelsShowing;
 
 	// ====================================curve'tors========================================
 

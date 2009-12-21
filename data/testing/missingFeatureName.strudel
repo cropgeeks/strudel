@@ -1,0 +1,24 @@
+feature	Barley	1H	12_30969	SNP	0	
+feature	Barley	1H	11_11223	SNP	20.75	
+feature	Barley	1H	11_21354	SNP	10.77	
+feature	Barley	2H	11_10399	SNP	9.1	
+feature	Barley	2H	12_20326	SNP	39.1	
+feature	Barley	2H	12_10156	SNP	51.75	
+feature	Barley	2H	11_10297	SNP	71.75	
+feature	Barley	2H	12_30691	SNP	91.75	
+feature	Rice	1	LOC_Os01g69904	gene	40389347	
+feature	Rice	1	LOC_Os01g72420	gene	52001760	
+feature	Rice	2	LOC_Os02g36680	gene	2136127	
+feature	Rice	2		gene	42139129	
+feature	Rice	2	LOC_Os02g36700	gene	92144278	
+feature	Rice	2	LOC_Os02g36710	gene	32150173	
+feature	Rice	2	LOC_Os02g36720	gene	52152489	
+feature	Rice	2	LOC_Os02g36730	gene	155458	
+homolog	Barley	12_30969	Rice	LOC_Os01g69904	0.00E+00	expressed protein
+homolog	Barley	11_11223	Rice	LOC_Os01g72420	0.00E+00	"C2 domain containing protein, putative, expressed"
+homolog	Barley	11_21354	Rice	LOC_Os02g36680	0.00E+00	expressed protein
+homolog	Barley	11_10399	Rice	LOC_Os02g36690	0.00E+00	hypothetical protein
+homolog	Barley	12_20326	Rice	LOC_Os02g36700	0.00E+00	"sucrose transporter BoSUT1, putative, expressed"
+homolog	Barley	12_10156	Rice	LOC_Os02g36710	0.00E+00	"SET, putative, expressed"
+homolog	Barley	11_10297	Rice	LOC_Os02g36720	0.00E+00	hypothetical protein
+homolog	Barley	12_30691	Rice	LOC_Os02g36730	0.00E+00	expressed protein

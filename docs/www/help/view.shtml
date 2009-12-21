@@ -20,20 +20,29 @@
 			View settings
 		</h2>
 
-		<a href="#overview">Using the overview window</a>
-		<br>
-		<a href="#distanceMarkers">Distance markers</a>
-		<br>
-		<a href="#linkShapes">Changing the shape of the homology links</a>
-		<br>
-		<a href="#filterByVis">Filtering of links by visibility of features</a>
-		<br>
-		<a href="#filterByEvalue">Filtering homology links by BLAST e-value</a>
-		<br>
-		<a href="#featureLabelDisplay">Manual override of feature and label display</a>
-		<br>
-		<a href="#exportView">Exporting the current view as an image</a>
-		<br>
+		<ul>
+			<li>
+				<a href="#overview">Using the overview window</a>
+			</li>
+			<li>
+				<a href="#distanceMarkers">Distance markers</a>
+			</li>
+			<li>
+				<a href="#linkShapes">Changing the shape of the homology links</a>
+			</li>
+			<li>
+				<a href="#filterByVis">Filtering of links by visibility of features</a>
+			</li>
+			<li>
+				<a href="#filterByEvalue">Filtering homology links by BLAST e-value</a>
+			</li>
+			<li>
+				<a href="#featureLabelDisplay">Manual override of feature and label display</a>
+			</li>
+			<li>
+				<a href="#exportView">Exporting the current view as an image</a>
+			</li>
+		</ul>
 
 		<!-- --------------------------------------------- -->
 		<h4>
@@ -48,6 +57,7 @@
 		move the genome on the main canvas up and down. It also lets the user see at a glance which chromosome of the genome
 		is currently showing on the main canvas.
 		<br>
+		<br>
 		<a href="#top">Back to top</a>
 
 		<!-- --------------------------------------------- -->
@@ -60,6 +70,7 @@
 		toggles distance markers on the chromosomes on and off (for all genomes). Please note that even when these are toggled
 		to ‘on’ they will only show when a zoom level has been reached where a chromosome just fills the screen.
 		<br>
+		<br>
 		<a href="#top">Back to top</a>
 
 		<!-- --------------------------------------------- -->
@@ -70,6 +81,7 @@
 		The links shape button
 		<img src="../images/curves.png">
 		lets the user toggle between curved, straight and angled link shapes (in ascending, then descending order).
+		<br>
 		<br>
 		<a href="#top">Back to top</a>
 
@@ -84,6 +96,7 @@
 		<img src="../images/linkfilter.png">
 		on the toolbar which toggles this filter on and off.
 		<br>
+		<br>
 		<a href="#top">Back to top</a>
 
 
@@ -97,6 +110,7 @@
 		which they will not be shown. Links will be filtered synchronously as the spinner value is changed with the up and
 		down arrows or by entering a new value and pressing Enter.
 		<br>
+		<br>
 		<a href="#top">Back to top</a>
 
 
@@ -105,14 +119,14 @@
 			Manual override of feature and label display:
 			<a name="featureLabelDisplay"></a>
 		</h4>
-		In order to control clutter on screen Strudel automatically controls when it displays features and feature labels.
-		This behaviour can be overridden by the user with the help of controls that are specific to each genome. These are
-		found next to the zoom controls at the bottom of the main canvas and, when selected, force the permanent display of
-		features
-		<img src="../images/showmarkers.png">
-		and labels
-		<img src="../images/showlabels.png">
-		respectively.
+		In order to control clutter on screen Strudel automatically controls when it displays features.
+		This behaviour can be overridden by the user with the help of the show all markers button <img src="../images/showmarkers.png"> 
+		which is specific to each genome and is found next to the zoom controls at the bottom of the main canvas. When selected, this button 
+		forces the permanent display of features at all times. 
+		<p>To force the continuous display of all feature labels, right click over a chromosome and select the "Show all labels" item 
+		from the context menu. This toggles the display of all labels for this chromosome on and off. Only one chromosome per genome can 
+		be selected for this at any one time. 
+		<br>
 		<br>
 		<a href="#top">Back to top</a>
 
@@ -126,6 +140,7 @@
 		<img src="../images/exportimage.png">
 		button on the toolbar and a save image dialog will appear. Choose a file name and location and click the Save button
 		in the dialog.
+		<br>
 		<br>
 		<a href="#top">Back to top</a>
 

@@ -39,6 +39,9 @@ public class DataLoadThread extends Thread
 				else
 					Strudel.winMain.reinitialiseDependentComponents();
 
+				//display the name of the current dataset in the window title bar
+				Strudel.winMain.setTitle(inputFile.getName() + " -- Strudel " + Install4j.VERSION);
+
 				// check if we need to enable some functionality -- depends on the number of genomes loaded
 				// cannot do comparative stuff if user one loaded one (target) genome
 				if (Strudel.winMain.dataContainer.gMapSets.size() == 1)
@@ -69,6 +72,9 @@ public class DataLoadThread extends Thread
 
 				// hide the start panel if it is still showing
 				Strudel.winMain.showStartPanel(false);
+
+				//clear the results table, in case we already had data loaded
+				Strudel.winMain.fatController.clearResultsTable();
 
 				// revalidate the GUI
 				Strudel.winMain.validate();

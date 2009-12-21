@@ -122,7 +122,7 @@ public class Strudel
 
 					//if the version has been updated, go to the website and get the update info
 					if (Install4j.displayUpdate)
-						Utils.visitURL(Constants.strudelHomePage + "whatsnew.shtml");
+						Utils.visitURL(Constants.strudelWhatsNewPage);
 				}
 
 			});

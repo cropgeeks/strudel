@@ -20,14 +20,14 @@
 			Data format/Loading data
 		</h2>
 
-		<p>
-			<a href="#dataFormat">Input data format</a>
-			<br>
-			<a href="#openingFiles">Opening files</a>
-			<br>
-			<a href="#exampleData">Example data</a>
+		<ul>
+			<li><a href="#dataFormat">Input data format</a></li>
+			<li><a href="#layout">Ordering of genomes</a></li>
+			<li><a href="#openingFiles">Opening files</a></li>
+			<li><a href="#exampleData">Example data</a></li>
+		</ul>
 
-		</p>
+
 
 		<!-- --------------------------------------------- -->
 		<h4>
@@ -59,7 +59,7 @@
 			</li>
 		</ul>
 
-		A simple example is available <a href="strudelFileFormatExample.txt">here</a>.
+		A simple <b><a href="strudelFileFormatExample.txt">example is available here</a>.</b>
 		<p>
 			A feature entry contains the following columns:
 		</p>
@@ -95,6 +95,20 @@
 		</p>
 
 		<a href="#top">Back to top</a>
+		
+		<!-- --------------------------------------------- -->
+		<h4>
+			Ordering of genomes:
+			<a name="layout"></a>
+		</h4>
+
+		<p>
+		Strudel will layout the genomes on canvas from left to right to right according to the order in which it encounters new genomes in the features 
+		section of the input data. In order to avoid lines being drawn across genomes, Strudel will only display homologies between adjacent genomes. 
+		We are currently working on extensions that will allow multiple instances of a genome to be displayed simultaneously to allow 
+		multi-way comparisons.
+</p>
+		<a href="#top">Back to top</a>
 
 
 		<!-- --------------------------------------------- -->
@@ -107,11 +121,13 @@
 		button on the toolbar.
 		<p>
 			In the Load Data dialog shown below, click on "Load own data files" and then browse for the appropriate files as
-			required.
+			required. 
 		</p>
 		<p>
 			<img class="capture" src="../images/dataLoadDialog.png" alt="Load Data Dialog">
 		</p>
+		<p>
+		You can also drag and drop files onto the Strudel canvas to open them.</p>
 		<a href="#top">Back to top</a>
 
 		<!-- --------------------------------------------- -->
@@ -123,11 +139,8 @@
 		An example data set is also provided with Strudel. This can be loaded by clicking the "Load Data" button on the
 		toolbar, and then accepting the default option on the Load Data dialog. Currently this consists of a comparison of the
 		genomes of
-		<i>Brachypodium distachyon</i>, barley (
-		<i>Hordeum vulgare</i>) and rice (
-		<i>Oryza sativa</i>). Click the info button
-		<img src="../images/info.png">
-		on the toolbar, then the "Example Data Sets" tab to see more detail.
+		<i>Brachypodium distachyon</i>, barley (<i>Hordeum vulgare</i>) and rice (<i>Oryza sativa</i>). Click the info button
+		<img src="../images/info.png"> on the toolbar, then the "Example Data Sets" tab to see more detail.
 		<p>
 			<a href="#top">Back to top</a>
 		</p>

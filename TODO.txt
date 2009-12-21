@@ -103,8 +103,7 @@ REFACTORING:
 
 BUGS to fix:
 
-- need colour for chromosome that is selected and inverted
-- need to clear results when new data is being loaded and results table is still up
+
 
 
 

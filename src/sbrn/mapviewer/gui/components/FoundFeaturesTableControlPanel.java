@@ -70,7 +70,7 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 			}
 		});
 
-		showHomologsCheckbox.setText("Show all links");
+		showHomologsCheckbox.setText("Show all homologies");
 		showHomologsCheckbox.addChangeListener(new javax.swing.event.ChangeListener()
 		{
 			public void stateChanged(javax.swing.event.ChangeEvent evt)

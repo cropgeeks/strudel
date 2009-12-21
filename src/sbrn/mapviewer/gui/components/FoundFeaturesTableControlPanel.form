@@ -133,7 +133,7 @@
     </Component>
     <Component class="javax.swing.JCheckBox" name="showHomologsCheckbox">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Show all links"/>
+        <Property name="text" type="java.lang.String" value="Show all homologies"/>
       </Properties>
       <Events>
         <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="showHomologsCheckboxStateChanged"/>

@@ -14,12 +14,12 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="targetDataInfoLabel" alignment="0" pref="119" max="32767" attributes="0"/>
-                  <Component id="refGen1InfoLabel" alignment="0" pref="119" max="32767" attributes="0"/>
-                  <Component id="refGen2InfoLabel" alignment="0" pref="119" max="32767" attributes="0"/>
+                  <Component id="genome1InfoLabel" alignment="0" pref="119" max="32767" attributes="0"/>
+                  <Component id="genome2InfoLabel" alignment="0" pref="119" max="32767" attributes="0"/>
+                  <Component id="genome3InfoLabel" alignment="0" pref="119" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -29,28 +29,28 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="targetDataInfoLabel" min="-2" max="-2" attributes="0"/>
+              <Component id="genome1InfoLabel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="refGen1InfoLabel" min="-2" max="-2" attributes="0"/>
+              <Component id="genome2InfoLabel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="refGen2InfoLabel" min="-2" max="-2" attributes="0"/>
+              <Component id="genome3InfoLabel" min="-2" max="-2" attributes="0"/>
               <EmptySpace pref="49" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JLabel" name="targetDataInfoLabel">
+    <Component class="javax.swing.JLabel" name="genome1InfoLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="jLabel1"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="refGen1InfoLabel">
+    <Component class="javax.swing.JLabel" name="genome2InfoLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="jLabel1"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="refGen2InfoLabel">
+    <Component class="javax.swing.JLabel" name="genome3InfoLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="jLabel1"/>
       </Properties>

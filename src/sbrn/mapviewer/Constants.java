@@ -25,9 +25,9 @@ public class Constants
 	public static final String exampleDataAllInOne = "data/BarleyRiceBrachySingleLineFormat.strudel";
 
 	//example data descriptions
-	public static final String exampleTargetDataDescription = "Barley Illumina SNPS consensus map UCR_20080416-2 (Close et al.); to be published";
-	public static final String exampleRefGenome1Description  = "Brachypodium distachyon 8x genome sequence, see http://www.brachypodium.org/";
-	public static final String exampleRefGenome2Description  = "Release 6 of the Rice Pseudomolecules and Genome Annotation, MSU Rice Genome Annotation Project, see http://rice.plantbiology.msu.edu/";
+	public static final String exampleGenome1Description  = "Brachypodium distachyon 8x genome sequence; http://www.brachypodium.org/";
+	public static final String exampleGenome2Description = "Barley Illumina SNPS consensus map UCR_20080416-2 (Close et al.); http://www.biomedcentral.com/1471-2164/10/582/abstract";
+	public static final String exampleGenome3Description  = "Release 6 of the Rice Pseudomolecules and Genome Annotation, MSU Rice Genome Annotation Project; http://rice.plantbiology.msu.edu/";
 
 	//URLs for annotation info for the reference example files we provide with the app
 	public static final String exampleTargetGenomeBaseURL = "http://penguin.scri.ac.uk/paul/germinate/germinate_development/app/flapjack/flapjack_search/search.pl?marker=";
@@ -39,7 +39,9 @@ public class Constants
 	public static final String strudelManualPage = "http://bioinf.scri.ac.uk/strudel/help/quickstart.shtml";
 	public static final String strudelQuickStartPage = "http://bioinf.scri.ac.uk/strudel/help/quickstart.shtml";
 	public static final String strudelPublicationsPage = "http://bioinf.scri.ac.uk/strudel/publications.shtml";
+	public static final String strudelWhatsNewPage = "http://bioinf.scri.ac.uk/strudel/help/whatsnew.shtml";
 	public static final String scriHTML = "http://www.scri.ac.uk";
+
 	//these are the individual help links that are listed on the front page
 	public static final String [] helpLabels = new String[]{"Data format and data loading", "General Controls", "View Settings", "Feature Exploration"};
 	public static final String manual0 = "http://bioinf.scri.ac.uk/strudel/help/data.shtml";

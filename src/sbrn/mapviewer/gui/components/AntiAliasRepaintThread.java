@@ -15,7 +15,7 @@ public class AntiAliasRepaintThread extends Thread
 	private Boolean killMe = false;
 	private static AntiAliasRepaintThread previousThread;
 
-	int delay = 500;
+	int delay = 750;
 
 	public AntiAliasRepaintThread(BufferedImage buffer)
 	{

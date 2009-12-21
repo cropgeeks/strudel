@@ -59,7 +59,7 @@ public class GChromoMap
 	//a boolean indicating whether we want to draw the highlighted features or not
 	public boolean drawMouseOverFeatures = false;
 
-	// do we have to draw a highlighted outline for this map
+	// do we have to highlight this map (currently done by changing its colour)
 	public boolean highlight = false;
 
 	//this gets set to true when we have selected a set of features for which we want annotation info to
@@ -135,8 +135,12 @@ public class GChromoMap
 			Graphics2D g2 = (Graphics2D) g;
 
 			//determine the fill colour first
-			if(isPartlyInverted)
+			if(isPartlyInverted || isFullyInverted)
+			{
 				colour = Colors.chromosomeInversionColour;
+				if(highlight)
+					colour = Colors.invertedChromosomeHighlightColour;
+			}
 			else if(highlight)
 				colour = Colors.chromosomeHighlightColour;
 			else
@@ -407,13 +411,6 @@ public class GChromoMap
 		g2.setFont(overviewLabelFont);
 		g2.setColor(Colors.chromosomeIndexColour);
 		g2.drawString(name, width * 2, Math.round(height/2.0f) + Math.round(smallFontSize/2.0f));
-
-		if (highlight)
-		{
-			g2.setColor(Colors.outlineColour);
-			g2.drawRect(0, 0, width - 1, height);
-		}
-
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------------------------------

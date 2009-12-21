@@ -20,12 +20,11 @@
 			General controls
 		</h2>
 
-		<a href="#mouseControls">Mouse controls</a>
-		<br>
-		<a href="#resetButtons">Reset buttons</a>
-		<br>
-		<a href="#invertChromos">Inverting chromosomes</a>
-		<br>
+		<ul>
+		<li><a href="#mouseControls">Mouse controls</a></li>
+		<li><a href="#resetButtons">Reset buttons</a></li>
+		<li><a href="#invertChromos">Inverting chromosomes</a></li>
+		</ul>
 
 
 		</p>
@@ -44,6 +43,15 @@
 				</td>
 				<td class="outline">
 					Display all the homologies of this chromosome
+				</td>
+			</tr>			
+			
+			<tr>
+				<td class="outline">
+					Single-click chromosome with Ctrl down
+				</td>
+				<td class="outline">
+					Select this chromosome for link display (links -- if applicable -- show when two or more chromosomes selected)
 				</td>
 			</tr>
 
@@ -67,19 +75,10 @@
 
 			<tr>
 				<td class="outline">
-					Mouse drag with Shift down, then release
+					Hold down Shift and drag mouse, then release
 				</td>
 				<td class="outline">
 					Zoom in on region outlined by panning
-				</td>
-			</tr>
-
-			<tr>
-				<td class="outline">
-					Single-click chromosome with Ctrl down
-				</td>
-				<td class="outline">
-					Select this chromosome for link display (links -- if applicable -- show when two or more chromosomes selected)
 				</td>
 			</tr>
 
@@ -110,15 +109,6 @@
 				</td>
 			</tr>
 
-			<tr>
-				<td class="outline">
-					Ctrl-Shift and click and drag next to chromosome (then right-click over region)
-				</td>
-				<td class="outline">
-					Select region for display of all features 
-				</td>
-			</tr>
-
 		</table>
 
 
@@ -138,6 +128,7 @@
 		(i.e. without any links or results showing). The individual reset buttons next to the zoom sliders below the main
 		canvas reset the zoom only without removing results or links, and only do so for one genome at a time.
 		<br>
+		<br>
 		<a href="#top">Back to top</a>
 
 
@@ -149,6 +140,7 @@
 		In cases where there are large scale inversions, inverting a chromosome can be useful for providing a better view of
 		the synteny between a pair of chromosomes. To do this, right-click over the chromosome (with or without links
 		selected) and choose “Invert chromosome” from the context menu.
+		<br>
 		<br>
 		<a href="#top">Back to top</a>
 

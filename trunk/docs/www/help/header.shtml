@@ -24,15 +24,20 @@
 
 <div class="block-header">Strudel Manual</div>
 <ul class="navigation">
-  <li><a href="../index.shtml">Strudel Homepage</a></li>
-    <li><a href="quickstart.shtml">Quickstart tutorial</a></li>
+   <li><a href="quickstart.shtml">Quickstart tutorial</a></li>
   <li><a href="data.shtml">Data format/Loading data</a></li>
   <li><a href="controls.shtml">General controls</a></li>
   <li><a href="view.shtml">View settings</a></li>
   <li><a href="exploration.shtml">Feature exploration</a></li>
 </ul>
 
+<div class="block-header">Miscellaneous</div>
+<ul class="navigation">
+   <li><a href="whatsnew.shtml">What's new in Strudel</a></li>
+</ul>
 
 </div>
+
+
 
 <div id="content">

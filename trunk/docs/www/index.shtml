@@ -7,7 +7,7 @@
 
 <link rel="stylesheet" href="stylesheet/styles.css" type="text/css">
 
-<title>Strudel - Comparative Map Visualization</title>
+<title>Strudel - Comparative Map Viewer</title>
 
 </head>
 <body>
@@ -15,14 +15,13 @@
 <!--#include virtual="header.shtml" -->
 
 
-<h2>Strudel - Comparative Map Visualization</h2>
+<h2>Strudel - Comparative Map Viewer</h2>
 
-<p>Strudel is our new graphical tool for visualizing genetic and physical maps of genomes for comparative purposes.
+<p>Strudel is our graphical tool for visualizing genetic and physical maps of genomes for comparative purposes.
 The application aims to let the user examine their data at a variety of different levels of resolution, from entire maps to individual markers,
 and explore syntenic relationships between genomes.
 All browsing and interaction with Strudel happens in real-time - there is no need to wait while the maps are generated.
-It is built using Java 1.6 and is shipped with its own JRE, so there is no
-need for users to install or update Java.
+It is built using Java 1.6 and ships with its own JRE, so there is no need for users to install or update Java.
 </p>
 
 <img class="capture" src="images/screenshot3_small.png" alt="Strudel Screenshot">
@@ -33,11 +32,13 @@ its correct functioning. </p>
 <p>Features: </p>
 
 <ul>
-<li>Visualize multiple genomes and their homologies </li>
+<li>Visualize multiple genomes and thousands of homologies interactively and in real time</li>
+<li>Continuous zoom ranging from entire genome views to singles features</li>
 <li>Explore intervals such as QTLs and list annotation for features</li>
 <li>Search for features by name</li>
 <li>Filter homologies on display by BLAST e-value</li>
 <li>Single genome mode also supported</li>
+<li>Ships with example dataset to facilitate familiarization with the software</li>
 </ul>
 
 <!--#include virtual="footer.html" -->

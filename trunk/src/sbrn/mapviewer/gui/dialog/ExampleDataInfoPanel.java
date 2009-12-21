@@ -20,9 +20,9 @@ public class ExampleDataInfoPanel extends javax.swing.JPanel
 	{
 		initComponents();
 
-		targetDataInfoLabel.setText("<html><b>Target genome (middle):</b><br/>" + Constants.exampleTargetDataDescription + "</html>");
-		refGen1InfoLabel.setText("<html><b>Reference genome 1 (left):</b><br/>" + Constants.exampleRefGenome1Description + "</html>");
-		refGen2InfoLabel.setText("<html><b>Reference genome 2 (right):</b><br/>" + Constants.exampleRefGenome2Description + "</html>");
+		genome1InfoLabel.setText("<html><b>Genome 1 (left):</b><br/>" + Constants.exampleGenome1Description + "</html>");
+		genome2InfoLabel.setText("<html><b>Genome 2 (middle):</b><br/>" + Constants.exampleGenome2Description + "</html>");
+		genome3InfoLabel.setText("<html><b>Genome 3 (right):</b><br/>" + Constants.exampleGenome3Description + "</html>");
 
 	}
 
@@ -36,28 +36,28 @@ public class ExampleDataInfoPanel extends javax.swing.JPanel
 	private void initComponents()
 	{
 
-		targetDataInfoLabel = new javax.swing.JLabel();
-		refGen1InfoLabel = new javax.swing.JLabel();
-		refGen2InfoLabel = new javax.swing.JLabel();
+		genome1InfoLabel = new javax.swing.JLabel();
+		genome2InfoLabel = new javax.swing.JLabel();
+		genome3InfoLabel = new javax.swing.JLabel();
 
-		targetDataInfoLabel.setText("jLabel1");
+		genome1InfoLabel.setText("jLabel1");
 
-		refGen1InfoLabel.setText("jLabel1");
+		genome2InfoLabel.setText("jLabel1");
 
-		refGen2InfoLabel.setText("jLabel1");
+		genome3InfoLabel.setText("jLabel1");
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
 		this.setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(targetDataInfoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE).addComponent(refGen1InfoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE).addComponent(refGen2InfoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)).addContainerGap()));
-		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap().addComponent(targetDataInfoLabel).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(refGen1InfoLabel).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(refGen2InfoLabel).addContainerGap(49, Short.MAX_VALUE)));
+		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap().addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(genome1InfoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE).addComponent(genome2InfoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE).addComponent(genome3InfoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)).addContainerGap()));
+		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap().addComponent(genome1InfoLabel).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(genome2InfoLabel).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(genome3InfoLabel).addContainerGap(49, Short.MAX_VALUE)));
 	}// </editor-fold>
 	//GEN-END:initComponents
 
 	//GEN-BEGIN:variables
 	// Variables declaration - do not modify
-	private javax.swing.JLabel refGen1InfoLabel;
-	private javax.swing.JLabel refGen2InfoLabel;
-	private javax.swing.JLabel targetDataInfoLabel;
+	private javax.swing.JLabel genome1InfoLabel;
+	private javax.swing.JLabel genome2InfoLabel;
+	private javax.swing.JLabel genome3InfoLabel;
 	// End of variables declaration//GEN-END:variables
 
 }

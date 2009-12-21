@@ -38,7 +38,7 @@ public class DataContainer
 
 		for (MapSet mapset : allMapSets)
 		{
-			gMapSets.add(new GMapSet(Colors.referenceGenomeColour, mapset, gMapLookup));
+			gMapSets.add(new GMapSet(Colors.genomeColour, mapset, gMapLookup));
 		}
 
 		// other initing stuff

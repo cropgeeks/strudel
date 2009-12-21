@@ -6,11 +6,10 @@ public class Colors
 {
 
 	//genomes and chromosomes
-	public static Color targetGenomeColour = new Color(80,0,0);
-	public static Color referenceGenomeColour = new Color(0, 50, 155);
+	public static Color genomeColour = new Color(0, 50, 155);
 	public static Color outlineColour = Color.white;
-	public static Color chromosomeCenterColour = new Color(130, 130, 130);
-	public static Color chromosomeInversionColour = new Color(0,36,18);
+	public static Color chromosomeInversionColour = new Color(157,183,95);//faint green
+	public static Color invertedChromosomeHighlightColour = new Color(164,134,92);//faint brown
 	public static Color chromosomeHighlightColour = new Color(80,0,0);
 
 	//colours for links
@@ -34,7 +33,6 @@ public class Colors
 	public static Color distanceMarkerBackgroundColour = new Color(70,70,70);
 
 	//regions
-	public static Color highlightedFeatureRegionColour = new Color(30,0,0);
 	public static Color panZoomRectOutlineColour = Color.red;
 	public static Color panZoomRectFillColour = new Color(1f, 1f, 1f, 0.25f);
 	public static Color selectionRectOutlineColour = Color.green;
@@ -49,6 +47,5 @@ public class Colors
 	public static Color mainCanvasBackgroundColour = Color.black;
 	public static Color backgroundGradientStartColour = Color.black;
 	public static Color backgroundGradientEndColour = new Color(110, 110, 110);
-	public static Color mainCanvasBottomBorderColour = new Color(80, 80, 80);
 
 }

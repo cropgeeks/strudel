@@ -137,7 +137,7 @@ public class GChromoMap
 			//determine the fill colour first
 			if(isPartlyInverted || isFullyInverted)
 			{
-				colour = Colors.chromosomeInversionColour;
+				colour = Colors.invertedChromosomeColour;
 				if(highlight)
 					colour = Colors.invertedChromosomeHighlightColour;
 			}

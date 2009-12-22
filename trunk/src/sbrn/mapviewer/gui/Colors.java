@@ -6,11 +6,11 @@ public class Colors
 {
 
 	//genomes and chromosomes
-	public static Color genomeColour = new Color(0, 50, 155);
+	public static Color genomeColour = new Color(0, 50, 155);//blue
 	public static Color outlineColour = Color.white;
-	public static Color chromosomeInversionColour = new Color(157,183,95);//faint green
-	public static Color invertedChromosomeHighlightColour = new Color(164,134,92);//faint brown
-	public static Color chromosomeHighlightColour = new Color(80,0,0);
+	public static Color invertedChromosomeColour = new Color(0,36,18);//green
+	public static Color invertedChromosomeHighlightColour = new Color(0,59,43);//light green
+	public static Color chromosomeHighlightColour = new Color(80,0,0); // red
 
 	//colours for links
 	public static Color linkColour = new Color(120,120,120);

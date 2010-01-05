@@ -16,7 +16,7 @@ class NBStartPublicationPanel extends javax.swing.JPanel implements ActionListen
         initComponents();
 		setOpaque(false);
 
-		linkLabel.setText("Publication");
+		linkLabel.setText("Coming soon");
 
 		linkLabel.setIcon(Icons.getIcon("WEB"));
 		linkLabel.addActionListener(this);

@@ -124,7 +124,8 @@ public class HomologResultsTableModel extends AbstractTableModel
 			buf.append(tableEntry.getHomologFeatureStart() + "\t");
 			buf.append(tableEntry.getLinkEValue() + "\t");
 			if(tableEntry.getHomologFeatureAnnotation() != null)
-				buf.append(tableEntry.getHomologFeatureAnnotation() + "\n");
+				buf.append(tableEntry.getHomologFeatureAnnotation());
+			buf.append("\n");
 		}
 		return buf.toString();
 	}

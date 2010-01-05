@@ -51,7 +51,7 @@
 					Single-click chromosome with Ctrl down
 				</td>
 				<td class="outline">
-					Select this chromosome for link display (links -- if applicable -- show when two or more chromosomes selected)
+					Select this chromosome for homology display (links -- if applicable -- show when two or more chromosomes selected)
 				</td>
 			</tr>
 
@@ -60,13 +60,13 @@
 					Single-click background
 				</td>
 				<td class="outline">
-					Hide all links
+					Hide all homologies
 				</td>
 			</tr>
 
 			<tr>
 				<td class="outline">
-					Single-click chromosome with Alt down
+					Single-click chromosome with Alt down (Linux: Alt + Ctrl)
 				</td>
 				<td class="outline">
 					Expand chromosome to fill the screen vertically

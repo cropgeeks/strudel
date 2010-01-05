@@ -14,6 +14,13 @@
 
 <!--#include virtual="header.shtml" -->
 
+<h2>New in release 1.10.01.05:</h2>
+<ul>
+<li>NEW: Added an annotation URL for Brachypodium in the example dataset.</li>
+<li>CHG: Changed 'Publication' label on front page to 'Coming soon'.</li>
+<li>BUG: Export of results table data was misformatted.</li>
+</ul>
+
 
 <h2>New in release 0.09.12.21:</h2>
 <ul>

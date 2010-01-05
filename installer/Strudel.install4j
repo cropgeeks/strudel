@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="4.2.5" transformSequenceNumber="2">
+<install4j version="4.2.6" transformSequenceNumber="2">
   <directoryPresets config="../data/BarleyRiceBrachySingleLineFormat.strudel" />
   <application name="Strudel" distributionSourceDir="" applicationId="6538-8163-8628-9425" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" keepModificationTimes="false" missingFilesStrategy="warn" shortName="Strudel" publisher="SCRI" publisherWeb="http://www.scri.ac.uk" version="0.09.12.04" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.5" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
@@ -33,10 +33,10 @@
       <executable name="strudel" type="1" iconSet="true" iconFile="" executableDir="." redirectStderr="true" stderrFile="error.log" stderrMode="overwrite" redirectStdout="true" stdoutFile="output.log" stdoutMode="overwrite" failOnStderrOutput="true" executableMode="1" changeWorkingDirectory="true" workingDirectory="." singleInstance="false" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker" checkConsoleParameter="false">
         <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" productName="" />
       </executable>
-      <splashScreen show="true" autoOff="true" alwaysOnTop="false" width="0" height="0" bitmapFile="../res/images/splashscreen.png" java6SplashScreen="false">
+      <splashScreen show="false" autoOff="true" alwaysOnTop="false" width="431" height="300" bitmapFile="../res/images/splashscreen.png" java6SplashScreen="false">
         <text>
-          <statusLine x="20" y="20" text="" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
-          <versionLine x="20" y="40" text="" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
+          <statusLine x="19" y="23" text="${compiler:sys.fullName}" font="Arial" fontSize="8" fontColor="255,255,255" fontWeight="500" />
+          <versionLine x="21" y="267" text="${compiler:sys.version}" font="Arial" fontSize="8" fontColor="255,255,255" fontWeight="500" />
         </text>
       </splashScreen>
       <java mainClass="sbrn.mapviewer.Strudel" vmParameters="-Xmx512m" arguments="" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">

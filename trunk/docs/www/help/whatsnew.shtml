@@ -14,6 +14,10 @@
 
 <!--#include virtual="header.shtml" -->
 
+<h3>Please note: with effect from the official release date of Strudel (version 1.10.01.05 onwards) the Strudel data format has changed.
+ Earlier input files will no longer be compatible and you must reformat these to match the current format. See 
+ <a href="http://bioinf.scri.ac.uk/strudel/help/data.shtml">the manual</a> for instructions and examples.</h3>
+
 <h2>New in release 1.10.01.05:</h2>
 <ul>
 <li>NEW: Added an annotation URL for Brachypodium in the example dataset.</li>

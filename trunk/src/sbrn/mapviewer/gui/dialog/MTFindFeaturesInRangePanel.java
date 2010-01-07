@@ -10,6 +10,7 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import sbrn.mapviewer.*;
+import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.components.*;
 import sbrn.mapviewer.gui.entities.*;
@@ -34,9 +35,9 @@ public class MTFindFeaturesInRangePanel extends javax.swing.JPanel implements Ac
 	{
 		//set up the combo boxes with their data models
 		Vector<String> genomes = new Vector<String>();
-		for (GMapSet gMapSet : Strudel.winMain.dataContainer.gMapSets)
+		for (MapSet mapSet : Strudel.winMain.dataContainer.allMapSets)
 		{
-			genomes.add(gMapSet.name);
+			genomes.add(mapSet.getName());
 		}
 		genomeCombo.setModel(new DefaultComboBoxModel(genomes));
 		setUpInitialCombos();
@@ -67,7 +68,7 @@ public class MTFindFeaturesInRangePanel extends javax.swing.JPanel implements Ac
 		jLabel4.setText("Genome:");
 
 		genomeCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[]
-		{ "Item 1", "Item 2", "Item 3", "Item 4" }));
+		                                                                     { "Item 1", "Item 2", "Item 3", "Item 4" }));
 		genomeCombo.addActionListener(new java.awt.event.ActionListener()
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -79,7 +80,7 @@ public class MTFindFeaturesInRangePanel extends javax.swing.JPanel implements Ac
 		jLabel5.setText("Chromosome:");
 
 		chromoCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[]
-		{ "Item 1", "Item 2", "Item 3", "Item 4" }));
+		                                                                     { "Item 1", "Item 2", "Item 3", "Item 4" }));
 		chromoCombo.addActionListener(new java.awt.event.ActionListener()
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -181,11 +182,11 @@ public class MTFindFeaturesInRangePanel extends javax.swing.JPanel implements Ac
 	private void setUpChromoCombo(String genomeName)
 	{
 		//find the genome object and set the other combo to list its chromosomes
-		GMapSet gMapSet = Utils.getGMapSetByName(genomeName);
+		MapSet mapset = Utils.getMapSetByName(genomeName);
 		Vector<String> chromoNames = new Vector<String>();
-		for (GChromoMap gChromoMap : gMapSet.gMaps)
+		for(ChromoMap chromoMap : mapset.getMaps())
 		{
-			chromoNames.add(gChromoMap.name);
+			chromoNames.add(chromoMap.getName());
 		}
 		chromoCombo.setModel(new DefaultComboBoxModel(chromoNames));
 	}

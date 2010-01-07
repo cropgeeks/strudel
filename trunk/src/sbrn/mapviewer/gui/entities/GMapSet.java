@@ -74,9 +74,9 @@ public class GMapSet
 	//the one and only chromosome in this mapset for which we want to be displaying labels -- if requested -- at all times
 	public GChromoMap mapWithAllLabelsShowing;
 
-	// ====================================curve'tors========================================
+	// ====================================c'tor========================================
 
-	public GMapSet(Color mapSetColour, MapSet mapSet, Hashtable<ChromoMap, GChromoMap> gMapLookup)
+	public GMapSet(Color mapSetColour, MapSet mapSet)
 	{
 		this.colour = mapSetColour;
 		this.mapSet = mapSet;
@@ -84,13 +84,13 @@ public class GMapSet
 		numMaps = mapSet.size();
 
 		// init the list of maps contained in this genome
-		initialise(gMapLookup);
+		initialise();
 	}
 
 	// ========================================methods==================================
 
 	// init the list of maps contained in this genome
-	public void initialise(Hashtable<ChromoMap, GChromoMap> gMapLookup)
+	public void initialise()
 	{
 		gMaps = new Vector<GChromoMap>();
 
@@ -99,52 +99,8 @@ public class GMapSet
 			ChromoMap cMap = mapSet.getMaps().get(i);
 			GChromoMap gMap = new GChromoMap(colour, cMap.getName(), i, this);
 			gMaps.add(gMap);
-
-			gMapLookup.put(cMap, gMap);
 		}
 	}
-
-	// ---------------------------------------------------------------------------------------------------------------------------
-
-//	public void addSelectedMap(GChromoMap map)
-//	{
-//		if (!selectedMaps.contains(map))
-//		{
-//			selectedMaps.add(map);
-//			map.drawHighlightOutline = true;
-//		}
-//	}
-
-	// ---------------------------------------------------------------------------------------------------------------------------
-
-//	public void removeSelectedMap(GChromoMap map)
-//	{
-//		if (selectedMaps.contains(map))
-//		{
-//			selectedMaps.remove(map);
-//			map.drawHighlightOutline = false;
-//		}
-//	}
-
-	// ---------------------------------------------------------------------------------------------------------------------------
-
-//	public void selectAllMaps()
-//	{
-//		for (GChromoMap gMap : gMaps)
-//		{
-//			addSelectedMap(gMap);
-//		}
-//	}
-
-	// ---------------------------------------------------------------------------------------------------------------------------
-
-//	public void deselectAllMaps()
-//	{
-//		for (GChromoMap gMap : gMaps)
-//		{
-//			removeSelectedMap(gMap);
-//		}
-//	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
 

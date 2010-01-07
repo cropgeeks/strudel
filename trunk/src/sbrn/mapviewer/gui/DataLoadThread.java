@@ -30,7 +30,7 @@ public class DataLoadThread extends Thread
 				if(!success)
 					return;
 
-				//store the input file int he recent files list
+				//store the input file in the recent files list
 				Prefs.setRecentDocument(inputFile.getAbsolutePath());
 
 				// build the rest of the GUI as required

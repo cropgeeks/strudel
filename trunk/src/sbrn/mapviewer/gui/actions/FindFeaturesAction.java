@@ -13,6 +13,7 @@ public class FindFeaturesAction extends AbstractAction
 	{
 		//reset the main canvas
 		Strudel.winMain.fatController.resetMainCanvasView();
+		Strudel.winMain.fatController.findFeaturesRequested = true;
 
 		//clear the find dialog
 		Strudel.winMain.ffDialog.ffPanel.getFFTextArea().setText("");
@@ -21,8 +22,6 @@ public class FindFeaturesAction extends AbstractAction
 		Strudel.winMain.ffDialog.setLocationRelativeTo(Strudel.winMain);
 		Strudel.winMain.ffDialog.setVisible(true);
 		Strudel.winMain.ffDialog.ffPanel.getFFTextArea().requestFocusInWindow();
-
-
 	}
 
 }

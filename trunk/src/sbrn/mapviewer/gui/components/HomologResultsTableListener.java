@@ -6,6 +6,7 @@ import javax.swing.event.*;
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
+import sbrn.mapviewer.gui.entities.*;
 
 public class HomologResultsTableListener implements ListSelectionListener, MouseMotionListener, MouseListener
 {
@@ -41,6 +42,9 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 
 	public void mouseClicked(MouseEvent e)
 	{
+		//highlight the feature in the row we clicked on
+//		highlightFeature();
+
 		// check whether we are in any of the cells containing hyperlinks
 		point.setLocation(e.getX(), e.getY());
 		int col = resultsTable.columnAtPoint(point);
@@ -120,6 +124,9 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 
 private void highlightFeature()
 {
+	FatController fatController = Strudel.winMain.fatController;
+	MainCanvas mainCanvas = Strudel.winMain.mainCanvas;
+
 	HomologResultsTableModel homologResultsTableModel = (HomologResultsTableModel) resultsTable.getModel();
 	// get the index of the selected row but check for changes due to filtering
 	int modelRow = -1;
@@ -133,31 +140,58 @@ private void highlightFeature()
 	}
 	if (homologResultsTableModel.getColumnCount() > 0)
 	{
-		//retrieve the feature that was clicked on, and its gmapset
+		//retrieve the target feature
 		Feature targetFeature = homologResultsTableModel.tableEntries.get(modelRow).getTargetFeature();
 		//find out whether we have a homolog for this feature
 		Feature homolog = homologResultsTableModel.tableEntries.get(modelRow).getHomologFeature();
 
+		//find out the target and ref map
+		GChromoMap targetGMap = null;
+		GChromoMap refMap = null;
+		//if we got here because of a range selection event we need to use the selected map as the target map
+		if(!fatController.findFeaturesRequested)
+		{
+			targetGMap = Strudel.winMain.fatController.selectionMap;
+		}
+		//else we need to use the instance of target map that is closest to the reference map
+		else
+		{
+			targetGMap = targetFeature.getOwningMap().getGChromoMaps().get(0);
+		}
+
+		//either way we need to pick the ref map that is closest
+		if(homolog != null)
+		{
+			refMap = Utils.getClosestGMap(homolog.getOwningMap(), targetGMap);
+		}
+
 		//if we got here because we requested features through the find features by name dialog then we
 		//want to zoom out fully so we can see them in the broadest possible context
 		//if we got here through a range request we do nothing
-		if(Strudel.winMain.fatController.findFeaturesRequested)
+		if(fatController.findFeaturesRequested)
 		{
-			Strudel.winMain.mainCanvas.zoomHandler.processZoomResetRequest(targetFeature.getOwningMap().getGChromoMap().owningSet);
+			mainCanvas.zoomHandler.processZoomResetRequest(targetGMap.owningSet);
 			if(homolog != null)
-				Strudel.winMain.mainCanvas.zoomHandler.processZoomResetRequest(homolog.getOwningMap().getGChromoMap().owningSet);
+				mainCanvas.zoomHandler.processZoomResetRequest(refMap.owningSet);
 		}
 
 		// highlight the feature on the canvas
-		Strudel.winMain.fatController.highlightFeature = targetFeature;
+		fatController.highlightFeature = targetFeature;
+		fatController.highlightFeatGMap = targetGMap;
 		if(homolog != null)
-			Strudel.winMain.fatController.highlightFeatureHomolog = homolog;
+		{
+			fatController.highlightFeatureHomolog = homolog;
+			fatController.highlightFeatHomGMap = refMap;
+		}
 		else
-			Strudel.winMain.fatController.highlightFeatureHomolog = null;
-		Strudel.winMain.mainCanvas.drawHighlightFeatures = true;
+		{
+			fatController.highlightFeatureHomolog = null;
+			fatController.highlightFeatHomGMap = null;
+		}
+		mainCanvas.drawHighlightFeatures = true;
 
 		//update the canvas
-		Strudel.winMain.mainCanvas.updateCanvas(false);
+		mainCanvas.updateCanvas(false);
 	}
 }
 

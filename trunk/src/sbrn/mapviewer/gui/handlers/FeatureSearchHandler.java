@@ -26,7 +26,9 @@ public class FeatureSearchHandler
 		float intervalStart = ((Number)findFeaturesInRangeDialog.ffInRangePanel.getRangeStartSpinner().getValue()).floatValue();
 		float intervalEnd = ((Number)findFeaturesInRangeDialog.ffInRangePanel.getRangeEndSpinner().getValue()).floatValue();
 
-		findAndDisplayFeaturesInRange(genome, chromosome, intervalStart, intervalEnd, false);
+		GChromoMap gMap = Utils.getGMapByName(chromosome, genome);
+		Strudel.winMain.fatController.selectionMap = gMap;
+		findAndDisplayFeaturesInRange(gMap, intervalStart, intervalEnd, false);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -34,19 +36,16 @@ public class FeatureSearchHandler
 	public static void findFeaturesInRangeFromCanvasSelection()
 	{
 		Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(true);
-
 		GChromoMap gMap = Strudel.winMain.fatController.selectionMap;
-		findAndDisplayFeaturesInRange(gMap.owningSet.name, gMap.name, gMap.relativeTopY, gMap.relativeBottomY, true);
+		findAndDisplayFeaturesInRange(gMap, gMap.relativeTopY, gMap.relativeBottomY, true);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	private  static void findAndDisplayFeaturesInRange(String genome, String chromosome,float intervalStart, float intervalEnd, boolean isCanvasSelection)
+	private  static void findAndDisplayFeaturesInRange(GChromoMap gChromoMap, float intervalStart, float intervalEnd, boolean isCanvasSelection)
 	{
 		try
 		{
-			//get the chromo object
-			GChromoMap gChromoMap = Utils.getGMapByName(chromosome,genome);
 			ChromoMap chromoMap = gChromoMap.chromoMap;
 
 			//we need to check that we have not exceeded the maximum value of the positions on the chromosome
@@ -105,8 +104,8 @@ public class FeatureSearchHandler
 				//we also need to set the labels on the control panel for the results to have the appropriate text
 				FoundFeaturesTableControlPanel controlPanel = Strudel.winMain.foundFeaturesTableControlPanel;
 				controlPanel.setVisible(true);
-				controlPanel.getGenomeLabel().setText(genome);
-				controlPanel.getChromoLabel().setText(chromosome);
+				controlPanel.getGenomeLabel().setText(gChromoMap.owningSet.name);
+				controlPanel.getChromoLabel().setText(gChromoMap.name);
 				controlPanel.getRegionStartLabel().setText(new Float(intervalStart).toString());
 				controlPanel.getRegionEndLabel().setText(new Float(intervalEnd).toString());
 				controlPanel.getNumberFeaturesLabel().setText(new Integer(containedFeatures.size()).toString());
@@ -145,9 +144,6 @@ public class FeatureSearchHandler
 	{
 		try
 		{
-			//first reset the canvas to its default view
-			Strudel.winMain.fatController.resetMainCanvasView();
-
 			//this array holds all the names of the features we need to display
 			String [] allNames = new String[0];
 			String input =  findFeaturesDialog.ffPanel.getFFTextArea().getText();

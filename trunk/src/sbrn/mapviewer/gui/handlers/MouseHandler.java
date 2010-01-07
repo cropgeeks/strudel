@@ -194,14 +194,6 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			winMain.mainCanvas.zoomHandler.processPanZoomRequest(selectedMap, mousePressedY, e.getY(), true);
 		}
 
-		//simple click on a target genome chromosome means display all links between this and all the reference chromos
-		if ((!isMetaClick(e) && !e.isAltDown() && !e.isShiftDown()) || (isMetaClick(e) && !e.isShiftDown()))
-		{
-			//repaint
-			// TODO: AA check
-			winMain.mainCanvas.updateCanvas(true);
-		}
-
 		winMain.mainCanvas.drawSelectionRect = false;
 	}
 

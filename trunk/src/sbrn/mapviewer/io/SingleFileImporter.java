@@ -96,6 +96,7 @@ public class SingleFileImporter
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace();
 			String errorMessage = "Error reading line " + lineCount + ".\n" + e.getMessage();
 			throw  new IOException(errorMessage);
 		}
@@ -305,7 +306,8 @@ public class SingleFileImporter
 			String mapset1 = ls.getMapSets().get(0).getName();
 			String mapset2 = ls.getMapSets().get(1).getName();
 
-			if (mapset1.equalsIgnoreCase(genome1Name) && mapset2.equalsIgnoreCase(genome2Name))
+			if ((mapset1.equalsIgnoreCase(genome1Name) && mapset2.equalsIgnoreCase(genome2Name)) ||
+							(mapset1.equalsIgnoreCase(genome2Name) && mapset2.equalsIgnoreCase(genome1Name)))
 			{
 				linkSet = ls;
 			}

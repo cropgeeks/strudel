@@ -29,19 +29,14 @@ public class LabelDisplayManager
 		//the features we need to draw
 		Vector<Feature> features = FeatureSearchHandler.featuresInRange;
 
-		//all the features should be on the same map so we can just query the first element for its parent map
-		GChromoMap gChromoMap = features.get(0).getOwningMap().getGChromoMap();
-		Vector<GChromoMap> gMaps = new Vector<GChromoMap>();
-		gMaps.add(gChromoMap);
-
 		//only draw those features that are actually visible on canvas
-		drawFeatureLabelsInRange(g2, Utils.checkFeatureVisibility(features), false);
+		drawFeatureLabelsInRange(Strudel.winMain.fatController.selectionMap, g2, Utils.checkFeatureVisibility(Strudel.winMain.fatController.selectionMap, features), false);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------------------------
 
 	//this just draws a label for a single highlighted feature
-	public static void drawHighlightedFeatureLabel(Graphics2D g2, Feature f, Feature homolog)
+	public static void drawHighlightedFeatureLabel(Graphics2D g2, Feature f, Feature homolog, GChromoMap targetMap, GChromoMap refMap)
 	{
 		// the usual font stuff
 		g2.setFont(new Font("Sans-serif", Font.PLAIN, fontHeight));
@@ -53,20 +48,19 @@ public class LabelDisplayManager
 
 		// we need these for working out the y positions
 		ChromoMap chromoMap = f.getOwningMap();
-		GChromoMap gChromoMap = chromoMap.getGChromoMap();
 		float mapEnd = chromoMap.getStop();
 		// this factor normalises the position to a value between 0 and 100
-		float scalingFactor = gChromoMap.height / mapEnd;
+		float scalingFactor = targetMap.height / mapEnd;
 
 		// the y position of the feature itself
 		int featureY;
 		if (f.getStart() == 0.0f)
 		{
-			featureY = gChromoMap.y;
+			featureY = targetMap.y;
 		}
 		else
 		{
-			featureY = Math.round(gChromoMap.y + gChromoMap.currentY + (f.getStart() * scalingFactor));
+			featureY = Math.round(targetMap.y + targetMap.currentY + (f.getStart() * scalingFactor));
 		}
 
 		//the y position of the feature label
@@ -82,20 +76,20 @@ public class LabelDisplayManager
 
 		//if we have no homologs that we are drawing links to we can just place the label to the left of the chromo always
 		//it will not get in the way of anything there
-		lineStartX =  gChromoMap.x;
+		lineStartX =  targetMap.x;
 		lineEndX =  lineStartX - lineLength;
 		labelX = lineEndX - stringWidth;
 
 		//if we do have a homolog we need to work out where it is in relation to this feature and place the label out of the way of the link line
-		if(homolog != null)
+		if(homolog != null && refMap != null)
 		{
-			int targetGenomeIndex = Strudel.winMain.dataContainer.allMapSets.indexOf(f.getOwningMap().getOwningMapSet());
-			int referenceGenomeIndex = Strudel.winMain.dataContainer.allMapSets.indexOf(homolog.getOwningMap().getOwningMapSet());
+			int targetGenomeIndex = Strudel.winMain.dataContainer.gMapSets.indexOf(targetMap.owningSet);
+			int referenceGenomeIndex = Strudel.winMain.dataContainer.gMapSets.indexOf(refMap.owningSet);
 
 			if(targetGenomeIndex > referenceGenomeIndex)
 			{
 				//place label to the right of the chromo
-				lineStartX =  gChromoMap.x + gChromoMap.width;
+				lineStartX =  targetMap.x + targetMap.width;
 				lineEndX =  lineStartX + lineLength;
 				labelX = lineEndX;
 			}
@@ -124,14 +118,14 @@ public class LabelDisplayManager
 		g2.setColor(Colors.highlightedFeatureColour);
 
 		// draw a line for the marker on the chromosome itself
-		g2.drawLine(gChromoMap.x -1, featureY, gChromoMap.x + gChromoMap.width +1, featureY);
+		g2.drawLine(targetMap.x -1, featureY, targetMap.x + targetMap.width +1, featureY);
 
 	}
 
 	//	------------------------------------------------------------------------------------------------------------------------------------
 
 	// draws labels next to found features in a specified range only
-	public static void drawFeatureLabelsInRange(Graphics2D g2, List<Feature> features, boolean isMouseOver)
+	public static void drawFeatureLabelsInRange(GChromoMap gMap, Graphics2D g2, List<Feature> features, boolean isMouseOver)
 	{
 		try
 		{
@@ -141,9 +135,7 @@ public class LabelDisplayManager
 			//first work out the features' y positions
 			//we need to create a LinkedHashMap with the default positons
 			//these will all be at the featureY of the Feature
-			HashMap<Feature, Integer> featurePositions = calculateFeaturePositions(features);
-
-			//System.out.println("=======drawing num labels = "+ featurePositions.size());
+			HashMap<Feature, Integer> featurePositions = calculateFeaturePositions(gMap, features);
 
 			//now work out the actual positions after correction for collision of labels
 			HashMap<Feature, Integer> laidoutPositions = calculateLabelPositions(features, featurePositions);
@@ -161,7 +153,7 @@ public class LabelDisplayManager
 					int featureY = featurePositions.get(f);
 
 					// next decide where to place the label on x
-					int mapSetX = Math.round(f.getOwningMap().getGChromoMap().owningSet.xPosition);
+					int mapSetX = Math.round(gMap.owningSet.xPosition);
 					int chromoWidth = Strudel.winMain.mainCanvas.chromoWidth;
 					// the amount by which we want to move the label end away from the chromosome (in pixels)
 					int lineLength = 50;
@@ -279,7 +271,7 @@ public class LabelDisplayManager
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	//works out the feature positions for a set of features
-	private static HashMap<Feature, Integer> calculateFeaturePositions(List<Feature> features)
+	private static HashMap<Feature, Integer> calculateFeaturePositions(GChromoMap gChromoMap, List<Feature> features)
 	{
 		HashMap<Feature, Integer> featurePositions = new HashMap<Feature, Integer>();
 
@@ -289,7 +281,6 @@ public class LabelDisplayManager
 			{
 				// we need these for working out the y positions
 				ChromoMap chromoMap = f.getOwningMap();
-				GChromoMap gChromoMap = chromoMap.getGChromoMap();
 				float mapEnd = chromoMap.getStop();
 				// this factor normalises the position to a value between 0 and 100
 				float scalingFactor = gChromoMap.height / mapEnd;
@@ -300,7 +291,6 @@ public class LabelDisplayManager
 					if (gChromoMap.isPartlyInverted || gChromoMap.isFullyInverted)
 					{
 						featureY = gChromoMap.y + gChromoMap.height;
-						//System.out.println("feature start at 0 and map inverted");
 					}
 					else
 					{
@@ -335,7 +325,7 @@ public class LabelDisplayManager
 	{
 		GChromoMap gMap = gMapSet.mapWithAllLabelsShowing;
 
-		//make a separate vector object with all the lniked features for this chromo
+		//make a separate vector object with all the linked features for this chromo
 		Vector<Feature> vec = new Vector<Feature>();
 		for (int i = 0; i < gMap.allLinkedFeatures.length; i++)
 		{
@@ -343,16 +333,16 @@ public class LabelDisplayManager
 		}
 
 		//check whether all these features are showing
-		vec = Utils.checkFeatureVisibility(vec);
+		vec = Utils.checkFeatureVisibility(gMap, vec);
 
-		//reverse the order of the feature
+		//reverse the order of the features if the map is inverted
 		if((gMap.isFullyInverted || gMap.isPartlyInverted))
 		{
 			Collections.reverse(vec);
 		}
 
 		//now draw the labels
-		drawFeatureLabelsInRange(g2, vec, false);
+		drawFeatureLabelsInRange(gMap, g2, vec, false);
 	}
 
 

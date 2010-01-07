@@ -27,11 +27,6 @@ public class MainCanvas extends JPanel
 	// do we need to draw links?
 	public boolean drawLinks = false;
 
-	//in addition we have a flag set by the user (through a button) -- userPrefAntialias
-	//stored in the Prefs
-	//this overrides the local flag if it is set to false
-	//otherwise we ignore it
-
 	// if true, paint a rectangle to indicate the fact that we are panning over a region we want to select for zooming in to
 	public boolean drawSelectionRect = false;
 	//these are the relevant coordinates for this
@@ -62,6 +57,7 @@ public class MainCanvas extends JPanel
 	//true if we want to display features within a certain range the user has searched for with the find dialog
 	public boolean drawFoundFeaturesInRange = false;
 
+	// a minimum space (in pixels) we want to leave at the top and the bottom of the tallest genome
 	public int topBottomSpacer = 0;
 
 	// width of chromosomes -- set this to a fixed fraction of the screen width for now
@@ -173,16 +169,21 @@ public class MainCanvas extends JPanel
 		{
 			if(winMain.fatController.highlightFeatureHomolog != null)
 			{
-				LabelDisplayManager.drawHighlightedFeatureLabel(g, winMain.fatController.highlightFeatureHomolog, winMain.fatController.highlightFeature);
-				LabelDisplayManager.drawHighlightedFeatureLabel(g, winMain.fatController.highlightFeature,winMain.fatController.highlightFeatureHomolog);
+				//label for the target feature
+				LabelDisplayManager.drawHighlightedFeatureLabel(g, winMain.fatController.highlightFeature,
+								winMain.fatController.highlightFeatureHomolog, winMain.fatController.highlightFeatGMap, winMain.fatController.highlightFeatHomGMap);
+				//label for the homolog
+				LabelDisplayManager.drawHighlightedFeatureLabel(g, winMain.fatController.highlightFeatureHomolog,
+								winMain.fatController.highlightFeature, winMain.fatController.highlightFeatHomGMap, winMain.fatController.highlightFeatGMap);
 
 				//we also want to check whether there are any links to display that are to be highlighted after a name based search for
 				//features and links originating from them
-				linkDisplayManager.drawHighlightedLink(g, winMain.fatController.highlightFeature, winMain.fatController.highlightFeatureHomolog, true);
+				linkDisplayManager.drawHighlightedLink(g, winMain.fatController.highlightFeature, winMain.fatController.highlightFeatureHomolog, true,
+								winMain.fatController.highlightFeatGMap, winMain.fatController.highlightFeatHomGMap);
 			}
 			else
 			{
-				LabelDisplayManager.drawHighlightedFeatureLabel(g, winMain.fatController.highlightFeature, null);
+				LabelDisplayManager.drawHighlightedFeatureLabel(g, winMain.fatController.highlightFeature, null, winMain.fatController.highlightFeatGMap, null);
 			}
 		}
 	}
@@ -217,7 +218,7 @@ public class MainCanvas extends JPanel
 		if (!evenNumber)
 			chromoWidth += 1;
 
-		//for all maps sets
+		//for all mapsets
 		for (GMapSet gMapSet : winMain.dataContainer.gMapSets)
 		{
 			if (killMe) return;
@@ -336,12 +337,12 @@ public class MainCanvas extends JPanel
 			}
 		}
 
-//		//we also want to check whether there are any links to display that are to be highlighted after a name based search for
-//		//features and links originating from them
-//		if (!killMe && drawHighlightFeatures && winMain.fatController.highlightFeatureHomolog != null && Strudel.winMain.dataContainer.gMapSets.size() > 1)
-//		{
-//			linkDisplayManager.drawHighlightedLink(g2, winMain.fatController.highlightFeature, winMain.fatController.highlightFeatureHomolog, true);
-//		}
+		//we also want to check whether there are any links to display that are to be highlighted after a name based search for
+		//features and links originating from them
+		if (!killMe && drawHighlightFeatures && winMain.fatController.highlightFeatureHomolog != null && Strudel.winMain.dataContainer.gMapSets.size() > 1)
+		{
+			linkDisplayManager.drawHighlightedLink(g2, winMain.fatController.highlightFeature, winMain.fatController.highlightFeatureHomolog, true, winMain.fatController.highlightFeatGMap, winMain.fatController.highlightFeatHomGMap);
+		}
 
 		//this draws labels of features in a contiguous range on a chromosome
 		//need to do this in this order so things are drawn on top of each other in the right sequence

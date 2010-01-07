@@ -19,7 +19,7 @@ public class ChromoMap implements Iterable<Feature>
 	private MapSet owner;
 
 	//the graphical object representing this map
-	private GChromoMap gChromoMap;
+	private LinkedList<GChromoMap> gChromoMaps = new LinkedList<GChromoMap>();
 
 	private final Vector<Feature> features = new Vector<Feature>();
 	private final Hashtable<String,Feature> nameLookup = new Hashtable<String,Feature>();
@@ -168,14 +168,19 @@ public class ChromoMap implements Iterable<Feature>
 		return this.features;
 	}
 
-	public GChromoMap getGChromoMap()
+	public LinkedList<GChromoMap> getGChromoMaps()
 	{
-		return gChromoMap;
+		return gChromoMaps;
 	}
 
-	public void setGChromoMap(GChromoMap chromoMap)
+	public void addGChromoMap(GChromoMap gChromoMap)
 	{
-		gChromoMap = chromoMap;
+		gChromoMaps.add(gChromoMap);
+	}
+
+	public void clearCurrentGChromoMaps()
+	{
+		gChromoMaps = new LinkedList<GChromoMap>();
 	}
 
 }

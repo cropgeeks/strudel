@@ -21,35 +21,6 @@ public class Utils
 
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	//returns the y coordinate of a feature in genome space rather than canvas space
-	//genome space = the extent of the genome as calculated by the application (can be greater than the visible canvas height)
-	public static int getFeatureYInGenomeSpace(Feature f)
-	{
-		int featureYInGenomeSpace = -1;
-
-		//the gmap the feature is on
-		GChromoMap gChromoMap = f.getOwningMap().getGChromoMap();
-
-		//the index of the chromo in the genome -- starts at 0
-		int chromoIndex = gChromoMap.index;
-
-		//the combined height of all chromosomes up to and excluding the one the feature is on
-		int combinedChromoHeight = (chromoIndex-1) * gChromoMap.height;
-
-		//the combined height of all spaces between chromos up to the one the feature is on
-		int combinedSpacerHeight = (chromoIndex-1) * Strudel.winMain.mainCanvas.chromoSpacing;
-
-		//the offset of the feature position from the top of the chromosome
-		int featureOffset = Math.round((f.getStart() / f.getOwningMap().getStop()) * gChromoMap.height);
-
-		//add it all up
-		featureYInGenomeSpace = combinedChromoHeight  + combinedSpacerHeight + featureOffset;
-
-		return featureYInGenomeSpace;
-	}
-
-	// --------------------------------------------------------------------------------------------------------------------------------------------------------
-
 	//finds a genome by name
 	public static MapSet getMapSetByName(String name, LinkedList<MapSet> mapsetList)
 	{
@@ -85,35 +56,46 @@ public class Utils
 
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	//finds a GMapSet by name
-	public static GMapSet getGMapSetByName(String name)
+	//finds all instances of a  GMapSet by name
+	public static LinkedList<GMapSet> getGMapSetsByName(String name)
 	{
-		GMapSet foundSet = null;
+		LinkedList<GMapSet> foundSets = null;
 
 		//we need to search all chromomaps in all mapsets for this
 		// for all gmapsets
 		for (GMapSet gMapSet : Strudel.winMain.dataContainer.gMapSets)
 		{
 			if(gMapSet.name.equals(name))
-				foundSet = gMapSet;
+			{
+				foundSets.add(gMapSet);
+			}
 		}
 
-		return foundSet	;
+		return foundSets;
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	//finds a map by name
+	//finds a map by name; if there are multiple instrances of the gmapset the map belongs to, this will return
+	//the first one
 	public static GChromoMap getGMapByName(String gMapName, String gMapSetName)
 	{
 		GChromoMap foundMap = null;
 
 		//we need to search all chromomaps in all mapsets for this
+		GMapSet foundSet = null;
 		// for all gmapsets
-		GMapSet gMapSet =  getGMapSetByName(gMapSetName);
+		for (GMapSet gMapSet : Strudel.winMain.dataContainer.gMapSets)
+		{
+			if(gMapSet.name.equals(gMapSetName))
+			{
+				foundSet = gMapSet;
+				break;
+			}
+		}
 
 		// for all gchromomaps within each mapset
-		for (GChromoMap gChromoMap : gMapSet.gMaps)
+		for (GChromoMap gChromoMap : foundSet.gMaps)
 		{
 			if(gChromoMap.name.equals(gMapName))
 				foundMap = gChromoMap;
@@ -509,9 +491,9 @@ public class Utils
 
 	// --------------------------------------------------------------------------------------------------------------------------------
 
-	public static int getFPosOnScreenInPixels(ChromoMap chromoMap, float fPos, boolean inverted)
+	public static int getFPosOnScreenInPixels(GChromoMap gMap, float fPos, boolean inverted)
 	{
-		GChromoMap gMap = chromoMap.getGChromoMap();
+		ChromoMap chromoMap = gMap.chromoMap;
 		int fDist = Math.round((gMap.height / chromoMap.getStop()) * fPos);
 		int fPosOnScreen =  fDist + gMap.yOnCanvas + gMap.currentY;
 
@@ -524,7 +506,7 @@ public class Utils
 
 	// --------------------------------------------------------------------------------------------------------------------------------
 
-	public static Vector<Feature> checkFeatureVisibility(Vector<Feature> features)
+	public static Vector<Feature> checkFeatureVisibility(GChromoMap gMap, Vector<Feature> features)
 	{
 		Vector<Feature> visibleFeatures = new Vector<Feature>();
 
@@ -534,28 +516,55 @@ public class Utils
 			if (feature != null)
 			{
 				//get the owning map and gMap
-				ChromoMap cMap = feature.getOwningMap();
-				GChromoMap gMap = cMap.getGChromoMap();
+				ChromoMap cMap = gMap.chromoMap;
 
 				//get the relative position on the map
 				float fStart = feature.getStart();
 				//convert this to an absolute position on the canvas in pixels
 				int pixelPos = -1;
 				if(!gMap.isFullyInverted || !gMap.isPartlyInverted)
-					pixelPos = getFPosOnScreenInPixels(cMap, fStart, false);
+					pixelPos = getFPosOnScreenInPixels(gMap, fStart, false);
 				else
-					pixelPos = getFPosOnScreenInPixels(cMap, fStart, true);
+					pixelPos = getFPosOnScreenInPixels(gMap, fStart, true);
 
-					//check whether this position is currently showing on the canvas or not
-					if (pixelPos > 0 && pixelPos < Strudel.winMain.mainCanvas.getHeight())
-					{
-						//if it is, add it
-						visibleFeatures.add(feature);
-					}
+				//check whether this position is currently showing on the canvas or not
+				if (pixelPos > 0 && pixelPos < Strudel.winMain.mainCanvas.getHeight())
+				{
+					//if it is, add it
+					visibleFeatures.add(feature);
+				}
 			}
 		}
 
 		return visibleFeatures;
+	}
+
+	// --------------------------------------------------------------------------------------------------------------------------------
+
+	public static boolean checkFeatureVisibility(GChromoMap gMap, Feature feature)
+	{
+		boolean featureIsVisible = false;
+
+		if (feature != null)
+		{
+			//get the relative position on the map
+			float fStart = feature.getStart();
+			//convert this to an absolute position on the canvas in pixels
+			int pixelPos = -1;
+			if(!gMap.isFullyInverted || !gMap.isPartlyInverted)
+				pixelPos = getFPosOnScreenInPixels(gMap, fStart, false);
+			else
+				pixelPos = getFPosOnScreenInPixels(gMap, fStart, true);
+
+			//check whether this position is currently showing on the canvas or not
+			if (pixelPos > 0 && pixelPos < Strudel.winMain.mainCanvas.getHeight())
+			{
+				featureIsVisible = true;
+			}
+
+		}
+
+		return featureIsVisible;
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -602,6 +611,47 @@ public class Utils
 	}
 
 
+	// --------------------------------------------------------------------------------------------------------------------------------
+
+	//returns the closest instance of a GChromoMap of the genome represented by ChromoMap refMap,
+	//relative to GChromoMap targetGMap
+	public static GChromoMap getClosestGMap(ChromoMap refMap, GChromoMap targetGMap)
+	{
+		GChromoMap closestMap = null;
+
+		int targetIndex = Strudel.winMain.dataContainer.gMapSets.indexOf(targetGMap.owningSet);
+		int leastDistance = Integer.MAX_VALUE;
+
+		for(GChromoMap refGMap : refMap.getGChromoMaps())
+		{
+			int refIndex = Strudel.winMain.dataContainer.gMapSets.indexOf(refGMap.owningSet);
+			int dist = Math.abs(refIndex - targetIndex);
+
+			if(dist < leastDistance)
+			{
+				leastDistance = dist;
+				closestMap = refGMap;
+			}
+		}
+
+		return closestMap;
+	}
+
+	// --------------------------------------------------------------------------------------------------------------------------------
+
+	public static ChromoMap pickRefMapFromFeaturesInLink(Link link, GChromoMap targetGMap)
+	{
+		ChromoMap feat1Map = link.getFeature1().getOwningMap();
+		ChromoMap feat2Map = link.getFeature2().getOwningMap();
+		//we don't know which of these maps is the target one so we need to find out
+		ChromoMap refMap = null;
+		if(targetGMap.chromoMap == feat1Map)
+			refMap = feat2Map;
+		else
+			refMap = feat1Map;
+
+		return refMap;
+	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
 
@@ -612,7 +662,7 @@ public class Utils
 			Desktop desktop = Desktop.getDesktop();
 			desktop.mail(new URI("mailto:strudel@scri.ac.uk?subject=Strudel%20Feedback"));
 		}
-		catch (Exception e) { System.out.println(e); }
+		catch (Exception e) { }
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------

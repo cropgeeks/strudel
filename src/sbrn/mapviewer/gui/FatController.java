@@ -33,6 +33,8 @@ public class FatController
 
 	//feature for highlighting and a single homolog for this
 	public Feature highlightFeature, highlightFeatureHomolog;
+	//the corresponding gMap objects
+	public GChromoMap highlightFeatGMap, highlightFeatHomGMap;
 
 	//true if we have requested to find features by name
 	public boolean findFeaturesRequested = false;
@@ -164,10 +166,12 @@ public class FatController
 		winMain.splitPane.setDividerLocation(1.0);
 
 		//clear the found features
-		Strudel.winMain.fatController.highlightFeature = null;
-		Strudel.winMain.fatController.highlightFeatureHomolog = null;
+		clearHighlightFeature();
 		if(FeatureSearchHandler.featuresInRange != null)
+		{
 			FeatureSearchHandler.featuresInRange.clear();
+//			Strudel.winMain.fatController.selectionMap = null;
+		}
 		winMain.mainCanvas.drawHighlightFeatures = false;
 		winMain.mainCanvas.drawFoundFeaturesInRange = false;
 		findFeaturesRequested = false;
@@ -292,6 +296,16 @@ public class FatController
 
 	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
 
+	//clears the highlighted feature, its homolog, and associated gMap objects
+	public void clearHighlightFeature()
+	{
+		highlightFeature = null;
+		highlightFeatureHomolog = null;
+		highlightFeatGMap = null;
+		highlightFeatHomGMap = null;
+	}
+
+	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
 
 }// end class
 

@@ -121,7 +121,7 @@ public class GChromoMap
 		centreColour = owningSet.colour.brighter().brighter().brighter().brighter();
 
 		//for convenience also set this object on the ChromoMap object so we can do lookups in either direction
-		chromoMap.setGChromoMap(this);
+		chromoMap.addGChromoMap(this);
 	}
 
 	// ============================methods==================================
@@ -418,12 +418,9 @@ public class GChromoMap
 	// draws labels next to features
 	public void drawMouseOverFeatures(Graphics2D g2)
 	{
-		Vector<GChromoMap> gMaps = new Vector<GChromoMap>();
-		gMaps.add(this);
-
 		if (mouseOverFeatures.size() > 0 && drawMouseOverFeatures && !owningSet.alwaysShowAllLabels)
 		{
-			LabelDisplayManager.drawFeatureLabelsInRange(g2, mouseOverFeatures, true);
+			LabelDisplayManager.drawFeatureLabelsInRange(this, g2, mouseOverFeatures, true);
 		}
 	}
 

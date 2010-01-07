@@ -31,6 +31,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 	public JButton bInfo;
 	public JButton bSave;
 	public JLabel memLabel = new JLabel();
+	public JButton bConfigure;
 
 	public int currentLinkShapeType = 1;
 	public boolean linkShapeOrderAscending = true;
@@ -50,6 +51,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 
 		//buttons
 		add(bOpen);
+		add(bConfigure);
 
 		addSeparator(true);
 		add(bFindFeatures);
@@ -161,6 +163,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		bFindFeaturesinRange.getActionMap().put("findFeaturesInRange", findFeaturesInRangeAction);
 
 		//these buttons have no keyboard shortcuts associated with them as yet -- straightforward config
+		bConfigure = (JButton) Utils.getButton(false, "Configure datasets", "Configure ordering and visibility of datasets", Icons.getIcon("CONFIGURE"), null, this, false);
 		bOverview = (JToggleButton) Utils.getButton(true, "", "Toggle the overview dialog on or off", Icons.getIcon("OVERVIEW"), null, this, false);
 		bOverview.setSelected(Prefs.guiOverviewVisible);
 		bDistMarkers = (JToggleButton) Utils.getButton(true, "", "Toggle the distance markers on or off", Icons.getIcon("DISTANCEMARKERS"), null, this, false);
@@ -229,8 +232,11 @@ public class ControlToolBar extends JToolBar implements ActionListener
 			Strudel.winMain.aboutDialog.setVisible(true);
 		}
 
-		else if(e.getSource() == bSave)
+		//configure visible datasets
+		else if(e.getSource() == bConfigure)
 		{
+			Strudel.winMain.genomeLayoutDialog.setLocationRelativeTo(Strudel.winMain);
+			Strudel.winMain.genomeLayoutDialog.setVisible(true);
 		}
 
 	}
@@ -297,6 +303,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 				bDistMarkers.setEnabled(true);
 				bCurves.setEnabled(false);
 				bLinkFilter.setEnabled(false);
+				bConfigure.setEnabled(false);
 			}
 			else
 			{
@@ -312,6 +319,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 				bDistMarkers.setEnabled(false);
 				bCurves.setEnabled(true);
 				bLinkFilter.setEnabled(true);
+				bConfigure.setEnabled(true);
 			}
 
 		}

@@ -1,0 +1,104 @@
+package sbrn.mapviewer.gui.dialog;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+import javax.swing.*;
+import sbrn.mapviewer.*;
+import scri.commons.gui.*;
+/*
+ * This dialog allows the user to decide which genomes they want to see on screen and in what order they should be laid out.
+ *
+ */
+public class GenomeLayoutDialog extends JDialog implements ActionListener
+{
+
+	private JButton okButton, cancelButton;
+	public GenomeLayoutPanel genomeLayoutPanel = new GenomeLayoutPanel();
+
+
+	public GenomeLayoutDialog()
+	{
+		super(Strudel.winMain, "Layout genomes", true);
+
+		genomeLayoutPanel.setPreferredSize(new Dimension(300,200));
+		add(genomeLayoutPanel);
+		add(createButtons(), BorderLayout.SOUTH);
+
+		getRootPane().setDefaultButton(okButton);
+		SwingUtils.addCloseHandler(this, cancelButton);
+
+		//action listeners for the buttons in the genome layout panel
+		genomeLayoutPanel.removeButton.addActionListener(this);
+		genomeLayoutPanel.addButton.addActionListener(this);
+
+		pack();
+		setResizable(false);
+
+	}
+
+	private JPanel createButtons()
+	{
+		okButton = SwingUtils.getButton("OK");
+		okButton.addActionListener(this);
+		okButton.setMnemonic(KeyEvent.VK_F);
+
+		cancelButton = SwingUtils.getButton("Cancel");
+		cancelButton.addActionListener(this);
+		cancelButton.setMnemonic(KeyEvent.VK_C);
+
+		JPanel p1 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 10));
+		p1.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
+		p1.add(okButton);
+		p1.add(cancelButton);
+
+		return p1;
+	}
+
+
+
+	public void actionPerformed(ActionEvent e)
+	{
+		if (e.getSource() == okButton)
+		{
+			configureGMapSets();
+			setVisible(false);
+		}
+		else if (e.getSource() == cancelButton)
+		{
+			//hide the dialog
+			setVisible(false);
+		}
+		else if (e.getSource() == genomeLayoutPanel.addButton)
+		{
+			genomeLayoutPanel.addComboBox(0);
+			int newHeight = (int) (getHeight() + genomeLayoutPanel.comboBoxes.get(0).getMaximumSize().getHeight());
+			setSize(new Dimension(getWidth(), newHeight));
+		}
+		else if (e.getSource() == genomeLayoutPanel.removeButton)
+		{
+			genomeLayoutPanel.removeComboBox();
+			int newHeight = (int) (getHeight() - genomeLayoutPanel.comboBoxes.get(0).getMaximumSize().getHeight());
+			setSize(new Dimension(getWidth(), newHeight));
+		}
+	}
+
+	private void configureGMapSets()
+	{
+		//extract the names of the current list of gmapsets to be displayed
+		LinkedList<String> gMapsetNames = new LinkedList<String>();
+		for (JComboBox comboBox : genomeLayoutPanel.comboBoxes)
+		{
+			gMapsetNames.add((String)comboBox.getSelectedItem());
+		}
+
+		//reconfigure the mapsets and the GUI
+		Strudel.winMain.dataContainer.reconfigureGMapSets(gMapsetNames);
+		Strudel.winMain.reinitialiseDependentComponents();
+		//reset and paint
+		Strudel.winMain.fatController.resetViewOnly();
+	}
+
+
+
+}

@@ -76,9 +76,6 @@ public class WinMain extends JFrame
 	//just contains a simple label with instructions for how to load data
 	public JPanel navPanel;
 
-	//a background panel with the SCRI logo
-//	public LogoPanel logoPanel;
-
 	//the panel with the genome labels
 	public GenomeLabelPanel genomeLabelPanel;
 
@@ -89,6 +86,7 @@ public class WinMain extends JFrame
 	public AboutDialog aboutDialog = new AboutDialog(this, true);
 
 	public MTDataLoadingDialog dataLoadingDialog;
+	public GenomeLayoutDialog genomeLayoutDialog;
 
 
 
@@ -175,7 +173,7 @@ public class WinMain extends JFrame
 		//the fat controller
 		fatController = new FatController(this);
 
-		//the file open dialog
+		//dialogs we only want one instance of
 		openFileDialog = new OpenFileDialog();
 
 		//this panel contains the main canvas
@@ -244,6 +242,7 @@ public class WinMain extends JFrame
 			ffDialog = new FindFeaturesDialog();
 			ffInRangeDialog = new FindFeaturesInRangeDialog();
 			ffInRangeDialog.ffInRangePanel.initRemainingComponents();
+			genomeLayoutDialog = new GenomeLayoutDialog();
 
 			//assemble everything
 
@@ -312,6 +311,9 @@ public class WinMain extends JFrame
 
 		//the labels with the genome names need to be updated
 		genomeLabelPanel.repaint();
+
+		//reinitialize the combo boxes in the configure genomes dialog
+//		Strudel.winMain.genomeLayoutDialog.genomeLayoutPanel.setupComboBoxes();
 	}
 
 

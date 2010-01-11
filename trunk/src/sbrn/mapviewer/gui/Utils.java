@@ -613,6 +613,17 @@ public class Utils
 
 	// --------------------------------------------------------------------------------------------------------------------------------
 
+	//checks whether two gmapsets are next to each other, in either direction
+	public static boolean areMapSetsAdjacent(GMapSet set1, GMapSet set2)
+	{
+		int index1 = Strudel.winMain.dataContainer.gMapSets.indexOf(set1);
+		int index2 = Strudel.winMain.dataContainer.gMapSets.indexOf(set2);
+		return Math.abs(index1 - index2) == 1;
+	}
+
+	// --------------------------------------------------------------------------------------------------------------------------------
+
+
 	//returns the closest instance of a GChromoMap of the genome represented by ChromoMap refMap,
 	//relative to GChromoMap targetGMap
 	public static GChromoMap getClosestGMap(ChromoMap refMap, GChromoMap targetGMap)

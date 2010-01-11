@@ -118,7 +118,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			if(selectedMap != null)
 			{
 				Strudel.winMain.fatController.isCtrlClickSelection = false;
-				winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(e.getX(), e.getY());
+				winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(selectedMap);
 			}
 			//otherwise -- if we clicked on the background -- clear all links displayed
 			else
@@ -133,8 +133,14 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		//CTRL+click on a chromosome means display all links between this and all other clicked chromos
 		else if (isMetaClick(e) && !e.isShiftDown())
 		{
-			Strudel.winMain.fatController.isCtrlClickSelection = true;
-			winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(e.getX(), e.getY());
+			// first figure out which chromosome we are in
+			GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, e.getX(), e.getY());
+			//if we have clicked on a map, display links between this map and all others
+			if(selectedMap != null)
+			{
+				Strudel.winMain.fatController.isCtrlClickSelection = true;
+				winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(selectedMap);
+			}
 		}
 
 		Strudel.winMain.mainCanvas.updateCanvas(true);

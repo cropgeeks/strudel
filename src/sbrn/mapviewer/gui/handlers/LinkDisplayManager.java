@@ -43,16 +43,16 @@ public class LinkDisplayManager
 	//	=====================================methods===========================================
 
 	// display the homologies between chromosomes as lines
-	public void processLinkDisplayRequest(int x, int y)
+	public void processLinkDisplayRequest(GChromoMap selectedMap)
 	{
+//		System.out.println("\n\n===============clicked on map " + selectedMap.name + ", index " +
+//						Strudel.winMain.dataContainer.gMapSets.indexOf(selectedMap.owningSet));
+
 		Vector<GChromoMap> selectedMaps = Strudel.winMain.fatController.selectedMaps;
 
 		//only do this if we have reference genomes -- otherwise there are no links
 		if(Strudel.winMain.dataContainer.gMapSets.size() > 1)
 		{
-			// first figure out which chromosome we are in
-			GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, x, y);
-
 			// the click has hit a chromosome
 			if (selectedMap != null)
 			{
@@ -125,6 +125,8 @@ public class LinkDisplayManager
 				task.get();
 		}
 		catch (Exception e) {}
+
+//		drawAllLinks(g, 0, killMe);
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -133,6 +135,9 @@ public class LinkDisplayManager
 	// Draws the lines between a chromosome of the reference genome and all potential homologues in the compared genome
 	public void drawAllLinks(Graphics2D g2, int startIndex, Boolean killMe)
 	{
+//		System.out.println("Strudel.winMain.fatController.selectedMaps.size() = " +
+//						Strudel.winMain.fatController.selectedMaps.size());
+
 		int numLinksDrawn = 0;
 
 		//only do this if we have at least 2 genomes -- otherwise there are no links to deal with
@@ -141,7 +146,7 @@ public class LinkDisplayManager
 			try
 			{
 				//potentially each linkset could be drawn from map A to map B and in the reverse direction too
-				//this object helps keep track of the linksets already drawn so we don't duplicate the effort
+				//this object helps keep track of the linksets already drawn so we don't duplicate the drawing
 				Vector<LinkSet> drawnLinkSets = new Vector<LinkSet>();
 
 				// for each map in the selectedMaps vector
@@ -152,6 +157,9 @@ public class LinkDisplayManager
 
 					// get the currently selected map
 					GChromoMap targetGMap = Strudel.winMain.fatController.selectedMaps.get(i);
+
+//					System.out.println("###########Strudel.winMain.fatController.selectedMaps.get(i) = "
+//									+ Strudel.winMain.fatController.selectedMaps.get(i).name);
 
 					// get the ChromoMap for the currently selected chromosome
 					ChromoMap selectedChromoMap = targetGMap.chromoMap;
@@ -182,13 +190,33 @@ public class LinkDisplayManager
 						GMapSet targetGMapSet = targetGMap.owningSet;
 						GMapSet referenceGMapSet = referenceGMap.owningSet;
 
+//						System.out.println("+++++++linkset is between " + targetGMap.name + ", index " +
+//										Strudel.winMain.dataContainer.gMapSets.indexOf(targetGMap.owningSet)
+//										+ " and " + referenceGMap.name + ", index " +
+//										Strudel.winMain.dataContainer.gMapSets.indexOf(referenceGMap.owningSet));
+
 						//need to check whether there is any point in proceeding here
 						//if the user is doing Ctrl click selection of maps they will only want to see links between the ones they selected
 						//so if we don't have both of the maps in this map set selected, just skip to the next one
 						if (Strudel.winMain.fatController.isCtrlClickSelection)
 						{
-							if (!(Strudel.winMain.fatController.selectedMaps.contains(targetGMap) && Strudel.winMain.fatController.selectedMaps.contains(referenceGMap)) || drawnLinkSets.contains(selectedLinks))
+//							System.out.println("Strudel.winMain.fatController.selectedMaps.contains(targetGMap) = "
+//											+ Strudel.winMain.fatController.selectedMaps.contains(targetGMap));
+//
+//							System.out.println("Strudel.winMain.fatController.selectedMaps.contains(referenceGMap) = " +
+//											Strudel.winMain.fatController.selectedMaps.contains(referenceGMap));
+//
+//							System.out.println("drawnLinkSets.contains(selectedLinks) = "
+//											+ drawnLinkSets.contains(selectedLinks));
+
+							boolean bothMapsPresent = Strudel.winMain.fatController.selectedMaps.contains(targetGMap)
+							&& Strudel.winMain.fatController.selectedMaps.contains(referenceGMap);
+							boolean setDrawnAlready = drawnLinkSets.contains(selectedLinks);
+							boolean gMapSetsAdjacent = Utils.areMapSetsAdjacent(targetGMap.owningSet, referenceGMap.owningSet);
+
+							if (!bothMapsPresent || setDrawnAlready || !gMapSetsAdjacent)
 							{
+//								System.out.println("continuing");
 								continue;
 							}
 						}
@@ -217,6 +245,8 @@ public class LinkDisplayManager
 
 						//add this linkset to our vector of linksets we have drawn already, for tracking
 						drawnLinkSets.add(selectedLinks);
+
+//						System.out.println("drawing linkset");
 
 						// for each link in the linkset
 						for (int li = startIndex, n = selectedLinks.size(); li < n; li += MainCanvas.cores)
@@ -280,6 +310,7 @@ public class LinkDisplayManager
 								{
 									linesDrawn.put(key, true);
 									// draw the link either as a straight line or a curve
+//									System.out.println("drawing link");
 									drawStraightOrCurvedLink(g2, targetChromoX, targetY, referenceChromoX, referenceY);
 									numLinksDrawn++;
 								}
@@ -408,7 +439,7 @@ public class LinkDisplayManager
 	/**
 	 * This method precomputes subsets of links between each target chromosome and each reference genome so that drawing them is quicker.
 	 */
-	private void initLinkSetLookup()
+	public void initLinkSetLookup()
 	{
 		try
 		{
@@ -479,8 +510,8 @@ public class LinkDisplayManager
 				}
 			}
 
-			System.out.println("num linksets made = " + numEntriesMade);
-			System.out.println("numEntries in linkSetLookup= " + linkSetLookup.keySet().size());
+//			System.out.println("num linksets made = " + numEntriesMade);
+//			System.out.println("numEntries in linkSetLookup= " + linkSetLookup.keySet().size());
 		}
 		catch (Exception e)
 		{

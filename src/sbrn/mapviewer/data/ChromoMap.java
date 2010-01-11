@@ -49,9 +49,9 @@ public class ChromoMap implements Iterable<Feature>
 	 * name.
 	 * @return a string representation of this chromosome map.
 	 */
-	@Override
-	public String toString()
-		{ return name; }
+//	@Override
+//	public String toString()
+//		{ return name; }
 
 	/**
 	 * Returns the name of this map.

@@ -14,14 +14,17 @@ public class GenomeLayoutDialog extends JDialog implements ActionListener
 {
 
 	private JButton okButton, cancelButton;
-	public GenomeLayoutPanel genomeLayoutPanel = new GenomeLayoutPanel();
+	public GenomeLayoutPanel genomeLayoutPanel = null;
+	private final Dimension initialSize = new Dimension(350,200);
 
 
 	public GenomeLayoutDialog()
 	{
 		super(Strudel.winMain, "Layout genomes", true);
 
-		genomeLayoutPanel.setPreferredSize(new Dimension(300,200));
+		genomeLayoutPanel = new GenomeLayoutPanel(this);
+
+		genomeLayoutPanel.setPreferredSize(initialSize);
 		add(genomeLayoutPanel);
 		add(createButtons(), BorderLayout.SOUTH);
 
@@ -32,9 +35,13 @@ public class GenomeLayoutDialog extends JDialog implements ActionListener
 		genomeLayoutPanel.removeButton.addActionListener(this);
 		genomeLayoutPanel.addButton.addActionListener(this);
 
-		pack();
 		setResizable(false);
 
+	}
+
+	public void restoreInitialSize()
+	{
+		setSize(initialSize);
 	}
 
 	private JPanel createButtons()
@@ -72,16 +79,18 @@ public class GenomeLayoutDialog extends JDialog implements ActionListener
 		else if (e.getSource() == genomeLayoutPanel.addButton)
 		{
 			genomeLayoutPanel.addComboBox(0);
-			int newHeight = (int) (getHeight() + genomeLayoutPanel.comboBoxes.get(0).getMaximumSize().getHeight());
-			setSize(new Dimension(getWidth(), newHeight));
 		}
 		else if (e.getSource() == genomeLayoutPanel.removeButton)
 		{
-			genomeLayoutPanel.removeComboBox();
-			int newHeight = (int) (getHeight() - genomeLayoutPanel.comboBoxes.get(0).getMaximumSize().getHeight());
-			setSize(new Dimension(getWidth(), newHeight));
+			genomeLayoutPanel.removeComboBox(false);
 		}
 	}
+
+	public void resizeDialog(int newHeight)
+	{
+		setSize(new Dimension(getWidth(), newHeight));
+	}
+
 
 	private void configureGMapSets()
 	{
@@ -95,7 +104,7 @@ public class GenomeLayoutDialog extends JDialog implements ActionListener
 		//reconfigure the mapsets and the GUI
 		Strudel.winMain.dataContainer.reconfigureGMapSets(gMapsetNames);
 		Strudel.winMain.reinitialiseDependentComponents();
-		//reset and paint
+		//reset and repaint
 		Strudel.winMain.fatController.resetViewOnly();
 	}
 

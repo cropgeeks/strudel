@@ -116,7 +116,6 @@ public class LinkDisplayManager
 
 				MainCanvas.tasks[i] = MainCanvas.executor.submit(new Runnable() {
 					public void run() {
-						System.out.println("multicore drawing all links, start index = " + startIndex);
 						drawAllLinks(g, startIndex, killMe);
 					}});
 			}
@@ -238,14 +237,12 @@ public class LinkDisplayManager
 								//if feature 1 is on the target map
 								if (link.getFeature1().getOwningMap() == targetGMap.chromoMap)
 								{
-									//									referenceGMap = link.getFeature2().getOwningMap().getGChromoMaps();
 									targetfeature = link.getFeature1();
 									referenceFeature = link.getFeature2();
 								}
 								else
 									//if feature 2 is on the target map, feat 1 on the reference
 								{
-									//									referenceGMap = link.getFeature1().getOwningMap().getGChromoMaps();
 									targetfeature = link.getFeature2();
 									referenceFeature = link.getFeature1();
 								}
@@ -293,7 +290,7 @@ public class LinkDisplayManager
 			}
 			catch (RuntimeException e)
 			{
-				e.printStackTrace();
+
 			}
 		}
 	}
@@ -417,22 +414,28 @@ public class LinkDisplayManager
 		{
 			linkSetLookup = new Hashtable<ChromoMap, Vector<LinkSet>>();
 
+			int numEntriesMade = 0;
+
 			//for each genome
 			for(MapSet mapset : Strudel.winMain.dataContainer.allMapSets)
 			{
 				//for each map
 				for(ChromoMap cMap : mapset)
 				{
+//					System.out.println("==========current map is " + cMap.getName());
+
 					//make a new entry for the lookup
 					linkSetLookup.put(cMap, new Vector<LinkSet>());
 
-					//for each feature
+					//for each feature on this map
 					for(Feature feature : cMap.getFeatureList())
 					{
+//						System.out.println("-----feature " + feature.getName());
+
 						//get all the links for this feature
 						Vector<Link> links = feature.getLinks();
 
-						//for each link
+						//for each link for this feature
 						for(Link link : links)
 						{
 							//find out the respective other map
@@ -442,38 +445,81 @@ public class LinkDisplayManager
 							else
 								otherMap = link.getFeature1().getOwningMap();
 
+//							System.out.println("+++maps for this linkset: (cMap) "+ cMap.getOwningMapSet().getName() + " "
+//											+ cMap.getName() + " and (otherMap) " + otherMap.getOwningMapSet().getName()
+//											+ " " + otherMap.getName());
+//							System.out.println("corresponding objects: " + cMap + ", " + otherMap);
+
 							LinkSet linkset = null;
-							//check whether the lookup entry for this map has a linkset for this combination of maps
-							for(LinkSet ls : linkSetLookup.get(cMap))
-							{
-								//if one exists, use that
-								Link example = ls.getLinks().get(0);
-								if((example.getFeature1().getOwningMap() == cMap && example.getFeature2().getOwningMap() == otherMap) ||
-												(example.getFeature2().getOwningMap() == cMap && example.getFeature1().getOwningMap() == otherMap))
-								{
-									linkset = ls;
-									break;
-								}
-							}
+
+							//search the lookup for any linksets with the cMap as the key
+							LinkSet cMapLinkSet = searchLinkSetLookup(cMap, otherMap);
+							//and the same for the other map
+							LinkSet otherLinkset = searchLinkSetLookup(otherMap, cMap);
+							if(cMapLinkSet != null)
+								linkset = cMapLinkSet;
+							else if(otherLinkset != null)
+								linkset = otherLinkset;
+
 							//else create a new linkset and add this to the vector held as the value for this map in the lookup
 							if(linkset == null)
 							{
+								numEntriesMade++;
 								linkset = new LinkSet();
-								linkSetLookup.get(cMap).add(linkset);
+//								System.out.println("&&&&making new  linkset ");
 							}
+
+							if(!linkSetLookup.get(cMap).contains(linkset))
+								linkSetLookup.get(cMap).add(linkset);
 
 							//add the link to the linkset for this map combination
 							linkset.addLink(link);
-
 						}
 					}
 				}
 			}
+
+			System.out.println("num linksets made = " + numEntriesMade);
+			System.out.println("numEntries in linkSetLookup= " + linkSetLookup.keySet().size());
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------------------------
+
+	private LinkSet searchLinkSetLookup(ChromoMap cMap, ChromoMap otherMap)
+	{
+		LinkSet linkSet = null;
+		if (linkSetLookup.get(cMap)!=null)
+		{
+			for (LinkSet ls : linkSetLookup.get(cMap))
+			{
+//				System.out.println("trying set " + ls);
+
+				//if one exists, use that
+				Link example = ls.getLinks().get(0);
+
+				ChromoMap map1 = example.getFeature1().getOwningMap();
+				ChromoMap map2 = example.getFeature2().getOwningMap();
+
+//				System.out.println("linkset between " + map1.getOwningMapSet().getName() + " " + map1.getName() + " and " + map2.getOwningMapSet().getName() + " " + map2.getName());
+//				System.out.println("corresponding objects: " + map1 + ", " + map2);
+
+				if ((map1 == cMap && map2 == otherMap) || (map2 == cMap && map1 == otherMap))
+				{
+					linkSet = ls;
+//					System.out.println("@@@@using existing set ");
+
+					//now we can break out of the loop since there can only be one instance of this linkset anyway
+					break;
+				}
+			}
+		}
+//		System.out.println("returning set " + linkSet);
+		return linkSet;
 	}
 
 

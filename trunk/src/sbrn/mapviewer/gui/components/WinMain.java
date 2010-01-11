@@ -311,9 +311,6 @@ public class WinMain extends JFrame
 
 		//the labels with the genome names need to be updated
 		genomeLabelPanel.repaint();
-
-		//reinitialize the combo boxes in the configure genomes dialog
-//		Strudel.winMain.genomeLayoutDialog.genomeLayoutPanel.setupComboBoxes();
 	}
 
 

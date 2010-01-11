@@ -17,7 +17,7 @@ public class CanvasZoomHandler
 	int fps = 25;
 
 	//animation times in milliseconds
-	int clickZoomMillis = 200;
+	int clickZoomMillis = 100;
 	int panZoomMillis = 300;
 
 	//this boolean is required because we need to check in the stateChanged method of the ZoomControlPanel class whether

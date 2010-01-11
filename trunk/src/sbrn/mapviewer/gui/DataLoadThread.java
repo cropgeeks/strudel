@@ -37,7 +37,11 @@ public class DataLoadThread extends Thread
 				if (!Strudel.winMain.fatController.guiFullyAssembled)
 					Strudel.winMain.fatController.assembleRemainingGUIComps();
 				else
+				{
 					Strudel.winMain.reinitialiseDependentComponents();
+					//reinitialize the combo boxes in the configure genomes dialog
+					Strudel.winMain.genomeLayoutDialog.genomeLayoutPanel.setupComboBoxes();
+				}
 
 				//display the name of the current dataset in the window title bar
 				Strudel.winMain.setTitle(inputFile.getName() + " -- Strudel " + Install4j.VERSION);

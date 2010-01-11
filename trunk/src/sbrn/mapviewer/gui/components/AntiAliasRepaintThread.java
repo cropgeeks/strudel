@@ -38,26 +38,26 @@ public class AntiAliasRepaintThread extends Thread
 	@Override
 	public void run()
 	{
-//		this.setName("AA thread");
-//		setPriority(Thread.MIN_PRIORITY);
-//
-//		try { Thread.sleep(delay); }
-//		catch (InterruptedException e) {}
-//
-//		if (killMe)
-//			return;
-//
-//		long s = System.nanoTime();
-//
-//		Graphics2D g = buffer.createGraphics();
-//		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-//		Strudel.winMain.mainCanvas.paintCanvas(g, killMe);
-//		g.dispose();
-//
-//		if (killMe == false)
-//		{
-//			hasImage = true;
-//			Strudel.winMain.mainCanvas.updateCanvas(false);
-//		}
+		this.setName("AA thread");
+		setPriority(Thread.MIN_PRIORITY);
+
+		try { Thread.sleep(delay); }
+		catch (InterruptedException e) {}
+
+		if (killMe)
+			return;
+
+		long s = System.nanoTime();
+
+		Graphics2D g = buffer.createGraphics();
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		Strudel.winMain.mainCanvas.paintCanvas(g, killMe);
+		g.dispose();
+
+		if (killMe == false)
+		{
+			hasImage = true;
+			Strudel.winMain.mainCanvas.updateCanvas(false);
+		}
 	}
 }

@@ -108,6 +108,9 @@ public class GChromoMap
 
 	public boolean linkedFeaturesReversed = false;
 
+	//a boolean to indicate whether we should always display labels, regardless of zoom factor
+	public boolean alwaysShowAllLabels = false;
+
 
 	// ============================curve'tors==================================
 
@@ -326,7 +329,17 @@ public class GChromoMap
 			g2.setColor(Colors.distanceMarkerColour);
 
 			// decide where to place the label on x
-			// on the left hand genome we want the label on the left, right hand genome on the right
+			// on the leftmost genome we want the label on the left, rightmost genome on the right
+			boolean labelOnRight = false;
+			int genomeIndex = Strudel.winMain.dataContainer.gMapSets.indexOf(owningSet);
+
+			//we want the label on the right if the owning genome is  the last genome on the right
+			if(genomeIndex == (Strudel.winMain.dataContainer.gMapSets.size()-1))
+			{
+				labelOnRight = true;
+			}
+
+			//x coords
 			int labelX = 0; // this is where the label is drawn from
 			int lineStartX = 0; // this is where the line to the label is drawn from
 			int lineEndX = 0; // the label connects to the line here
@@ -346,23 +359,29 @@ public class GChromoMap
 
 				int stringWidth = fm.stringWidth(label);
 
-				//x coords
-				labelX = x - lineLength - gap - stringWidth;
-				lineStartX =  x-1;
-				lineEndX =  x- lineLength;
+				//this is what we do if the label needs to be on the right
+				if(labelOnRight)
+				{
+					lineStartX =  x + width;
+					lineEndX =  lineStartX + lineLength;
+					labelX = lineEndX + gap;
+				}
+				else//label on left
+				{
+					labelX = x - lineLength - gap - stringWidth;
+					lineStartX =  x-1;
+					lineEndX =  x- lineLength;
+				}
 
+				//y coord
 				int labelY = Math.round(currentY) + fontHeight / 2;
 
-				//if we have links drawn we need a background for the distance markers or things will look messy
-				//just fill a continuous rectangle next to the chromosome, with the height of the chromosome and the width of the largest label
-				if (Strudel.winMain.mainCanvas.drawLinks)
-				{
-					int horizontalGap = 3;
-					int verticalGap = 2;
-					int arcSize = Math.round(fontHeight/1.5f);
-					g2.setColor(Colors.distanceMarkerBackgroundColour);
-					g2.fillRoundRect(labelX - horizontalGap, labelY - fontHeight, stringWidth + horizontalGap*2, fontHeight + verticalGap, arcSize, arcSize);
-				}
+				//fill a continuous rectangle next to the chromosome as a background, with the height of the chromosome and the width of the largest label
+				int horizontalGap = 3;
+				int verticalGap = 2;
+				int arcSize = Math.round(fontHeight/1.5f);
+				g2.setColor(Colors.distanceMarkerBackgroundColour);
+				g2.fillRoundRect(labelX - horizontalGap, labelY - fontHeight, stringWidth + horizontalGap*2, fontHeight + verticalGap, arcSize, arcSize);
 
 				// draw a line from the marker to the label
 				g2.setColor(Colors.distanceMarkerColour);
@@ -418,7 +437,7 @@ public class GChromoMap
 	// draws labels next to features
 	public void drawMouseOverFeatures(Graphics2D g2)
 	{
-		if (mouseOverFeatures.size() > 0 && drawMouseOverFeatures && !owningSet.alwaysShowAllLabels)
+		if (mouseOverFeatures.size() > 0 && drawMouseOverFeatures)
 		{
 			LabelDisplayManager.drawFeatureLabelsInRange(this, g2, mouseOverFeatures, true);
 		}
@@ -473,6 +492,7 @@ public class GChromoMap
 	private void drawLinkedFeatures(Graphics2D g2)
 	{
 		int lastY = -1;
+		int numMarkersDrawn = 0;
 
 		if (allLinkedFeaturePositions != null)
 		{
@@ -496,11 +516,14 @@ public class GChromoMap
 				// draw a line for the marker
 				if (yPos != lastY)
 				{
+					numMarkersDrawn++;
 					g2.drawLine(0, yPos, width, yPos);
 					lastY = yPos;
 				}
 			}
 		}
+
+		Strudel.winMain.mainCanvas.numMarkersDrawn += numMarkersDrawn;
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------------------------

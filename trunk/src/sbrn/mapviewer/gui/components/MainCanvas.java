@@ -27,6 +27,14 @@ public class MainCanvas extends JPanel
 	// do we need to draw links?
 	public boolean drawLinks = false;
 
+	// if true, antialias everything
+	//this is a flag set by code within the application
+	public boolean antiAlias = false;
+	//in addition we have a flag set by the user (through a button) -- userPrefAntialias
+	//stored in the Prefs
+	//this overrides the local flag if it is set to false
+	//otherwise we ignore it
+
 	// if true, paint a rectangle to indicate the fact that we are panning over a region we want to select for zooming in to
 	public boolean drawSelectionRect = false;
 	//these are the relevant coordinates for this
@@ -69,6 +77,8 @@ public class MainCanvas extends JPanel
 	public static ExecutorService executor;
 	public static Future[] tasks;
 
+	public int numMarkersDrawn = 0;
+
 	// ============================curve'tor==================================
 
 	public MainCanvas()
@@ -99,7 +109,6 @@ public class MainCanvas extends JPanel
 	@Override
 	public void paintComponent(Graphics graphics)
 	{
-
 		super.paintComponent(graphics);
 
 		Graphics2D g = (Graphics2D) graphics;
@@ -122,11 +131,12 @@ public class MainCanvas extends JPanel
 			bufferGraphics.dispose();
 
 			// Set up a post-render AA thread for a pretty repaint when ready
-			new AntiAliasRepaintThread(aaBuffer);
+			if(antiAlias)
+				new AntiAliasRepaintThread(aaBuffer);
 		}
 
 		// Render the back-buffer
-		if (AntiAliasRepaintThread.hasImage)
+		if (AntiAliasRepaintThread.hasImage && antiAlias)
 			g.drawImage(aaBuffer, 0, 0, null);
 		else
 			g.drawImage(buffer, 0, 0, null);
@@ -169,20 +179,20 @@ public class MainCanvas extends JPanel
 		{
 			if(winMain.fatController.highlightFeatureHomolog != null)
 			{
+				//we also want to check whether there are any links to display that are to be highlighted after a name based search for
+				//features and links originating from them
+				linkDisplayManager.drawHighlightedLink(g, winMain.fatController.highlightFeature, winMain.fatController.highlightFeatureHomolog, true,
+								winMain.fatController.highlightFeatGMap, winMain.fatController.highlightFeatHomGMap);
 				//label for the target feature
 				LabelDisplayManager.drawHighlightedFeatureLabel(g, winMain.fatController.highlightFeature,
 								winMain.fatController.highlightFeatureHomolog, winMain.fatController.highlightFeatGMap, winMain.fatController.highlightFeatHomGMap);
 				//label for the homolog
 				LabelDisplayManager.drawHighlightedFeatureLabel(g, winMain.fatController.highlightFeatureHomolog,
 								winMain.fatController.highlightFeature, winMain.fatController.highlightFeatHomGMap, winMain.fatController.highlightFeatGMap);
-
-				//we also want to check whether there are any links to display that are to be highlighted after a name based search for
-				//features and links originating from them
-				linkDisplayManager.drawHighlightedLink(g, winMain.fatController.highlightFeature, winMain.fatController.highlightFeatureHomolog, true,
-								winMain.fatController.highlightFeatGMap, winMain.fatController.highlightFeatHomGMap);
 			}
 			else
 			{
+				//just draw the feature label
 				LabelDisplayManager.drawHighlightedFeatureLabel(g, winMain.fatController.highlightFeature, null, winMain.fatController.highlightFeatGMap, null);
 			}
 		}
@@ -193,6 +203,9 @@ public class MainCanvas extends JPanel
 	// paint the genomes or portions thereof onto this canvas
 	public void paintCanvas(Graphics2D g2, Boolean killMe)
 	{
+		long startTime = System.currentTimeMillis();
+		numMarkersDrawn = 0;
+
 		//background
 		setBackground(Colors.mainCanvasBackgroundColour);
 
@@ -362,8 +375,8 @@ public class MainCanvas extends JPanel
 				//if the map is meant to be visible on the canvas at this time
 				if (gChromoMap.isShowingOnCanvas && !gChromoMap.inversionInProgress)
 				{
-					if(gMapSet.alwaysShowAllLabels)
-						LabelDisplayManager.drawLabelsForAllVisibleFeatures(g2, gMapSet);
+					if(gChromoMap.alwaysShowAllLabels)
+						LabelDisplayManager.drawLabelsForAllVisibleFeatures(g2, gChromoMap);
 					drawMapIndex(g2, gChromoMap, gMapSet);
 				}
 			}
@@ -372,6 +385,10 @@ public class MainCanvas extends JPanel
 		winMain.fatController.updateOverviewCanvases();
 
 		redraw = false;
+
+		long endTime = System.currentTimeMillis();
+//		System.out.println("" + numMarkersDrawn + " markers drawn in " + (endTime-startTime) + " ms");
+
 	}
 
 

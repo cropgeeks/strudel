@@ -67,8 +67,9 @@ public class SingleFileImporter
 				}
 				else if(line.startsWith("URL"))
 					processURL(line);
-				else
-					throw  new IOException("Missing type field at start of line.");
+				//ignore other lines for now -- this permits headers and comments to be included
+//				else
+//					throw  new IOException("Missing type field at start of line.");
 
 				lineCount++;
 			}

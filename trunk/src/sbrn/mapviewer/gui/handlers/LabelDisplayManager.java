@@ -36,90 +36,33 @@ public class LabelDisplayManager
 	//------------------------------------------------------------------------------------------------------------------------------------
 
 	//this just draws a label for a single highlighted feature
-	public static void drawHighlightedFeatureLabel(Graphics2D g2, Feature f, Feature homolog, GChromoMap targetMap, GChromoMap refMap)
+	public static void drawHighlightedFeatureLabel(Graphics2D g2, Feature f, Feature homolog, GChromoMap gMap, GChromoMap refMap)
 	{
 		// the usual font stuff
 		g2.setFont(new Font("Sans-serif", Font.PLAIN, fontHeight));
 		FontMetrics fm = g2.getFontMetrics();
 
-		// get the name of the feature
-		String featureName = f.getName() + " (" + f.getType() + ")";
-		int stringWidth = fm.stringWidth(featureName);
-
 		// we need these for working out the y positions
 		ChromoMap chromoMap = f.getOwningMap();
 		float mapEnd = chromoMap.getStop();
 		// this factor normalises the position to a value between 0 and 100
-		float scalingFactor = targetMap.height / mapEnd;
+		float scalingFactor = gMap.height / mapEnd;
 
 		// the y position of the feature itself
 		int featureY;
 		if (f.getStart() == 0.0f)
 		{
-			featureY = targetMap.y;
+			featureY = gMap.y;
 		}
 		else
 		{
-			featureY = Math.round(targetMap.y + targetMap.currentY + (f.getStart() * scalingFactor));
+			featureY = Math.round(gMap.y + gMap.currentY + (f.getStart() * scalingFactor));
 		}
 
 		//the y position of the feature label
 		int labelY = featureY + (fontHeight/2);
 
-		// next decide where to place the label on x
-		// the amount by which we want to move the label end away from the chromosome (in pixels)
-		int lineLength = 50;
-		//x coords
-		int labelX = -1;
-		int lineStartX =  -1;
-		int lineEndX =  -1;
-
-		//if we have no homologs that we are drawing links to we can just place the label to the left of the chromo always
-		//it will not get in the way of anything there
-		lineStartX =  targetMap.x;
-		lineEndX =  lineStartX - lineLength;
-		labelX = lineEndX - stringWidth;
-
-		//if we do have a homolog we need to work out where it is in relation to this feature and place the label out of the way of the link line
-		if(homolog != null && refMap != null)
-		{
-			int targetGenomeIndex = Strudel.winMain.dataContainer.gMapSets.indexOf(targetMap.owningSet);
-			int referenceGenomeIndex = Strudel.winMain.dataContainer.gMapSets.indexOf(refMap.owningSet);
-
-			if(targetGenomeIndex > referenceGenomeIndex)
-			{
-				//place label to the right of the chromo
-				lineStartX =  targetMap.x + targetMap.width;
-				lineEndX =  lineStartX + lineLength;
-				labelX = lineEndX;
-			}
-		}
-
-		// draw a line from the marker to the label
-		g2.setColor(Colors.strongEmphasisLinkColour);
-		g2.drawLine(lineStartX, featureY, lineEndX , labelY - fontHeight / 2);
-
-		//draw a rounded rectangle as a background for the label
-		g2.setColor(Colors.highlightedFeatureLabelBackgroundColour);
-		float arcSize = fontHeight/1.5f;
-		int horizontalGap = 3;
-		int verticalGap = 4;
-		RoundRectangle2D.Float backGroundRect = new RoundRectangle2D.Float(labelX - horizontalGap, labelY - fontHeight, stringWidth + horizontalGap*2,
-						fontHeight + verticalGap, arcSize, arcSize);
-		g2.fill(backGroundRect);
-
-		// set the label colour
-		g2.setColor(Colors.highlightedFeatureLabelColour);
-		// draw the label
-		g2.drawString(featureName, labelX, labelY);
-
-
-		// set the feature colour
-		g2.setColor(Colors.highlightedFeatureColour);
-
-		// draw a line for the marker on the chromosome itself
-		g2.drawLine(targetMap.x -1, featureY, targetMap.x + targetMap.width +1, featureY);
-
+		drawFeatureLabel(g2, f, gMap, refMap, true, true, false, labelY, featureY,fm);
 	}
 
 	//	------------------------------------------------------------------------------------------------------------------------------------
@@ -145,46 +88,11 @@ public class LabelDisplayManager
 			{
 				if (f != null)
 				{
-					// get the name of the feature
-					String featureName = f.getName() + " (" + f.getType() + ")";
-					int stringWidth = fm.stringWidth(featureName);
 					// this is where the label goes
 					int labelY = laidoutPositions.get(f);
 					int featureY = featurePositions.get(f);
 
-					// next decide where to place the label on x
-					int mapSetX = Math.round(gMap.owningSet.xPosition);
-					int chromoWidth = Strudel.winMain.mainCanvas.chromoWidth;
-					// the amount by which we want to move the label end away from the chromosome (in pixels)
-					int lineLength = 50;
-					int labelX = mapSetX + chromoWidth + lineLength; // this is where the label is drawn from
-					int lineStartX = mapSetX + chromoWidth + 1; // this is where the line to the label is drawn from
-					int lineEndX = labelX - 2; // the label connects to the line here
-					if (isMouseOver)
-					{
-						//set the colour to highlight feature
-						g2.setColor(Colors.highlightedFeatureColour);
-					}
-					else
-					{
-						//set the colour to draw feature normally
-						g2.setColor(Colors.featureColour);
-					}
-
-					// draw a line from the marker to the label
-					g2.drawLine(lineStartX, featureY, lineEndX, labelY - fontHeight / 2);
-					//draw a rectangle as a background for the label
-					float arcSize = fontHeight / 1.5f;
-					int horizontalGap = 3;
-					int verticalGap = 4;
-					RoundRectangle2D.Float backGroundRect = new RoundRectangle2D.Float(labelX - horizontalGap, labelY - fontHeight, stringWidth + horizontalGap * 2, fontHeight + verticalGap, arcSize, arcSize);
-					g2.fill(backGroundRect);
-					// set the label font colour
-					g2.setColor(Colors.featureLabelColour);
-					if(isMouseOver)
-						g2.setColor(Colors.highlightedFeatureLabelColour);
-					// draw the label
-					g2.drawString(featureName, labelX, labelY);
+					drawFeatureLabel(g2, f, gMap, null, true, false,isMouseOver, labelY, featureY, fm);
 				}
 			}
 		}
@@ -193,6 +101,106 @@ public class LabelDisplayManager
 			e.printStackTrace();
 		}
 	}
+
+
+	//------------------------------------------------------------------------------------------------------------------------------------
+
+	//this draws a label for a single feature
+	public static void drawFeatureLabel(Graphics2D g2, Feature f, GChromoMap gMap, GChromoMap refMap, boolean labelOnRight,
+					boolean highlight, boolean isMouseOver, int labelY, int featureY,FontMetrics fm)
+	{
+		// get the name of the feature
+		String featureName = f.getName() + " (" + f.getType() + ")";
+		int stringWidth = fm.stringWidth(featureName);
+
+		// next decide where to place the label on x
+		int lineLength = 20; // the amount by which we want to move the label end away from the chromosome (in pixels)
+		int labelX = -1; // this is where the label is drawn from
+		int lineStartX = -1; // this is where the line to the label is drawn from
+		int lineEndX = -1; // the label connects to the line here
+
+		//we need to work out whether the label should go on the right or the left
+		//by default we can have them on the right but if the genome is the last one to the right the label text may extend off screen
+		//check for this and place the label to the left if this is the case
+		int genomeIndex = Strudel.winMain.dataContainer.gMapSets.indexOf(gMap.owningSet);
+		if(!highlight && (genomeIndex == (Strudel.winMain.dataContainer.gMapSets.size()-1)))
+		{
+			labelOnRight = false;
+		}
+
+		//if we do have a homolog we need to work out where it is in relation to this feature and place the label out of the way of the link line
+		if(highlight && refMap != null)
+		{
+			int targetGenomeIndex = Strudel.winMain.dataContainer.gMapSets.indexOf(gMap.owningSet);
+			int referenceGenomeIndex = Strudel.winMain.dataContainer.gMapSets.indexOf(refMap.owningSet);
+
+			//we want the label on the right if the target genome is to the right of the reference but only if this is not the last genome on the right
+			if((targetGenomeIndex > referenceGenomeIndex) && !(targetGenomeIndex == (Strudel.winMain.dataContainer.gMapSets.size()-1)))
+			{
+				//place label to the right of the chromo
+				labelOnRight = true;
+			}
+			//otherwise put the label on the left but only if this is not the leftmost genome
+			else if(targetGenomeIndex != 0)
+			{
+				labelOnRight = false;
+			}
+		}
+
+		//this is what we do if the label needs to be on the right
+		if(labelOnRight)
+		{
+			//place label to the right of the chromo
+			lineStartX =  gMap.x + gMap.width;
+			lineEndX =  lineStartX + lineLength;
+			labelX = lineEndX;
+		}
+		else//label on left
+		{
+			lineStartX =  gMap.x;
+			lineEndX =  lineStartX - lineLength;
+			labelX = lineEndX - stringWidth;
+		}
+
+		//set the colour appropriately
+		if(highlight)
+			g2.setColor(Colors.strongEmphasisLinkColour);
+		else if(isMouseOver)
+			g2.setColor(Colors.highlightedFeatureColour);
+		else
+			g2.setColor(Colors.featureColour);
+
+		// draw a line from the marker to the label
+		g2.drawLine(lineStartX, featureY, lineEndX, labelY - fontHeight / 2);
+
+		//draw a rectangle as a background for the label
+		if(highlight)
+			g2.setColor(Colors.highlightedFeatureLabelBackgroundColour);
+		float arcSize = fontHeight / 1.5f;
+		int horizontalGap = 3;
+		int verticalGap = 4;
+		RoundRectangle2D.Float backGroundRect = new RoundRectangle2D.Float(labelX - horizontalGap, labelY - fontHeight, stringWidth + horizontalGap * 2, fontHeight + verticalGap, arcSize, arcSize);
+		g2.fill(backGroundRect);
+
+		// set the label font colour
+		if(isMouseOver || highlight)
+			g2.setColor(Colors.highlightedFeatureLabelColour);
+		else
+			g2.setColor(Colors.featureLabelColour);
+
+		// draw the label
+		g2.drawString(featureName, labelX, labelY);
+
+		//if necessary draw a highlighted line for the marker on the chromosome itself
+		if(highlight)
+		{
+			// set the feature colour
+			g2.setColor(Colors.highlightedFeatureColour);
+
+			g2.drawLine(gMap.x -1, featureY, gMap.x + gMap.width +1, featureY);
+		}
+	}
+
 
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -321,10 +329,8 @@ public class LabelDisplayManager
 
 
 	//draw all labels for all features on this mapset's selected chromosome if this has been requested
-	public static void drawLabelsForAllVisibleFeatures(Graphics2D g2, GMapSet gMapSet)
+	public static void drawLabelsForAllVisibleFeatures(Graphics2D g2, GChromoMap gMap)
 	{
-		GChromoMap gMap = gMapSet.mapWithAllLabelsShowing;
-
 		//make a separate vector object with all the linked features for this chromo
 		Vector<Feature> vec = new Vector<Feature>();
 		for (int i = 0; i < gMap.allLinkedFeatures.length; i++)

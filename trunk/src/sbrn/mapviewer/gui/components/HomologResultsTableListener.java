@@ -43,7 +43,7 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 	public void mouseClicked(MouseEvent e)
 	{
 		//highlight the feature in the row we clicked on
-//		highlightFeature();
+		highlightFeature();
 
 		// check whether we are in any of the cells containing hyperlinks
 		point.setLocation(e.getX(), e.getY());
@@ -127,7 +127,13 @@ private void highlightFeature()
 	FatController fatController = Strudel.winMain.fatController;
 	MainCanvas mainCanvas = Strudel.winMain.mainCanvas;
 
-	HomologResultsTableModel homologResultsTableModel = (HomologResultsTableModel) resultsTable.getModel();
+	HomologResultsTableModel homologResultsTableModel = null;
+	try
+	{
+		homologResultsTableModel = (HomologResultsTableModel) resultsTable.getModel();
+	}
+	catch (ClassCastException e){}
+
 	// get the index of the selected row but check for changes due to filtering
 	int modelRow = -1;
 	if (resultsTable.getSelectedRow() >= 0)

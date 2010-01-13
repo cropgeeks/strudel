@@ -29,7 +29,7 @@ public class Prefs extends XMLPreferences
 	public static boolean showMaxZoomLevelMessage = true;
 
 	//this boolean is set by the user through a button and indicates a global preference for antialiased or plain darwing styles
-//	public static boolean userPrefAntialias = false;
+	public static boolean userPrefAntialias = false;
 
 	//do we links to be drawn whether their orginating feature is currently visible on the canvas or not?
 	public static boolean drawOnlyLinksToVisibleFeatures = false;

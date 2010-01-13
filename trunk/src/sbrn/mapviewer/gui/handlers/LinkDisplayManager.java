@@ -139,6 +139,7 @@ public class LinkDisplayManager
 //						Strudel.winMain.fatController.selectedMaps.size());
 
 		int numLinksDrawn = 0;
+		long startTime = System.currentTimeMillis();
 
 		//only do this if we have at least 2 genomes -- otherwise there are no links to deal with
 		if(Strudel.winMain.dataContainer.gMapSets.size() > 1)
@@ -324,6 +325,9 @@ public class LinkDisplayManager
 
 			}
 		}
+
+		long endTime = System.currentTimeMillis();
+//		System.out.println("" + numLinksDrawn + " links drawn in " + (endTime-startTime) + " ms");
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -571,8 +575,7 @@ public class LinkDisplayManager
 		double ctrly2 = endY;
 
 		//this is what we do for straight or curved lines
-		if(Strudel.winMain.toolbar.currentLinkShapeType == Constants.LINKTYPE_CURVED ||
-						Strudel.winMain.toolbar.currentLinkShapeType == Constants.LINKTYPE_STRAIGHT)
+		if(Strudel.winMain.toolbar.currentLinkShapeType == Constants.LINKTYPE_CURVED)
 		{
 			//if the linkCurvatureCoeff is greater than 0 we make this line into a curve by moving the control points towards the centre
 			if (linkShapeCoeff > 0)
@@ -585,6 +588,10 @@ public class LinkDisplayManager
 			CubicCurve2D curve = new CubicCurve2D.Double();
 			curve.setCurve(startX, startY, ctrlx1, ctrly1, ctrlx2, ctrly2, endX, endY);
 			g2.draw(curve);
+		}
+		else if(Strudel.winMain.toolbar.currentLinkShapeType == Constants.LINKTYPE_STRAIGHT)
+		{
+			g2.drawLine(startX, startY, endX, endY);
 		}
 		//this is what we do for angled lines
 		else if(Strudel.winMain.toolbar.currentLinkShapeType == Constants.LINKTYPE_ANGLED)

@@ -13,7 +13,7 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 	public String invertChromoStr = "Invert chromosome";
 	public String fitChromoStr = "Fit chromosome on screen";
 	public String showAllLabelsStr = "Show all labels";
-//	public String hideAllLabelsStr = "Hide all labels";
+	//	public String hideAllLabelsStr = "Hide all labels";
 	public String addAllFeaturesStr = "Add features in range to results";
 	public String webInfoStr = "Show annotation for features in range";
 
@@ -51,13 +51,6 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 		GChromoMap selectedMap = Strudel.winMain.fatController.selectionMap;
 		GMapSet gMapSet = selectedMap.owningSet;
 
-//		//check whether we want to display the option for showing all labels
-//		if ((gMapSet.zoomFactor >= gMapSet.singleChromoViewZoomFactor - 1 && gMapSet.singleChromoViewZoomFactor != 0))
-//			showAllLabelsItem.setVisible(true);
-//		else
-//			showAllLabelsItem.setVisible(false);
-
-
 		if(source.equals(invertChromoMenuItem))
 		{
 			//invert the whole chromosome
@@ -93,18 +86,19 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 		}
 		else if(source.equals(showAllLabelsItem))
 		{
-			if(gMapSet.mapWithAllLabelsShowing==null)
+			//if the selected map is not currently showing all labels, set its boolean to true and show the item as selected
+			if(selectedMap.alwaysShowAllLabels == false)
 			{
-				gMapSet.mapWithAllLabelsShowing = selectedMap;
-				gMapSet.alwaysShowAllLabels = true;
+				selectedMap.alwaysShowAllLabels = true;
 				showAllLabelsItem.setSelected(true);
 			}
-			else if(gMapSet.mapWithAllLabelsShowing!=null)
+			//otherwise set the boolean to false and deselect the item
+			else
 			{
-				gMapSet.mapWithAllLabelsShowing = null;
-				gMapSet.alwaysShowAllLabels = false;
+				selectedMap.alwaysShowAllLabels = false;
 				showAllLabelsItem.setSelected(false);
 			}
+
 			//repaint
 			Strudel.winMain.mainCanvas.updateCanvas(true);
 		}

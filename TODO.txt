@@ -86,8 +86,6 @@ Xin & Andy's List:
 
 REFACTORING:
 
-- handling of antialising needs to be streamlined
-- look for unnecessary repaints
 - link drawing algorithm -- review and improve if possible, change straight line drawing to use drawLine method instead of draw(Shape)
 - check whether any features are drawn offscreen (= unnecessarily)
 - ControlToolBar createControls(): action config code is repetitive, hive off into convenience method

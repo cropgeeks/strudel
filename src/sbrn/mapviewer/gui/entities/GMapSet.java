@@ -65,14 +65,9 @@ public class GMapSet
 
 	//a boolean to indicate whether we should always display markers, regardless of zoom factor
 	public boolean overrideMarkersAutoDisplay = false;
-	//a boolean to indicate whether we should always display labels, regardless of zoom factor
-	public boolean alwaysShowAllLabels = false;
 
 	//the zoom control panel pertaining to this mapset
 	public ZoomControlPanel zoomControlPanel;
-
-	//the one and only chromosome in this mapset for which we want to be displaying labels -- if requested -- at all times
-	public GChromoMap mapWithAllLabelsShowing;
 
 	// ====================================c'tor========================================
 

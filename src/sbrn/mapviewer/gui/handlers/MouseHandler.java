@@ -87,22 +87,15 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		lastMouseDragYPos = e.getY();
 		timeOfMouseDown = System.currentTimeMillis();
 
+		GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, e.getX(), e.getY());
+
 		//check whether this is a popup request -- needs to be done both in mousePressed and in mouseReleased due to platform dependent nonsense
 		if (e.isPopupTrigger())
 		{
 			//this is for bringing up a context menu when the mouse is over a chromosome
-			if(mouseOverHandler.selectedMap != null)
+			if(selectedMap != null)
 			{
-				// get the selected set first
-				GChromoMap selectedMap = Utils.getSelectedMap(winMain, Utils.getSelectedSetIndex(e), mousePressedY);
-
-				//clear any feature labels that might be hanging around here
-				selectedMap.drawMouseOverFeatures = false;
-				Strudel.winMain.mainCanvas.updateCanvas(true);
-
-				winMain.fatController.invertMap = selectedMap;
-				winMain.fatController.selectionMap = selectedMap;
-				winMain.chromoContextPopupMenu.show(winMain.mainCanvas, e.getX(), e.getY());
+				processPopupTrigger(selectedMap, e);
 			}
 			return;
 		}
@@ -113,7 +106,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		if (!isMetaClick(e) && !e.isAltDown() && !e.isShiftDown())
 		{
 			// first figure out which chromosome we are in
-			GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, e.getX(), e.getY());
+
 			//if we have clicked on a map, display links between this map and all others
 			if(selectedMap != null)
 			{
@@ -133,8 +126,6 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		//CTRL+click on a chromosome means display all links between this and all other clicked chromos
 		else if (isMetaClick(e) && !e.isShiftDown())
 		{
-			// first figure out which chromosome we are in
-			GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, e.getX(), e.getY());
 			//if we have clicked on a map, display links between this map and all others
 			if(selectedMap != null)
 			{
@@ -154,31 +145,11 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		//check whether this is a popup request -- needs to be done both in mousePressed and in mouseReleased due to platform dependent nonsense
 		if (e.isPopupTrigger())
 		{
+			GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, e.getX(), e.getY());
 			//this is for bringing up a context menu when the mouse is over a chromosome
-			if(mouseOverHandler.selectedMap != null)
+			if(selectedMap != null)
 			{
-				// get the selected map first
-				GChromoMap selectedMap = Utils.getSelectedMap(winMain, Utils.getSelectedSetIndex(e), mousePressedY);
-				winMain.fatController.selectionMap = selectedMap;
-				winMain.fatController.invertMap = selectedMap;
-
-				//if we have got here because we had first drawn a selection rectangle for including all features in a range for inclusion
-				//in the results table, then we want the context menu to only have the option for this, and not inverting chromos etc
-				if(selectedMap.drawSelectionRect)
-				{
-					winMain.chromoContextPopupMenu.addAllFeaturesItem.setVisible(true);
-					winMain.chromoContextPopupMenu.invertChromoMenuItem.setVisible(false);
-					winMain.chromoContextPopupMenu.fitChromoMenuItem.setVisible(false);
-				}
-				else
-				{
-					winMain.chromoContextPopupMenu.addAllFeaturesItem.setVisible(false);
-					winMain.chromoContextPopupMenu.invertChromoMenuItem.setVisible(true);
-					winMain.chromoContextPopupMenu.fitChromoMenuItem.setVisible(true);
-				}
-
-				//show the context menu
-				winMain.chromoContextPopupMenu.show(winMain.mainCanvas, e.getX(), e.getY());
+				processPopupTrigger(selectedMap, e);
 			}
 			return;
 		}
@@ -382,6 +353,36 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		winMain.mainCanvas.updateCanvas(true);
 	}
 
+	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	private void processPopupTrigger(GChromoMap selectedMap, MouseEvent e)
+	{
+		//check whether the 	showAllLabelsItem should be selected or not for this map
+		Strudel.winMain.chromoContextPopupMenu.showAllLabelsItem.setSelected(selectedMap.alwaysShowAllLabels);
+
+		//clear any feature labels that might be hanging around here
+		selectedMap.drawMouseOverFeatures = false;
+		Strudel.winMain.mainCanvas.updateCanvas(true);
+
+		winMain.fatController.invertMap = selectedMap;
+		winMain.fatController.selectionMap = selectedMap;
+
+		//if we have got here because we had first drawn a selection rectangle for including all features in a range for inclusion
+		//in the results table, then we want the context menu to only have the option for this, and not inverting chromos etc
+		if(selectedMap.drawSelectionRect)
+		{
+			winMain.chromoContextPopupMenu.addAllFeaturesItem.setVisible(true);
+			winMain.chromoContextPopupMenu.invertChromoMenuItem.setVisible(false);
+			winMain.chromoContextPopupMenu.fitChromoMenuItem.setVisible(false);
+		}
+		else
+		{
+			winMain.chromoContextPopupMenu.addAllFeaturesItem.setVisible(false);
+			winMain.chromoContextPopupMenu.invertChromoMenuItem.setVisible(true);
+			winMain.chromoContextPopupMenu.fitChromoMenuItem.setVisible(true);
+		}
+		winMain.chromoContextPopupMenu.show(winMain.mainCanvas, e.getX(), e.getY());
+	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

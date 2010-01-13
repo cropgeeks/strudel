@@ -216,8 +216,6 @@ public class FatController
 
 			//marker and label display overrides
 			gMapSet.overrideMarkersAutoDisplay = false;
-			gMapSet.alwaysShowAllLabels = false;
-			gMapSet.mapWithAllLabelsShowing = null;
 			winMain.chromoContextPopupMenu.showAllLabelsItem.setText(winMain.chromoContextPopupMenu.showAllLabelsStr);
 
 			//for all maps within mapset
@@ -238,6 +236,8 @@ public class FatController
 
 				//don't draw mouseover feature labels
 				gMap.drawMouseOverFeatures = false;
+
+				gMap.alwaysShowAllLabels = false;
 			}
 		}
 

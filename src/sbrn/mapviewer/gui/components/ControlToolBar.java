@@ -83,10 +83,10 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		add(memLabel);
 		add(new JLabel("  "));
 
+		//these buttons have states stored in the prefs
 		bAntialias.setSelected(Prefs.userPrefAntialias);
-
 		bLinkFilter.setSelected(Prefs.drawOnlyLinksToVisibleFeatures);
-		bDistMarkers.setEnabled(false);
+		bDistMarkers.setSelected(Prefs.showDistanceMarkers);
 	}
 
 	private void createControls()
@@ -195,7 +195,6 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		else if(e.getSource() == bAntialias)
 		{
 			Prefs.userPrefAntialias = bAntialias.isSelected();
-			Strudel.winMain.mainCanvas.antiAlias = bAntialias.isSelected();
 			Strudel.winMain.mainCanvas.updateCanvas(true);
 		}
 

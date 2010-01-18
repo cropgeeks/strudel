@@ -119,10 +119,6 @@ public class Strudel
 						winMain.fatController.loadOwnData = true;
 						DataLoadUtils.loadDataInThread(initialFile, true);
 					}
-
-					//if the version has been updated, go to the website and get the update info
-					if (Install4j.displayUpdate)
-						Utils.visitURL(Constants.strudelWhatsNewPage);
 				}
 
 			});

@@ -51,15 +51,15 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 		setBorder(javax.swing.BorderFactory.createTitledBorder("Highlighted region: "));
 		setMinimumSize(new java.awt.Dimension(10, 300));
 
-		genomeLabel.setText("genome");
+		genomeLabel.setText("n/a");
 
-		chromoLabel.setText("chromo");
+		chromoLabel.setText("n/a");
 
-		regionStartLabel.setText("start");
+		regionStartLabel.setText("n/a");
 
-		regionEndLabel.setText("end");
+		regionEndLabel.setText("n/a");
 
-		numberFeaturesLabel.setText("num");
+		numberFeaturesLabel.setText("n/a");
 
 		showLabelsCheckbox.setText("Show all labels");
 		showLabelsCheckbox.addChangeListener(new javax.swing.event.ChangeListener()
@@ -122,6 +122,8 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 			HomologResultsTableModel homologResultsTableModel = (HomologResultsTableModel) Strudel.winMain.ffResultsPanel.resultsTable.getModel();
 			int genomeColumnIndex = homologResultsTableModel.findColumn(homologResultsTableModel.homologGenomeColumnLabel);
 			Strudel.winMain.ffResultsPanel.resultsTable.newFilter(genomeName, genomeColumnIndex);
+
+			Strudel.winMain.mainCanvas.updateCanvas(true);
 		}
 	}
 

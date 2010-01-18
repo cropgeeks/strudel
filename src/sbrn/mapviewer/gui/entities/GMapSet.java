@@ -40,7 +40,7 @@ public class GMapSet
 
 	// the point on the genome that is currently seen in the center of the canvas, in pixels, measured from the top of the genome
 	//n.b. when we are zoomed in to beyond a level where we can see the entire genome the genome height will be
-	//greater than the canvas height
+	//greater than the height of the visible part of the main canvas
 	public int centerPoint = 0;
 
 	// the total current height of the genome as drawn on the canvas, in pixels

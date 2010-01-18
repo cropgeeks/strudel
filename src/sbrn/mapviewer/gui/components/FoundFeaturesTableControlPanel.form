@@ -99,27 +99,27 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="genomeLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="genome"/>
+        <Property name="text" type="java.lang.String" value="n/a"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="chromoLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="chromo"/>
+        <Property name="text" type="java.lang.String" value="n/a"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="regionStartLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="start"/>
+        <Property name="text" type="java.lang.String" value="n/a"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="regionEndLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="end"/>
+        <Property name="text" type="java.lang.String" value="n/a"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="numberFeaturesLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="num"/>
+        <Property name="text" type="java.lang.String" value="n/a"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JCheckBox" name="showLabelsCheckbox">

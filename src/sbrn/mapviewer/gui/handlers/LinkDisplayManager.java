@@ -5,6 +5,7 @@ import java.awt.geom.*;
 import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
+import javax.swing.table.*;
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
@@ -45,9 +46,6 @@ public class LinkDisplayManager
 	// display the homologies between chromosomes as lines
 	public void processLinkDisplayRequest(GChromoMap selectedMap)
 	{
-//		System.out.println("\n\n===============clicked on map " + selectedMap.name + ", index " +
-//						Strudel.winMain.dataContainer.gMapSets.indexOf(selectedMap.owningSet));
-
 		Vector<GChromoMap> selectedMaps = Strudel.winMain.fatController.selectedMaps;
 
 		//only do this if we have reference genomes -- otherwise there are no links
@@ -126,7 +124,7 @@ public class LinkDisplayManager
 		}
 		catch (Exception e) {}
 
-//		drawAllLinks(g, 0, killMe);
+		//		drawAllLinks(g, 0, killMe);
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -135,9 +133,6 @@ public class LinkDisplayManager
 	// Draws the lines between a chromosome of the reference genome and all potential homologues in the compared genome
 	public void drawAllLinks(Graphics2D g2, int startIndex, Boolean killMe)
 	{
-//		System.out.println("Strudel.winMain.fatController.selectedMaps.size() = " +
-//						Strudel.winMain.fatController.selectedMaps.size());
-
 		int numLinksDrawn = 0;
 		long startTime = System.currentTimeMillis();
 
@@ -158,9 +153,6 @@ public class LinkDisplayManager
 
 					// get the currently selected map
 					GChromoMap targetGMap = Strudel.winMain.fatController.selectedMaps.get(i);
-
-//					System.out.println("###########Strudel.winMain.fatController.selectedMaps.get(i) = "
-//									+ Strudel.winMain.fatController.selectedMaps.get(i).name);
 
 					// get the ChromoMap for the currently selected chromosome
 					ChromoMap selectedChromoMap = targetGMap.chromoMap;
@@ -191,25 +183,11 @@ public class LinkDisplayManager
 						GMapSet targetGMapSet = targetGMap.owningSet;
 						GMapSet referenceGMapSet = referenceGMap.owningSet;
 
-//						System.out.println("+++++++linkset is between " + targetGMap.name + ", index " +
-//										Strudel.winMain.dataContainer.gMapSets.indexOf(targetGMap.owningSet)
-//										+ " and " + referenceGMap.name + ", index " +
-//										Strudel.winMain.dataContainer.gMapSets.indexOf(referenceGMap.owningSet));
-
 						//need to check whether there is any point in proceeding here
 						//if the user is doing Ctrl click selection of maps they will only want to see links between the ones they selected
 						//so if we don't have both of the maps in this map set selected, just skip to the next one
 						if (Strudel.winMain.fatController.isCtrlClickSelection)
 						{
-//							System.out.println("Strudel.winMain.fatController.selectedMaps.contains(targetGMap) = "
-//											+ Strudel.winMain.fatController.selectedMaps.contains(targetGMap));
-//
-//							System.out.println("Strudel.winMain.fatController.selectedMaps.contains(referenceGMap) = " +
-//											Strudel.winMain.fatController.selectedMaps.contains(referenceGMap));
-//
-//							System.out.println("drawnLinkSets.contains(selectedLinks) = "
-//											+ drawnLinkSets.contains(selectedLinks));
-
 							boolean bothMapsPresent = Strudel.winMain.fatController.selectedMaps.contains(targetGMap)
 							&& Strudel.winMain.fatController.selectedMaps.contains(referenceGMap);
 							boolean setDrawnAlready = drawnLinkSets.contains(selectedLinks);
@@ -217,7 +195,6 @@ public class LinkDisplayManager
 
 							if (!bothMapsPresent || setDrawnAlready || !gMapSetsAdjacent)
 							{
-//								System.out.println("continuing");
 								continue;
 							}
 						}
@@ -246,8 +223,6 @@ public class LinkDisplayManager
 
 						//add this linkset to our vector of linksets we have drawn already, for tracking
 						drawnLinkSets.add(selectedLinks);
-
-//						System.out.println("drawing linkset");
 
 						// for each link in the linkset
 						for (int li = startIndex, n = selectedLinks.size(); li < n; li += MainCanvas.cores)
@@ -284,17 +259,17 @@ public class LinkDisplayManager
 								float referenceFeatureStart = referenceFeature.getStart();
 
 								// convert the y value to scaled coordinates on the canvas by obtaining the coords of the appropriate chromosome object and scaling them appropriately
-								int targetY = Utils.getFPosOnScreenInPixels(targetGMap, targetFeatureStart, false);
-								int referenceY = Utils.getFPosOnScreenInPixels(referenceGMap, referenceFeatureStart, false);
+								int targetY = Utils.relativeFPosToPixelOnCanvas(targetGMap, targetFeatureStart, false);
+								int referenceY = Utils.relativeFPosToPixelOnCanvas(referenceGMap, referenceFeatureStart, false);
 
 								//check for chromosome inversion and invert values if necessary
 								if (targetGMap.isPartlyInverted)
 								{
-									targetY = Utils.getFPosOnScreenInPixels(targetGMap, targetFeatureStart, true);
+									targetY = Utils.relativeFPosToPixelOnCanvas(targetGMap, targetFeatureStart, true);
 								}
 								if (referenceGMap.isPartlyInverted)
 								{
-									referenceY = Utils.getFPosOnScreenInPixels(referenceGMap, referenceFeatureStart, true);
+									referenceY = Utils.relativeFPosToPixelOnCanvas(referenceGMap, referenceFeatureStart, true);
 								}
 
 								//decide whether this link should be drawn or not
@@ -311,7 +286,6 @@ public class LinkDisplayManager
 								{
 									linesDrawn.put(key, true);
 									// draw the link either as a straight line or a curve
-//									System.out.println("drawing link");
 									drawStraightOrCurvedLink(g2, targetChromoX, targetY, referenceChromoX, referenceY);
 									numLinksDrawn++;
 								}
@@ -327,7 +301,7 @@ public class LinkDisplayManager
 		}
 
 		long endTime = System.currentTimeMillis();
-//		System.out.println("" + numLinksDrawn + " links drawn in " + (endTime-startTime) + " ms");
+		//		System.out.println("" + numLinksDrawn + " links drawn in " + (endTime-startTime) + " ms");
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -389,49 +363,32 @@ public class LinkDisplayManager
 		//only do this if we have at least 2 genomes -- otherwise there are no links to deal with
 		if(Strudel.winMain.dataContainer.gMapSets.size() > 1)
 		{
-			// for all  links sets
-			for (LinkSet selectedLinks : Strudel.winMain.dataContainer.allLinkSets)
+			//get the entries from the results table
+			TableModel model = Strudel.winMain.ffResultsPanel.resultsTable.getModel();
+			if (model instanceof HomologResultsTableModel)
 			{
-				// for each link in the linkset
-				for (Link link : selectedLinks)
+				for (ResultsTableEntry tableEntry : Strudel.winMain.ffResultsPanel.resultsTable.getVisibleEntries())
 				{
-					//get the features of this link
-					Feature f1 = link.getFeature1();
-					Feature f2 = link.getFeature2();
-
-					//get the gmaps they are on
-					GChromoMap targetGMap = Strudel.winMain.fatController.selectionMap;
-					ChromoMap refMap = Utils.pickRefMapFromFeaturesInLink(link, targetGMap);
-					GChromoMap refGMap = Utils.getClosestGMap(refMap, targetGMap);
-					//figure which feature is the target
-					Feature targetFeature, refFeature;
-					if(f1.getOwningMap() == refMap)
+					if (tableEntry.getHomologFeature() != null)
 					{
-						targetFeature = f2;
-						refFeature = f1;
-					}
-					else
-					{
-						targetFeature = f1;
-						refFeature = f2;
-					}
+						Feature targetFeature = tableEntry.getTargetFeature();
+						Feature homolog = tableEntry.getHomologFeature();
+						GChromoMap targetGMap = targetFeature.getOwningMap().getGChromoMaps().get(0);
+						GChromoMap refGMap = homolog.getOwningMap().getGChromoMaps().get(0);
 
-					//test for their visibility
-					boolean bothFeaturesVisible = Utils.checkFeatureVisibility(targetGMap, targetFeature) &&
-					Utils.checkFeatureVisibility(refGMap, refFeature) ;
+						//if visible link filtering is turned on we need to check whether the features for this link are both visible on screen
+						if(Strudel.winMain.toolbar.bLinkFilter.isSelected())
+						{
+							if(!(Utils.checkFeatureVisibility(targetGMap, targetFeature) && Utils.checkFeatureVisibility(refGMap, homolog)))
+								continue;
+						}
 
-					Vector<Feature> featuresInRange = FeatureSearchHandler.featuresInRange;
-
-					//check whether either of the features for this link are included in the found features list of their maps
-					// we also only want to draw this link if it has a BLAST e-value smaller than the cut-off currently selected by the user
-					boolean eValueBelowThreshold = (featuresInRange.contains(f1) || featuresInRange.contains(f2) ) && link.getBlastScore() <= blastThreshold;
-
-					if(eValueBelowThreshold)
-					{
-						if ((Prefs.drawOnlyLinksToVisibleFeatures && bothFeaturesVisible) || !Prefs.drawOnlyLinksToVisibleFeatures )
+						//check the e-Value cutoff
+						float eValue = Float.parseFloat(tableEntry.getLinkEValue());
+						if(eValue <= blastThreshold)
 						{
 							//draw the link
-							drawHighlightedLink(g2, f1, f2, false, targetGMap,refGMap);
+							drawHighlightedLink(g2, targetFeature, homolog, false, targetGMap, refGMap);
 						}
 					}
 				}
@@ -457,16 +414,12 @@ public class LinkDisplayManager
 				//for each map
 				for(ChromoMap cMap : mapset)
 				{
-//					System.out.println("==========current map is " + cMap.getName());
-
 					//make a new entry for the lookup
 					linkSetLookup.put(cMap, new Vector<LinkSet>());
 
 					//for each feature on this map
 					for(Feature feature : cMap.getFeatureList())
 					{
-//						System.out.println("-----feature " + feature.getName());
-
 						//get all the links for this feature
 						Vector<Link> links = feature.getLinks();
 
@@ -479,11 +432,6 @@ public class LinkDisplayManager
 								otherMap = link.getFeature2().getOwningMap();
 							else
 								otherMap = link.getFeature1().getOwningMap();
-
-//							System.out.println("+++maps for this linkset: (cMap) "+ cMap.getOwningMapSet().getName() + " "
-//											+ cMap.getName() + " and (otherMap) " + otherMap.getOwningMapSet().getName()
-//											+ " " + otherMap.getName());
-//							System.out.println("corresponding objects: " + cMap + ", " + otherMap);
 
 							LinkSet linkset = null;
 
@@ -501,7 +449,6 @@ public class LinkDisplayManager
 							{
 								numEntriesMade++;
 								linkset = new LinkSet();
-//								System.out.println("&&&&making new  linkset ");
 							}
 
 							if(!linkSetLookup.get(cMap).contains(linkset))
@@ -513,9 +460,6 @@ public class LinkDisplayManager
 					}
 				}
 			}
-
-//			System.out.println("num linksets made = " + numEntriesMade);
-//			System.out.println("numEntries in linkSetLookup= " + linkSetLookup.keySet().size());
 		}
 		catch (Exception e)
 		{
@@ -532,28 +476,20 @@ public class LinkDisplayManager
 		{
 			for (LinkSet ls : linkSetLookup.get(cMap))
 			{
-//				System.out.println("trying set " + ls);
-
 				//if one exists, use that
 				Link example = ls.getLinks().get(0);
 
 				ChromoMap map1 = example.getFeature1().getOwningMap();
 				ChromoMap map2 = example.getFeature2().getOwningMap();
 
-//				System.out.println("linkset between " + map1.getOwningMapSet().getName() + " " + map1.getName() + " and " + map2.getOwningMapSet().getName() + " " + map2.getName());
-//				System.out.println("corresponding objects: " + map1 + ", " + map2);
-
 				if ((map1 == cMap && map2 == otherMap) || (map2 == cMap && map1 == otherMap))
 				{
 					linkSet = ls;
-//					System.out.println("@@@@using existing set ");
-
 					//now we can break out of the loop since there can only be one instance of this linkset anyway
 					break;
 				}
 			}
 		}
-//		System.out.println("returning set " + linkSet);
 		return linkSet;
 	}
 

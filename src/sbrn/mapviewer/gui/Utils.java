@@ -106,6 +106,36 @@ public class Utils
 
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
 
+	//finds a map by name; if there are multiple instrances of the gmapset the map belongs to, this will return
+	//the first one
+	public static GChromoMap getGMapByNameAndGMapset(String gMapName, GMapSet targetSet)
+	{
+		GChromoMap foundMap = null;
+
+		//we need to search all chromomaps in all mapsets for this
+		GMapSet foundSet = null;
+		// for all gmapsets
+		for (GMapSet gMapSet : Strudel.winMain.dataContainer.gMapSets)
+		{
+			if(gMapSet == targetSet)
+			{
+				foundSet = gMapSet;
+				break;
+			}
+		}
+
+		// for all gchromomaps within each mapset
+		for (GChromoMap gChromoMap : foundSet.gMaps)
+		{
+			if(gChromoMap.name.equals(gMapName))
+				foundMap = gChromoMap;
+		}
+
+		return foundMap;
+	}
+
+	// --------------------------------------------------------------------------------------------------------------------------------------------------------
+
 	//finds a Feature by name in the centrally held set of GMapSets
 	public static Feature getFeatureByName(String featureName)
 	{
@@ -484,24 +514,61 @@ public class Utils
 
 	// --------------------------------------------------------------------------------------------------------------------------------
 
-	public static int convertRelativeFPosToPixels(GMapSet owningSet, ChromoMap chromoMap, float fPos)
+	/**converts the position of a feature on its map (fPos) from its original units (centiMorgans or base pairs) to a pixel
+	 * position on its owning gMap, in pixels and assuming the map starts at zero pixels
+	 */
+	public static int relativeFPosToPixelsOnGMap(GMapSet owningSet, ChromoMap chromoMap, float fPos)
 	{
 		return Math.round((owningSet.chromoHeight / chromoMap.getStop()) * fPos);
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
 
-	public static int getFPosOnScreenInPixels(GChromoMap gMap, float fPos, boolean inverted)
+	/**
+	 * converts the position of a feature on its map (fPos) from its original units (centiMorgans or base pairs) to a pixel
+	 * position on the canvas, in pixels; this may or may not be within the boundaries of the currently visible part of the canvas
+	 */
+	public static int relativeFPosToPixelOnCanvas(GChromoMap gMap, float fPos, boolean inverted)
 	{
 		ChromoMap chromoMap = gMap.chromoMap;
-		int fDist = Math.round((gMap.height / chromoMap.getStop()) * fPos);
-		int fPosOnScreen =  fDist + gMap.yOnCanvas + gMap.currentY;
+		int fDist = relativeFPosToPixelsOnGMap(gMap.owningSet, chromoMap, fPos);
+		int fPosOnScreen =  fDist + gMap.y + gMap.currentY;
 
 		if(inverted)
-			return gMap.yOnCanvas + gMap.currentY + gMap.height - fDist;
+			return gMap.y + gMap.currentY + gMap.height - fDist;
 
 		return fPosOnScreen;
+	}
 
+	/**
+	 * Converts the position of a feature on its gMap (in pixels, assuming the map starts at zero) to an absolute position
+	 * on the canvas, in pixels; this may or may not be within the boundaries of the currently visible part of the canvas
+	 */
+	// --------------------------------------------------------------------------------------------------------------------------------
+
+	public static int pixelsOnChromoToPixelsOnCanvas(GChromoMap gMap, int fPos, boolean inverted)
+	{
+		int spaceAboveMap = calcSpaceAboveGMap(gMap);
+		int fPosOnScreen =  fPos + spaceAboveMap + gMap.currentY;
+
+		if(inverted)
+			return spaceAboveMap + gMap.currentY + gMap.height - fPos;
+
+		return fPosOnScreen;
+	}
+
+	// --------------------------------------------------------------------------------------------------------------------------------
+
+	//returns the vertical extent of the genome above the gMap in pixels
+	//this includes the spaces between chromosomes and the chromosomes themselves
+	private static int calcSpaceAboveGMap(GChromoMap gMap)
+	{
+		//how many chromosomes are above this map in the genome
+		int numChromosAbove = gMap.index;
+		//combined spaces between chromos
+		int spacer = Strudel.winMain.mainCanvas.chromoSpacing;
+		return (numChromosAbove * gMap.owningSet.chromoHeight) +
+		(numChromosAbove * spacer);
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -515,20 +582,8 @@ public class Utils
 		{
 			if (feature != null)
 			{
-				//get the owning map and gMap
-				ChromoMap cMap = gMap.chromoMap;
-
-				//get the relative position on the map
-				float fStart = feature.getStart();
-				//convert this to an absolute position on the canvas in pixels
-				int pixelPos = -1;
-				if(!gMap.isFullyInverted || !gMap.isPartlyInverted)
-					pixelPos = getFPosOnScreenInPixels(gMap, fStart, false);
-				else
-					pixelPos = getFPosOnScreenInPixels(gMap, fStart, true);
-
 				//check whether this position is currently showing on the canvas or not
-				if (pixelPos > 0 && pixelPos < Strudel.winMain.mainCanvas.getHeight())
+				if (checkFeatureVisibility(gMap, feature))
 				{
 					//if it is, add it
 					visibleFeatures.add(feature);
@@ -552,16 +607,15 @@ public class Utils
 			//convert this to an absolute position on the canvas in pixels
 			int pixelPos = -1;
 			if(!gMap.isFullyInverted || !gMap.isPartlyInverted)
-				pixelPos = getFPosOnScreenInPixels(gMap, fStart, false);
+				pixelPos = relativeFPosToPixelOnCanvas(gMap, fStart, false);
 			else
-				pixelPos = getFPosOnScreenInPixels(gMap, fStart, true);
+				pixelPos = relativeFPosToPixelOnCanvas(gMap, fStart, true);
 
 			//check whether this position is currently showing on the canvas or not
 			if (pixelPos > 0 && pixelPos < Strudel.winMain.mainCanvas.getHeight())
 			{
 				featureIsVisible = true;
 			}
-
 		}
 
 		return featureIsVisible;
@@ -662,6 +716,45 @@ public class Utils
 			refMap = feat1Map;
 
 		return refMap;
+	}
+
+	// --------------------------------------------------------------------------------------------------------------------------------
+
+	//puts a list of features from the same gMapSet into the right sort order according to their layout on screen (i.e. top to bottom within the genome)
+	public static LinkedList<Feature> sortFeaturesWithinGMapset(LinkedList<Feature> features, GMapSet gMapSet)
+	{
+		LinkedList<Feature> sortedFeatures = new LinkedList<Feature>();
+		TreeMap<GChromoMap, LinkedList<Feature>> lookup = new TreeMap<GChromoMap, LinkedList<Feature>>();
+
+		//sort the features into their maps first
+		for(Feature f : features)
+		{
+			addFeatureToLookup( gMapSet, f, lookup);
+		}
+		//then sort each feature list from each map in its natural (ascending) order
+		for(GChromoMap map : lookup.keySet())
+		{
+			Collections.sort(lookup.get(map));
+			//put the features from each map into the sorted list in order of the maps within the mapset
+			sortedFeatures.addAll(lookup.get(map));
+		}
+
+		return sortedFeatures;
+	}
+	//------------------------------------------------------------------------------------------------------------------------------------
+
+	private static void addFeatureToLookup(GMapSet gMapSet, Feature feature, TreeMap<GChromoMap, LinkedList<Feature>> lookup)
+	{
+		GChromoMap chromoMap = getGMapByNameAndGMapset(feature.getOwningMap().getName(), gMapSet);
+		//check whether its gMap is listed here
+		if(!lookup.keySet().contains(chromoMap))
+		{
+			//if not, add it to the lookup
+			lookup.put(chromoMap, new LinkedList<Feature>());
+		}
+		//if the feature is not present in the feature list for this gmap, add it
+		if(!lookup.get(chromoMap).contains(feature))
+			lookup.get(chromoMap).add(feature);
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------

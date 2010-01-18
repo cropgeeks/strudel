@@ -173,8 +173,8 @@ public class FeatureSearchHandler
 				//now put the results into the JTable held by the results panel
 				updateResultsTable(features);
 
-				//hide the control panel for the results table as it is not needed with this kind of results
-				Strudel.winMain.foundFeaturesTableControlPanel.setVisible(false);
+				//earmark the features for drawing on repaint
+				Strudel.winMain.mainCanvas.drawFeaturesFoundByName = true;
 
 				// validate and repaint the canvas so it knows it has been resized
 				Strudel.winMain.validate();

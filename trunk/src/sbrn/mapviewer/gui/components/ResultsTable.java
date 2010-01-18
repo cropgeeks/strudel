@@ -5,6 +5,7 @@ import java.awt.font.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.table.*;
+import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.entities.*;
 
@@ -190,6 +191,9 @@ public class ResultsTable extends JTable
 			((DefaultRowSorter<TableModel, Integer>) getRowSorter()).setRowFilter(null);
 		else
 			((DefaultRowSorter<TableModel, Integer>) getRowSorter()).setRowFilter(rf);
+
+		//update the label that says how many features are contained in the results table
+		Strudel.winMain.foundFeaturesTableControlPanel.getNumberFeaturesLabel().setText(new Integer(getVisibleEntries().size()).toString());
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -260,6 +264,22 @@ public class ResultsTable extends JTable
 		return urlAvailable;
 	}
 
+
+	//	---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	public LinkedList<ResultsTableEntry> getVisibleEntries()
+	{
+		LinkedList<ResultsTableEntry> visibleEntries = new LinkedList<ResultsTableEntry>();
+
+		for (int i = 0; i < getRowCount(); i++)
+		{
+			HomologResultsTableModel model = (HomologResultsTableModel) getModel();
+			ResultsTableEntry resultsTableEntry = model.tableEntries.get(convertRowIndexToModel(i));
+			visibleEntries.add(resultsTableEntry);
+		}
+
+		return visibleEntries;
+	}
 
 	//	---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

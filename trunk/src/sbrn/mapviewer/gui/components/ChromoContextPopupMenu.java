@@ -79,6 +79,9 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 					Strudel.winMain.ffResultsPanel.resultsTable.addFeaturesFromSelectedMap(selectedMap);
 				else
 					FeatureSearchHandler.findFeaturesInRangeFromCanvasSelection();
+
+				//update the label that says how many features are contained in the results table
+				Strudel.winMain.foundFeaturesTableControlPanel.getNumberFeaturesLabel().setText(new Integer(Strudel.winMain.ffResultsPanel.resultsTable.getVisibleEntries().size()).toString());
 			}
 
 			//repaint

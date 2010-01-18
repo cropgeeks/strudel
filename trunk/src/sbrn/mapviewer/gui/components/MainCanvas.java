@@ -29,7 +29,7 @@ public class MainCanvas extends JPanel
 
 	// if true, antialias everything
 	//this is a flag set by code within the application
-	public boolean antiAlias = false;
+	//	public boolean antiAlias = false;
 	//in addition we have a flag set by the user (through a button) -- userPrefAntialias
 	//stored in the Prefs
 	//this overrides the local flag if it is set to false
@@ -65,8 +65,16 @@ public class MainCanvas extends JPanel
 	//true if we want to display features within a certain range the user has searched for with the find dialog
 	public boolean drawFoundFeaturesInRange = false;
 
+	//true if we want to display features within a certain range the user has searched for with the find dialog
+	public boolean drawFeaturesFoundByName = false;
+
 	// a minimum space (in pixels) we want to leave at the top and the bottom of the tallest genome
 	public int topBottomSpacer = 0;
+
+	// the total amount of space we have for drawing on vertically, in pixels
+	int availableSpaceVertically = 0;
+	// the combined height of all the vertical spaces between chromosomes
+	int allSpacers = 0;
 
 	// width of chromosomes -- set this to a fixed fraction of the screen width for now
 	//gets set in the paintCanvas method
@@ -75,9 +83,11 @@ public class MainCanvas extends JPanel
 	// Objects for multicore rendering
 	public static int cores = Runtime.getRuntime().availableProcessors();
 	public static ExecutorService executor;
-	public static Future[] tasks;
+	public static Future<?>[] tasks;
 
 	public int numMarkersDrawn = 0;
+
+	Rectangle canvasBounds = null;
 
 	// ============================curve'tor==================================
 
@@ -109,6 +119,8 @@ public class MainCanvas extends JPanel
 	@Override
 	public void paintComponent(Graphics graphics)
 	{
+//		System.out.println("=====main canvas paintComponent " + System.currentTimeMillis());
+
 		super.paintComponent(graphics);
 
 		Graphics2D g = (Graphics2D) graphics;
@@ -131,12 +143,12 @@ public class MainCanvas extends JPanel
 			bufferGraphics.dispose();
 
 			// Set up a post-render AA thread for a pretty repaint when ready
-			if(antiAlias)
+			if(Strudel.winMain.toolbar.bAntialias.isSelected())
 				new AntiAliasRepaintThread(aaBuffer);
 		}
 
 		// Render the back-buffer
-		if (AntiAliasRepaintThread.hasImage && antiAlias)
+		if (AntiAliasRepaintThread.hasImage && Strudel.winMain.toolbar.bAntialias.isSelected())
 			g.drawImage(aaBuffer, 0, 0, null);
 		else
 			g.drawImage(buffer, 0, 0, null);
@@ -156,6 +168,19 @@ public class MainCanvas extends JPanel
 
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
+		//this draws the distance markers and mouseover labels on all genomes
+		drawMouseOverLabels(g);
+
+		//this just draws a label and, where required, a link for a single highlighted features -- need to be drawn at the very end to be on top of everything else
+		if (drawHighlightFeatures)
+			drawHighlightFeatures(g);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------------------------------------
+
+	//draws the and mouseover labels on all genomes
+	private void drawMouseOverLabels(Graphics2D g2)
+	{
 		//now we need to draw the rest of the things relating to the map
 		//this needs to be done after drawing the links so it is all visible on top of the links
 		for (GMapSet gMapSet : winMain.dataContainer.gMapSets)
@@ -165,36 +190,55 @@ public class MainCanvas extends JPanel
 			{
 				if(gChromoMap.isShowingOnCanvas)
 				{
-					if(Prefs.showDistanceMarkers)
-					{
-						gChromoMap.drawDistanceMarkers(g);
-					}
-					gChromoMap.drawMouseOverFeatures(g);
+					gChromoMap.drawMouseOverFeatures(g2);
 				}
 			}
 		}
+	}
 
-		//this just draws a label for a single highlighted features -- need to be drawn at the very end to be on top of everything else
-		if (drawHighlightFeatures)
+
+	//------------------------------------------------------------------------------------------------------------------------------------------------
+
+	//draws the distance markers on all genomes
+	private void drawDistanceMarkers(Graphics2D g2)
+	{
+		//now we need to draw the rest of the things relating to the map
+		//this needs to be done after drawing the links so it is all visible on top of the links
+		for (GMapSet gMapSet : winMain.dataContainer.gMapSets)
 		{
-			if(winMain.fatController.highlightFeatureHomolog != null)
+			// for each chromosome in the genome
+			for (GChromoMap gChromoMap : gMapSet.gMaps)
 			{
-				//we also want to check whether there are any links to display that are to be highlighted after a name based search for
-				//features and links originating from them
-				linkDisplayManager.drawHighlightedLink(g, winMain.fatController.highlightFeature, winMain.fatController.highlightFeatureHomolog, true,
-								winMain.fatController.highlightFeatGMap, winMain.fatController.highlightFeatHomGMap);
-				//label for the target feature
-				LabelDisplayManager.drawHighlightedFeatureLabel(g, winMain.fatController.highlightFeature,
-								winMain.fatController.highlightFeatureHomolog, winMain.fatController.highlightFeatGMap, winMain.fatController.highlightFeatHomGMap);
-				//label for the homolog
-				LabelDisplayManager.drawHighlightedFeatureLabel(g, winMain.fatController.highlightFeatureHomolog,
-								winMain.fatController.highlightFeature, winMain.fatController.highlightFeatHomGMap, winMain.fatController.highlightFeatGMap);
+				if(gChromoMap.isShowingOnCanvas)
+				{
+					gChromoMap.drawDistanceMarkers(g2);
+				}
 			}
-			else
-			{
-				//just draw the feature label
-				LabelDisplayManager.drawHighlightedFeatureLabel(g, winMain.fatController.highlightFeature, null, winMain.fatController.highlightFeatGMap, null);
-			}
+		}
+	}
+
+	//------------------------------------------------------------------------------------------------------------------------------------------------
+
+	//draws labels and optionally links for a single feature or a feature pair we want to highlight
+	private void drawHighlightFeatures(Graphics2D g2)
+	{
+		if(winMain.fatController.highlightFeatureHomolog != null)
+		{
+			//we also want to check whether there are any links to display that are to be highlighted after a name based search for
+			//features and links originating from them
+			linkDisplayManager.drawHighlightedLink(g2, winMain.fatController.highlightFeature, winMain.fatController.highlightFeatureHomolog, true,
+							winMain.fatController.highlightFeatGMap, winMain.fatController.highlightFeatHomGMap);
+			//label for the target feature
+			LabelDisplayManager.drawHighlightedFeatureLabel(g2, winMain.fatController.highlightFeature,
+							winMain.fatController.highlightFeatureHomolog, winMain.fatController.highlightFeatGMap, winMain.fatController.highlightFeatHomGMap);
+			//label for the homolog
+			LabelDisplayManager.drawHighlightedFeatureLabel(g2, winMain.fatController.highlightFeatureHomolog,
+							winMain.fatController.highlightFeature, winMain.fatController.highlightFeatHomGMap, winMain.fatController.highlightFeatGMap);
+		}
+		else
+		{
+			//just draw the feature label
+			LabelDisplayManager.drawHighlightedFeatureLabel(g2, winMain.fatController.highlightFeature, null, winMain.fatController.highlightFeatGMap, null);
 		}
 	}
 
@@ -203,33 +247,8 @@ public class MainCanvas extends JPanel
 	// paint the genomes or portions thereof onto this canvas
 	public void paintCanvas(Graphics2D g2, Boolean killMe)
 	{
-		long startTime = System.currentTimeMillis();
-		numMarkersDrawn = 0;
-
-		//background
-		setBackground(Colors.mainCanvasBackgroundColour);
-
-		// get current size of frame
-		canvasHeight = getHeight();
-		canvasWidth = getWidth();
-
-		// create a bounding rectangle the size of the currently visible canvas
-		Rectangle canvasBounds = new Rectangle(0, 0, this.getWidth(), this.getHeight());
-
-		//background gradient from top to bottom, dark to light, starts black
-		Color b1 = Colors.backgroundGradientStartColour;
-		Color b2 = Colors.backgroundGradientEndColour;
-		g2.setPaint(new GradientPaint(canvasWidth / 2, 0, b1, canvasWidth / 2, canvasHeight, b2));
-		g2.fillRect(0, 0, canvasWidth, canvasHeight);
-
-		// width of chromosomes -- set this to a fixed fraction of the screen width for now
-		chromoWidth = Math.round(canvasWidth / 40);
-
-		// check that this number is even
-		boolean evenNumber = chromoWidth % 2 == 0;
-		// if it isn't just add 1 -- otherwise we get into trouble with feature line widths exceeding the width of the chromosome
-		if (!evenNumber)
-			chromoWidth += 1;
+		//work out general position and colour parameters
+		calcRequiredParams(g2);
 
 		//for all mapsets
 		for (GMapSet gMapSet : winMain.dataContainer.gMapSets)
@@ -246,108 +265,19 @@ public class MainCanvas extends JPanel
 
 			// work out the other coordinates needed
 			// these are genome specific because we can have a different zoom factor for each genome
-			// the total amount of space we have for drawing on vertically, in pixels
-			int availableSpaceVertically = canvasHeight - (chromoSpacing * 2);
-			// the combined height of all the vertical spaces between chromosomes
-			int allSpacers = chromoSpacing * (winMain.dataContainer.maxChromos - 1);
-
 			// currentY is the y position at which we start drawing the genome, chromo by chromo, top to bottom
 			// this may be off the visible canvas in a northerly direction
-			int currentY = 0;
-
-			// this is what we do at a zoom factor of 1 (at startup but also after zoom reset)
-			if (gMapSet.zoomFactor == 1)
-			{
-				// the height of a chromosome
-				gMapSet.chromoHeight = (availableSpaceVertically - allSpacers) / winMain.dataContainer.maxChromos;
-				initialChromoHeight = gMapSet.chromoHeight;
-				initialCanvasHeight = canvasHeight;
-
-				//the zoom factor at which we would fit a single chromosome (but nothing else) on the visible portion of the canvas
-				gMapSet.singleChromoViewZoomFactor = canvasHeight / gMapSet.chromoHeight;
-				gMapSet.thresholdAllMarkerPainting = gMapSet.singleChromoViewZoomFactor;
-
-				// the total vertical extent of the genome, excluding top and bottom spacers
-				gMapSet.totalY = (gMapSet.numMaps * gMapSet.chromoHeight) + ((gMapSet.numMaps - 1) * chromoSpacing);
-				gMapSet.centerPoint = Math.round(gMapSet.totalY / 2.0f);
-				// the space at the top and bottom -- should be equal
-				topBottomSpacer = (canvasHeight - gMapSet.totalY) / 2;
-
-				// we want to fit all the chromosomes on at a zoom factor of 1 so we only use the top spacer when this is the case
-				currentY = topBottomSpacer;
-			}
-			// this is what we do when we are zoomed in
-			else
-			{
-				// start drawing at minus half the total height of the entire genome plus half the canvasheight
-				currentY = -(gMapSet.totalY / 2) + canvasHeight / 2 - (gMapSet.centerPoint - (gMapSet.totalY / 2));
-			}
+			int currentY = calcMapSetSpecificParams(gMapSet);
 
 			// now paint the chromosomes in this genome
 			// for each chromosome in the genome
-			for (GChromoMap gChromoMap : gMapSet.gMaps)
-			{
-				if (killMe) return;
+			drawMaps(gMapSet,g2, currentY);
 
-				// we use the same x position for all chromosomes in this genome
-				int x = Math.round(gMapSet.xPosition);
-
-				// the map draws itself from 0,0 always but we need move the origin of the graphics object to the actual
-				// coordinates where we want things drawn
-				g2.translate(x, currentY);
-
-				// need to set the current height and width and coords on the chromomap before we draw it
-				// this is purely so we have it stored somewhere
-				gChromoMap.x = x;
-				gChromoMap.y = currentY;
-				gChromoMap.yOnCanvas = currentY;
-				gChromoMap.height = gMapSet.chromoHeight;
-				gChromoMap.width = chromoWidth;
-				// update its bounding rectangle (used for hit detection)
-				gChromoMap.boundingRectangle.setBounds(gChromoMap.x, gChromoMap.y,
-								gChromoMap.width, gChromoMap.height);
-
-				if (canvasBounds.contains(gChromoMap.boundingRectangle) || canvasBounds.intersects(gChromoMap.boundingRectangle))
-				{
-					gChromoMap.isShowingOnCanvas = true;
-					gChromoMap.isFullyShowingOnCanvas = canvasBounds.contains(gChromoMap.boundingRectangle);
-				}
-				else
-				{
-					gChromoMap.isShowingOnCanvas = false;
-				}
-
-				//check whether the arrays that hold the data for drawing features etc have been inited
-				//if not, do it now (only needs to be done here once, at startup)
-				if (!gChromoMap.arraysInitialized)
-					gChromoMap.initArrays();
-
-				//if the map is meant to be visible on the canvas at this time
-				if (gChromoMap.isShowingOnCanvas)
-				{
-					// get the map to draw itself (from 0,0 always)
-					gChromoMap.paintMap(g2);
-				}
-
-				// now move the graphics object's origin back to 0,0 to preserve the overall coordinate system
-				g2.translate(-x, -currentY);
-
-				// increment the y position so we can draw the next one
-				currentY += gMapSet.chromoHeight + chromoSpacing;
-			}
 		}
 		// optionally draw all the currently selected links between chromos
 		if (drawLinks && !killMe)
 		{
 			linkDisplayManager.multicoreDrawAllLinks(g2, killMe);
-		}
-		//this draws homologies for features in a contiguous range on a chromosome
-		if (drawFoundFeaturesInRange && !killMe)
-		{
-			if (Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().isSelected() || Strudel.winMain.foundFeaturesTableControlPanel.getShowHomologsCheckbox().isSelected())
-			{
-				linkDisplayManager.drawHighlightedLinksInRange(g2);
-			}
 		}
 
 		//we also want to check whether there are any links to display that are to be highlighted after a name based search for
@@ -357,49 +287,195 @@ public class MainCanvas extends JPanel
 			linkDisplayManager.drawHighlightedLink(g2, winMain.fatController.highlightFeature, winMain.fatController.highlightFeatureHomolog, true, winMain.fatController.highlightFeatGMap, winMain.fatController.highlightFeatHomGMap);
 		}
 
+
+		//this draws homologies for features in a contiguous range on a chromosome
+		if ((drawFoundFeaturesInRange || drawFeaturesFoundByName) && !killMe)
+		{
+			if (Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().isSelected() || Strudel.winMain.foundFeaturesTableControlPanel.getShowHomologsCheckbox().isSelected())
+			{
+				linkDisplayManager.drawHighlightedLinksInRange(g2);
+			}
+		}
+
 		//this draws labels of features in a contiguous range on a chromosome
 		//need to do this in this order so things are drawn on top of each other in the right sequence
-		if (!killMe && drawFoundFeaturesInRange && (Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().isSelected() || Strudel.winMain.foundFeaturesTableControlPanel.getShowLabelsCheckbox().isSelected()))
+		if (!killMe && (drawFoundFeaturesInRange || drawFeaturesFoundByName) && (Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().isSelected() || Strudel.winMain.foundFeaturesTableControlPanel.getShowLabelsCheckbox().isSelected()))
 		{
 			LabelDisplayManager.drawLabelsForFoundFeatures(g2);
 		}
 
+		//distance markers along the maps
+		if (!killMe && Prefs.showDistanceMarkers)
+			drawDistanceMarkers(g2);
+
+		//last we want to draw the chromosome indexes so they are painted on top of all other stuff
+		if (!killMe)
+			drawAllMapIndices(g2);
+
+		// also need to update the overview canvases from here
+		winMain.fatController.updateOverviewCanvases();
+
+		redraw = false;
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------------------------
+
+	//this method sets all the mapset specific parameters we need to work out for each drawing operation
+	private int calcMapSetSpecificParams(GMapSet gMapSet)
+	{
+		int currentY = 0;
+		// this is what we do at a zoom factor of 1 (at startup but also after zoom reset)
+		if (gMapSet.zoomFactor == 1)
+		{
+			// the height of a chromosome
+			gMapSet.chromoHeight = (availableSpaceVertically - allSpacers) / winMain.dataContainer.maxChromos;
+			initialChromoHeight = gMapSet.chromoHeight;
+			initialCanvasHeight = canvasHeight;
+
+			//the zoom factor at which we would fit a single chromosome (but nothing else) on the visible portion of the canvas
+			gMapSet.singleChromoViewZoomFactor = canvasHeight / gMapSet.chromoHeight;
+			gMapSet.thresholdAllMarkerPainting = gMapSet.singleChromoViewZoomFactor;
+
+			// the total vertical extent of the genome, excluding top and bottom spacers
+			gMapSet.totalY = (gMapSet.numMaps * gMapSet.chromoHeight) + ((gMapSet.numMaps - 1) * chromoSpacing);
+			gMapSet.centerPoint = Math.round(gMapSet.totalY / 2.0f);
+			// the space at the top and bottom -- should be equal
+			topBottomSpacer = (canvasHeight - gMapSet.totalY) / 2;
+
+			// we want to fit all the chromosomes on at a zoom factor of 1 so we only use the top spacer when this is the case
+			currentY = topBottomSpacer;
+		}
+		// this is what we do when we are zoomed in
+		else
+		{
+			// start drawing at minus half the total height of the entire genome plus half the canvasheight
+			currentY = -(gMapSet.totalY / 2) + canvasHeight / 2 - (gMapSet.centerPoint - (gMapSet.totalY / 2));
+		}
+
+		return currentY;
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------------------------
+
+	//this method sets all the general parameters we need to work out for each drawing operation such as chromosome widths etc
+	private void calcRequiredParams(Graphics2D g2)
+	{
+		numMarkersDrawn = 0;
+
+		//background
+		setBackground(Colors.mainCanvasBackgroundColour);
+
+		// get current size of frame
+		canvasHeight = getHeight();
+		canvasWidth = getWidth();
+
+		// create a bounding rectangle the size of the currently visible canvas
+		canvasBounds = new Rectangle(0, 0, this.getWidth(), this.getHeight());
+
+		//background gradient from top to bottom, dark to light, starts black
+		Color b1 = Colors.backgroundGradientStartColour;
+		Color b2 = Colors.backgroundGradientEndColour;
+		g2.setPaint(new GradientPaint(canvasWidth / 2, 0, b1, canvasWidth / 2, canvasHeight, b2));
+		g2.fillRect(0, 0, canvasWidth, canvasHeight);
+
+		// width of chromosomes -- set this to a fixed fraction of the screen width for now
+		chromoWidth = Math.round(canvasWidth / 40);
+
+		// check that this number is even
+		boolean evenNumber = chromoWidth % 2 == 0;
+		// if it isn't just add 1 -- otherwise we get into trouble with feature line widths exceeding the width of the chromosome
+		if (!evenNumber)
+			chromoWidth += 1;
+
+		// the total amount of space we have for drawing on vertically, in pixels
+		availableSpaceVertically = canvasHeight - (chromoSpacing * 2);
+		// the combined height of all the vertical spaces between chromosomes
+		allSpacers = chromoSpacing * (winMain.dataContainer.maxChromos - 1);
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------------------------
+
+	//draws all the maps in one mapset
+	private void drawMaps(GMapSet gMapSet,Graphics2D g2, int currentY)
+	{
+		// now paint the chromosomes in this genome
+		// for each chromosome in the genome
+		for (GChromoMap gChromoMap : gMapSet.gMaps)
+		{
+			// we use the same x position for all chromosomes in this genome
+			int x = Math.round(gMapSet.xPosition);
+
+			// the map draws itself from 0,0 always but we need move the origin of the graphics object to the actual
+			// coordinates where we want things drawn
+			g2.translate(x, currentY);
+
+			// need to set the current height and width and coords on the chromomap before we draw it
+			// this is purely so we have it stored somewhere
+			gChromoMap.x = x;
+			gChromoMap.y = currentY;
+			gChromoMap.height = gMapSet.chromoHeight;
+			gChromoMap.width = chromoWidth;
+			// update its bounding rectangle (used for hit detection)
+			gChromoMap.boundingRectangle.setBounds(gChromoMap.x, gChromoMap.y,
+							gChromoMap.width, gChromoMap.height);
+
+			if (canvasBounds.contains(gChromoMap.boundingRectangle) || canvasBounds.intersects(gChromoMap.boundingRectangle))
+			{
+				gChromoMap.isShowingOnCanvas = true;
+				gChromoMap.isFullyShowingOnCanvas = canvasBounds.contains(gChromoMap.boundingRectangle);
+			}
+			else
+			{
+				gChromoMap.isShowingOnCanvas = false;
+			}
+
+			//check whether the arrays that hold the data for drawing features etc have been inited
+			//if not, do it now (only needs to be done here once, at startup)
+			if (!gChromoMap.arraysInitialized)
+				gChromoMap.initArrays();
+
+			//if the map is meant to be visible on the canvas at this time
+			if (gChromoMap.isShowingOnCanvas)
+			{
+				// get the map to draw itself (from 0,0 always)
+				gChromoMap.paintMap(g2);
+			}
+
+			// now move the graphics object's origin back to 0,0 to preserve the overall coordinate system
+			g2.translate(-x, -currentY);
+
+			// increment the y position so we can draw the next one
+			currentY += gMapSet.chromoHeight + chromoSpacing;
+		}
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------------------------
+
+	//draws an index number next to each map in each genome
+	private void drawAllMapIndices(Graphics2D g2)
+	{
 		//last we want to draw the chromosome indexes so they are painted on top of all other stuff
 		for (GMapSet gMapSet : winMain.dataContainer.gMapSets)
 		{
 			// for each chromosome in the genome
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
 			{
-				if (killMe) return;
-
 				//if the map is meant to be visible on the canvas at this time
 				if (gChromoMap.isShowingOnCanvas && !gChromoMap.inversionInProgress)
 				{
 					if(gChromoMap.alwaysShowAllLabels)
 						LabelDisplayManager.drawLabelsForAllVisibleFeatures(g2, gChromoMap);
-					drawMapIndex(g2, gChromoMap, gMapSet);
+					drawMapIndex(g2, gChromoMap);
 				}
 			}
 		}
-		// also need to update the overview canvases from here
-		winMain.fatController.updateOverviewCanvases();
-
-		redraw = false;
-
-		long endTime = System.currentTimeMillis();
-//		System.out.println("" + numMarkersDrawn + " markers drawn in " + (endTime-startTime) + " ms");
-
 	}
-
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
 	// draw the index of the map in the genome
-	private void drawMapIndex(Graphics2D g2, GChromoMap gChromoMap, GMapSet gMapSet)
+	private void drawMapIndex(Graphics2D g2, GChromoMap gChromoMap)
 	{
-		//the index we want to draw
-		int mapIndex = gChromoMap.index;
-
 		//font stuff
 		int fontSize = Math.round(WinMain.mainCanvas.getHeight() / 40);
 		Font mapLabelFont = new Font("Arial", Font.BOLD, fontSize);
@@ -418,15 +494,11 @@ public class MainCanvas extends JPanel
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
 		//draw the label
-		FontMetrics fm = g2.getFontMetrics();
-		//		String indexLabel = String.valueOf(mapIndex + 1);
 		String indexLabel = gChromoMap.name;
-		int stringWidth = fm.stringWidth(indexLabel);
 		g2.drawString(indexLabel, gChromoMap.x + gChromoMap.width + 10, labelY);
 
 		//turn text antialiasing off again
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
-
 	}
 
 
@@ -447,12 +519,15 @@ public class MainCanvas extends JPanel
 		//now update the arrays with the position data
 		Strudel.winMain.fatController.initialisePositionArrays();
 
-		//		//update the canvas
+		//repaint
 		updateCanvas(true);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
+	//checks whether we want to draw markers on the chromsomes
+	//this should only happen if we have exceeded a threshold zoom factor for the owning mapset or if the user has explicitly
+	//requested it by pressing a button
 	public void checkMarkerPaintingThresholds(GMapSet selectedSet)
 	{
 		// check whether we need to display markers and labels
@@ -472,24 +547,6 @@ public class MainCanvas extends JPanel
 			selectedSet.paintAllMarkers = false;
 		}
 	}
-
-	// -----------------------------------------------------------------------------------------------------------------------------------
-
-//	public void checkForLabelDrawing(GMapSet gMapSet)
-//	{
-//		//check whether we should have the alwaysShowAllLabelsButton enabled
-//		//we don't want this option if we are looking at more than one chromo on screen
-//		if ((gMapSet.zoomFactor >= gMapSet.singleChromoViewZoomFactor - 1 && gMapSet.singleChromoViewZoomFactor != 0))
-//		{
-//			gMapSet.zoomControlPanel.alwaysShowAllLabelsButton.setEnabled(true);
-//		}
-//		else
-//		{
-//			gMapSet.alwaysShowAllLabels = false;
-//			gMapSet.zoomControlPanel.alwaysShowAllLabelsButton.setSelected(false);
-//			gMapSet.zoomControlPanel.alwaysShowAllLabelsButton.setEnabled(false);
-//		}
-//	}
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
 

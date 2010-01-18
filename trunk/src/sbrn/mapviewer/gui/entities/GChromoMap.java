@@ -10,7 +10,7 @@ import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.handlers.*;
 
-public class GChromoMap
+public class GChromoMap implements Comparable
 {
 
 	// ============================vars==================================
@@ -23,8 +23,6 @@ public class GChromoMap
 	//these are relative to the screen bounds at any one time
 	public int x;
 	public int y;
-	//this var stores the top left location of the map relative to the entire canvas, which includes off screen sections
-	public int yOnCanvas;
 
 	public Color colour;
 	public String name;
@@ -110,6 +108,10 @@ public class GChromoMap
 
 	//a boolean to indicate whether we should always display labels, regardless of zoom factor
 	public boolean alwaysShowAllLabels = false;
+//
+//	//this is the y coord for the top left corner of this map on the canvas (not screen!)
+//	//may be off the visible screen
+//	public int yOnCanvas;
 
 
 	// ============================curve'tors==================================
@@ -439,7 +441,7 @@ public class GChromoMap
 	{
 		if (mouseOverFeatures.size() > 0 && drawMouseOverFeatures)
 		{
-			LabelDisplayManager.drawFeatureLabelsInRange(this, g2, mouseOverFeatures, true);
+			LabelDisplayManager.drawFeatureLabelsInRange(this, g2, mouseOverFeatures, true, null);
 		}
 	}
 
@@ -470,7 +472,7 @@ public class GChromoMap
 
 				//scale this by the current map height to give us a position in pixels, between zero and the chromosome height
 				//then store this value in the array we use for drawing
-				allLinkedFeaturePositions[i] =Utils.convertRelativeFPosToPixels(owningSet, chromoMap, start);
+				allLinkedFeaturePositions[i] =Utils.relativeFPosToPixelsOnGMap(owningSet, chromoMap, start);
 
 				//if the map is inverted we need to store the inverse of this value i.e. the map end value minus the feature position
 				if(isFullyInverted || isPartlyInverted)
@@ -491,6 +493,10 @@ public class GChromoMap
 	// draw the markers for the features
 	private void drawLinkedFeatures(Graphics2D g2)
 	{
+		//System.out.println("===============drawing linked features for map  "+ name);
+		//System.out.println("y = " + y);
+		//System.out.println("owningSet.totalY = " + owningSet.totalY);
+
 		int lastY = -1;
 		int numMarkersDrawn = 0;
 
@@ -513,8 +519,18 @@ public class GChromoMap
 				if(inversionInProgress)
 					yPos = Math.round((yPos * (height / (float)owningSet.chromoHeight)) + currentY);
 
+				//check whether this position is currently showing on the canvas or not
+				boolean featureIsVisible = false;
+				int upperViewPortBoundary = owningSet.centerPoint - (Strudel.winMain.mainCanvas.getHeight()/2);
+				int lowerViewPortBoundary = owningSet.centerPoint + (Strudel.winMain.mainCanvas.getHeight()/2);
+				int fPosPixelsOnCanvas = Utils.pixelsOnChromoToPixelsOnCanvas(this, yPos, inversionInProgress);
+				if (fPosPixelsOnCanvas > upperViewPortBoundary && fPosPixelsOnCanvas < lowerViewPortBoundary)
+				{
+					featureIsVisible = true;
+				}
+
 				// draw a line for the marker
-				if (yPos != lastY)
+				if (yPos != lastY && featureIsVisible)
 				{
 					numMarkersDrawn++;
 					g2.drawLine(0, yPos, width, yPos);
@@ -574,6 +590,23 @@ public class GChromoMap
 		//then draw an outline around it
 		g2.setColor(Colors.selectionRectOutlineColour);
 		g2.drawRect(rectX, start, rectWidth, rectHeight);
+	}
+
+	@Override
+	public int compareTo(Object o)
+	{
+		int i = 0;
+
+		GChromoMap gMap = (GChromoMap)o;
+
+		if(index == gMap.index)
+			i = 0;
+		else if(index < gMap.index)
+			i = -1;
+		else if(index > gMap.index)
+			i = 1;
+
+		return i;
 	}
 
 }// end class

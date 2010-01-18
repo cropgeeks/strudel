@@ -4,9 +4,11 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.util.*;
 import java.util.List;
+import javax.swing.table.*;
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
+import sbrn.mapviewer.gui.components.*;
 import sbrn.mapviewer.gui.entities.*;
 
 /*
@@ -26,11 +28,69 @@ public class LabelDisplayManager
 	//draws labels for a set of features that the user searched for
 	public static void drawLabelsForFoundFeatures(Graphics2D g2)
 	{
-		//the features we need to draw
-		Vector<Feature> features = FeatureSearchHandler.featuresInRange;
+		//this is what we do when we are exploring a single continuous range on a given chromosome
+//		if (Strudel.winMain.mainCanvas.drawFoundFeaturesInRange)
+//		{
+//			//the features we need to draw
+//			Vector<Feature> features = new Vector<Feature>();
+//			for (ResultsTableEntry tableEntry : Strudel.winMain.ffResultsPanel.resultsTable.getVisibleEntries())
+//			{
+//				//get the feature for this entry and add it to the lookup
+//				Feature targetF = tableEntry.getTargetFeature();
+//				if(!features.contains(targetF))
+//					features.add(targetF);
+//				//do the same for the homolog
+//				Feature homolog = tableEntry.getHomologFeature();
+//				if (tableEntry.getHomologFeature() != null && !features.contains(homolog))
+//					features.add(homolog);
+//			}
+//
+//			//only draw those features that are actually visible on canvas
+//			drawFeatureLabelsInRange(Strudel.winMain.fatController.selectionMap, g2, Utils.checkFeatureVisibility(Strudel.winMain.fatController.selectionMap, features), false, null);
+//		}
+		//this is what we do when the results come from a name based feature search, i.e. the features can be on a number of different chromosomes
+		if (Strudel.winMain.mainCanvas.drawFeaturesFoundByName || Strudel.winMain.mainCanvas.drawFoundFeaturesInRange)
+		{
+			//we need to have a list of gMaps that have features in the results list
+			//for each gMap we need to know the associated features
+			HashMap<GMapSet, LinkedList<Feature>> lookup = new HashMap<GMapSet, LinkedList<Feature>>();
+			//get the entries from the results table
+			TableModel model = Strudel.winMain.ffResultsPanel.resultsTable.getModel();
+			if (model instanceof HomologResultsTableModel)
+			{
+				for (ResultsTableEntry tableEntry : Strudel.winMain.ffResultsPanel.resultsTable.getVisibleEntries())
+				{
+					//get the feature for this entry and add it to the lookup
+					addFeatureToLookup(tableEntry.getTargetFeature(), lookup);
+					//do the same for the homolog
+					if (tableEntry.getHomologFeature() != null)
+						addFeatureToLookup(tableEntry.getHomologFeature(), lookup);
+				}
+				//then draw labels for each feature list for each gmap as a separate grouping
+				for (GMapSet gMapSet : lookup.keySet())
+				{
+					LinkedList<Feature> features = lookup.get(gMapSet);
+					features = Utils.sortFeaturesWithinGMapset(features, gMapSet);
+					drawFeatureLabelsInRange(null, g2, features, false, gMapSet);
+				}
+			}
+		}
+	}
 
-		//only draw those features that are actually visible on canvas
-		drawFeatureLabelsInRange(Strudel.winMain.fatController.selectionMap, g2, Utils.checkFeatureVisibility(Strudel.winMain.fatController.selectionMap, features), false);
+	//------------------------------------------------------------------------------------------------------------------------------------
+
+	private static void addFeatureToLookup(Feature feature, HashMap<GMapSet, LinkedList<Feature>> lookup)
+	{
+		GMapSet gMapSet = feature.getOwningMap().getGChromoMaps().get(0).owningSet;
+		//check whether its gMap is listed here
+		if(!lookup.keySet().contains(gMapSet))
+		{
+			//if not, add it to the lookup
+			lookup.put(gMapSet, new LinkedList<Feature>());
+		}
+		//if the feature is not present in the feature list for this gmap, add it
+		if(!lookup.get(gMapSet).contains(feature))
+			lookup.get(gMapSet).add(feature);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------------------------
@@ -68,7 +128,7 @@ public class LabelDisplayManager
 	//	------------------------------------------------------------------------------------------------------------------------------------
 
 	// draws labels next to found features in a specified range only
-	public static void drawFeatureLabelsInRange(GChromoMap gMap, Graphics2D g2, List<Feature> features, boolean isMouseOver)
+	public static void drawFeatureLabelsInRange(GChromoMap gMap, Graphics2D g2, List<Feature> features, boolean isMouseOver, GMapSet gMapSet)
 	{
 		try
 		{
@@ -76,12 +136,21 @@ public class LabelDisplayManager
 			FontMetrics fm = g2.getFontMetrics();
 
 			//first work out the features' y positions
-			//we need to create a LinkedHashMap with the default positons
+			//we need to create a HashMap with the default positons
 			//these will all be at the featureY of the Feature
-			HashMap<Feature, Integer> featurePositions = calculateFeaturePositions(gMap, features);
+			HashMap<Feature, Integer> featurePositions = null;
+			HashMap<Feature, Integer> laidoutPositions = null;
+			if(gMap != null && gMapSet == null)
+			{
+				featurePositions = calculateFeaturePositionsOnGMap(gMap, features);
+			}
+			else if(gMap == null && gMapSet != null)
+			{
+				featurePositions = calculateFeaturePositionsInGMapSet(gMapSet, features);
+			}
 
-			//now work out the actual positions after correction for collision of labels
-			HashMap<Feature, Integer> laidoutPositions = calculateLabelPositions(features, featurePositions);
+			//then work out the actual positions after correction for collision of labels
+			laidoutPositions = calculateLabelPositionsOnScreen(features, featurePositions);
 
 			// for all features in our list
 			for (Feature f : features)
@@ -91,6 +160,13 @@ public class LabelDisplayManager
 					// this is where the label goes
 					int labelY = laidoutPositions.get(f);
 					int featureY = featurePositions.get(f);
+
+					//if we are doing this at the mapset scale (e.g. when we are drawing labels for found features) we need to
+					//figure out the gMap from the gMapSet here
+					if(gMap == null && gMapSet != null)
+					{
+						gMap = Utils.getGMapByNameAndGMapset(f.getOwningMap().getName(), gMapSet);
+					}
 
 					drawFeatureLabel(g2, f, gMap, null, true, false,isMouseOver, labelY, featureY, fm);
 				}
@@ -114,7 +190,7 @@ public class LabelDisplayManager
 		int stringWidth = fm.stringWidth(featureName);
 
 		// next decide where to place the label on x
-		int lineLength = 20; // the amount by which we want to move the label end away from the chromosome (in pixels)
+		int lineLength = 30; // the amount by which we want to move the label end away from the chromosome (in pixels)
 		int labelX = -1; // this is where the label is drawn from
 		int lineStartX = -1; // this is where the line to the label is drawn from
 		int lineEndX = -1; // the label connects to the line here
@@ -204,9 +280,9 @@ public class LabelDisplayManager
 
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	//calculates the label positions for a set of features by  -- if necessary -- shuffling labels downwards
+	//calculates the label positions for a set of features on a given gMap by  -- if necessary -- shuffling labels downwards
 	@SuppressWarnings("unchecked")
-	private static HashMap<Feature, Integer> calculateLabelPositions(List<Feature> features, HashMap<Feature, Integer> featurePositions)
+	private static HashMap<Feature, Integer> calculateLabelPositionsOnScreen(List<Feature> features, HashMap<Feature, Integer> featurePositions)
 	{
 		//we want to start off with the same kind of order and positions as the feature positions
 		HashMap<Feature, Integer> labelPositions = (HashMap<Feature, Integer>)featurePositions.clone();
@@ -235,14 +311,13 @@ public class LabelDisplayManager
 		//the top and bottom of it respectively
 		for (int i = 0; i < features.size(); i++)
 		{
+			//retrive the current and the subsequent feature
 			Feature f1 = features.get(i);
-
 			//when we get to the last feature we just  break out of the loop
 			if(i == features.size()-1)
 			{
 				break;
 			}
-
 			Feature f2 = features.get(i+1);
 
 			if (f1 != null && f2 != null)
@@ -276,10 +351,36 @@ public class LabelDisplayManager
 		return labelPositions;
 	}
 
+
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	//works out the feature positions for a set of features
-	private static HashMap<Feature, Integer> calculateFeaturePositions(GChromoMap gChromoMap, List<Feature> features)
+	//works out the feature positions for a set of features all contained in a single GChromoMap
+	private static HashMap<Feature, Integer> calculateFeaturePositionsOnGMap(GChromoMap gChromoMap, List<Feature> features)
+	{
+
+		HashMap<Feature, Integer> featurePositions = new HashMap<Feature, Integer>();
+
+		for (Feature f : features)
+		{
+			if (f != null)
+			{
+				//System.out.println("feature name " + f.getName());
+
+				// the y position of the feature itself on the canvas, in pixel coords relative to the canvas boundaries
+				int featureY = Utils.relativeFPosToPixelOnCanvas(gChromoMap, f.getStart(), gChromoMap.isFullyInverted);
+				featurePositions.put(f, featureY);
+
+				//System.out.println("position of feature " + f.getName() + " on map " + gChromoMap.name + " = " + featureY);
+			}
+		}
+
+		return featurePositions;
+	}
+
+	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	//works out the feature positions for a set of features that may lie on different chromosomes within the same GMapSet
+	private static HashMap<Feature, Integer> calculateFeaturePositionsInGMapSet(GMapSet gMapSet, List<Feature> features)
 	{
 		HashMap<Feature, Integer> featurePositions = new HashMap<Feature, Integer>();
 
@@ -287,38 +388,17 @@ public class LabelDisplayManager
 		{
 			if (f != null)
 			{
-				// we need these for working out the y positions
-				ChromoMap chromoMap = f.getOwningMap();
-				float mapEnd = chromoMap.getStop();
-				// this factor normalises the position to a value between 0 and 100
-				float scalingFactor = gChromoMap.height / mapEnd;
-				// the y position of the feature itself on the canvas, in pixel coords relative to the canvas boundaries
-				int featureY;
-				if (f.getStart() == 0.0f)
-				{
-					if (gChromoMap.isPartlyInverted || gChromoMap.isFullyInverted)
-					{
-						featureY = gChromoMap.y + gChromoMap.height;
-					}
-					else
-					{
-						featureY = gChromoMap.y;
-					}
-				}
-				else
-				{
-					//check whether the map is inverted
-					if (gChromoMap.isPartlyInverted || gChromoMap.isFullyInverted)
-					{
-						featureY = Math.round(gChromoMap.y + gChromoMap.currentY + gChromoMap.height - (f.getStart() * scalingFactor));
-					}
-					else
-					{
-						featureY = Math.round(gChromoMap.y + gChromoMap.currentY + (f.getStart() * scalingFactor));
-					}
-				}
+				//				//System.out.println("feature name " + f.getName());
 
+				//if we are doing this at the mapset scale (e.g. when we are drawing labels for found features) we need to
+				//figure out the gMap from the gMapSet here
+				GChromoMap gChromoMap = Utils.getGMapByNameAndGMapset(f.getOwningMap().getName(), gMapSet);
+
+				// the y position of the feature itself on the canvas, in pixel coords relative to the canvas boundaries
+				int featureY = Utils.relativeFPosToPixelOnCanvas(gChromoMap, f.getStart(), gChromoMap.isFullyInverted);
 				featurePositions.put(f, featureY);
+
+				//				//System.out.println("position of feature " + f.getName() + " on map " + gChromoMap.name + " = " + featureY);
 			}
 		}
 
@@ -348,7 +428,7 @@ public class LabelDisplayManager
 		}
 
 		//now draw the labels
-		drawFeatureLabelsInRange(gMap, g2, vec, false);
+		drawFeatureLabelsInRange(gMap, g2, vec, false, null);
 	}
 
 

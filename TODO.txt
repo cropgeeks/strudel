@@ -2,6 +2,9 @@
 
 features to implement -- general:
 
+- include Sorghum in example dataset and rebuild dataset from scratch, including BLAST hits in both directions, removing duplicates, and removing duff homologs between features that are not listed
+- make ALL target chromosomes highlighted (red) again (e.g. in one-to-all comparisons)
+- Need handling of homolog directionality. Three modes should be supported: similarity of links by name only, BLAST with directionality of search enforced, and BLAST with directionality not enforced. Use color coding where BLAST hit is not reciprocal to indicate reduced confidence in homology (enforced directionality mode only). Put a user choice of these 3 modes into a prefs dialog. 
 - data load progress monitor
 - Mac mouse control support
 - dynamically determine suitable number of distance markers to display depending on the zoom level
@@ -31,6 +34,7 @@ Data:
 
 Dave's list:
 
+- 
 - colour chooser
 - potentials:
 	* include in raw data putative homologs e.g. for rice loci in barley and flag every entry in the data as mapped or putative; then display these in the mapviewer, perhaps in different colours based on the value of the flag

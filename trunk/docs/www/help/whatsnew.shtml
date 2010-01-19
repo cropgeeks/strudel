@@ -17,6 +17,38 @@
 <h3>Please note: with effect from the official release date of Strudel (version 1.10.01.05 onwards) the Strudel data format has changed.
  Earlier input files will no longer be compatible and you must reformat these to match the current format. See 
  <a href="http://bioinf.scri.ac.uk/strudel/help/data.shtml">the manual</a> for instructions and examples.</h3>
+ 
+ <h2>New in release 1.10.01.19:</h2>
+ 
+ <h3>New features:</h3>
+<ul>
+<li>There is now functionality to configure the visible datasets so that multiple instances of a given set are visible, to allow all-by-all comparisons.
+ Please refer to the <a href="./data.shtml#layout">manual</a> page for instructions on how to use this feature. 
+</li>
+<li>The control panel on the results table is now also displayed when features are listed that were found through a name search.
+This allows users to visualize all features and homologs discovered by this route.</li>
+</ul>
+ 
+  <h3>Other changes/bug fixes:</h3>
+<ul>
+<li> CHG: Have put a check into GChromoMap.drawLinkedFeatures() to see whether features actually need drawn or are whether they are offscreen. </li>
+<li> CHG: Refactored drawing code in MainCanvas.</li>
+<li> CHG: Installer updated. Redirection to the what's new page is now done through the install4j installer rather than in-code. Banner, watermark and licence file added.</li>
+<li> BUG: State of antialias and distance marker buttons was not being stored in preferences correctly. </li>
+<li> CHG: Label drawing code refactored to use a single method for all label drawing. </li>
+<li> CHG: Labels are now drawn inwards from genomes at either end to prevent label text falling off the edge of the canvas.</li>
+<li> CHG: Reinstated the antialias button. When selected the antialiasing behaviour is still controlled by the application, i.e. antialias is off during animation and navigation but delayed antialiased repaint threads kick in when the user has stopped making inputs to the application.</li>
+<li> BUG: Import of the mini example file from the Strudel website (strudelFileFormatExample.txt) was failing. Have removed headers from this and have also removed the check in the file parser that throws the error if the line does not start with one of the permitted flags. </li>
+<li> NEW: Updated website header file to include link to usage map. </li>
+<li> CHG: Changed code for drawing all labels on chromosome so that each chromosome has its own flag for whether all labels should be drawn or not. This now allows multiple chromosomes in a genome to be selected for this at the same time.</li> 
+<li> BUG: When Ctrl-click-selecting individual chromosomes, not all selections resulted in link set drawing -- now fixed.</li>
+<li> CHG: Removed homologs containing unknown features from the example dataset.</li>
+<li> BUG: Features were being drawn twice when chromosomes were ctrl-click selected in pairs.</li>
+<li> BUG: Linksets were being created in duplicate during initing of linkset lookup. </li>
+<li> CHG: Refactored code in initLinkSetLookup() in LinkDisplayManager.</li>
+<li> BUG: Removed unnecessary repaint in MouseHandler.mouseReleased().</li>
+</ul>
+
 
 <h2>New in release 1.10.01.05:</h2>
 <ul>

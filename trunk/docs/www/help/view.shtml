@@ -31,6 +31,9 @@
 				<a href="#linkShapes">Changing the shape of the homology links</a>
 			</li>
 			<li>
+				<a href="antialias">Antialiased drawing style</a>
+			</li>
+			<li>
 				<a href="#filterByVis">Filtering of links by visibility of features</a>
 			</li>
 			<li>
@@ -81,6 +84,22 @@
 		The links shape button
 		<img src="../images/curves.png">
 		lets the user toggle between curved, straight and angled link shapes (in ascending, then descending order).
+		<br>
+		<br>
+		<a href="#top">Back to top</a>
+		
+		
+		<!-- --------------------------------------------- -->
+		<h4>
+			Antialiased drawing style:
+			<a name="antialias"></a>
+		</h4>
+		The antialias button
+		<img src="../images/antialias.png">
+		lets the user toggle between antialiased and plain drawing styles. This applies to links and text drawn. Antialiased drawing 
+		produces smoother lines but comes with a significant performance overhead. Even when this button is selected, any 
+		drawing operations requiring animation therefore use the plain drawing style, with another, antialiased redraw happening shortly after
+		 the animation has stopped. 
 		<br>
 		<br>
 		<a href="#top">Back to top</a>

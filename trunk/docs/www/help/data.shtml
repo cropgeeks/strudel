@@ -103,11 +103,25 @@
 		</h4>
 
 		<p>
-		Strudel will layout the genomes on canvas from left to right to right according to the order in which it encounters new genomes in the features 
-		section of the input data. In order to avoid lines being drawn across genomes, Strudel will only display homologies between adjacent genomes. 
-		We are currently working on extensions that will allow multiple instances of a genome to be displayed simultaneously to allow 
-		multi-way comparisons.
-</p>
+			By default, Strudel will layout the genomes on canvas from left to right to right according to the order in which it
+			encounters new genomes in the features section of the input data. In order to avoid lines being drawn across genomes,
+			Strudel will only display homologies between adjacent genomes.
+		</p>
+		<p>
+			Users can configure the ordering and number of instances of genomes on screen by clicking the "Configure datasets"
+			button <img src="../images/configure.png"> on the toolbar. This brings up the following dialog:
+		</p>
+		<p>
+			<img class="capture" src="../images/configGenomesDialog.png" alt="Config Genomes Dialog">
+		</p>
+		<p>
+		You can choose the order of the genomes on screen (left to right) by selecting genome names from the drop-down menus
+		 in top to bottom order. Clicking the "Add" and "Remove" buttons will add and remove a drop-down menu at a time, respectively. 
+		 Click the "OK" button to confirm the new layout. This will reset the view in the process, and result sets generated previously 
+		 will be cleared.</p>
+		 <p>
+		 You can use this feature to add additional instances of a genome to allow all-by-all comparisons without links being drawn 
+		 across genomes.</p>
 		<a href="#top">Back to top</a>
 
 

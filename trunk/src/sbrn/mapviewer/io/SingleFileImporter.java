@@ -10,7 +10,7 @@ import sbrn.mapviewer.gui.dialog.*;
 /**
  * Used for importing data in the single file Strudel format. For example see data/singleLineFileFormatExample.xlsx.
  */
-public class SingleFileImporter
+public class SingleFileImporter extends TrackableReader
 {
 	//==========================================methods==================================================
 
@@ -36,17 +36,15 @@ public class SingleFileImporter
 	//the file format has a single line entry for either a feature, homology or URL
 	//the first field says which type it is
 	//features are expected first in the file, then links
-	public void parseCombinedFile(File file) throws Exception
+	public void parseCombinedFile() throws Exception
 	{
 		int lineCount = 1;
 
 		try
 		{
-			BufferedReader reader = new BufferedReader(new FileReader(file));
-
 			//parse the file
 			String line = null;
-			while((line = reader.readLine()) != null)
+			while((line = readLine()) != null && okToRun)
 			{
 				if(line.startsWith("feature"))
 				{
@@ -76,8 +74,6 @@ public class SingleFileImporter
 
 			if (missingFeatures.size() > 0)
 			{
-				Strudel.winMain.dataLoadingDialog.setVisible(false);
-
 				//list the features that were missing, if any
 				StringBuilder missingFeatureList = new StringBuilder();
 				for (String featureName : missingFeatures)
@@ -380,6 +376,26 @@ public class SingleFileImporter
 			}
 		}
 	}
+
+	@Override
+	public void runJob() throws Exception
+	{
+		in = new BufferedReader(new InputStreamReader(getInputStream(true), "ASCII"));
+		parseCombinedFile();
+	}
+
+	@Override
+	public String getMessage()
+	{
+		String blah = getTransferRate();
+		return "Loading at: " + blah;
+	}
+
+	public int getJobCount()
+	{
+		return 1;
+	}
+
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

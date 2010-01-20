@@ -85,7 +85,6 @@ public class WinMain extends JFrame
 	public OpenFileDialog openFileDialog;
 	public AboutDialog aboutDialog = new AboutDialog(this, true);
 
-	public MTDataLoadingDialog dataLoadingDialog;
 	public GenomeLayoutDialog genomeLayoutDialog;
 
 

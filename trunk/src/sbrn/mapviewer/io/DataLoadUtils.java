@@ -3,7 +3,9 @@ package sbrn.mapviewer.io;
 import java.io.*;
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
+import sbrn.mapviewer.gui.components.WinMain;
 import sbrn.mapviewer.gui.dialog.*;
+import sbrn.mapviewer.gui.handlers.LinkDisplayManager;
 import scri.commons.gui.*;
 
 public class DataLoadUtils
@@ -11,8 +13,6 @@ public class DataLoadUtils
 
 	public static void loadDataInThread(String inputFileName, boolean commandLineLoad)
 	{
-		Strudel.winMain.dataLoadingDialog = new MTDataLoadingDialog(Strudel.winMain, false);
-
 		//first check that we have at least one pointer at a file with target feature data -- the bare minimum to run this application
 		//missing target data file
 
@@ -34,42 +34,84 @@ public class DataLoadUtils
 			inputFileName = workingDir + fileSep + Constants.exampleDataAllInOne;
 		}
 
-		//then load the data in a separate thread
-		DataLoadThread dataLoadThread = new DataLoadThread(inputFileName);
-		dataLoadThread.start();
+		SingleFileImporter singleFileImporter = new SingleFileImporter();
+		StrudelFile file = new StrudelFile(inputFileName);
+		singleFileImporter.setInput(file);
 
-		//show a dialog with a progress bar
-		Strudel.winMain.dataLoadingDialog.setLocationRelativeTo(Strudel.winMain);
-		Strudel.winMain.dataLoadingDialog.setVisible(true);
+		ProgressDialog dialog = new ProgressDialog(singleFileImporter, "Data loading", "Data loading - please wait...");
+		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
+		{
+			if (dialog.getResult() == ProgressDialog.JOB_FAILED)
+			{
 
+				TaskDialog.error("Data load failed: " + dialog.getException().toString() + "\nPlease correct your data and try again.", "Close");
+			}
+
+			return;
+		}
+		else if(dialog.getResult() == ProgressDialog.JOB_COMPLETED)
+			checkLoadCompleted(inputFileName);
 	}
 
-
-	// ----------------------------------------------------------------------------------------------------------------------------------------------
-
-	// Loads data from file using the object data model; this will populate all the relevant MapSet and LinkSet objects.
-	public static boolean loadDataFromSingleFile(File inputFile)
+	private static void checkLoadCompleted(String inputFileName)
 	{
-		boolean success = true;
-		try
-		{
-			SingleFileImporter singleFileImporter = new SingleFileImporter();
-			singleFileImporter.parseCombinedFile(inputFile);
-		}
-		catch (Exception e)
-		{
-			success = false;
-			// reset the cancel flag as the user might now want to try again
-			Strudel.winMain.fatController.dataLoadCancelled = false;
-			// hide the data loading progress dialog
-			if (Strudel.winMain.dataLoadingDialog != null)
-				Strudel.winMain.dataLoadingDialog.setVisible(false);
+		File inputFile = new File(inputFileName);
+		//store the input file in the recent files list
+		Prefs.setRecentDocument(inputFile.getAbsolutePath());
 
-			e.printStackTrace();
-
-			TaskDialog.error("Data load failed: " + e.toString() + "\nPlease correct your data and try again.", "Close");
+		// build the rest of the GUI as required
+		if (!Strudel.winMain.fatController.guiFullyAssembled)
+			Strudel.winMain.fatController.assembleRemainingGUIComps();
+		else
+		{
+			Strudel.winMain.reinitialiseDependentComponents();
+			//reinitialize the combo boxes in the configure genomes dialog
+			Strudel.winMain.genomeLayoutDialog.genomeLayoutPanel.setupComboBoxes();
 		}
-		return success;
+
+		//display the name of the current dataset in the window title bar
+		Strudel.winMain.setTitle(inputFile.getName() + " -- Strudel " + Install4j.VERSION);
+
+		// check if we need to enable some functionality -- depends on the number of genomes loaded
+		// cannot do comparative stuff if user one loaded one (target) genome
+		if (Strudel.winMain.dataContainer.gMapSets.size() == 1)
+		{
+			//enables toolbar controls selectively
+			Strudel.winMain.toolbar.enableControls(true);
+			//disable the comparative mode controls in the results table's control panel
+			Strudel.winMain.foundFeaturesTableControlPanel.getFilterLabel().setEnabled(false);
+			Strudel.winMain.foundFeaturesTableControlPanel.getGenomeFilterCombo().setEnabled(false);
+			Strudel.winMain.foundFeaturesTableControlPanel.getShowHomologsCheckbox().setEnabled(false);
+		}
+		else
+		{
+			//enables toolbar controls selectively
+			Strudel.winMain.toolbar.enableControls(false);
+			//enable the comparative mode controls in the results table's control panel
+			Strudel.winMain.foundFeaturesTableControlPanel.getFilterLabel().setEnabled(true);
+			Strudel.winMain.foundFeaturesTableControlPanel.getGenomeFilterCombo().setEnabled(true);
+			Strudel.winMain.foundFeaturesTableControlPanel.getShowHomologsCheckbox().setEnabled(true);
+
+			// also need a new link display manager because it holds the precomputed links
+			WinMain.mainCanvas.linkDisplayManager = new LinkDisplayManager(WinMain.mainCanvas);
+		}
+
+		// hide the start panel if it is still showing
+		Strudel.winMain.showStartPanel(false);
+
+		//clear the results table, in case we already had data loaded
+		Strudel.winMain.fatController.clearResultsTable();
+
+		// revalidate the GUI
+		Strudel.winMain.validate();
+
+		//repaint the main canvas
+		WinMain.mainCanvas.updateCanvas(true);
+
+		// bring the focus back on the main window -- need this in case we had an overview dialog open (which then gets focus)
+		Strudel.winMain.requestFocus();
+
+		Strudel.winMain.fatController.recentFileLoad = false;
 	}
 
 

@@ -517,9 +517,9 @@ public class Utils
 	/**converts the position of a feature on its map (fPos) from its original units (centiMorgans or base pairs) to a pixel
 	 * position on its owning gMap, in pixels and assuming the map starts at zero pixels
 	 */
-	public static int relativeFPosToPixelsOnGMap(GMapSet owningSet, ChromoMap chromoMap, float fPos)
+	public static int relativeFPosToPixelsOnGMap(GChromoMap gMap, float fPos)
 	{
-		return Math.round((owningSet.chromoHeight / chromoMap.getStop()) * fPos);
+		return Math.round((gMap.owningSet.chromoHeight / gMap.chromoMap.getStop()) * fPos);
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -528,16 +528,15 @@ public class Utils
 	 * converts the position of a feature on its map (fPos) from its original units (centiMorgans or base pairs) to a pixel
 	 * position on the canvas, in pixels; this may or may not be within the boundaries of the currently visible part of the canvas
 	 */
-	public static int relativeFPosToPixelOnCanvas(GChromoMap gMap, float fPos, boolean inverted)
+	public static int relativeFPosToPixelOnCanvas(GChromoMap gMap, float fPos, boolean inverting)
 	{
-		ChromoMap chromoMap = gMap.chromoMap;
-		int fDist = relativeFPosToPixelsOnGMap(gMap.owningSet, chromoMap, fPos);
-		int fPosOnScreen =  fDist + gMap.y + gMap.currentY;
+		int fDist = Math.round((gMap.height / gMap.chromoMap.getStop()) * fPos);
+		int fPosOnCanvas =   fDist + gMap.y + gMap.currentY;
 
-		if(inverted)
+		if(inverting)
 			return gMap.y + gMap.currentY + gMap.height - fDist;
 
-		return fPosOnScreen;
+		return fPosOnCanvas;
 	}
 
 	/**

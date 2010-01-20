@@ -103,6 +103,7 @@ BUGS to fix:
 
 - unnecessary repaints when doing mouseover on chromosome and features are not actually showing
 - entering into the selectable area of either of the two checkboxes on the results control panel triggers a change event even if there are no mouse clicks, despite there not being a mouselistener registered on the component
+- mouseover label display of feature name not working for features that are at position 0 on chromosome (reproduce with mini.strudel)
 
 
 

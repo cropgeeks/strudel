@@ -1,7 +1,6 @@
 package sbrn.mapviewer.io;
 
 import java.io.*;
-import java.text.*;
 import java.util.*;
 
 import sbrn.mapviewer.*;
@@ -41,7 +40,6 @@ public class CMapLinkImporter
 			}
 			catch (Exception e)
 			{
-				Strudel.winMain.dataLoadingDialog.setVisible(false);
 				TaskDialog.error("File " + filename + " not found. Comparative data not loaded.", "Close");
 				e.printStackTrace();
 			}

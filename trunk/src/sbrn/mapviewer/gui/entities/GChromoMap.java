@@ -472,7 +472,7 @@ public class GChromoMap implements Comparable
 
 				//scale this by the current map height to give us a position in pixels, between zero and the chromosome height
 				//then store this value in the array we use for drawing
-				allLinkedFeaturePositions[i] =Utils.relativeFPosToPixelsOnGMap(owningSet, chromoMap, start);
+				allLinkedFeaturePositions[i] =Utils.relativeFPosToPixelsOnGMap(this, start);
 
 				//if the map is inverted we need to store the inverse of this value i.e. the map end value minus the feature position
 				if(isFullyInverted || isPartlyInverted)

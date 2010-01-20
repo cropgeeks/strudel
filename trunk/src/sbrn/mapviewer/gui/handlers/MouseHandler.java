@@ -99,7 +99,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			}
 			return;
 		}
-		else if (SwingUtilities.isRightMouseButton(e))
+		else if (!isOSX && SwingUtilities.isRightMouseButton(e))
 			return;
 
 		//simple click on a target genome chromosome means display all links between this and all the reference chromos

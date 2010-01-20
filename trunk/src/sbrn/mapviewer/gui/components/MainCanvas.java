@@ -133,8 +133,10 @@ public class MainCanvas extends JPanel
 		{
 			if (buffer == null || buffer.getWidth() != w || buffer.getHeight() != h)
 			{
-				buffer = (BufferedImage) createImage(w, h);
-				aaBuffer = (BufferedImage) createImage(w, h);
+//				buffer = (BufferedImage) createImage(w, h);
+//				aaBuffer = (BufferedImage) createImage(w, h);
+				buffer = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+				aaBuffer = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
 			}
 
 			// Render an image to the buffer

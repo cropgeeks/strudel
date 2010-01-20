@@ -18,6 +18,13 @@
  Earlier input files will no longer be compatible and you must reformat these to match the current format. See 
  <a href="http://bioinf.scri.ac.uk/strudel/help/data.shtml">the manual</a> for instructions and examples.</h3>
  
+  <h2>New in release 1.10.01.20:</h2>
+  This is a bug fix release with two minor fixes. 
+  <ul>
+  <li>BUG: Cmd-click on Mac was not working.</li>
+  <li>BUG: Link positions during chromosome inversion were being drawn in the wrong places.</li>
+  </ul>
+ 
  <h2>New in release 1.10.01.19:</h2>
  
  <h3>New features:</h3>

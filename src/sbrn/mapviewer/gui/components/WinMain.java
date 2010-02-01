@@ -87,6 +87,8 @@ public class WinMain extends JFrame
 
 	public GenomeLayoutDialog genomeLayoutDialog;
 
+	public ColorSchemeChooserDialog colorChooserDialog = new ColorSchemeChooserDialog(this);
+
 
 
 	//	=================================================curve'tor=====================================
@@ -148,7 +150,7 @@ public class WinMain extends JFrame
 				{
 					//refresh the main canvas
 					Strudel.winMain.validate();
-					mainCanvas.redraw = true;
+					mainCanvas.setRedraw(true);
 				}
 			}
 

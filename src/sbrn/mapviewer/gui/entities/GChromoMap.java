@@ -116,14 +116,12 @@ public class GChromoMap implements Comparable
 
 	// ============================curve'tors==================================
 
-	public GChromoMap(Color colour, String name, int index, GMapSet owningSet)
+	public GChromoMap(String name, int index, GMapSet owningSet)
 	{
-		this.colour = colour;
 		this.name = name;
 		this.index = index;
 		this.owningSet = owningSet;
 		this.chromoMap = owningSet.mapSet.getMaps().get(index);
-		centreColour = owningSet.colour.brighter().brighter().brighter().brighter();
 
 		//for convenience also set this object on the ChromoMap object so we can do lookups in either direction
 		chromoMap.addGChromoMap(this);
@@ -149,7 +147,7 @@ public class GChromoMap implements Comparable
 			else if(highlight)
 				colour = Colors.chromosomeHighlightColour;
 			else
-				colour = owningSet.colour;
+				colour = Colors.genomeColour;
 
 			//this is the colour of the centre of the chromo -- needs to be brighter so we can get the 3d effect
 			centreColour = colour.brighter().brighter().brighter().brighter();
@@ -209,13 +207,9 @@ public class GChromoMap implements Comparable
 			g2.draw(rect);
 			//fill the rectangle with two different gradient fills
 			// draw first half of chromosome
-			GradientPaint gradient = new GradientPaint(0, 0, colour, width / 2, 0, centreColour);
+			GradientPaint gradient = new GradientPaint(0, 0, colour, width / 2, 0, centreColour, true);
 			g2.setPaint(gradient);
-			g2.fillRect(0, currentY, width / 2, rectHeight);
-			// draw second half of chromosome
-			GradientPaint whiteGradient = new GradientPaint(width / 2, 0, centreColour, width, 0, colour);
-			g2.setPaint(whiteGradient);
-			g2.fillRect(width / 2, currentY, width / 2, rectHeight);
+			g2.fillRect(0, currentY, width, rectHeight);
 
 			//if we have a selected region, colour it in with a different colour
 			if(highlightChromomapRegion)
@@ -409,22 +403,12 @@ public class GChromoMap implements Comparable
 	// -----------------------------------------------------------------------------------------------------------------------------------------
 
 	// draw the chromosome/map for the purpose of an overview only
-	public void paintOverViewMap(Graphics g, int x, int y, int width, int height)
+	public void paintOverViewMap(Graphics2D g2, int width, int height)
 	{
-		Graphics2D g2 = (Graphics2D) g;
-
-		// this colour is the lightest in the double gradient which produces the ambient light effect
-		// i.e. this is the colour one will see in the centre of the chromosome (= the topmost part of the simulated cylinder)
-
 		// draw first half of chromosome
-		GradientPaint gradient = new GradientPaint(0, 0, colour, width / 2, 0, centreColour);
+		GradientPaint gradient = new GradientPaint(0, 0, colour, width / 2, 0, centreColour, true);
 		g2.setPaint(gradient);
-		g2.fillRect(0, 0, width / 2, height);
-
-		// draw second half of chromosome
-		GradientPaint whiteGradient = new GradientPaint(width / 2, 0, centreColour, width / 2 * 2, 0, colour);
-		g2.setPaint(whiteGradient);
-		g2.fillRect(width / 2, 0, width / 2, height);
+		g2.fillRect(0, 0, width, height);
 
 		// draw the index of the map in the genome
 		int smallFontSize = 9;

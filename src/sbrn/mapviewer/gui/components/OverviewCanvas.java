@@ -96,7 +96,7 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener, Mouse
 			g2.translate(genomeX, currentY);
 
 			// get the map to draw itself (from 0,0 always)
-			gChromoMap.paintOverViewMap(g, genomeX, currentY, chromoWidth, chromoHeight);
+			gChromoMap.paintOverViewMap(g2, chromoWidth, chromoHeight);
 
 			// now move the graphics object's origin back to 0,0 to preserve the overall coordinate system
 			g2.translate(-genomeX, -currentY);

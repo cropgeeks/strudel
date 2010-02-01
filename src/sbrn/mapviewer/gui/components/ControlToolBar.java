@@ -2,7 +2,6 @@ package sbrn.mapviewer.gui.components;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.text.*;
 import javax.swing.*;
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
@@ -33,6 +32,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 	public JLabel memLabel = new JLabel();
 	public JButton bConfigure;
 	public JToggleButton bAntialias;
+	private JButton bColours;
 
 	public int currentLinkShapeType = 1;
 	public boolean linkShapeOrderAscending = true;
@@ -71,6 +71,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		add(bCurves);
 		add(bAntialias);
 		add(bLinkFilter);
+		add(bColours);
 
 		addSeparator(true);
 		add(blastLabel);
@@ -176,7 +177,8 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		bHelp =  (JButton) Utils.getButton(false, "", "Help", Icons.getIcon("HELP"), null, this, true);
 		bInfo =  (JButton) Utils.getButton(false, "", "About Strudel", Icons.getIcon("INFO"), null, this, true);
 		bResetAll =  (JButton) Utils.getButton(false, "Reset", "Reset display", Icons.getIcon("RESET"), null, this, false);
-		bAntialias = (JToggleButton) Utils.getButton(true, "", "Toggle between higher quality and plain drawing styles", Icons.getIcon("ANTIALIAS"), null, this, false);
+		bAntialias = (JToggleButton) Utils.getButton(true, "", "Toggle between higher quality and plain drawing styles", Icons.getIcon("ANTIALIAS"), null, this, false);		
+		bColours = (JButton) Utils.getButton(false, "", "Pick between, and customise, two colour schemes", Icons.getIcon("COLOURS"), null, this, false);
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -250,6 +252,11 @@ public class ControlToolBar extends JToolBar implements ActionListener
 			Strudel.winMain.genomeLayoutDialog.setVisible(true);
 		}
 
+		else if(e.getSource() == bColours)
+		{
+			Strudel.winMain.colorChooserDialog.setLocationRelativeTo(Strudel.winMain);
+			Strudel.winMain.colorChooserDialog.setVisible(true);
+		}
 	}
 
 	private void addSeparator(boolean separator)
@@ -316,6 +323,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 				bLinkFilter.setEnabled(false);
 				bConfigure.setEnabled(false);
 				bAntialias.setEnabled(true);
+				bColours.setEnabled(true);
 			}
 			else
 			{
@@ -333,6 +341,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 				bLinkFilter.setEnabled(true);
 				bConfigure.setEnabled(true);
 				bAntialias.setEnabled(true);
+				bColours.setEnabled(true);
 			}
 
 		}

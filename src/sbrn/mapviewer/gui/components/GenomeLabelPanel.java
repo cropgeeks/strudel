@@ -1,6 +1,7 @@
 package sbrn.mapviewer.gui.components;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import javax.swing.*;
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
@@ -9,6 +10,7 @@ public class GenomeLabelPanel extends JPanel
 {
 
 	int fontHeight = 12;
+	BufferedImage exportBuffer;
 
 	public GenomeLabelPanel()
 	{
@@ -46,5 +48,20 @@ public class GenomeLabelPanel extends JPanel
 
 		//turn antialias off again
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+	}
+
+	/**
+	 * Draws the panel to a buffer for the exportImage code.
+	 */
+	public BufferedImage createExportBuffer()
+	{
+		exportBuffer = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_RGB);
+		Graphics2D g = exportBuffer.createGraphics();
+
+		g.setColor(Color.BLACK);
+		setBackground(Colors.backgroundGradientEndColour);
+		paintComponent(g);
+		setBackground(Colors.genomeLabelPanelColour);
+		return exportBuffer;
 	}
 }

@@ -71,9 +71,8 @@ public class GMapSet
 
 	// ====================================c'tor========================================
 
-	public GMapSet(Color mapSetColour, MapSet mapSet)
+	public GMapSet(MapSet mapSet)
 	{
-		this.colour = mapSetColour;
 		this.mapSet = mapSet;
 		this.name = mapSet.getName();
 		numMaps = mapSet.size();
@@ -92,7 +91,7 @@ public class GMapSet
 		for (int i = 0; i < mapSet.size(); i++)
 		{
 			ChromoMap cMap = mapSet.getMaps().get(i);
-			GChromoMap gMap = new GChromoMap(colour, cMap.getName(), i, this);
+			GChromoMap gMap = new GChromoMap(cMap.getName(), i, this);
 			gMaps.add(gMap);
 		}
 	}

@@ -4,7 +4,6 @@ import java.awt.*;
 
 public class Colors
 {
-
 	//genomes and chromosomes
 	public static Color genomeColour = new Color(0, 50, 155);//blue
 	public static Color outlineColour = Color.white;
@@ -44,8 +43,37 @@ public class Colors
 	public static Color  overviewCanvasBackgroundColour = Color.white;
 
 	//main canvas
-	public static Color mainCanvasBackgroundColour = Color.black;
 	public static Color backgroundGradientStartColour = Color.black;
 	public static Color backgroundGradientEndColour = new Color(110, 110, 110);
 
+	public static void setColourScheme(DefaultColourScheme newScheme)
+	{
+		//genomes and chromosomes
+		genomeColour = newScheme.genomeColour;
+		outlineColour = newScheme.outlineColour;
+		invertedChromosomeColour = newScheme.invertedChromosomeColour;
+		invertedChromosomeHighlightColour = newScheme.invertedChromosomeHighlightColour;
+		chromosomeHighlightColour = newScheme.chromosomeHighlightColour;
+
+		//colours for links
+		linkColour = newScheme.linkColour;
+		strongEmphasisLinkColour = newScheme.strongEmphasisLinkColour;
+		mildEmphasisLinkColour =  newScheme.mildEmphasisLinkColour;
+
+		//various labels
+		chromosomeIndexColour = newScheme.chromosomeIndexColour;
+
+		//features
+		featureColour = newScheme.featureColour;
+		highlightedFeatureColour = newScheme.highlightedFeatureColour;
+		featureLabelColour = newScheme.featureLabelColour;
+		highlightedFeatureLabelColour = newScheme.highlightedFeatureLabelColour;
+
+		//backgrounds
+		highlightedFeatureLabelBackgroundColour = newScheme.highlightedFeatureLabelBackgroundColour;
+
+		//main canvas
+		backgroundGradientStartColour = newScheme.backgroundGradientStartColour;
+		backgroundGradientEndColour = newScheme.backgroundGradientEndColour;
+	}
 }

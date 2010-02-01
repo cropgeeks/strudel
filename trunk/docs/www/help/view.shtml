@@ -45,6 +45,9 @@
 			<li>
 				<a href="#exportView">Exporting the current view as an image</a>
 			</li>
+			<li>
+				<a href="#customiseColours">Choose between, and customise, two colour schemes</a>
+			</li>
 		</ul>
 
 		<!-- --------------------------------------------- -->
@@ -159,6 +162,26 @@
 		<img src="../images/exportimage.png">
 		button on the toolbar and a save image dialog will appear. Choose a file name and location and click the Save button
 		in the dialog.
+		<br>
+		<br>
+		<a href="#top">Back to top</a>
+		
+		
+		<!-- --------------------------------------------- -->
+		<h4>
+			Customising the colour schemes:
+			<a name="customiseColours"></a>
+		</h4>
+		Click on the customise colours
+		<img src="../images/customisecolours.png">
+		button on the toolbar and the customise colours dialog will appear. You can swap between colour schemes by selecting a
+		scheme from the combo box. On the left you can see a list of colours and on the right you can see a preview of the colour scheme. 
+		To customise a colour scheme, double click on the colour for the element of the scheme you wish to change in the list and
+		a colour chooser dialog will be displayed. Select your chosen colour, using the controls in one of the tabs, then press the OK
+		button. You will now see the updated preview. Once you have finished customising a colour scheme, press the apply button to have
+		the main view updated with the new colour scheme. Reset to defaults in the dialog sets a colour scheme back to its original colours.
+		<p>The background colour scheme is normally a gradient between Background Gradient Start and Background Gradient End. To achieve a
+		single colour background you should set both Background Gradient Start and Background Gradient End to the same colour.</p>
 		<br>
 		<br>
 		<a href="#top">Back to top</a>

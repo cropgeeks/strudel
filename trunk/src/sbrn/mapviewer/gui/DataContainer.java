@@ -41,7 +41,7 @@ public class DataContainer
 		for (String mapsetName : gMapsetNames)
 		{
 			MapSet mapset = Utils.getMapSetByName(mapsetName);
-			gMapSets.add(new GMapSet(Colors.genomeColour, mapset));
+			gMapSets.add(new GMapSet(mapset));
 		}
 
 		// other initing stuff
@@ -68,7 +68,7 @@ public class DataContainer
 
 		for (MapSet mapset : allMapSets)
 		{
-			gMapSets.add(new GMapSet(Colors.genomeColour, mapset));
+			gMapSets.add(new GMapSet(mapset));
 		}
 
 		// other initing stuff

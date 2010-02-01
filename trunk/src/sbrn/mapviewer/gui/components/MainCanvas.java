@@ -57,7 +57,7 @@ public class MainCanvas extends JPanel
 	// Back-buffer for AA-rendering
 	private BufferedImage aaBuffer;
 	// Does the buffer need redrawn before use?
-	boolean redraw = true;
+	private boolean redraw = true;
 
 	//true if we want to display individual features the user has searched for with the find dialog
 	public boolean drawHighlightFeatures = false;
@@ -109,7 +109,7 @@ public class MainCanvas extends JPanel
 
 	public void updateCanvas(boolean invalidate)
 	{
-		redraw = invalidate;
+		setRedraw(invalidate);
 		repaint();
 	}
 
@@ -129,7 +129,7 @@ public class MainCanvas extends JPanel
 		int h = getHeight();
 
 		// Does the back-buffer need to be re-created before use
-		if (redraw || buffer == null || buffer.getWidth() != w || buffer.getHeight() != h)
+		if (isRedraw() || buffer == null || buffer.getWidth() != w || buffer.getHeight() != h)
 		{
 			if (buffer == null || buffer.getWidth() != w || buffer.getHeight() != h)
 			{
@@ -317,7 +317,7 @@ public class MainCanvas extends JPanel
 		// also need to update the overview canvases from here
 		winMain.fatController.updateOverviewCanvases();
 
-		redraw = false;
+		setRedraw(false);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
@@ -363,9 +363,6 @@ public class MainCanvas extends JPanel
 	private void calcRequiredParams(Graphics2D g2)
 	{
 		numMarkersDrawn = 0;
-
-		//background
-		setBackground(Colors.mainCanvasBackgroundColour);
 
 		// get current size of frame
 		canvasHeight = getHeight();
@@ -555,6 +552,22 @@ public class MainCanvas extends JPanel
 	public BufferedImage getImageBuffer()
 	{
 		return buffer;
+	}
+
+	/**
+	 * @return the redraw
+	 */
+	public boolean isRedraw()
+	{
+		return redraw;
+	}
+
+	/**
+	 * @param redraw the redraw to set
+	 */
+	public void setRedraw(boolean redraw)
+	{
+		this.redraw = redraw;
 	}
 
 	//----------------------------------------------------------------------------------------------------------------------------------------

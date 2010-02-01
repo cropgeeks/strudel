@@ -138,12 +138,30 @@ public class Strudel
 
 			});
 
+			//set up the colour scheme the user had last selected
+			setColours();
+
 			winMain.setVisible(true);
 
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
+		}
+	}
+
+	private void setColours()
+	{
+		DefaultColourScheme defScheme = new DefaultColourScheme();
+		DefaultColourScheme printScheme = new PrintColourScheme();
+
+		if (Prefs.selectedColourScheme.equals(defScheme.toString()))
+		{
+			defScheme.setColours();
+		}
+		else if (Prefs.selectedColourScheme.equals(printScheme.toString()))
+		{
+			printScheme.setColours();
 		}
 	}
 

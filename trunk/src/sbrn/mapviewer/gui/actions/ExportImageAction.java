@@ -1,12 +1,15 @@
 package sbrn.mapviewer.gui.actions;
 
+import java.awt.Graphics2D;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 
 import javax.imageio.*;
 import javax.swing.*;
 
 import sbrn.mapviewer.*;
+import sbrn.mapviewer.gui.components.WinMain;
 import scri.commons.gui.*;
 
 public class ExportImageAction extends AbstractAction
@@ -41,7 +44,13 @@ public class ExportImageAction extends AbstractAction
 
 			try
 			{
-				ImageIO.write(Strudel.winMain.mainCanvas.getImageBuffer(), "png", file);
+				BufferedImage main = WinMain.mainCanvas.getImageBuffer();
+				BufferedImage label = Strudel.winMain.genomeLabelPanel.createExportBuffer();
+				BufferedImage totalImage = new BufferedImage(main.getWidth(), main.getHeight()+label.getHeight(), BufferedImage.TYPE_INT_RGB);
+				Graphics2D g = totalImage.createGraphics();
+				g.drawImage(main, null, 0, 0);
+				g.drawImage(label, null, 0, main.getHeight());
+				ImageIO.write(totalImage, "png", file);
 				TaskDialog.info("The exported image was successfully saved "
 								+ " to " + file, "Close");
 			}

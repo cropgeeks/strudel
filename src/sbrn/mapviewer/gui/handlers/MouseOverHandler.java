@@ -39,6 +39,8 @@ public class MouseOverHandler
 			selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, x, y);
 			if (selectedMap != null && selectedMap.arraysInitialized)
 			{
+				HintPanel.setLabel("MouseHandler.detectMouseOver() - " + selectedMap.name);
+
 				//some nasty logic to do with the persistent display of labels
 				if (previousMap == null || (previousMap != null && !previousMap.persistHighlightedFeatures))
 				{
@@ -82,6 +84,8 @@ public class MouseOverHandler
 			else
 			{
 				clearPreviousMap();
+
+				HintPanel.setLabel("MouseHandler.detectMouseOver() - not over a map");
 			}
 		}
 		catch (Exception e)

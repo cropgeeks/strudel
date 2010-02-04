@@ -89,7 +89,7 @@ public class WinMain extends JFrame
 
 	public ColorSchemeChooserDialog colorChooserDialog = new ColorSchemeChooserDialog(this);
 
-
+	public static HintPanel hintPanel = new HintPanel();
 
 	//	=================================================curve'tor=====================================
 
@@ -195,6 +195,8 @@ public class WinMain extends JFrame
 		FileDropAdapter dropAdapter = new FileDropAdapter(this);
 		setDropTarget(new DropTarget(this, dropAdapter));
 
+		// Icons for the hint panel
+		hintPanel.setIcons(Icons.getIcon("HELP12"), Icons.getIcon("CLOSE8"), Icons.getIcon("CLOSEGRAY8"));
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -215,6 +217,7 @@ public class WinMain extends JFrame
 
 			//this is the main canvas which we render the genomes on
 			mainCanvas = new MainCanvas();
+			mainPanel.add(hintPanel, BorderLayout.NORTH);
 			mainPanel.add(mainCanvas, BorderLayout.CENTER);
 
 			//add mousehandler

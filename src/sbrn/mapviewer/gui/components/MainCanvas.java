@@ -145,12 +145,12 @@ public class MainCanvas extends JPanel
 			bufferGraphics.dispose();
 
 			// Set up a post-render AA thread for a pretty repaint when ready
-			if(Strudel.winMain.toolbar.bAntialias.isSelected())
+			if(Prefs.userPrefAntialias)
 				new AntiAliasRepaintThread(aaBuffer);
 		}
 
 		// Render the back-buffer
-		if (AntiAliasRepaintThread.hasImage && Strudel.winMain.toolbar.bAntialias.isSelected())
+		if (AntiAliasRepaintThread.hasImage && Prefs.userPrefAntialias)
 			g.drawImage(aaBuffer, 0, 0, null);
 		else
 			g.drawImage(buffer, 0, 0, null);
@@ -279,7 +279,7 @@ public class MainCanvas extends JPanel
 		// optionally draw all the currently selected links between chromos
 		if (drawLinks && !killMe)
 		{
-			linkDisplayManager.multicoreDrawAllLinks(g2, killMe);
+			linkDisplayManager.drawAllLinks(g2, killMe);
 		}
 
 		//we also want to check whether there are any links to display that are to be highlighted after a name based search for

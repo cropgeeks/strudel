@@ -24,15 +24,16 @@ public class ControlToolBar extends JToolBar implements ActionListener
 	public JButton bFindFeatures;
 	public JButton bFindFeaturesinRange;
 	public JButton bResetAll;
-	public JToggleButton bDistMarkers;
-	public JButton bCurves;
-	public JToggleButton bLinkFilter;
+	//	public JToggleButton bDistMarkers;
+	//	public JButton bCurves;
+	//	public JToggleButton bLinkFilter;
 	public JButton bInfo;
 	public JButton bSave;
 	public JLabel memLabel = new JLabel();
-	public JButton bConfigure;
-	public JToggleButton bAntialias;
+	public JButton bConfigureGenomes;
+	//	public JToggleButton bAntialias;
 	private JButton bColours;
+	public JButton bConfigureView;
 
 	public int currentLinkShapeType = 1;
 	public boolean linkShapeOrderAscending = true;
@@ -52,7 +53,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 
 		//buttons
 		add(bOpen);
-		add(bConfigure);
+		add(bConfigureGenomes);
 
 		addSeparator(true);
 		add(bFindFeatures);
@@ -67,11 +68,8 @@ public class ControlToolBar extends JToolBar implements ActionListener
 
 		addSeparator(true);
 		add(bOverview);
-		add(bDistMarkers);
-		add(bCurves);
-		add(bAntialias);
-		add(bLinkFilter);
 		add(bColours);
+		add(bConfigureView);
 
 		addSeparator(true);
 		add(blastLabel);
@@ -84,10 +82,6 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		add(memLabel);
 		add(new JLabel("  "));
 
-		//these buttons have states stored in the prefs
-		bAntialias.setSelected(Prefs.userPrefAntialias);
-		bLinkFilter.setSelected(Prefs.drawOnlyLinksToVisibleFeatures);
-		bDistMarkers.setSelected(Prefs.showDistanceMarkers);
 	}
 
 	private void createControls()
@@ -168,63 +162,20 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		bFindFeaturesinRange.getActionMap().put("findFeaturesInRange", findFeaturesInRangeAction);
 
 		//these buttons have no keyboard shortcuts associated with them as yet -- straightforward config
-		bConfigure = (JButton) Utils.getButton(false, "Configure datasets", "Configure ordering and visibility of datasets", Icons.getIcon("CONFIGURE"), null, this, false);
+		bConfigureGenomes = (JButton) Utils.getButton(false, "Configure datasets", "Configure ordering and visibility of datasets", Icons.getIcon("CONFIGURE"), null, this, false);
 		bOverview = (JToggleButton) Utils.getButton(true, "", "Toggle the overview dialog on or off", Icons.getIcon("OVERVIEW"), null, this, false);
 		bOverview.setSelected(Prefs.guiOverviewVisible);
-		bDistMarkers = (JToggleButton) Utils.getButton(true, "", "Toggle the distance markers on or off", Icons.getIcon("DISTANCEMARKERS"), null, this, false);
-		bCurves = (JButton) Utils.getButton(false, "", "Cycle through straight, angled and curved links", Icons.getIcon("CURVES"), null, this, false);
-		bLinkFilter = (JToggleButton) Utils.getButton(true, "", "Toggle between visibility-based filtering of links and no filtering", Icons.getIcon("LINKFILTER"), null, this, false);
 		bHelp =  (JButton) Utils.getButton(false, "", "Help", Icons.getIcon("HELP"), null, this, true);
 		bInfo =  (JButton) Utils.getButton(false, "", "About Strudel", Icons.getIcon("INFO"), null, this, true);
 		bResetAll =  (JButton) Utils.getButton(false, "Reset", "Reset display", Icons.getIcon("RESET"), null, this, false);
-		bAntialias = (JToggleButton) Utils.getButton(true, "", "Toggle between higher quality and plain drawing styles", Icons.getIcon("ANTIALIAS"), null, this, false);		
 		bColours = (JButton) Utils.getButton(false, "", "Pick between, and customise, two colour schemes", Icons.getIcon("COLOURS"), null, this, false);
+		bConfigureView = (JButton) Utils.getButton(false, "", "Configure view settings", Icons.getIcon("VIEWSETTINGS"), null, this, false);
 	}
 
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == bOverview)
 			toggleOverviewDialog();
-
-		//toggles the distance markers on or off
-		else if(e.getSource() == bDistMarkers)
-		{
-			Prefs.showDistanceMarkers = bDistMarkers.isSelected();
-			Strudel.winMain.mainCanvas.updateCanvas(true);
-		}
-
-		//toggle between antialias and none
-		else if(e.getSource() == bAntialias)
-		{
-			Prefs.userPrefAntialias = bAntialias.isSelected();
-			Strudel.winMain.mainCanvas.updateCanvas(true);
-		}
-
-		//toggle between link filter and none
-		else if(e.getSource() == bLinkFilter)
-		{
-			Prefs.drawOnlyLinksToVisibleFeatures = bLinkFilter.isSelected();
-			Strudel.winMain.mainCanvas.updateCanvas(true);
-		}
-
-		//toggle the link shape between straight, angled and curved
-		else if(e.getSource() == bCurves)
-		{
-			//increment the currentLinkShapeType held by the tool bar or decrement as appropriate
-			if(linkShapeOrderAscending)
-				Strudel.winMain.toolbar.currentLinkShapeType ++;
-			else
-				Strudel.winMain.toolbar.currentLinkShapeType --;
-
-			//reset the index of the current link shape type back to 1 if it is greater than the max number so we can keep cycling through the options
-			if(currentLinkShapeType >= Constants.NUM_LINKSHAPE_TYPES)
-				linkShapeOrderAscending = false;
-			if(currentLinkShapeType == 1)
-				linkShapeOrderAscending = true;
-
-			LinkShapeAnimator linkShapeAnimator = new LinkShapeAnimator(currentLinkShapeType);
-			linkShapeAnimator.start();
-		}
 
 		//reset the main canvas view and deselect all features
 		else if (e.getSource() == bResetAll)
@@ -246,7 +197,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		}
 
 		//configure visible datasets
-		else if(e.getSource() == bConfigure)
+		else if(e.getSource() == bConfigureGenomes)
 		{
 			Strudel.winMain.genomeLayoutDialog.setLocationRelativeTo(Strudel.winMain);
 			Strudel.winMain.genomeLayoutDialog.setVisible(true);
@@ -256,6 +207,12 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		{
 			Strudel.winMain.colorChooserDialog.setLocationRelativeTo(Strudel.winMain);
 			Strudel.winMain.colorChooserDialog.setVisible(true);
+		}
+
+		else if(e.getSource() == bConfigureView)
+		{
+			Strudel.winMain.configureViewSettingsDialog.setLocationRelativeTo(Strudel.winMain);
+			Strudel.winMain.configureViewSettingsDialog.setVisible(true);
 		}
 	}
 
@@ -318,11 +275,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 				bFindFeatures.setEnabled(true);
 				bFindFeaturesinRange.setEnabled(true);
 				bResetAll.setEnabled(true);
-				bDistMarkers.setEnabled(true);
-				bCurves.setEnabled(false);
-				bLinkFilter.setEnabled(false);
-				bConfigure.setEnabled(false);
-				bAntialias.setEnabled(true);
+				bConfigureGenomes.setEnabled(false);
 				bColours.setEnabled(true);
 			}
 			else
@@ -336,11 +289,8 @@ public class ControlToolBar extends JToolBar implements ActionListener
 				bResetAll.setEnabled(true);
 				//this button we want to be always disabled at the lowest zoom level as we don't want markers displayed then
 				//it becomes enabled when a chromosome is fitted on screen
-				bDistMarkers.setEnabled(false);
-				bCurves.setEnabled(true);
-				bLinkFilter.setEnabled(true);
-				bConfigure.setEnabled(true);
-				bAntialias.setEnabled(true);
+				bConfigureGenomes.setEnabled(true);
+				bConfigureView.setEnabled(true);
 				bColours.setEnabled(true);
 			}
 

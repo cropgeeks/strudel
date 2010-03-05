@@ -22,8 +22,6 @@ public class LinkShapeAnimator extends Thread
 	@Override
 	public void run()
 	{
-		//first of all disable the button that triggered this thread so that the user cannot start multiple instances of this
-		Strudel.winMain.toolbar.bCurves.setEnabled(false);
 
 		//the total number of frames we need to render
 		int totalFrames = Math.round(fps * (millis / 1000.0f));
@@ -102,9 +100,6 @@ public class LinkShapeAnimator extends Thread
 			//do the repaint
 			Strudel.winMain.mainCanvas.updateCanvas(true);
 		}
-
-		//re-enable the button that triggered this thread
-		Strudel.winMain.toolbar.bCurves.setEnabled(true);
 
 		//repaint
 		// TODO: AA check

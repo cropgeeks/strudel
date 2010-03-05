@@ -16,14 +16,14 @@ public class NBColourPanel extends JPanel implements ActionListener
 {
 	private DefaultListModel schemeModel;
 	private DefaultComboBoxModel comboModel;
-	private PreviewCanvas preview;
-	private ColorSchemeChooserDialog parent;
-	private DefaultColourScheme defaultScheme;
-	private DefaultColourScheme printScheme;
+	private final PreviewCanvas preview;
+	private final ColorSchemeChooserDialog parent;
+	private final DefaultColourScheme defaultScheme;
+	private final DefaultColourScheme printScheme;
 	private JDialog chooser;
 	private JColorChooser colourChooser;
 	private Color newColour;
-	private ActionListener dialogListener;
+	private final ActionListener dialogListener;
 
     /** Creates new form NBColourPanel */
     public NBColourPanel(PreviewCanvas preview, ColorSchemeChooserDialog parent)
@@ -50,7 +50,6 @@ public class NBColourPanel extends JPanel implements ActionListener
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				System.out.println(colourChooser.getColor());
 				newColour = colourChooser.getColor();
 			}
 		};
@@ -98,6 +97,7 @@ public class NBColourPanel extends JPanel implements ActionListener
 	private void addMouseListener(final JList list)
 	{
 		list.addMouseListener(new MouseAdapter() {
+			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2)
 					selectColor(list);
@@ -187,8 +187,6 @@ public class NBColourPanel extends JPanel implements ActionListener
 	{
 		DefaultColourScheme cs = (DefaultColourScheme) schemeCombo.getSelectedItem();
 		cs.setCustomColourPreferences();
-
-		System.out.println(schemeCombo.getSelectedItem().toString());
 
 		Prefs.selectedColourScheme = schemeCombo.getSelectedItem().toString();
 	}

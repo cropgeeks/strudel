@@ -2,6 +2,7 @@ package sbrn.mapviewer.gui;
 
 import java.awt.Color;
 import java.util.*;
+import sbrn.mapviewer.*;
 import scri.commons.gui.*;
 
 public class Prefs extends XMLPreferences
@@ -37,6 +38,12 @@ public class Prefs extends XMLPreferences
 
 	//do we want to show the distance markers
 	public static boolean showDistanceMarkers = false;
+
+	//show the hints panel
+	public static boolean showHintPanel = true;
+
+	//the shape of the links -- curved, straight or angled
+	public static int linkShape = Constants.LINKTYPE_CURVED;
 
 	//the number of the last version released
 	public static String lastVersion = null;

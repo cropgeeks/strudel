@@ -16,10 +16,9 @@ public class Constants
 	//this determines the shape of the curve, if any
 	public static final float MAX_CURVEDLINK_COEFF = 0.3f;
 	public static final float MAX_ANGLEDLINK_COEFF = 0.15f;
-	public static final int LINKTYPE_CURVED = 1;
-	public static final int LINKTYPE_STRAIGHT = 2;
-	public static final int LINKTYPE_ANGLED = 3;
-	public static final int NUM_LINKSHAPE_TYPES = 3;
+	public static final int LINKTYPE_CURVED = 0;
+	public static final int LINKTYPE_STRAIGHT = 1;
+	public static final int LINKTYPE_ANGLED = 2;
 
 	//example data file paths
 	public static final String exampleDataAllInOne = "data/BarleyRiceBrachySingleLineFormat.strudel";

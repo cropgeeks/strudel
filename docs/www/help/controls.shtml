@@ -48,7 +48,7 @@
 			
 			<tr>
 				<td class="outline">
-					Single-click chromosome with Ctrl down
+					Single-click chromosome with Ctrl (Mac: Cmd) down
 				</td>
 				<td class="outline">
 					Select this chromosome for homology display (links -- if applicable -- show when two or more chromosomes selected)

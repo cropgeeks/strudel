@@ -104,6 +104,10 @@ public class GenomeLayoutDialog extends JDialog implements ActionListener
 		//reconfigure the mapsets and the GUI
 		Strudel.winMain.dataContainer.reconfigureGMapSets(gMapsetNames);
 		Strudel.winMain.reinitialiseDependentComponents();
+
+		//reinitialize the linkset lookup
+//		Strudel.winMain.mainCanvas.linkDisplayManager.initLinkSetLookup();
+
 		//reset and repaint
 		Strudel.winMain.fatController.resetMainCanvasView();
 	}

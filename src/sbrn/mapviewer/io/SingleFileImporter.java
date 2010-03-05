@@ -391,6 +391,7 @@ public class SingleFileImporter extends TrackableReader
 		return "Loading at: " + blah;
 	}
 
+	@Override
 	public int getJobCount()
 	{
 		return 1;

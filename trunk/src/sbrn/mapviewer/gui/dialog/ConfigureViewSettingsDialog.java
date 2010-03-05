@@ -4,37 +4,36 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import sbrn.mapviewer.*;
-import sbrn.mapviewer.gui.handlers.*;
 import scri.commons.gui.*;
 
-public class FindFeaturesInRangeDialog extends JDialog implements ActionListener
+public class ConfigureViewSettingsDialog extends JDialog implements ActionListener
 {
 
-	private JButton bFind, bCancel;
-	public MTFindFeaturesInRangePanel ffInRangePanel = new MTFindFeaturesInRangePanel();
+	private JButton bClose, bCancel;
+	public ConfigureViewSettingsPanel viewSettingsPanel = new ConfigureViewSettingsPanel();
 
-	public FindFeaturesInRangeDialog()
+	public ConfigureViewSettingsDialog()
 	{
-		super(Strudel.winMain, "List features in range", true);
+		super(Strudel.winMain, "Configure View Settings", true);
 
-		add(ffInRangePanel);
+		add(viewSettingsPanel);
 		add(createButtons(), BorderLayout.SOUTH);
 
-		getRootPane().setDefaultButton(bFind);
+		getRootPane().setDefaultButton(bClose);
 		SwingUtils.addCloseHandler(this, bCancel);
 
 		setLocationRelativeTo(Strudel.winMain);
 		pack();
-		setResizable(true);
+		setResizable(false);
 
 	}
 
 
 	private JPanel createButtons()
 	{
-		bFind = SwingUtils.getButton("Find");
-		bFind.addActionListener(this);
-		bFind.setMnemonic(KeyEvent.VK_F);
+		bClose = SwingUtils.getButton("Close");
+		bClose.addActionListener(this);
+		bClose.setMnemonic(KeyEvent.VK_F);
 
 		bCancel = SwingUtils.getButton("Cancel");
 		bCancel.addActionListener(this);
@@ -42,7 +41,7 @@ public class FindFeaturesInRangeDialog extends JDialog implements ActionListener
 
 		JPanel p1 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
 		p1.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 5));
-		p1.add(bFind);
+		p1.add(bClose);
 		p1.add(bCancel);
 
 		return p1;
@@ -52,17 +51,17 @@ public class FindFeaturesInRangeDialog extends JDialog implements ActionListener
 
 	public void actionPerformed(ActionEvent e)
 	{
-		if (e.getSource() == bFind)
+		if (e.getSource() == bClose)
 		{
-			FeatureSearchHandler.findFeaturesInRangeFromDialog(this);
+			//hide the find dialog
+			setVisible(false);
+			Strudel.winMain.mainCanvas.updateCanvas(true);
 		}
 
 		else if (e.getSource() == bCancel)
 		{
 			//hide the find dialog
 			setVisible(false);
-			//clear the highlighted features
-			Strudel.winMain.fatController.clearHighlightFeature();
 		}
 	}
 

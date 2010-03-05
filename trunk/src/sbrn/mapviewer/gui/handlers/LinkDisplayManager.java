@@ -99,39 +99,12 @@ public class LinkDisplayManager
 		}
 	}
 
-	// --------------------------------------------------------------------------------------------------------------------------------
-
-	public void multicoreDrawAllLinks(final Graphics2D g, final Boolean killMe)
-	{
-		linesDrawn = new Hashtable<String, Boolean>();
-
-		try
-		{
-			// Paint the links using multiple cores...
-			for (int i = 0; i < MainCanvas.tasks.length; i++)
-			{
-				final int startIndex = i;
-
-				MainCanvas.tasks[i] = MainCanvas.executor.submit(new Runnable() {
-					public void run() {
-						drawAllLinks(g, startIndex, killMe);
-					}});
-			}
-
-			// Wait in the drawing finishing before continuing
-			for (Future task: MainCanvas.tasks)
-				task.get();
-		}
-		catch (Exception e) {}
-
-		//		drawAllLinks(g, 0, killMe);
-	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
 
 
 	// Draws the lines between a chromosome of the reference genome and all potential homologues in the compared genome
-	public void drawAllLinks(Graphics2D g2, int startIndex, Boolean killMe)
+	public void drawAllLinks(Graphics2D g2, Boolean killMe)
 	{
 		int numLinksDrawn = 0;
 		long startTime = System.currentTimeMillis();
@@ -179,6 +152,13 @@ public class LinkDisplayManager
 
 						//now retrieve the physically closest instance of a GchromoMap associated with this refMap object
 						GChromoMap referenceGMap = Utils.getClosestGMap(refMap, targetGMap);
+
+						//at this point we need a check to see whether the reference map has a graphical representation at all
+						//this may have been removed by the user through the configure genomes dialog after having initally been present
+						//if we don't have  a referenceGMap object we just go on to the next linkset
+						if(referenceGMap == null)
+							continue;
+
 						//set up the gmapset objects accordingly
 						GMapSet targetGMapSet = targetGMap.owningSet;
 						GMapSet referenceGMapSet = referenceGMap.owningSet;
@@ -192,11 +172,18 @@ public class LinkDisplayManager
 							&& Strudel.winMain.fatController.selectedMaps.contains(referenceGMap);
 							boolean setDrawnAlready = drawnLinkSets.contains(selectedLinks);
 							boolean gMapSetsAdjacent = Utils.areMapSetsAdjacent(targetGMap.owningSet, referenceGMap.owningSet);
+							boolean bothMapsShowing = targetGMap.isShowingOnCanvas && referenceGMap.isShowingOnCanvas;
 
 							if (!bothMapsPresent || setDrawnAlready || !gMapSetsAdjacent)
 							{
 								continue;
 							}
+						}
+						//also check whether both maps are visible
+						boolean bothMapsShowing = targetGMap.isShowingOnCanvas && referenceGMap.isShowingOnCanvas;
+						if (!bothMapsShowing)
+						{
+							continue;
 						}
 
 						// the x coordinates have to be worked out
@@ -225,7 +212,7 @@ public class LinkDisplayManager
 						drawnLinkSets.add(selectedLinks);
 
 						// for each link in the linkset
-						for (int li = startIndex, n = selectedLinks.size(); li < n; li += MainCanvas.cores)
+						for (int li = 0; li < selectedLinks.size(); li++)
 						{
 							if (killMe)
 								return;
@@ -294,14 +281,14 @@ public class LinkDisplayManager
 					}
 				}
 			}
-			catch (RuntimeException e)
+			catch (Exception e)
 			{
-
+				e.printStackTrace();
 			}
 		}
 
 		long endTime = System.currentTimeMillis();
-		//		System.out.println("" + numLinksDrawn + " links drawn in " + (endTime-startTime) + " ms");
+//		System.out.println("" + numLinksDrawn + " links drawn in " + (endTime-startTime) + " ms");
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -377,7 +364,7 @@ public class LinkDisplayManager
 						GChromoMap refGMap = homolog.getOwningMap().getGChromoMaps().get(0);
 
 						//if visible link filtering is turned on we need to check whether the features for this link are both visible on screen
-						if(Strudel.winMain.toolbar.bLinkFilter.isSelected())
+						if(Prefs.drawOnlyLinksToVisibleFeatures)
 						{
 							if(!(Utils.checkFeatureVisibility(targetGMap, targetFeature) && Utils.checkFeatureVisibility(refGMap, homolog)))
 								continue;
@@ -405,6 +392,7 @@ public class LinkDisplayManager
 		try
 		{
 			linkSetLookup = new Hashtable<ChromoMap, Vector<LinkSet>>();
+			HashMap<Link, Link> linkLookup = new HashMap<Link, Link>();
 
 			int numEntriesMade = 0;
 
@@ -455,7 +443,11 @@ public class LinkDisplayManager
 								linkSetLookup.get(cMap).add(linkset);
 
 							//add the link to the linkset for this map combination
-							linkset.addLink(link);
+							if(!linkLookup.containsKey(link))
+							{
+								linkset.addLink(link);
+								linkLookup.put(link, link);
+							}
 						}
 					}
 				}
@@ -511,7 +503,7 @@ public class LinkDisplayManager
 		double ctrly2 = endY;
 
 		//this is what we do for straight or curved lines
-		if(Strudel.winMain.toolbar.currentLinkShapeType == Constants.LINKTYPE_CURVED)
+		if(Prefs.linkShape == Constants.LINKTYPE_CURVED)
 		{
 			//if the linkCurvatureCoeff is greater than 0 we make this line into a curve by moving the control points towards the centre
 			if (linkShapeCoeff > 0)
@@ -525,12 +517,12 @@ public class LinkDisplayManager
 			curve.setCurve(startX, startY, ctrlx1, ctrly1, ctrlx2, ctrly2, endX, endY);
 			g2.draw(curve);
 		}
-		else if(Strudel.winMain.toolbar.currentLinkShapeType == Constants.LINKTYPE_STRAIGHT)
+		else if(Prefs.linkShape == Constants.LINKTYPE_STRAIGHT)
 		{
 			g2.drawLine(startX, startY, endX, endY);
 		}
 		//this is what we do for angled lines
-		else if(Strudel.winMain.toolbar.currentLinkShapeType == Constants.LINKTYPE_ANGLED)
+		else if(Prefs.linkShape == Constants.LINKTYPE_ANGLED)
 		{
 			ctrlx1 = startX + ((endX - startX) * linkShapeCoeff);
 			ctrlx2 = endX - ((endX - startX) * linkShapeCoeff);

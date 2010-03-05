@@ -39,7 +39,10 @@ public class MouseOverHandler
 			selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, x, y);
 			if (selectedMap != null && selectedMap.arraysInitialized)
 			{
-				HintPanel.setLabel("MouseHandler.detectMouseOver() - " + selectedMap.name);
+				HintPanel.setLabel("Click this chromosome to see its homologs or Alt-click it to fit it on screen");
+				if(selectedMap.owningSet.zoomFactor >= selectedMap.owningSet.singleChromoViewZoomFactor)
+					HintPanel.setLabel("Shift-click and drag on the chromosome to outline a region for further zooming, or use the zoom sliders");
+
 
 				//some nasty logic to do with the persistent display of labels
 				if (previousMap == null || (previousMap != null && !previousMap.persistHighlightedFeatures))
@@ -85,7 +88,7 @@ public class MouseOverHandler
 			{
 				clearPreviousMap();
 
-				HintPanel.setLabel("MouseHandler.detectMouseOver() - not over a map");
+				HintPanel.setLabel("Click on a chromosome to see all its homologs or Ctrl-click two or more to see their homologs");
 			}
 		}
 		catch (Exception e)

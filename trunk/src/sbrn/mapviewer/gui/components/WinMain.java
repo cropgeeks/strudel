@@ -83,12 +83,12 @@ public class WinMain extends JFrame
 	public FindFeaturesDialog ffDialog;
 	public FindFeaturesInRangeDialog ffInRangeDialog;
 	public OpenFileDialog openFileDialog;
+	public ConfigureViewSettingsDialog configureViewSettingsDialog;
 	public AboutDialog aboutDialog = new AboutDialog(this, true);
-
 	public GenomeLayoutDialog genomeLayoutDialog;
-
 	public ColorSchemeChooserDialog colorChooserDialog = new ColorSchemeChooserDialog(this);
 
+	//this panel displays hints for the user as to what to do in a given context
 	public static HintPanel hintPanel = new HintPanel();
 
 	//	=================================================curve'tor=====================================
@@ -176,6 +176,7 @@ public class WinMain extends JFrame
 
 		//dialogs we only want one instance of
 		openFileDialog = new OpenFileDialog();
+		configureViewSettingsDialog = new ConfigureViewSettingsDialog();
 
 		//this panel contains the main canvas
 		mainPanel = new JPanel(new BorderLayout());
@@ -195,8 +196,12 @@ public class WinMain extends JFrame
 		FileDropAdapter dropAdapter = new FileDropAdapter(this);
 		setDropTarget(new DropTarget(this, dropAdapter));
 
-		// Icons for the hint panel
-		hintPanel.setIcons(Icons.getIcon("HELP12"), Icons.getIcon("CLOSE8"), Icons.getIcon("CLOSEGRAY8"));
+		//the hint panel
+		hintPanel.setIcons(Icons.getIcon("HELP12"), Icons.getIcon("FILECLOSEHIGHLIGHTED"), Icons.getIcon("FILECLOSE"));
+		if(Prefs.showHintPanel)
+			hintPanel.setVisible(true);
+		else
+			hintPanel.setVisible(false);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------

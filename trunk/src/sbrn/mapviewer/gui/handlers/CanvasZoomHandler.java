@@ -264,10 +264,10 @@ public class CanvasZoomHandler
 	//the button for this should be disabled unless we are zoomed in beyond the level at which a chromosome fills the screen
 	private void checkZoomForDistMarkerButton(GMapSet selectedSet)
 	{
-		if(selectedSet.zoomFactor >= selectedSet.singleChromoViewZoomFactor)
-			Strudel.winMain.toolbar.bDistMarkers.setEnabled(true);
-		else
-			Strudel.winMain.toolbar.bDistMarkers.setEnabled(false);
+//		if(selectedSet.zoomFactor >= selectedSet.singleChromoViewZoomFactor)
+//			Strudel.winMain.toolbar.bDistMarkers.setEnabled(true);
+//		else
+//			Strudel.winMain.toolbar.bDistMarkers.setEnabled(false);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------------------------

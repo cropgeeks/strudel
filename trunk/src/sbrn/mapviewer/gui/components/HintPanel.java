@@ -6,6 +6,8 @@ package sbrn.mapviewer.gui.components;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import sbrn.mapviewer.*;
+import sbrn.mapviewer.gui.*;
 
 public class HintPanel extends JPanel
 {
@@ -24,16 +26,20 @@ public class HintPanel extends JPanel
 		closeLabel.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 5));
 
 		closeLabel.addMouseListener(new MouseAdapter() {
+			@Override
 			public void mouseExited(MouseEvent e) {
 				closeLabel.setIcon(closeIcon1);
 			}
+			@Override
 			public void mouseEntered(MouseEvent e) {
 				closeLabel.setIcon(closeIcon2);
 			}
+			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				// TODO: Call setVisible(false) and update prefs/toolbar state
-				System.out.println("hide me");
+				Prefs.showHintPanel = false;
+				Strudel.winMain.configureViewSettingsDialog.viewSettingsPanel.getHintPanelCheckBox().setSelected(false);
+				setVisible(Prefs.showHintPanel);
 			}
 		});
 

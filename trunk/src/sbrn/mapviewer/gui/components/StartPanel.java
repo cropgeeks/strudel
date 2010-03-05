@@ -72,10 +72,6 @@ public class StartPanel extends javax.swing.JPanel implements ActionListener
 	}// </editor-fold>
 	//GEN-END:initComponents
 
-	private void hyperLinkLabel1ActionPerformed(java.awt.event.ActionEvent evt)
-	{
-		// TODO add your handling code here:
-	}
 
 	//GEN-BEGIN:variables
 	// Variables declaration - do not modify

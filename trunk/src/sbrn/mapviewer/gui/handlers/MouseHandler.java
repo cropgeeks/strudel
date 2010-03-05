@@ -68,7 +68,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 
 	public void mouseEntered(MouseEvent e)
 	{
-		HintPanel.setLabel("MouseHandler.mouseEntered()");
+
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -107,20 +107,17 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		//simple click on a target genome chromosome means display all links between this and all the reference chromos
 		if (!isMetaClick(e) && !e.isAltDown() && !e.isShiftDown())
 		{
-			// first figure out which chromosome we are in
+			Strudel.winMain.fatController.isCtrlClickSelection = false;
 
 			//if we have clicked on a map, display links between this map and all others
 			if(selectedMap != null)
 			{
-				Strudel.winMain.fatController.isCtrlClickSelection = false;
 				winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(selectedMap);
 			}
 			//otherwise -- if we clicked on the background -- clear all links displayed
 			else
 			{
-				Strudel.winMain.fatController.isCtrlClickSelection = false;
 				Strudel.winMain.fatController.clearMapOutlines();
-
 				//reset selected maps
 				Strudel.winMain.fatController.selectedMaps.clear();
 			}

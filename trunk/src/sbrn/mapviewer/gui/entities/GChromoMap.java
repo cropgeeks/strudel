@@ -477,9 +477,6 @@ public class GChromoMap implements Comparable
 	// draw the markers for the features
 	private void drawLinkedFeatures(Graphics2D g2)
 	{
-		//System.out.println("===============drawing linked features for map  "+ name);
-		//System.out.println("y = " + y);
-		//System.out.println("owningSet.totalY = " + owningSet.totalY);
 
 		int lastY = -1;
 		int numMarkersDrawn = 0;

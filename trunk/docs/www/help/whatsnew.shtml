@@ -23,6 +23,8 @@
   <ul>
   <li>BUG: Cmd-click on Mac was not working.</li>
   <li>BUG: Link positions during chromosome inversion were being drawn in the wrong places.</li>
+  <li>BUG: When a genome was removed from view using the Configure Genomes dialog, the link display for the remaining 
+  genomes was not working properly.</li>
   </ul>
  
  <h2>New in release 1.10.01.19:</h2>

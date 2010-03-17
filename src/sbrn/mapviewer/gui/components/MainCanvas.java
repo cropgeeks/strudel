@@ -97,7 +97,7 @@ public class MainCanvas extends JPanel
 		zoomHandler = new CanvasZoomHandler(this);
 
 		//this is for detecting key events
-		addKeyListener(new CanvasKeyListener(this));
+		addKeyListener(new CanvasKeyListener());
 		setFocusable(true);
 
 		// Prepare the background threads that will do the main painting
@@ -176,6 +176,9 @@ public class MainCanvas extends JPanel
 		//this just draws a label and, where required, a link for a single highlighted features -- need to be drawn at the very end to be on top of everything else
 		if (drawHighlightFeatures)
 			drawHighlightFeatures(g);
+
+		//update the hint panel
+		HintPanel.upDate();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------------------------------------

@@ -2,12 +2,11 @@
 
 features to implement -- general:
 
-- use hash map of line positions to store int instead of hash of coords, then use int to colour lines accoridng to how many are covered by the same position/line
+- use hash map of line positions to store int instead of hash of coords, then use int to colour lines according to how many are covered by the same position/line
 - visualize paralogs within genomes by drawing arcs back onto the genome itself
 - include Sorghum in example dataset and rebuild dataset from scratch, including BLAST hits in both directions, removing duplicates, and removing duff homologs between features that are not listed
 - make ALL target chromosomes highlighted (red) again (e.g. in one-to-all comparisons)
 - Need handling of homolog directionality. Three modes should be supported: similarity of links by name only, BLAST with directionality of search enforced, and BLAST with directionality not enforced. Use color coding where BLAST hit is not reciprocal to indicate reduced confidence in homology (enforced directionality mode only). Put a user choice of these 3 modes into a prefs dialog. 
-- Mac mouse control support
 - dynamically determine suitable number of distance markers to display depending on the zoom level
 - show loci as filled rectangles rather than lines at higher zoom levels
 - colour selector for user 
@@ -34,8 +33,6 @@ Data:
 
 Dave's list:
 
-- 
-- colour chooser
 - potentials:
 	* include in raw data putative homologs e.g. for rice loci in barley and flag every entry in the data as mapped or putative; then display these in the mapviewer, perhaps in different colours based on the value of the flag
 	* include all reference genome features and their annotation in the feature range results table (but not on the canvas)
@@ -77,11 +74,6 @@ Show annotation for both target and ref  - Linda.
 Ability to move markers around. - Luke
 Save project files including current state – Luke
 Menu bar support for new/infrequent users – Robbie
-
-================================
-
-Xin & Andy's List:
-- Screen found features by BLAST cutoff
 
 
 ================================

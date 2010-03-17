@@ -2,7 +2,6 @@ package sbrn.mapviewer.data;
 
 import java.util.*;
 import sbrn.mapviewer.*;
-import sbrn.mapviewer.gui.*;
 
 /**
  * A MapSet holds a collection of chromosome map (ChromoMap) objects.

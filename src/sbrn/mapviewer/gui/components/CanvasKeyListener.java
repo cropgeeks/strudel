@@ -5,11 +5,9 @@ import sbrn.mapviewer.*;
 
 public class CanvasKeyListener implements KeyListener
 {
-	private final MainCanvas mainCanvas;
-
-	public CanvasKeyListener(MainCanvas mainCanvas)
+	public CanvasKeyListener()
 	{
-		this.mainCanvas = mainCanvas;
+
 	}
 
 	public void keyPressed(KeyEvent e)

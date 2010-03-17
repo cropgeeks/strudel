@@ -88,7 +88,7 @@ public class ConfigureViewSettingsPanel extends javax.swing.JPanel
 		});
 
 		distanceMarkerCheckbox.setActionCommand("Show distance markers");
-		distanceMarkerCheckbox.setLabel("Show distance markers (higher zoom levels only)");
+		distanceMarkerCheckbox.setText("Show distance markers (higher zoom levels only)");
 		distanceMarkerCheckbox.addChangeListener(new javax.swing.event.ChangeListener()
 		{
 			public void stateChanged(javax.swing.event.ChangeEvent evt)

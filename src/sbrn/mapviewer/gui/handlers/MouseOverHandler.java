@@ -37,14 +37,13 @@ public class MouseOverHandler
 		{
 			// first figure out which chromosome we are in
 			selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, x, y);
+
+			//update the hint panel
+			HintPanel.upDate();
+
 			if (selectedMap != null && selectedMap.arraysInitialized)
 			{
-				HintPanel.setLabel("Click this chromosome to see its homologs or Alt-click it to fit it on screen");
-				if(selectedMap.owningSet.zoomFactor >= selectedMap.owningSet.singleChromoViewZoomFactor)
-					HintPanel.setLabel("Shift-click and drag on the chromosome to outline a region for further zooming, or use the zoom sliders");
-
-
-				//some nasty logic to do with the persistent display of labels
+				//these are conditions for the persistent display of labels
 				if (previousMap == null || (previousMap != null && !previousMap.persistHighlightedFeatures))
 				{
 					clearPreviousMap();
@@ -88,7 +87,7 @@ public class MouseOverHandler
 			{
 				clearPreviousMap();
 
-				HintPanel.setLabel("Click on a chromosome to see all its homologs or Ctrl-click two or more to see their homologs");
+				HintPanel.setLabel(HintPanel.overviewStr);
 			}
 		}
 		catch (Exception e)

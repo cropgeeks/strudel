@@ -29,7 +29,7 @@
 	</target>
 
 	<target name="compile" depends="init , clean">
-		<javac srcdir="${src}" destdir="${classes}" target="1.5" debug="yes">
+		<javac srcdir="${src}" destdir="${classes}" target="1.5" debug="yes" deprecation="true">
 			<classpath refid="project.classpath"/>
 			<exclude name="**/package-info.java"/>
 		</javac>

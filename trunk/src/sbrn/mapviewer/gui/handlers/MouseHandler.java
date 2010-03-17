@@ -18,7 +18,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	int mouseDragPosX = 0;
 	int mousePressedX = -1;
 	int mousePressedY = -1;
-	MouseOverHandler mouseOverHandler;
+	public MouseOverHandler mouseOverHandler;
 
 	long timeOfMouseDown = 0;
 

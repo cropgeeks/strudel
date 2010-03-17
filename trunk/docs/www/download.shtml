@@ -33,7 +33,7 @@ party libraries. </p>
 	<td><img src="images/icon_windows.gif" alt="Windows"></td>
 	<td>
 
-		<a href="installers/strudel_windows_1_10_01_20.exe">Microsoft Windows</a>
+		<a href="installers/strudel_windows_1_10_03_09.exe">Microsoft Windows</a>
 	</td>
 </tr>
 <tr>
@@ -41,7 +41,7 @@ party libraries. </p>
 	<td><img src="images/icon_osx.gif" alt="OS X"></td>
 	<td>
 
-		<a href="installers/strudel_macos_1_10_01_20.dmg">Apple Mac OS X</a>
+		<a href="installers/strudel_macos_1_10_03_09.dmg">Apple Mac OS X</a>
 	</td>
 </tr>
 <tr>
@@ -49,7 +49,7 @@ party libraries. </p>
 	<td><img src="images/icon_linux.gif" alt="Linux"></td>
 	<td>
 
-		<a href="installers/strudel_linux_1_10_01_20.sh">Linux</a>
+		<a href="installers/strudel_linux_1_10_03_09.sh">Linux</a>
 	</td>
 </tr>
 <tr>
@@ -57,7 +57,7 @@ party libraries. </p>
 	<td><img src="images/icon_solaris.gif" alt="Solaris"></td>
 	<td>
 
-		<a href="installers/strudel_solaris_1_10_01_20.sh">Solaris (sparc)</a>
+		<a href="installers/strudel_solaris_1_10_03_09.sh">Solaris (sparc)</a>
 	</td>
 </tr>
 </table>

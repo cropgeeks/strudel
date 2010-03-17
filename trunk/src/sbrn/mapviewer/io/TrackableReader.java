@@ -125,7 +125,7 @@ public abstract class TrackableReader extends SimpleJob
 
 	/**
 	 * Return the transfer rate in MB/sec or KB/sec.
-	 * 
+	 *
 	 * @return
 	 */
 	String getTransferRate()
@@ -135,14 +135,14 @@ public abstract class TrackableReader extends SimpleJob
 		long byteDiff = bytesRead - lastBytesRead;
 
 		float bytesPerSec = byteDiff / (timeDiff / (float) 1000);
-		float kbPerSec = bytesPerSec / (float) 1024;
+		float kbPerSec = bytesPerSec / 1024;
 
 		if (kbPerSec >= 1024)
 		{
-			float mbPerSec = kbPerSec / (float) 1024;
+			float mbPerSec = kbPerSec / 1024;
 			return df.format(mbPerSec) + " MB/sec";
 		}
-		else
-			return df.format(kbPerSec) + " KB/sec";
+
+		return df.format(kbPerSec) + " KB/sec";
 	}
 }

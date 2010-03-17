@@ -132,7 +132,7 @@
         <Component class="javax.swing.JCheckBox" name="distanceMarkerCheckbox">
           <Properties>
             <Property name="actionCommand" type="java.lang.String" value="Show distance markers"/>
-            <Property name="label" type="java.lang.String" value="Show distance markers (higher zoom levels only)"/>
+            <Property name="text" type="java.lang.String" value="Show distance markers (higher zoom levels only)"/>
           </Properties>
           <Events>
             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="stateChanged"/>

@@ -54,25 +54,6 @@ public class Utils
 		return foundSet	;
 	}
 
-	// --------------------------------------------------------------------------------------------------------------------------------------------------------
-
-	//finds all instances of a  GMapSet by name
-	public static LinkedList<GMapSet> getGMapSetsByName(String name)
-	{
-		LinkedList<GMapSet> foundSets = null;
-
-		//we need to search all chromomaps in all mapsets for this
-		// for all gmapsets
-		for (GMapSet gMapSet : Strudel.winMain.dataContainer.gMapSets)
-		{
-			if(gMapSet.name.equals(name))
-			{
-				foundSets.add(gMapSet);
-			}
-		}
-
-		return foundSets;
-	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
 

@@ -466,7 +466,34 @@ public class Utils
 
 	// Utility method to help create the buttons. Sets their text, tooltip, and
 	// icon, as well as adding actionListener, defining margings, etc.
-	public static  AbstractButton getButton(boolean toggle, String title, String tt, ImageIcon icon, Action action, ActionListener actionListener, boolean enabled)
+	public static  AbstractButton getButton(boolean toggle, String title, String tt, ImageIcon icon, ActionListener actionListener, boolean enabled)
+	{
+		AbstractButton button = null;
+
+		if (toggle)
+			button = new JToggleButton(title);
+		else
+			button = new JButton(title);
+
+		button.setText(title != null ? title : "");
+		button.setToolTipText(tt);
+		button.setIcon(icon);
+		button.setFocusPainted(false);
+		button.setFocusable(false);
+		button.addActionListener(actionListener);
+		button.setMargin(new Insets(2, 1, 2, 1));
+		button.setEnabled(enabled);
+
+		if (SystemUtils.isMacOS())
+		{
+			button.putClientProperty("JButton.buttonType", "bevel");
+			button.setMargin(new Insets(-2, -1, -2, -1));
+		}
+
+		return button;
+	}
+
+	public static  AbstractButton getButton(boolean toggle, String title, String tt, ImageIcon icon, Action action)
 	{
 		AbstractButton button = null;
 
@@ -480,9 +507,7 @@ public class Utils
 		button.setIcon(icon);
 		button.setFocusPainted(false);
 		button.setFocusable(false);
-		button.addActionListener(actionListener);
 		button.setMargin(new Insets(2, 1, 2, 1));
-		button.setEnabled(enabled);
 
 		if (SystemUtils.isMacOS())
 		{

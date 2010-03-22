@@ -7,6 +7,8 @@
   </NonVisualComponents>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
@@ -21,9 +23,9 @@
           <EmptySpace min="0" pref="365" max="32767" attributes="0"/>
           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="9" max="32767" attributes="0"/>
                   <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="9" max="32767" attributes="0"/>
               </Group>
           </Group>
       </Group>
@@ -33,9 +35,9 @@
           <EmptySpace min="0" pref="210" max="32767" attributes="0"/>
           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="7" max="32767" attributes="0"/>
                   <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="8" max="32767" attributes="0"/>
               </Group>
           </Group>
       </Group>
@@ -72,7 +74,7 @@
                           <Component id="distanceMarkerCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="linkShapeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="64" max="32767" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -98,7 +100,7 @@
                           <Component id="linkShapeStraightRButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="linkShapeAngledRButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="25" max="32767" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -112,6 +114,9 @@
           <Events>
             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="stateChanged"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JCheckBox(Actions.showHint);"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JCheckBox" name="antialiasCheckbox">
           <Properties>
@@ -120,6 +125,9 @@
           <Events>
             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="stateChanged"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JCheckBox(Actions.antialiasedDraw);"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JCheckBox" name="linkFilterCheckbox">
           <Properties>
@@ -128,15 +136,21 @@
           <Events>
             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="stateChanged"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JCheckBox(Actions.filterLinks);"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JCheckBox" name="distanceMarkerCheckbox">
           <Properties>
-            <Property name="actionCommand" type="java.lang.String" value="Show distance markers"/>
             <Property name="text" type="java.lang.String" value="Show distance markers (higher zoom levels only)"/>
+            <Property name="actionCommand" type="java.lang.String" value="Show distance markers"/>
           </Properties>
           <Events>
             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="stateChanged"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JCheckBox(Actions.showDistanceMarkers);"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="linkShapeLabel">
           <Properties>
@@ -153,6 +167,9 @@
           <Events>
             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="stateChanged"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JRadioButton(Actions.linkCurved);"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JRadioButton" name="linkShapeStraightRButton">
           <Properties>
@@ -164,6 +181,9 @@
           <Events>
             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="stateChanged"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JRadioButton(Actions.linkStraight);"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JRadioButton" name="linkShapeAngledRButton">
           <Properties>
@@ -175,6 +195,9 @@
           <Events>
             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="stateChanged"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JRadioButton(Actions.linkAngled);"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>

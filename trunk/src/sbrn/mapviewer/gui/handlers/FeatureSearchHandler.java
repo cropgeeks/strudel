@@ -207,7 +207,7 @@ public class FeatureSearchHandler
 		((ResultsTable)Strudel.winMain.ffResultsPanel.getFFResultsTable()).initColumnSizes();
 
 		//enable the button that allows export of this data to file
-		Strudel.winMain.toolbar.bSave.setEnabled(true);
+		Actions.saveResults.setEnabled(true);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

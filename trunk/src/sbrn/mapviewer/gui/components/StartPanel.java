@@ -9,11 +9,8 @@ package sbrn.mapviewer.gui.components;
 import java.awt.event.*;
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
-import sbrn.mapviewer.gui.actions.*;
 import sbrn.mapviewer.gui.dialog.*;
 import sbrn.mapviewer.io.*;
-import scri.commons.gui.Icons;
-import scri.commons.gui.matisse.HyperLinkLabel;
 
 /**
  *

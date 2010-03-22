@@ -10,11 +10,13 @@ public class ConfigureViewSettingsDialog extends JDialog implements ActionListen
 {
 
 	private JButton bClose, bCancel;
-	public ConfigureViewSettingsPanel viewSettingsPanel = new ConfigureViewSettingsPanel();
+	public ConfigureViewSettingsPanel viewSettingsPanel;
 
 	public ConfigureViewSettingsDialog()
 	{
 		super(Strudel.winMain, "Configure View Settings", true);
+
+		viewSettingsPanel = new ConfigureViewSettingsPanel();
 
 		add(viewSettingsPanel);
 		add(createButtons(), BorderLayout.SOUTH);

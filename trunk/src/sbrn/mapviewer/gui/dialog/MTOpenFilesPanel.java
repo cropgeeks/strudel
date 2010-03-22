@@ -173,6 +173,11 @@ public class MTOpenFilesPanel extends javax.swing.JPanel
 		return inputFileTF;
 	}
 
+	public void setInputFileTF(String name)
+	{
+		inputFileTF.setText(name);
+	}
+
 	public javax.swing.JRadioButton getOwnDataRadioButton()
 	{
 		return ownDataRadioButton;

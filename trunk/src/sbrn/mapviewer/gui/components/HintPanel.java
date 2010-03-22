@@ -46,8 +46,7 @@ public class HintPanel extends JPanel
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				Prefs.showHintPanel = false;
-				Strudel.winMain.configureViewSettingsDialog.viewSettingsPanel.getHintPanelCheckBox().setSelected(false);
+				Strudel.winMain.mView.showHint();
 				setVisible(Prefs.showHintPanel);
 			}
 		});

@@ -143,7 +143,7 @@ public class FatController
 		 clearResultsTable();
 
 		//disable the button that allows export of this data to file
-		Strudel.winMain.toolbar.bSave.setEnabled(false);
+		Actions.saveResults.setEnabled(false);
 
 		//reset the BLAST cut-off
 		LinkDisplayManager.setBlastThreshold(1);

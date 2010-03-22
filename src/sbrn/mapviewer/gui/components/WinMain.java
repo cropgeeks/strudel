@@ -3,7 +3,6 @@ package sbrn.mapviewer.gui.components;
 import java.awt.*;
 import java.awt.dnd.*;
 import java.awt.event.*;
-import java.beans.*;
 import java.lang.management.*;
 import java.util.*;
 import java.text.*;
@@ -32,12 +31,18 @@ public class WinMain extends JFrame
 
 	//++++++++++Swing components that make up the GUI: +++++++++++++
 
-	//the tool bar at the top
-	public ControlToolBar toolbar;
-
 	//the thumbnail overviews and the dialog that contains them
 	public LinkedList<OverviewCanvas> overviewCanvases = new LinkedList<OverviewCanvas>();
 	public OverviewDialog overviewDialog = new OverviewDialog(this);
+
+		//the tool bar at the top
+	public ControlToolBar toolbar;
+
+	public MenuFile mFile;
+	public MenuExplore mExplore;
+	public MenuView mView;
+	public MenuAbout mAbout;
+	public WinMainMenuBar menuBar;
 
 	//the controller instance for the whole application
 	public FatController fatController;
@@ -96,6 +101,11 @@ public class WinMain extends JFrame
 	public WinMain()
 	{
 
+		mFile = new MenuFile();
+		mExplore = new MenuExplore();
+		mView = new MenuView(this);
+		mAbout = new MenuAbout();
+		menuBar = new WinMainMenuBar(this);
 		//get the GUI assembled as far as possible without the data loaded
 		setupInitialComponents();
 		pack();
@@ -124,6 +134,8 @@ public class WinMain extends JFrame
 		// maximization from above
 		addListeners();
 		createMemoryTimer();
+
+		setJMenuBar(menuBar);
 	}
 
 	//=================================================methods=====================================

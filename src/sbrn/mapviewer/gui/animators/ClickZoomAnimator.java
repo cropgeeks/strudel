@@ -1,5 +1,6 @@
 package sbrn.mapviewer.gui.animators;
 
+import javax.swing.*;
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.components.*;
@@ -60,13 +61,7 @@ public class ClickZoomAnimator extends Thread
 		for (int i = 0; i < totalFrames; i++)
 		{
 			// sleep for the amount of animation time divided by the totalFrames value
-			try
-			{
-				Thread.sleep(millis / totalFrames);
-			}
-			catch (InterruptedException e)
-			{
-			}
+
 
 			// set the new zoom factor
 			selectedSet.zoomFactor = selectedSet.zoomFactor + zoomFactorIncrement;
@@ -93,6 +88,14 @@ public class ClickZoomAnimator extends Thread
 
 			//update zoom control position
 			Strudel.winMain.fatController.updateAllZoomControls();
+
+			try
+			{
+				Thread.sleep(millis / totalFrames);
+			}
+			catch (InterruptedException e)
+			{
+			}
 		}
 
 
@@ -118,15 +121,18 @@ public class ClickZoomAnimator extends Thread
 		//turn drawing of map index back on
 		selectedMap.drawChromoIndex = true;
 
-		//repaint
-		// TODO: AA check
-		Strudel.winMain.mainCanvas.updateCanvas(true);
-
 		zoomHandler.isClickZoomRequest = false;
 
+		//repaint
+		// TODO: AA check
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run()
+			{
+				Strudel.winMain.mainCanvas.updateCanvas(true);
+			}
+		});
+
 		done = true;
-
-
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------

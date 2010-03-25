@@ -117,7 +117,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			//otherwise -- if we clicked on the background -- clear all links displayed
 			else
 			{
-				Strudel.winMain.fatController.clearMapOutlines();
+				Strudel.winMain.fatController.clearMapHighlighting();
 				//reset selected maps
 				Strudel.winMain.fatController.selectedMaps.clear();
 			}
@@ -129,6 +129,8 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			if(selectedMap != null)
 			{
 				Strudel.winMain.fatController.isCtrlClickSelection = true;
+				//also reset the wholeGenomeSelected flag
+				selectedMap.owningSet.wholeMapsetIsSelected  = false;
 				winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(selectedMap);
 			}
 		}

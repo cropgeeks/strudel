@@ -12,7 +12,7 @@ import sbrn.mapviewer.gui.*;
 
 public class WinMainMenuBar extends JMenuBar
 {
-	private WinMain winMain;
+	private final WinMain winMain;
 
 	// The components of the file menu
 	private JMenu mFile;
@@ -98,7 +98,7 @@ public class WinMainMenuBar extends JMenuBar
 	{
 		mExplore = new JMenu("Explore");
 		mExplore.setMnemonic('E');
-		
+
 		mfindFeature = getItem(Actions.findFeature, "Find features by name", KeyEvent.VK_F, Strudel.ctrlMenuShortcut);
 		mExploreRange = getItem(Actions.exploreRange, "Explore range", KeyEvent.VK_R, Strudel.ctrlMenuShortcut);
 
@@ -124,14 +124,14 @@ public class WinMainMenuBar extends JMenuBar
 		mViewSettings = new JMenu(Actions.viewSettings);
 		mViewSettings.setMnemonic('S');
 
-		mShowHint = getCheckedItem(Actions.showHint, "Show hint", KeyEvent.VK_H, Strudel.ctrlMenuShortcut);
+		mShowHint = getCheckedItem(Actions.showHint, "Show hint panel", KeyEvent.VK_H, Strudel.ctrlMenuShortcut);
 		mAntialiasedDraw = getCheckedItem(Actions.antialiasedDraw, "Draw antialiased", KeyEvent.VK_A, Strudel.ctrlMenuShortcut);
 		mFilterLinks = getCheckedItem(Actions.filterLinks, "Filter links", 0, 0);
 		mShowDistanceMarkers = getCheckedItem(Actions.showDistanceMarkers, "Show distance markers", KeyEvent.VK_D, Strudel.ctrlMenuShortcut);
 
 		mLinkShape = new JMenu(Actions.linkShape);
 		mLinkShape.setMnemonic('L');
-		
+
 		mCurved = getCheckedItem(Actions.linkCurved, "Curved", 0, Strudel.ctrlMenuShortcut);
 		mStraight = getCheckedItem(Actions.linkStraight, "Straight", 0, Strudel.ctrlMenuShortcut);
 		mAngled = getCheckedItem(Actions.linkAngled, "Angled", 0, Strudel.ctrlMenuShortcut);

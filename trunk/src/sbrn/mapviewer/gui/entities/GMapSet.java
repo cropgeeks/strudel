@@ -69,6 +69,9 @@ public class GMapSet
 	//the zoom control panel pertaining to this mapset
 	public ZoomControlPanel zoomControlPanel;
 
+	//true if all the chromosomes belonging to this mapset have been selected
+	public boolean wholeMapsetIsSelected = false;
+
 	// ====================================c'tor========================================
 
 	public GMapSet(MapSet mapSet)

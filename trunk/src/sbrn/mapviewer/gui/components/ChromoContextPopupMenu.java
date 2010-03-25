@@ -16,11 +16,13 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 	//	public String hideAllLabelsStr = "Hide all labels";
 	public String addAllFeaturesStr = "Add features in range to results";
 	public String webInfoStr = "Show annotation for features in range";
+	public String selectAllChromosStr = "Select all chromosomes in genome";
 
 	public JMenuItem invertChromoMenuItem;
 	public JMenuItem fitChromoMenuItem;
 	public JMenuItem addAllFeaturesItem;
 	public JCheckBoxMenuItem showAllLabelsItem;
+	public JMenuItem selectAllChromosItem;
 
 
 	public ChromoContextPopupMenu()
@@ -40,6 +42,10 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 		showAllLabelsItem = new JCheckBoxMenuItem(showAllLabelsStr);
 		showAllLabelsItem.addActionListener(this);
 		add(showAllLabelsItem);
+
+		selectAllChromosItem = new JMenuItem(selectAllChromosStr);
+		selectAllChromosItem.addActionListener(this);
+		add(selectAllChromosItem);
 	}
 
 
@@ -102,6 +108,20 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 				showAllLabelsItem.setSelected(false);
 			}
 
+			//repaint
+			Strudel.winMain.mainCanvas.updateCanvas(true);
+		}
+		else if (source.equals(selectAllChromosItem))
+		{
+			//reset selected maps
+//			Strudel.winMain.fatController.selectedMaps.clear();
+//			Strudel.winMain.fatController.clearMapHighlighting();
+
+			//set the appropriate flags to indicate what we are doing
+			selectedMap.owningSet.wholeMapsetIsSelected = true;
+			Strudel.winMain.fatController.isCtrlClickSelection = false;
+
+			Strudel.winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(selectedMap);
 			//repaint
 			Strudel.winMain.mainCanvas.updateCanvas(true);
 		}

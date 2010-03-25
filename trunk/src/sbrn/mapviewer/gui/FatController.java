@@ -49,7 +49,10 @@ public class FatController
 	//true if the user is adding maps to their selection by Ctrl clicking
 	public boolean isCtrlClickSelection = false;
 
-	//true if we are laoding a file from the recent docs list
+	//true if the user selects a whole genome at a time
+//	public boolean isWholeGenomeSelection = false;
+
+	//true if we are loading a file from the recent docs list
 	public boolean recentFileLoad = false;
 
 
@@ -281,10 +284,12 @@ public class FatController
 
 	//restores the original view to what it looked like after loading the current dataset
 	//without clearing any results
-	public void clearMapOutlines()
+	public void clearMapHighlighting()
 	{
 		for(GMapSet gMapSet : winMain.dataContainer.gMapSets)
 		{
+			gMapSet.wholeMapsetIsSelected = false;
+
 			//for all maps within mapset
 			for(GChromoMap gMap: gMapSet.gMaps)
 			{

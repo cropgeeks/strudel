@@ -11,7 +11,7 @@ import static javax.swing.Action.*;
 
 public class Actions
 {
-	private WinMain winMain;
+	private final WinMain winMain;
 
 	// File menu actions
 	public static AbstractAction loadData;
@@ -76,7 +76,6 @@ public class Actions
 	{
 		loadData = new AbstractAction("Load Data", getIcon("FILEOPEN")) {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Load Data");
 				winMain.mFile.loadData();
 			}
 		};
@@ -222,7 +221,7 @@ public class Actions
 		loadExample.setEnabled(true);
 		exportImage.setEnabled(false);
 		saveResults.setEnabled(false);
-		
+
 		findFeature.setEnabled(false);
 		exploreRange.setEnabled(false);
 

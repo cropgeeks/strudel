@@ -21,7 +21,9 @@ public class HintPanel extends JPanel
 	//strings to display -- store them all here rather than all over the code
 	public static final String clickSpecificChromoStr = "Click this chromosome to see its homologs, Alt-click it to fit it on screen";
 	public static final String zoomInStr = "Shift-click and drag on the chromosome to outline a region for further zooming, or use the zoom sliders";
-	public static final String overviewStr = "Click on a chromosome to see all its homologs or Ctrl-click two or more to see their homologs";
+	public static final String overviewStr = "Click on a chromosome to see all its homologs or Ctrl-click two or more to see their homologs. " +
+	"You can also right-click on a chromosome and choose '"
+	+ Strudel.winMain.chromoContextPopupMenu.selectAllChromosStr + "'.";
 	public static final String altClickStr = "Alt-click to fill the screen with this chromosome";
 
 

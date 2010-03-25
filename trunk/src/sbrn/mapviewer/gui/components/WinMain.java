@@ -94,7 +94,7 @@ public class WinMain extends JFrame
 	public ColorSchemeChooserDialog colorChooserDialog = new ColorSchemeChooserDialog(this);
 
 	//this panel displays hints for the user as to what to do in a given context
-	public static HintPanel hintPanel = new HintPanel();
+	public static HintPanel hintPanel;
 
 	//	=================================================curve'tor=====================================
 
@@ -208,12 +208,6 @@ public class WinMain extends JFrame
 		FileDropAdapter dropAdapter = new FileDropAdapter(this);
 		setDropTarget(new DropTarget(this, dropAdapter));
 
-		//the hint panel
-		hintPanel.setIcons(Icons.getIcon("HELP12"), Icons.getIcon("FILECLOSEHIGHLIGHTED"), Icons.getIcon("FILECLOSE"));
-		if(Prefs.showHintPanel)
-			hintPanel.setVisible(true);
-		else
-			hintPanel.setVisible(false);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -226,15 +220,23 @@ public class WinMain extends JFrame
 			//control panel for found features
 			foundFeaturesTableControlPanel = new FoundFeaturesTableControlPanel();
 
-			//the popup menu we use when are over a chromosome
-			chromoContextPopupMenu  = new ChromoContextPopupMenu();
-
 			//this panel contains the zoom controls and the search results panel below it
 			bottomPanel = new JPanel(new BorderLayout());
 
+			//the popup menu we use when are over a chromosome
+			chromoContextPopupMenu  = new ChromoContextPopupMenu();
+
+			//the hint panel
+			hintPanel = new HintPanel();
+			mainPanel.add(hintPanel, BorderLayout.NORTH);
+			hintPanel.setIcons(Icons.getIcon("HELP12"), Icons.getIcon("FILECLOSEHIGHLIGHTED"), Icons.getIcon("FILECLOSE"));
+			if(Prefs.showHintPanel)
+				hintPanel.setVisible(true);
+			else
+				hintPanel.setVisible(false);
+
 			//this is the main canvas which we render the genomes on
 			mainCanvas = new MainCanvas();
-			mainPanel.add(hintPanel, BorderLayout.NORTH);
 			mainPanel.add(mainCanvas, BorderLayout.CENTER);
 
 			//add mousehandler

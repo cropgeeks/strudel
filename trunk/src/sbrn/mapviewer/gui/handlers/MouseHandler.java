@@ -348,10 +348,6 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		{
 			winMain.mainCanvas.moveGenomeViewPort(selectedSet, newCenterPoint);
 		}
-
-		//repaint
-		// TODO: AA check
-		winMain.mainCanvas.updateCanvas(true);
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------

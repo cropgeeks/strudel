@@ -33,19 +33,22 @@ public class WinMainMenuBar extends JMenuBar
 	private JMenuItem mColourChooser;
 	private JMenuItem mConfigureDatasets;
 	private JMenuItem mReset;
+
 	// The components of the view settings sub-menu
 	private JMenu mViewSettings;
 	private JMenuItem mShowHint;
 	private JMenuItem mAntialiasedDraw;
 	private JMenuItem mFilterLinks;
 	private JMenuItem mShowDistanceMarkers;
+	private JMenuItem hideUnlinkedFeatures;
+
 	// The components of the link shape sub-menu
 	private JMenu mLinkShape;
 	private JMenuItem mCurved;
 	private JMenuItem mStraight;
 	private JMenuItem mAngled;
 
-	// The componenets of the about menu
+	// The components of the about menu
 	private JMenu mAbout;
 	private JMenuItem mHelp;
 	private JMenuItem mAboutStrudel;
@@ -128,6 +131,7 @@ public class WinMainMenuBar extends JMenuBar
 		mAntialiasedDraw = getCheckedItem(Actions.antialiasedDraw, "Draw antialiased", KeyEvent.VK_A, Strudel.ctrlMenuShortcut);
 		mFilterLinks = getCheckedItem(Actions.filterLinks, "Filter links", 0, 0);
 		mShowDistanceMarkers = getCheckedItem(Actions.showDistanceMarkers, "Show distance markers", KeyEvent.VK_D, Strudel.ctrlMenuShortcut);
+		hideUnlinkedFeatures = getCheckedItem(Actions.hideUnlinkedFeatures, "Hide unlinked features", 0, 0);
 
 		mLinkShape = new JMenu(Actions.linkShape);
 		mLinkShape.setMnemonic('L');
@@ -148,6 +152,7 @@ public class WinMainMenuBar extends JMenuBar
 		mViewSettings.add(mAntialiasedDraw);
 		mViewSettings.add(mFilterLinks);
 		mViewSettings.add(mShowDistanceMarkers);
+		mViewSettings.add(hideUnlinkedFeatures);
 		mView.add(mLinkShape);
 
 		ButtonGroup grp = new ButtonGroup();

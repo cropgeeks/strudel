@@ -33,11 +33,14 @@ public class Prefs extends XMLPreferences
 	//this boolean is set by the user through a button and indicates a global preference for antialiased or plain darwing styles
 	public static boolean userPrefAntialias = false;
 
-	//do we links to be drawn whether their orginating feature is currently visible on the canvas or not?
+	//do we want links to be drawn whether their orginating feature is currently visible on the canvas or not?
 	public static boolean drawOnlyLinksToVisibleFeatures = false;
 
 	//do we want to show the distance markers
 	public static boolean showDistanceMarkers = false;
+
+	//this determines whether we display all features or just those that have links associated with them
+	public static boolean hideUnlinkedFeatures = false;
 
 	//show the hints panel
 	public static boolean showHintPanel = true;

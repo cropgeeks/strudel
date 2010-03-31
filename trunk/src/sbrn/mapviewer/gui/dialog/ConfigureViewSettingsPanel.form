@@ -20,7 +20,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <EmptySpace min="0" pref="365" max="32767" attributes="0"/>
+          <EmptySpace min="0" pref="417" max="32767" attributes="0"/>
           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace min="0" pref="9" max="32767" attributes="0"/>
@@ -32,7 +32,7 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <EmptySpace min="0" pref="210" max="32767" attributes="0"/>
+          <EmptySpace min="0" pref="253" max="32767" attributes="0"/>
           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace min="0" pref="7" max="32767" attributes="0"/>
@@ -56,7 +56,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="331" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="383" max="32767" attributes="0"/>
               <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
@@ -73,6 +73,7 @@
                           <Component id="linkFilterCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="distanceMarkerCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="linkShapeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="unlinkedFeaturesCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="64" max="32767" attributes="0"/>
                   </Group>
@@ -81,7 +82,7 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="165" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="206" max="32767" attributes="0"/>
               <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
@@ -92,6 +93,8 @@
                       <Component id="linkFilterCheckbox" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="distanceMarkerCheckbox" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="unlinkedFeaturesCheckbox" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="linkShapeLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -142,8 +145,8 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="distanceMarkerCheckbox">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Show distance markers (higher zoom levels only)"/>
             <Property name="actionCommand" type="java.lang.String" value="Show distance markers"/>
+            <Property name="text" type="java.lang.String" value="Show distance markers (higher zoom levels only)"/>
           </Properties>
           <Events>
             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="stateChanged"/>
@@ -197,6 +200,20 @@
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JRadioButton(Actions.linkAngled);"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="unlinkedFeaturesCheckbox">
+          <Properties>
+            <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="Actions.hideUnlinkedFeatures" type="code"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Hide unlinked features"/>
+          </Properties>
+          <Events>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="unlinkedFeaturesCheckboxstateChanged"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JCheckBox(Actions.showDistanceMarkers);"/>
           </AuxValues>
         </Component>
       </SubComponents>

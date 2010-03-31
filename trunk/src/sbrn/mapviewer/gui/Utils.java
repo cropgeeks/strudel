@@ -118,9 +118,9 @@ public class Utils
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	//finds a Feature by name in the centrally held set of GMapSets
-	public static Feature getFeatureByName(String featureName)
+	public static ArrayList<Feature> getFeatureByName(String featureName)
 	{
-		Feature f = null;
+		ArrayList<Feature> allFeatures = new ArrayList<Feature>();
 
 		//we need to search all chromomaps in all mapsets for this
 		// for all gmapsets
@@ -131,20 +131,20 @@ public class Utils
 			{
 				//get the ChromoMap object
 				//look up the name in this
-				f = gChromoMap.chromoMap.getFeature(featureName);
-				if(f!=null)
+				ArrayList<Feature> features = gChromoMap.chromoMap.getFeatures(featureName);
+				if(features.size() > 0)
 				{
-					return f;
+					allFeatures.addAll(features);
 				}
 			}
 		}
 
-		return f;
+		return allFeatures;
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
 
-	public static void buildLinkSetFromFeatureLists(LinkSet linkSet, LinkedList<Feature> f1List, LinkedList<Feature> f2List, String blastScoreStr, String linkAnnotation) throws ParseException
+	public static void buildLinkSetFromFeatureLists(LinkSet linkSet, ArrayList<Feature> f1List, ArrayList<Feature> f2List, String blastScoreStr, String linkAnnotation) throws ParseException
 	{
 		// Pair up every instance of f1 with f2
 		for (Feature f1: f1List)
@@ -176,90 +176,71 @@ public class Utils
 
 	// --------------------------------------------------------------------------------------------------------------------------------
 
-	public static void addLinkToLinkset(LinkSet linkSet, Feature feature1, Feature feature2, String blastScoreStr, String linkAnnotation)
+	//this method makes a link for each possible combination of features in list features1 and features2
+	//we need the multiple links because each the features in a given list all have the same name but different positions and have to be treated as synonymous but distinct
+	public static void addLinkToLinkset(LinkSet linkSet, ArrayList<Feature> features1, ArrayList<Feature> features2, String blastScoreStr, String linkAnnotation)
 	{
-		// Pair up every instance of f1 with f2
-		Link link = new Link(feature1, feature2);
-		linkSet.addLink(link);
-
-		// We also add the Link to each Feature so the Feature
-		// itself knows about the links it has with others
-		feature1.getLinks().add(link);
-		feature2.getLinks().add(link);
-
-		//add the BLAST score as evidence
-		try
+		for (Feature feature1 : features1)
 		{
-			DecimalFormat df = new DecimalFormat("0.###E0");
-			Number blastScore = df.parse(blastScoreStr);
-			link.setBlastScore(blastScore.doubleValue());
+			for (Feature feature2 : features2)
+			{
+				// Pair up every instance of f1 with f2
+				Link link = new Link(feature1, feature2);
+				linkSet.addLink(link);
+				// We also add the Link to each Feature so the Feature
+				// itself knows about the links it has with others
+				feature1.getLinks().add(link);
+				feature2.getLinks().add(link);
+				//add the BLAST score as evidence
+				try
+				{
+					DecimalFormat df = new DecimalFormat("0.###E0");
+					Number blastScore = df.parse(blastScoreStr);
+					link.setBlastScore(blastScore.doubleValue());
+				}
+				catch (ParseException e)
+				{
+					throw new NumberFormatException("The homology between " + feature1 + " and " + feature2 + " contains an invalid e-Value. ");
+				}
+				//add the annotation, if there is any
+				if (linkAnnotation != null)
+					link.setAnnotation(linkAnnotation);
+			}
 		}
-		catch (ParseException e)
-		{
-			throw new NumberFormatException("The homology between " + feature1 + " and " + feature2 + " contains an invalid e-Value. ");
-		}
-
-		//add the annotation, if there is any
-		if(linkAnnotation != null)
-			link.setAnnotation(linkAnnotation);
 
 		// TODO: Do we want to add a list of references Features to the Feature object itself, so it knows who it links to?
 		// If so, how do we deal with, eg removing MapSets andkeeping these lists (and the LinkSet!) up to date.
 
 	}
+
 	// --------------------------------------------------------------------------------------------------------------------------------
 
-	// Searches over single MapSet to find a feature whose name matches the one given.
-	public static Feature getFeatureByName(String name, MapSet mapSet ) throws Exception
+	public static ArrayList <Feature> getFeaturesByName(String name, LinkedList<MapSet> mapSets )
 	{
-		Feature feature = null;
-
-		try
+		ArrayList <Feature> allFeatures = new ArrayList<Feature>();
+		for(MapSet mapSet : mapSets)
 		{
-			for (ChromoMap map: mapSet.getMaps())
-			{
-				Feature checkFeature = map.getFeature(name);
-				if(checkFeature != null)
-					feature = checkFeature;
-			}
-
+			ArrayList <Feature> features = getFeaturesByName(name, mapSet);
+			allFeatures.addAll(features);
 		}
-		catch (Exception e)
-		{
-		}
-
-		return feature;
+		return allFeatures;
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
 
-	// Searches over list of  MapSets to find every feature whose name matches the one given.
-	public static LinkedList<Feature> getFeaturesByName(String name, LinkedList<MapSet> mapSets ) throws Exception
+	// Searches over single MapSet to find a feature whose name matches the one given.
+	public static ArrayList <Feature> getFeaturesByName(String name, MapSet mapSet)
 	{
+		ArrayList <Feature> foundFeatures = new ArrayList<Feature>();
 
-		LinkedList<Feature> list = new LinkedList<Feature>();
-		Feature feature = null;
-
-		try
+		for (ChromoMap map: mapSet.getMaps())
 		{
-			for (MapSet mapset: mapSets)
-			{
-				for (ChromoMap map: mapset.getMaps())
-				{
-					feature = map.getFeature(name);
-					if (feature != null)
-					{
-						list.add(feature);
-					}
-				}
-			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
+			ArrayList<Feature> features = map.getFeatures(name);
+			if(features != null && features.size() > 0)
+				foundFeatures.addAll(features);
 		}
 
-		return list;
+		return foundFeatures;
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -571,7 +552,7 @@ public class Utils
 		//how many chromosomes are above this map in the genome
 		int numChromosAbove = gMap.index;
 		//combined spaces between chromos
-		int spacer = Strudel.winMain.mainCanvas.chromoSpacing;
+		int spacer = gMap.owningSet.chromoSpacing;
 		return (numChromosAbove * gMap.owningSet.chromoHeight) +
 		(numChromosAbove * spacer);
 	}

@@ -22,7 +22,7 @@ public class ChromoMap implements Iterable<Feature>
 	private LinkedList<GChromoMap> gChromoMaps = new LinkedList<GChromoMap>();
 
 	private final Vector<Feature> features = new Vector<Feature>();
-	private final Hashtable<String,Feature> nameLookup = new Hashtable<String,Feature>();
+	private final Hashtable<String,ArrayList<Feature>> nameLookup = new Hashtable<String, ArrayList<Feature>>();
 
 	private float start = Integer.MAX_VALUE, stop = Integer.MIN_VALUE;
 
@@ -39,7 +39,7 @@ public class ChromoMap implements Iterable<Feature>
 	 * Allows you to use ChromoMap in a 1.5 for loop. Will be slow for large
 	 * maps - if you know the feature you're after - do a search by name instead
 	 * with the getFeature(String) method.
-	 * @see sbrn.mapviewer.data.ChromoMap#getFeature(String) getFeature(String)
+	 * @see sbrn.mapviewer.data.ChromoMap#getFeatures(String) getFeature(String)
 	 */
 	public Iterator<Feature> iterator()
 		{ return features.iterator(); }
@@ -94,15 +94,25 @@ public class ChromoMap implements Iterable<Feature>
 	public void addFeature(Feature feature)
 	{
 		features.add(feature);
-		nameLookup.put(feature.getName(), feature);
+		//add this feature to the lookup
+		//need to check whether there is an entry in our lookup already or not
+		ArrayList<Feature> list = nameLookup.get(feature.getName());
+		if(list != null)
+		{
+			list.add(feature);
+		}
+		else
+		{
+			list = new ArrayList<Feature>();
+			list.add(feature);
+			nameLookup.put(feature.getName(), list);
+		}
 
 		// Find out if this feature has a greater start/stop position
 		if (feature.getStart() <= start)
 			start = feature.getStart();
 		if (feature.getStop() >= stop)
 			stop = feature.getStop();
-
-//		Collections.sort(features);
 
 		// Also let the feature track the map
 		feature.setOwningMap(this);
@@ -119,7 +129,7 @@ public class ChromoMap implements Iterable<Feature>
 	 * Returns the feature with the given name.
 	 * @return the feature with the given name, or null if it is not found
 	 */
-	public Feature getFeature(String name)
+	public ArrayList<Feature> getFeatures(String name)
 		{ return nameLookup.get(name); }
 
 	/**

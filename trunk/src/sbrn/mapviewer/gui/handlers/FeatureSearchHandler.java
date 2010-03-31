@@ -151,18 +151,18 @@ public class FeatureSearchHandler
 			allNames = input.split("\n");
 
 			//get the corresponding feature objects
-			Vector<Feature> features = new Vector<Feature>(allNames.length);
+			Vector<Feature> allFeatures = new Vector<Feature>(allNames.length);
 			for (int i = 0; i < allNames.length; i++)
 			{
-				Feature f = Utils.getFeatureByName(allNames[i].trim());
-				if(f !=null)
+				ArrayList<Feature> features = Utils.getFeatureByName(allNames[i].trim());
+				if(features.size() > 0)
 				{
-					features.add(f);
+					allFeatures.addAll(features);
 				}
 			}
 
 			//we have found features
-			if (features.size() > 0)
+			if (allFeatures.size() > 0)
 			{
 				//set the results panel to be visible
 				findFeaturesDialog.setVisible(false);
@@ -171,7 +171,7 @@ public class FeatureSearchHandler
 				Strudel.winMain.splitPane.setDividerLocation(newDividerLocation);
 
 				//now put the results into the JTable held by the results panel
-				updateResultsTable(features);
+				updateResultsTable(allFeatures);
 
 				//earmark the features for drawing on repaint
 				Strudel.winMain.mainCanvas.drawFeaturesFoundByName = true;

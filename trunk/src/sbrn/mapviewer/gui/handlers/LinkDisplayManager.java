@@ -178,7 +178,7 @@ public class LinkDisplayManager
 						boolean bothMapsShowing = targetGMap.isShowingOnCanvas && referenceGMap.isShowingOnCanvas;
 						boolean setDrawnAlready = drawnLinkSets.contains(selectedLinks);
 						boolean gMapSetsAdjacent = Utils.areMapSetsAdjacent(targetGMap.owningSet, referenceGMap.owningSet);
-						if (!bothMapsShowing || setDrawnAlready || !gMapSetsAdjacent)
+						if (setDrawnAlready || !gMapSetsAdjacent || (Prefs.drawOnlyLinksToVisibleFeatures && !bothMapsShowing))
 							continue;
 
 						//if the user is doing Ctrl click selection of maps they will only want to see links between the ones they selected
@@ -229,7 +229,6 @@ public class LinkDisplayManager
 		}
 
 		long endTime = System.currentTimeMillis();
-//		System.out.println("" + numAllLinksDrawn + " links drawn in " + (endTime-startTime) + " ms");
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------

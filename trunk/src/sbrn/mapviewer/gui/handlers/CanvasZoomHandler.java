@@ -54,7 +54,7 @@ public class CanvasZoomHandler
 			newZoomFactor = 1;
 
 		// this is the combined height of all spacers -- does not change with the zoom factor
-		int combinedSpacers = mainCanvas.chromoSpacing * (selectedSet.numMaps - 1);
+		int combinedSpacers = selectedSet.chromoSpacing * (selectedSet.numMaps - 1);
 
 		// the new total Y extent of the genome in pixels
 		int newTotalY = (int) (((selectedSet.totalY - combinedSpacers) * multiplier) + combinedSpacers);
@@ -121,10 +121,10 @@ public class CanvasZoomHandler
 		// work out the chromo height and total genome height for when the new zoom factor will have been applied
 		int finalChromoHeight = (int) (mainCanvas.initialChromoHeight * finalZoomFactor);
 		// this is the combined height of all spacers -- does not change with the zoom factor
-		int combinedSpacers = mainCanvas.chromoSpacing * (selectedSet.numMaps - 1);
+		int combinedSpacers = selectedSet.chromoSpacing * (selectedSet.numMaps - 1);
 
 		// the total vertical extent of the genome at startup, excluding top and bottom spacers
-		int totalY = (selectedSet.numMaps * mainCanvas.initialChromoHeight) + ((selectedSet.numMaps - 1) * mainCanvas.chromoSpacing);
+		int totalY = (selectedSet.numMaps * mainCanvas.initialChromoHeight) + ((selectedSet.numMaps - 1) * selectedSet.chromoSpacing);
 
 		// the new total Y extent of the genome in pixels for after the animation
 		int finalTotalY = (int) (((totalY - combinedSpacers) * finalZoomFactor) + combinedSpacers);
@@ -178,7 +178,7 @@ public class CanvasZoomHandler
 		int chromoOffset = chromoIndex * newChromoHeight;
 
 		// the combined distance of all spacers between the top of the genome and our selected chromo
-		int spacingOffset = chromoIndex * mainCanvas.chromoSpacing - mainCanvas.chromoSpacing;
+		int spacingOffset = chromoIndex * selectedSet.chromoSpacing - selectedSet.chromoSpacing;
 
 		// the new centerpoint should be a proportion of the total genome height and is defined as
 		// the sum of all chromosome heights and the spacer heights minus either half the height of a chromo
@@ -234,7 +234,7 @@ public class CanvasZoomHandler
 		GMapSet selectedSet = selectedMap.owningSet;
 
 		// this is the combined height of all spacers -- does not change with the zoom factor
-		int combinedSpacers = mainCanvas.chromoSpacing * (selectedSet.numMaps - 1);
+		int combinedSpacers = selectedMap.owningSet.chromoSpacing * (selectedSet.numMaps - 1);
 
 		// these are the values we want for the last iteration
 		float finalZoomFactor = selectedSet.zoomFactor * finalScalingFactor;

@@ -72,6 +72,15 @@ public class GMapSet
 	//true if all the chromosomes belonging to this mapset have been selected
 	public boolean wholeMapsetIsSelected = false;
 
+	// space the chromosomes vertically by this fixed amount
+	public int chromoSpacing = 15;
+
+	// the combined height of all the vertical spaces between chromosomes
+	public int allSpacers = 0;
+
+	//true while we are scrolling
+	public boolean isScrolling = false;
+
 	// ====================================c'tor========================================
 
 	public GMapSet(MapSet mapSet)

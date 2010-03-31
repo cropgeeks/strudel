@@ -9,7 +9,7 @@ import sbrn.mapviewer.gui.components.WinMain;
  */
 public class MenuView
 {
-	private WinMain winMain;
+	private final WinMain winMain;
 
 	public MenuView(WinMain winMain)
 	{
@@ -61,6 +61,13 @@ public class MenuView
 	public void showDistanceMarkers()
 	{
 		Prefs.showDistanceMarkers = !Prefs.showDistanceMarkers;
+		Strudel.winMain.mainCanvas.updateCanvas(true);
+	}
+
+	public void hideUnlinkedFeatures()
+	{
+		Prefs.hideUnlinkedFeatures = !Prefs.hideUnlinkedFeatures;
+		winMain.fatController.initialisePositionArrays();
 		Strudel.winMain.mainCanvas.updateCanvas(true);
 	}
 

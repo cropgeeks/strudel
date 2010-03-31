@@ -34,6 +34,7 @@ public class Actions
 	public static AbstractAction antialiasedDraw;
 	public static AbstractAction filterLinks;
 	public static AbstractAction showDistanceMarkers;
+	public static AbstractAction hideUnlinkedFeatures;
 	// Link shape menu actions
 	public static AbstractAction linkShape;
 	public static AbstractAction linkCurved;
@@ -146,6 +147,12 @@ public class Actions
 			}
 		};
 
+		hideUnlinkedFeatures = new AbstractAction("Hide unlinked features") {
+			public void actionPerformed(ActionEvent e) {
+				winMain.mView.hideUnlinkedFeatures();
+			}
+		};
+
 		linkCurved = new AbstractAction("Curved") {
 			public void actionPerformed(ActionEvent e) {
 				winMain.mView.linkShape(Constants.LINKTYPE_CURVED);
@@ -206,6 +213,7 @@ public class Actions
 		antialiasedDraw.putValue(SELECTED_KEY, Prefs.userPrefAntialias);
 		showDistanceMarkers.putValue(SELECTED_KEY, Prefs.showDistanceMarkers);
 		filterLinks.putValue(SELECTED_KEY, Prefs.drawOnlyLinksToVisibleFeatures);
+		hideUnlinkedFeatures.putValue(SELECTED_KEY, Prefs.hideUnlinkedFeatures);
 
 		linkCurved.putValue(SELECTED_KEY, Prefs.linkShape == Constants.LINKTYPE_CURVED);
 		linkStraight.putValue(SELECTED_KEY, Prefs.linkShape == Constants.LINKTYPE_STRAIGHT);
@@ -232,6 +240,7 @@ public class Actions
 		showHint.setEnabled(false);
 		antialiasedDraw.setEnabled(false);
 		filterLinks.setEnabled(false);
+		hideUnlinkedFeatures.setEnabled(false);
 		showDistanceMarkers.setEnabled(false);
 		linkCurved.setEnabled(false);
 		linkStraight.setEnabled(false);
@@ -263,6 +272,7 @@ public class Actions
 		showHint.setEnabled(true);
 		antialiasedDraw.setEnabled(true);
 		filterLinks.setEnabled(true);
+		hideUnlinkedFeatures.setEnabled(true);
 		showDistanceMarkers.setEnabled(true);
 		linkCurved.setEnabled(true);
 		linkStraight.setEnabled(true);

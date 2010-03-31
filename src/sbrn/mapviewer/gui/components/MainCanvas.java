@@ -21,9 +21,6 @@ public class MainCanvas extends JPanel
 	public int canvasHeight;
 	public int canvasWidth;
 
-	// space the chromosomes vertically by this fixed amount
-	public int chromoSpacing = 15;
-
 	// do we need to draw links?
 	public boolean drawLinks = false;
 
@@ -68,13 +65,11 @@ public class MainCanvas extends JPanel
 	//true if we want to display features within a certain range the user has searched for with the find dialog
 	public boolean drawFeaturesFoundByName = false;
 
-	// a minimum space (in pixels) we want to leave at the top and the bottom of the tallest genome
-	public int topBottomSpacer = 0;
+	// a minimum space (in pixels) we want to leave at the top and the bottom of each genome
+	public final int topBottomSpacer = 15;
 
 	// the total amount of space we have for drawing on vertically, in pixels
 	int availableSpaceVertically = 0;
-	// the combined height of all the vertical spaces between chromosomes
-	int allSpacers = 0;
 
 	// width of chromosomes -- set this to a fixed fraction of the screen width for now
 	//gets set in the paintCanvas method
@@ -88,6 +83,8 @@ public class MainCanvas extends JPanel
 	public int numMarkersDrawn = 0;
 
 	Rectangle canvasBounds = null;
+
+	int minChromoHeight = 5;
 
 	// ============================curve'tor==================================
 
@@ -278,6 +275,9 @@ public class MainCanvas extends JPanel
 			// for each chromosome in the genome
 			drawMaps(gMapSet,g2, currentY);
 
+			//reset the scroll flag
+			gMapSet.isScrolling = false;
+
 		}
 		// optionally draw all the currently selected links between chromos
 		if (drawLinks && !killMe)
@@ -328,12 +328,25 @@ public class MainCanvas extends JPanel
 	//this method sets all the mapset specific parameters we need to work out for each drawing operation
 	private int calcMapSetSpecificParams(GMapSet gMapSet)
 	{
-		int currentY = 0;
+
 		// this is what we do at a zoom factor of 1 (at startup but also after zoom reset)
 		if (gMapSet.zoomFactor == 1)
 		{
+			// the combined height of all the vertical spaces between chromosomes
+//			gMapSet.allSpacers = gMapSet.chromoSpacing * (winMain.dataContainer.maxChromos - 1);
+			gMapSet.allSpacers = gMapSet.chromoSpacing * gMapSet.gMaps.size();
+
 			// the height of a chromosome
-			gMapSet.chromoHeight = (availableSpaceVertically - allSpacers) / winMain.dataContainer.maxChromos;
+			gMapSet.chromoHeight = (availableSpaceVertically - gMapSet.allSpacers) / gMapSet.gMaps.size();
+
+			//now check that the chromoheight has not gone smaller than one pixel here
+			if(gMapSet.chromoHeight < minChromoHeight)
+			{
+				gMapSet.chromoHeight = minChromoHeight;
+				gMapSet.chromoSpacing = minChromoHeight;
+				gMapSet.allSpacers = gMapSet.chromoSpacing * gMapSet.gMaps.size();
+			}
+
 			initialChromoHeight = gMapSet.chromoHeight;
 			initialCanvasHeight = canvasHeight;
 
@@ -342,20 +355,21 @@ public class MainCanvas extends JPanel
 			gMapSet.thresholdAllMarkerPainting = gMapSet.singleChromoViewZoomFactor;
 
 			// the total vertical extent of the genome, excluding top and bottom spacers
-			gMapSet.totalY = (gMapSet.numMaps * gMapSet.chromoHeight) + ((gMapSet.numMaps - 1) * chromoSpacing);
-			gMapSet.centerPoint = Math.round(gMapSet.totalY / 2.0f);
-			// the space at the top and bottom -- should be equal
-			topBottomSpacer = (canvasHeight - gMapSet.totalY) / 2;
+			gMapSet.totalY = (gMapSet.numMaps * gMapSet.chromoHeight) + ((gMapSet.numMaps - 1) * gMapSet.chromoSpacing);
+			if(!gMapSet.isScrolling)
+				gMapSet.centerPoint = Math.round(gMapSet.totalY / 2.0f);
 
-			// we want to fit all the chromosomes on at a zoom factor of 1 so we only use the top spacer when this is the case
-			currentY = topBottomSpacer;
 		}
 		// this is what we do when we are zoomed in
 		else
 		{
-			// start drawing at minus half the total height of the entire genome plus half the canvasheight
-			currentY = -(gMapSet.totalY / 2) + canvasHeight / 2 - (gMapSet.centerPoint - (gMapSet.totalY / 2));
+
 		}
+
+		// we want to fit all the chromosomes on at a zoom factor of 1 so we only use the top spacer when this is the case
+//		currentY = Math.round((availableSpaceVertically * 0.5f) - (0.5f * gMapSet.totalY));
+		// start drawing at minus half the total height of the entire genome plus half the canvasheight
+		int currentY = -(gMapSet.totalY / 2) + canvasHeight / 2 - (gMapSet.centerPoint - (gMapSet.totalY / 2));
 
 		return currentY;
 	}
@@ -390,9 +404,8 @@ public class MainCanvas extends JPanel
 			chromoWidth += 1;
 
 		// the total amount of space we have for drawing on vertically, in pixels
-		availableSpaceVertically = canvasHeight - (chromoSpacing * 2);
-		// the combined height of all the vertical spaces between chromosomes
-		allSpacers = chromoSpacing * (winMain.dataContainer.maxChromos - 1);
+		availableSpaceVertically = canvasHeight - (topBottomSpacer * 2);
+
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
@@ -447,7 +460,7 @@ public class MainCanvas extends JPanel
 			g2.translate(-x, -currentY);
 
 			// increment the y position so we can draw the next one
-			currentY += gMapSet.chromoHeight + chromoSpacing;
+			currentY += gMapSet.chromoHeight + gMapSet.chromoSpacing;
 		}
 	}
 
@@ -480,6 +493,12 @@ public class MainCanvas extends JPanel
 	{
 		//font stuff
 		int fontSize = Math.round(WinMain.mainCanvas.getHeight() / 40);
+		//check the font size is not greater than the chromosome height
+		if(gChromoMap.owningSet.chromoHeight < fontSize)
+			fontSize = gChromoMap.owningSet.chromoHeight -1;
+
+
+		//set the font
 		Font mapLabelFont = new Font("Arial", Font.BOLD, fontSize);
 		g2.setFont(mapLabelFont);
 		g2.setColor(Colors.chromosomeIndexColour);
@@ -509,11 +528,12 @@ public class MainCanvas extends JPanel
 	// used to scroll up and down the canvas
 	public void moveGenomeViewPort(GMapSet gMapSet, int newCenterPoint)
 	{
+		gMapSet.isScrolling = true;
+
 		//the center point is an absolute value in pixels which is the offset from the top of the genome to the current
 		//point in the center of the screen on y
 		//update the centerpoint to the new value
 		gMapSet.centerPoint = newCenterPoint;
-		updateCanvas(true);
 
 		//update overviews
 		winMain.fatController.updateOverviewCanvases();

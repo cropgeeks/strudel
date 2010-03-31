@@ -65,7 +65,7 @@ public class PanZoomAnimator extends Thread implements ItemListener
 		GMapSet selectedSet = selectedMap.owningSet;
 
 		// this is the combined height of all spacers -- does not change with the zoom factor
-		int combinedSpacers = mainCanvas.chromoSpacing * (selectedSet.numMaps - 1);
+		int combinedSpacers = selectedMap.owningSet.chromoSpacing * (selectedSet.numMaps - 1);
 
 		// these are the values we want for the final iteration
 		float finalZoomFactor = selectedSet.zoomFactor * finalScalingFactor;

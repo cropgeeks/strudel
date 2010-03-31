@@ -2,6 +2,7 @@ package sbrn.mapviewer.gui.components;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 import javax.swing.event.*;
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
@@ -112,11 +113,11 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 
 			// extract the value of the cell clicked on
 			String featureName = (String) homologResultsTableModel.getValueAt(modelRow, selectedCol);
-			Feature feature = Utils.getFeatureByName(featureName);
-			MapSet 	mapSet = feature.getOwningMapSet();
+			ArrayList<Feature> features = Utils.getFeatureByName(featureName);
+			MapSet 	mapSet = features.get(0).getOwningMapSet();
 
 			if(mapSet.getURL() != null)
-				Utils.visitURL(mapSet.getURL() + feature.getName());
+				Utils.visitURL(mapSet.getURL() + features.get(0).getName());
 		}
 
 		resultsTable.isFilterEvent = false;

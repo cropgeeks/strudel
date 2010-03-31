@@ -122,6 +122,8 @@ public class GChromoMap implements Comparable
 		this.index = index;
 		this.owningSet = owningSet;
 		this.chromoMap = owningSet.mapSet.getMaps().get(index);
+		colour = Colors.genomeColour;
+		centreColour = colour.brighter().brighter().brighter().brighter();
 
 		//for convenience also set this object on the ChromoMap object so we can do lookups in either direction
 		chromoMap.addGChromoMap(this);
@@ -449,7 +451,10 @@ public class GChromoMap implements Comparable
 			//if it is, we add it to the arrays
 			//otherwise it's fine to just have it in the feature list of the corresponding chromomap from where we can access it for
 			//other uses such as full feature lists for search ranges etc
-			if((f.getLinks() != null && f.getLinks().size() > 0) || Strudel.winMain.dataContainer.gMapSets.size() == 1)
+			boolean featureHasLinks = f.getLinks() != null && f.getLinks().size() > 0;
+			boolean singleGenomeMode = Strudel.winMain.dataContainer.gMapSets.size() == 1;
+
+			if((Prefs.hideUnlinkedFeatures && featureHasLinks) || !Prefs.hideUnlinkedFeatures  || singleGenomeMode)
 			{
 				//the start point of this features in its own units (cM, bp, whatever)
 				float start = f.getStart();

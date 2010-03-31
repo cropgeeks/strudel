@@ -51,8 +51,8 @@ public class CMapLinkImporter
 				String[] t = str.split("\\t");
 
 				// Find all features with the first name and all with the second
-				LinkedList<Feature> f1List = Utils.getFeaturesByName(t[0], mapSets);
-				LinkedList<Feature> f2List = Utils.getFeaturesByName(t[1], mapSets);
+				ArrayList<Feature> f1List = Utils.getFeaturesByName(t[0], mapSets);
+				ArrayList<Feature> f2List = Utils.getFeaturesByName(t[1], mapSets);
 
 				//the last token in the array contains the annotation but for the user's convenience this may just be left blank
 				//need to check for this

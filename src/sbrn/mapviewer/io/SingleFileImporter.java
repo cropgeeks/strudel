@@ -258,6 +258,7 @@ public class SingleFileImporter extends TrackableReader
 	//processes a single link (homolog) and add its it to the appropriate link set
 	private void processLink(String line) throws Exception
 	{
+
 		//the file format is tab delimited text
 		String [] tokens = line.split("\t");
 
@@ -280,15 +281,15 @@ public class SingleFileImporter extends TrackableReader
 		if(featureName1.equals("") || featureName2.equals(""))
 			throw new IOException("Missing feature name in homology.");
 
-		Feature feature1 = Utils.getFeatureByName(featureName1, mapSet1);
-		Feature feature2 = Utils.getFeatureByName(featureName2, mapSet2);
+		ArrayList <Feature> features1 = Utils.getFeaturesByName(featureName1, mapSet1);
+		ArrayList <Feature> features2 = Utils.getFeaturesByName(featureName2, mapSet2);
 
 		//here we record any missing features so we can report these later
-		if( feature1 == null)
+		if( features1.size() == 0)
 		{
 			missingFeatures.add(featureName1);
 		}
-		if( feature2 == null)
+		if( features2.size() == 0)
 		{
 			missingFeatures.add(featureName2);
 		}
@@ -297,6 +298,7 @@ public class SingleFileImporter extends TrackableReader
 		//check whether a linkset between these two genomes exists already
 		for (LinkSet ls : allLinkSets)
 		{
+
 			if(ls.getMapSets().size() == 0 || ls.getMapSets() == null)
 				throw new Exception("Homology cannot be processed - check the features involved have feature entries in the file.");
 
@@ -328,8 +330,8 @@ public class SingleFileImporter extends TrackableReader
 			throw new IOException("Missing e-Value in homology.");
 
 		//this method adds the link between the two features to the linkset
-		if(linkSet != null && feature1 != null && feature2 != null)
-			Utils.addLinkToLinkset(linkSet, feature1, feature2, eValueStr, annotation);
+		if(features1.size() > 0 && features2.size() > 0)
+			Utils.addLinkToLinkset(linkSet, features1, features2, eValueStr, annotation);
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------

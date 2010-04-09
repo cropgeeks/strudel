@@ -32,9 +32,6 @@ public class MainCanvas extends JPanel
 	//the handler for all zooming related events
 	public CanvasZoomHandler zoomHandler;
 
-	//the chromosome height in pixels that we first init the chromos to
-	public int initialChromoHeight = 0;
-
 	//the canvas height at a zoom factor of 1
 	public int initialCanvasHeight = 0;
 
@@ -76,9 +73,7 @@ public class MainCanvas extends JPanel
 
 	Rectangle canvasBounds = null;
 
-	//the minimum height of a chromosome that we default to when we have more chromosomes than we have space for on the canvas
-	//chromos will then fall off the screen above and below
-	int minChromoHeight = 5;
+
 
 	// ============================curve'tor==================================
 
@@ -110,7 +105,7 @@ public class MainCanvas extends JPanel
 	@Override
 	public void paintComponent(Graphics graphics)
 	{
-//		System.out.println("=====main canvas paintComponent " + System.currentTimeMillis());
+//		System.out.println("\n\n\n=====main canvas paintComponent " + System.currentTimeMillis());
 
 		super.paintComponent(graphics);
 
@@ -124,8 +119,6 @@ public class MainCanvas extends JPanel
 		{
 			if (buffer == null || buffer.getWidth() != w || buffer.getHeight() != h)
 			{
-//				buffer = (BufferedImage) createImage(w, h);
-//				aaBuffer = (BufferedImage) createImage(w, h);
 				buffer = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
 				aaBuffer = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
 			}
@@ -246,12 +239,16 @@ public class MainCanvas extends JPanel
 		//work out general position and colour parameters
 		calcRequiredParams(g2);
 
+		if(!Strudel.winMain.fatController.mapSetsInited)
+		{
+			initMapSets();
+			Strudel.winMain.fatController.initialisePositionArrays();
+		}
+
 		//for all mapsets
 		for (GMapSet gMapSet : winMain.dataContainer.gMapSets)
 		{
 			if (killMe) return;
-
-			checkMarkerPaintingThresholds(gMapSet);
 
 			//calculate the x position for this genome
 			int numGenomes = winMain.dataContainer.gMapSets.size();
@@ -322,51 +319,17 @@ public class MainCanvas extends JPanel
 	//this method sets all the mapset specific parameters we need to work out for each drawing operation
 	private int calcMapSetSpecificParams(GMapSet gMapSet)
 	{
-
+		int currentY = -1;
 		// this is what we do at a zoom factor of 1 (at startup but also after zoom reset)
 		if (gMapSet.zoomFactor == 1)
 		{
-			// the combined height of all the vertical spaces between chromosomes
-			gMapSet.allSpacers = gMapSet.chromoSpacing * (winMain.dataContainer.maxChromos - 1);
-//			gMapSet.allSpacers = gMapSet.chromoSpacing * gMapSet.gMaps.size();
-
-			// the height of a chromosome
-//			gMapSet.chromoHeight = (availableSpaceVertically - gMapSet.allSpacers) / gMapSet.gMaps.size();
-			gMapSet.chromoHeight = (availableSpaceVertically - gMapSet.allSpacers) / winMain.dataContainer.maxChromos;
-
-			//now check that the chromoheight has not gone smaller than one pixel here
-			if(gMapSet.chromoHeight < minChromoHeight)
-			{
-				gMapSet.chromoHeight = minChromoHeight;
-				gMapSet.chromoSpacing = minChromoHeight;
-				gMapSet.allSpacers = gMapSet.chromoSpacing * gMapSet.gMaps.size();
-			}
-
-			initialChromoHeight = gMapSet.chromoHeight;
-			initialCanvasHeight = canvasHeight;
-
-			//the zoom factor at which we would fit a single chromosome (but nothing else) on the visible portion of the canvas
-			gMapSet.singleChromoViewZoomFactor = canvasHeight / gMapSet.chromoHeight;
-			gMapSet.thresholdAllMarkerPainting = gMapSet.singleChromoViewZoomFactor;
-
-			// the total vertical extent of the genome, excluding top and bottom spacers
-			gMapSet.totalY = (gMapSet.numMaps * gMapSet.chromoHeight) + ((gMapSet.numMaps - 1) * gMapSet.chromoSpacing);
 			if(!gMapSet.isScrolling && !gMapSet.hasBeenScrolled)
 			{
 				gMapSet.centerPoint = Math.round(gMapSet.totalY / 2.0f);
 			}
-
 		}
-		// this is what we do when we are zoomed in
-		else
-		{
-
-		}
-
-		// we want to fit all the chromosomes on at a zoom factor of 1 so we only use the top spacer when this is the case
-//		currentY = Math.round((availableSpaceVertically * 0.5f) - (0.5f * gMapSet.totalY));
 		// start drawing at minus half the total height of the entire genome plus half the canvasheight
-		int currentY = -(gMapSet.totalY / 2) + canvasHeight / 2 - (gMapSet.centerPoint - (gMapSet.totalY / 2));
+		currentY = -(gMapSet.totalY / 2) + canvasHeight / 2 - (gMapSet.centerPoint - (gMapSet.totalY / 2));
 
 		return currentY;
 	}
@@ -410,6 +373,7 @@ public class MainCanvas extends JPanel
 	//draws all the maps in one mapset
 	private void drawMaps(GMapSet gMapSet,Graphics2D g2, int currentY)
 	{
+
 		// now paint the chromosomes in this genome
 		// for each chromosome in the genome
 		for (GChromoMap gChromoMap : gMapSet.gMaps)
@@ -425,11 +389,10 @@ public class MainCanvas extends JPanel
 			// this is purely so we have it stored somewhere
 			gChromoMap.x = x;
 			gChromoMap.y = currentY;
-			gChromoMap.height = gMapSet.chromoHeight;
 			gChromoMap.width = chromoWidth;
 			// update its bounding rectangle (used for hit detection)
 			gChromoMap.boundingRectangle.setBounds(gChromoMap.x, gChromoMap.y,
-							gChromoMap.width, gChromoMap.height);
+							gChromoMap.width, gChromoMap.currentHeight);
 
 			if (canvasBounds.contains(gChromoMap.boundingRectangle) || canvasBounds.intersects(gChromoMap.boundingRectangle))
 			{
@@ -456,8 +419,8 @@ public class MainCanvas extends JPanel
 			// now move the graphics object's origin back to 0,0 to preserve the overall coordinate system
 			g2.translate(-x, -currentY);
 
-			// increment the y position so we can draw the next one
-			currentY += gMapSet.chromoHeight + gMapSet.chromoSpacing;
+			// increment the y position so we can draw the next map
+			currentY += gChromoMap.currentHeight + gMapSet.chromoSpacing;
 		}
 	}
 
@@ -491,9 +454,8 @@ public class MainCanvas extends JPanel
 		//font stuff
 		int fontSize = Math.round(WinMain.mainCanvas.getHeight() / 40);
 		//check the font size is not greater than the chromosome height
-		if(gChromoMap.owningSet.chromoHeight < fontSize)
-			fontSize = gChromoMap.owningSet.chromoHeight -1;
-
+		if(gChromoMap.currentHeight < fontSize)
+			fontSize = gChromoMap.currentHeight -1;
 
 		//set the font
 		Font mapLabelFont = new Font("Arial", Font.BOLD, fontSize);
@@ -503,7 +465,7 @@ public class MainCanvas extends JPanel
 		// decide where to place the label on y
 		int labelY = 0;
 		//position of index with this var is in the center of the chromosome regardless of chromo position
-		int chromoCenterPos = gChromoMap.y + Math.round(gChromoMap.height / 2.0f) + (fontSize/2);
+		int chromoCenterPos = gChromoMap.y + Math.round(gChromoMap.currentHeight / 2.0f) + (fontSize/2);
 
 		//draw the index in the center of each chromosome
 		labelY = chromoCenterPos;
@@ -525,7 +487,6 @@ public class MainCanvas extends JPanel
 	//moves the genome viewport for the psecified mapset either up or down by the specified increment
 	public void scroll(boolean up, GMapSet gMapSet,  int scrollIncrement)
 	{
-
 		//this is where we are moving the center of the genome (vertically) to
 		int newCenterPoint = -1;
 
@@ -576,30 +537,6 @@ public class MainCanvas extends JPanel
 		updateCanvas(true);
 	}
 
-	// -----------------------------------------------------------------------------------------------------------------------------------
-
-	//checks whether we want to draw markers on the chromsomes
-	//this should only happen if we have exceeded a threshold zoom factor for the owning mapset or if the user has explicitly
-	//requested it by pressing a button
-	public void checkMarkerPaintingThresholds(GMapSet selectedSet)
-	{
-		// check whether we need to display markers and labels
-		if (selectedSet.zoomFactor >= selectedSet.thresholdAllMarkerPainting)
-		{
-			selectedSet.paintAllMarkers = true;
-		}
-		else if (selectedSet.zoomFactor < selectedSet.thresholdAllMarkerPainting)
-		{
-			if(selectedSet.overrideMarkersAutoDisplay)
-				selectedSet.paintAllMarkers = true;
-			else
-				selectedSet.paintAllMarkers = false;
-		}
-		else
-		{
-			selectedSet.paintAllMarkers = false;
-		}
-	}
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
@@ -624,7 +561,21 @@ public class MainCanvas extends JPanel
 		this.redraw = redraw;
 	}
 
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	//calculates the initial map sizes for all mapsets
+	private void initMapSets()
+	{
+		for(GMapSet gMapSet : Strudel.winMain.dataContainer.gMapSets)
+		{
+			gMapSet.calculateMapSizes();
+		}
+
+		Strudel.winMain.fatController.mapSetsInited = true;
+	}
+
 	//----------------------------------------------------------------------------------------------------------------------------------------
+
 
 
 }// end class

@@ -2,6 +2,7 @@ package sbrn.mapviewer.gui.handlers;
 
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
+import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.animators.*;
 import sbrn.mapviewer.gui.components.*;
 import sbrn.mapviewer.gui.entities.*;
@@ -53,22 +54,19 @@ public class CanvasZoomHandler
 		if (newZoomFactor < 1)
 			newZoomFactor = 1;
 
-		// this is the combined height of all spacers -- does not change with the zoom factor
-		int combinedSpacers = selectedSet.chromoSpacing * (selectedSet.numMaps - 1);
-
 		// the new total Y extent of the genome in pixels
-		int newTotalY = (int) (((selectedSet.totalY - combinedSpacers) * multiplier) + combinedSpacers);
+		int newTotalY = Math.round(selectedSet.totalY * multiplier);
 
 		// the new centerpoint needs to be worked out in relation to the current one
 		float proportion = selectedSet.centerPoint / (float) selectedSet.totalY;
 		float newCenterPoint = newTotalY * proportion;
-		int newChromoHeight = Math.round(selectedSet.chromoHeight * multiplier);
 
 		// update the genome centerpoint to the new percentage and update the scroller position
 		selectedSet.zoomFactor = newZoomFactor;
-		selectedSet.totalY = newTotalY;
 		selectedSet.centerPoint = Math.round(newCenterPoint);
-		selectedSet.chromoHeight = newChromoHeight;
+
+		//need to now update the map sizes
+		selectedSet.calculateMapSizes();
 
 		//update the position lookup arrays for mouseover
 		Strudel.winMain.fatController.initialisePositionArrays();
@@ -112,19 +110,19 @@ public class CanvasZoomHandler
 
 		// animate this by zooming in gradually
 		//this is the zoom factor we want to get to
-		float finalZoomFactor = mainCanvas.getHeight() / mainCanvas.initialChromoHeight;
+		float finalZoomFactor = mainCanvas.getHeight() / selectedMap.initialHeight;
 
 		//make sure this does not exceed the max zoom factor
 		if(finalZoomFactor > Constants.MAX_ZOOM_FACTOR)
 			finalZoomFactor = Constants.MAX_ZOOM_FACTOR;
 
 		// work out the chromo height and total genome height for when the new zoom factor will have been applied
-		int finalChromoHeight = (int) (mainCanvas.initialChromoHeight * finalZoomFactor);
+		int finalChromoHeight = (int) (selectedMap.initialHeight * finalZoomFactor);
 		// this is the combined height of all spacers -- does not change with the zoom factor
 		int combinedSpacers = selectedSet.chromoSpacing * (selectedSet.numMaps - 1);
 
 		// the total vertical extent of the genome at startup, excluding top and bottom spacers
-		int totalY = (selectedSet.numMaps * mainCanvas.initialChromoHeight) + ((selectedSet.numMaps - 1) * selectedSet.chromoSpacing);
+		int totalY = (selectedSet.numMaps * selectedMap.initialHeight) + ((selectedSet.numMaps - 1) * selectedSet.chromoSpacing);
 
 		// the new total Y extent of the genome in pixels for after the animation
 		int finalTotalY = (int) (((totalY - combinedSpacers) * finalZoomFactor) + combinedSpacers);
@@ -143,7 +141,9 @@ public class CanvasZoomHandler
 	{
 		//this is the final zoom factor we want to have here
 		selectedSet.zoomFactor = 1;
-		selectedSet.chromoHeight = Strudel.winMain.mainCanvas.initialChromoHeight;
+
+		//need to now update the map sizes
+		selectedSet.calculateMapSizes();
 
 		//update overviews
 		Strudel.winMain.fatController.updateOverviewCanvases();
@@ -162,41 +162,42 @@ public class CanvasZoomHandler
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
-	//helper method used for adjusting zoom to a particular location and zoom level
-	public void adjustZoom(GChromoMap selectedMap, int newTotalY, int newChromoHeight, int distFromBottom)
+	//used for adjusting zoom to a particular location and zoom level
+	public void adjustZoom(float newZoomFactor, GChromoMap selectedMap, int distFromBottom)
 	{
 		GMapSet selectedSet = selectedMap.owningSet;
 
-		selectedSet.totalY = newTotalY;
+		//set the new zoom factor
+		selectedSet.zoomFactor = newZoomFactor;
+
+		//need to now update the map sizes and the totalY of the mapset
+		selectedSet.calculateMapSizes();
 
 		// now we need to work out the percent offset from the top of the center of the chromo that
 		// we want to zoom in on in the zoomed genome
-		// the index of the selected chromo in the genome, starting at 1 rather than zero (for multiplication purposes below)
-		int chromoIndex = selectedSet.gMaps.indexOf(selectedMap) + 1;
 
 		// the distance from the top of the genome to the end of the selected chromo, in pixels
-		int chromoOffset = chromoIndex * newChromoHeight;
-
-		// the combined distance of all spacers between the top of the genome and our selected chromo
-		int spacingOffset = chromoIndex * selectedSet.chromoSpacing - selectedSet.chromoSpacing;
+		int spaceToEndOfMapInPixels = Utils.calcSpaceAboveGMap(selectedMap) + selectedMap.currentHeight;
 
 		// the new centerpoint should be a proportion of the total genome height and is defined as
 		// the sum of all chromosome heights and the spacer heights minus either half the height of a chromo
 		// (for click zoom requests) or a calculated offset (for pan zoom requests)
-		float newCenterPoint = chromoOffset + spacingOffset - distFromBottom;
+		float newCenterPoint = spaceToEndOfMapInPixels - distFromBottom;
 
 		// update the genome centerpoint to the new percentage and update the scroller position
 		selectedSet.centerPoint = Math.round(newCenterPoint);
-		selectedSet.chromoHeight = newChromoHeight;
-
-		// check whether we need to display markers and labels
-		if (selectedMap.isShowingOnCanvas)
-		{
-			mainCanvas.checkMarkerPaintingThresholds(selectedSet);
-		}
 
 		//check whether we want to let the user switch on the distance markers
 		checkZoomForDistMarkerButton(selectedSet);
+
+		//update overviews
+		Strudel.winMain.fatController.updateOverviewCanvases();
+
+		//update zoom control position
+		Strudel.winMain.fatController.updateAllZoomControls();
+
+		//now update the arrays with the position data
+		Strudel.winMain.fatController.initialisePositionArrays();
 
 		// repaint the canvas
 		mainCanvas.updateCanvas(true);
@@ -212,8 +213,8 @@ public class CanvasZoomHandler
 		ChromoMap chromoMap = gChromoMap.chromoMap;
 
 		//need to know where to zoom into first
-		int relativeTopY = (int) Math.floor((gChromoMap.height / chromoMap.getStop()) * intervalStart);
-		int relativeBottomY = (int) Math.ceil((gChromoMap.height / chromoMap.getStop()) * intervalEnd);
+		int relativeTopY = (int) Math.floor((gChromoMap.currentHeight / chromoMap.getStop()) * intervalStart);
+		int relativeBottomY = (int) Math.ceil((gChromoMap.currentHeight / chromoMap.getStop()) * intervalEnd);
 
 		//this buffer increases the size of the visible interval slightly so the bounds don't coincide with the canvas bounds
 		int buffer = 4;
@@ -222,41 +223,6 @@ public class CanvasZoomHandler
 		Strudel.winMain.mainCanvas.zoomHandler.processPanZoomRequest(gChromoMap, topY,
 						bottomY, animate);
 	}
-
-
-	// -----------------------------------------------------------------------------------------------------------------------------------
-
-	// zoom into a range on a chromosome which is defined by biological feature positions (rather than pixel values)
-	public void zoomToPixelRange(GChromoMap selectedMap, int top, int bottom)
-	{
-		int selectedYDist = bottom - top;
-		float finalScalingFactor = mainCanvas.getHeight() / (float) selectedYDist;
-		GMapSet selectedSet = selectedMap.owningSet;
-
-		// this is the combined height of all spacers -- does not change with the zoom factor
-		int combinedSpacers = selectedMap.owningSet.chromoSpacing * (selectedSet.numMaps - 1);
-
-		// these are the values we want for the last iteration
-		float finalZoomFactor = selectedSet.zoomFactor * finalScalingFactor;
-		float finalChromoHeight = (int) (selectedSet.chromoHeight * finalScalingFactor);
-		// the distance from the top of the chromosome to the mousePressedY location, in pixels
-		float initialDistFromTop = (float) (top - selectedMap.boundingRectangle.getY() + (selectedYDist / 2));
-		float initialDistFromTopProportion = initialDistFromTop / (float) selectedMap.boundingRectangle.getHeight();
-
-		// the new total Y extent of the genome in pixels
-		int finalTotalY = (int) (((selectedSet.totalY - combinedSpacers) * finalScalingFactor) + combinedSpacers);
-		selectedSet.zoomFactor = finalZoomFactor;
-		adjustZoom(selectedMap, finalTotalY, (int) finalChromoHeight, (int) (finalChromoHeight - (initialDistFromTopProportion * finalChromoHeight)));
-
-		//now update the arrays with the position data
-		Strudel.winMain.fatController.initialisePositionArrays();
-		//update zoom control position
-		Strudel.winMain.fatController.updateAllZoomControls();
-
-		//turn antialiasing on and repaint
-		mainCanvas.updateCanvas(true);
-	}
-
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
 

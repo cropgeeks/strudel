@@ -10,7 +10,7 @@ public class Constants
 	public static final int MAX_ZOOM_FACTOR = 300;
 
 	//the number of distance markers we want to draw on a chromosome -- fixed regardless of zoom factor
-	public static final int  numDistanceMarkers = 30;
+	public static final int  numDistanceMarkers = 25;
 
 	//the maximum curvature coefficient for the links
 	//this determines the shape of the curve, if any

@@ -55,6 +55,9 @@ public class FatController
 	//true if we are loading a file from the recent docs list
 	public boolean recentFileLoad = false;
 
+	//true if the mapsets have been initialiased -- this calculates their map sizes
+	public boolean mapSetsInited = false;
+
 
 	// ===============================================curve'tors===================================
 
@@ -155,7 +158,7 @@ public class FatController
 		//deselect the buttons on the zoom control panels
 		for (ZoomControlPanel zoomControlPanel : winMain.zoomControlPanels)
 		{
-			zoomControlPanel.overrideMarkersAutoDisplayButton.setSelected(false);
+			zoomControlPanel.showAllMarkersButton.setSelected(false);
 		}
 	}
 
@@ -218,8 +221,6 @@ public class FatController
 			//reset selected maps
 			selectedMaps.clear();
 
-			//marker and label display overrides
-			gMapSet.overrideMarkersAutoDisplay = false;
 			winMain.chromoContextPopupMenu.showAllLabelsItem.setText(winMain.chromoContextPopupMenu.showAllLabelsStr);
 
 			//for all maps within mapset

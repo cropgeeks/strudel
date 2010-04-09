@@ -16,7 +16,10 @@ public class GChromoMap implements Comparable
 	// ============================vars==================================
 
 	// size stuff
-	public int height;
+	//the height of the chromosome at any one time -- can change
+	public int currentHeight;
+	//the initial height when fully zoomed out -- never changes
+	public int initialHeight;
 	public int width;
 
 	// position stuff
@@ -113,6 +116,10 @@ public class GChromoMap implements Comparable
 //	//may be off the visible screen
 //	public int yOnCanvas;
 
+	//the vertical extent of the genome above the gMap in pixels
+	//this includes the spaces between chromosomes and the chromosomes themselves
+	public int spaceAboveMap = -1;
+
 
 	// ============================curve'tors==================================
 
@@ -158,10 +165,10 @@ public class GChromoMap implements Comparable
 
 			//adjust the y in case we are inverting
 			multiplier = Math.abs(((Math.abs(angleFromVertical / 90.0f)) -1.0f) *0.5f);
-			currentY = Math.round(multiplier * owningSet.chromoHeight);
+			currentY = Math.round(multiplier * currentHeight);
 
 			//adjust the  height according to the angle if necessary
-			height = (int)(owningSet.chromoHeight * Math.abs(angleFromVertical / 90.0f));
+//			currentHeight = (int)(currentHeight * Math.abs(angleFromVertical / 90.0f));
 
 			//adjust the colours according to the angle to create a pseudo-3d effect when inverting
 			//first get the main colour and extract its hsb values
@@ -194,11 +201,11 @@ public class GChromoMap implements Comparable
 			//need another check here to make sure we are not drawing any rectangle parts below the ellipse
 			//this would stick out and destroy the illusion of a 3D inversion process
 			//very dirty hack but quickest solution and it works
-			int rectHeight = height;
+			int rectHeight = currentHeight;
 			//the length of the top half of the rectangle above a line representing the centerpoint of the chromosome
-			int topHalfLengthOfRect = (owningSet.chromoHeight/2) - currentY;
+			int topHalfLengthOfRect = (rectHeight/2) - currentY;
 			//same for the bottom half
-			int bottomHalfLengthOfRect = (currentY + height) - (owningSet.chromoHeight/2);
+			int bottomHalfLengthOfRect = (currentY + currentHeight) - (rectHeight/2);
 			//if there is more chromo below the center line than there should be, just set the value of the bottom half to be
 			//the same as the top half
 			if(bottomHalfLengthOfRect > topHalfLengthOfRect)
@@ -229,8 +236,8 @@ public class GChromoMap implements Comparable
 				//the constant in the following equations (0.0055f) is derived from a linear function that describes the movement of
 				//the ellipse up and down the chromosome as a function of the angle
 				float ellipseHeight = (float) (Math.cos(Math.toRadians(angleFromVertical)) * width);
-				float bottomEllipseY = (((-0.0055f * angleFromVertical) + 0.5f) * owningSet.chromoHeight) - ellipseHeight/2.0f;
-				float topEllipseY = (((0.0055f * angleFromVertical) + 0.5f) * owningSet.chromoHeight) - ellipseHeight/2.0f;
+				float bottomEllipseY = (((-0.0055f * angleFromVertical) + 0.5f) * currentHeight) - ellipseHeight/2.0f;
+				float topEllipseY = (((0.0055f * angleFromVertical) + 0.5f) * currentHeight) - ellipseHeight/2.0f;
 
 				//draw an ellipse representing the top of the chromosome
 				//needs to be drawn in two halves so we can add the gradient to create the illusion of a highlight
@@ -295,10 +302,10 @@ public class GChromoMap implements Comparable
 			float numMarkers = Constants.numDistanceMarkers;
 
 			// this is the number of pixels by which the markers get spaced
-			float interval = owningSet.chromoHeight / numMarkers;
+			float interval = currentHeight / numMarkers;
 			float currentY = y;
 			if(isFullyInverted)
-				currentY = y + height;
+				currentY = y + currentHeight;
 
 			// this is the numerical amount by which we want to separate the marker values
 			// this gets scaled by the maximum value at the chromosome end and can be in
@@ -435,7 +442,6 @@ public class GChromoMap implements Comparable
 	// initialises the arrays we need for fast drawing
 	public void initArrays()
 	{
-
 		// init the arrays that hold ALL the features for this map
 		int numFeatures = chromoMap.countFeatures();
 
@@ -460,18 +466,19 @@ public class GChromoMap implements Comparable
 
 				//scale this by the current map height to give us a position in pixels, between zero and the chromosome height
 				//then store this value in the array we use for drawing
-				allLinkedFeaturePositions[i] =Utils.relativeFPosToPixelsOnGMap(this, start);
+				allLinkedFeaturePositions[i] = Utils.relativeFPosToPixelsOnGMap(this, start);
 
 				//if the map is inverted we need to store the inverse of this value i.e. the map end value minus the feature position
 				if(isFullyInverted || isPartlyInverted)
 				{
-					allLinkedFeaturePositions[i] = (int) ((owningSet.chromoHeight / chromoMap.getStop()) * (chromoMap.getStop() -start));
+					allLinkedFeaturePositions[i] = (int) ((currentHeight / chromoMap.getStop()) * (chromoMap.getStop() -start));
 				}
 
 				//also store a reference to the feature itself in a parallel array
 				allLinkedFeatures[i] = f;
 			}
 		}
+
 		arraysInitialized = true;
 	}
 
@@ -502,7 +509,7 @@ public class GChromoMap implements Comparable
 
 				//check whether inversion in progress
 				if(inversionInProgress)
-					yPos = Math.round((yPos * (height / (float)owningSet.chromoHeight)) + currentY);
+					yPos = Math.round((yPos * (currentHeight / (float)currentHeight)) + currentY);
 
 				//check whether this position is currently showing on the canvas or not
 				boolean featureIsVisible = false;
@@ -535,8 +542,8 @@ public class GChromoMap implements Comparable
 		Color highlightColour = Utils.getTonedDownColour(colour);
 		Color centreHighlightColour = highlightColour.brighter().brighter().brighter().brighter();
 
-		int start = (int) ((owningSet.chromoHeight / chromoMap.getStop()) * highlightedRegionStart);
-		int end =  (int) ((owningSet.chromoHeight / chromoMap.getStop()) * highlightedRegionEnd);
+		int start = (int) ((currentHeight / chromoMap.getStop()) * highlightedRegionStart);
+		int end =  (int) ((currentHeight / chromoMap.getStop()) * highlightedRegionEnd);
 		int rectHeight = end - start;
 
 		GradientPaint gradient = new GradientPaint(0, 0, highlightColour, width / 2, 0, centreHighlightColour);
@@ -559,8 +566,8 @@ public class GChromoMap implements Comparable
 
 		//now we need to convert them back to absolute ones that take into account the currrent height of the chromosome
 		//this is so we can zoom and still show the rectangle which then gets resized appropriately
-		int start = Math.round((owningSet.chromoHeight / chromoMap.getStop()) * relativeTopY) ;
-		int end =  Math.round((owningSet.chromoHeight / chromoMap.getStop()) * relativeBottomY);
+		int start = Math.round((currentHeight / chromoMap.getStop()) * relativeTopY) ;
+		int end =  Math.round((currentHeight / chromoMap.getStop()) * relativeBottomY);
 		int rectHeight = end - start;
 
 		//width and x -- always the same

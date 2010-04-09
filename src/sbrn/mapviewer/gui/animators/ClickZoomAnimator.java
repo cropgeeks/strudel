@@ -52,43 +52,31 @@ public class ClickZoomAnimator extends Thread
 		int totalFrames = Math.round(fps * (millis / 1000.0f));
 
 		// these are the amounts we need to increment things by
-		// follows the pattern of: (final value minus current value) divided by the total number of frames
+		// follows a pattern of: (final value minus current value) divided by the total number of frames
 		float zoomFactorIncrement = (finalZoomFactor - selectedSet.zoomFactor) / totalFrames;
-		float chromoHeightIncrement = (finalChromoHeight - selectedSet.chromoHeight) / totalFrames;
-		float totalYIncrement = (finalTotalY - selectedSet.totalY) / totalFrames;
+		float chromoHeightIncrement = (finalChromoHeight - selectedMap.currentHeight) / totalFrames;
 
 		// now loop for the number of total frames, zooming in by a bit each time
 		for (int i = 0; i < totalFrames; i++)
 		{
-			// sleep for the amount of animation time divided by the totalFrames value
-
-
 			// set the new zoom factor
-			selectedSet.zoomFactor = selectedSet.zoomFactor + zoomFactorIncrement;
+			float newZoomFactor = selectedSet.zoomFactor + zoomFactorIncrement;
 
 			//don't let the zoom factor fall below 1
-			if (selectedSet.zoomFactor < 1)
-				selectedSet.zoomFactor = 1;
+			if (newZoomFactor < 1)
+				newZoomFactor = 1;
 
 			// work out the chromo height and total genome height for when the new zoom factor will have been applied
-			int newChromoHeight = Math.round(selectedSet.chromoHeight + chromoHeightIncrement);
+			int newChromoHeight = Math.round(selectedMap.currentHeight + chromoHeightIncrement);
 
 			// distance from the bottom of the chromosome -- is half the height of the chromosome as we want it centered
 			int distFromBottom = newChromoHeight / 2;
 
-			// the new total Y extent of the genome in pixels
-			int newTotalY = Math.round(selectedSet.totalY + totalYIncrement);
-
 			// adjust the zoom
 			// this call includes the redraw of the main canvas
-			zoomHandler.adjustZoom(selectedMap, newTotalY, newChromoHeight, distFromBottom);
+			zoomHandler.adjustZoom(newZoomFactor, selectedMap, distFromBottom);
 
-			//update the arrays with the position data
-			Strudel.winMain.fatController.initialisePositionArrays();
-
-			//update zoom control position
-			Strudel.winMain.fatController.updateAllZoomControls();
-
+			// sleep for the amount of animation time divided by the totalFrames value
 			try
 			{
 				Thread.sleep(millis / totalFrames);
@@ -102,19 +90,10 @@ public class ClickZoomAnimator extends Thread
 		//if we have not reached the max zoom factor with this we need to do one more zoom adjust
 		//explicitly here to make sure we have all the final intended values and have not fallen short
 		//of these due to rounding errors etc.
-		selectedSet.zoomFactor = finalZoomFactor;
-		zoomHandler.adjustZoom(selectedMap, finalTotalY, finalChromoHeight,	 Math.round(finalChromoHeight/2.0f));
+		if(selectedSet.zoomFactor != finalZoomFactor)
+			zoomHandler.adjustZoom(finalZoomFactor, selectedMap, Math.round(finalChromoHeight/2.0f));
 
-		//update overviews
-		Strudel.winMain.fatController.updateOverviewCanvases();
-
-		//update zoom control position
-		Strudel.winMain.fatController.updateAllZoomControls();
-
-		//now update the arrays with the position data
-		Strudel.winMain.fatController.initialisePositionArrays();
-
-		//enable drawing of markers providing we have zoomed in, not out
+		//enable drawing of markers provided we have zoomed in, not out
 		if (selectedSet.zoomFactor > 1)
 			selectedSet.thresholdAllMarkerPainting = selectedSet.zoomFactor;
 
@@ -124,7 +103,6 @@ public class ClickZoomAnimator extends Thread
 		zoomHandler.isClickZoomRequest = false;
 
 		//repaint
-		// TODO: AA check
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run()
 			{

@@ -173,7 +173,6 @@ public class FatController
 		if(FeatureSearchHandler.featuresInRange != null)
 		{
 			FeatureSearchHandler.featuresInRange.clear();
-//			Strudel.winMain.fatController.selectionMap = null;
 		}
 		winMain.mainCanvas.drawHighlightFeatures = false;
 		winMain.mainCanvas.drawFoundFeaturesInRange = false;
@@ -213,6 +212,8 @@ public class FatController
 		{
 			//reset zoom on all mapsets
 			winMain.mainCanvas.zoomHandler.processZoomResetRequest(gMapSet);
+
+			gMapSet.hasBeenScrolled = false;
 
 			//reset selected maps
 			selectedMaps.clear();

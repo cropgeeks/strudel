@@ -81,6 +81,10 @@ public class GMapSet
 	//true while we are scrolling
 	public boolean isScrolling = false;
 
+	//this indicates whether this map set has been scrolled at all
+	//we need so we know whether to recenter the mapset when fully zoomed out
+	public boolean hasBeenScrolled = false;
+
 	// ====================================c'tor========================================
 
 	public GMapSet(MapSet mapSet)

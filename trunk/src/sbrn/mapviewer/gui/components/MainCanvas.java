@@ -24,14 +24,6 @@ public class MainCanvas extends JPanel
 	// do we need to draw links?
 	public boolean drawLinks = false;
 
-	// if true, antialias everything
-	//this is a flag set by code within the application
-	//	public boolean antiAlias = false;
-	//in addition we have a flag set by the user (through a button) -- userPrefAntialias
-	//stored in the Prefs
-	//this overrides the local flag if it is set to false
-	//otherwise we ignore it
-
 	// if true, paint a rectangle to indicate the fact that we are panning over a region we want to select for zooming in to
 	public boolean drawSelectionRect = false;
 	//these are the relevant coordinates for this
@@ -84,6 +76,8 @@ public class MainCanvas extends JPanel
 
 	Rectangle canvasBounds = null;
 
+	//the minimum height of a chromosome that we default to when we have more chromosomes than we have space for on the canvas
+	//chromos will then fall off the screen above and below
 	int minChromoHeight = 5;
 
 	// ============================curve'tor==================================
@@ -333,11 +327,12 @@ public class MainCanvas extends JPanel
 		if (gMapSet.zoomFactor == 1)
 		{
 			// the combined height of all the vertical spaces between chromosomes
-//			gMapSet.allSpacers = gMapSet.chromoSpacing * (winMain.dataContainer.maxChromos - 1);
-			gMapSet.allSpacers = gMapSet.chromoSpacing * gMapSet.gMaps.size();
+			gMapSet.allSpacers = gMapSet.chromoSpacing * (winMain.dataContainer.maxChromos - 1);
+//			gMapSet.allSpacers = gMapSet.chromoSpacing * gMapSet.gMaps.size();
 
 			// the height of a chromosome
-			gMapSet.chromoHeight = (availableSpaceVertically - gMapSet.allSpacers) / gMapSet.gMaps.size();
+//			gMapSet.chromoHeight = (availableSpaceVertically - gMapSet.allSpacers) / gMapSet.gMaps.size();
+			gMapSet.chromoHeight = (availableSpaceVertically - gMapSet.allSpacers) / winMain.dataContainer.maxChromos;
 
 			//now check that the chromoheight has not gone smaller than one pixel here
 			if(gMapSet.chromoHeight < minChromoHeight)
@@ -356,8 +351,10 @@ public class MainCanvas extends JPanel
 
 			// the total vertical extent of the genome, excluding top and bottom spacers
 			gMapSet.totalY = (gMapSet.numMaps * gMapSet.chromoHeight) + ((gMapSet.numMaps - 1) * gMapSet.chromoSpacing);
-			if(!gMapSet.isScrolling)
+			if(!gMapSet.isScrolling && !gMapSet.hasBeenScrolled)
+			{
 				gMapSet.centerPoint = Math.round(gMapSet.totalY / 2.0f);
+			}
 
 		}
 		// this is what we do when we are zoomed in
@@ -520,6 +517,40 @@ public class MainCanvas extends JPanel
 
 		//turn text antialiasing off again
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+	}
+
+
+	// --------------------------------------------------------------------------------------------------------------------------------
+
+	//moves the genome viewport for the psecified mapset either up or down by the specified increment
+	public void scroll(boolean up, GMapSet gMapSet,  int scrollIncrement)
+	{
+
+		//this is where we are moving the center of the genome (vertically) to
+		int newCenterPoint = -1;
+
+		//scrolling up
+		if (up)
+		{
+			newCenterPoint = gMapSet.centerPoint  - scrollIncrement;
+			//don't let the genome disappear completely
+			if(newCenterPoint < 0)
+				newCenterPoint = 0;
+		}
+		//scrolling down
+		else
+		{
+			newCenterPoint = gMapSet.centerPoint  + scrollIncrement;
+			//don't let the genome disappear completely
+			if(newCenterPoint > gMapSet.totalY)
+				newCenterPoint = gMapSet.totalY;
+		}
+
+		if(newCenterPoint != gMapSet.centerPoint)
+			gMapSet.hasBeenScrolled = true;
+
+		//move the genome viewport
+		winMain.mainCanvas.moveGenomeViewPort(gMapSet, newCenterPoint);
 	}
 
 

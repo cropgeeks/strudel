@@ -24,7 +24,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 
 	private final boolean isOSX = SystemUtils.isMacOS();
 
-	int scrollGenomeIncrement = 100;
+	int scrollIncrement = 100;
 
 	int lastMouseDragYPos = -1;
 
@@ -191,7 +191,9 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, (int)(gMapSet.xPosition), y);
 
 		//mouse is getting dragged without shift held down -- scroll the canvas up or down
-		if (!e.isShiftDown())
+		//check whether all maps in the mapset are visible -- if yes, do not scroll
+		boolean allMapsVisible = gMapSet.getVisibleMaps().size() == gMapSet.gMaps.size();
+		if (!e.isShiftDown() & !allMapsVisible)
 		{
 			//include a time delay before dragging so we can prevent accidental drags that were in fact intended to be mouse clicks
 			long now = System.currentTimeMillis();
@@ -205,12 +207,12 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			// mouse is getting dragged up
 			if (y < mouseDragPosY)
 			{
-				winMain.mainCanvas.moveGenomeViewPort(gMapSet, gMapSet.centerPoint + distanceDragged);
+				winMain.mainCanvas.scroll(false, gMapSet, distanceDragged);
 			}
 			// mouse is getting dragged down
 			if (y > mouseDragPosY)
 			{
-				winMain.mainCanvas.moveGenomeViewPort(gMapSet, gMapSet.centerPoint - distanceDragged);
+				winMain.mainCanvas.scroll(true, gMapSet, distanceDragged);
 			}
 
 			lastMouseDragYPos = y;
@@ -312,41 +314,21 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		int index = Utils.getSelectedSetIndex(e);
 		GMapSet selectedSet = Strudel.winMain.dataContainer.gMapSets.get(index);
 
-		//this moves the genome center point up and down
-		int newCenterPoint = -1;
-
-		//this boolean dictates whether we should actually move the viewport or not
-		//it is set to false if moving the viewport would make all maps disappear from the canvas completely
-		boolean moveViewport = false;
-
 		// work out in which direction we have moved the mouse
 		int notches = e.getWheelRotation();
-
-		//scrolling up
-		if (notches < 0)
+		//check whether all maps in the mapset are visible -- if yes, do not scroll
+		if(selectedSet.getVisibleMaps().size() < selectedSet.gMaps.size())
 		{
-			newCenterPoint = selectedSet.centerPoint  - scrollGenomeIncrement;
-			//don't let the centerpoint become negative or the first chromosome will disappear off the canvas
-			if(newCenterPoint > 0)
-				moveViewport = true;
-		}
-		//scrolling down
-		else
-		{
-			newCenterPoint = selectedSet.centerPoint  + scrollGenomeIncrement;
-			//this buffer is a hack that allows us to keep the last chromosome in the set visible on the canvas at all times
-			//if we don't apply this then it can disappear altogether, which we want to avoid
-			//the buffer needs to be proportional to the size of the genome or else it won't
-			float buffer = selectedSet.totalY*0.005f;
-			if(newCenterPoint < (selectedSet.totalY - buffer))
-				moveViewport = true;
-		}
-
-		//move the genome viewport but make sure we do not scroll off the canvas
-		//i.e. we want to be able to always see at least one chromosome
-		if(moveViewport)
-		{
-			winMain.mainCanvas.moveGenomeViewPort(selectedSet, newCenterPoint);
+			//scrolling up
+			if (notches < 0)
+			{
+				Strudel.winMain.mainCanvas.scroll(true, selectedSet, scrollIncrement);
+			}
+			//scrolling down
+			else
+			{
+				Strudel.winMain.mainCanvas.scroll(false, selectedSet, scrollIncrement);
+			}
 		}
 	}
 

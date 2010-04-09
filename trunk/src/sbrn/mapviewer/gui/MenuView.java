@@ -1,7 +1,8 @@
 package sbrn.mapviewer.gui;
 
 import sbrn.mapviewer.Strudel;
-import sbrn.mapviewer.gui.components.WinMain;
+import sbrn.mapviewer.gui.components.*;
+import scri.commons.gui.*;
 
 /**
  * Stores the methods which carry out the actions which are fired whenever the
@@ -18,6 +19,24 @@ public class MenuView
 
 	public void showOverview()
 	{
+		//only execute this when the overview dialog is being opened, rather than closed
+		if (!winMain.overviewDialog.isVisible())
+		{
+			//check whether any of the overview canvases contain so many chromos that they have to be rendered as one
+			//if yes, display an error message
+			boolean errorMessage = false;
+			for (OverviewCanvas overviewCanvas : winMain.overviewCanvases)
+			{
+				if (overviewCanvas.renderAsOneChromo)
+					errorMessage = true;
+			}
+			if (errorMessage && Prefs.showRenderAsOneMessage)
+			{
+				TaskDialog.info("In the overview, one or more genomes have too many chromosomes to have them rendered individually."+
+								"\nThese will be rendered as a single chromosome instead.", "Continue", winMain.toolbar.renderAsOneChromoCheckBox);
+			}
+		}
+
 		// Toggle the state
 		Prefs.guiOverviewVisible = !Prefs.guiOverviewVisible;
 

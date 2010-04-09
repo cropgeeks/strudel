@@ -405,7 +405,7 @@ public class GChromoMap implements Comparable
 	// -----------------------------------------------------------------------------------------------------------------------------------------
 
 	// draw the chromosome/map for the purpose of an overview only
-	public void paintOverViewMap(Graphics2D g2, int width, int height)
+	public void paintOverViewMap(Graphics2D g2, int width, int height, int smallFontSize)
 	{
 		// draw first half of chromosome
 		GradientPaint gradient = new GradientPaint(0, 0, colour, width / 2, 0, centreColour, true);
@@ -413,7 +413,6 @@ public class GChromoMap implements Comparable
 		g2.fillRect(0, 0, width, height);
 
 		// draw the index of the map in the genome
-		int smallFontSize = 9;
 		Font overviewLabelFont = new Font("Arial", Font.BOLD, smallFontSize);
 		g2.setFont(overviewLabelFont);
 		g2.setColor(Colors.chromosomeIndexColour);

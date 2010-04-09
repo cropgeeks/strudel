@@ -506,7 +506,7 @@ public class Utils
 	 */
 	public static int relativeFPosToPixelsOnGMap(GChromoMap gMap, float fPos)
 	{
-		return Math.round((gMap.owningSet.chromoHeight / gMap.chromoMap.getStop()) * fPos);
+		return Math.round((gMap.currentHeight / gMap.chromoMap.getStop()) * fPos);
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -517,11 +517,11 @@ public class Utils
 	 */
 	public static int relativeFPosToPixelOnCanvas(GChromoMap gMap, float fPos, boolean inverting)
 	{
-		int fDist = Math.round((gMap.height / gMap.chromoMap.getStop()) * fPos);
+		int fDist = Math.round((gMap.currentHeight / gMap.chromoMap.getStop()) * fPos);
 		int fPosOnCanvas =   fDist + gMap.y + gMap.currentY;
 
 		if(inverting)
-			return gMap.y + gMap.currentY + gMap.height - fDist;
+			return gMap.y + gMap.currentY + gMap.currentHeight - fDist;
 
 		return fPosOnCanvas;
 	}
@@ -534,11 +534,10 @@ public class Utils
 
 	public static int pixelsOnChromoToPixelsOnCanvas(GChromoMap gMap, int fPos, boolean inverted)
 	{
-		int spaceAboveMap = calcSpaceAboveGMap(gMap);
-		int fPosOnScreen =  fPos + spaceAboveMap + gMap.currentY;
+		int fPosOnScreen =  fPos + gMap.spaceAboveMap + gMap.currentY;
 
 		if(inverted)
-			return spaceAboveMap + gMap.currentY + gMap.height - fPos;
+			return gMap.spaceAboveMap + gMap.currentY + gMap.currentHeight - fPos;
 
 		return fPosOnScreen;
 	}
@@ -547,14 +546,21 @@ public class Utils
 
 	//returns the vertical extent of the genome above the gMap in pixels
 	//this includes the spaces between chromosomes and the chromosomes themselves
-	private static int calcSpaceAboveGMap(GChromoMap gMap)
+	public static int calcSpaceAboveGMap(GChromoMap gMap)
 	{
 		//how many chromosomes are above this map in the genome
 		int numChromosAbove = gMap.index;
 		//combined spaces between chromos
 		int spacer = gMap.owningSet.chromoSpacing;
-		return (numChromosAbove * gMap.owningSet.chromoHeight) +
-		(numChromosAbove * spacer);
+		//what is the combined height of all chromos above this one
+		int totalChromoSpaceAbove = 0;
+		for(int i = 0; i < numChromosAbove; i++)
+		{
+			GChromoMap gChromoMap = gMap.owningSet.gMaps.get(i);
+			totalChromoSpaceAbove += gChromoMap.currentHeight;
+		}
+
+		return totalChromoSpaceAbove + (numChromosAbove * spacer);
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------

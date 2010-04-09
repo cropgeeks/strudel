@@ -106,7 +106,7 @@ public class LabelDisplayManager
 		ChromoMap chromoMap = f.getOwningMap();
 		float mapEnd = chromoMap.getStop();
 		// this factor normalises the position to a value between 0 and 100
-		float scalingFactor = gMap.height / mapEnd;
+		float scalingFactor = gMap.currentHeight / mapEnd;
 
 		// the y position of the feature itself
 		int featureY;

@@ -27,6 +27,9 @@ public class Prefs extends XMLPreferences
 	public static int guiOverviewY = 0;
 	public static boolean guiOverviewVisible = true;
 
+	//this boolean decides whether we scale the chromosomes according to their relative size or make them all the same size
+	public static boolean scaleChromosByRelativeSize = true;
+
 	//a boolean indicating whether we need to show the "max zoom level reached " taskdialog when user has pan zoomed to the max
 	public static boolean showMaxZoomLevelMessage = true;
 

@@ -291,6 +291,8 @@ public class WinMain extends JFrame
 		}
 	}
 
+
+
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void hideSplitPaneBottomHalf()
@@ -301,8 +303,8 @@ public class WinMain extends JFrame
 		splitPane.setDividerSize(0);
 
 		//refresh the main canvas
-		Strudel.winMain.validate();
-		Strudel.winMain.mainCanvas.updateCanvas(true);
+		validate();
+		mainCanvas.updateCanvas(true);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------

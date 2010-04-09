@@ -3,7 +3,9 @@ package sbrn.mapviewer.gui.entities;
 import java.awt.*;
 import java.util.*;
 
+import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
+import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.components.*;
 
 /**
@@ -47,7 +49,7 @@ public class GMapSet
 	public int totalY;
 
 	//the height of a chromosome in this genome, in pixels (all chromos are the same height, always)
-	public int chromoHeight;
+	//	public int chromoHeight;
 
 	// this controls whether we draw chromosome markers
 	public boolean paintAllMarkers = false;
@@ -59,12 +61,9 @@ public class GMapSet
 	public float thresholdLabelPainting;
 
 	//the zoom factor at which we would fit a single chromosome (but nothing else) on the visible portion of the canvas
-	public float singleChromoViewZoomFactor;
+	//	public float singleChromoViewZoomFactor;
 
 	public TreeMap<Feature, Integer> foundFeatures = new TreeMap<Feature, Integer>();
-
-	//a boolean to indicate whether we should always display markers, regardless of zoom factor
-	public boolean overrideMarkersAutoDisplay = false;
 
 	//the zoom control panel pertaining to this mapset
 	public ZoomControlPanel zoomControlPanel;
@@ -73,7 +72,7 @@ public class GMapSet
 	public boolean wholeMapsetIsSelected = false;
 
 	// space the chromosomes vertically by this fixed amount
-	public int chromoSpacing = 15;
+	public int chromoSpacing = 9;
 
 	// the combined height of all the vertical spaces between chromosomes
 	public int allSpacers = 0;
@@ -84,6 +83,18 @@ public class GMapSet
 	//this indicates whether this map set has been scrolled at all
 	//we need so we know whether to recenter the mapset when fully zoomed out
 	public boolean hasBeenScrolled = false;
+
+	//the minimum height of a chromosome that we default to when we have more chromosomes than we have space for on the canvas
+	//chromos will then fall off the screen above and below
+	public int minChromoHeight = 5;
+
+	public OverviewCanvas overviewCanvas;
+
+	//the shortest map in this mapset
+	GChromoMap shortestMap = null;
+
+	//the longest map in this mapset
+	GChromoMap longestMap = null;
 
 	// ====================================c'tor========================================
 
@@ -109,6 +120,25 @@ public class GMapSet
 			ChromoMap cMap = mapSet.getMaps().get(i);
 			GChromoMap gMap = new GChromoMap(cMap.getName(), i, this);
 			gMaps.add(gMap);
+
+			//also check whether this gMap is shorter than the current shortest map
+			if(shortestMap == null)
+				shortestMap = gMap;
+			else
+			{
+				if(gMap.chromoMap.getStop() < shortestMap.chromoMap.getStop())
+					shortestMap = gMap;
+			}
+
+			//ditto for longest
+			if(longestMap == null)
+				longestMap = gMap;
+			else
+			{
+				if(gMap.chromoMap.getStop() > longestMap.chromoMap.getStop())
+					longestMap = gMap;
+			}
+
 		}
 	}
 
@@ -125,6 +155,100 @@ public class GMapSet
 				visibleMaps.add(gChromoMap);
 		}
 		return visibleMaps;
+	}
+
+	// ---------------------------------------------------------------------------------------------------------------------------
+
+	//this works out the sizes of all maps in this mapset
+	//depending on the user preference this will either make all of them the same or scale them to relative size
+	public void calculateMapSizes()
+	{
+//		System.out.println("+++++++calculateMapSizes for mapset " + name);
+//		System.out.println("shortest map for mapset " + name + " = " + shortestMap.name);
+//		System.out.println("length = " + shortestMap.chromoMap.getStop());
+//		System.out.println("longest map for mapset " + name + " = " + longestMap.name);
+//		System.out.println("length = " + longestMap.chromoMap.getStop());
+
+		// the total amount of space we have for drawing on vertically, in pixels
+		int availableVerticalSpace = Strudel.winMain.mainCanvas.getHeight() - (Strudel.winMain.mainCanvas.topBottomSpacer * 2);
+
+		//this is the number of pixels per unit we have available
+		float pixelsPerUnit = 0;
+
+		if(Prefs.scaleChromosByRelativeSize)
+		{
+			// the combined height of all the vertical spaces between chromosomes
+			allSpacers = chromoSpacing * (gMaps.size()-1);
+
+			//this is the number of pixels we have available for actual chromosomes, minus the spacers
+			int spaceForChromos = availableVerticalSpace - allSpacers;
+
+			//add up all the units in the mapset
+			float totalUnits = 0;
+			for(GChromoMap map : gMaps)
+				totalUnits += map.chromoMap.getStop();
+
+			pixelsPerUnit = spaceForChromos/totalUnits;
+
+//			//check stats of shortest map
+//			int shortestMapHeight = Math.round(shortestMap.chromoMap.getStop() * pixelsPerUnit);
+//
+//			System.out.println("pixelsPerUnit = " + pixelsPerUnit);
+//			System.out.println("shortestMapHeight for mapset " + name + " = " + shortestMapHeight);
+//
+//			//now check that the chromoheight has not gone smaller than the minimum here
+//			if(shortestMapHeight < minChromoHeight)
+//			{
+//				//recalculate the pixelsPerUnit value in this case
+//				pixelsPerUnit = minChromoHeight/shortestMap.chromoMap.getStop();
+//
+//				System.out.println("pixelsPerUnit recalculated= " + pixelsPerUnit);
+//
+//				//also flag up the fact that we have too  many chromos to render individually in the overview for this genome
+//				overviewCanvas.renderAsOneChromo = true;
+//			}
+		}
+		else
+		{
+			// the combined height of all the vertical spaces between chromosomes
+			allSpacers = chromoSpacing * (Strudel.winMain.dataContainer.maxChromos - 1);
+		}
+
+		//reset totalY
+		totalY = 0;
+
+		//now set all the map sizes
+		for(GChromoMap map : gMaps)
+		{
+			if(Prefs.scaleChromosByRelativeSize)
+				map.currentHeight = Math.round(map.chromoMap.getStop() * pixelsPerUnit);
+			else
+				map.currentHeight = (availableVerticalSpace - allSpacers) / Strudel.winMain.dataContainer.maxChromos;
+
+			//now check that the chromoheight has not gone smaller than one pixel here
+			if(map.currentHeight < minChromoHeight)
+			{
+				map.currentHeight = minChromoHeight;
+				overviewCanvas.renderAsOneChromo = true;
+			}
+
+
+			//if we are doing this for the first time
+			if(!Strudel.winMain.fatController.mapSetsInited)
+				map.initialHeight = map.currentHeight;
+
+			//now we also need to apply the current zoom factor
+			map.currentHeight = Math.round(map.currentHeight * zoomFactor);
+
+			totalY += map.currentHeight;
+
+			//update the value for the space above the map, which has changed now
+			map.spaceAboveMap = Utils.calcSpaceAboveGMap(map);
+		}
+
+		// the total vertical extent of the genome, excluding top and bottom spacers
+		totalY += allSpacers;
+//		System.out.println("totalY for mapset = " + totalY);
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------

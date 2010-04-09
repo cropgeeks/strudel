@@ -20,7 +20,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 	public JSlider zoomSlider;
 	JButton resetButton;
 	GMapSet gMapSet;
-	public JToggleButton overrideMarkersAutoDisplayButton;
+	public JToggleButton showAllMarkersButton;
 	JButton scrollUpButton, scrollDownButton;
 
 	boolean scrollContinuously = false;
@@ -73,7 +73,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 			resetButton.setMargin(new Insets(2, 1, 2, 1));
 
 		//marker display button
-		overrideMarkersAutoDisplayButton = (JToggleButton) Utils.getButton(true, "", "Always show all markers", Icons.getIcon("SHOWMARKERS"), this, true);
+		showAllMarkersButton = (JToggleButton) Utils.getButton(true, "", "Always show all markers", Icons.getIcon("SHOWMARKERS"), this, true);
 
 		//scroll buttons
 		scrollUpButton = new JButton(Icons.getIcon("UPARROW"));
@@ -101,7 +101,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		add(new JLabel("   "));
 		add(zoomSlider);
 		add(resetButton);
-		add(overrideMarkersAutoDisplayButton);
+		add(showAllMarkersButton);
 		add(scrollUpButton);
 		add(scrollDownButton);
 		add(new JLabel("   "));
@@ -142,12 +142,12 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		{
 			winMain.mainCanvas.zoomHandler.processZoomResetRequest(gMapSet);
 		}
-		else if(e.getSource() == overrideMarkersAutoDisplayButton)
+		else if(e.getSource() == showAllMarkersButton)
 		{
-			if(overrideMarkersAutoDisplayButton.isSelected())
-				gMapSet.overrideMarkersAutoDisplay = true;
+			if(showAllMarkersButton.isSelected())
+				gMapSet.paintAllMarkers = true;
 			else
-				gMapSet.overrideMarkersAutoDisplay = false;
+				gMapSet.paintAllMarkers = false;
 
 			Strudel.winMain.mainCanvas.updateCanvas(true);
 		}
@@ -158,7 +158,6 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 			if(gMapSet.getVisibleMaps().size() < gMapSet.gMaps.size())
 			{
 				int scrollIncrement = Strudel.winMain.mainCanvas.getHeight();
-				int newCenterPoint = gMapSet.centerPoint  - scrollIncrement;
 				Strudel.winMain.mainCanvas.scroll(true, gMapSet, scrollIncrement);
 			}
 		}
@@ -168,7 +167,6 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 			if(gMapSet.getVisibleMaps().size() < gMapSet.gMaps.size())
 			{
 				int scrollIncrement = Strudel.winMain.mainCanvas.getHeight();
-				int newCenterPoint = gMapSet.centerPoint + scrollIncrement;
 				Strudel.winMain.mainCanvas.scroll(false, gMapSet, scrollIncrement);
 			}
 		}
@@ -200,7 +198,6 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 
 		public void mousePressed(MouseEvent e)
 		{
-			System.out.println("scroll button pressed");
 			scrollContinuously = true;
 			scrollContinuously(up);
 		}
@@ -208,7 +205,6 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 
 		public void mouseReleased(MouseEvent e)
 		{
-			System.out.println("scroll button released");
 			scrollContinuously = false;
 		}
 

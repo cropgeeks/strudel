@@ -339,17 +339,17 @@ public class LinkDisplayManager
 		}
 
 		//y coords
-		int y1 = Math.round(gMap1.y + gMap1.currentY + (f1.getStart() * (gMap1.height / gMap1.chromoMap.getStop())));
-		int y2 = Math.round(gMap2.y + gMap2.currentY + (f2.getStart() * (gMap2.height / gMap2.chromoMap.getStop())));
+		int y1 = Math.round(gMap1.y + gMap1.currentY + (f1.getStart() * (gMap1.currentHeight / gMap1.chromoMap.getStop())));
+		int y2 = Math.round(gMap2.y + gMap2.currentY + (f2.getStart() * (gMap2.currentHeight / gMap2.chromoMap.getStop())));
 
 		//check for chromosome inversion and invert values if necessary
 		if(gMap1.isPartlyInverted || gMap1.isFullyInverted)
 		{
-			y1 = (int) ((gMap1.chromoMap.getStop() - f1.getStart()) / (gMap1.chromoMap.getStop() / gMap1.height)) + (gMap1.y + gMap1.currentY);
+			y1 = (int) ((gMap1.chromoMap.getStop() - f1.getStart()) / (gMap1.chromoMap.getStop() / gMap1.currentHeight)) + (gMap1.y + gMap1.currentY);
 		}
 		if(gMap2.isPartlyInverted  || gMap2.isFullyInverted)
 		{
-			y2 = (int) ((gMap2.chromoMap.getStop() - f2.getStart()) / (gMap2.chromoMap.getStop() / gMap2.height)) + (gMap2.y + gMap2.currentY);
+			y2 = (int) ((gMap2.chromoMap.getStop() - f2.getStart()) / (gMap2.chromoMap.getStop() / gMap2.currentHeight)) + (gMap2.y + gMap2.currentY);
 		}
 
 		// draw the link either as a straight line or a curve

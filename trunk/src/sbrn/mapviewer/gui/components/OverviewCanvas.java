@@ -42,6 +42,7 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener, Mouse
 		this.winMain = winMain;
 		this.mainCanvas = winMain.mainCanvas;
 		this.gMapSet = gMapSet;
+		gMapSet.overviewCanvas = this;
 
 		regionRect = new Rectangle();
 
@@ -50,33 +51,9 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener, Mouse
 
 		this.addMouseMotionListener(this);
 		this.addMouseListener(this);
-
-		calcInitialParams();
 	}
 
 	// ========================================methods=============================
-
-	//calculates chromosome height to predetermine whether this overview will have to do reduced
-	//rendering, i.e. show single chromosome instead of multiples
-	private void calcInitialParams()
-	{
-		int canvasHeight = getHeight();
-
-		//space between the chromosomes vertically
-		float chromoSpacing = Math.round((canvasHeight / gMapSet.numMaps) * 0.20f);
-
-		// the total amount of space we have for drawing on vertically, in pixels
-		float availableSpaceVertically = canvasHeight - (chromoSpacing * 2);
-		// the combined height of all the vertical spaces between chromosomes
-		float allSpacers = chromoSpacing * (gMapSet.numMaps - 1);
-		// the height of a chromosome
-		int chromoHeight = Math.round((availableSpaceVertically - allSpacers) / gMapSet.numMaps);
-
-		if (chromoHeight < minChromoHeight && chromoSpacing < minChromoHeight)
-		{
-			renderAsOneChromo = true;
-		}
-	}
 
 	// paint the genome onto this canvas
 	@Override

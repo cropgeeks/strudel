@@ -8,7 +8,7 @@ import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.handlers.*;
 import scri.commons.gui.*;
 
-public class ControlToolBar extends JToolBar implements ActionListener
+public class ControlToolBar extends JToolBar implements ActionListener, ItemListener
 {
 	private final WinMain winMain;
 
@@ -22,19 +22,18 @@ public class ControlToolBar extends JToolBar implements ActionListener
 	public JButton bFindFeatures;
 	public JButton bFindFeaturesinRange;
 	public JButton bResetAll;
-	//	public JToggleButton bDistMarkers;
-	//	public JButton bCurves;
-	//	public JToggleButton bLinkFilter;
 	public JButton bInfo;
 	public JButton bSave;
 	public JLabel memLabel = new JLabel();
 	public JButton bConfigureGenomes;
-	//	public JToggleButton bAntialias;
 	private JButton bColours;
 	public JButton bConfigureView;
 
 	public int currentLinkShapeType = 1;
 	public boolean linkShapeOrderAscending = true;
+
+	//a checkbox for asking the user whether they want to be reminded each time they have reached the max zoom level through pan zooming
+	public JCheckBox renderAsOneChromoCheckBox = new JCheckBox("Don't show this dialog again");
 
 
 	ControlToolBar(WinMain winMain)
@@ -80,6 +79,13 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		add(memLabel);
 		add(new JLabel("  "));
 
+		//configure the maxZoomMessageCheckBox
+		renderAsOneChromoCheckBox.addItemListener(this);
+		if(Prefs.showRenderAsOneMessage)
+			renderAsOneChromoCheckBox.setSelected(false);
+		else
+			renderAsOneChromoCheckBox.setSelected(true);
+
 	}
 
 	private void createControls()
@@ -122,11 +128,10 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		eValueSpinner.setEnabled(false);
 
 		//for a few of the buttons we want Ctrl based keyboard shortcuts
-		//this requires some crazy configuration code, sadly
 
 		//configure open file dialog button
 		bOpen = (JButton) Utils.getButton(false, "Load Data", "Load data into Strudel", Icons.getIcon("FILEOPEN"), Actions.loadData);
-		
+
 		//configure export image button
 		bExport = (JButton) Utils.getButton(false, "", "Export the display as an image", Icons.getIcon("EXPORTIMAGE"), Actions.exportImage);
 
@@ -152,35 +157,6 @@ public class ControlToolBar extends JToolBar implements ActionListener
 
 	public void actionPerformed(ActionEvent e)
 	{
-//		if (e.getSource() == bOverview)
-//			toggleOverviewDialog();
-//
-//		//reset the main canvas view and deselect all features
-//		else if (e.getSource() == bResetAll)
-//			Strudel.winMain.fatController.resetMainCanvasView();
-//
-//		//help menu
-//		else if (e.getSource() == bHelp)
-//		{
-//			String url = Constants.strudelManualPage;
-//
-//			Utils.visitURL(url);
-//		}
-//
-//		//"about" dialog
-//		else if(e.getSource() == bInfo)
-//		{
-//			Strudel.winMain.aboutDialog.setLocationRelativeTo(Strudel.winMain);
-//			Strudel.winMain.aboutDialog.setVisible(true);
-//		}
-//
-//		//configure visible datasets
-//		else if(e.getSource() == bColours)
-//		{
-//			Strudel.winMain.colorChooserDialog.setLocationRelativeTo(Strudel.winMain);
-//			Strudel.winMain.colorChooserDialog.setVisible(true);
-//		}
-
 		if(e.getSource() == bConfigureView)
 		{
 			Strudel.winMain.configureViewSettingsDialog.setLocationRelativeTo(Strudel.winMain);
@@ -198,18 +174,6 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		}
 		else if (separator)
 			addSeparator();
-	}
-
-
-
-	void toggleOverviewDialog()
-	{
-		// Toggle the state
-		Prefs.guiOverviewVisible = !Prefs.guiOverviewVisible;
-
-		// Then set the toolbar button and dialog to match
-		bOverview.setSelected(Prefs.guiOverviewVisible);
-		winMain.overviewDialog.setVisible(Prefs.guiOverviewVisible);
 	}
 
 	private void eValueSpinnerStateChanged(javax.swing.event.ChangeEvent e)
@@ -260,5 +224,18 @@ public class ControlToolBar extends JToolBar implements ActionListener
 
 		}
 		catch (Exception e)	{}
+	}
+
+	//here we handle user actions for the checkbox that decides whether we show the warning message re overview rendering each time
+	public void itemStateChanged(ItemEvent e)
+	{
+		if(e.getSource().equals(renderAsOneChromoCheckBox))
+		{
+			if(renderAsOneChromoCheckBox.isSelected())
+				Prefs.showRenderAsOneMessage = false;
+			else
+				Prefs.showRenderAsOneMessage = true;
+		}
+
 	}
 }

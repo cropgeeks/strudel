@@ -21,7 +21,9 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 	JButton resetButton;
 	GMapSet gMapSet;
 	public JToggleButton overrideMarkersAutoDisplayButton;
-//	public JToggleButton alwaysShowAllLabelsButton;
+	JButton scrollUpButton, scrollDownButton;
+
+	boolean scrollContinuously = false;
 
 
 	// ===================================================curve'tor====================================
@@ -70,9 +72,23 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		if (scri.commons.gui.SystemUtils.isMacOS() == false)
 			resetButton.setMargin(new Insets(2, 1, 2, 1));
 
-		//marker and label display buttons
+		//marker display button
 		overrideMarkersAutoDisplayButton = (JToggleButton) Utils.getButton(true, "", "Always show all markers", Icons.getIcon("SHOWMARKERS"), this, true);
-//		alwaysShowAllLabelsButton = (JToggleButton) Utils.getButton(true, "", "Always show all labels", Icons.getIcon("SHOWLABELS"), null, this, true);
+
+		//scroll buttons
+		scrollUpButton = new JButton(Icons.getIcon("UPARROW"));
+//		scrollUpButton.addMouseListener(new ScrollButtonMouseListener(true));
+		scrollUpButton.setToolTipText("Scroll up by one screen or hold for continuous fast scrolling");
+		scrollUpButton.addActionListener(this);
+		if (scri.commons.gui.SystemUtils.isMacOS() == false)
+			scrollUpButton.setMargin(new Insets(2, 1, 2, 1));
+
+		scrollDownButton = new JButton(Icons.getIcon("DOWNARROW"));
+//		scrollDownButton.addMouseListener(new ScrollButtonMouseListener(false));
+		scrollDownButton.setToolTipText("Scroll down by one screen or hold for continuous fast scrolling");
+		scrollDownButton.addActionListener(this);
+		if (scri.commons.gui.SystemUtils.isMacOS() == false)
+			scrollDownButton.setMargin(new Insets(2, 1, 2, 1));
 
 		//we need the filler when this toolbar is the only one
 		//this is to stop it from filling the whole width of the frame
@@ -86,7 +102,8 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		add(zoomSlider);
 		add(resetButton);
 		add(overrideMarkersAutoDisplayButton);
-//		add(alwaysShowAllLabelsButton);
+		add(scrollUpButton);
+		add(scrollDownButton);
 		add(new JLabel("   "));
 
 		//we need the filler when this toolbar is the only one
@@ -134,15 +151,27 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 
 			Strudel.winMain.mainCanvas.updateCanvas(true);
 		}
-//		else if(e.getSource() == alwaysShowAllLabelsButton)
-//		{
-//			if(alwaysShowAllLabelsButton.isSelected())
-//				gMapSet.alwaysShowAllLabels = true;
-//			else
-//				gMapSet.alwaysShowAllLabels = false;
-//
-//			Strudel.winMain.mainCanvas.updateCanvas(true);
-//		}
+
+		else if(e.getSource() == scrollUpButton)
+		{
+			//check whether all maps in the mapset are visible -- if yes, do not scroll
+			if(gMapSet.getVisibleMaps().size() < gMapSet.gMaps.size())
+			{
+				int scrollIncrement = Strudel.winMain.mainCanvas.getHeight();
+				int newCenterPoint = gMapSet.centerPoint  - scrollIncrement;
+				Strudel.winMain.mainCanvas.scroll(true, gMapSet, scrollIncrement);
+			}
+		}
+		else if(e.getSource() == scrollDownButton)
+		{
+			//check whether all maps in the mapset are visible -- if yes, do not scroll
+			if(gMapSet.getVisibleMaps().size() < gMapSet.gMaps.size())
+			{
+				int scrollIncrement = Strudel.winMain.mainCanvas.getHeight();
+				int newCenterPoint = gMapSet.centerPoint + scrollIncrement;
+				Strudel.winMain.mainCanvas.scroll(false, gMapSet, scrollIncrement);
+			}
+		}
 	}
 
 
@@ -159,4 +188,57 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 	public void mousePressed(MouseEvent e){}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	class ScrollButtonMouseListener implements MouseListener
+	{
+		boolean up = false;
+
+		ScrollButtonMouseListener(boolean up)
+		{
+			this.up = up;
+		}
+
+		public void mousePressed(MouseEvent e)
+		{
+			System.out.println("scroll button pressed");
+			scrollContinuously = true;
+			scrollContinuously(up);
+		}
+
+
+		public void mouseReleased(MouseEvent e)
+		{
+			System.out.println("scroll button released");
+			scrollContinuously = false;
+		}
+
+		public void mouseClicked(MouseEvent e){}
+		public void mouseEntered(MouseEvent e){}
+		public void mouseExited(MouseEvent e){}
+	}
+
+	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+	private void scrollContinuously(boolean up)
+	{
+		while(scrollContinuously)
+		{
+			if(up)
+			{
+				int scrollIncrement = Strudel.winMain.mainCanvas.getHeight();
+				int newCenterPoint = gMapSet.centerPoint  - scrollIncrement;
+				Strudel.winMain.mainCanvas.scroll(true, gMapSet, scrollIncrement);
+			}
+			else
+			{
+				int scrollIncrement = Strudel.winMain.mainCanvas.getHeight();
+				int newCenterPoint = gMapSet.centerPoint + scrollIncrement;
+				Strudel.winMain.mainCanvas.scroll(false, gMapSet, scrollIncrement);
+			}
+		}
+	}
+
+	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 }

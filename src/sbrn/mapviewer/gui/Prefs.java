@@ -30,6 +30,9 @@ public class Prefs extends XMLPreferences
 	//a boolean indicating whether we need to show the "max zoom level reached " taskdialog when user has pan zoomed to the max
 	public static boolean showMaxZoomLevelMessage = true;
 
+	//a boolean indicating whether we need to show the "chromos rendered as one" taskdialog when a user requests the overview dialog to be displayed
+	public static boolean showRenderAsOneMessage = true;
+
 	//this boolean is set by the user through a button and indicates a global preference for antialiased or plain darwing styles
 	public static boolean userPrefAntialias = false;
 

@@ -10,7 +10,7 @@ public class Constants
 	public static final int MAX_ZOOM_FACTOR = 300;
 
 	//the number of distance markers we want to draw on a chromosome -- fixed regardless of zoom factor
-	public static final int  numDistanceMarkers = 25;
+	public static final int  numDistanceMarkers = 30;
 
 	//the maximum curvature coefficient for the links
 	//this determines the shape of the curve, if any
@@ -47,4 +47,16 @@ public class Constants
 	public static final String manual1 = "http://bioinf.scri.ac.uk/strudel/help/controls.shtml";
 	public static final String manual2 = "http://bioinf.scri.ac.uk/strudel/help/view.shtml";
 	public static final String manual3= "http://bioinf.scri.ac.uk/strudel/help/exploration.shtml";
+
+	//a zoom factor value above which we can draw all  features
+	//this is to reduce the amount of clutter on screen
+	public static final float thresholdDistMarkerPainting = 5;
+
+	//distance marker drawing metrics
+	public static final int distMarkerFontHeight = 9;
+	public static final int distMarkerVerticalGap = 1;
+
+	//chromosome index label height
+	public static final int chromoIndexFontHeight = 12;
+
 }

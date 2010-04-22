@@ -86,16 +86,11 @@ public class ClickZoomAnimator extends Thread
 			}
 		}
 
-
 		//if we have not reached the max zoom factor with this we need to do one more zoom adjust
 		//explicitly here to make sure we have all the final intended values and have not fallen short
 		//of these due to rounding errors etc.
 		if(selectedSet.zoomFactor != finalZoomFactor)
 			zoomHandler.adjustZoom(finalZoomFactor, selectedMap, Math.round(finalChromoHeight/2.0f));
-
-		//enable drawing of markers provided we have zoomed in, not out
-		if (selectedSet.zoomFactor > 1)
-			selectedSet.thresholdAllMarkerPainting = selectedSet.zoomFactor;
 
 		//turn drawing of map index back on
 		selectedMap.drawChromoIndex = true;

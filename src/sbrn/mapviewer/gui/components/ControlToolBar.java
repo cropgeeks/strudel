@@ -152,16 +152,12 @@ public class ControlToolBar extends JToolBar implements ActionListener, ItemList
 		bInfo =  (JButton) Utils.getButton(false, "", "About Strudel", Icons.getIcon("INFO"), Actions.about);
 		bResetAll =  (JButton) Utils.getButton(false, "Reset", "Reset display", Icons.getIcon("RESET"), Actions.reset);
 		bColours = (JButton) Utils.getButton(false, "", "Pick between, and customise, two colour schemes", Icons.getIcon("COLOURS"), Actions.customiseColours);
-		bConfigureView = (JButton) Utils.getButton(false, "", "Configure view settings", Icons.getIcon("CONFIGUREVIEW"), this, false);
+		bConfigureView = (JButton) Utils.getButton(false, "", "Configure view settings", Icons.getIcon("CONFIGUREVIEW"), Actions.configureViewSettings);
 	}
 
 	public void actionPerformed(ActionEvent e)
 	{
-		if(e.getSource() == bConfigureView)
-		{
-			Strudel.winMain.configureViewSettingsDialog.setLocationRelativeTo(Strudel.winMain);
-			Strudel.winMain.configureViewSettingsDialog.setVisible(true);
-		}
+
 	}
 
 	private void addSeparator(boolean separator)

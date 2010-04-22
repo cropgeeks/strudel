@@ -198,7 +198,7 @@ public class MainCanvas extends JPanel
 			// for each chromosome in the genome
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
 			{
-				if(gChromoMap.isShowingOnCanvas)
+				if(gChromoMap.isShowingOnCanvas && !gChromoMap.inversionInProgress && gChromoMap.currentHeight >= (getHeight()/2))
 				{
 					gChromoMap.drawDistanceMarkers(g2);
 				}
@@ -329,7 +329,7 @@ public class MainCanvas extends JPanel
 			}
 		}
 		// start drawing at minus half the total height of the entire genome plus half the canvasheight
-		currentY = -(gMapSet.totalY / 2) + canvasHeight / 2 - (gMapSet.centerPoint - (gMapSet.totalY / 2));
+		currentY =  -(gMapSet.totalY / 2) + canvasHeight / 2 - (gMapSet.centerPoint - (gMapSet.totalY / 2));
 
 		return currentY;
 	}
@@ -374,53 +374,62 @@ public class MainCanvas extends JPanel
 	private void drawMaps(GMapSet gMapSet,Graphics2D g2, int currentY)
 	{
 
-		// now paint the chromosomes in this genome
-		// for each chromosome in the genome
-		for (GChromoMap gChromoMap : gMapSet.gMaps)
+//		System.out.println("drawing maps for mapset " + gMapSet.name);
+		try
 		{
-			// we use the same x position for all chromosomes in this genome
-			int x = Math.round(gMapSet.xPosition);
-
-			// the map draws itself from 0,0 always but we need move the origin of the graphics object to the actual
-			// coordinates where we want things drawn
-			g2.translate(x, currentY);
-
-			// need to set the current height and width and coords on the chromomap before we draw it
-			// this is purely so we have it stored somewhere
-			gChromoMap.x = x;
-			gChromoMap.y = currentY;
-			gChromoMap.width = chromoWidth;
-			// update its bounding rectangle (used for hit detection)
-			gChromoMap.boundingRectangle.setBounds(gChromoMap.x, gChromoMap.y,
-							gChromoMap.width, gChromoMap.currentHeight);
-
-			if (canvasBounds.contains(gChromoMap.boundingRectangle) || canvasBounds.intersects(gChromoMap.boundingRectangle))
+			// now paint the chromosomes in this genome
+			// for each chromosome in the genome
+			for (GChromoMap gChromoMap : gMapSet.gMaps)
 			{
-				gChromoMap.isShowingOnCanvas = true;
-				gChromoMap.isFullyShowingOnCanvas = canvasBounds.contains(gChromoMap.boundingRectangle);
+				// we use the same x position for all chromosomes in this genome
+				int x = Math.round(gMapSet.xPosition);
+
+				// the map draws itself from 0,0 always but we need move the origin of the graphics object to the actual
+				// coordinates where we want things drawn
+				g2.translate(x, currentY);
+
+				// need to set the current height and width and coords on the chromomap before we draw it
+				// this is purely so we have it stored somewhere
+				gChromoMap.x = x;
+				gChromoMap.y = currentY;
+				gChromoMap.width = chromoWidth;
+				// update its bounding rectangle (used for hit detection)
+				gChromoMap.boundingRectangle.setBounds(gChromoMap.x, gChromoMap.y,
+								gChromoMap.width, gChromoMap.currentHeight);
+
+				if (canvasBounds.contains(gChromoMap.boundingRectangle) || canvasBounds.intersects(gChromoMap.boundingRectangle))
+				{
+					gChromoMap.isShowingOnCanvas = true;
+					gChromoMap.isFullyShowingOnCanvas = canvasBounds.contains(gChromoMap.boundingRectangle);
+				}
+				else
+				{
+					gChromoMap.isShowingOnCanvas = false;
+				}
+
+				//check whether the arrays that hold the data for drawing features etc have been inited
+				//if not, do it now (only needs to be done here once, at startup)
+				if (!gChromoMap.arraysInitialized)
+					gChromoMap.initArrays();
+
+				//if the map is meant to be visible on the canvas at this time
+				if (gChromoMap.isShowingOnCanvas)
+				{
+					// get the map to draw itself (from 0,0 always)
+					gChromoMap.paintMap(g2);
+				}
+
+				// now move the graphics object's origin back to 0,0 to preserve the overall coordinate system
+				g2.translate(-x, -currentY);
+
+				// increment the y position so we can draw the next map
+				currentY += gChromoMap.currentHeight + gMapSet.chromoSpacing;
 			}
-			else
-			{
-				gChromoMap.isShowingOnCanvas = false;
-			}
-
-			//check whether the arrays that hold the data for drawing features etc have been inited
-			//if not, do it now (only needs to be done here once, at startup)
-			if (!gChromoMap.arraysInitialized)
-				gChromoMap.initArrays();
-
-			//if the map is meant to be visible on the canvas at this time
-			if (gChromoMap.isShowingOnCanvas)
-			{
-				// get the map to draw itself (from 0,0 always)
-				gChromoMap.paintMap(g2);
-			}
-
-			// now move the graphics object's origin back to 0,0 to preserve the overall coordinate system
-			g2.translate(-x, -currentY);
-
-			// increment the y position so we can draw the next map
-			currentY += gChromoMap.currentHeight + gMapSet.chromoSpacing;
+		}
+		catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -452,10 +461,7 @@ public class MainCanvas extends JPanel
 	private void drawMapIndex(Graphics2D g2, GChromoMap gChromoMap)
 	{
 		//font stuff
-		int fontSize = Math.round(WinMain.mainCanvas.getHeight() / 40);
-		//check the font size is not greater than the chromosome height
-		if(gChromoMap.currentHeight < fontSize)
-			fontSize = gChromoMap.currentHeight -1;
+		int fontSize = Constants.chromoIndexFontHeight;
 
 		//set the font
 		Font mapLabelFont = new Font("Arial", Font.BOLD, fontSize);
@@ -564,7 +570,7 @@ public class MainCanvas extends JPanel
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	//calculates the initial map sizes for all mapsets
-	private void initMapSets()
+	public void initMapSets()
 	{
 		for(GMapSet gMapSet : Strudel.winMain.dataContainer.gMapSets)
 		{

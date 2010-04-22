@@ -28,6 +28,7 @@ public class Actions
 	public static AbstractAction customiseColours;
 	public static AbstractAction configureDatasets;
 	public static AbstractAction reset;
+
 	// View Settings menu actions
 	public static AbstractAction viewSettings;
 	public static AbstractAction showHint;
@@ -35,6 +36,9 @@ public class Actions
 	public static AbstractAction filterLinks;
 	public static AbstractAction showDistanceMarkers;
 	public static AbstractAction hideUnlinkedFeatures;
+	public static AbstractAction configureViewSettings;
+	public static AbstractAction scaleChromosomes;
+
 	// Link shape menu actions
 	public static AbstractAction linkShape;
 	public static AbstractAction linkCurved;
@@ -153,6 +157,18 @@ public class Actions
 			}
 		};
 
+		configureViewSettings = new AbstractAction("Configure view settings") {
+			public void actionPerformed(ActionEvent e) {
+				winMain.mView.configureViewSettings();
+			}
+		};
+
+		scaleChromosomes = new AbstractAction("Scale chromosomes") {
+			public void actionPerformed(ActionEvent e) {
+				winMain.mView.scaleChromosomes();
+			}
+		};
+
 		linkCurved = new AbstractAction("Curved") {
 			public void actionPerformed(ActionEvent e) {
 				winMain.mView.linkShape(Constants.LINKTYPE_CURVED);
@@ -214,6 +230,7 @@ public class Actions
 		showDistanceMarkers.putValue(SELECTED_KEY, Prefs.showDistanceMarkers);
 		filterLinks.putValue(SELECTED_KEY, Prefs.drawOnlyLinksToVisibleFeatures);
 		hideUnlinkedFeatures.putValue(SELECTED_KEY, Prefs.hideUnlinkedFeatures);
+		scaleChromosomes.putValue(SELECTED_KEY, Prefs.scaleChromosByRelativeSize);
 
 		linkCurved.putValue(SELECTED_KEY, Prefs.linkShape == Constants.LINKTYPE_CURVED);
 		linkStraight.putValue(SELECTED_KEY, Prefs.linkShape == Constants.LINKTYPE_STRAIGHT);
@@ -242,6 +259,7 @@ public class Actions
 		filterLinks.setEnabled(false);
 		hideUnlinkedFeatures.setEnabled(false);
 		showDistanceMarkers.setEnabled(false);
+		scaleChromosomes.setEnabled(false);
 		linkCurved.setEnabled(false);
 		linkStraight.setEnabled(false);
 		linkAngled.setEnabled(false);
@@ -274,6 +292,7 @@ public class Actions
 		filterLinks.setEnabled(true);
 		hideUnlinkedFeatures.setEnabled(true);
 		showDistanceMarkers.setEnabled(true);
+		scaleChromosomes.setEnabled(true);
 		linkCurved.setEnabled(true);
 		linkStraight.setEnabled(true);
 		linkAngled.setEnabled(true);

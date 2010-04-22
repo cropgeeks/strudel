@@ -2,6 +2,7 @@ package sbrn.mapviewer.io;
 
 import java.io.*;
 import sbrn.mapviewer.*;
+import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.components.WinMain;
 import sbrn.mapviewer.gui.dialog.*;
@@ -13,6 +14,9 @@ public class DataLoadUtils
 
 	public static void loadDataInThread(String inputFileName, boolean commandLineLoad)
 	{
+		//make sure we set this flag back to false if we are loading data on top of an existing set
+		Strudel.winMain.fatController.mapSetsInited = false;
+
 		//first check that we have at least one pointer at a file with target feature data -- the bare minimum to run this application
 		//missing target data file
 

@@ -96,9 +96,6 @@ public class GChromoMap implements Comparable
 	public boolean highlightChromomapRegion = false;
 	public float highlightedRegionStart, highlightedRegionEnd;
 
-	//the zoom factor above which we want to display distance markers on the chromosomes
-	float distanceMarkerZoomThreshold;
-
 	// if true, paint a rectangle to indicate the fact that we are panning over a region we want to select for zooming in to
 	public boolean drawSelectionRect = false;
 	//these are the relevant coordinates for this
@@ -111,10 +108,6 @@ public class GChromoMap implements Comparable
 
 	//a boolean to indicate whether we should always display labels, regardless of zoom factor
 	public boolean alwaysShowAllLabels = false;
-//
-//	//this is the y coord for the top left corner of this map on the canvas (not screen!)
-//	//may be off the visible screen
-//	public int yOnCanvas;
 
 	//the vertical extent of the genome above the gMap in pixels
 	//this includes the spaces between chromosomes and the chromosomes themselves
@@ -161,14 +154,12 @@ public class GChromoMap implements Comparable
 			//this is the colour of the centre of the chromo -- needs to be brighter so we can get the 3d effect
 			centreColour = colour.brighter().brighter().brighter().brighter();
 
-			distanceMarkerZoomThreshold = owningSet.thresholdAllMarkerPainting;
-
 			//adjust the y in case we are inverting
 			multiplier = Math.abs(((Math.abs(angleFromVertical / 90.0f)) -1.0f) *0.5f);
 			currentY = Math.round(multiplier * currentHeight);
 
 			//adjust the  height according to the angle if necessary
-//			currentHeight = (int)(currentHeight * Math.abs(angleFromVertical / 90.0f));
+			//			currentHeight = (int)(currentHeight * Math.abs(angleFromVertical / 90.0f));
 
 			//adjust the colours according to the angle to create a pseudo-3d effect when inverting
 			//first get the main colour and extract its hsb values
@@ -292,119 +283,114 @@ public class GChromoMap implements Comparable
 	public void drawDistanceMarkers(Graphics2D g2)
 	{
 		//font stuff
-		int fontHeight = 9;
-		g2.setFont(new Font("Sans-serif", Font.PLAIN, fontHeight));
+		g2.setFont(new Font("Sans-serif", Font.PLAIN, Constants.distMarkerFontHeight));
 		FontMetrics fm = g2.getFontMetrics();
 
-		if (owningSet.zoomFactor >=  distanceMarkerZoomThreshold && !inversionInProgress)
+		//the number of markers we want to draw
+		float numDistanceMarkers = Constants.numDistanceMarkers;
+
+		// this is the number of pixels by which the markers get spaced
+		float interval = currentHeight / numDistanceMarkers;
+		float currentY = y;
+		if(isFullyInverted)
+			currentY = y + currentHeight;
+
+		// this is the numerical amount by which we want to separate the marker values
+		// this gets scaled by the maximum value at the chromosome end and can be in
+		// centiMorgan or in base pairs
+		float increment = chromoMap.getStop() / numDistanceMarkers;
+
+		// the current marker value we want to print
+		float currentVal = 0;
+
+		// need to format the number appropriately
+		NumberFormat nf = NumberFormat.getInstance();
+
+		// check first whether we are dealing with ints or floating point numbers for the chromosome distances
+		if (chromoMap.getStop() % 1 == 0) // this is an int
 		{
-			//the number of markers we want to draw at any one time, regardless of our zoom level
-			float numMarkers = Constants.numDistanceMarkers;
+			nf.setMaximumFractionDigits(0);
+		}
+		else// it's a float
+		{
+			// we want two decimals here
+			nf.setMaximumFractionDigits(2);
+			nf.setMinimumFractionDigits(2);
+		}
 
-			// this is the number of pixels by which the markers get spaced
-			float interval = currentHeight / numMarkers;
-			float currentY = y;
+		// set the colour to white
+		g2.setColor(Colors.distanceMarkerColour);
+
+		// decide where to place the label on x
+		// on the leftmost genome we want the label on the left, rightmost genome on the right
+		boolean labelOnRight = false;
+		int genomeIndex = Strudel.winMain.dataContainer.gMapSets.indexOf(owningSet);
+
+		//we want the label on the right if the owning genome is  the last genome on the right
+		if(genomeIndex == (Strudel.winMain.dataContainer.gMapSets.size()-1))
+		{
+			labelOnRight = true;
+		}
+
+		//x coords
+		int labelX = 0; // this is where the label is drawn from
+		int lineStartX = 0; // this is where the line to the label is drawn from
+		int lineEndX = 0; // the label connects to the line here
+
+		// the amount by which we want to move the label away from the chromosome (in pixels)
+		int lineLength = 8;
+		// the amount we want to separate the label and the line by, in pixels
+		int gap = 5;
+
+		//draw
+		for (int i = 0; i <= numDistanceMarkers; i++)
+		{
+			//the label we want to draw
+			String label = String.valueOf(nf.format(currentVal));
 			if(isFullyInverted)
-				currentY = y + currentHeight;
+				label = String.valueOf(nf.format(Math.abs(currentVal)));
 
-			// this is the numerical amount by which we want to separate the marker values
-			// this gets scaled by the maximum value at the chromosome end and can be in
-			// centiMorgan or in base pairs
-			float increment = chromoMap.getStop() / numMarkers;
+			int stringWidth = fm.stringWidth(label);
 
-			// the current marker value we want to print
-			float currentVal = 0;
-
-			// need to format the number appropriately
-			NumberFormat nf = NumberFormat.getInstance();
-
-			// check first whether we are dealing with ints or floating point numbers for the chromosome distances
-			if (chromoMap.getStop() % 1 == 0) // this is an int
+			//this is what we do if the label needs to be on the right
+			if(labelOnRight)
 			{
-				nf.setMaximumFractionDigits(0);
+				lineStartX =  x + width;
+				lineEndX =  lineStartX + lineLength;
+				labelX = lineEndX + gap;
 			}
-			else// it's a float
+			else//label on left
 			{
-				// we want two decimals here
-				nf.setMaximumFractionDigits(2);
-				nf.setMinimumFractionDigits(2);
+				labelX = x - lineLength - gap - stringWidth;
+				lineStartX =  x-1;
+				lineEndX =  x- lineLength;
 			}
 
-			// set the colour to white
+			//y coord
+			int labelY = Math.round(currentY) + Constants.distMarkerFontHeight / 2;
+
+			//fill a continuous rectangle next to the chromosome as a background, with the height of the chromosome and the width of the largest label
+			int horizontalGap = 3;
+			int arcSize = Math.round(Constants.distMarkerFontHeight/1.5f);
+			g2.setColor(Colors.distanceMarkerBackgroundColour);
+			g2.fillRoundRect(labelX - horizontalGap, labelY - Constants.distMarkerFontHeight, stringWidth + horizontalGap*2, Constants.distMarkerFontHeight + Constants.distMarkerVerticalGap, arcSize, arcSize);
+
+			// draw a line from the marker to the label
 			g2.setColor(Colors.distanceMarkerColour);
+			g2.drawLine(lineStartX, Math.round(currentY), lineEndX, Math.round(currentY));
+			//draw the label
+			g2.drawString(label, labelX, labelY);
 
-			// decide where to place the label on x
-			// on the leftmost genome we want the label on the left, rightmost genome on the right
-			boolean labelOnRight = false;
-			int genomeIndex = Strudel.winMain.dataContainer.gMapSets.indexOf(owningSet);
-
-			//we want the label on the right if the owning genome is  the last genome on the right
-			if(genomeIndex == (Strudel.winMain.dataContainer.gMapSets.size()-1))
+			// increment/decrement
+			if(isFullyInverted)
 			{
-				labelOnRight = true;
+				currentY -= interval;
+				currentVal -= increment;
 			}
-
-			//x coords
-			int labelX = 0; // this is where the label is drawn from
-			int lineStartX = 0; // this is where the line to the label is drawn from
-			int lineEndX = 0; // the label connects to the line here
-
-			// the amount by which we want to move the label away from the chromosome (in pixels)
-			int lineLength = 8;
-			// the amount we want to separate the label and the line by, in pixels
-			int gap = 5;
-
-			//draw
-			for (int i = 0; i <= numMarkers; i++)
+			else
 			{
-				//the label we want to draw
-				String label = String.valueOf(nf.format(currentVal));
-				if(isFullyInverted)
-					label = String.valueOf(nf.format(Math.abs(currentVal)));
-
-				int stringWidth = fm.stringWidth(label);
-
-				//this is what we do if the label needs to be on the right
-				if(labelOnRight)
-				{
-					lineStartX =  x + width;
-					lineEndX =  lineStartX + lineLength;
-					labelX = lineEndX + gap;
-				}
-				else//label on left
-				{
-					labelX = x - lineLength - gap - stringWidth;
-					lineStartX =  x-1;
-					lineEndX =  x- lineLength;
-				}
-
-				//y coord
-				int labelY = Math.round(currentY) + fontHeight / 2;
-
-				//fill a continuous rectangle next to the chromosome as a background, with the height of the chromosome and the width of the largest label
-				int horizontalGap = 3;
-				int verticalGap = 2;
-				int arcSize = Math.round(fontHeight/1.5f);
-				g2.setColor(Colors.distanceMarkerBackgroundColour);
-				g2.fillRoundRect(labelX - horizontalGap, labelY - fontHeight, stringWidth + horizontalGap*2, fontHeight + verticalGap, arcSize, arcSize);
-
-				// draw a line from the marker to the label
-				g2.setColor(Colors.distanceMarkerColour);
-				g2.drawLine(lineStartX, Math.round(currentY), lineEndX, Math.round(currentY));
-				//draw the label
-				g2.drawString(label, labelX, labelY);
-
-				// increment/decrement
-				if(isFullyInverted)
-				{
-					currentY -= interval;
-					currentVal -= increment;
-				}
-				else
-				{
-					currentY += interval;
-					currentVal += increment;
-				}
+				currentY += interval;
+				currentVal += increment;
 			}
 		}
 	}

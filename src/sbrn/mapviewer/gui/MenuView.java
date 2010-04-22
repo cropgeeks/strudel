@@ -60,14 +60,12 @@ public class MenuView
 			winMain.hintPanel.setVisible(false);
 		winMain.mainCanvas.updateCanvas(true);
 
-		winMain.menuBar.getMShowHint().setSelected(Prefs.showHintPanel);
 		Strudel.winMain.configureViewSettingsDialog.viewSettingsPanel.getHintPanelCheckBox().setSelected(Prefs.showHintPanel);
 	}
 
 	public void antialiasedDraw()
 	{
 		Prefs.userPrefAntialias = !Prefs.userPrefAntialias;
-		winMain.menuBar.getMAntialiasedDraw().setSelected(Prefs.userPrefAntialias);
 		Strudel.winMain.mainCanvas.updateCanvas(true);
 	}
 
@@ -87,6 +85,20 @@ public class MenuView
 	{
 		Prefs.hideUnlinkedFeatures = !Prefs.hideUnlinkedFeatures;
 		winMain.fatController.initialisePositionArrays();
+		Strudel.winMain.mainCanvas.updateCanvas(true);
+	}
+
+	public void configureViewSettings()
+	{
+		Strudel.winMain.configureViewSettingsDialog.setLocationRelativeTo(Strudel.winMain);
+		Strudel.winMain.configureViewSettingsDialog.setVisible(true);
+	}
+
+	public void scaleChromosomes()
+	{
+		Prefs.scaleChromosByRelativeSize = !Prefs.scaleChromosByRelativeSize;
+		Strudel.winMain.fatController.resetMainCanvasView();
+		Strudel.winMain.mainCanvas.initMapSets();
 		Strudel.winMain.mainCanvas.updateCanvas(true);
 	}
 

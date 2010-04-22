@@ -33,20 +33,7 @@ public class WinMainMenuBar extends JMenuBar
 	private JMenuItem mColourChooser;
 	private JMenuItem mConfigureDatasets;
 	private JMenuItem mReset;
-
-	// The components of the view settings sub-menu
-	private JMenu mViewSettings;
-	private JMenuItem mShowHint;
-	private JMenuItem mAntialiasedDraw;
-	private JMenuItem mFilterLinks;
-	private JMenuItem mShowDistanceMarkers;
-	private JMenuItem hideUnlinkedFeatures;
-
-	// The components of the link shape sub-menu
-	private JMenu mLinkShape;
-	private JMenuItem mCurved;
-	private JMenuItem mStraight;
-	private JMenuItem mAngled;
+	private JMenuItem mConfigureViewSettings;
 
 	// The components of the about menu
 	private JMenu mAbout;
@@ -123,22 +110,7 @@ public class WinMainMenuBar extends JMenuBar
 		mColourChooser = getItem(Actions.customiseColours, "Customise colours", KeyEvent.VK_C, Strudel.ctrlMenuShortcut);
 		mConfigureDatasets = getItem(Actions.configureDatasets, "Configure datasets", 0, 0);
 		mReset = getItem(Actions.reset, "Reset", 0, 0);
-
-		mViewSettings = new JMenu(Actions.viewSettings);
-		mViewSettings.setMnemonic('S');
-
-		mShowHint = getCheckedItem(Actions.showHint, "Show hint panel", KeyEvent.VK_H, Strudel.ctrlMenuShortcut);
-		mAntialiasedDraw = getCheckedItem(Actions.antialiasedDraw, "Draw antialiased", KeyEvent.VK_A, Strudel.ctrlMenuShortcut);
-		mFilterLinks = getCheckedItem(Actions.filterLinks, "Filter links", 0, 0);
-		mShowDistanceMarkers = getCheckedItem(Actions.showDistanceMarkers, "Show distance markers", KeyEvent.VK_D, Strudel.ctrlMenuShortcut);
-		hideUnlinkedFeatures = getCheckedItem(Actions.hideUnlinkedFeatures, "Hide unlinked features", 0, 0);
-
-		mLinkShape = new JMenu(Actions.linkShape);
-		mLinkShape.setMnemonic('L');
-
-		mCurved = getCheckedItem(Actions.linkCurved, "Curved", 0, Strudel.ctrlMenuShortcut);
-		mStraight = getCheckedItem(Actions.linkStraight, "Straight", 0, Strudel.ctrlMenuShortcut);
-		mAngled = getCheckedItem(Actions.linkAngled, "Angled", 0, Strudel.ctrlMenuShortcut);
+		mConfigureViewSettings = getItem(Actions.configureViewSettings, "Configure view settings", 0, 0);
 
 		mView.add(mShowOverview);
 		mView.addSeparator();
@@ -146,23 +118,8 @@ public class WinMainMenuBar extends JMenuBar
 		mView.add(mConfigureDatasets);
 		mView.addSeparator();
 		mView.add(mReset);
-		mView.addSeparator();
-		mView.add(mViewSettings);
-		mViewSettings.add(mShowHint);
-		mViewSettings.add(mAntialiasedDraw);
-		mViewSettings.add(mFilterLinks);
-		mViewSettings.add(mShowDistanceMarkers);
-		mViewSettings.add(hideUnlinkedFeatures);
-		mView.add(mLinkShape);
+		mView.add(mConfigureViewSettings);
 
-		ButtonGroup grp = new ButtonGroup();
-		grp.add(mCurved);
-		grp.add(mStraight);
-		grp.add(mAngled);
-
-		mLinkShape.add(mCurved);
-		mLinkShape.add(mStraight);
-		mLinkShape.add(mAngled);
 		add(mView);
 	}
 
@@ -243,9 +200,4 @@ public class WinMainMenuBar extends JMenuBar
 		mRecentFiles.setEnabled(mRecentFiles.getItemCount() > 0);
 	}
 
-	public JMenuItem getMShowHint()
-		{	return mShowHint;	}
-
-	public JMenuItem getMAntialiasedDraw()
-		{	return mAntialiasedDraw;	}
 }

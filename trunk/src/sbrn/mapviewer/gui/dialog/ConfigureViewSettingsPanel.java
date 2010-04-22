@@ -28,6 +28,7 @@ public class ConfigureViewSettingsPanel extends javax.swing.JPanel
 		distanceMarkerCheckbox.setSelected(Prefs.showDistanceMarkers);
 		hintPanelCheckBox.setSelected(Prefs.showHintPanel);
 		unlinkedFeaturesCheckbox.setSelected(Prefs.hideUnlinkedFeatures);
+		scaleChromosCheckbox.setSelected(Prefs.scaleChromosByRelativeSize);
 
 		//init the link shape radion buttons appropriately
 		switch (Prefs.linkShape)
@@ -60,6 +61,7 @@ public class ConfigureViewSettingsPanel extends javax.swing.JPanel
 		linkShapeStraightRButton = new javax.swing.JRadioButton(Actions.linkStraight);
 		linkShapeAngledRButton = new javax.swing.JRadioButton(Actions.linkAngled);
 		unlinkedFeaturesCheckbox = new javax.swing.JCheckBox(Actions.showDistanceMarkers);
+		scaleChromosCheckbox = new javax.swing.JCheckBox(Actions.showDistanceMarkers);
 
 		jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("View Settings:"));
 
@@ -142,17 +144,31 @@ public class ConfigureViewSettingsPanel extends javax.swing.JPanel
 			}
 		});
 
+		scaleChromosCheckbox.setAction(Actions.scaleChromosomes);
+		scaleChromosCheckbox.addChangeListener(new javax.swing.event.ChangeListener()
+		{
+			public void stateChanged(javax.swing.event.ChangeEvent evt)
+			{
+				scaleChromosCheckboxstateChanged(evt);
+			}
+		});
+
 		javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
 		jPanel1.setLayout(jPanel1Layout);
-		jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 383, Short.MAX_VALUE).addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(jPanel1Layout.createSequentialGroup().addContainerGap().addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(jPanel1Layout.createSequentialGroup().addComponent(linkShapeCurvedRButton).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(linkShapeStraightRButton).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(linkShapeAngledRButton)).addComponent(hintPanelCheckBox).addComponent(antialiasCheckbox).addComponent(linkFilterCheckbox).addComponent(distanceMarkerCheckbox).addComponent(linkShapeLabel).addComponent(unlinkedFeaturesCheckbox)).addContainerGap(64, Short.MAX_VALUE))));
-		jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 206, Short.MAX_VALUE).addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(jPanel1Layout.createSequentialGroup().addContainerGap().addComponent(hintPanelCheckBox).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(antialiasCheckbox).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(linkFilterCheckbox).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(distanceMarkerCheckbox).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(unlinkedFeaturesCheckbox).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(linkShapeLabel).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(linkShapeCurvedRButton).addComponent(linkShapeStraightRButton).addComponent(linkShapeAngledRButton)).addContainerGap(25, Short.MAX_VALUE))));
+		jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 383, Short.MAX_VALUE).addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(jPanel1Layout.createSequentialGroup().addContainerGap().addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(jPanel1Layout.createSequentialGroup().addComponent(linkShapeCurvedRButton).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(linkShapeStraightRButton).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(linkShapeAngledRButton)).addComponent(hintPanelCheckBox).addComponent(antialiasCheckbox).addComponent(linkFilterCheckbox).addComponent(distanceMarkerCheckbox).addComponent(linkShapeLabel).addComponent(unlinkedFeaturesCheckbox).addComponent(scaleChromosCheckbox)).addContainerGap(64, Short.MAX_VALUE))));
+		jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 231, Short.MAX_VALUE).addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(jPanel1Layout.createSequentialGroup().addContainerGap().addComponent(hintPanelCheckBox).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(antialiasCheckbox).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(linkFilterCheckbox).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(distanceMarkerCheckbox).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(unlinkedFeaturesCheckbox).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(scaleChromosCheckbox).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(linkShapeLabel).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(linkShapeCurvedRButton).addComponent(linkShapeStraightRButton).addComponent(linkShapeAngledRButton)).addContainerGap(25, Short.MAX_VALUE))));
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
 		this.setLayout(layout);
 		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 417, Short.MAX_VALUE).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addGap(0, 9, Short.MAX_VALUE).addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addGap(0, 9, Short.MAX_VALUE))));
-		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 253, Short.MAX_VALUE).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addGap(0, 7, Short.MAX_VALUE).addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addGap(0, 8, Short.MAX_VALUE))));
+		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 278, Short.MAX_VALUE).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addGap(0, 7, Short.MAX_VALUE).addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addGap(0, 8, Short.MAX_VALUE))));
 	}// </editor-fold>
 	//GEN-END:initComponents
+
+	void scaleChromosCheckboxstateChanged(javax.swing.event.ChangeEvent evt)
+	{
+		// TODO add your handling code here:
+	}
 
 	private void unlinkedFeaturesCheckboxstateChanged(javax.swing.event.ChangeEvent evt)
 	{
@@ -171,6 +187,7 @@ public class ConfigureViewSettingsPanel extends javax.swing.JPanel
 	private javax.swing.JRadioButton linkShapeCurvedRButton;
 	private javax.swing.JLabel linkShapeLabel;
 	private javax.swing.JRadioButton linkShapeStraightRButton;
+	private javax.swing.JCheckBox scaleChromosCheckbox;
 	private javax.swing.JCheckBox unlinkedFeaturesCheckbox;
 
 	// End of variables declaration//GEN-END:variables

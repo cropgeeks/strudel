@@ -313,29 +313,37 @@ public class WinMain extends JFrame
 	//needs to be done when users load different datasets in succession
 	public void reinitialiseDependentComponents()
 	{
-		//remove existing components
-		zoomControlAndGenomelabelContainer.remove(zoomControlContainerPanel);
-		for(OverviewCanvas overviewCanvas : overviewCanvases)
+		try
 		{
-			overviewDialog.remove(overviewCanvas);
+			//remove existing components
+			zoomControlAndGenomelabelContainer.remove(zoomControlContainerPanel);
+			for(OverviewCanvas overviewCanvas : overviewCanvases)
+			{
+				overviewDialog.remove(overviewCanvas);
+			}
+
+			//clear lists with the corresponding objects
+			zoomControlPanels.clear();
+			overviewCanvases.clear();
+
+			//reinstate everything
+			//the panels with the zoom control sliders
+			initZoomControls();
+			foundFeaturesTableControlPanel.setupGenomeFilterCombo();
+			zoomControlAndGenomelabelContainer.add(zoomControlContainerPanel, BorderLayout.CENTER);
+
+			initOverviewDialog();
+
+			Strudel.winMain.ffInRangeDialog.ffInRangePanel.initRemainingComponents();
+
+			//the labels with the genome names need to be updated
+			genomeLabelPanel.repaint();
 		}
-
-		//clear lists with the corresponding objects
-		zoomControlPanels.clear();
-		overviewCanvases.clear();
-
-		//reinstate everything
-		//the panels with the zoom control sliders
-		initZoomControls();
-		foundFeaturesTableControlPanel.setupGenomeFilterCombo();
-		zoomControlAndGenomelabelContainer.add(zoomControlContainerPanel, BorderLayout.CENTER);
-
-		initOverviewDialog();
-
-		Strudel.winMain.ffInRangeDialog.ffInRangePanel.initRemainingComponents();
-
-		//the labels with the genome names need to be updated
-		genomeLabelPanel.repaint();
+		catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 

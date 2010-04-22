@@ -9,6 +9,7 @@ import javax.swing.event.*;
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.entities.*;
+import sbrn.mapviewer.gui.handlers.*;
 import scri.commons.gui.*;
 
 public class ZoomControlPanel extends JToolBar implements ChangeListener, ActionListener, MouseListener
@@ -22,6 +23,8 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 	GMapSet gMapSet;
 	public JToggleButton showAllMarkersButton;
 	JButton scrollUpButton, scrollDownButton;
+	JSpinner maxZoomSpinner;
+	FormattedTextFieldVerifier maxZoomSpinnerInputVerifier;
 
 	boolean scrollContinuously = false;
 
@@ -47,7 +50,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 	private void setupComponents(boolean addFiller)
 	{
 		//settings for the slider
-		int sliderMax = Constants.MAX_ZOOM_FACTOR;
+		int sliderMax = gMapSet.maxZoomFactor;
 		int sliderMin = 1;
 		int sliderInitialVal = 1;
 
@@ -64,6 +67,19 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		zoomSlider.setPaintTicks(true);
 		zoomSlider.setMinorTickSpacing(sliderMax/20);
 		zoomSlider.setMajorTickSpacing(sliderMax/10);
+
+		//this control allows users to choose their own max zoom value
+		maxZoomSpinner = new JSpinner();
+		maxZoomSpinner.setValue(gMapSet.maxZoomFactor);
+		maxZoomSpinner.setMaximumSize(new Dimension(100, 20));
+
+		maxZoomSpinnerInputVerifier = new FormattedTextFieldVerifier("The value entered here must be positive.",0, false);
+		((JSpinner.DefaultEditor) maxZoomSpinner.getEditor()).getTextField().setInputVerifier(maxZoomSpinnerInputVerifier);
+		maxZoomSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
+			public void stateChanged(javax.swing.event.ChangeEvent evt) {
+				maxZoomSpinnerStateChanged(evt);
+			}
+		});
 
 		//reset button
 		resetButton = new JButton(Icons.getIcon("RESET"));
@@ -96,11 +112,16 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 			add(Box.createHorizontalGlue());
 
 		//add the components
+		//all of these are zoom related
 		add(new JLabel("   "));
 		add(label);
+		add(new JLabel("  Max: "));
+		add(maxZoomSpinner);
 		add(new JLabel("   "));
 		add(zoomSlider);
+		add(new JLabel("   "));
 		add(resetButton);
+		//the rest of the components
 		add(showAllMarkersButton);
 		add(scrollUpButton);
 		add(scrollDownButton);
@@ -115,6 +136,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+	//called when the zoom slider has been moved
 	public void stateChanged(ChangeEvent e)
 	{
 		JSlider source = (JSlider) e.getSource();
@@ -125,6 +147,21 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		}
 	}
 
+	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	//called when the zoom value spinner has been used
+	private void maxZoomSpinnerStateChanged(javax.swing.event.ChangeEvent e)
+	{
+		System.out.println("max zoom changed for mapset " + gMapSet.name);
+		System.out.println("old value = " + gMapSet.maxZoomFactor);
+
+		JSpinner source = (JSpinner) e.getSource();
+		gMapSet.maxZoomFactor = (Integer)source.getValue();
+		zoomSlider.setMaximum(gMapSet.maxZoomFactor);
+		updateSlider();
+
+		System.out.println("new value = " + gMapSet.maxZoomFactor);
+	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -222,19 +259,27 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		{
 			if(up)
 			{
-				int scrollIncrement = Strudel.winMain.mainCanvas.getHeight();
-				int newCenterPoint = gMapSet.centerPoint  - scrollIncrement;
-				Strudel.winMain.mainCanvas.scroll(true, gMapSet, scrollIncrement);
+				Strudel.winMain.mainCanvas.scroll(true, gMapSet, Strudel.winMain.mainCanvas.getHeight());
 			}
 			else
 			{
-				int scrollIncrement = Strudel.winMain.mainCanvas.getHeight();
-				int newCenterPoint = gMapSet.centerPoint + scrollIncrement;
-				Strudel.winMain.mainCanvas.scroll(false, gMapSet, scrollIncrement);
+				Strudel.winMain.mainCanvas.scroll(false, gMapSet, Strudel.winMain.mainCanvas.getHeight());
 			}
 		}
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+	private void addSeparator(boolean separator)
+	{
+		if (SystemUtils.isMacOS())
+		{
+			add(new JLabel(" "));
+			if (separator)
+				add(new JLabel(" "));
+		}
+		else if (separator)
+			addSeparator();
+	}
+	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 }

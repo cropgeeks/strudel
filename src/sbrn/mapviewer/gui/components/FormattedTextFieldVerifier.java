@@ -10,13 +10,13 @@ import scri.commons.gui.*;
 public class FormattedTextFieldVerifier extends InputVerifier
 {
 
-	private final String negNumberMessage;
+	private final String errorMessage;
 	private final float threshold;
 	private final boolean isUpperThreshold;
 
-	public FormattedTextFieldVerifier(String negNumberMessage, float threshold, boolean isUpperThreshold)
+	public FormattedTextFieldVerifier(String errorMessage, float threshold, boolean isUpperThreshold)
 	{
-		this.negNumberMessage = negNumberMessage;
+		this.errorMessage = errorMessage;
 		this.threshold = threshold;
 		this.isUpperThreshold = isUpperThreshold;
 	}
@@ -47,7 +47,7 @@ public class FormattedTextFieldVerifier extends InputVerifier
 				else if(isUpperThreshold && (value <= threshold))
 					return true;
 
-				TaskDialog.error(negNumberMessage, "Close");
+				TaskDialog.error(errorMessage, "Close");
 				return false;
 			}
 		}

@@ -74,9 +74,6 @@ public class CanvasZoomHandler
 		//update zoom control position
 		Strudel.winMain.fatController.updateAllZoomControls();
 
-		//check whether we want to let the user switch on the distance markers
-		checkZoomForDistMarkerButton(selectedSet);
-
 		Strudel.winMain.mainCanvas.updateCanvas(true);
 	}
 
@@ -113,8 +110,8 @@ public class CanvasZoomHandler
 		float finalZoomFactor = mainCanvas.getHeight() / selectedMap.initialHeight;
 
 		//make sure this does not exceed the max zoom factor
-		if(finalZoomFactor > Constants.MAX_ZOOM_FACTOR)
-			finalZoomFactor = Constants.MAX_ZOOM_FACTOR;
+		if(finalZoomFactor > selectedSet.maxZoomFactor)
+			finalZoomFactor = selectedSet.maxZoomFactor;
 
 		// work out the chromo height and total genome height for when the new zoom factor will have been applied
 		int finalChromoHeight = (int) (selectedMap.initialHeight * finalZoomFactor);
@@ -167,6 +164,9 @@ public class CanvasZoomHandler
 	{
 		GMapSet selectedSet = selectedMap.owningSet;
 
+		//make sure the new zoom factor does not exceed the max allowed
+		if(newZoomFactor > selectedSet.maxZoomFactor)
+			newZoomFactor = selectedSet.maxZoomFactor;
 		//set the new zoom factor
 		selectedSet.zoomFactor = newZoomFactor;
 
@@ -186,9 +186,6 @@ public class CanvasZoomHandler
 
 		// update the genome centerpoint to the new percentage and update the scroller position
 		selectedSet.centerPoint = Math.round(newCenterPoint);
-
-		//check whether we want to let the user switch on the distance markers
-		checkZoomForDistMarkerButton(selectedSet);
 
 		//update overviews
 		Strudel.winMain.fatController.updateOverviewCanvases();
@@ -224,17 +221,6 @@ public class CanvasZoomHandler
 						bottomY, animate);
 	}
 
-	// -----------------------------------------------------------------------------------------------------------------------------------
-
-	//check whether we want to let the user switch on the distance markers
-	//the button for this should be disabled unless we are zoomed in beyond the level at which a chromosome fills the screen
-	private void checkZoomForDistMarkerButton(GMapSet selectedSet)
-	{
-//		if(selectedSet.zoomFactor >= selectedSet.singleChromoViewZoomFactor)
-//			Strudel.winMain.toolbar.bDistMarkers.setEnabled(true);
-//		else
-//			Strudel.winMain.toolbar.bDistMarkers.setEnabled(false);
-	}
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
 

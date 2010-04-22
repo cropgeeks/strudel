@@ -6,7 +6,7 @@ public class Constants
 	//size of the splitpane divider when visible
 	public static final int SPLITPANE_DIVIDER_SIZE = 7;
 
-	//the maximum zoom factor we will ever want to use
+	//the maximum zoom factor default setting
 	public static final int MAX_ZOOM_FACTOR = 300;
 
 	//the number of distance markers we want to draw on a chromosome -- fixed regardless of zoom factor

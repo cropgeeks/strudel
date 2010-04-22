@@ -79,8 +79,8 @@ public class GMapSet
 	//the longest map in this mapset
 	GChromoMap longestMap = null;
 
-	//this is true when we have more maps than we can render on canvas even with the minimum chromsome height
-//	private final boolean isOverSizeMapset = false;
+	//the max zoom factor for this mapset -- can be overridden by the user with the spinner control at the bottom of the screen
+	public int maxZoomFactor = Constants.MAX_ZOOM_FACTOR;
 
 	// ====================================c'tor========================================
 

@@ -10,6 +10,7 @@ public class Colors
 	public static Color invertedChromosomeColour = new Color(0,36,18);//green
 	public static Color invertedChromosomeHighlightColour = new Color(0,59,43);//light green
 	public static Color chromosomeHighlightColour = new Color(80,0,0); // red
+	public static Color chromosomeDimmedOutColour = new Color(120,120,120);
 
 	//colours for links
 	public static Color linkColour = new Color(120,120,120);

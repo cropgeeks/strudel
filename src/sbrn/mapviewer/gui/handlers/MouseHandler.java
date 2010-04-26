@@ -1,6 +1,8 @@
 package sbrn.mapviewer.gui.handlers;
 
+import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import sbrn.mapviewer.*;
@@ -122,6 +124,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 				Strudel.winMain.fatController.selectedMaps.clear();
 			}
 		}
+
 		//CTRL+click on a chromosome means display all links between this and all other clicked chromos
 		else if (isMetaClick(e) && !e.isShiftDown())
 		{
@@ -133,6 +136,17 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 				selectedMap.owningSet.wholeMapsetIsSelected  = false;
 				winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(selectedMap);
 			}
+		}
+
+		//Alt + drag allows repositioning of chromosomes
+		else if (e.isAltDown())
+		{
+			//this is all to do with chromosome dragging and repositioning
+			//get top l.h. Y coordinate of this rect
+			int topY = (int)selectedMap.boundingRectangle.getY();
+			winMain.fatController.draggedMap = selectedMap;
+			Strudel.winMain.fatController.draggedMapYOffset = mousePressedY - topY;
+			winMain.mainCanvas.dragMap(e);
 		}
 
 		Strudel.winMain.mainCanvas.updateCanvas(true);
@@ -172,6 +186,28 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			winMain.mainCanvas.zoomHandler.processPanZoomRequest(selectedMap, mousePressedY, e.getY(), true);
 		}
 
+
+		//this is what we do when Alt is down and the mouse was getting dragged
+		if(e.isAltDown())
+		{
+			//reposition the selected map
+			if(Strudel.winMain.fatController.draggedMap != null)
+			{
+				Utils.repositionDraggedMap(e);
+			}
+			else
+			{
+				GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, e.getX(), e.getY());
+				if(selectedMap != null)
+				{
+					Strudel.winMain.fatController.isCtrlClickSelection = true;
+					//also reset the wholeGenomeSelected flag
+					selectedMap.owningSet.wholeMapsetIsSelected  = false;
+					winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(selectedMap);
+				}
+			}
+		}
+
 		winMain.mainCanvas.drawSelectionRect = false;
 	}
 
@@ -190,10 +226,10 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		//the chromosome -- if any - this event pertains to (i.e. where on the canvas on y are we)
 		GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, (int)(gMapSet.xPosition), y);
 
-		//mouse is getting dragged without shift held down -- scroll the canvas up or down
+		//mouse is getting dragged without shift or Alt held down -- scroll the canvas up or down
 		//check whether all maps in the mapset are visible -- if yes, do not scroll
 		boolean allMapsVisible = gMapSet.getVisibleMaps().size() == gMapSet.gMaps.size();
-		if (!e.isShiftDown() & !allMapsVisible)
+		if (!e.isShiftDown() && !allMapsVisible && !e.isAltDown())
 		{
 			//include a time delay before dragging so we can prevent accidental drags that were in fact intended to be mouse clicks
 			long now = System.currentTimeMillis();
@@ -218,9 +254,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			lastMouseDragYPos = y;
 		}
 
-
 		// mouse is getting dragged  with SHIFT or CTRL-SHIFT down -- draw a rectangle for  selection (zooming/range selection)
-
 		//this is what we do for drawing a selection rectangle
 		if(e.isShiftDown() && isMetaClick(e))
 		{
@@ -292,6 +326,18 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			winMain.mainCanvas.updateCanvas(false);
 		}
 
+
+		//this is what we do when Alt is down and the mouse is getting dragged
+		if(e.isAltDown())
+		{
+			//reposition the selected map
+			if(selectedMap != null)
+			{
+				winMain.mainCanvas.dragMap(e);
+				Strudel.winMain.mainCanvas.updateCanvas(true);
+			}
+		}
+
 		// update the current drag positions
 		mouseDragPosX = e.getX();
 		mouseDragPosY = e.getY();
@@ -316,18 +362,43 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 
 		// work out in which direction we have moved the mouse
 		int notches = e.getWheelRotation();
-		//check whether all maps in the mapset are visible -- if yes, do not scroll
-		if(selectedSet.getVisibleMaps().size() < selectedSet.gMaps.size())
+
+		//if Ctrl is down we zoom
+		if(isMetaClick(e))
 		{
-			//scrolling up
+			float newZoomFactor = -1;
+			float increment = selectedSet.maxZoomFactor / 100;
+
+			//zooming out
 			if (notches < 0)
-			{
-				Strudel.winMain.mainCanvas.scroll(true, selectedSet, scrollIncrement);
-			}
-			//scrolling down
+				newZoomFactor = selectedSet.zoomFactor - increment;
+			//zooming in
 			else
+				newZoomFactor = selectedSet.zoomFactor + increment;
+
+			//if the new zoom factor is negative, do nothing
+			if(newZoomFactor < 0)
+				return;
+
+			Strudel.winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(newZoomFactor, 0, selectedSet, true);
+			Strudel.winMain.fatController.updateAllZoomControls();
+		}
+		//otherwise we scroll
+		else
+		{
+			//check whether all maps in the mapset are visible -- if yes, do not scroll
+			if(selectedSet.getVisibleMaps().size() < selectedSet.gMaps.size())
 			{
-				Strudel.winMain.mainCanvas.scroll(false, selectedSet, scrollIncrement);
+				//scrolling up
+				if (notches < 0)
+				{
+					Strudel.winMain.mainCanvas.scroll(true, selectedSet, scrollIncrement);
+				}
+				//scrolling down
+				else
+				{
+					Strudel.winMain.mainCanvas.scroll(false, selectedSet, scrollIncrement);
+				}
 			}
 		}
 	}

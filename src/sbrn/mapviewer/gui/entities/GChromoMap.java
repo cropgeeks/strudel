@@ -33,6 +33,8 @@ public class GChromoMap implements Comparable
 	// the index of the chromosome in the genome
 	// starts at 0
 	public int index;
+	//this is the same thing but stores the original value; the index itself can be changed through reordering of chromos
+	public int initialIndex;
 
 	// the owning map set
 	public GMapSet owningSet;
@@ -120,6 +122,7 @@ public class GChromoMap implements Comparable
 	{
 		this.name = name;
 		this.index = index;
+		initialIndex = index;
 		this.owningSet = owningSet;
 		this.chromoMap = owningSet.mapSet.getMaps().get(index);
 		colour = Colors.genomeColour;
@@ -148,6 +151,8 @@ public class GChromoMap implements Comparable
 			}
 			else if(highlight)
 				colour = Colors.chromosomeHighlightColour;
+			else if(this == Strudel.winMain.fatController.draggedMap)
+				colour = Colors.chromosomeDimmedOutColour;
 			else
 				colour = Colors.genomeColour;
 
@@ -157,9 +162,6 @@ public class GChromoMap implements Comparable
 			//adjust the y in case we are inverting
 			multiplier = Math.abs(((Math.abs(angleFromVertical / 90.0f)) -1.0f) *0.5f);
 			currentY = Math.round(multiplier * currentHeight);
-
-			//adjust the  height according to the angle if necessary
-			//			currentHeight = (int)(currentHeight * Math.abs(angleFromVertical / 90.0f));
 
 			//adjust the colours according to the angle to create a pseudo-3d effect when inverting
 			//first get the main colour and extract its hsb values

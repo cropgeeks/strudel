@@ -28,26 +28,7 @@ public class LabelDisplayManager
 	//draws labels for a set of features that the user searched for
 	public static void drawLabelsForFoundFeatures(Graphics2D g2)
 	{
-		//this is what we do when we are exploring a single continuous range on a given chromosome
-//		if (Strudel.winMain.mainCanvas.drawFoundFeaturesInRange)
-//		{
-//			//the features we need to draw
-//			Vector<Feature> features = new Vector<Feature>();
-//			for (ResultsTableEntry tableEntry : Strudel.winMain.ffResultsPanel.resultsTable.getVisibleEntries())
-//			{
-//				//get the feature for this entry and add it to the lookup
-//				Feature targetF = tableEntry.getTargetFeature();
-//				if(!features.contains(targetF))
-//					features.add(targetF);
-//				//do the same for the homolog
-//				Feature homolog = tableEntry.getHomologFeature();
-//				if (tableEntry.getHomologFeature() != null && !features.contains(homolog))
-//					features.add(homolog);
-//			}
-//
-//			//only draw those features that are actually visible on canvas
-//			drawFeatureLabelsInRange(Strudel.winMain.fatController.selectionMap, g2, Utils.checkFeatureVisibility(Strudel.winMain.fatController.selectionMap, features), false, null);
-//		}
+
 		//this is what we do when the results come from a name based feature search, i.e. the features can be on a number of different chromosomes
 		if (Strudel.winMain.mainCanvas.drawFeaturesFoundByName || Strudel.winMain.mainCanvas.drawFoundFeaturesInRange)
 		{

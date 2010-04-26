@@ -59,4 +59,7 @@ public class Constants
 	//chromosome index label height
 	public static final int chromoIndexFontHeight = 12;
 
+	//the size of a square cell in the snap grid onto which we draw the chromosomes
+	public static final int snapGridCellSize = 35;
+
 }

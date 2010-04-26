@@ -1,6 +1,8 @@
 package sbrn.mapviewer.gui.components;
 
 import java.awt.*;
+import java.awt.event.*;
+import java.awt.geom.*;
 import java.awt.image.*;
 import java.util.concurrent.*;
 import javax.swing.*;
@@ -73,7 +75,11 @@ public class MainCanvas extends JPanel
 
 	Rectangle canvasBounds = null;
 
+	/*indicates whether the map should be snapped to an invisible grid*/
+	private final boolean snapToGrid = true;
 
+	//this is the rectangle we draw when we drag a chromosome to a new location
+	public Rectangle ghostRect;
 
 	// ============================curve'tor==================================
 
@@ -304,9 +310,15 @@ public class MainCanvas extends JPanel
 		if (!killMe && Prefs.showDistanceMarkers)
 			drawDistanceMarkers(g2);
 
-		//last we want to draw the chromosome indexes so they are painted on top of all other stuff
+		//draw the chromosome indexes so they are painted on top of all other stuff
 		if (!killMe)
 			drawAllMapIndices(g2);
+
+		//draws (optionally) a map that is getting dragged for repositioning
+		if(Strudel.winMain.fatController.draggedMap != null)
+		{
+			drawGhostOfDraggedMap(g2);
+		}
 
 		// also need to update the overview canvases from here
 		winMain.fatController.updateOverviewCanvases();
@@ -449,7 +461,7 @@ public class MainCanvas extends JPanel
 				{
 					if(gChromoMap.alwaysShowAllLabels)
 						LabelDisplayManager.drawLabelsForAllVisibleFeatures(g2, gChromoMap);
-					drawMapIndex(g2, gChromoMap);
+					drawMapIndex(g2, gChromoMap, false, false);
 				}
 			}
 		}
@@ -458,30 +470,53 @@ public class MainCanvas extends JPanel
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
 	// draw the index of the map in the genome
-	private void drawMapIndex(Graphics2D g2, GChromoMap gChromoMap)
+	private void drawMapIndex(Graphics2D g2, GChromoMap gChromoMap, boolean isDraggedMapGhost, boolean drawBackGround)
 	{
+		//the label we need to draw
+		String indexLabel = gChromoMap.name;
+
 		//font stuff
 		int fontSize = Constants.chromoIndexFontHeight;
 
 		//set the font
 		Font mapLabelFont = new Font("Arial", Font.BOLD, fontSize);
 		g2.setFont(mapLabelFont);
-		g2.setColor(Colors.chromosomeIndexColour);
 
 		// decide where to place the label on y
-		int labelY = 0;
-		//position of index with this var is in the center of the chromosome regardless of chromo position
-		int chromoCenterPos = gChromoMap.y + Math.round(gChromoMap.currentHeight / 2.0f) + (fontSize/2);
+		int labelY =  -1;
+		int offset = Math.round(gChromoMap.currentHeight / 2.0f) + (fontSize/2);
+		if(isDraggedMapGhost)
+			labelY =  Strudel.winMain.fatController.draggedMapY+ offset;
+		else
+			labelY = gChromoMap.y + offset;
 
-		//draw the index in the center of each chromosome
-		labelY = chromoCenterPos;
+		//and on x
+		int labelX = gChromoMap.x + gChromoMap.width + 10;
+
+		if (drawBackGround)
+		{
+			//optionally, draw a background rectangle for the index
+			FontMetrics fm = g2.getFontMetrics();
+			int stringWidth = fm.stringWidth(indexLabel);
+			g2.setColor(Colors.highlightedFeatureLabelBackgroundColour);
+			float arcSize = fontSize / 1.5f;
+			int horizontalGap = 3;
+			int verticalGap = 4;
+			RoundRectangle2D.Float backGroundRect = new RoundRectangle2D.Float(labelX - horizontalGap, labelY - fontSize, stringWidth + horizontalGap * 2, fontSize + verticalGap, arcSize, arcSize);
+			g2.fill(backGroundRect);
+		}
 
 		//turn text antialiasing on
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
+		//set the label colour
+		if(isDraggedMapGhost)
+			g2.setColor(Colors.highlightedFeatureLabelColour);
+		else
+			g2.setColor(Colors.chromosomeIndexColour);
+
 		//draw the label
-		String indexLabel = gChromoMap.name;
-		g2.drawString(indexLabel, gChromoMap.x + gChromoMap.width + 10, labelY);
+		g2.drawString(indexLabel, labelX, labelY);
 
 		//turn text antialiasing off again
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
@@ -580,8 +615,39 @@ public class MainCanvas extends JPanel
 		Strudel.winMain.fatController.mapSetsInited = true;
 	}
 
+//	---------------------------------------------------------------------------------------------------------------------------
+
+	//repositions a map that is getting dragged with the mouse
+	public void dragMap(MouseEvent e)
+	{
+		int x = e.getX();
+		int y = e.getY();
+
+		//need to adjust for where along the backbone of the map we picked it up
+		//otherwise we get jumps along y axis
+		y = y - Strudel.winMain.fatController.draggedMapYOffset;
+
+		//reposition map by setting its coordinates appropriately
+		Strudel.winMain.fatController.draggedMapX = x;
+		Strudel.winMain.fatController.draggedMapY = y;
+	}
+
+
 	//----------------------------------------------------------------------------------------------------------------------------------------
 
+	private void drawGhostOfDraggedMap(Graphics2D g2)
+	{
+		GChromoMap map = Strudel.winMain.fatController.draggedMap;
 
+		//draw the rectangle representing the dragged chromosome
+		ghostRect = new Rectangle((int)map.owningSet.xPosition, Strudel.winMain.fatController.draggedMapY, map.width, map.currentHeight);
+		g2.setColor(Colors.panZoomRectOutlineColour);
+		g2.draw(ghostRect);
+
+		//draw map index
+		drawMapIndex(g2, map, true, true);
+	}
+
+	//----------------------------------------------------------------------------------------------------------------------------------------
 
 }// end class

@@ -58,6 +58,13 @@ public class FatController
 	//true if the mapsets have been initialiased -- this calculates their map sizes
 	public boolean mapSetsInited = false;
 
+	//the one (and only one) map that is being dragged with the mouse for repositioning
+	public GChromoMap draggedMap;
+	//this specifies how far down the length of the selected map's "backbone" the user clicked
+	//needed to avoid sudden shift upon redraw of map when it has been moved*/
+	public int draggedMapYOffset = 0;
+	public int draggedMapX, draggedMapY;
+
 
 	// ===============================================curve'tors===================================
 
@@ -151,15 +158,6 @@ public class FatController
 		//disable the button that allows export of this data to file
 		Actions.saveResults.setEnabled(false);
 
-		//reset the BLAST cut-off
-		LinkDisplayManager.setBlastThreshold(1);
-		Strudel.winMain.toolbar.eValueSpinner.setValue(0);
-
-		//deselect the buttons on the zoom control panels
-		for (ZoomControlPanel zoomControlPanel : winMain.zoomControlPanels)
-		{
-			zoomControlPanel.showAllMarkersButton.setSelected(false);
-		}
 	}
 
 	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -213,9 +211,6 @@ public class FatController
 	{
 		for(GMapSet gMapSet : winMain.dataContainer.gMapSets)
 		{
-			//reset zoom on all mapsets
-			winMain.mainCanvas.zoomHandler.processZoomResetRequest(gMapSet);
-
 			gMapSet.hasBeenScrolled = false;
 
 			//reset selected maps
@@ -241,9 +236,29 @@ public class FatController
 
 				//don't draw mouseover feature labels
 				gMap.drawMouseOverFeatures = false;
-
 				gMap.alwaysShowAllLabels = false;
+
+				//reset the original index within the genome in case there has been reordering of chromosomes
+//				System.out.println("resetting index for map " + gMap.name + " to " + gMap.initialIndex);
+				gMap.index = gMap.initialIndex;
 			}
+
+			//now sort the maps in the selected genome by their new indices
+			Collections.sort(gMapSet.gMaps);
+
+			//reset zoom on the mapset
+			winMain.mainCanvas.zoomHandler.processZoomResetRequest(gMapSet);
+		}
+
+
+		//reset the BLAST cut-off
+		LinkDisplayManager.setBlastThreshold(1);
+		Strudel.winMain.toolbar.eValueSpinner.setValue(0);
+
+		//deselect the buttons on the zoom control panels
+		for (ZoomControlPanel zoomControlPanel : winMain.zoomControlPanels)
+		{
+			zoomControlPanel.showAllMarkersButton.setSelected(false);
 		}
 
 		initialisePositionArrays();

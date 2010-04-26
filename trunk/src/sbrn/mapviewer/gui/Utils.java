@@ -301,6 +301,29 @@ public class Utils
 
 	// --------------------------------------------------------------------------------------------------------------------------------
 
+	//check whether we have a map that intersects with the rectangle passed in
+	public static GChromoMap getSelectedMap(Rectangle intersectionRect, GMapSet gMapSet)
+	{
+		GChromoMap selectedMap = null;
+
+		// check whether the point x,y lies within one of the bounding rectangles of our chromosomes
+		// for each chromosome in the genome
+
+		for (GChromoMap gChromoMap : gMapSet.gMaps)
+		{
+			// check whether the hit falls within its current bounding rectangle
+			if (gChromoMap.boundingRectangle.intersects(intersectionRect))
+			{
+				selectedMap = gChromoMap;
+				break;
+			}
+		}
+
+		return selectedMap;
+	}
+
+	// --------------------------------------------------------------------------------------------------------------------------------
+
 
 	//check whether we have a map that intersects with the rectangle passed in
 	public static GChromoMap getSelectedMap(Rectangle intersectionRect)
@@ -548,6 +571,8 @@ public class Utils
 	//this includes the spaces between chromosomes and the chromosomes themselves
 	public static int calcSpaceAboveGMap(GChromoMap gMap)
 	{
+//		System.out.println("gMap.index for map "+gMap.name+" = " + gMap.index);
+
 		//how many chromosomes are above this map in the genome
 		int numChromosAbove = gMap.index;
 		//combined spaces between chromos
@@ -763,4 +788,42 @@ public class Utils
 
 	// --------------------------------------------------------------------------------------------------------------------------------
 
+	public static void repositionDraggedMap(MouseEvent e)
+	{
+		Strudel.winMain.mainCanvas.dragMap(e);
+		GMapSet selectedSet = Strudel.winMain.fatController.draggedMap.owningSet;
+
+		//look for the closest map
+		GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.mainCanvas.ghostRect, selectedSet);
+		if(selectedMap != null)
+		{
+			//the index of the map below which we want to insert the dragged map
+			int insertionIndex = -1;
+			//check where we overlap -- could be top or bottom
+			if(selectedMap.y <= Strudel.winMain.mainCanvas.ghostRect.getY())
+				insertionIndex = selectedMap.index;
+			else
+				insertionIndex = selectedMap.index -1;
+
+			//shuffle the indexes of all maps in this genome down by one, starting from the insertion index
+			for(GChromoMap gMap : selectedSet.gMaps)
+			{
+				if(gMap.index > insertionIndex && gMap.index < selectedMap.index)
+					gMap.index += 1;
+			}
+
+			//then set the new index for the dragged map
+			Strudel.winMain.fatController.draggedMap.index = insertionIndex +1;
+
+			//now sort the maps in the selected genome by their new indices
+			Collections.sort(selectedSet.gMaps);
+
+			//repaint
+			Strudel.winMain.mainCanvas.updateCanvas(true);
+		}
+
+		//reset everything
+		Strudel.winMain.fatController.draggedMap = null;
+		Strudel.winMain.fatController.draggedMapYOffset = 0;
+	}
 }

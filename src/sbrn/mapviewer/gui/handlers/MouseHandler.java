@@ -366,6 +366,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		//if Ctrl is down we zoom
 		if(isMetaClick(e))
 		{
+//			System.out.println("zooming");
 			float newZoomFactor = -1;
 			float increment = selectedSet.maxZoomFactor / 100;
 

@@ -136,7 +136,7 @@ public class ControlToolBar extends JToolBar implements ActionListener, ItemList
 		bExport = (JButton) Utils.getButton(false, "", "Export the display as an image", Icons.getIcon("EXPORTIMAGE"), Actions.exportImage);
 
 		//configure save table data button
-		bSave = (JButton) Utils.getButton(false, "", "Save results table to file", Icons.getIcon("SAVE"), Actions.saveResults);
+		bSave = (JButton) Utils.getButton(false, "", "Save results table to file", Icons.getIcon("SAVE"), Actions.saveTableData);
 
 		//configure find features button
 		bFindFeatures = (JButton) Utils.getButton(false, "Find", "Find features by name", Icons.getIcon("FIND"), Actions.findFeature);

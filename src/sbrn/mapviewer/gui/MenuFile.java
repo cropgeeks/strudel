@@ -10,6 +10,7 @@ import sbrn.mapviewer.Strudel;
 import sbrn.mapviewer.gui.components.HomologResultsTableModel;
 import sbrn.mapviewer.gui.components.WinMain;
 import sbrn.mapviewer.gui.dialog.OpenFileDialog;
+import sbrn.mapviewer.gui.entities.*;
 import sbrn.mapviewer.io.DataLoadUtils;
 import scri.commons.file.FileUtils;
 import scri.commons.gui.TaskDialog;
@@ -33,14 +34,14 @@ public class MenuFile
 
 	void loadExample()
 	{
-	    Strudel.winMain.fatController.loadOwnData = false;
-	    DataLoadUtils.loadDataInThread(null, false);
+		Strudel.winMain.fatController.loadOwnData = false;
+		DataLoadUtils.loadDataInThread(null, false);
 	}
 
 	public void openFile(File file)
 	{
 		Strudel.winMain.fatController.recentFileLoad = true;
-	    DataLoadUtils.loadDataInThread(file.toString(), false);
+		DataLoadUtils.loadDataInThread(file.toString(), false);
 	}
 
 	void exportImage()
@@ -97,12 +98,24 @@ public class MenuFile
 	    }
 	}
 
-	void saveResults()
+
+	public void saveTableData()
+	{
+		saveResults("Save table data as", "tableData.txt", extractResultsTableData());
+	}
+
+	public void saveMapOrder()
+	{
+		saveResults("Save map order as", "mapOrder.txt", extractMapOrder());
+	}
+
+	//saves results in text format to a file
+	private void saveResults(String fileChooserTitle, String fileName, String data)
 	{
 	    JFileChooser fc = new JFileChooser();
-	    fc.setDialogTitle("Save table data as");
+	    fc.setDialogTitle(fileChooserTitle);
 	    fc.setCurrentDirectory(new File(System.getProperty("user.home")));
-	    File outputFile = new File("tableData.txt");
+	    File outputFile = new File(fileName);
 	    fc.setSelectedFile(outputFile);
 
 	    while (fc.showSaveDialog(Strudel.winMain) == JFileChooser.APPROVE_OPTION)
@@ -127,7 +140,7 @@ public class MenuFile
 		    try
 		    {
 			    //write table data to file
-			    FileUtils.writeFile(file, extractResultsTableData());
+			    FileUtils.writeFile(file, data);
 
 			    if(file.exists())
 				    TaskDialog.info("The data was successfully saved  to " + file, "Close");
@@ -150,10 +163,51 @@ public class MenuFile
 	    }
 	}
 
+	//gets the table data from the table and returns them in tab delimited format for saving out to file
 	private String extractResultsTableData()
 	{
 		//get the table model first
 		TableModel model = Strudel.winMain.ffResultsPanel.resultsTable.getModel();
 		return ((HomologResultsTableModel)model).getAllDataInTabFormat();
 	}
+
+	//extracts the order of all maps in their mapsets and formats them for saving to a tab del text file
+	private String extractMapOrder()
+	{
+		StringBuilder sb = new StringBuilder();
+
+		//print header with mapsets' names first
+		for(GMapSet gMapSet : Strudel.winMain.dataContainer.gMapSets)
+		{
+			sb.append(gMapSet.name + "\t");
+		}
+
+		//line break
+		sb.append("\n");
+
+		//iterate over the mapsets and maps
+		for (int i = 0; i < Strudel.winMain.dataContainer.maxChromos; i++)
+		{
+			for(GMapSet gMapSet : Strudel.winMain.dataContainer.gMapSets)
+			{
+				GChromoMap gMap  = null;
+				if(gMapSet.gMaps.size() > i)
+				{
+					gMap  = gMapSet.gMaps.get(i);
+					//output map name
+					sb.append(gMap.name + "\t");
+				}
+				else
+				{
+					//if there is no map for this row, just output an empty String and tab char
+					sb.append(" \t");
+				}
+			}
+			//line break
+			sb.append("\n");
+		}
+
+		return sb.toString();
+	}
+
 }

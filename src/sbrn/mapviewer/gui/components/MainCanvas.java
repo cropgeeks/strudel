@@ -88,8 +88,6 @@ public class MainCanvas extends JPanel
 		this.winMain = Strudel.winMain;
 		zoomHandler = new CanvasZoomHandler(this);
 
-		//this is for detecting key events
-		addKeyListener(new CanvasKeyListener());
 		setFocusable(true);
 
 		// Prepare the background threads that will do the main painting
@@ -528,6 +526,8 @@ public class MainCanvas extends JPanel
 	//moves the genome viewport for the psecified mapset either up or down by the specified increment
 	public void scroll(boolean up, GMapSet gMapSet,  int scrollIncrement)
 	{
+//		System.out.println("scrolling");
+
 		//this is where we are moving the center of the genome (vertically) to
 		int newCenterPoint = -1;
 
@@ -620,16 +620,10 @@ public class MainCanvas extends JPanel
 	//repositions a map that is getting dragged with the mouse
 	public void dragMap(MouseEvent e)
 	{
-		int x = e.getX();
-		int y = e.getY();
-
+		Strudel.winMain.fatController.draggedMapX = e.getX();
 		//need to adjust for where along the backbone of the map we picked it up
 		//otherwise we get jumps along y axis
-		y = y - Strudel.winMain.fatController.draggedMapYOffset;
-
-		//reposition map by setting its coordinates appropriately
-		Strudel.winMain.fatController.draggedMapX = x;
-		Strudel.winMain.fatController.draggedMapY = y;
+		Strudel.winMain.fatController.draggedMapY = e.getY() - Strudel.winMain.fatController.draggedMapYOffset;
 	}
 
 

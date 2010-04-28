@@ -20,7 +20,8 @@ public class WinMainMenuBar extends JMenuBar
 	private JMenuItem mLoadData;
 	private JMenuItem mLoadExample;
 	private JMenuItem mExportImage;
-	private JMenuItem mSaveResults;
+	private JMenuItem mSaveTableData;
+	private JMenuItem mSaveMapOrder;
 
 	// The components of the explore menu
 	private JMenu mExplore;
@@ -63,8 +64,9 @@ public class WinMainMenuBar extends JMenuBar
 
 		mLoadData = getItem(Actions.loadData, "Load Data", KeyEvent.VK_O, Strudel.ctrlMenuShortcut);
 		mLoadExample = getItem(Actions.loadExample, "Load Example", KeyEvent.VK_L, Strudel.ctrlMenuShortcut);
-		mExportImage = getItem(Actions.exportImage, "Export Image", KeyEvent.VK_E, Strudel.ctrlMenuShortcut);
-		mSaveResults = getItem(Actions.saveResults, "Save Results", KeyEvent.VK_S, Strudel.ctrlMenuShortcut);
+		mExportImage = getItem(Actions.exportImage, "Export Image...", KeyEvent.VK_E, Strudel.ctrlMenuShortcut);
+		mSaveTableData = getItem(Actions.saveTableData, "Save Table Data...", 0,0);
+		mSaveMapOrder = getItem(Actions.saveMapOrder, "Save Map Order...", 0, 0);
 
 		mRecentFiles = new JMenu("Recent Files");
 		createRecentMenu();
@@ -72,7 +74,8 @@ public class WinMainMenuBar extends JMenuBar
 		mFile.add(mLoadData);
 		mFile.add(mLoadExample);
 		mFile.addSeparator();
-		mFile.add(mSaveResults);
+		mFile.add(mSaveTableData);
+		mFile.add(mSaveMapOrder);
 		mFile.add(mExportImage);
 		mFile.addSeparator();
 		mFile.add(mRecentFiles);

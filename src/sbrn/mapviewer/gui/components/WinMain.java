@@ -136,6 +136,9 @@ public class WinMain extends JFrame
 		createMemoryTimer();
 
 		setJMenuBar(menuBar);
+
+		//this is for detecting key events
+		addKeyListener(new CanvasKeyListener());
 	}
 
 	//=================================================methods=====================================

@@ -58,7 +58,7 @@ public class GMapSet
 	public boolean wholeMapsetIsSelected = false;
 
 	// space the chromosomes vertically by this fixed amount
-	public int chromoSpacing = 8;
+	public int chromoSpacing = 10;
 
 	//true while we are scrolling
 	public boolean isScrolling = false;
@@ -69,7 +69,7 @@ public class GMapSet
 
 	//the minimum height of a chromosome that we default to when we have more chromosomes than we have space for on the canvas
 	//chromos will then fall off the screen above and below
-	public int minChromoHeight = 11;
+	public int minChromoHeight = 12;
 
 	public OverviewCanvas overviewCanvas;
 

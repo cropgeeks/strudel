@@ -156,7 +156,7 @@ public class FatController
 		 clearResultsTable();
 
 		//disable the button that allows export of this data to file
-		Actions.saveResults.setEnabled(false);
+		Actions.saveTableData.setEnabled(false);
 
 	}
 

@@ -808,7 +808,7 @@ public class Utils
 			//shuffle the indexes of all maps in this genome down by one, starting from the insertion index
 			for(GChromoMap gMap : selectedSet.gMaps)
 			{
-				if(gMap.index > insertionIndex && gMap.index < selectedMap.index)
+				if(gMap.index > insertionIndex && gMap.index < Strudel.winMain.fatController.draggedMap.index)
 					gMap.index += 1;
 			}
 
@@ -826,4 +826,7 @@ public class Utils
 		Strudel.winMain.fatController.draggedMap = null;
 		Strudel.winMain.fatController.draggedMapYOffset = 0;
 	}
+
+	// --------------------------------------------------------------------------------------------------------------------------------
+
 }

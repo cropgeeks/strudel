@@ -17,7 +17,8 @@ public class Actions
 	public static AbstractAction loadData;
 	public static AbstractAction loadExample;
 	public static AbstractAction exportImage;
-	public static AbstractAction saveResults;
+	public static AbstractAction saveTableData;
+	public static AbstractAction saveMapOrder;
 
 	// Explore menu actions
 	public static AbstractAction findFeature;
@@ -97,9 +98,15 @@ public class Actions
 			}
 		};
 
-		saveResults = new AbstractAction("Save Results Table", getIcon("SAVE")) {
+		saveTableData = new AbstractAction("Save Results Table", getIcon("SAVE")) {
 			public void actionPerformed(ActionEvent e) {
-				winMain.mFile.saveResults();
+				winMain.mFile.saveTableData();
+			}
+		};
+
+		saveMapOrder = new AbstractAction("Save Map Order", getIcon("SAVE")) {
+			public void actionPerformed(ActionEvent e) {
+				winMain.mFile.saveMapOrder();
 			}
 		};
 
@@ -245,7 +252,8 @@ public class Actions
 		loadData.setEnabled(true);
 		loadExample.setEnabled(true);
 		exportImage.setEnabled(false);
-		saveResults.setEnabled(false);
+		saveTableData.setEnabled(false);
+		saveMapOrder.setEnabled(false);
 
 		findFeature.setEnabled(false);
 		exploreRange.setEnabled(false);
@@ -279,6 +287,7 @@ public class Actions
 		loadData.setEnabled(true);
 		loadExample.setEnabled(true);
 		exportImage.setEnabled(true);
+		saveMapOrder.setEnabled(true);
 
 		findFeature.setEnabled(true);
 		exploreRange.setEnabled(true);

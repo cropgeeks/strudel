@@ -381,7 +381,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			if(newZoomFactor < 0)
 				return;
 
-			Strudel.winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(newZoomFactor, 0, selectedSet, true);
+			Strudel.winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(newZoomFactor, selectedSet);
 			Strudel.winMain.fatController.updateAllZoomControls();
 		}
 		//otherwise we scroll

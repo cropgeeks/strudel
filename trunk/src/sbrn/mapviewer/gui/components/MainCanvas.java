@@ -109,7 +109,7 @@ public class MainCanvas extends JPanel
 	@Override
 	public void paintComponent(Graphics graphics)
 	{
-//		System.out.println("\n\n\n=====main canvas paintComponent " + System.currentTimeMillis());
+		System.out.println("\n\n\n=====main canvas paintComponent " + System.currentTimeMillis());
 
 		super.paintComponent(graphics);
 
@@ -268,6 +268,7 @@ public class MainCanvas extends JPanel
 
 			// now paint the chromosomes in this genome
 			// for each chromosome in the genome
+//			System.out.println("drawing maps for mapset " + gMapSet.name + " from ypos of " + currentY);
 			drawMaps(gMapSet,g2, currentY);
 
 			//reset the scroll flag
@@ -329,7 +330,6 @@ public class MainCanvas extends JPanel
 	//this method sets all the mapset specific parameters we need to work out for each drawing operation
 	private int calcMapSetSpecificParams(GMapSet gMapSet)
 	{
-		int currentY = -1;
 		// this is what we do at a zoom factor of 1 (at startup but also after zoom reset)
 		if (gMapSet.zoomFactor == 1)
 		{
@@ -339,7 +339,7 @@ public class MainCanvas extends JPanel
 			}
 		}
 		// start drawing at minus half the total height of the entire genome plus half the canvasheight
-		currentY =  -(gMapSet.totalY / 2) + canvasHeight / 2 - (gMapSet.centerPoint - (gMapSet.totalY / 2));
+		int currentY =  -(gMapSet.totalY / 2) + canvasHeight / 2 - (gMapSet.centerPoint - (gMapSet.totalY / 2));
 
 		return currentY;
 	}

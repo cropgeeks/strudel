@@ -37,36 +37,27 @@ public class CanvasZoomHandler
 
 	// gets invoked when the zoom is adjusted by using the sliders
 	// adjusts the zoom factor and checks whether we need to display markers and labels
-	public void processContinuousZoomRequest(float newZoomFactor, float multiplier, GMapSet selectedSet, boolean isSliderRequest)
+	public void processContinuousZoomRequest(float newZoomFactor, GMapSet selectedSet)
 	{
-		//for a request from the sliders we need to work out the multiplier but not the zoom factor
-		if(isSliderRequest)
-		{
-			multiplier = newZoomFactor/selectedSet.zoomFactor;
-		}
-		//for all the other requests it's the opposite
-		else
-		{
-			newZoomFactor = selectedSet.zoomFactor * multiplier;
-		}
+		// update the genome centerpoint to the new percentage and update the scroller position
+		selectedSet.zoomFactor = newZoomFactor;
 
 		// don't let the zoom factor fall below zero
 		if (newZoomFactor < 1)
 			newZoomFactor = 1;
 
-		// the new total Y extent of the genome in pixels
-		int newTotalY = Math.round(selectedSet.totalY * multiplier);
+		//remember the previous totalY of the mapset, then recompute the map sizes with the new zoom factor
+		int oldTotalY = selectedSet.totalY;
+		selectedSet.calculateMapSizes();
 
 		// the new centerpoint needs to be worked out in relation to the current one
-		float proportion = selectedSet.centerPoint / (float) selectedSet.totalY;
-		float newCenterPoint = newTotalY * proportion;
-
-		// update the genome centerpoint to the new percentage and update the scroller position
-		selectedSet.zoomFactor = newZoomFactor;
+		float proportion = selectedSet.centerPoint / (float) oldTotalY;
+		float newCenterPoint = selectedSet.totalY * proportion;
 		selectedSet.centerPoint = Math.round(newCenterPoint);
 
-		//need to now update the map sizes
-		selectedSet.calculateMapSizes();
+		System.out.println("proportion = " + proportion);
+		System.out.println("selectedSet.totalY = " + selectedSet.totalY);
+		System.out.println("selectedSet.centerPoint = " + selectedSet.centerPoint);
 
 		//update the position lookup arrays for mouseover
 		Strudel.winMain.fatController.initialisePositionArrays();
@@ -141,6 +132,9 @@ public class CanvasZoomHandler
 
 		//need to now update the map sizes
 		selectedSet.calculateMapSizes();
+
+		//and reset the centerpoint of the mapset
+		selectedSet.centerPoint = Math.round(selectedSet.totalY / 2.0f);
 
 		//update overviews
 		Strudel.winMain.fatController.updateOverviewCanvases();

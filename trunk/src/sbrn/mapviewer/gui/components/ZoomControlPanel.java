@@ -142,7 +142,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		JSlider source = (JSlider) e.getSource();
 		if (source.equals(zoomSlider) && !winMain.mainCanvas.zoomHandler.isClickZoomRequest && !winMain.mainCanvas.zoomHandler.isPanZoomRequest)
 		{
-			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(source.getValue(), 0, gMapSet, true);
+			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(source.getValue(), gMapSet);
 			updateSlider();
 		}
 	}

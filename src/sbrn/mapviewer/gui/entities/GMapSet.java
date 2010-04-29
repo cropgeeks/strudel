@@ -82,6 +82,9 @@ public class GMapSet
 	//the max zoom factor for this mapset -- can be overridden by the user with the spinner control at the bottom of the screen
 	public int maxZoomFactor = Constants.MAX_ZOOM_FACTOR;
 
+	//true if this mapset is oversized i.e. we do not have enough pixels to render all maps on screen at the same time
+	public boolean isOversized = false;
+
 	// ====================================c'tor========================================
 
 	public GMapSet(MapSet mapSet)
@@ -195,7 +198,10 @@ public class GMapSet
 				scalingFactor = minChromoHeight / shortestChromoHeight;
 
 			overviewCanvas.renderAsOneChromo = true;
+			isOversized = true;
 		}
+		else
+			isOversized = false;
 
 		//reset totalY
 		totalY = 0;

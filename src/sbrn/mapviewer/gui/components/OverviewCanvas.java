@@ -97,7 +97,7 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener, Mouse
 		int fontSize = 9;
 
 		//if we can fit all the chromosomes on the overview canvas
-		if (chromoHeight > minChromoHeight && chromoSpacing > minChromoHeight)
+		if (!renderAsOneChromo)
 		{
 			// now paint the chromosomes in this genome
 			// for each chromosome in the genome
@@ -146,12 +146,12 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener, Mouse
 		int rectHeight = 0;
 		//we only ever change the height and y coord of the rectangle
 		//the rest stays the same as we always want it to cover the full width of the canvas
-		if (gMapSet.zoomFactor == 1) //fully zoomed out
+		if (gMapSet.zoomFactor == 1 && !renderAsOneChromo) //fully zoomed out
 		{
 			rectY = 1;
 			rectHeight = getHeight()-3;
 		}
-		else //zoomed in
+		else if ((gMapSet.zoomFactor == 1 && renderAsOneChromo) || gMapSet.zoomFactor > 1)//zoomed in
 		{
 			//work out the topmost y coord of the genome as visible on the main canvas
 			int topY = Math.round(gMapSet.centerPoint - winMain.mainCanvas.getHeight()/2.0f);

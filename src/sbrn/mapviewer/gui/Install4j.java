@@ -14,7 +14,7 @@ public class Install4j
 {
 	private static String URL = Constants.strudelHomePage + "installers/updates.xml";
 
-	public static String VERSION = "X.XX.XX.XX";
+	public static String VERSION;
 	public static boolean displayUpdate = false;
 
 	/**
@@ -58,20 +58,11 @@ public class Install4j
 
 	private static void getVersion()
 	{
-		try
-		{
-			com.install4j.api.ApplicationRegistry.ApplicationInfo info =
-				com.install4j.api.ApplicationRegistry.getApplicationInfoByDir(new File("."));
-
-			VERSION = info.getVersion();
-
-			if (Prefs.lastVersion == null || !Prefs.lastVersion.equals(VERSION))
-				displayUpdate = true;
-
-			Prefs.lastVersion = VERSION;
-		}
-		catch (Exception e) {}
-		catch (Throwable e) {}
+		// Attempt to get the version string from the jar's manifest
+		VERSION = Strudel.class.getPackage().getImplementationVersion();
+		
+		if(VERSION == null)
+			VERSION = "x.xx.xx.xx";
 	}
 
 	static void pingServer()

@@ -62,12 +62,11 @@ public class Strudel
 
 		prefs.loadPreferences(prefsFile, Prefs.class);
 		prefs.savePreferences(prefsFile, Prefs.class);
-		Install4j.doStartUpCheck();
 
-		if (args.length == 1)
-		{
-			initialFile = args[0].trim();
-		}
+		if (args.length > 0)
+			initialFile = args[0];
+
+		Install4j.doStartUpCheck();
 
 		new Strudel();
 

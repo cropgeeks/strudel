@@ -10,6 +10,8 @@ import javax.swing.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.components.*;
 import sbrn.mapviewer.io.*;
+
+import scri.commons.file.*;
 import scri.commons.gui.*;
 import scri.commons.*;
 
@@ -31,7 +33,7 @@ public class Strudel
 	private static Level logLevel = Level.WARNING;
 	public static Logger logger = Logger.getLogger("sbrn.strudel");
 
-	private static File prefsFile = new File(System.getProperty("user.home"), ".strudel.xml");
+	private static File prefsFile = getPrefsFile();
 	private static Prefs prefs = new Prefs();
 	public static WinMain winMain;
 
@@ -162,6 +164,27 @@ public class Strudel
 		{
 			printScheme.setColours();
 		}
+	}
+
+	private static File getPrefsFile()
+	{
+		// Ensure the .scri-bioinf folder exists
+		File fldr = new File(System.getProperty("user.home"), ".scri-bioinf");
+		fldr.mkdirs();
+
+		// This is the file we really want
+		File file = new File(fldr, "strudel.xml");
+		// So if it exists, just use it
+		if (file.exists())
+			return file;
+
+		// If not, see if the "old" (pre 21/06/2010) file is available
+		File old = new File(System.getProperty("user.home"), ".strudel.xml");
+		if (old.exists())
+			try { FileUtils.copyFile(old, file, true); }
+			catch (IOException e) {}
+
+		return file;
 	}
 
 	// --------------------------------------------------

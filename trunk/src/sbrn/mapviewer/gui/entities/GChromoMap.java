@@ -10,7 +10,7 @@ import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.handlers.*;
 
-public class GChromoMap implements Comparable
+public class GChromoMap implements Comparable<GChromoMap>
 {
 
 	// ============================vars==================================
@@ -573,11 +573,9 @@ public class GChromoMap implements Comparable
 	}
 
 	@Override
-	public int compareTo(Object o)
+	public int compareTo(GChromoMap gMap)
 	{
 		int i = 0;
-
-		GChromoMap gMap = (GChromoMap)o;
 
 		if(index == gMap.index)
 			i = 0;

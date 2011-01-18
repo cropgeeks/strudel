@@ -109,7 +109,7 @@ public class MainCanvas extends JPanel
 	@Override
 	public void paintComponent(Graphics graphics)
 	{
-		System.out.println("\n\n\n=====main canvas paintComponent " + System.currentTimeMillis());
+//		System.out.println("=====main canvas paintComponent " + System.currentTimeMillis());
 
 		super.paintComponent(graphics);
 
@@ -313,11 +313,11 @@ public class MainCanvas extends JPanel
 		if (!killMe)
 			drawAllMapIndices(g2);
 
-		//draws (optionally) a map that is getting dragged for repositioning
-		if(Strudel.winMain.fatController.draggedMap != null)
-		{
-			drawGhostOfDraggedMap(g2);
-		}
+//		//draws (optionally) a map that is getting dragged for repositioning
+//		if(Strudel.winMain.fatController.draggedMap != null)
+//		{
+//			drawGhostOfDraggedMap(g2);
+//		}
 
 		// also need to update the overview canvases from here
 		winMain.fatController.updateOverviewCanvases();

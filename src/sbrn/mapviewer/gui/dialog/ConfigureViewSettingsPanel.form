@@ -148,8 +148,8 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="distanceMarkerCheckbox">
           <Properties>
-            <Property name="actionCommand" type="java.lang.String" value="Show distance markers"/>
             <Property name="text" type="java.lang.String" value="Show distance markers (higher zoom levels only)"/>
+            <Property name="actionCommand" type="java.lang.String" value="Show distance markers"/>
           </Properties>
           <Events>
             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="stateChanged"/>
@@ -212,9 +212,6 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Hide unlinked features"/>
           </Properties>
-          <Events>
-            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="unlinkedFeaturesCheckboxstateChanged"/>
-          </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JCheckBox(Actions.showDistanceMarkers);"/>
           </AuxValues>
@@ -224,10 +221,8 @@
             <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="Actions.scaleChromosomes" type="code"/>
             </Property>
+            <Property name="text" type="java.lang.String" value="Scale chromosomes"/>
           </Properties>
-          <Events>
-            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="scaleChromosCheckboxstateChanged"/>
-          </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JCheckBox(Actions.showDistanceMarkers);"/>
           </AuxValues>

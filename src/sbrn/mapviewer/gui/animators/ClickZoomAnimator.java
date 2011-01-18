@@ -56,9 +56,18 @@ public class ClickZoomAnimator extends Thread
 		float zoomFactorIncrement = (finalZoomFactor - selectedSet.zoomFactor) / totalFrames;
 		float chromoHeightIncrement = (finalChromoHeight - selectedMap.currentHeight) / totalFrames;
 
+//		System.out.println("zooming map " + selectedMap.name);
+//		System.out.println("pre-zoom centerpoint for mapset = " +selectedSet.centerPoint);
+//		System.out.println("pre-zoom height of map = " + selectedMap.currentHeight);
+//		System.out.println("pre-zoom ZoomFactor = " + selectedSet.zoomFactor);
+//		System.out.println("pre zoom selectedSet.totalY = " + selectedSet.totalY);
+//		System.out.println("canvas height = " + Strudel.winMain.mainCanvas.getHeight());
+		
 		// now loop for the number of total frames, zooming in by a bit each time
 		for (int i = 0; i < totalFrames; i++)
 		{
+//			System.out.println("\n#### zoom iteration " + i);
+			
 			// set the new zoom factor
 			float newZoomFactor = selectedSet.zoomFactor + zoomFactorIncrement;
 
@@ -71,6 +80,11 @@ public class ClickZoomAnimator extends Thread
 
 			// distance from the bottom of the chromosome -- is half the height of the chromosome as we want it centered
 			int distFromBottom = newChromoHeight / 2;
+			
+//			System.out.println("newZoomFactor = " + newZoomFactor);
+//			System.out.println("selectedSet.totalY = " + selectedSet.totalY);
+//			System.out.println("newChromoHeight = " + newChromoHeight);
+//			System.out.println("distFromBottom = " + distFromBottom);
 
 			// adjust the zoom
 			// this call includes the redraw of the main canvas
@@ -106,6 +120,9 @@ public class ClickZoomAnimator extends Thread
 		});
 
 		done = true;
+		
+		//place the focus on this window so we can listen to keyboard events too
+		Strudel.winMain.requestFocusInWindow();
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------

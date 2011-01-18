@@ -51,6 +51,8 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	// used for selecting chromosomes for display of links and for zooming
 	public void mouseClicked(MouseEvent e)
 	{
+//		System.out.println("mouse clicked");
+		
 		//place the focus on this window so we can listen to keyboard events too
 		winMain.mainCanvas.requestFocusInWindow();
 
@@ -62,7 +64,6 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 
 			if (selectedMap != null)
 				winMain.mainCanvas.zoomHandler.processClickZoomRequest(selectedMap);
-			return;
 		}
 	}
 
@@ -86,6 +87,8 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 
 	public void mousePressed(MouseEvent e)
 	{
+//		System.out.println("mouse pressed");
+		
 		mousePressedX = e.getX();
 		mousePressedY = e.getY();
 		lastMouseDragYPos = e.getY();
@@ -139,15 +142,15 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		}
 
 		//Alt + drag allows repositioning of chromosomes
-		else if (e.isAltDown())
-		{
-			//this is all to do with chromosome dragging and repositioning
-			//get top l.h. Y coordinate of this rect
-			int topY = (int)selectedMap.boundingRectangle.getY();
-			winMain.fatController.draggedMap = selectedMap;
-			Strudel.winMain.fatController.draggedMapYOffset = mousePressedY - topY;
-			winMain.mainCanvas.dragMap(e);
-		}
+//		else if (e.isAltDown())
+//		{
+//			//this is all to do with chromosome dragging and repositioning
+//			//get top l.h. Y coordinate of this rect
+//			int topY = (int)selectedMap.boundingRectangle.getY();
+//			winMain.fatController.draggedMap = selectedMap;
+//			Strudel.winMain.fatController.draggedMapYOffset = mousePressedY - topY;
+//			winMain.mainCanvas.dragMap(e);
+//		}
 
 		Strudel.winMain.mainCanvas.updateCanvas(true);
 	}
@@ -157,6 +160,8 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 
 	public void mouseReleased(MouseEvent e)
 	{
+//		System.out.println("mouse released");
+		
 		//check whether this is a popup request -- needs to be done both in mousePressed and in mouseReleased due to platform dependent nonsense
 		if (e.isPopupTrigger())
 		{
@@ -185,29 +190,30 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 				selectedMap = Utils.getSelectedMap(winMain, gMapSetIndex, e.getY());
 			winMain.mainCanvas.zoomHandler.processPanZoomRequest(selectedMap, mousePressedY, e.getY(), true);
 		}
+//		else if (e.isShiftDown() && isMetaClick(e)) //Ctrl+shift
+//		{
+//			//the mouse was getting dragged and we have released the button
+//			//reposition the selected map
+//			if(Strudel.winMain.fatController.draggedMap != null)
+//			{
+//				Utils.repositionDraggedMap(e);
+//			}
+//		}
 
 
-		//this is what we do when Alt is down and the mouse was getting dragged
-		if(e.isAltDown())
-		{
-			//reposition the selected map
-			if(Strudel.winMain.fatController.draggedMap != null)
-			{
-				Utils.repositionDraggedMap(e);
-			}
-			else
-			{
-				GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, e.getX(), e.getY());
-				if(selectedMap != null)
-				{
-					Strudel.winMain.fatController.isCtrlClickSelection = true;
-					//also reset the wholeGenomeSelected flag
-					selectedMap.owningSet.wholeMapsetIsSelected  = false;
-					winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(selectedMap);
-				}
-			}
-		}
-
+//		//this is what we do when Alt is down 
+//		if(e.isAltDown())
+//		{
+//			GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, e.getX(), e.getY());
+//			if(selectedMap != null)
+//			{
+//				Strudel.winMain.fatController.isCtrlClickSelection = true;
+//				//also reset the wholeGenomeSelected flag
+//				selectedMap.owningSet.wholeMapsetIsSelected  = false;
+//				winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(selectedMap);
+//			}
+//		}
+		
 		winMain.mainCanvas.drawSelectionRect = false;
 	}
 
@@ -216,6 +222,8 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	// used for zooming and scrolling
 	public void mouseDragged(MouseEvent e)
 	{
+//		System.out.println("mouse dragged");
+		
 		int x = e.getX();
 		int y = e.getY();
 

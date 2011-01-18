@@ -347,7 +347,7 @@ public class LabelDisplayManager
 			{
 
 				// the y position of the feature itself on the canvas, in pixel coords relative to the canvas boundaries
-				int featureY = Utils.relativeFPosToPixelOnCanvas(gChromoMap, f.getStart(), gChromoMap.isFullyInverted);
+				int featureY = Utils.relativeFPosToPixelOnCanvas(gChromoMap, f.getStart());
 				featurePositions.put(f, featureY);
 
 			}
@@ -367,15 +367,13 @@ public class LabelDisplayManager
 		{
 			if (f != null)
 			{
-
 				//if we are doing this at the mapset scale (e.g. when we are drawing labels for found features) we need to
 				//figure out the gMap from the gMapSet here
 				GChromoMap gChromoMap = Utils.getGMapByNameAndGMapset(f.getOwningMap().getName(), gMapSet);
 
 				// the y position of the feature itself on the canvas, in pixel coords relative to the canvas boundaries
-				int featureY = Utils.relativeFPosToPixelOnCanvas(gChromoMap, f.getStart(), gChromoMap.isFullyInverted);
+				int featureY = Utils.relativeFPosToPixelOnCanvas(gChromoMap, f.getStart());
 				featurePositions.put(f, featureY);
-
 			}
 		}
 

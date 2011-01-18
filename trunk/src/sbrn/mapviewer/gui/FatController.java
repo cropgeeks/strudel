@@ -259,6 +259,7 @@ public class FatController
 		for (ZoomControlPanel zoomControlPanel : winMain.zoomControlPanels)
 		{
 			zoomControlPanel.showAllMarkersButton.setSelected(false);
+			zoomControlPanel.gMapSet.paintAllMarkers = false;
 		}
 
 		initialisePositionArrays();

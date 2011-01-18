@@ -20,7 +20,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 	JLabel label;
 	public JSlider zoomSlider;
 	JButton resetButton;
-	GMapSet gMapSet;
+	public GMapSet gMapSet;
 	public JToggleButton showAllMarkersButton;
 	JButton scrollUpButton, scrollDownButton;
 	JSpinner maxZoomSpinner;
@@ -152,15 +152,15 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 	//called when the zoom value spinner has been used
 	private void maxZoomSpinnerStateChanged(javax.swing.event.ChangeEvent e)
 	{
-		System.out.println("max zoom changed for mapset " + gMapSet.name);
-		System.out.println("old value = " + gMapSet.maxZoomFactor);
+//		System.out.println("max zoom changed for mapset " + gMapSet.name);
+//		System.out.println("old value = " + gMapSet.maxZoomFactor);
 
 		JSpinner source = (JSpinner) e.getSource();
 		gMapSet.maxZoomFactor = (Integer)source.getValue();
 		zoomSlider.setMaximum(gMapSet.maxZoomFactor);
 		updateSlider();
 
-		System.out.println("new value = " + gMapSet.maxZoomFactor);
+//		System.out.println("new value = " + gMapSet.maxZoomFactor);
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------

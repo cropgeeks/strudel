@@ -210,6 +210,31 @@ public class WinMain extends JFrame
 		//drag and drop support
 		FileDropAdapter dropAdapter = new FileDropAdapter(this);
 		setDropTarget(new DropTarget(this, dropAdapter));
+		
+		
+		//this is  a nasty hack to stop the Alt key messing up the focus system for the main canvas
+		//see http://stackoverflow.com/questions/1722864/disable-default-alt-key-action-in-jframe-under-windows
+		//this was necessary because Alt+click on chromosomes moved the focus away from  the main canvas and 
+		//as a result subsequent mouse presses were not being registered
+		this.addFocusListener(new FocusListener() {
+		        private final KeyEventDispatcher altDisabler = new KeyEventDispatcher() {
+		            @Override
+		            public boolean dispatchKeyEvent(KeyEvent e) {
+		                return e.getKeyCode() == 18;
+		            }
+		        };
+
+		        @Override
+		        public void focusGained(FocusEvent e) {
+		            KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(altDisabler);
+		        }
+
+		        @Override
+		        public void focusLost(FocusEvent e) {
+		            KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(altDisabler);
+		        }
+		    });
+
 
 	}
 

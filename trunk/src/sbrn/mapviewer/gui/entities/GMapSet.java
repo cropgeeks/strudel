@@ -19,7 +19,7 @@ public class GMapSet
 	public Color colour;
 
 	// a list with the maps (chromosomes) contained in this genome
-	public Vector<GChromoMap> gMaps;
+	public LinkedList<GChromoMap> gMaps;
 
 	// the number of chromosomes in this genome
 	public int numMaps;
@@ -102,13 +102,14 @@ public class GMapSet
 	// init the list of maps contained in this genome
 	public void initialise()
 	{
-		gMaps = new Vector<GChromoMap>();
+		gMaps = new LinkedList<GChromoMap>();
 
 		for (int i = 0; i < mapSet.size(); i++)
 		{
 			ChromoMap cMap = mapSet.getMaps().get(i);
 			GChromoMap gMap = new GChromoMap(cMap.getName(), i, this);
 			gMaps.add(gMap);
+			gMap.initialIndex = i;
 
 			//also check whether this gMap is shorter than the current shortest map
 			if(shortestMap == null && gMap.chromoMap.getStop() != 0)

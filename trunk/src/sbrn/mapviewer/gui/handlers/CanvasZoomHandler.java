@@ -55,9 +55,9 @@ public class CanvasZoomHandler
 		float newCenterPoint = selectedSet.totalY * proportion;
 		selectedSet.centerPoint = Math.round(newCenterPoint);
 
-		System.out.println("proportion = " + proportion);
-		System.out.println("selectedSet.totalY = " + selectedSet.totalY);
-		System.out.println("selectedSet.centerPoint = " + selectedSet.centerPoint);
+//		System.out.println("proportion = " + proportion);
+//		System.out.println("selectedSet.totalY = " + selectedSet.totalY);
+//		System.out.println("selectedSet.centerPoint = " + selectedSet.centerPoint);
 
 		//update the position lookup arrays for mouseover
 		Strudel.winMain.fatController.initialisePositionArrays();
@@ -89,7 +89,7 @@ public class CanvasZoomHandler
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
 	// zooms in by a fixed amount on a chromosome the user clicked on (to fill screen with chromosome)
-	public ClickZoomAnimator processClickZoomRequest(GChromoMap selectedMap)
+	public void processClickZoomRequest(GChromoMap selectedMap)
 	{
 
 		// figure out the genome it belongs to and increase that genome's zoom factor so that we can
@@ -118,8 +118,6 @@ public class CanvasZoomHandler
 		ClickZoomAnimator clickZoomAnimator = new ClickZoomAnimator(fps, clickZoomMillis, selectedMap,
 						mainCanvas, finalZoomFactor, finalTotalY, finalChromoHeight, this);
 		clickZoomAnimator.start();
-
-		return clickZoomAnimator;
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
@@ -156,6 +154,8 @@ public class CanvasZoomHandler
 	//used for adjusting zoom to a particular location and zoom level
 	public void adjustZoom(float newZoomFactor, GChromoMap selectedMap, int distFromBottom)
 	{
+//		System.out.println("ADJUST ZOOM");
+		
 		GMapSet selectedSet = selectedMap.owningSet;
 
 		//make sure the new zoom factor does not exceed the max allowed
@@ -177,6 +177,10 @@ public class CanvasZoomHandler
 		// the sum of all chromosome heights and the spacer heights minus either half the height of a chromo
 		// (for click zoom requests) or a calculated offset (for pan zoom requests)
 		float newCenterPoint = spaceToEndOfMapInPixels - distFromBottom;
+		
+//		System.out.println("selectedMap.currentHeight = " + selectedMap.currentHeight);
+//		System.out.println("spaceToEndOfMapInPixels = " + spaceToEndOfMapInPixels);
+//		System.out.println("selectedSet.centerPoint = " + newCenterPoint);
 
 		// update the genome centerpoint to the new percentage and update the scroller position
 		selectedSet.centerPoint = Math.round(newCenterPoint);

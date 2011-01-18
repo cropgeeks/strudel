@@ -96,9 +96,15 @@ BUGS to fix:
 
 - list of recent files can end up including same file over and over again
 - unnecessary repaints when doing mouseover on chromosome and features are not actually showing
+- unnecessary repaints when mouseover on checkbox areas in result control panel
 - entering into the selectable area of either of the two checkboxes on the results control panel triggers a change event even if there are no mouse clicks, despite there not being a mouselistener registered on the component
 - mouseover label display of feature name not working for features that are at position 0 on chromosome (reproduce with mini.strudel)
-
-
+ 
+- when display markers is selected, some (scaled) chromos in a genome may end up having them displayed, others don's -> looks odd
+- nullPointerException when data is loaded on top of an existing set
+- leftover highlighted links display when flicking through results table
+- features at position 0 on map are not drawn when map is fully inverted
+- on window resize chromosomes are not being redrawn at appropriate sizes
+- can't scroll to end of first chromosomes -- reproduce with mini.strudel
 
 

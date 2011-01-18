@@ -117,7 +117,6 @@ public class LinkDisplayManager
 	public void drawAllLinks(Graphics2D g2, Boolean killMe)
 	{
 		int numAllLinksDrawn = 0;
-		long startTime = System.currentTimeMillis();
 
 		//only do this if we have at least 2 genomes -- otherwise there are no links to deal with
 		if(Strudel.winMain.dataContainer.gMapSets.size() > 1)
@@ -227,8 +226,6 @@ public class LinkDisplayManager
 				e.printStackTrace();
 			}
 		}
-
-		long endTime = System.currentTimeMillis();
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -262,7 +259,7 @@ public class LinkDisplayManager
 					referenceFeature = link.getFeature2();
 				}
 				else
-					//if feature 2 is on the target map, feat 1 on the reference
+				//if feature 2 is on the target map, feat 1 on the reference
 				{
 					targetFeature = link.getFeature2();
 					referenceFeature = link.getFeature1();
@@ -274,18 +271,8 @@ public class LinkDisplayManager
 				float referenceFeatureStart = referenceFeature.getStart();
 
 				// convert the y value to scaled coordinates on the canvas by obtaining the coords of the appropriate chromosome object and scaling them appropriately
-				int targetY = Utils.relativeFPosToPixelOnCanvas(targetGMap, targetFeatureStart, false);
-				int referenceY = Utils.relativeFPosToPixelOnCanvas(referenceGMap, referenceFeatureStart, false);
-
-				//check for chromosome inversion and invert values if necessary
-				if (targetGMap.isPartlyInverted)
-				{
-					targetY = Utils.relativeFPosToPixelOnCanvas(targetGMap, targetFeatureStart, true);
-				}
-				if (referenceGMap.isPartlyInverted)
-				{
-					referenceY = Utils.relativeFPosToPixelOnCanvas(referenceGMap, referenceFeatureStart, true);
-				}
+				int targetY = Utils.relativeFPosToPixelOnCanvas(targetGMap, targetFeatureStart);
+				int referenceY = Utils.relativeFPosToPixelOnCanvas(referenceGMap, referenceFeatureStart);
 
 				//decide whether this link should be drawn or not
 				boolean drawLink = false;
@@ -300,8 +287,8 @@ public class LinkDisplayManager
 				if(linesDrawn.get(key) == null && drawLink)
 				{
 					linesDrawn.put(key, true);
-					// draw the link either as a straight line or a curve
-					drawStraightOrCurvedLink(g2, targetChromoX, targetY, referenceChromoX, referenceY);
+					// draw the link
+					drawSingleLink(g2, targetChromoX, targetY, referenceChromoX, referenceY);
 
 					numLinksDrawn++;
 				}
@@ -357,7 +344,7 @@ public class LinkDisplayManager
 			g2.setColor(Colors.strongEmphasisLinkColour);
 		else
 			g2.setColor(Colors.mildEmphasisLinkColour);
-		drawStraightOrCurvedLink(g2,targetChromoX, y1, referenceChromoX, y2);
+		drawSingleLink(g2,targetChromoX, y1, referenceChromoX, y2);
 	}
 
 
@@ -509,7 +496,7 @@ public class LinkDisplayManager
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
 	//draws a single link, either as a straight line or a curve depending on the value of the linkCurvatureCoeff set at class level
-	private void drawStraightOrCurvedLink(Graphics2D g2, int startX, int startY, int endX, int endY)
+	private void drawSingleLink(Graphics2D g2, int startX, int startY, int endX, int endY)
 	{
 		//if the linkCurvatureCoeff is 0 then the line will be straight and the control points are simply moved to either end of the line
 		//ctrlx1 - the X coordinate used to set the first control point of this CubicCurve2D

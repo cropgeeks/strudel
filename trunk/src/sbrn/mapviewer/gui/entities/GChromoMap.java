@@ -16,7 +16,7 @@ public class GChromoMap implements Comparable<GChromoMap>
 	// ============================vars==================================
 
 	// size stuff
-	//the height of the chromosome at any one time -- can change
+	//the height of the chromosome at any one time -- can change with zooming but not inversion
 	public int currentHeight;
 	//the initial height when fully zoomed out -- never changes
 	public int initialHeight;
@@ -24,7 +24,10 @@ public class GChromoMap implements Comparable<GChromoMap>
 
 	// position stuff
 	//these are relative to the screen bounds at any one time
+	//the top left corner of the map in x coordinate (pixel) space on the canvas
 	public int x;
+	//the top left corner of the map in y coordinate (pixel) space on the canvas
+	//the y coordinate can off screen (i.e. negative) if we are zoomed in
 	public int y;
 
 	public Color colour;
@@ -75,24 +78,28 @@ public class GChromoMap implements Comparable<GChromoMap>
 	//the colour in the centre of the chromosome
 	Color centreColour;
 
+	
+	//all of the following vars are related to inverting the map
 	//this is the angle at which we draw this map, measured from vertical and going clockwise
-	public float angleFromVertical = 90;
+	public float angleOnZAxis = 90;
 	public float undersideBrightness;
-
 	//true if this chromosome is shown fully inverted
 	public boolean isFullyInverted = false;
 	//true if this chromosome is shown partly inverted
 	public boolean isPartlyInverted = false;
 	//true while the inversion of the chromosome is in progress
 	public boolean inversionInProgress = false;
+	//the height during inversion
+	public int inversionHeight;
+	//the top left corner y position of the chromosome during an inversion event
+	//this is zero at all other times
+	public int currentY = 0;
+	//a factor used to calculate the currentY value from the angle during the inversion
+	public float inversionScalingFactor = 0;
+	
 
 	//true if we want to draw the number of the chromosome
 	public boolean drawChromoIndex = true;
-
-	//the top left corner y position of the chromosome during an inversion event
-	public int currentY = 0;
-	//a factor used to calculate the currentY value from the angle during the inversion
-	public float multiplier = 0;
 
 	//these vars allow us to colour in a region on the chromosome for highlighting
 	public boolean highlightChromomapRegion = false;
@@ -116,10 +123,12 @@ public class GChromoMap implements Comparable<GChromoMap>
 	public int spaceAboveMap = -1;
 
 
-	// ============================curve'tors==================================
+	// ============================c'tors==================================
 
 	public GChromoMap(String name, int index, GMapSet owningSet)
 	{
+//		System.out.println("adding map " + name + " with index " + index + " for mapset " + owningSet.name);
+		
 		this.name = name;
 		this.index = index;
 		initialIndex = index;
@@ -138,6 +147,7 @@ public class GChromoMap implements Comparable<GChromoMap>
 	 */
 	public void paintMap(Graphics g)
 	{
+
 		try
 		{
 			Graphics2D g2 = (Graphics2D) g;
@@ -151,17 +161,17 @@ public class GChromoMap implements Comparable<GChromoMap>
 			}
 			else if(highlight)
 				colour = Colors.chromosomeHighlightColour;
-			else if(this == Strudel.winMain.fatController.draggedMap)
-				colour = Colors.chromosomeDimmedOutColour;
+//			else if(this == Strudel.winMain.fatController.draggedMap)
+//				colour = Colors.chromosomeDimmedOutColour;
 			else
 				colour = Colors.genomeColour;
 
 			//this is the colour of the centre of the chromo -- needs to be brighter so we can get the 3d effect
 			centreColour = colour.brighter().brighter().brighter().brighter();
-
+			
 			//adjust the y in case we are inverting
-			multiplier = Math.abs(((Math.abs(angleFromVertical / 90.0f)) -1.0f) *0.5f);
-			currentY = Math.round(multiplier * currentHeight);
+			inversionScalingFactor = Math.abs(((Math.abs(angleOnZAxis / 90.0f)) -1.0f) *0.5f);
+			currentY = Math.round(inversionScalingFactor * currentHeight);			
 
 			//adjust the colours according to the angle to create a pseudo-3d effect when inverting
 			//first get the main colour and extract its hsb values
@@ -169,7 +179,7 @@ public class GChromoMap implements Comparable<GChromoMap>
 			//reduce the brightness value if necessary
 			float currentBrightness = hsb[2];
 			//scale by angle
-			float newBrightness = Math.abs(angleFromVertical / 90.0f) * currentBrightness;
+			float newBrightness = Math.abs(angleOnZAxis / 90.0f) * currentBrightness;
 			//don't let this fall below a threshold
 			if(newBrightness < 0.3f)
 				newBrightness = 0.3f;
@@ -181,7 +191,7 @@ public class GChromoMap implements Comparable<GChromoMap>
 			//reduce the brightness value if necessary
 			float currentCenterBrightness = hsbCentreColour[2];
 			//scale by angle
-			float newCenterBrightness = Math.abs(angleFromVertical / 90.0f) * currentCenterBrightness;
+			float newCenterBrightness = Math.abs(angleOnZAxis / 90.0f) * currentCenterBrightness;
 			//don't let this fall below a threshold
 			if(newCenterBrightness < 0.3f)
 				newCenterBrightness = 0.3f;
@@ -203,12 +213,15 @@ public class GChromoMap implements Comparable<GChromoMap>
 			//the same as the top half
 			if(bottomHalfLengthOfRect > topHalfLengthOfRect)
 				rectHeight = topHalfLengthOfRect * 2;
-
-			//now draw the rectangle
+			
+			//for the purpose of inversion we store the height in this variable
+			inversionHeight = rectHeight;
+			
+			//draw the bounding rectangle for the map		
 			Rectangle rect = new Rectangle(0, currentY, width, rectHeight);
 			g2.draw(rect);
 			//fill the rectangle with two different gradient fills
-			// draw first half of chromosome
+			// draw first half of fill
 			GradientPaint gradient = new GradientPaint(0, 0, colour, width / 2, 0, centreColour, true);
 			g2.setPaint(gradient);
 			g2.fillRect(0, currentY, width, rectHeight);
@@ -219,18 +232,17 @@ public class GChromoMap implements Comparable<GChromoMap>
 				highlightChromomapRegion(g2);
 			}
 
-
 			//if the chromosome is being inverted
-			if(angleFromVertical != 90 && angleFromVertical != -90)
-			{
+			if(angleOnZAxis != 90 && angleOnZAxis != -90)
+			{				
 				//now draw two ellipses
 				//these represent the underside and the top of the cylinder which may or may not visible depending on the angle and
 				//which also changes shape with the angle
 				//the constant in the following equations (0.0055f) is derived from a linear function that describes the movement of
 				//the ellipse up and down the chromosome as a function of the angle
-				float ellipseHeight = (float) (Math.cos(Math.toRadians(angleFromVertical)) * width);
-				float bottomEllipseY = (((-0.0055f * angleFromVertical) + 0.5f) * currentHeight) - ellipseHeight/2.0f;
-				float topEllipseY = (((0.0055f * angleFromVertical) + 0.5f) * currentHeight) - ellipseHeight/2.0f;
+				float ellipseHeight = (float) (Math.cos(Math.toRadians(angleOnZAxis)) * width);
+				float bottomEllipseY = (((-0.0055f * angleOnZAxis) + 0.5f) * currentHeight) - ellipseHeight/2.0f;
+				float topEllipseY = (((0.0055f * angleOnZAxis) + 0.5f) * currentHeight) - ellipseHeight/2.0f;
 
 				//draw an ellipse representing the top of the chromosome
 				//needs to be drawn in two halves so we can add the gradient to create the illusion of a highlight
@@ -252,7 +264,7 @@ public class GChromoMap implements Comparable<GChromoMap>
 
 				//draw an ellipse representing the underside of the chromosome
 				Ellipse2D bottomEllipse2D = new Ellipse2D.Float(0, bottomEllipseY, width, ellipseHeight);
-				undersideBrightness = (1.0f/(Math.abs(angleFromVertical / 90.0f))) * 0.1f;
+				undersideBrightness = (1.0f/(Math.abs(angleOnZAxis / 90.0f))) * 0.1f;
 				//make sure this is not any brighter than the centreColour brightness
 				if(undersideBrightness > hsbCentreColour[2])
 					undersideBrightness = hsbCentreColour[2];
@@ -262,15 +274,11 @@ public class GChromoMap implements Comparable<GChromoMap>
 
 			// now draw features and labels as required
 			if (owningSet.paintAllMarkers && isShowingOnCanvas)
-			{
-				drawLinkedFeatures(g2);
-			}
+				drawFeatures(g2);
 
 			//draw the selection rectangle if required
 			if (drawSelectionRect)
-			{
 				drawSelectionRectangle(g2);
-			}
 		}
 		catch (RuntimeException e)
 		{
@@ -430,6 +438,8 @@ public class GChromoMap implements Comparable<GChromoMap>
 	// initialises the arrays we need for fast drawing
 	public void initArrays()
 	{
+//		System.out.println("init arrays");
+		
 		// init the arrays that hold ALL the features for this map
 		int numFeatures = chromoMap.countFeatures();
 
@@ -456,12 +466,6 @@ public class GChromoMap implements Comparable<GChromoMap>
 				//then store this value in the array we use for drawing
 				allLinkedFeaturePositions[i] = Utils.relativeFPosToPixelsOnGMap(this, start);
 
-				//if the map is inverted we need to store the inverse of this value i.e. the map end value minus the feature position
-				if(isFullyInverted || isPartlyInverted)
-				{
-					allLinkedFeaturePositions[i] = (int) ((currentHeight / chromoMap.getStop()) * (chromoMap.getStop() -start));
-				}
-
 				//also store a reference to the feature itself in a parallel array
 				allLinkedFeatures[i] = f;
 			}
@@ -474,7 +478,7 @@ public class GChromoMap implements Comparable<GChromoMap>
 	// -----------------------------------------------------------------------------------------------------------------------------------------
 
 	// draw the markers for the features
-	private void drawLinkedFeatures(Graphics2D g2)
+	private void drawFeatures(Graphics2D g2)
 	{
 
 		int lastY = -1;
@@ -494,10 +498,10 @@ public class GChromoMap implements Comparable<GChromoMap>
 				{
 					yPos = allLinkedFeaturePositions[i];
 				}
-
+				
 				//check whether inversion in progress
 				if(inversionInProgress)
-					yPos = Math.round((yPos * (currentHeight / (float)currentHeight)) + currentY);
+					yPos = Math.round((yPos * (inversionHeight / (float)currentHeight)) + currentY);
 
 				//check whether this position is currently showing on the canvas or not
 				boolean featureIsVisible = false;
@@ -505,9 +509,7 @@ public class GChromoMap implements Comparable<GChromoMap>
 				int lowerViewPortBoundary = owningSet.centerPoint + (Strudel.winMain.mainCanvas.getHeight()/2);
 				int fPosPixelsOnCanvas = Utils.pixelsOnChromoToPixelsOnCanvas(this, yPos, inversionInProgress);
 				if (fPosPixelsOnCanvas > upperViewPortBoundary && fPosPixelsOnCanvas < lowerViewPortBoundary)
-				{
 					featureIsVisible = true;
-				}
 
 				// draw a line for the marker
 				if (yPos != lastY && featureIsVisible)

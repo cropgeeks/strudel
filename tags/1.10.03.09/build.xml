@@ -1,0 +1,77 @@
+<project name="MapViewer" default="compile" basedir=".">
+	<description>MapViewer Ant Build Script</description>
+
+	<property name="src" location="src"/>
+	<property name="res" location="res"/>
+	<property name="classes" location="classes"/>
+	<property name="lib" location="lib"/>
+
+	<property name="mapviewer.jar" value="${lib}/mapviewer.jar"/>
+	<property name="i4j" value="C:\Program Files\install4j\bin\ant.jar"/>
+
+
+	<path id="project.classpath">
+		<fileset dir="${lib}">
+			<include name="**/*.jar"/>
+			<exclude name="**/${mapviewer.jar}"/>
+		</fileset>
+	</path>
+
+	<target name="clean">
+		<delete includeemptydirs="true">
+			<fileset dir="${classes}" includes="**/*"/>
+			<fileset file="${mapviewer.jar}"/>
+		</delete>
+	</target>
+	
+	<target name="init">
+		<mkdir dir="classes"/>
+	</target>
+
+	<target name="compile" depends="init , clean">
+		<javac srcdir="${src}" destdir="${classes}" target="1.5" debug="yes">
+			<classpath refid="project.classpath"/>
+			<exclude name="**/package-info.java"/>
+		</javac>
+	</target>
+
+	<target name="jar" depends="clean, compile">
+		<jar jarfile="${mapviewer.jar}">
+			<fileset dir="${classes}"/>
+			<zipfileset dir="${res}" prefix="res"/>
+			<manifest>
+				<attribute name="Main-Class" value="sbrn.mapviewer.gui.MapViewer"/>
+				<attribute name="Class-Path"
+					value="osxadapter.jar
+						scri-commons.jar
+						swing-layout-1.0.3.jar
+						i4jruntime.jar
+						office-2.0.jar					
+					"/>
+			</manifest>
+		</jar>
+	</target>
+	
+	<target name="install4j" depends="jar">
+		<taskdef name="install4j"
+		classname="com.install4j.Install4JTask"
+		classpath="${i4j}"/>	
+		<delete>
+			<fileset dir="installer" includes="**/*.exe"/>
+			<fileset dir="installer" includes="**/*.sh"/>
+			<fileset dir="installer" includes="**/*.dmg"/>
+		</delete>
+		<input message="Enter the version number:" addproperty="version"/>
+		<install4j projectfile="installer/Strudel.install4j" release="${version}"/>
+	</target>
+
+	<target name="javadoc">
+		<javadoc destdir="docs/api" author="true" version="true" use="true">
+			<fileset dir="${src}" defaultexcludes="yes">
+				<include name="**/*.java"/>
+			</fileset>
+			<classpath refid="project.classpath"/>
+		</javadoc>
+	</target>
+
+</project>

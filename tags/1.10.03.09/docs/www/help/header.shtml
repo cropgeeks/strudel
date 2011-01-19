@@ -1,0 +1,43 @@
+<div id="page">
+
+
+<div id="header">
+	<span class="logo">
+	</span>
+</div>
+
+<div id="headerImage">
+</div>
+
+<div id="topNav">
+	<span class="headerText">
+		<b>Plant Bioinformatics Group</b>
+	</span>
+</div>
+
+<div id="navigation">
+
+<div class="block-header">Strudel</div>
+<ul class="navigation">
+  <li><a href="../">Strudel Homepage</a></li>
+</ul>
+
+<div class="block-header">Strudel Manual</div>
+<ul class="navigation">
+   <li><a href="quickstart.shtml">Quickstart tutorial</a></li>
+  <li><a href="data.shtml">Data format/Loading data</a></li>
+  <li><a href="controls.shtml">General controls</a></li>
+  <li><a href="view.shtml">View settings</a></li>
+  <li><a href="exploration.shtml">Feature exploration</a></li>
+</ul>
+
+<div class="block-header">Miscellaneous</div>
+<ul class="navigation">
+   <li><a href="whatsnew.shtml">What's new in Strudel</a></li>
+</ul>
+
+</div>
+
+
+
+<div id="content">

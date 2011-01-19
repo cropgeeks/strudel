@@ -1,0 +1,114 @@
+<project name="MapViewer" default="compile" basedir=".">
+	<description>MapViewer Ant Build Script</description>
+
+	<property name="src" location="src"/>
+	<property name="res" location="res"/>
+	<property name="classes" location="classes"/>
+	<property name="lib" location="lib"/>
+
+	<property name="mapviewer.jar" value="${lib}/mapviewer.jar"/>
+	<property name="i4j" value="C:\Program Files\install4j5\bin\ant.jar"/>
+
+
+	<path id="project.classpath">
+		<fileset dir="${lib}">
+			<include name="**/*.jar"/>
+			<exclude name="**/${mapviewer.jar}"/>
+		</fileset>
+	</path>
+
+	<target name="clean">
+		<delete includeemptydirs="true">
+			<fileset dir="${classes}" includes="**/*"/>
+			<fileset file="${mapviewer.jar}"/>
+		</delete>
+	</target>
+	
+	<target name="init">
+		<mkdir dir="classes"/>
+	</target>
+
+	<target name="compile" depends="init , clean">
+		<javac srcdir="${src}" destdir="${classes}" target="1.5" debug="yes" deprecation="true">
+			<classpath refid="project.classpath"/>
+			<exclude name="**/package-info.java"/>
+		</javac>
+	</target>
+
+	<target name="jar" depends="clean, compile">
+		<condition property="i4j.version" value="x.xx.xx.xx">
+			<equals arg1="${i4j.version}" arg2="${i4j.version}"/>
+		</condition>
+
+		<jar jarfile="${mapviewer.jar}">
+			<fileset dir="${classes}"/>
+			<zipfileset dir="${res}" prefix="res"/>
+			<manifest>
+				<attribute name="Main-Class" value="sbrn.mapviewer.Strudel"/>
+				<attribute name="Class-Path"
+					value="osxadapter.jar
+						scri-commons.jar
+						swing-layout-1.0.3.jar
+						i4jruntime.jar
+						office-2.0.jar					
+					"/>
+				<attribute name="Implementation-Version" value="${i4j.version}"/>
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="getversion">
+		<input message="Enter the version number:" addproperty="i4j.version"/>
+	</target>
+
+	
+	<target name="install4j" depends="getversion, jar">
+		<taskdef name="install4j"
+		classname="com.install4j.Install4JTask"
+		classpath="${i4j}"/>
+		
+		<delete>
+			<fileset dir="installer" includes="**/*.exe"/>
+			<fileset dir="installer" includes="**/*.sh"/>
+			<fileset dir="installer" includes="**/*.dmg"/>
+		</delete>
+		<install4j projectfile="installer/strudel.install4j" release="${version}"/>
+	</target>
+
+	<target name="javadoc">
+		<javadoc destdir="docs/api" author="true" version="true" use="true">
+			<fileset dir="${src}" defaultexcludes="yes">
+				<include name="**/*.java"/>
+			</fileset>
+			<classpath refid="project.classpath"/>
+		</javadoc>
+	</target>
+
+	<target name="sign" depends="jar">
+		<input message="Enter the storepass:" addproperty="storepass"/>
+		<signjar alias="plantbio" storepass="${storepass}"
+			preservelastmodified="true" lazy="true"
+			tsaurl="https://timestamp.geotrust.com/tsa">
+			<fileset dir="${lib}">
+				<include name="**/*.jar"/>
+			</fileset>
+		</signjar>
+	</target>
+
+	<target name="jnlp" depends="getversion, sign">
+		<copy
+			file="docs/www/cgi-bin/strudel.jnlp.template"
+			tofile="\\bioinf\root\var\www\html\strudel\webstart\strudel.jnlp.template"
+			overwrite="true">
+			<filterset>
+				<filter token="VERSION" value="${version} WS"/>
+			</filterset>
+		</copy>
+		<copy todir="\\bioinf\root\var\www\html\strudel\webstart">
+			<fileset dir="${lib}">
+				<include name="**/*.jar"/>
+			</fileset>
+		</copy>
+	</target>
+
+</project>

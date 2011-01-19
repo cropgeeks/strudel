@@ -61,7 +61,7 @@ public class OverviewDialog extends JDialog
 			@Override
 			public void windowClosing(WindowEvent e)
 			{
-				winMain.mView.showOverview();
+				winMain.toolbar.toggleOverviewDialog();
 			}
 		});
 	}

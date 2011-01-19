@@ -2,7 +2,6 @@
 
 features to implement -- general:
 
-- preference support for filling whole screen with genome when zoomed out (rather thanhaving all chromso in all genomes the same size)
 - use hash map of line positions to store int instead of hash of coords, then use int to colour lines according to how many are covered by the same position/line
 - visualize paralogs within genomes by drawing arcs back onto the genome itself
 - include Sorghum in example dataset and rebuild dataset from scratch, including BLAST hits in both directions, removing duplicates, and removing duff homologs between features that are not listed
@@ -94,17 +93,9 @@ REFACTORING:
 
 BUGS to fix:
 
-- list of recent files can end up including same file over and over again
 - unnecessary repaints when doing mouseover on chromosome and features are not actually showing
-- unnecessary repaints when mouseover on checkbox areas in result control panel
 - entering into the selectable area of either of the two checkboxes on the results control panel triggers a change event even if there are no mouse clicks, despite there not being a mouselistener registered on the component
 - mouseover label display of feature name not working for features that are at position 0 on chromosome (reproduce with mini.strudel)
- 
-- when display markers is selected, some (scaled) chromos in a genome may end up having them displayed, others don's -> looks odd
-- nullPointerException when data is loaded on top of an existing set
-- leftover highlighted links display when flicking through results table
-- features at position 0 on map are not drawn when map is fully inverted
-- on window resize chromosomes are not being redrawn at appropriate sizes
-- can't scroll to end of first chromosomes -- reproduce with mini.strudel
+
 
 

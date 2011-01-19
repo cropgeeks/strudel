@@ -92,7 +92,7 @@ public class HintPanel extends JPanel
 		GChromoMap selectedMap = Strudel.winMain.mouseHandler.mouseOverHandler.selectedMap;
 		if(selectedMap != null)
 		{
-			if(selectedMap.owningSet.zoomFactor == 1)
+			if(selectedMap.owningSet.zoomFactor >= selectedMap.owningSet.singleChromoViewZoomFactor)
 				HintPanel.setLabel(HintPanel.zoomInStr);
 			else if(selectedMap.highlight && Strudel.winMain.mainCanvas.drawLinks)
 				HintPanel.setLabel(HintPanel.altClickStr);

@@ -20,8 +20,7 @@ public class WinMainMenuBar extends JMenuBar
 	private JMenuItem mLoadData;
 	private JMenuItem mLoadExample;
 	private JMenuItem mExportImage;
-	private JMenuItem mSaveTableData;
-	private JMenuItem mSaveMapOrder;
+	private JMenuItem mSaveResults;
 
 	// The components of the explore menu
 	private JMenu mExplore;
@@ -34,9 +33,19 @@ public class WinMainMenuBar extends JMenuBar
 	private JMenuItem mColourChooser;
 	private JMenuItem mConfigureDatasets;
 	private JMenuItem mReset;
-	private JMenuItem mConfigureViewSettings;
+	// The components of the view settings sub-menu
+	private JMenu mViewSettings;
+	private JMenuItem mShowHint;
+	private JMenuItem mAntialiasedDraw;
+	private JMenuItem mFilterLinks;
+	private JMenuItem mShowDistanceMarkers;
+	// The components of the link shape sub-menu
+	private JMenu mLinkShape;
+	private JMenuItem mCurved;
+	private JMenuItem mStraight;
+	private JMenuItem mAngled;
 
-	// The components of the about menu
+	// The componenets of the about menu
 	private JMenu mAbout;
 	private JMenuItem mHelp;
 	private JMenuItem mAboutStrudel;
@@ -64,9 +73,8 @@ public class WinMainMenuBar extends JMenuBar
 
 		mLoadData = getItem(Actions.loadData, "Load Data", KeyEvent.VK_O, Strudel.ctrlMenuShortcut);
 		mLoadExample = getItem(Actions.loadExample, "Load Example", KeyEvent.VK_L, Strudel.ctrlMenuShortcut);
-		mExportImage = getItem(Actions.exportImage, "Export Image...", KeyEvent.VK_E, Strudel.ctrlMenuShortcut);
-		mSaveTableData = getItem(Actions.saveTableData, "Save Table Data...", 0,0);
-		mSaveMapOrder = getItem(Actions.saveMapOrder, "Save Map Order...", 0, 0);
+		mExportImage = getItem(Actions.exportImage, "Export Image", KeyEvent.VK_E, Strudel.ctrlMenuShortcut);
+		mSaveResults = getItem(Actions.saveResults, "Save Results", KeyEvent.VK_S, Strudel.ctrlMenuShortcut);
 
 		mRecentFiles = new JMenu("Recent Files");
 		createRecentMenu();
@@ -74,8 +82,7 @@ public class WinMainMenuBar extends JMenuBar
 		mFile.add(mLoadData);
 		mFile.add(mLoadExample);
 		mFile.addSeparator();
-		mFile.add(mSaveTableData);
-		mFile.add(mSaveMapOrder);
+		mFile.add(mSaveResults);
 		mFile.add(mExportImage);
 		mFile.addSeparator();
 		mFile.add(mRecentFiles);
@@ -113,7 +120,21 @@ public class WinMainMenuBar extends JMenuBar
 		mColourChooser = getItem(Actions.customiseColours, "Customise colours", KeyEvent.VK_C, Strudel.ctrlMenuShortcut);
 		mConfigureDatasets = getItem(Actions.configureDatasets, "Configure datasets", 0, 0);
 		mReset = getItem(Actions.reset, "Reset", 0, 0);
-		mConfigureViewSettings = getItem(Actions.configureViewSettings, "Configure view settings", 0, 0);
+
+		mViewSettings = new JMenu(Actions.viewSettings);
+		mViewSettings.setMnemonic('S');
+
+		mShowHint = getCheckedItem(Actions.showHint, "Show hint panel", KeyEvent.VK_H, Strudel.ctrlMenuShortcut);
+		mAntialiasedDraw = getCheckedItem(Actions.antialiasedDraw, "Draw antialiased", KeyEvent.VK_A, Strudel.ctrlMenuShortcut);
+		mFilterLinks = getCheckedItem(Actions.filterLinks, "Filter links", 0, 0);
+		mShowDistanceMarkers = getCheckedItem(Actions.showDistanceMarkers, "Show distance markers", KeyEvent.VK_D, Strudel.ctrlMenuShortcut);
+
+		mLinkShape = new JMenu(Actions.linkShape);
+		mLinkShape.setMnemonic('L');
+
+		mCurved = getCheckedItem(Actions.linkCurved, "Curved", 0, Strudel.ctrlMenuShortcut);
+		mStraight = getCheckedItem(Actions.linkStraight, "Straight", 0, Strudel.ctrlMenuShortcut);
+		mAngled = getCheckedItem(Actions.linkAngled, "Angled", 0, Strudel.ctrlMenuShortcut);
 
 		mView.add(mShowOverview);
 		mView.addSeparator();
@@ -121,8 +142,22 @@ public class WinMainMenuBar extends JMenuBar
 		mView.add(mConfigureDatasets);
 		mView.addSeparator();
 		mView.add(mReset);
-		mView.add(mConfigureViewSettings);
+		mView.addSeparator();
+		mView.add(mViewSettings);
+		mViewSettings.add(mShowHint);
+		mViewSettings.add(mAntialiasedDraw);
+		mViewSettings.add(mFilterLinks);
+		mViewSettings.add(mShowDistanceMarkers);
+		mView.add(mLinkShape);
 
+		ButtonGroup grp = new ButtonGroup();
+		grp.add(mCurved);
+		grp.add(mStraight);
+		grp.add(mAngled);
+
+		mLinkShape.add(mCurved);
+		mLinkShape.add(mStraight);
+		mLinkShape.add(mAngled);
 		add(mView);
 	}
 
@@ -203,4 +238,9 @@ public class WinMainMenuBar extends JMenuBar
 		mRecentFiles.setEnabled(mRecentFiles.getItemCount() > 0);
 	}
 
+	public JMenuItem getMShowHint()
+		{	return mShowHint;	}
+
+	public JMenuItem getMAntialiasedDraw()
+		{	return mAntialiasedDraw;	}
 }

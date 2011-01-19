@@ -147,23 +147,22 @@ public class FeatureSearchHandler
 			//this array holds all the names of the features we need to display
 			String [] allNames = new String[0];
 			String input =  findFeaturesDialog.ffPanel.getFFTextArea().getText();
-			
-			//parse input
+			//parse inputFile
 			allNames = input.split("\n");
 
 			//get the corresponding feature objects
-			Vector<Feature> findFeatures = new Vector<Feature>(allNames.length);
+			Vector<Feature> features = new Vector<Feature>(allNames.length);
 			for (int i = 0; i < allNames.length; i++)
 			{
-				ArrayList<Feature> features = Utils.getFeatureByName(allNames[i].trim());
-				if(features.size() > 0)
+				Feature f = Utils.getFeatureByName(allNames[i].trim());
+				if(f !=null)
 				{
-					findFeatures.addAll(features);
+					features.add(f);
 				}
 			}
 
 			//we have found features
-			if (findFeatures.size() > 0)
+			if (features.size() > 0)
 			{
 				//set the results panel to be visible
 				findFeaturesDialog.setVisible(false);
@@ -172,7 +171,7 @@ public class FeatureSearchHandler
 				Strudel.winMain.splitPane.setDividerLocation(newDividerLocation);
 
 				//now put the results into the JTable held by the results panel
-				updateResultsTable(findFeatures);
+				updateResultsTable(features);
 
 				//earmark the features for drawing on repaint
 				Strudel.winMain.mainCanvas.drawFeaturesFoundByName = true;
@@ -188,9 +187,9 @@ public class FeatureSearchHandler
 			}
 
 		}
-		catch (Exception e)
+		catch (RuntimeException e1)
 		{
-			e.printStackTrace();
+			e1.printStackTrace();
 		}
 	}
 
@@ -208,7 +207,7 @@ public class FeatureSearchHandler
 		((ResultsTable)Strudel.winMain.ffResultsPanel.getFFResultsTable()).initColumnSizes();
 
 		//enable the button that allows export of this data to file
-		Actions.saveTableData.setEnabled(true);
+		Actions.saveResults.setEnabled(true);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

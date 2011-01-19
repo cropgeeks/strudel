@@ -28,7 +28,26 @@ public class LabelDisplayManager
 	//draws labels for a set of features that the user searched for
 	public static void drawLabelsForFoundFeatures(Graphics2D g2)
 	{
-
+		//this is what we do when we are exploring a single continuous range on a given chromosome
+//		if (Strudel.winMain.mainCanvas.drawFoundFeaturesInRange)
+//		{
+//			//the features we need to draw
+//			Vector<Feature> features = new Vector<Feature>();
+//			for (ResultsTableEntry tableEntry : Strudel.winMain.ffResultsPanel.resultsTable.getVisibleEntries())
+//			{
+//				//get the feature for this entry and add it to the lookup
+//				Feature targetF = tableEntry.getTargetFeature();
+//				if(!features.contains(targetF))
+//					features.add(targetF);
+//				//do the same for the homolog
+//				Feature homolog = tableEntry.getHomologFeature();
+//				if (tableEntry.getHomologFeature() != null && !features.contains(homolog))
+//					features.add(homolog);
+//			}
+//
+//			//only draw those features that are actually visible on canvas
+//			drawFeatureLabelsInRange(Strudel.winMain.fatController.selectionMap, g2, Utils.checkFeatureVisibility(Strudel.winMain.fatController.selectionMap, features), false, null);
+//		}
 		//this is what we do when the results come from a name based feature search, i.e. the features can be on a number of different chromosomes
 		if (Strudel.winMain.mainCanvas.drawFeaturesFoundByName || Strudel.winMain.mainCanvas.drawFoundFeaturesInRange)
 		{
@@ -87,7 +106,7 @@ public class LabelDisplayManager
 		ChromoMap chromoMap = f.getOwningMap();
 		float mapEnd = chromoMap.getStop();
 		// this factor normalises the position to a value between 0 and 100
-		float scalingFactor = gMap.currentHeight / mapEnd;
+		float scalingFactor = gMap.height / mapEnd;
 
 		// the y position of the feature itself
 		int featureY;
@@ -347,7 +366,7 @@ public class LabelDisplayManager
 			{
 
 				// the y position of the feature itself on the canvas, in pixel coords relative to the canvas boundaries
-				int featureY = Utils.relativeFPosToPixelOnCanvas(gChromoMap, f.getStart());
+				int featureY = Utils.relativeFPosToPixelOnCanvas(gChromoMap, f.getStart(), gChromoMap.isFullyInverted);
 				featurePositions.put(f, featureY);
 
 			}
@@ -367,13 +386,15 @@ public class LabelDisplayManager
 		{
 			if (f != null)
 			{
+
 				//if we are doing this at the mapset scale (e.g. when we are drawing labels for found features) we need to
 				//figure out the gMap from the gMapSet here
 				GChromoMap gChromoMap = Utils.getGMapByNameAndGMapset(f.getOwningMap().getName(), gMapSet);
 
 				// the y position of the feature itself on the canvas, in pixel coords relative to the canvas boundaries
-				int featureY = Utils.relativeFPosToPixelOnCanvas(gChromoMap, f.getStart());
+				int featureY = Utils.relativeFPosToPixelOnCanvas(gChromoMap, f.getStart(), gChromoMap.isFullyInverted);
 				featurePositions.put(f, featureY);
+
 			}
 		}
 

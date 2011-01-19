@@ -136,9 +136,6 @@ public class WinMain extends JFrame
 		createMemoryTimer();
 
 		setJMenuBar(menuBar);
-
-		//this is for detecting key events
-		addKeyListener(new CanvasKeyListener());
 	}
 
 	//=================================================methods=====================================
@@ -210,31 +207,6 @@ public class WinMain extends JFrame
 		//drag and drop support
 		FileDropAdapter dropAdapter = new FileDropAdapter(this);
 		setDropTarget(new DropTarget(this, dropAdapter));
-		
-		
-		//this is  a nasty hack to stop the Alt key messing up the focus system for the main canvas
-		//see http://stackoverflow.com/questions/1722864/disable-default-alt-key-action-in-jframe-under-windows
-		//this was necessary because Alt+click on chromosomes moved the focus away from  the main canvas and 
-		//as a result subsequent mouse presses were not being registered
-		this.addFocusListener(new FocusListener() {
-		        private final KeyEventDispatcher altDisabler = new KeyEventDispatcher() {
-		            @Override
-		            public boolean dispatchKeyEvent(KeyEvent e) {
-		                return e.getKeyCode() == 18;
-		            }
-		        };
-
-		        @Override
-		        public void focusGained(FocusEvent e) {
-		            KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(altDisabler);
-		        }
-
-		        @Override
-		        public void focusLost(FocusEvent e) {
-		            KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(altDisabler);
-		        }
-		    });
-
 
 	}
 
@@ -319,8 +291,6 @@ public class WinMain extends JFrame
 		}
 	}
 
-
-
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void hideSplitPaneBottomHalf()
@@ -331,8 +301,8 @@ public class WinMain extends JFrame
 		splitPane.setDividerSize(0);
 
 		//refresh the main canvas
-		validate();
-		mainCanvas.updateCanvas(true);
+		Strudel.winMain.validate();
+		Strudel.winMain.mainCanvas.updateCanvas(true);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -341,37 +311,29 @@ public class WinMain extends JFrame
 	//needs to be done when users load different datasets in succession
 	public void reinitialiseDependentComponents()
 	{
-		try
+		//remove existing components
+		zoomControlAndGenomelabelContainer.remove(zoomControlContainerPanel);
+		for(OverviewCanvas overviewCanvas : overviewCanvases)
 		{
-			//remove existing components
-			zoomControlAndGenomelabelContainer.remove(zoomControlContainerPanel);
-			for(OverviewCanvas overviewCanvas : overviewCanvases)
-			{
-				overviewDialog.remove(overviewCanvas);
-			}
-
-			//clear lists with the corresponding objects
-			zoomControlPanels.clear();
-			overviewCanvases.clear();
-
-			//reinstate everything
-			//the panels with the zoom control sliders
-			initZoomControls();
-			foundFeaturesTableControlPanel.setupGenomeFilterCombo();
-			zoomControlAndGenomelabelContainer.add(zoomControlContainerPanel, BorderLayout.CENTER);
-
-			initOverviewDialog();
-
-			Strudel.winMain.ffInRangeDialog.ffInRangePanel.initRemainingComponents();
-
-			//the labels with the genome names need to be updated
-			genomeLabelPanel.repaint();
+			overviewDialog.remove(overviewCanvas);
 		}
-		catch (Exception e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		//clear lists with the corresponding objects
+		zoomControlPanels.clear();
+		overviewCanvases.clear();
+
+		//reinstate everything
+		//the panels with the zoom control sliders
+		initZoomControls();
+		foundFeaturesTableControlPanel.setupGenomeFilterCombo();
+		zoomControlAndGenomelabelContainer.add(zoomControlContainerPanel, BorderLayout.CENTER);
+
+		initOverviewDialog();
+
+		Strudel.winMain.ffInRangeDialog.ffInRangePanel.initRemainingComponents();
+
+		//the labels with the genome names need to be updated
+		genomeLabelPanel.repaint();
 	}
 
 

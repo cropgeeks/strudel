@@ -17,8 +17,7 @@ public class Actions
 	public static AbstractAction loadData;
 	public static AbstractAction loadExample;
 	public static AbstractAction exportImage;
-	public static AbstractAction saveTableData;
-	public static AbstractAction saveMapOrder;
+	public static AbstractAction saveResults;
 
 	// Explore menu actions
 	public static AbstractAction findFeature;
@@ -29,17 +28,12 @@ public class Actions
 	public static AbstractAction customiseColours;
 	public static AbstractAction configureDatasets;
 	public static AbstractAction reset;
-
 	// View Settings menu actions
 	public static AbstractAction viewSettings;
 	public static AbstractAction showHint;
 	public static AbstractAction antialiasedDraw;
 	public static AbstractAction filterLinks;
 	public static AbstractAction showDistanceMarkers;
-	public static AbstractAction hideUnlinkedFeatures;
-	public static AbstractAction configureViewSettings;
-	public static AbstractAction scaleChromosomes;
-
 	// Link shape menu actions
 	public static AbstractAction linkShape;
 	public static AbstractAction linkCurved;
@@ -98,15 +92,9 @@ public class Actions
 			}
 		};
 
-		saveTableData = new AbstractAction("Save Results Table", getIcon("SAVE")) {
+		saveResults = new AbstractAction("Save Results Table", getIcon("SAVE")) {
 			public void actionPerformed(ActionEvent e) {
-				winMain.mFile.saveTableData();
-			}
-		};
-
-		saveMapOrder = new AbstractAction("Save Map Order", getIcon("SAVE")) {
-			public void actionPerformed(ActionEvent e) {
-				winMain.mFile.saveMapOrder();
+				winMain.mFile.saveResults();
 			}
 		};
 
@@ -155,24 +143,6 @@ public class Actions
 		showDistanceMarkers = new AbstractAction("Show distance markers") {
 			public void actionPerformed(ActionEvent e) {
 				winMain.mView.showDistanceMarkers();
-			}
-		};
-
-		hideUnlinkedFeatures = new AbstractAction("Hide unlinked features") {
-			public void actionPerformed(ActionEvent e) {
-				winMain.mView.hideUnlinkedFeatures();
-			}
-		};
-
-		configureViewSettings = new AbstractAction("Configure view settings") {
-			public void actionPerformed(ActionEvent e) {
-				winMain.mView.configureViewSettings();
-			}
-		};
-
-		scaleChromosomes = new AbstractAction("Scale chromosomes") {
-			public void actionPerformed(ActionEvent e) {
-				winMain.mView.scaleChromosomes();
 			}
 		};
 
@@ -236,8 +206,6 @@ public class Actions
 		antialiasedDraw.putValue(SELECTED_KEY, Prefs.userPrefAntialias);
 		showDistanceMarkers.putValue(SELECTED_KEY, Prefs.showDistanceMarkers);
 		filterLinks.putValue(SELECTED_KEY, Prefs.drawOnlyLinksToVisibleFeatures);
-		hideUnlinkedFeatures.putValue(SELECTED_KEY, Prefs.hideUnlinkedFeatures);
-		scaleChromosomes.putValue(SELECTED_KEY, Prefs.scaleChromosByRelativeSize);
 
 		linkCurved.putValue(SELECTED_KEY, Prefs.linkShape == Constants.LINKTYPE_CURVED);
 		linkStraight.putValue(SELECTED_KEY, Prefs.linkShape == Constants.LINKTYPE_STRAIGHT);
@@ -252,8 +220,7 @@ public class Actions
 		loadData.setEnabled(true);
 		loadExample.setEnabled(true);
 		exportImage.setEnabled(false);
-		saveTableData.setEnabled(false);
-		saveMapOrder.setEnabled(false);
+		saveResults.setEnabled(false);
 
 		findFeature.setEnabled(false);
 		exploreRange.setEnabled(false);
@@ -265,9 +232,7 @@ public class Actions
 		showHint.setEnabled(false);
 		antialiasedDraw.setEnabled(false);
 		filterLinks.setEnabled(false);
-		hideUnlinkedFeatures.setEnabled(false);
 		showDistanceMarkers.setEnabled(false);
-		scaleChromosomes.setEnabled(false);
 		linkCurved.setEnabled(false);
 		linkStraight.setEnabled(false);
 		linkAngled.setEnabled(false);
@@ -287,7 +252,6 @@ public class Actions
 		loadData.setEnabled(true);
 		loadExample.setEnabled(true);
 		exportImage.setEnabled(true);
-		saveMapOrder.setEnabled(true);
 
 		findFeature.setEnabled(true);
 		exploreRange.setEnabled(true);
@@ -299,9 +263,7 @@ public class Actions
 		showHint.setEnabled(true);
 		antialiasedDraw.setEnabled(true);
 		filterLinks.setEnabled(true);
-		hideUnlinkedFeatures.setEnabled(true);
 		showDistanceMarkers.setEnabled(true);
-		scaleChromosomes.setEnabled(true);
 		linkCurved.setEnabled(true);
 		linkStraight.setEnabled(true);
 		linkAngled.setEnabled(true);

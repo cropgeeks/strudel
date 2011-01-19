@@ -16,7 +16,6 @@ public class CanvasKeyListener implements KeyListener
 		if(e.getKeyCode() == 27)
 		{
 			Strudel.winMain.fatController.hideSelectionRect();
-
 		}
 	}
 

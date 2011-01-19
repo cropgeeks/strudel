@@ -18,26 +18,6 @@
  Earlier input files will no longer be compatible and you must reformat these to match the current format. See 
  <a href="http://bioinf.scri.ac.uk/strudel/help/data.shtml">the manual</a> for instructions and examples.</h3>
  
-  <h2>New in release 1.10.03.09:</h2>
-  <h3>New features:</h3>
-<ul>
- <li>Added a hint panel for displaying interactive messages.</li>
- <li>Colour Scheme support has been added, as well as support for custom colour schemes.</li>
- <li>Added a ProgressDialog for tracking data import.</li>
-</ul>
-
- 
-   <h3>Other changes/bug fixes:</h3>
-<ul>
- <li>- CHG: Removed several buttons from toolbar and put replacement controls into a dialog for view settings. </li>
- <li>- CHG: Export Image code updated to include the GenomeLabelPanel.</li>
- <li>- BUG: A bug in the multi-core link drawing code was stopping some links from being displayed.</li>
- <li>- BUG: Linksets to maps that were offscreen were drawn unnecessarily. Have added extra check to prevent this. Link drawing performance has improved as a result of this.</li> 
- <li>- BUG: Duplicate links were being added to the precomputed linksets for each gChromoMap. Links are now being tracked in hashtable to prevent duplicate entries. </li>
-</ul>
- 
- 
- 
   <h2>New in release 1.10.01.20:</h2>
   This is a bug fix release with two minor fixes. 
   <ul>
@@ -46,9 +26,6 @@
   <li>BUG: When a genome was removed from view using the Configure Genomes dialog, the link display for the remaining 
   genomes was not working properly.</li>
   </ul>
- 
- 
- 
  
  <h2>New in release 1.10.01.19:</h2>
  
@@ -82,16 +59,12 @@ This allows users to visualize all features and homologs discovered by this rout
 </ul>
 
 
-
-
 <h2>New in release 1.10.01.05:</h2>
 <ul>
 <li>NEW: Added an annotation URL for Brachypodium in the example dataset.</li>
 <li>CHG: Changed 'Publication' label on front page to 'Coming soon'.</li>
 <li>BUG: Export of results table data was misformatted.</li>
 </ul>
-
-
 
 
 <h2>New in release 0.09.12.21:</h2>

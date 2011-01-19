@@ -35,6 +35,7 @@ pageTracker._trackPageview();
   <li><a href="help/quickstart.shtml">Manual</a></li>
   <li><a href="people.shtml">People</a></li>
     <li><a href="publications.shtml">Publications</a></li>
+    <li><a href="map.shtml">Usage Map</a></li>
 </ul>
 
 <!--#include virtual="../software_common/links.html" -->

@@ -64,8 +64,7 @@
 
 <h2>Strudel - World Map</h2>
 
-<p>The map below shows where in the world users have been running Strudel.
-<a href="maplarge.shtml" target="_new">View Larger Map</a>.</p>
+<p>The map shows where in the world users have been running Strudel.</p>
 
 <div id="map" style="width: 650px; height: 400px"></div>
 
@@ -73,9 +72,7 @@
 
 <p>We use the geolocation service at <a href="http://www.infosniper.net">
 www.infosniper.net</a> to map IP addresses to cities. It's not always accurate,
-but we think it gives a fairly good overview. The pins don't show visits to
-our website, but actual locations where users have downloaded - <i>and
-run</i> - Strudel.</p>
+but we think it gives a fairly good overview.</p>
 
 
 <!--#include virtual="footer.html" -->

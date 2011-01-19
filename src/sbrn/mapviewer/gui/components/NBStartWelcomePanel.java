@@ -6,6 +6,7 @@ package sbrn.mapviewer.gui.components;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import sbrn.mapviewer.gui.*;
+import scri.commons.gui.*;
 import scri.commons.gui.Icons;
 
 public class NBStartWelcomePanel extends javax.swing.JPanel implements ActionListener
@@ -17,22 +18,18 @@ public class NBStartWelcomePanel extends javax.swing.JPanel implements ActionLis
         initComponents();
 		setOpaque(false);
 
-		versionLabel.setText("<html>Strudel " + Install4j.VERSION + " &copy; Plant Bioinformatics Group, SCRI.</html>");
-		feedbackLabel.setText("Email feedback");
+		versionLabel.setText("<html>Version " + Install4j.VERSION);
+		feedbackLabel.setText("Email feedback ");
 		feedbackLabel.setIcon(Icons.getIcon("FEEDBACK"));
 		feedbackLabel.addActionListener(this);
-		twitterLabel.setText("Follow us");
-		twitterLabel.setIcon(Icons.getIcon("TWITTER"));
-		twitterLabel.addActionListener(this);
     }
 
 	public void actionPerformed(ActionEvent e)
 	{
 		if(e.getSource() == feedbackLabel)
+		{
 			Utils.sendFeedback();
-
-		else if (e.getSource() == twitterLabel)
-			Utils.visitURL("http://twitter.com/cropgeeks");
+		}
 	}
 
     /** This method is called from within the constructor to
@@ -46,45 +43,39 @@ public class NBStartWelcomePanel extends javax.swing.JPanel implements ActionLis
 
         versionLabel = new javax.swing.JLabel();
         feedbackLabel = new scri.commons.gui.matisse.HyperLinkLabel();
-        twitterLabel = new scri.commons.gui.matisse.HyperLinkLabel();
 
         versionLabel.setText("<html>Tablet x.xx.xx.xx - &copy; Plant Bioinformatics Group, SCRI.");
 
         feedbackLabel.setForeground(new java.awt.Color(68, 106, 156));
         feedbackLabel.setText("Send feedback");
 
-        twitterLabel.setForeground(new java.awt.Color(68, 106, 156));
-        twitterLabel.setText("Follow us");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 379, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(versionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addComponent(versionLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(feedbackLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(twitterLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 36, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(versionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(twitterLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(versionLabel)
                     .addComponent(feedbackLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private scri.commons.gui.matisse.HyperLinkLabel feedbackLabel;
-    private scri.commons.gui.matisse.HyperLinkLabel twitterLabel;
     private javax.swing.JLabel versionLabel;
     // End of variables declaration//GEN-END:variables
 

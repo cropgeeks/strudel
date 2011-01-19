@@ -9,7 +9,7 @@ public class ChromoZAxisInversionAnimator extends Thread
 	GChromoMap invertMap;
 	int fps;
 	int millis;
-	
+
 	public ChromoZAxisInversionAnimator(GChromoMap invertMap, int fps, int millis)
 	{
 		super();
@@ -17,7 +17,7 @@ public class ChromoZAxisInversionAnimator extends Thread
 		this.fps = fps;
 		this.millis = millis;
 	}
-	
+
 	@Override
 	public void run()
 	{
@@ -25,41 +25,40 @@ public class ChromoZAxisInversionAnimator extends Thread
 		{
 			//the total number of frames we need to render
 			int totalFrames = Math.round(fps * (millis / 1000.0f));
-			
+
 			//angle we want to draw at
-			float endAngle = -1;
-			if(invertMap.angleOnZAxis == 90)
-				endAngle = -90;
-			else
-				endAngle = 90;
-			float interval = (endAngle -  invertMap.angleOnZAxis) / totalFrames;
-			
+			float currentAngle = 90;
+			float endAngle = -90;
+			float interval = (endAngle - currentAngle) / totalFrames;
+
 			invertMap.inversionInProgress = true;
-			
+
 			// now loop for the number of total frames, zooming in by a bit each time
 			for (int i = 0; i < totalFrames; i++)
 			{
 				//increment angle
-				invertMap.angleOnZAxis += interval;
-				
-				if( invertMap.angleOnZAxis < 90 &&  invertMap.angleOnZAxis > -90)
+				currentAngle = currentAngle + interval;
+				//set the angle for drawing the map on the map object itself
+				invertMap.angleFromVertical = currentAngle;
+
+				if(invertMap.isFullyInverted)
 				{
-					invertMap.isPartlyInverted = true;
-					invertMap.isFullyInverted = false;
+					if(currentAngle > 0)
+						invertMap.isPartlyInverted = true;
+					else
+						invertMap.isPartlyInverted = false;
 				}
 				else
 				{
-					invertMap.isPartlyInverted = false;
-					
-					if(invertMap.angleOnZAxis == -90)
-						invertMap.isFullyInverted = true;
-					else if (invertMap.angleOnZAxis == 90)
-						invertMap.isFullyInverted = false;
+					if(currentAngle < 0)
+						invertMap.isPartlyInverted = true;
+					else
+						invertMap.isPartlyInverted = false;
 				}
-							
+
 				//repaint
 				Strudel.winMain.mainCanvas.updateCanvas(true);
-				
+
 				// sleep for the amount of animation time divided by the totalFrames value
 				try
 				{
@@ -69,28 +68,21 @@ public class ChromoZAxisInversionAnimator extends Thread
 				{
 				}
 			}
-			
-			//due to rounding errors in the calculation we can end with slightly more or less than angles of 90 or -90
-			//check and correct if necessary
-			if(invertMap.angleOnZAxis < 0 && invertMap.angleOnZAxis != -90)
-				 invertMap.angleOnZAxis = -90;
-			else if(invertMap.angleOnZAxis > 0 && invertMap.angleOnZAxis != 90)
-				 invertMap.angleOnZAxis = 90;			
-			
-			//check whether the map is now inverted
-			if(invertMap.angleOnZAxis == -90)
-				invertMap.isFullyInverted = true;
-			else if (invertMap.angleOnZAxis == 90)
+
+			//flag up the fact that this chromoMap is now inverted but check first whether it is already inverted
+			//in that case it will now be the right way up again
+			if(invertMap.isFullyInverted)
 				invertMap.isFullyInverted = false;
-			
-			//reset the other flags
-			invertMap.isPartlyInverted = false;		
+			else
+				invertMap.isFullyInverted = true;
+
 			invertMap.inversionInProgress = false;
-						
+
 			//update the position lookup arrays for mouseover
 			Strudel.winMain.fatController.initialisePositionArrays();
-			
+
 			//repaint
+			// TODO: AA check
 			Strudel.winMain.mainCanvas.updateCanvas(true);
 		}
 		catch (RuntimeException e)

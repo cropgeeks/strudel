@@ -49,21 +49,8 @@ public class FatController
 	//true if the user is adding maps to their selection by Ctrl clicking
 	public boolean isCtrlClickSelection = false;
 
-	//true if the user selects a whole genome at a time
-//	public boolean isWholeGenomeSelection = false;
-
-	//true if we are loading a file from the recent docs list
+	//true if we are laoding a file from the recent docs list
 	public boolean recentFileLoad = false;
-
-	//true if the mapsets have been initialiased -- this calculates their map sizes
-	public boolean mapSetsInited = false;
-
-	//the one (and only one) map that is being dragged with the mouse for repositioning
-	public GChromoMap draggedMap;
-	//this specifies how far down the length of the selected map's "backbone" the user clicked
-	//needed to avoid sudden shift upon redraw of map when it has been moved*/
-	public int draggedMapYOffset = 0;
-	public int draggedMapX, draggedMapY;
 
 
 	// ===============================================curve'tors===================================
@@ -156,8 +143,17 @@ public class FatController
 		 clearResultsTable();
 
 		//disable the button that allows export of this data to file
-		Actions.saveTableData.setEnabled(false);
+		Strudel.winMain.toolbar.bSave.setEnabled(false);
 
+		//reset the BLAST cut-off
+		LinkDisplayManager.setBlastThreshold(1);
+		Strudel.winMain.toolbar.eValueSpinner.setValue(0);
+
+		//deselect the buttons on the zoom control panels
+		for (ZoomControlPanel zoomControlPanel : winMain.zoomControlPanels)
+		{
+			zoomControlPanel.overrideMarkersAutoDisplayButton.setSelected(false);
+		}
 	}
 
 	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -174,6 +170,7 @@ public class FatController
 		if(FeatureSearchHandler.featuresInRange != null)
 		{
 			FeatureSearchHandler.featuresInRange.clear();
+//			Strudel.winMain.fatController.selectionMap = null;
 		}
 		winMain.mainCanvas.drawHighlightFeatures = false;
 		winMain.mainCanvas.drawFoundFeaturesInRange = false;
@@ -211,11 +208,14 @@ public class FatController
 	{
 		for(GMapSet gMapSet : winMain.dataContainer.gMapSets)
 		{
-			gMapSet.hasBeenScrolled = false;
+			//reset zoom on all mapsets
+			winMain.mainCanvas.zoomHandler.processZoomResetRequest(gMapSet);
 
 			//reset selected maps
 			selectedMaps.clear();
 
+			//marker and label display overrides
+			gMapSet.overrideMarkersAutoDisplay = false;
 			winMain.chromoContextPopupMenu.showAllLabelsItem.setText(winMain.chromoContextPopupMenu.showAllLabelsStr);
 
 			//for all maps within mapset
@@ -236,30 +236,9 @@ public class FatController
 
 				//don't draw mouseover feature labels
 				gMap.drawMouseOverFeatures = false;
+
 				gMap.alwaysShowAllLabels = false;
-
-				//reset the original index within the genome in case there has been reordering of chromosomes
-//				System.out.println("resetting index for map " + gMap.name + " to " + gMap.initialIndex);
-				gMap.index = gMap.initialIndex;
 			}
-
-			//now sort the maps in the selected genome by their new indices
-			Collections.sort(gMapSet.gMaps);
-
-			//reset zoom on the mapset
-			winMain.mainCanvas.zoomHandler.processZoomResetRequest(gMapSet);
-		}
-
-
-		//reset the BLAST cut-off
-		LinkDisplayManager.setBlastThreshold(1);
-		Strudel.winMain.toolbar.eValueSpinner.setValue(0);
-
-		//deselect the buttons on the zoom control panels
-		for (ZoomControlPanel zoomControlPanel : winMain.zoomControlPanels)
-		{
-			zoomControlPanel.showAllMarkersButton.setSelected(false);
-			zoomControlPanel.gMapSet.paintAllMarkers = false;
 		}
 
 		initialisePositionArrays();
@@ -302,12 +281,10 @@ public class FatController
 
 	//restores the original view to what it looked like after loading the current dataset
 	//without clearing any results
-	public void clearMapHighlighting()
+	public void clearMapOutlines()
 	{
 		for(GMapSet gMapSet : winMain.dataContainer.gMapSets)
 		{
-			gMapSet.wholeMapsetIsSelected = false;
-
 			//for all maps within mapset
 			for(GChromoMap gMap: gMapSet.gMaps)
 			{

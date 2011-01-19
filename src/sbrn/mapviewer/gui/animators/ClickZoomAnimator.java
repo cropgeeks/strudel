@@ -1,6 +1,5 @@
 package sbrn.mapviewer.gui.animators;
 
-import javax.swing.*;
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.components.*;
@@ -52,44 +51,14 @@ public class ClickZoomAnimator extends Thread
 		int totalFrames = Math.round(fps * (millis / 1000.0f));
 
 		// these are the amounts we need to increment things by
-		// follows a pattern of: (final value minus current value) divided by the total number of frames
+		// follows the pattern of: (final value minus current value) divided by the total number of frames
 		float zoomFactorIncrement = (finalZoomFactor - selectedSet.zoomFactor) / totalFrames;
-		float chromoHeightIncrement = (finalChromoHeight - selectedMap.currentHeight) / totalFrames;
+		float chromoHeightIncrement = (finalChromoHeight - selectedSet.chromoHeight) / totalFrames;
+		float totalYIncrement = (finalTotalY - selectedSet.totalY) / totalFrames;
 
-//		System.out.println("zooming map " + selectedMap.name);
-//		System.out.println("pre-zoom centerpoint for mapset = " +selectedSet.centerPoint);
-//		System.out.println("pre-zoom height of map = " + selectedMap.currentHeight);
-//		System.out.println("pre-zoom ZoomFactor = " + selectedSet.zoomFactor);
-//		System.out.println("pre zoom selectedSet.totalY = " + selectedSet.totalY);
-//		System.out.println("canvas height = " + Strudel.winMain.mainCanvas.getHeight());
-		
 		// now loop for the number of total frames, zooming in by a bit each time
 		for (int i = 0; i < totalFrames; i++)
 		{
-//			System.out.println("\n#### zoom iteration " + i);
-			
-			// set the new zoom factor
-			float newZoomFactor = selectedSet.zoomFactor + zoomFactorIncrement;
-
-			//don't let the zoom factor fall below 1
-			if (newZoomFactor < 1)
-				newZoomFactor = 1;
-
-			// work out the chromo height and total genome height for when the new zoom factor will have been applied
-			int newChromoHeight = Math.round(selectedMap.currentHeight + chromoHeightIncrement);
-
-			// distance from the bottom of the chromosome -- is half the height of the chromosome as we want it centered
-			int distFromBottom = newChromoHeight / 2;
-			
-//			System.out.println("newZoomFactor = " + newZoomFactor);
-//			System.out.println("selectedSet.totalY = " + selectedSet.totalY);
-//			System.out.println("newChromoHeight = " + newChromoHeight);
-//			System.out.println("distFromBottom = " + distFromBottom);
-
-			// adjust the zoom
-			// this call includes the redraw of the main canvas
-			zoomHandler.adjustZoom(newZoomFactor, selectedMap, distFromBottom);
-
 			// sleep for the amount of animation time divided by the totalFrames value
 			try
 			{
@@ -98,31 +67,66 @@ public class ClickZoomAnimator extends Thread
 			catch (InterruptedException e)
 			{
 			}
+
+			// set the new zoom factor
+			selectedSet.zoomFactor = selectedSet.zoomFactor + zoomFactorIncrement;
+
+			//don't let the zoom factor fall below 1
+			if (selectedSet.zoomFactor < 1)
+				selectedSet.zoomFactor = 1;
+
+			// work out the chromo height and total genome height for when the new zoom factor will have been applied
+			int newChromoHeight = Math.round(selectedSet.chromoHeight + chromoHeightIncrement);
+
+			// distance from the bottom of the chromosome -- is half the height of the chromosome as we want it centered
+			int distFromBottom = newChromoHeight / 2;
+
+			// the new total Y extent of the genome in pixels
+			int newTotalY = Math.round(selectedSet.totalY + totalYIncrement);
+
+			// adjust the zoom
+			// this call includes the redraw of the main canvas
+			zoomHandler.adjustZoom(selectedMap, newTotalY, newChromoHeight, distFromBottom);
+
+			//update the arrays with the position data
+			Strudel.winMain.fatController.initialisePositionArrays();
+
+			//update zoom control position
+			Strudel.winMain.fatController.updateAllZoomControls();
 		}
+
 
 		//if we have not reached the max zoom factor with this we need to do one more zoom adjust
 		//explicitly here to make sure we have all the final intended values and have not fallen short
 		//of these due to rounding errors etc.
-		if(selectedSet.zoomFactor != finalZoomFactor)
-			zoomHandler.adjustZoom(finalZoomFactor, selectedMap, Math.round(finalChromoHeight/2.0f));
+		selectedSet.zoomFactor = finalZoomFactor;
+		zoomHandler.adjustZoom(selectedMap, finalTotalY, finalChromoHeight,	 Math.round(finalChromoHeight/2.0f));
+
+		//update overviews
+		Strudel.winMain.fatController.updateOverviewCanvases();
+
+		//update zoom control position
+		Strudel.winMain.fatController.updateAllZoomControls();
+
+		//now update the arrays with the position data
+		Strudel.winMain.fatController.initialisePositionArrays();
+
+		//enable drawing of markers providing we have zoomed in, not out
+		if (selectedSet.zoomFactor > 1)
+			selectedSet.thresholdAllMarkerPainting = selectedSet.zoomFactor;
 
 		//turn drawing of map index back on
 		selectedMap.drawChromoIndex = true;
 
+		//repaint
+		// TODO: AA check
+		Strudel.winMain.mainCanvas.updateCanvas(true);
+
 		zoomHandler.isClickZoomRequest = false;
 
-		//repaint
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run()
-			{
-				Strudel.winMain.mainCanvas.updateCanvas(true);
-			}
-		});
-
 		done = true;
-		
-		//place the focus on this window so we can listen to keyboard events too
-		Strudel.winMain.requestFocusInWindow();
+
+
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------

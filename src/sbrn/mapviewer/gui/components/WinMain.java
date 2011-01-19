@@ -3,6 +3,7 @@ package sbrn.mapviewer.gui.components;
 import java.awt.*;
 import java.awt.dnd.*;
 import java.awt.event.*;
+import java.beans.*;
 import java.lang.management.*;
 import java.util.*;
 import java.text.*;
@@ -31,18 +32,12 @@ public class WinMain extends JFrame
 
 	//++++++++++Swing components that make up the GUI: +++++++++++++
 
+	//the tool bar at the top
+	public ControlToolBar toolbar;
+
 	//the thumbnail overviews and the dialog that contains them
 	public LinkedList<OverviewCanvas> overviewCanvases = new LinkedList<OverviewCanvas>();
 	public OverviewDialog overviewDialog = new OverviewDialog(this);
-
-		//the tool bar at the top
-	public ControlToolBar toolbar;
-
-	public MenuFile mFile;
-	public MenuExplore mExplore;
-	public MenuView mView;
-	public MenuAbout mAbout;
-	public WinMainMenuBar menuBar;
 
 	//the controller instance for the whole application
 	public FatController fatController;
@@ -94,18 +89,13 @@ public class WinMain extends JFrame
 	public ColorSchemeChooserDialog colorChooserDialog = new ColorSchemeChooserDialog(this);
 
 	//this panel displays hints for the user as to what to do in a given context
-	public static HintPanel hintPanel;
+	public static HintPanel hintPanel = new HintPanel();
 
 	//	=================================================curve'tor=====================================
 
 	public WinMain()
 	{
 
-		mFile = new MenuFile();
-		mExplore = new MenuExplore();
-		mView = new MenuView(this);
-		mAbout = new MenuAbout();
-		menuBar = new WinMainMenuBar(this);
 		//get the GUI assembled as far as possible without the data loaded
 		setupInitialComponents();
 		pack();
@@ -134,11 +124,6 @@ public class WinMain extends JFrame
 		// maximization from above
 		addListeners();
 		createMemoryTimer();
-
-		setJMenuBar(menuBar);
-
-		//this is for detecting key events
-		addKeyListener(new CanvasKeyListener());
 	}
 
 	//=================================================methods=====================================
@@ -210,32 +195,13 @@ public class WinMain extends JFrame
 		//drag and drop support
 		FileDropAdapter dropAdapter = new FileDropAdapter(this);
 		setDropTarget(new DropTarget(this, dropAdapter));
-		
-		
-		//this is  a nasty hack to stop the Alt key messing up the focus system for the main canvas
-		//see http://stackoverflow.com/questions/1722864/disable-default-alt-key-action-in-jframe-under-windows
-		//this was necessary because Alt+click on chromosomes moved the focus away from  the main canvas and 
-		//as a result subsequent mouse presses were not being registered
-		this.addFocusListener(new FocusListener() {
-		        private final KeyEventDispatcher altDisabler = new KeyEventDispatcher() {
-		            @Override
-		            public boolean dispatchKeyEvent(KeyEvent e) {
-		                return e.getKeyCode() == 18;
-		            }
-		        };
 
-		        @Override
-		        public void focusGained(FocusEvent e) {
-		            KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(altDisabler);
-		        }
-
-		        @Override
-		        public void focusLost(FocusEvent e) {
-		            KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(altDisabler);
-		        }
-		    });
-
-
+		//the hint panel
+		hintPanel.setIcons(Icons.getIcon("HELP12"), Icons.getIcon("FILECLOSEHIGHLIGHTED"), Icons.getIcon("FILECLOSE"));
+		if(Prefs.showHintPanel)
+			hintPanel.setVisible(true);
+		else
+			hintPanel.setVisible(false);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -248,23 +214,15 @@ public class WinMain extends JFrame
 			//control panel for found features
 			foundFeaturesTableControlPanel = new FoundFeaturesTableControlPanel();
 
-			//this panel contains the zoom controls and the search results panel below it
-			bottomPanel = new JPanel(new BorderLayout());
-
 			//the popup menu we use when are over a chromosome
 			chromoContextPopupMenu  = new ChromoContextPopupMenu();
 
-			//the hint panel
-			hintPanel = new HintPanel();
-			mainPanel.add(hintPanel, BorderLayout.NORTH);
-			hintPanel.setIcons(Icons.getIcon("HELP12"), Icons.getIcon("FILECLOSEHIGHLIGHTED"), Icons.getIcon("FILECLOSE"));
-			if(Prefs.showHintPanel)
-				hintPanel.setVisible(true);
-			else
-				hintPanel.setVisible(false);
+			//this panel contains the zoom controls and the search results panel below it
+			bottomPanel = new JPanel(new BorderLayout());
 
 			//this is the main canvas which we render the genomes on
 			mainCanvas = new MainCanvas();
+			mainPanel.add(hintPanel, BorderLayout.NORTH);
 			mainPanel.add(mainCanvas, BorderLayout.CENTER);
 
 			//add mousehandler
@@ -319,8 +277,6 @@ public class WinMain extends JFrame
 		}
 	}
 
-
-
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void hideSplitPaneBottomHalf()
@@ -331,8 +287,8 @@ public class WinMain extends JFrame
 		splitPane.setDividerSize(0);
 
 		//refresh the main canvas
-		validate();
-		mainCanvas.updateCanvas(true);
+		Strudel.winMain.validate();
+		Strudel.winMain.mainCanvas.updateCanvas(true);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -341,37 +297,29 @@ public class WinMain extends JFrame
 	//needs to be done when users load different datasets in succession
 	public void reinitialiseDependentComponents()
 	{
-		try
+		//remove existing components
+		zoomControlAndGenomelabelContainer.remove(zoomControlContainerPanel);
+		for(OverviewCanvas overviewCanvas : overviewCanvases)
 		{
-			//remove existing components
-			zoomControlAndGenomelabelContainer.remove(zoomControlContainerPanel);
-			for(OverviewCanvas overviewCanvas : overviewCanvases)
-			{
-				overviewDialog.remove(overviewCanvas);
-			}
-
-			//clear lists with the corresponding objects
-			zoomControlPanels.clear();
-			overviewCanvases.clear();
-
-			//reinstate everything
-			//the panels with the zoom control sliders
-			initZoomControls();
-			foundFeaturesTableControlPanel.setupGenomeFilterCombo();
-			zoomControlAndGenomelabelContainer.add(zoomControlContainerPanel, BorderLayout.CENTER);
-
-			initOverviewDialog();
-
-			Strudel.winMain.ffInRangeDialog.ffInRangePanel.initRemainingComponents();
-
-			//the labels with the genome names need to be updated
-			genomeLabelPanel.repaint();
+			overviewDialog.remove(overviewCanvas);
 		}
-		catch (Exception e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		//clear lists with the corresponding objects
+		zoomControlPanels.clear();
+		overviewCanvases.clear();
+
+		//reinstate everything
+		//the panels with the zoom control sliders
+		initZoomControls();
+		foundFeaturesTableControlPanel.setupGenomeFilterCombo();
+		zoomControlAndGenomelabelContainer.add(zoomControlContainerPanel, BorderLayout.CENTER);
+
+		initOverviewDialog();
+
+		Strudel.winMain.ffInRangeDialog.ffInRangePanel.initRemainingComponents();
+
+		//the labels with the genome names need to be updated
+		genomeLabelPanel.repaint();
 	}
 
 

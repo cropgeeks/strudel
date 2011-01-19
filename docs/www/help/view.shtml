@@ -25,6 +25,18 @@
 				<a href="#overview">Using the overview window</a>
 			</li>
 			<li>
+				<a href="#distanceMarkers">Distance markers</a>
+			</li>
+			<li>
+				<a href="#linkShapes">Changing the shape of the homology links</a>
+			</li>
+			<li>
+				<a href="antialias">Antialiased drawing style</a>
+			</li>
+			<li>
+				<a href="#filterByVis">Filtering of links by visibility of features</a>
+			</li>
+			<li>
 				<a href="#filterByEvalue">Filtering homology links by BLAST e-value</a>
 			</li>
 			<li>
@@ -34,10 +46,7 @@
 				<a href="#exportView">Exporting the current view as an image</a>
 			</li>
 			<li>
-				<a href="#customiseColours">Colour schemes</a>
-			</li>
-			<li>
-				<a href="#configureViewSettings">Configuring other view settings</a>
+				<a href="#customiseColours">Choose between, and customise, two colour schemes</a>
 			</li>
 		</ul>
 
@@ -56,6 +65,62 @@
 		<br>
 		<br>
 		<a href="#top">Back to top</a>
+
+		<!-- --------------------------------------------- -->
+		<h4>
+			Distance markers:
+			<a name="distanceMarkers"></a>
+		</h4>
+		The distance markers button
+		<img src="../images/distancemarkers.png">
+		toggles distance markers on the chromosomes on and off (for all genomes). Please note that even when these are toggled
+		to ‘on’ they will only show when a zoom level has been reached where a chromosome just fills the screen.
+		<br>
+		<br>
+		<a href="#top">Back to top</a>
+
+		<!-- --------------------------------------------- -->
+		<h4>
+			Changing the shape of the homology links:
+			<a name="linkShapes"></a>
+		</h4>
+		The links shape button
+		<img src="../images/curves.png">
+		lets the user toggle between curved, straight and angled link shapes (in ascending, then descending order).
+		<br>
+		<br>
+		<a href="#top">Back to top</a>
+		
+		
+		<!-- --------------------------------------------- -->
+		<h4>
+			Antialiased drawing style:
+			<a name="antialias"></a>
+		</h4>
+		The antialias button
+		<img src="../images/antialias.png">
+		lets the user toggle between antialiased and plain drawing styles. This applies to links and text drawn. Antialiased drawing 
+		produces smoother lines but comes with a significant performance overhead. Even when this button is selected, any 
+		drawing operations requiring animation therefore use the plain drawing style, with another, antialiased redraw happening shortly after
+		 the animation has stopped. 
+		<br>
+		<br>
+		<a href="#top">Back to top</a>
+
+
+		<!-- --------------------------------------------- -->
+		<h4>
+			Filtering of links by visibility of features
+			<a name="filterByVis"></a>
+		</h4>
+		To reduce the number of links shown users can choose to only view those links whose features are both visible on the
+		canvas. This is controlled by the link filter button
+		<img src="../images/linkfilter.png">
+		on the toolbar which toggles this filter on and off.
+		<br>
+		<br>
+		<a href="#top">Back to top</a>
+
 
 
 		<!-- --------------------------------------------- -->
@@ -110,66 +175,16 @@
 		Click on the customise colours
 		<img src="../images/customisecolours.png">
 		button on the toolbar and the customise colours dialog will appear. You can swap between colour schemes by selecting a
-		scheme from the combo box. On the left you can see a list of colours and on the right you can see a preview of the
-		colour scheme. To customise a colour scheme, double click on the colour for the element of the scheme you wish to
-		change in the list and a colour chooser dialog will be displayed. Select your chosen colour, using the controls in one
-		of the tabs, then press the OK button. You will now see the updated preview. Once you have finished customising a
-		colour scheme, press the apply button to have the main view updated with the new colour scheme. 
-		The modified colour scheme will be saved as part of your preferences automatically.
-		Reset to defaults in the dialog reverts a colour scheme back to its original colours. 
-		<p>
-			The background colour scheme is normally a gradient between Background Gradient Start and Background Gradient End. To
-			achieve a single colour background you should set both Background Gradient Start and Background Gradient End to the
-			same colour.
-		</p>
-
+		scheme from the combo box. On the left you can see a list of colours and on the right you can see a preview of the colour scheme. 
+		To customise a colour scheme, double click on the colour for the element of the scheme you wish to change in the list and
+		a colour chooser dialog will be displayed. Select your chosen colour, using the controls in one of the tabs, then press the OK
+		button. You will now see the updated preview. Once you have finished customising a colour scheme, press the apply button to have
+		the main view updated with the new colour scheme. Reset to defaults in the dialog sets a colour scheme back to its original colours.
+		<p>The background colour scheme is normally a gradient between Background Gradient Start and Background Gradient End. To achieve a
+		single colour background you should set both Background Gradient Start and Background Gradient End to the same colour.</p>
+		<br>
+		<br>
 		<a href="#top">Back to top</a>
-
-
-
-		<!-- --------------------------------------------- -->
-		<h4>
-			Configuring other view settings:
-			<a name="configureViewSettings"></a>
-		</h4>
-
-		The configure view settings button
-		<img src="../images/viewSettings.png">
-		brings up the following dialog which lets the user configure several view settings at once:
-		<p>
-
-		<img class="capture" src="../images/configureViewSettingsDialog.png">
-
-		</p>
-		
-		<ul>
-			<li>
-				"Show hint panel" checkbox: This can be checked to display a panel at the top of the main canvas which shows
-				context-dependent hints on what action the user can take next.
-			</li>
-			<li>
-				"Use antialiased drawing" checkbox: This lets the user toggle between antialiased and plain drawing styles for links and
-				text drawn. Antialiased drawing produces smoother lines but comes with a significant performance overhead. Even when
-				this button is selected, any drawing operations requiring animation therefore use the plain drawing style, with
-				another, antialiased redraw happening shortly after the animation has stopped.
-			</li>
-			<li>
-				"Filter out links to off screen features" checkbox: To reduce the number of links shown users can choose to only view 
-				those links whose features are both visible on the canvas.
-			</li>
-			<li>
-				"Show distance markers" checkbox: This toggles distance markers on the chromosomes on and off (for all genomes). Please note
-				that even when these are set to ‘on’ they will only show when a zoom level has been reached where a chromosome
-				just fills the screen, or greater.
-			</li>
-			<li>
-				"Link shape" radio buttons: Here the user can choose between curved, straight and angled link shapes.
-			</li>
-		</ul>
-
-		<a href="#top">Back to top</a>
-
-
 
 		<!--#include virtual="footer.html" -->
 

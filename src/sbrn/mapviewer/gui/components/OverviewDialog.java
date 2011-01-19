@@ -8,11 +8,11 @@ import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
 import scri.commons.gui.*;
 
-public class OverviewDialog extends JDialog
+class OverviewDialog extends JDialog
 {
 	private final WinMain winMain;
 
-	public OverviewDialog(WinMain winMain)
+	OverviewDialog(WinMain winMain)
 	{
 		super(winMain, "Overview", false);
 		this.winMain = winMain;
@@ -61,7 +61,7 @@ public class OverviewDialog extends JDialog
 			@Override
 			public void windowClosing(WindowEvent e)
 			{
-				winMain.mView.showOverview();
+				winMain.toolbar.toggleOverviewDialog();
 			}
 		});
 	}

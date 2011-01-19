@@ -27,26 +27,17 @@ public class Prefs extends XMLPreferences
 	public static int guiOverviewY = 0;
 	public static boolean guiOverviewVisible = true;
 
-	//this boolean decides whether we scale the chromosomes according to their relative size or make them all the same size
-	public static boolean scaleChromosByRelativeSize = true;
-
 	//a boolean indicating whether we need to show the "max zoom level reached " taskdialog when user has pan zoomed to the max
 	public static boolean showMaxZoomLevelMessage = true;
-
-	//a boolean indicating whether we need to show the "chromos rendered as one" taskdialog when a user requests the overview dialog to be displayed
-	public static boolean showRenderAsOneMessage = true;
 
 	//this boolean is set by the user through a button and indicates a global preference for antialiased or plain darwing styles
 	public static boolean userPrefAntialias = false;
 
-	//do we want links to be drawn whether their orginating feature is currently visible on the canvas or not?
+	//do we links to be drawn whether their orginating feature is currently visible on the canvas or not?
 	public static boolean drawOnlyLinksToVisibleFeatures = false;
 
 	//do we want to show the distance markers
 	public static boolean showDistanceMarkers = false;
-
-	//this determines whether we display all features or just those that have links associated with them
-	public static boolean hideUnlinkedFeatures = false;
 
 	//show the hints panel
 	public static boolean showHintPanel = true;

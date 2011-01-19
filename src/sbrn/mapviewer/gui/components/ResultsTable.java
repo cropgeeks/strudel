@@ -18,8 +18,6 @@ public class ResultsTable extends JTable
 
 	public boolean isFilterEvent = false;
 
-	TableRowSorter<TableModel> sorter;
-
 	//===============================================curve'tor=========================================
 
 	public ResultsTable()
@@ -34,7 +32,7 @@ public class ResultsTable extends JTable
 		setDefaultRenderer(Float.class, new LeftAlignedRenderer());
 
 		//set up sorting/filtering capability
-		sorter = new TableRowSorter<TableModel>(this.getModel());
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(this.getModel());
 		setRowSorter(sorter);
 
 		//add listener

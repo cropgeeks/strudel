@@ -5,9 +5,11 @@ import sbrn.mapviewer.*;
 
 public class CanvasKeyListener implements KeyListener
 {
-	public CanvasKeyListener()
-	{
+	private final MainCanvas mainCanvas;
 
+	public CanvasKeyListener(MainCanvas mainCanvas)
+	{
+		this.mainCanvas = mainCanvas;
 	}
 
 	public void keyPressed(KeyEvent e)
@@ -16,7 +18,6 @@ public class CanvasKeyListener implements KeyListener
 		if(e.getKeyCode() == 27)
 		{
 			Strudel.winMain.fatController.hideSelectionRect();
-
 		}
 	}
 

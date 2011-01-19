@@ -5,7 +5,7 @@ import java.net.*;
 
 public class StrudelFile
 {
-	private final String filename;
+	private String filename;
 
 	private URL url;
 	private File file;
@@ -38,17 +38,19 @@ public class StrudelFile
 		// Or parse the URL to determine the filename part of it:
 		// http://someserver/somefolder/file.ext?argument=parameter
 		//                              ^^^^^^^^
+		else
+		{
+			String name = filename;
 
-		String name = filename;
+			if (name.indexOf("?") != -1)
+				name = name.substring(0, name.indexOf("?"));
 
-		if (name.indexOf("?") != -1)
-			name = name.substring(0, name.indexOf("?"));
+			int slashIndex = name.lastIndexOf("/");
+			if (slashIndex != -1)
+				name = name.substring(slashIndex + 1);
 
-		int slashIndex = name.lastIndexOf("/");
-		if (slashIndex != -1)
-			name = name.substring(slashIndex + 1);
-
-		return name;
+			return name;
+		}
 	}
 
 	long length()

@@ -1,8 +1,7 @@
 package sbrn.mapviewer.gui;
 
 import sbrn.mapviewer.Strudel;
-import sbrn.mapviewer.gui.components.*;
-import scri.commons.gui.*;
+import sbrn.mapviewer.gui.components.WinMain;
 
 /**
  * Stores the methods which carry out the actions which are fired whenever the
@@ -10,7 +9,7 @@ import scri.commons.gui.*;
  */
 public class MenuView
 {
-	private final WinMain winMain;
+	private WinMain winMain;
 
 	public MenuView(WinMain winMain)
 	{
@@ -19,24 +18,6 @@ public class MenuView
 
 	public void showOverview()
 	{
-		//only execute this when the overview dialog is being opened, rather than closed
-		if (!winMain.overviewDialog.isVisible())
-		{
-			//check whether any of the overview canvases contain so many chromos that they have to be rendered as one
-			//if yes, display an error message
-			boolean errorMessage = false;
-			for (OverviewCanvas overviewCanvas : winMain.overviewCanvases)
-			{
-				if (overviewCanvas.renderAsOneChromo)
-					errorMessage = true;
-			}
-			if (errorMessage && Prefs.showRenderAsOneMessage)
-			{
-				TaskDialog.info("In the overview, one or more genomes have too many chromosomes to have them rendered individually."+
-								"\nThese will be rendered as a single chromosome instead.", "Continue", winMain.toolbar.renderAsOneChromoCheckBox);
-			}
-		}
-
 		// Toggle the state
 		Prefs.guiOverviewVisible = !Prefs.guiOverviewVisible;
 
@@ -60,12 +41,14 @@ public class MenuView
 			winMain.hintPanel.setVisible(false);
 		winMain.mainCanvas.updateCanvas(true);
 
+		winMain.menuBar.getMShowHint().setSelected(Prefs.showHintPanel);
 		Strudel.winMain.configureViewSettingsDialog.viewSettingsPanel.getHintPanelCheckBox().setSelected(Prefs.showHintPanel);
 	}
 
 	public void antialiasedDraw()
 	{
 		Prefs.userPrefAntialias = !Prefs.userPrefAntialias;
+		winMain.menuBar.getMAntialiasedDraw().setSelected(Prefs.userPrefAntialias);
 		Strudel.winMain.mainCanvas.updateCanvas(true);
 	}
 
@@ -78,27 +61,6 @@ public class MenuView
 	public void showDistanceMarkers()
 	{
 		Prefs.showDistanceMarkers = !Prefs.showDistanceMarkers;
-		Strudel.winMain.mainCanvas.updateCanvas(true);
-	}
-
-	public void hideUnlinkedFeatures()
-	{
-		Prefs.hideUnlinkedFeatures = !Prefs.hideUnlinkedFeatures;
-		winMain.fatController.initialisePositionArrays();
-		Strudel.winMain.mainCanvas.updateCanvas(true);
-	}
-
-	public void configureViewSettings()
-	{
-		Strudel.winMain.configureViewSettingsDialog.setLocationRelativeTo(Strudel.winMain);
-		Strudel.winMain.configureViewSettingsDialog.setVisible(true);
-	}
-
-	public void scaleChromosomes()
-	{
-		Prefs.scaleChromosByRelativeSize = !Prefs.scaleChromosByRelativeSize;
-		Strudel.winMain.fatController.resetMainCanvasView();
-		Strudel.winMain.mainCanvas.initMapSets();
 		Strudel.winMain.mainCanvas.updateCanvas(true);
 	}
 

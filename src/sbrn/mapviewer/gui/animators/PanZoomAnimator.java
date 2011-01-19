@@ -55,96 +55,113 @@ public class PanZoomAnimator extends Thread implements ItemListener
 	@Override
 	public void run()
 	{
-		try
+		zoomHandler.isPanZoomRequest = true;
+
+		int totalFrames = Math.round(fps * (millis / 1000.0f));
+
+		// divide the difference between a scaling factor of 1 and the final scaling factor by the number of frames we want to use for this
+		float increment = (finalScalingFactor - 1) / totalFrames;
+
+		GMapSet selectedSet = selectedMap.owningSet;
+
+		// this is the combined height of all spacers -- does not change with the zoom factor
+		int combinedSpacers = mainCanvas.chromoSpacing * (selectedSet.numMaps - 1);
+
+		// these are the values we want for the final iteration
+		float finalZoomFactor = selectedSet.zoomFactor * finalScalingFactor;
+		float finalChromoHeight = (int) (selectedSet.chromoHeight * finalScalingFactor);
+		// the distance from the top of the chromosome to the mousePressedY location, in pixels
+		float initialDistFromTop = (float) (mousePressedY - selectedMap.boundingRectangle.getY() + (mouseReleasedY - mousePressedY) / 2);
+		float initialDistFromTopProportion = initialDistFromTop / (float) selectedMap.boundingRectangle.getHeight();
+
+		// the new total Y extent of the genome in pixels
+		int finalTotalY = (int) (((selectedSet.totalY - combinedSpacers) * finalScalingFactor) + combinedSpacers);
+
+		// these are the amounts we need to increment things by
+		// follows the pattern of: (final value minus current value) divided by the total number of frames
+		float zoomFactorIncrement = (finalZoomFactor - selectedSet.zoomFactor) / totalFrames;
+		float chromoHeightIncrement = (finalChromoHeight - selectedSet.chromoHeight) / totalFrames;
+		float totalYIncrement = (finalTotalY - selectedSet.totalY) / totalFrames;
+		boolean maxZoomFactorReached = false;
+
+		if (animate)
 		{
-			zoomHandler.isPanZoomRequest = true;
-
-			int totalFrames = Math.round(fps * (millis / 1000.0f));
-
-			// divide the difference between a scaling factor of 1 and the final scaling factor by the number of frames we want to use for this
-			float increment = (finalScalingFactor - 1) / totalFrames;
-
-			GMapSet selectedSet = selectedMap.owningSet;
-
-			// these are the values we want for the final iteration
-			float finalZoomFactor = selectedSet.zoomFactor * finalScalingFactor;
-			float finalChromoHeight = (int) (selectedMap.currentHeight * finalScalingFactor);
-			// the distance from the top of the chromosome to the mousePressedY location, in pixels
-			float initialDistFromTop = (float) (mousePressedY - selectedMap.boundingRectangle.getY() + (mouseReleasedY - mousePressedY) / 2);
-			float initialDistFromTopProportion = initialDistFromTop / (float) selectedMap.boundingRectangle.getHeight();
-
-			// these are the amounts we need to increment things by
-			// follows the pattern of: (final value minus current value) divided by the total number of frames
-			float zoomFactorIncrement = (finalZoomFactor - selectedSet.zoomFactor) / totalFrames;
-			float chromoHeightIncrement = (finalChromoHeight - selectedMap.currentHeight) / totalFrames;
-			boolean maxZoomFactorReached = false;
-
-			if (animate)
+			// now loop for the number of total frames, zooming in by a bit each time
+			for (int i = 0; i < totalFrames; i++)
 			{
-				// now loop for the number of total frames, zooming in by a bit each time
-				for (int i = 0; i < totalFrames; i++)
+				// sleep for the amount of animation time divided by the fps value
+				try
 				{
-					// sleep for the amount of animation time divided by the fps value
-					try
-					{
-						Thread.sleep(millis / totalFrames);
-					}
-					catch (InterruptedException e)
-					{
-					}
-
-					// work out the current scaling factor
-					// next zoom factor divided by current zoom factor
-					float currentScalingFactor = (selectedSet.zoomFactor + zoomFactorIncrement) / selectedSet.zoomFactor;
-
-					//work out  the new zoom factor
-					float newZoomFactor = 0;
-					//if this does not exceed the max zoom factor
-					if (selectedSet.zoomFactor < selectedSet.maxZoomFactor)
-						newZoomFactor = selectedSet.zoomFactor + zoomFactorIncrement;
-					//if this DOES exceed the max zoom factor
-					else
-					{
-						if (Prefs.showMaxZoomLevelMessage)
-						{
-							TaskDialog.info("Maximum zoom level reached for map set " + selectedSet.name, "Close", maxZoomMessageCheckBox);
-						}
-						zoomHandler.isPanZoomRequest = false;
-						maxZoomFactorReached = true;
-
-						break;
-					}
-
-					// work out the chromo height and total genome height for when the new zoom factor will have been applied
-					int newChromoHeight = Math.round(selectedMap.currentHeight + chromoHeightIncrement);
-
-					// the distance from the top of the chromosome to the mousePressedY location, in pixels
-					int distFromTop = Math.round(initialDistFromTopProportion * newChromoHeight);
-					// the same from the bottom of the chromosome
-					int distFromBottom = newChromoHeight - distFromTop;
-
-					// adjust the zoom and increment the scaling factor
-					// this call includes the redraw of the main canvas
-					zoomHandler.adjustZoom(newZoomFactor, selectedMap, distFromBottom);
-					currentScalingFactor += increment;
-
+					Thread.sleep(millis / totalFrames);
 				}
-			}
-			//if we have not reached the max zoom factor with this we need to do one more zoom adjust
-			//explicitly here to make sure we have all the final intended values and have not fallen short
-			//of these due to rounding errors etc.
-			if (!maxZoomFactorReached)
-			{
-				zoomHandler.adjustZoom(finalZoomFactor, selectedMap, (int) (finalChromoHeight - (initialDistFromTopProportion * finalChromoHeight)));
-			}
+				catch (InterruptedException e)
+				{
+				}
 
-			zoomHandler.isPanZoomRequest = false;
+				// work out the current scaling factor
+				// next zoom factor divided by current zoom factor
+				float currentScalingFactor = (selectedSet.zoomFactor + zoomFactorIncrement) / selectedSet.zoomFactor;
+
+				// set the new zoom factor
+				//if this does not exceed the max zoom factor
+				if (selectedSet.zoomFactor < Constants.MAX_ZOOM_FACTOR)
+					selectedSet.zoomFactor += zoomFactorIncrement;
+				//if this DOES exceed the max zoom factor
+				else
+				{
+					if (Prefs.showMaxZoomLevelMessage)
+					{
+						TaskDialog.info("Maximum zoom level reached for map set " + selectedSet.name, "Close", maxZoomMessageCheckBox);
+					}
+					zoomHandler.isPanZoomRequest = false;
+					maxZoomFactorReached = true;
+
+					break;
+				}
+
+				// work out the chromo height and total genome height for when the new zoom factor will have been applied
+				int newChromoHeight = Math.round(selectedSet.chromoHeight + chromoHeightIncrement);
+
+				// the distance from the top of the chromosome to the mousePressedY location, in pixels
+				int distFromTop = Math.round(initialDistFromTopProportion * newChromoHeight);
+				// the same from the bottom of the chromosome
+				int distFromBottom = newChromoHeight - distFromTop;
+
+				// the new total Y extent of the genome in pixels
+				int newTotalY = Math.round(selectedSet.totalY + totalYIncrement);
+
+				// adjust the zoom and increment the scaling factor
+				// this call includes the redraw of the main canvas
+				zoomHandler.adjustZoom(selectedMap, newTotalY, newChromoHeight, distFromBottom);
+				currentScalingFactor += increment;
+
+				//update visible zoom info
+				Strudel.winMain.fatController.updateAllZoomControls();
+			}
 		}
-		catch (Exception e)
+		//if we have not reached the max zoom factor with this we need to do one more zoom adjust
+		//explicitly here to make sure we have all the final intended values and have not fallen short
+		//of these due to rounding errors etc.
+		if (!maxZoomFactorReached)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			selectedSet.zoomFactor = finalZoomFactor;
+			zoomHandler.adjustZoom(
+							selectedMap,
+							finalTotalY,
+							(int) finalChromoHeight,
+							(int) (finalChromoHeight - (initialDistFromTopProportion * finalChromoHeight)));
 		}
+
+		//now update the arrays with the position data
+		Strudel.winMain.fatController.initialisePositionArrays();
+		//update zoom control position
+		Strudel.winMain.fatController.updateAllZoomControls();
+
+		//repaint
+		// TODO: AA check
+		Strudel.winMain.mainCanvas.updateCanvas(true);
+
+		zoomHandler.isPanZoomRequest = false;
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------

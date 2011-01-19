@@ -117,6 +117,7 @@ public class LinkDisplayManager
 	public void drawAllLinks(Graphics2D g2, Boolean killMe)
 	{
 		int numAllLinksDrawn = 0;
+		long startTime = System.currentTimeMillis();
 
 		//only do this if we have at least 2 genomes -- otherwise there are no links to deal with
 		if(Strudel.winMain.dataContainer.gMapSets.size() > 1)
@@ -177,7 +178,7 @@ public class LinkDisplayManager
 						boolean bothMapsShowing = targetGMap.isShowingOnCanvas && referenceGMap.isShowingOnCanvas;
 						boolean setDrawnAlready = drawnLinkSets.contains(selectedLinks);
 						boolean gMapSetsAdjacent = Utils.areMapSetsAdjacent(targetGMap.owningSet, referenceGMap.owningSet);
-						if (setDrawnAlready || !gMapSetsAdjacent || (Prefs.drawOnlyLinksToVisibleFeatures && !bothMapsShowing))
+						if (!bothMapsShowing || setDrawnAlready || !gMapSetsAdjacent)
 							continue;
 
 						//if the user is doing Ctrl click selection of maps they will only want to see links between the ones they selected
@@ -226,6 +227,9 @@ public class LinkDisplayManager
 				e.printStackTrace();
 			}
 		}
+
+		long endTime = System.currentTimeMillis();
+//		System.out.println("" + numAllLinksDrawn + " links drawn in " + (endTime-startTime) + " ms");
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -259,7 +263,7 @@ public class LinkDisplayManager
 					referenceFeature = link.getFeature2();
 				}
 				else
-				//if feature 2 is on the target map, feat 1 on the reference
+					//if feature 2 is on the target map, feat 1 on the reference
 				{
 					targetFeature = link.getFeature2();
 					referenceFeature = link.getFeature1();
@@ -271,8 +275,18 @@ public class LinkDisplayManager
 				float referenceFeatureStart = referenceFeature.getStart();
 
 				// convert the y value to scaled coordinates on the canvas by obtaining the coords of the appropriate chromosome object and scaling them appropriately
-				int targetY = Utils.relativeFPosToPixelOnCanvas(targetGMap, targetFeatureStart);
-				int referenceY = Utils.relativeFPosToPixelOnCanvas(referenceGMap, referenceFeatureStart);
+				int targetY = Utils.relativeFPosToPixelOnCanvas(targetGMap, targetFeatureStart, false);
+				int referenceY = Utils.relativeFPosToPixelOnCanvas(referenceGMap, referenceFeatureStart, false);
+
+				//check for chromosome inversion and invert values if necessary
+				if (targetGMap.isPartlyInverted)
+				{
+					targetY = Utils.relativeFPosToPixelOnCanvas(targetGMap, targetFeatureStart, true);
+				}
+				if (referenceGMap.isPartlyInverted)
+				{
+					referenceY = Utils.relativeFPosToPixelOnCanvas(referenceGMap, referenceFeatureStart, true);
+				}
 
 				//decide whether this link should be drawn or not
 				boolean drawLink = false;
@@ -287,8 +301,8 @@ public class LinkDisplayManager
 				if(linesDrawn.get(key) == null && drawLink)
 				{
 					linesDrawn.put(key, true);
-					// draw the link
-					drawSingleLink(g2, targetChromoX, targetY, referenceChromoX, referenceY);
+					// draw the link either as a straight line or a curve
+					drawStraightOrCurvedLink(g2, targetChromoX, targetY, referenceChromoX, referenceY);
 
 					numLinksDrawn++;
 				}
@@ -326,17 +340,17 @@ public class LinkDisplayManager
 		}
 
 		//y coords
-		int y1 = Math.round(gMap1.y + gMap1.currentY + (f1.getStart() * (gMap1.currentHeight / gMap1.chromoMap.getStop())));
-		int y2 = Math.round(gMap2.y + gMap2.currentY + (f2.getStart() * (gMap2.currentHeight / gMap2.chromoMap.getStop())));
+		int y1 = Math.round(gMap1.y + gMap1.currentY + (f1.getStart() * (gMap1.height / gMap1.chromoMap.getStop())));
+		int y2 = Math.round(gMap2.y + gMap2.currentY + (f2.getStart() * (gMap2.height / gMap2.chromoMap.getStop())));
 
 		//check for chromosome inversion and invert values if necessary
 		if(gMap1.isPartlyInverted || gMap1.isFullyInverted)
 		{
-			y1 = (int) ((gMap1.chromoMap.getStop() - f1.getStart()) / (gMap1.chromoMap.getStop() / gMap1.currentHeight)) + (gMap1.y + gMap1.currentY);
+			y1 = (int) ((gMap1.chromoMap.getStop() - f1.getStart()) / (gMap1.chromoMap.getStop() / gMap1.height)) + (gMap1.y + gMap1.currentY);
 		}
 		if(gMap2.isPartlyInverted  || gMap2.isFullyInverted)
 		{
-			y2 = (int) ((gMap2.chromoMap.getStop() - f2.getStart()) / (gMap2.chromoMap.getStop() / gMap2.currentHeight)) + (gMap2.y + gMap2.currentY);
+			y2 = (int) ((gMap2.chromoMap.getStop() - f2.getStart()) / (gMap2.chromoMap.getStop() / gMap2.height)) + (gMap2.y + gMap2.currentY);
 		}
 
 		// draw the link either as a straight line or a curve
@@ -344,7 +358,7 @@ public class LinkDisplayManager
 			g2.setColor(Colors.strongEmphasisLinkColour);
 		else
 			g2.setColor(Colors.mildEmphasisLinkColour);
-		drawSingleLink(g2,targetChromoX, y1, referenceChromoX, y2);
+		drawStraightOrCurvedLink(g2,targetChromoX, y1, referenceChromoX, y2);
 	}
 
 
@@ -496,7 +510,7 @@ public class LinkDisplayManager
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
 	//draws a single link, either as a straight line or a curve depending on the value of the linkCurvatureCoeff set at class level
-	private void drawSingleLink(Graphics2D g2, int startX, int startY, int endX, int endY)
+	private void drawStraightOrCurvedLink(Graphics2D g2, int startX, int startY, int endX, int endY)
 	{
 		//if the linkCurvatureCoeff is 0 then the line will be straight and the control points are simply moved to either end of the line
 		//ctrlx1 - the X coordinate used to set the first control point of this CubicCurve2D

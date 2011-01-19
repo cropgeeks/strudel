@@ -18,7 +18,7 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener, Mouse
 	MainCanvas mainCanvas;
 
 	//the map set this overview depicts
-	public GMapSet gMapSet;
+	GMapSet gMapSet;
 
 	//this is where we drag the mouse to
 	int mouseDragPosY = 0;
@@ -29,12 +29,6 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener, Mouse
 	//the rectangle we draw around the currently zoomed in area
 	Rectangle regionRect;
 
-	//the minimum chromosome height at which we will still render individual chromosomes on this overview
-	int minChromoHeight = 2;
-
-	//true if we have to render multiple chromosomes as one due to excessive numbers
-	public boolean renderAsOneChromo = false;
-
 //	========================================curve'tor=====================================
 
 	public OverviewCanvas(WinMain winMain, GMapSet gMapSet)
@@ -42,7 +36,6 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener, Mouse
 		this.winMain = winMain;
 		this.mainCanvas = winMain.mainCanvas;
 		this.gMapSet = gMapSet;
-		gMapSet.overviewCanvas = this;
 
 		regionRect = new Rectangle();
 
@@ -92,50 +85,24 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener, Mouse
 		//background gradient from top to bottom, dark to light, starts black
 		Color b1 = Colors.backgroundGradientStartColour;
 		Color b2 = Colors.backgroundGradientEndColour;
-		g2.setPaint(new GradientPaint(canvasWidth/2, 0, b1, canvasWidth/2, canvasHeight, b2));
-		g2.fillRect(0, 0, canvasWidth, canvasHeight);
-		int fontSize = 9;
+		g2.setPaint(new GradientPaint(canvasWidth/2, 0, b1, canvasWidth/2, canvasHeight, b2)); g2.fillRect(0, 0, canvasWidth, canvasHeight);
 
-		//if we can fit all the chromosomes on the overview canvas
-		if (!renderAsOneChromo)
+		// now paint the chromosomes in this genome
+		// for each chromosome in the genome
+		for (GChromoMap gChromoMap : gMapSet.gMaps)
 		{
-			// now paint the chromosomes in this genome
-			// for each chromosome in the genome
-			for (GChromoMap gChromoMap : gMapSet.gMaps)
-			{
-				// the map draws itself from 0,0 always but we need move the origin of the graphics object to the actual
-				// coordinates where we want things drawn
-				g2.translate(genomeX, currentY);
+			// the map draws itself from 0,0 always but we need move the origin of the graphics object to the actual
+			// coordinates where we want things drawn
+			g2.translate(genomeX, currentY);
 
-				// get the map to draw itself (from 0,0 always)
-				gChromoMap.paintOverViewMap(g2, chromoWidth, chromoHeight, fontSize);
+			// get the map to draw itself (from 0,0 always)
+			gChromoMap.paintOverViewMap(g2, chromoWidth, chromoHeight);
 
-				// now move the graphics object's origin back to 0,0 to preserve the overall coordinate system
-				g2.translate(-genomeX, -currentY);
+			// now move the graphics object's origin back to 0,0 to preserve the overall coordinate system
+			g2.translate(-genomeX, -currentY);
 
-				// increment the y position so we can draw the next one
-				currentY += chromoHeight + chromoSpacing;
-			}
-		}
-		//if we cannot fit all chromos on together
-		else
-		{
-			//draw a single chromo from top to bottom -- this represents all chromos together for this purpose
-			Color colour = Colors.genomeColour;
-			Color centreColour = colour.brighter().brighter().brighter().brighter();
-			GradientPaint gradient = new GradientPaint(0, 0, colour, chromoWidth / 2, 0, centreColour, true);
-			g2.setPaint(gradient);
-			int chromoXPos = canvasWidth/2 - chromoWidth/2;
-			int gap = 7;
-			g2.fillRect(chromoXPos, gap, chromoWidth, canvasHeight - gap*2);
-
-			//now draw a warning on the canvas to say that all chromos have to be rendered together here
-			g2.setColor(Colors.chromosomeIndexColour);
-			String warnStr = "all chromosomes";
-			int strWidth = g2.getFontMetrics().stringWidth(warnStr);
-			int labelXPos = canvasWidth/2 - strWidth/2;
-			g2.drawString(warnStr, labelXPos, canvasHeight/2);
-			g2.drawString("(rendered as one)", labelXPos, canvasHeight/2 + fontSize*2);
+			// increment the y position so we can draw the next one
+			currentY += chromoHeight + chromoSpacing;
 		}
 
 		// now draw a rectangle indicating where in the main canvas we are currently zoomed in to
@@ -146,12 +113,12 @@ public class OverviewCanvas extends JPanel implements MouseMotionListener, Mouse
 		int rectHeight = 0;
 		//we only ever change the height and y coord of the rectangle
 		//the rest stays the same as we always want it to cover the full width of the canvas
-		if (gMapSet.zoomFactor == 1 && !renderAsOneChromo) //fully zoomed out
+		if (gMapSet.zoomFactor == 1) //fully zoomed out
 		{
 			rectY = 1;
 			rectHeight = getHeight()-3;
 		}
-		else if ((gMapSet.zoomFactor == 1 && renderAsOneChromo) || gMapSet.zoomFactor > 1)//zoomed in
+		else //zoomed in
 		{
 			//work out the topmost y coord of the genome as visible on the main canvas
 			int topY = Math.round(gMapSet.centerPoint - winMain.mainCanvas.getHeight()/2.0f);

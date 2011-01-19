@@ -1,8 +1,6 @@
 package sbrn.mapviewer.gui.handlers;
 
-import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import sbrn.mapviewer.*;
@@ -26,7 +24,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 
 	private final boolean isOSX = SystemUtils.isMacOS();
 
-	int scrollIncrement = 100;
+	int scrollGenomeIncrement = 100;
 
 	int lastMouseDragYPos = -1;
 
@@ -51,8 +49,6 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	// used for selecting chromosomes for display of links and for zooming
 	public void mouseClicked(MouseEvent e)
 	{
-//		System.out.println("mouse clicked");
-		
 		//place the focus on this window so we can listen to keyboard events too
 		winMain.mainCanvas.requestFocusInWindow();
 
@@ -64,6 +60,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 
 			if (selectedMap != null)
 				winMain.mainCanvas.zoomHandler.processClickZoomRequest(selectedMap);
+			return;
 		}
 	}
 
@@ -87,8 +84,6 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 
 	public void mousePressed(MouseEvent e)
 	{
-//		System.out.println("mouse pressed");
-		
 		mousePressedX = e.getX();
 		mousePressedY = e.getY();
 		lastMouseDragYPos = e.getY();
@@ -127,7 +122,6 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 				Strudel.winMain.fatController.selectedMaps.clear();
 			}
 		}
-
 		//CTRL+click on a chromosome means display all links between this and all other clicked chromos
 		else if (isMetaClick(e) && !e.isShiftDown())
 		{
@@ -141,17 +135,6 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			}
 		}
 
-		//Alt + drag allows repositioning of chromosomes
-//		else if (e.isAltDown())
-//		{
-//			//this is all to do with chromosome dragging and repositioning
-//			//get top l.h. Y coordinate of this rect
-//			int topY = (int)selectedMap.boundingRectangle.getY();
-//			winMain.fatController.draggedMap = selectedMap;
-//			Strudel.winMain.fatController.draggedMapYOffset = mousePressedY - topY;
-//			winMain.mainCanvas.dragMap(e);
-//		}
-
 		Strudel.winMain.mainCanvas.updateCanvas(true);
 	}
 
@@ -160,8 +143,6 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 
 	public void mouseReleased(MouseEvent e)
 	{
-//		System.out.println("mouse released");
-		
 		//check whether this is a popup request -- needs to be done both in mousePressed and in mouseReleased due to platform dependent nonsense
 		if (e.isPopupTrigger())
 		{
@@ -190,30 +171,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 				selectedMap = Utils.getSelectedMap(winMain, gMapSetIndex, e.getY());
 			winMain.mainCanvas.zoomHandler.processPanZoomRequest(selectedMap, mousePressedY, e.getY(), true);
 		}
-//		else if (e.isShiftDown() && isMetaClick(e)) //Ctrl+shift
-//		{
-//			//the mouse was getting dragged and we have released the button
-//			//reposition the selected map
-//			if(Strudel.winMain.fatController.draggedMap != null)
-//			{
-//				Utils.repositionDraggedMap(e);
-//			}
-//		}
 
-
-//		//this is what we do when Alt is down 
-//		if(e.isAltDown())
-//		{
-//			GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, e.getX(), e.getY());
-//			if(selectedMap != null)
-//			{
-//				Strudel.winMain.fatController.isCtrlClickSelection = true;
-//				//also reset the wholeGenomeSelected flag
-//				selectedMap.owningSet.wholeMapsetIsSelected  = false;
-//				winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(selectedMap);
-//			}
-//		}
-		
 		winMain.mainCanvas.drawSelectionRect = false;
 	}
 
@@ -222,8 +180,6 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	// used for zooming and scrolling
 	public void mouseDragged(MouseEvent e)
 	{
-//		System.out.println("mouse dragged");
-		
 		int x = e.getX();
 		int y = e.getY();
 
@@ -234,10 +190,8 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		//the chromosome -- if any - this event pertains to (i.e. where on the canvas on y are we)
 		GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, (int)(gMapSet.xPosition), y);
 
-		//mouse is getting dragged without shift or Alt held down -- scroll the canvas up or down
-		//check whether all maps in the mapset are visible -- if yes, do not scroll
-		boolean allMapsVisible = gMapSet.getVisibleMaps().size() == gMapSet.gMaps.size();
-		if (!e.isShiftDown() && !allMapsVisible && !e.isAltDown())
+		//mouse is getting dragged without shift held down -- scroll the canvas up or down
+		if (!e.isShiftDown())
 		{
 			//include a time delay before dragging so we can prevent accidental drags that were in fact intended to be mouse clicks
 			long now = System.currentTimeMillis();
@@ -251,18 +205,20 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			// mouse is getting dragged up
 			if (y < mouseDragPosY)
 			{
-				winMain.mainCanvas.scroll(false, gMapSet, distanceDragged);
+				winMain.mainCanvas.moveGenomeViewPort(gMapSet, gMapSet.centerPoint + distanceDragged);
 			}
 			// mouse is getting dragged down
 			if (y > mouseDragPosY)
 			{
-				winMain.mainCanvas.scroll(true, gMapSet, distanceDragged);
+				winMain.mainCanvas.moveGenomeViewPort(gMapSet, gMapSet.centerPoint - distanceDragged);
 			}
 
 			lastMouseDragYPos = y;
 		}
 
+
 		// mouse is getting dragged  with SHIFT or CTRL-SHIFT down -- draw a rectangle for  selection (zooming/range selection)
+
 		//this is what we do for drawing a selection rectangle
 		if(e.isShiftDown() && isMetaClick(e))
 		{
@@ -334,18 +290,6 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			winMain.mainCanvas.updateCanvas(false);
 		}
 
-
-		//this is what we do when Alt is down and the mouse is getting dragged
-		if(e.isAltDown())
-		{
-			//reposition the selected map
-			if(selectedMap != null)
-			{
-				winMain.mainCanvas.dragMap(e);
-				Strudel.winMain.mainCanvas.updateCanvas(true);
-			}
-		}
-
 		// update the current drag positions
 		mouseDragPosX = e.getX();
 		mouseDragPosY = e.getY();
@@ -368,48 +312,46 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		int index = Utils.getSelectedSetIndex(e);
 		GMapSet selectedSet = Strudel.winMain.dataContainer.gMapSets.get(index);
 
+		//this moves the genome center point up and down
+		int newCenterPoint = -1;
+
+		//this boolean dictates whether we should actually move the viewport or not
+		//it is set to false if moving the viewport would make all maps disappear from the canvas completely
+		boolean moveViewport = false;
+
 		// work out in which direction we have moved the mouse
 		int notches = e.getWheelRotation();
 
-		//if Ctrl is down we zoom
-		if(isMetaClick(e))
+		//scrolling up
+		if (notches < 0)
 		{
-//			System.out.println("zooming");
-			float newZoomFactor = -1;
-			float increment = selectedSet.maxZoomFactor / 100;
-
-			//zooming out
-			if (notches < 0)
-				newZoomFactor = selectedSet.zoomFactor - increment;
-			//zooming in
-			else
-				newZoomFactor = selectedSet.zoomFactor + increment;
-
-			//if the new zoom factor is negative, do nothing
-			if(newZoomFactor < 0)
-				return;
-
-			Strudel.winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(newZoomFactor, selectedSet);
-			Strudel.winMain.fatController.updateAllZoomControls();
+			newCenterPoint = selectedSet.centerPoint  - scrollGenomeIncrement;
+			//don't let the centerpoint become negative or the first chromosome will disappear off the canvas
+			if(newCenterPoint > 0)
+				moveViewport = true;
 		}
-		//otherwise we scroll
+		//scrolling down
 		else
 		{
-			//check whether all maps in the mapset are visible -- if yes, do not scroll
-			if(selectedSet.getVisibleMaps().size() < selectedSet.gMaps.size())
-			{
-				//scrolling up
-				if (notches < 0)
-				{
-					Strudel.winMain.mainCanvas.scroll(true, selectedSet, scrollIncrement);
-				}
-				//scrolling down
-				else
-				{
-					Strudel.winMain.mainCanvas.scroll(false, selectedSet, scrollIncrement);
-				}
-			}
+			newCenterPoint = selectedSet.centerPoint  + scrollGenomeIncrement;
+			//this buffer is a hack that allows us to keep the last chromosome in the set visible on the canvas at all times
+			//if we don't apply this then it can disappear altogether, which we want to avoid
+			//the buffer needs to be proportional to the size of the genome or else it won't
+			float buffer = selectedSet.totalY*0.005f;
+			if(newCenterPoint < (selectedSet.totalY - buffer))
+				moveViewport = true;
 		}
+
+		//move the genome viewport but make sure we do not scroll off the canvas
+		//i.e. we want to be able to always see at least one chromosome
+		if(moveViewport)
+		{
+			winMain.mainCanvas.moveGenomeViewPort(selectedSet, newCenterPoint);
+		}
+
+		//repaint
+		// TODO: AA check
+		winMain.mainCanvas.updateCanvas(true);
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------

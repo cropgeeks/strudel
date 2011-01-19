@@ -7,7 +7,7 @@
 	<property name="lib" location="lib"/>
 
 	<property name="mapviewer.jar" value="${lib}/mapviewer.jar"/>
-	<property name="i4j" value="C:\Program Files\install4j5\bin\ant.jar"/>
+	<property name="i4j" value="C:\Program Files\install4j\bin\ant.jar"/>
 
 
 	<path id="project.classpath">

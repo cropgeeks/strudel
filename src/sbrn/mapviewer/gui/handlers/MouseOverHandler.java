@@ -41,37 +41,45 @@ public class MouseOverHandler
 			//update the hint panel
 			HintPanel.upDate();
 
+			//a map has been selected i.e. the mouse is over it
 			if (selectedMap != null && selectedMap.arraysInitialized)
 			{
+				//this additional check clears any existing labels if we are just moving the mouse within the same map
+				if(selectedMap == previousMap && selectedMap.drawMouseOverFeatures)
+				{
+					matches = null;
+					selectedMap.drawMouseOverFeatures = false;
+					winMain.mainCanvas.updateCanvas(false);
+				}
+				
 				//these are conditions for the persistent display of labels
 				if (previousMap == null || (previousMap != null && !previousMap.persistHighlightedFeatures))
 				{
-					clearPreviousMap();
 
 					// figure out where on the chromosome the hit has occurred, in pixels from the top of the chromosome
 					int pixelNumberFromTop = (int) (y - selectedMap.boundingRectangle.getY());
 
 					// now look up this value in the feature arrays of the map
-					for (int i = 0; i < selectedMap.allLinkedFeaturePositions.length; i++)
+					for (int i = 0; i < selectedMap.allFeaturePositions.length; i++)
 					{
 						//check the current pixel number from the top against the values in the array
 						//if there is one that is the same (incl. error margin) then add the corresponding feature to the vector
-						if (selectedMap.allLinkedFeaturePositions[i] <= pixelNumberFromTop + errorMargin &&
-										selectedMap.allLinkedFeaturePositions[i] >= pixelNumberFromTop - errorMargin)
+						if (selectedMap.allFeaturePositions[i] <= pixelNumberFromTop + errorMargin &&
+										selectedMap.allFeaturePositions[i] >= pixelNumberFromTop - errorMargin)
 						{
 							if (matches == null)
 							{
 								matches = new Vector<Feature>();
 							}
-							if(selectedMap.allLinkedFeatures[i] != null)
+							if(selectedMap.allFeatures[i] != null)
 							{
-								matches.add(selectedMap.allLinkedFeatures[i]);
+								matches.add(selectedMap.allFeatures[i]);
 							}
 						}
 					}
 
 					// we have a match
-					if (matches != null && selectedMap.owningSet.paintAllMarkers)
+					if (matches != null && selectedMap.owningSet.showAllFeatures)
 					{
 						// set the vector object of the selected map and repaint
 						selectedMap.mouseOverFeatures = matches;
@@ -102,8 +110,9 @@ public class MouseOverHandler
 
 	private void clearPreviousMap()
 	{
+		
 		// reset the selected map if the mouse is not over it
-		if (previousMap != null  && !previousMap.persistHighlightedFeatures && previousMap.owningSet.paintAllMarkers)
+		if (previousMap != null  && !previousMap.persistHighlightedFeatures && previousMap.owningSet.showAllFeatures)
 		{
 			previousMap.mouseOverFeatures.clear();
 			previousMap.drawMouseOverFeatures = false;

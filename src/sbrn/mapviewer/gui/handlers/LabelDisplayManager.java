@@ -409,9 +409,9 @@ public class LabelDisplayManager
 	{
 		//make a separate vector object with all the linked features for this chromo
 		Vector<Feature> vec = new Vector<Feature>();
-		for (int i = 0; i < gMap.allLinkedFeatures.length; i++)
+		for (int i = 0; i < gMap.allFeatures.length; i++)
 		{
-			vec.add(gMap.allLinkedFeatures[i]);
+			vec.add(gMap.allFeatures[i]);
 		}
 
 		//check whether all these features are showing

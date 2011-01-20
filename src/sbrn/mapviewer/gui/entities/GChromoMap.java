@@ -42,8 +42,8 @@ public class GChromoMap implements Comparable<GChromoMap>
 	public ChromoMap chromoMap;
 
 	// arrays with Feature names and positions for fast access during drawing operations
-	public int[] allLinkedFeaturePositions;
-	public Feature [] allLinkedFeatures;
+	public int[] allFeaturePositions;
+	public Feature [] allFeatures;
 	//
 	// indicates whether this whole map or part thereof is currently drawn on the canvas
 	public boolean isShowingOnCanvas = true;
@@ -259,9 +259,9 @@ public class GChromoMap implements Comparable<GChromoMap>
 			}
 
 			// now draw features and labels as required
-			if (owningSet.paintAllMarkers && isShowingOnCanvas)
+			if (owningSet.showAllFeatures && isShowingOnCanvas)
 			{
-				drawLinkedFeatures(g2);
+				drawAllFeatures(g2);
 			}
 
 			//draw the selection rectangle if required
@@ -434,39 +434,31 @@ public class GChromoMap implements Comparable<GChromoMap>
 	// initialises the arrays we need for fast drawing
 	public void initArrays()
 	{
-
 		// init the arrays that hold ALL the features for this map
 		int numFeatures = chromoMap.countFeatures();
 
-		allLinkedFeatures = new Feature[numFeatures];
-		allLinkedFeaturePositions = new int[numFeatures];
+		allFeatures = new Feature[numFeatures];
+		allFeaturePositions = new int[numFeatures];
 		Vector<Feature> featureList = chromoMap.getFeatureList();
 		for (int i = 0, n=featureList.size(); i < n; i++)
 		{
 			Feature f = featureList.get(i);
 
-			//at this point we need to know whether this feature is involved in any links
-			//if it is, we add it to the arrays
-			//otherwise it's fine to just have it in the feature list of the corresponding chromomap from where we can access it for
-			//other uses such as full feature lists for search ranges etc
-			if((f.getLinks() != null && f.getLinks().size() > 0) || Strudel.winMain.dataContainer.gMapSets.size() == 1)
+			//the start point of this features in its own units (cM, bp, whatever)
+			float start = f.getStart();
+			
+			//scale this by the current map height to give us a position in pixels, between zero and the chromosome height
+			//then store this value in the array we use for drawing
+			allFeaturePositions[i] =Utils.relativeFPosToPixelsOnGMap(this, start);
+			
+			//if the map is inverted we need to store the inverse of this value i.e. the map end value minus the feature position
+			if(isFullyInverted || isPartlyInverted)
 			{
-				//the start point of this features in its own units (cM, bp, whatever)
-				float start = f.getStart();
-
-				//scale this by the current map height to give us a position in pixels, between zero and the chromosome height
-				//then store this value in the array we use for drawing
-				allLinkedFeaturePositions[i] =Utils.relativeFPosToPixelsOnGMap(this, start);
-
-				//if the map is inverted we need to store the inverse of this value i.e. the map end value minus the feature position
-				if(isFullyInverted || isPartlyInverted)
-				{
-					allLinkedFeaturePositions[i] = (int) ((owningSet.chromoHeight / chromoMap.getStop()) * (chromoMap.getStop() -start));
-				}
-
-				//also store a reference to the feature itself in a parallel array
-				allLinkedFeatures[i] = f;
+				allFeaturePositions[i] = (int) ((owningSet.chromoHeight / chromoMap.getStop()) * (chromoMap.getStop() -start));
 			}
+			
+			//also store a reference to the feature itself in a parallel array
+			allFeatures[i] = f;
 		}
 		arraysInitialized = true;
 	}
@@ -475,25 +467,25 @@ public class GChromoMap implements Comparable<GChromoMap>
 	// -----------------------------------------------------------------------------------------------------------------------------------------
 
 	// draw the markers for the features
-	private void drawLinkedFeatures(Graphics2D g2)
+	private void drawAllFeatures(Graphics2D g2)
 	{
 
 		int lastY = -1;
 		int numMarkersDrawn = 0;
 
-		if (allLinkedFeaturePositions != null)
+		if (allFeaturePositions != null)
 		{
 			g2.setColor(Colors.featureColour);
-			for (int i = 0; i < allLinkedFeaturePositions.length; i++)
+			for (int i = 0; i < allFeaturePositions.length; i++)
 			{
 				int yPos;
-				if (allLinkedFeaturePositions[i] == 0.0f)
+				if (allFeaturePositions[i] == 0.0f)
 				{
 					yPos = 0;
 				}
 				else
 				{
-					yPos = allLinkedFeaturePositions[i];
+					yPos = allFeaturePositions[i];
 				}
 
 				//check whether inversion in progress

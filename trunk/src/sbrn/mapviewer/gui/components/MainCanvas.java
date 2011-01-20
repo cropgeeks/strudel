@@ -79,6 +79,8 @@ public class MainCanvas extends JPanel
 	// width of chromosomes -- set this to a fixed fraction of the screen width for now
 	//gets set in the paintCanvas method
 	public int chromoWidth = 0;
+	//this is the minimum chromosome width we always want
+	public int minimumChromosomeWidth = 10;
 
 	// Objects for multicore rendering
 	public static int cores = Runtime.getRuntime().availableProcessors();
@@ -383,20 +385,55 @@ public class MainCanvas extends JPanel
 		g2.setPaint(new GradientPaint(canvasWidth / 2, 0, b1, canvasWidth / 2, canvasHeight, b2));
 		g2.fillRect(0, 0, canvasWidth, canvasHeight);
 
-		// width of chromosomes -- set this to a fixed fraction of the screen width for now
-		chromoWidth = Math.round(canvasWidth / 40);
-
-		// check that this number is even
-		boolean evenNumber = chromoWidth % 2 == 0;
-		// if it isn't just add 1 -- otherwise we get into trouble with feature line widths exceeding the width of the chromosome
-		if (!evenNumber)
-			chromoWidth += 1;
+		setChromosomeWidth();
 
 		// the total amount of space we have for drawing on vertically, in pixels
 		availableSpaceVertically = canvasHeight - (chromoSpacing * 2);
 		// the combined height of all the vertical spaces between chromosomes
 		allSpacers = chromoSpacing * (winMain.dataContainer.maxChromos - 1);
 	}
+	
+	// -----------------------------------------------------------------------------------------------------------------------------------
+	/**
+	 * Sets the width of all chromosomes shown on the canvas.
+	 * 
+	 * Algorithm for this:
+	 * 
+	 * Calculate the ideal chromosome width (this is a dynamically calculated value that changes with the canvas width itself)
+	 *  if we can't have at least 4 times the chromo width between genomes, reduce the chromo width rather than the space between genomes
+	 *  if this brings the chromo width to below our safe threshold, set it to the safe threshold
+	 *  
+	 *  The effect of this is that if we are short of space then we reduce the chromosome width before we start reducing the space between genomes.
+	 */
+	private void setChromosomeWidth()
+	{
+		// ideal width of chromosomes -- set to a fixed fraction of the screen width 
+		int maxChromoWidth = Math.round(canvasWidth / 40);
+		chromoWidth = maxChromoWidth;	
+		
+		//ideally we want something like at least 4 times the chromowidth between genomes or else the links get awfully cluttered
+		//if we have so many genomes that this is impossible then we have to reduce this or else go for the minimum width
+		int numGenomes = winMain.dataContainer.gMapSets.size();
+		//the multiplier we use for this
+		int multiplier = 4;
+		int combinedWidthAllGenomes = numGenomes*chromoWidth;
+		int unfilledSpaceHorizontally = getWidth() - combinedWidthAllGenomes;
+		float actualMultipleOfChromoWidth = unfilledSpaceHorizontally/(float)combinedWidthAllGenomes;	
+		//reduce the width appropriately if necessary
+		if(actualMultipleOfChromoWidth < multiplier)
+			chromoWidth = (unfilledSpaceHorizontally/multiplier) / numGenomes;
+
+		//but don't let this fall below the minimum
+		if(chromoWidth < minimumChromosomeWidth)
+			chromoWidth = minimumChromosomeWidth;
+
+		// check that this number is even
+		boolean evenNumber = chromoWidth % 2 == 0;
+		// if it isn't, just add 1 -- otherwise we get into problems with feature line widths exceeding the width of the chromosome
+		if (!evenNumber)
+			chromoWidth += 1;
+	}
+	
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
 

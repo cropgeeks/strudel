@@ -39,6 +39,9 @@ public class Prefs extends XMLPreferences
 	//do we want to show the distance markers
 	public static boolean showDistanceMarkers = false;
 
+	// should all "highlighted" homologies be drawn in white
+	public static boolean highlightHomologiesInWhite = true;
+
 	//show the hints panel
 	public static boolean showHintPanel = true;
 

@@ -279,10 +279,13 @@ public class MainCanvas extends JPanel
 			drawMaps(gMapSet,g2, currentY);
 
 		}
+
+		boolean showAllHomologies = (Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().isSelected() || Strudel.winMain.foundFeaturesTableControlPanel.getShowHomologsCheckbox().isSelected());
+
 		// optionally draw all the currently selected links between chromos
 		if (drawLinks && !killMe)
 		{
-			linkDisplayManager.drawAllLinks(g2, killMe);
+			linkDisplayManager.drawAllLinks(g2, killMe, showAllHomologies);
 		}
 
 		//we also want to check whether there are any links to display that are to be highlighted after a name based search for

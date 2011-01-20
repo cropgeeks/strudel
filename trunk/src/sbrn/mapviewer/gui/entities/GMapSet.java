@@ -50,7 +50,7 @@ public class GMapSet
 	public int chromoHeight;
 
 	// this controls whether we draw chromosome markers
-	public boolean paintAllMarkers = false;
+	public boolean showAllFeatures = false;
 
 	//a zoom factor value above which we can draw all  features
 	//this is to reduce the amount of clutter on screen

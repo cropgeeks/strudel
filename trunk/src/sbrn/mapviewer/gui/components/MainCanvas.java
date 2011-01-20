@@ -576,18 +576,18 @@ public class MainCanvas extends JPanel
 		// check whether we need to display markers and labels
 		if (selectedSet.zoomFactor >= selectedSet.thresholdAllMarkerPainting)
 		{
-			selectedSet.paintAllMarkers = true;
+			selectedSet.showAllFeatures = true;
 		}
 		else if (selectedSet.zoomFactor < selectedSet.thresholdAllMarkerPainting)
 		{
 			if(selectedSet.overrideMarkersAutoDisplay)
-				selectedSet.paintAllMarkers = true;
+				selectedSet.showAllFeatures = true;
 			else
-				selectedSet.paintAllMarkers = false;
+				selectedSet.showAllFeatures = false;
 		}
 		else
 		{
-			selectedSet.paintAllMarkers = false;
+			selectedSet.showAllFeatures = false;
 		}
 	}
 

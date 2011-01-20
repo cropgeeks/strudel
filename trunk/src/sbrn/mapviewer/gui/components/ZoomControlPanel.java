@@ -71,8 +71,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 			resetButton.setMargin(new Insets(2, 1, 2, 1));
 
 		//marker and label display buttons
-		overrideMarkersAutoDisplayButton = (JToggleButton) Utils.getButton(true, "", "Always show all markers", Icons.getIcon("SHOWMARKERS"), this, true);
-//		alwaysShowAllLabelsButton = (JToggleButton) Utils.getButton(true, "", "Always show all labels", Icons.getIcon("SHOWLABELS"), null, this, true);
+		overrideMarkersAutoDisplayButton = (JToggleButton) Utils.getButton(true, "", "Always show all features", Icons.getIcon("SHOWMARKERS"), this, true);
 
 		//we need the filler when this toolbar is the only one
 		//this is to stop it from filling the whole width of the frame

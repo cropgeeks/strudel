@@ -114,7 +114,7 @@ public class LinkDisplayManager
 
 
 	// Draws the lines between a chromosome of the reference genome and all potential homologues in the compared genome
-	public void drawAllLinks(Graphics2D g2, Boolean killMe, boolean showAllHomologies)
+	public void drawAllLinks(Graphics2D g2, Boolean killMe, boolean dimNormalLinks)
 	{
 		int numAllLinksDrawn = 0;
 		long startTime = System.currentTimeMillis();
@@ -212,16 +212,10 @@ public class LinkDisplayManager
 							targetChromoX = Math.round(targetGMapSet.xPosition) -1;
 						}
 
-						// set the colour
-						if (showAllHomologies)
-							g2.setColor(Colors.linkColour.darker().darker().darker());
-						else
-							g2.setColor(Colors.linkColour);
-
 						//add this linkset to our vector of linksets we have drawn already, for tracking
 						drawnLinkSets.add(selectedLinks);
 
-						numAllLinksDrawn += drawLinkSet(selectedLinks, g2, killMe, targetGMap,referenceGMap,targetChromoX, referenceChromoX);
+						numAllLinksDrawn += drawLinkSet(selectedLinks, g2, killMe, targetGMap,referenceGMap,targetChromoX, referenceChromoX, dimNormalLinks);
 					}
 				}
 			}
@@ -239,7 +233,7 @@ public class LinkDisplayManager
 
 	//draws a single linkset which conssts of all links between a pair of chromosomes
 	private int drawLinkSet(LinkSet selectedLinks, Graphics2D g2, Boolean killMe, GChromoMap targetGMap,
-					GChromoMap referenceGMap,int targetChromoX, int referenceChromoX)
+					GChromoMap referenceGMap,int targetChromoX, int referenceChromoX, boolean dimNormalLinks)
 	{
 		int numLinksDrawn = 0;
 
@@ -304,9 +298,16 @@ public class LinkDisplayManager
 				if(linesDrawn.get(key) == null && drawLink)
 				{
 					linesDrawn.put(key, true);
+
+					// set the colour
+					Color c = Utils.getLinkColor(link);
+					if (dimNormalLinks)
+						g2.setColor(c.darker().darker().darker());
+					else
+						g2.setColor(c);
+
 					// draw the link either as a straight line or a curve
 					drawStraightOrCurvedLink(g2, targetChromoX, targetY, referenceChromoX, referenceY);
-
 					numLinksDrawn++;
 				}
 			}
@@ -356,11 +357,26 @@ public class LinkDisplayManager
 			y2 = (int) ((gMap2.chromoMap.getStop() - f2.getStart()) / (gMap2.chromoMap.getStop() / gMap2.height)) + (gMap2.y + gMap2.currentY);
 		}
 
+		// Determine the link color by searching *all* links from Feature F1 until we find one that links between it and F2
+		Color linkColor = null;
+		for (Link link: f1.getLinks())
+			if (link.getFeature1() == f2 || link.getFeature2() == f2)
+			{
+				linkColor = Utils.getLinkColor(link);
+				break;
+			}
+
 		// draw the link either as a straight line or a curve
 		if(strongEmphasis)
 			g2.setColor(Colors.strongEmphasisLinkColour);
+//		else
+//			g2.setColor(Colors.mildEmphasisLinkColour);
+
+		else if (Prefs.highlightHomologiesInWhite)
+			g2.setColor(Color.white);
 		else
-			g2.setColor(Colors.mildEmphasisLinkColour);
+			g2.setColor(linkColor);
+
 		drawStraightOrCurvedLink(g2,targetChromoX, y1, referenceChromoX, y2);
 	}
 

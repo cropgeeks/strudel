@@ -176,7 +176,7 @@ public class Utils
 
 	// --------------------------------------------------------------------------------------------------------------------------------
 
-	public static void addLinkToLinkset(LinkSet linkSet, Feature feature1, Feature feature2, String blastScoreStr, String linkAnnotation)
+	public static void addLinkToLinkset(LinkSet linkSet, Feature feature1, Feature feature2, String blastScoreStr, String linkAnnotation, Color color)
 	{
 		// Pair up every instance of f1 with f2
 		Link link = new Link(feature1, feature2);
@@ -202,6 +202,14 @@ public class Utils
 		//add the annotation, if there is any
 		if(linkAnnotation != null)
 			link.setAnnotation(linkAnnotation);
+
+		//add the color, if there is one
+		if (color != null)
+		{
+			link.r = color.getRed();
+			link.g = color.getGreen();
+			link.b = color.getBlue();
+		}
 
 		// TODO: Do we want to add a list of references Features to the Feature object itself, so it knows who it links to?
 		// If so, how do we deal with, eg removing MapSets andkeeping these lists (and the LinkSet!) up to date.
@@ -776,4 +784,11 @@ public class Utils
 
 	// --------------------------------------------------------------------------------------------------------------------------------
 
+	public static Color getLinkColor(Link link)
+	{
+		if (link.r == -1)
+			return Colors.linkColour;
+
+		return new Color(link.r, link.g, link.b);
+	}
 }

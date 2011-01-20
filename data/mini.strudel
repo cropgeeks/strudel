@@ -16,8 +16,8 @@ feature 	genome3	3_1	feat3_1_3	SNP	7.80E+01
 feature 	genome3	3_2	feat3_2_1	SNP	1.23E+02
 feature 	genome3	3_2	feat3_2_2	SNP	4.56E+02
 feature 	genome3	3_2	feat3_2_3	SNP	7.89E+02
-homolog	genome1	feat1_1_1	genome2	feat2_2_1	0.00E+00
-homolog	genome3	feat3_2_1	genome2	feat2_2_2	0.00E+00
+homolog	genome1	feat1_1_1	genome2	feat2_2_1	0.00E+00		#00FF00
+homolog	genome3	feat3_2_1	genome2	feat2_2_2	0.00E+00		#00FF00
 homolog	genome2	feat2_2_3	genome3	feat3_1_2	0.00E+00
 homolog	genome1	feat1_1_2	genome3	feat3_1_3	0.00E+00
 homolog	genome3	feat3_2_1	genome1	feat1_1_2	0.00E+00

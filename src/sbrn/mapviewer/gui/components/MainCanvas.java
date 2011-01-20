@@ -282,12 +282,13 @@ public class MainCanvas extends JPanel
 
 		}
 
-		boolean showAllHomologies = (Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().isSelected() || Strudel.winMain.foundFeaturesTableControlPanel.getShowHomologsCheckbox().isSelected());
+		boolean dimNormalLinks = Strudel.winMain.foundFeaturesTableControlPanel.getShowHomologsCheckbox().isSelected()
+			&& (drawFoundFeaturesInRange || drawFeaturesFoundByName);
 
 		// optionally draw all the currently selected links between chromos
 		if (drawLinks && !killMe)
 		{
-			linkDisplayManager.drawAllLinks(g2, killMe, showAllHomologies);
+			linkDisplayManager.drawAllLinks(g2, killMe, dimNormalLinks);
 		}
 
 		//we also want to check whether there are any links to display that are to be highlighted after a name based search for

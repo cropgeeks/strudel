@@ -74,10 +74,10 @@
 			A homolog entry contains the following columns:
 		<p>
 			"homolog" label -- genome name feat.1 -- feat.1 name -- genome name feat.2 -- feat.2 name -- BLAST eValue --
-			annotation
+			annotation -- colour
 		</p>
 		<p>
-			The annotation field can be blank.
+			The annotation and colour fields can be blank. A homolog's colour should be defined using hex, eg #0000FF for blue.
 		</p>
 
 		<p>

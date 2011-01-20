@@ -1,5 +1,6 @@
 package sbrn.mapviewer.io;
 
+import java.awt.*;
 import java.io.*;
 import java.util.*;
 import sbrn.mapviewer.*;
@@ -319,7 +320,7 @@ public class SingleFileImporter extends TrackableReader
 		//the last token in the array contains the annotation but for the user's convenience this may just be left blank
 		//need to check for this
 		String annotation = null;
-		if(tokens.length == 7)
+		if(tokens.length >= 7)
 			annotation = tokens[6].trim();
 
 		//parse the BLAST e-Value
@@ -327,9 +328,14 @@ public class SingleFileImporter extends TrackableReader
 		if(eValueStr.equals(""))
 			throw new IOException("Missing e-Value in homology.");
 
+		// Link color
+		Color color = null;
+		if (tokens.length >= 8)
+			color = Color.decode(tokens[7]);
+
 		//this method adds the link between the two features to the linkset
 		if(linkSet != null && feature1 != null && feature2 != null)
-			Utils.addLinkToLinkset(linkSet, feature1, feature2, eValueStr, annotation);
+			Utils.addLinkToLinkset(linkSet, feature1, feature2, eValueStr, annotation, color);
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------

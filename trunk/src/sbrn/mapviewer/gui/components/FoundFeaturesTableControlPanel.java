@@ -20,6 +20,7 @@ import sbrn.mapviewer.gui.entities.*;
  */
 public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 {
+	private boolean isInitialising = true;
 
 	/** Creates new form FoundFeaturesTableControlPanel */
 	public FoundFeaturesTableControlPanel()
@@ -29,6 +30,8 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 
 		highlightWhiteCheckbox.setSelected(Prefs.highlightHomologiesInWhite);
 		highlightWhiteCheckbox.setEnabled(showHomologsCheckbox.isSelected());
+
+		isInitialising = false;
 	}
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -176,6 +179,9 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel
 
 	private void highlightWhiteCheckboxStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_highlightWhiteCheckboxStateChanged
 		Prefs.highlightHomologiesInWhite = highlightWhiteCheckbox.isSelected();
+
+		if (isInitialising == false)
+			Strudel.winMain.mainCanvas.updateCanvas(true);
 	}//GEN-LAST:event_highlightWhiteCheckboxStateChanged
 
 	private void genomeFilterComboActionPerformed(java.awt.event.ActionEvent evt)

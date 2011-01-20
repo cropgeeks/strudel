@@ -10,6 +10,9 @@ public class Link
 	private double blastScore;
 	private String annotation;
 
+	// RGB components used to represent this link's color on screen
+	public int r = -1, g = -1, b = -1;
+
 	public Link(Feature feature1, Feature feature2)
 	{
 		this.feature1 = feature1;

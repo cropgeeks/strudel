@@ -114,7 +114,7 @@ public class LinkDisplayManager
 
 
 	// Draws the lines between a chromosome of the reference genome and all potential homologues in the compared genome
-	public void drawAllLinks(Graphics2D g2, Boolean killMe)
+	public void drawAllLinks(Graphics2D g2, Boolean killMe, boolean showAllHomologies)
 	{
 		int numAllLinksDrawn = 0;
 		long startTime = System.currentTimeMillis();
@@ -213,7 +213,10 @@ public class LinkDisplayManager
 						}
 
 						// set the colour
-						g2.setColor(Colors.linkColour);
+						if (showAllHomologies)
+							g2.setColor(Colors.linkColour.darker().darker().darker());
+						else
+							g2.setColor(Colors.linkColour);
 
 						//add this linkset to our vector of linksets we have drawn already, for tracking
 						drawnLinkSets.add(selectedLinks);

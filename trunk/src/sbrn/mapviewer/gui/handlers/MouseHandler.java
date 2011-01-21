@@ -1,9 +1,11 @@
 package sbrn.mapviewer.gui.handlers;
 
 import java.awt.event.*;
+import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import sbrn.mapviewer.*;
+import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.components.*;
 import sbrn.mapviewer.gui.entities.*;
@@ -52,8 +54,8 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		//place the focus on this window so we can listen to keyboard events too
 		winMain.mainCanvas.requestFocusInWindow();
 
-		//mouse click with alt held down means zoom into single chromo so it fills the screen
-		if (e.isAltDown())
+		//double click means zoom into single chromo so it fills the screen
+		if (e.getClickCount() == 2)
 		{
 			GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, e.getX(),
 							e.getY());
@@ -86,11 +88,12 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	{
 		mousePressedX = e.getX();
 		mousePressedY = e.getY();
+
 		lastMouseDragYPos = e.getY();
 		timeOfMouseDown = System.currentTimeMillis();
 
 		GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, e.getX(), e.getY());
-
+		
 		//check whether this is a popup request -- needs to be done both in mousePressed and in mouseReleased due to platform dependent nonsense
 		if (e.isPopupTrigger())
 		{
@@ -105,7 +108,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			return;
 
 		//simple click on a target genome chromosome means display all links between this and all the reference chromos
-		if (!isMetaClick(e) && !e.isAltDown() && !e.isShiftDown())
+		if (!isMetaClick(e) && !e.isShiftDown())
 		{
 			Strudel.winMain.fatController.isCtrlClickSelection = false;
 
@@ -133,6 +136,11 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 				selectedMap.owningSet.wholeMapsetIsSelected  = false;
 				winMain.mainCanvas.linkDisplayManager.processLinkDisplayRequest(selectedMap);
 			}
+		}
+		else if(e.isShiftDown() && isMetaClick(e))
+		{
+			//if we had a feature selection rectangle on screen previously we need to now clear it
+			Strudel.winMain.fatController.clearSelectionRectangle();
 		}
 
 		Strudel.winMain.mainCanvas.updateCanvas(true);
@@ -172,7 +180,8 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			winMain.mainCanvas.zoomHandler.processPanZoomRequest(selectedMap, mousePressedY, e.getY(), true);
 		}
 
-		winMain.mainCanvas.drawSelectionRect = false;
+		//clear the zoom selection rectangle
+		winMain.mainCanvas.drawZoomSelectionRectangle = false;
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -221,27 +230,32 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 
 		//this is what we do for drawing a selection rectangle
 		if(e.isShiftDown() && isMetaClick(e))
-		{
+		{	
 			if(selectedMap != null)
 			{
 				// +ve y
-				if (y >= mousePressedY)
+				if (y > mousePressedY)
 				{
 					selectedMap.selectionRectTopY = mousePressedY - selectedMap.boundingRectangle.y;
 					selectedMap.selectionRectBottomY = y - selectedMap.boundingRectangle.y;
 					selectedMap.chromoHeightOnSelection = selectedMap.boundingRectangle.height;
 				}
 				// -ve y
-				else if (y < mousePressedY)
+				else if (y <= mousePressedY)
 				{
 					selectedMap.selectionRectTopY = y - selectedMap.boundingRectangle.y;
 					selectedMap.selectionRectBottomY = mousePressedY - selectedMap.boundingRectangle.y;
 					selectedMap.chromoHeightOnSelection = selectedMap.boundingRectangle.height;
 				}
+				
+				//need to check here whether we are dragging to select a second map accidentally
+				//we can only ever have one of these rectangles at any one time
+				if(Strudel.winMain.fatController.selectionMap != null && Strudel.winMain.fatController.selectionMap != selectedMap)
+					return;
 
 				Strudel.winMain.fatController.selectionMap = selectedMap;
 				//let the MAP draw this rectangle -- we want to have this rect associated with the map and redrawn when the map is rendered
-				selectedMap.drawSelectionRect = true;
+				selectedMap.drawFeatureSelectionRectangle = true;
 
 				//update the context menus according to what we intend to do with this selection rectangle
 				//if we have an existing results set we want to add the features in the rectangle to this
@@ -249,8 +263,15 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 				if(Strudel.winMain.ffResultsPanel.getFFResultsTable().getModel().getRowCount() > 0)
 					Strudel.winMain.chromoContextPopupMenu.addAllFeaturesItem.setText(Strudel.winMain.chromoContextPopupMenu.addAllFeaturesStr);
 				else
-					Strudel.winMain.chromoContextPopupMenu.addAllFeaturesItem.setText(Strudel.winMain.chromoContextPopupMenu.webInfoStr);
-
+					Strudel.winMain.chromoContextPopupMenu.addAllFeaturesItem.setText(Strudel.winMain.chromoContextPopupMenu.showAnnotationStr);
+				
+				//draw links as we select
+				float intervalStart = Utils.pixelsOnChromoToFeaturePositionOnChromomap(selectedMap, (int)selectedMap.selectionRectTopY);
+				float intervalEnd = Utils.pixelsOnChromoToFeaturePositionOnChromomap(selectedMap, (int)selectedMap.selectionRectBottomY);
+				Strudel.winMain.mainCanvas.drawLinksOriginatingInRange = true;
+				Vector<Feature> selectedFeatures = Utils.getFeaturesByInterval(selectedMap.chromoMap, intervalStart, intervalEnd);
+				Strudel.winMain.mainCanvas.linkDisplayManager.featuresSelectedByRange = selectedFeatures;
+				
 				//redraw
 				winMain.mainCanvas.updateCanvas(true);
 				winMain.mainCanvas.requestFocusInWindow();
@@ -286,7 +307,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			}
 			//let the MAIN CANVAS draw this rectangle -- we only ever have one of these at a time and we do not need to store
 			//its coordinates for any length of time
-			winMain.mainCanvas.drawSelectionRect = true;
+			winMain.mainCanvas.drawZoomSelectionRectangle = true;
 			winMain.mainCanvas.updateCanvas(false);
 		}
 
@@ -370,7 +391,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 
 		//if we have got here because we had first drawn a selection rectangle for including all features in a range for inclusion
 		//in the results table, then we want the context menu to only have the option for this, and not inverting chromos etc
-		if(selectedMap.drawSelectionRect)
+		if(selectedMap.drawFeatureSelectionRectangle)
 		{
 			winMain.chromoContextPopupMenu.addAllFeaturesItem.setVisible(true);
 			winMain.chromoContextPopupMenu.invertChromoMenuItem.setVisible(false);

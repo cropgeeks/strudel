@@ -152,7 +152,12 @@ public class CanvasZoomHandler
 		Strudel.winMain.fatController.updateAllZoomControls();
 
 		//update the arrays with the position data
-		Strudel.winMain.fatController.initialisePositionArrays();
+		// for all gchromomaps within this mapset
+		for (GChromoMap gChromoMap : selectedSet.gMaps)
+		{
+			gChromoMap.initArrays();
+		}
+		
 		Strudel.winMain.mainCanvas.zoomHandler.isClickZoomRequest = false;
 
 		//now repaint

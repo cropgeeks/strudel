@@ -97,7 +97,7 @@ public class GChromoMap implements Comparable<GChromoMap>
 	float distanceMarkerZoomThreshold;
 
 	// if true, paint a rectangle to indicate the fact that we are panning over a region we want to select for zooming in to
-	public boolean drawSelectionRect = false;
+	public boolean drawFeatureSelectionRectangle = false;
 	//these are the relevant coordinates for this
 	public float selectionRectTopY, selectionRectBottomY, chromoHeightOnSelection;
 	//and the relative coordinates that correspond to the positions on the screen
@@ -265,7 +265,7 @@ public class GChromoMap implements Comparable<GChromoMap>
 			}
 
 			//draw the selection rectangle if required
-			if (drawSelectionRect)
+			if (drawFeatureSelectionRectangle)
 			{
 				drawSelectionRectangle(g2);
 			}
@@ -433,7 +433,7 @@ public class GChromoMap implements Comparable<GChromoMap>
 
 	// initialises the arrays we need for fast drawing
 	public void initArrays()
-	{
+	{		
 		// init the arrays that hold ALL the features for this map
 		int numFeatures = chromoMap.countFeatures();
 

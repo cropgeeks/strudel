@@ -8,7 +8,7 @@
       </Border>
     </Property>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[10, 300]"/>
+      <Dimension value="[10, 320]"/>
     </Property>
   </Properties>
   <AuxValues>
@@ -42,11 +42,11 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="numberFeaturesLabel" min="-2" max="-2" attributes="1"/>
-                          <Component id="regionEndLabel" pref="101" max="32767" attributes="1"/>
-                          <Component id="regionStartLabel" pref="101" max="32767" attributes="1"/>
-                          <Component id="chromoLabel" pref="101" max="32767" attributes="1"/>
-                          <Component id="genomeLabel" alignment="0" pref="101" max="32767" attributes="1"/>
-                          <Component id="genomeFilterCombo" alignment="0" pref="101" max="32767" attributes="0"/>
+                          <Component id="regionEndLabel" pref="98" max="32767" attributes="1"/>
+                          <Component id="regionStartLabel" pref="98" max="32767" attributes="1"/>
+                          <Component id="chromoLabel" pref="98" max="32767" attributes="1"/>
+                          <Component id="genomeLabel" alignment="0" pref="98" max="32767" attributes="1"/>
+                          <Component id="genomeFilterCombo" alignment="0" pref="98" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Component id="showLabelsCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -98,7 +98,7 @@
               <Component id="showHomologsCheckbox" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="highlightWhiteCheckbox" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="77" max="32767" attributes="0"/>
+              <EmptySpace pref="76" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>

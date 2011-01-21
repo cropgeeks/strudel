@@ -791,4 +791,12 @@ public class Utils
 
 		return new Color(link.r, link.g, link.b);
 	}
+
+	public static Color getChromosomeColor(ChromoMap cMap)
+	{
+		if (cMap.r == -1)
+			return Colors.genomeColour;
+
+		return new Color(cMap.r, cMap.g, cMap.b);
+	}
 }

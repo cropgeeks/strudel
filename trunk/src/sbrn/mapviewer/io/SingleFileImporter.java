@@ -66,6 +66,8 @@ public class SingleFileImporter extends TrackableReader
 				}
 				else if(line.startsWith("URL"))
 					processURL(line);
+				else if (line.startsWith("chromosome"))
+					processChromosome(line);
 				//ignore other lines for now -- this permits headers and comments to be included
 //				else
 //					throw  new IOException("Missing type field at start of line.");
@@ -370,6 +372,36 @@ public class SingleFileImporter extends TrackableReader
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	private void processChromosome(String line) throws Exception
+	{
+		//the file format is tab delimited text
+		String [] tokens = line.split("\t");
+
+		String genome = tokens[1].trim();
+		String chromo = tokens[2].trim();
+		Color color = Color.decode(tokens[3].trim());
+
+		// Find the genome...
+		MapSet mapSet = null;
+		for (MapSet ms: allMapSets)
+			if (ms.getName().equals(genome))
+				mapSet = ms;
+		if (mapSet == null)
+			throw new Exception("No genome named '" + genome + "' exists.");
+
+		// Fine the chromosome...
+		ChromoMap chromoMap = null;
+		for (ChromoMap cm : mapSet.getMaps())
+			if (cm.getName().equals(chromo))
+				chromoMap = cm;
+		if (chromoMap == null)
+			throw new Exception("Genome '" + genome + "' has no '" + chromo + "' chromosome.");
+
+		chromoMap.r = color.getRed();
+		chromoMap.g = color.getGreen();
+		chromoMap.b = color.getBlue();
+	}
 
 	//sorts all features imported by the start position within their map
 	private void sortFeatures()

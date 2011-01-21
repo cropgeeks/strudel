@@ -308,6 +308,9 @@ public class MainCanvas extends JPanel
 			}
 		}
 
+		if (!killMe)
+			drawAllMapColours(g2);
+
 		//this draws labels of features in a contiguous range on a chromosome
 		//need to do this in this order so things are drawn on top of each other in the right sequence
 		if (!killMe && (drawFoundFeaturesInRange || drawFeaturesFoundByName) && (Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().isSelected() || Strudel.winMain.foundFeaturesTableControlPanel.getShowLabelsCheckbox().isSelected()))
@@ -393,25 +396,25 @@ public class MainCanvas extends JPanel
 		// the combined height of all the vertical spaces between chromosomes
 		allSpacers = chromoSpacing * (winMain.dataContainer.maxChromos - 1);
 	}
-	
+
 	// -----------------------------------------------------------------------------------------------------------------------------------
 	/**
 	 * Sets the width of all chromosomes shown on the canvas.
-	 * 
+	 *
 	 * Algorithm for this:
-	 * 
+	 *
 	 * Calculate the ideal chromosome width (this is a dynamically calculated value that changes with the canvas width itself)
 	 *  if we can't have at least 4 times the chromo width between genomes, reduce the chromo width rather than the space between genomes
 	 *  if this brings the chromo width to below our safe threshold, set it to the safe threshold
-	 *  
+	 *
 	 *  The effect of this is that if we are short of space then we reduce the chromosome width before we start reducing the space between genomes.
 	 */
 	private void setChromosomeWidth()
 	{
-		// ideal width of chromosomes -- set to a fixed fraction of the screen width 
+		// ideal width of chromosomes -- set to a fixed fraction of the screen width
 		int maxChromoWidth = Math.round(canvasWidth / 40);
-		chromoWidth = maxChromoWidth;	
-		
+		chromoWidth = maxChromoWidth;
+
 		//ideally we want something like at least 4 times the chromowidth between genomes or else the links get awfully cluttered
 		//if we have so many genomes that this is impossible then we have to reduce this or else go for the minimum width
 		int numGenomes = winMain.dataContainer.gMapSets.size();
@@ -419,7 +422,7 @@ public class MainCanvas extends JPanel
 		int multiplier = 4;
 		int combinedWidthAllGenomes = numGenomes*chromoWidth;
 		int unfilledSpaceHorizontally = getWidth() - combinedWidthAllGenomes;
-		float actualMultipleOfChromoWidth = unfilledSpaceHorizontally/(float)combinedWidthAllGenomes;	
+		float actualMultipleOfChromoWidth = unfilledSpaceHorizontally/(float)combinedWidthAllGenomes;
 		//reduce the width appropriately if necessary
 		if(actualMultipleOfChromoWidth < multiplier)
 			chromoWidth = (unfilledSpaceHorizontally/multiplier) / numGenomes;
@@ -434,7 +437,7 @@ public class MainCanvas extends JPanel
 		if (!evenNumber)
 			chromoWidth += 1;
 	}
-	
+
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
@@ -516,10 +519,49 @@ public class MainCanvas extends JPanel
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
+	private void drawAllMapColours(Graphics2D g2)
+	{
+		// Font stuff copied from drawMapIndex() below to try to keep the colour labels a similar size
+		int fontSize = Math.round(WinMain.mainCanvas.getHeight() / 40);
+		Font mapLabelFont = new Font("Arial", Font.BOLD, fontSize);
+		g2.setFont(mapLabelFont);
+		int fontHeight = g2.getFontMetrics().getHeight()-4;
+
+		for (GMapSet gMapSet : winMain.dataContainer.gMapSets)
+		{
+			// for each chromosome in the genome
+			for (GChromoMap gChromoMap : gMapSet.gMaps)
+			{
+				//if the map is meant to be visible on the canvas at this time
+				if (gChromoMap.isShowingOnCanvas && !gChromoMap.inversionInProgress)
+				{
+					// decide where to place the label on y
+					int labelY = 0;
+					//position of index with this var is in the center of the chromosome regardless of chromo position
+					int chromoCenterPos = gChromoMap.y + Math.round(gChromoMap.height / 2.0f) + (fontSize/2);
+
+					//draw the index in the center of each chromosome
+					labelY = chromoCenterPos;
+
+					// Does it have a custom colour? If so, mark it next to the label
+					if (gChromoMap.chromoMap.r != -1)
+					{
+						Color c = Utils.getChromosomeColor(gChromoMap.chromoMap);
+
+						g2.setColor(c);
+						g2.fillRect(gChromoMap.x -25, labelY-fontHeight, 15, fontHeight);
+						g2.setColor(Color.white);
+						g2.drawRect(gChromoMap.x -25, labelY-fontHeight, 15, fontHeight);
+					}
+				}
+			}
+		}
+	}
+
 	// draw the index of the map in the genome
 	private void drawMapIndex(Graphics2D g2, GChromoMap gChromoMap)
 	{
-		//font stuff
+		//font stuff - also see drawAllMapColours() above if changing this code!
 		int fontSize = Math.round(WinMain.mainCanvas.getHeight() / 40);
 		Font mapLabelFont = new Font("Arial", Font.BOLD, fontSize);
 		g2.setFont(mapLabelFont);

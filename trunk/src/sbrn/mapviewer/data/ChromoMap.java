@@ -26,6 +26,9 @@ public class ChromoMap implements Iterable<Feature>
 
 	private float start = Integer.MAX_VALUE, stop = Integer.MIN_VALUE;
 
+	// RGB components used to represent this chromosome's color on screen
+	public int r = -1, g = -1, b = -1;
+
 	/**
 	 * Constructs a new chromosome map with the given name.
 	 * @param name the name of this chromosome map

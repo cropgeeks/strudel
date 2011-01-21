@@ -446,17 +446,17 @@ public class GChromoMap implements Comparable<GChromoMap>
 
 			//the start point of this features in its own units (cM, bp, whatever)
 			float start = f.getStart();
-			
+
 			//scale this by the current map height to give us a position in pixels, between zero and the chromosome height
 			//then store this value in the array we use for drawing
 			allFeaturePositions[i] =Utils.relativeFPosToPixelsOnGMap(this, start);
-			
+
 			//if the map is inverted we need to store the inverse of this value i.e. the map end value minus the feature position
 			if(isFullyInverted || isPartlyInverted)
 			{
 				allFeaturePositions[i] = (int) ((owningSet.chromoHeight / chromoMap.getStop()) * (chromoMap.getStop() -start));
 			}
-			
+
 			//also store a reference to the feature itself in a parallel array
 			allFeatures[i] = f;
 		}

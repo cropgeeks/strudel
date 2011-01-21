@@ -96,6 +96,11 @@ BUGS to fix:
 - unnecessary repaints when doing mouseover on chromosome and features are not actually showing
 - entering into the selectable area of either of the two checkboxes on the results control panel triggers a change event even if there are no mouse clicks, despite there not being a mouselistener registered on the component
 - mouseover label display of feature name not working for features that are at position 0 on chromosome (reproduce with mini.strudel)
+- selecting the option to open a file, not picking one, but hitting Load anyway causing a warning message as expected
+but when you close it, the same message then appears for a second time.
+- hovering the mouse over some of the table components (mainly in the left hand panel) causes repaints that don't need to happen.
+- scaling down the screen size doesn't result in the labels keeping "expected" sizes. Especially noticable with genomes with
+just one or two chromosomes.
 
 
 

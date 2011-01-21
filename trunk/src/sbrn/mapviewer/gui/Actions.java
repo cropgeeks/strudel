@@ -18,6 +18,7 @@ public class Actions
 	public static AbstractAction loadExample;
 	public static AbstractAction exportImage;
 	public static AbstractAction saveResults;
+	public static AbstractAction exit;
 
 	// Explore menu actions
 	public static AbstractAction findFeature;
@@ -95,6 +96,12 @@ public class Actions
 		saveResults = new AbstractAction("Save Results Table", getIcon("SAVE")) {
 			public void actionPerformed(ActionEvent e) {
 				winMain.mFile.saveResults();
+			}
+		};
+
+		exit = new AbstractAction("Exit") {
+			public void actionPerformed(ActionEvent e) {
+				winMain.mFile.exit();
 			}
 		};
 

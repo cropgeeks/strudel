@@ -21,6 +21,7 @@ public class WinMainMenuBar extends JMenuBar
 	private JMenuItem mLoadExample;
 	private JMenuItem mExportImage;
 	private JMenuItem mSaveResults;
+	private JMenuItem mExit;
 
 	// The components of the explore menu
 	private JMenu mExplore;
@@ -75,6 +76,7 @@ public class WinMainMenuBar extends JMenuBar
 		mLoadExample = getItem(Actions.loadExample, "Load Example", KeyEvent.VK_L, Strudel.ctrlMenuShortcut);
 		mExportImage = getItem(Actions.exportImage, "Export Image", KeyEvent.VK_E, Strudel.ctrlMenuShortcut);
 		mSaveResults = getItem(Actions.saveResults, "Save Results", KeyEvent.VK_S, Strudel.ctrlMenuShortcut);
+		mExit = getItem(Actions.exit, "Exit", 0, 0);
 
 		mRecentFiles = new JMenu("Recent Files");
 		createRecentMenu();
@@ -86,6 +88,8 @@ public class WinMainMenuBar extends JMenuBar
 		mFile.add(mExportImage);
 		mFile.addSeparator();
 		mFile.add(mRecentFiles);
+		mFile.addSeparator();
+		mFile.add(mExit);
 
 		add(mFile);
 	}

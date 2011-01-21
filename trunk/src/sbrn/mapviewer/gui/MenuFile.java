@@ -156,4 +156,9 @@ public class MenuFile
 		TableModel model = Strudel.winMain.ffResultsPanel.resultsTable.getModel();
 		return ((HomologResultsTableModel)model).getAllDataInTabFormat();
 	}
+
+	void exit()
+	{
+		Strudel.exit();
+	}
 }

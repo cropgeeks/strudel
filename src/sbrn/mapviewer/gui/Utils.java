@@ -269,6 +269,22 @@ public class Utils
 
 		return list;
 	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
+
+	//get a list with names for all the features contained in this interval
+	public static Vector<Feature> getFeaturesByInterval(ChromoMap chromoMap,float intervalStart, float intervalEnd)
+	{			
+		Vector<Feature> containedFeatures = new Vector<Feature>();
+		for(Feature f : chromoMap.getFeatureList())
+		{
+			boolean featureHasLinks = f.getLinks().size() > 0;
+			//add the feature only if it is in the interval and has links or if the number of mapsets loaded is 1
+			if((f.getStart() >= intervalStart) && (f.getStart() <= intervalEnd) && (featureHasLinks || Strudel.winMain.dataContainer.gMapSets.size() == 1))
+				containedFeatures.add(f);
+		}
+		return containedFeatures;
+	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
 
@@ -524,6 +540,16 @@ public class Utils
 		}
 
 		return button;
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
+	
+	/**
+	 * Converts a relative (0-based) pixel position on a GChromoMap back to a feature position on the ChromoMap (bp, cM or whatever)
+	 */
+	public static float pixelsOnChromoToFeaturePositionOnChromomap(GChromoMap gMap, int pixels)
+	{
+		return Math.round((pixels/(float)gMap.owningSet.chromoHeight)*gMap.chromoMap.getStop());
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------

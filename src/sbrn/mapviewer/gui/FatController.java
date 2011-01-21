@@ -157,6 +157,12 @@ public class FatController
 		{
 			zoomControlPanel.overrideMarkersAutoDisplayButton.setSelected(false);
 		}
+
+		//repaint
+		winMain.mainCanvas.updateCanvas(true);
+			
+		//this reinitialises the position arrays
+		initialisePositionArrays();
 	}
 
 	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -235,15 +241,23 @@ public class FatController
 				gMap.highlightChromomapRegion = false;
 
 				//don't draw selection rectangle
-				gMap.drawSelectionRect = false;
+				gMap.drawFeatureSelectionRectangle = false;
 
 				//don't draw mouseover feature labels
 				gMap.drawMouseOverFeatures = false;
-
+				//or labels
 				gMap.alwaysShowAllLabels = false;
 			}
+
 		}
 
+		//clear the feature selection rectangle
+		clearSelectionRectangle();
+		
+		//clear the zoom selection rectangle
+		winMain.mainCanvas.drawZoomSelectionRectangle = false;
+		
+		//reinitialise the positions of our features
 		initialisePositionArrays();
 
 		//repaint
@@ -262,12 +276,18 @@ public class FatController
 
 	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	public void hideSelectionRect()
+	//clears the green feature selection rectangle drawn around a map region with mouse drag, and any feature links associated
+	//repaint needs to be called separately 
+	public void clearSelectionRectangle()
 	{
 		if(Strudel.winMain.fatController.selectionMap != null)
-			Strudel.winMain.fatController.selectionMap.drawSelectionRect = false;
-		// TODO: update true or false?
-		Strudel.winMain.mainCanvas.updateCanvas(true);
+		{
+			Strudel.winMain.fatController.selectionMap.drawFeatureSelectionRectangle = false;
+			Strudel.winMain.fatController.selectionMap = null;
+			//reset any features selected in a range
+			winMain.mainCanvas.drawLinksOriginatingInRange = false;
+			winMain.mainCanvas.linkDisplayManager.featuresSelectedByRange = null;
+		}
 	}
 
 

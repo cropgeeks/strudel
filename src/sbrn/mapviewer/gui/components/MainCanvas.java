@@ -2,9 +2,11 @@ package sbrn.mapviewer.gui.components;
 
 import java.awt.*;
 import java.awt.image.*;
+import java.util.*;
 import java.util.concurrent.*;
 import javax.swing.*;
 import sbrn.mapviewer.*;
+import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.entities.*;
 import sbrn.mapviewer.gui.handlers.*;
@@ -36,7 +38,7 @@ public class MainCanvas extends JPanel
 	//otherwise we ignore it
 
 	// if true, paint a rectangle to indicate the fact that we are panning over a region we want to select for zooming in to
-	public boolean drawSelectionRect = false;
+	public boolean drawZoomSelectionRectangle = false;
 	//these are the relevant coordinates for this
 	public Rectangle selectionRect = new Rectangle();
 
@@ -62,11 +64,14 @@ public class MainCanvas extends JPanel
 	//true if we want to display individual features the user has searched for with the find dialog
 	public boolean drawHighlightFeatures = false;
 
-	//true if we want to display features within a certain range the user has searched for with the find dialog
+	//true if we want to display features within a certain range the user has searched for with the range dialog
 	public boolean drawFoundFeaturesInRange = false;
 
 	//true if we want to display features within a certain range the user has searched for with the find dialog
 	public boolean drawFeaturesFoundByName = false;
+	
+	//true if we want links drawn from all features within a certain range on the chromosome
+	public boolean drawLinksOriginatingInRange = false;
 
 	// a minimum space (in pixels) we want to leave at the top and the bottom of the tallest genome
 	public int topBottomSpacer = 0;
@@ -160,7 +165,7 @@ public class MainCanvas extends JPanel
 		// Render any additional overlay images (highlights, mouse-overs etc)
 
 		// this optionally draws a rectangle delimiting a region we want to zoom in on
-		if (drawSelectionRect)
+		if (drawZoomSelectionRectangle)
 		{
 			//fill the rectangle first
 			g.setPaint(Colors.panZoomRectFillColour);
@@ -307,6 +312,9 @@ public class MainCanvas extends JPanel
 				linkDisplayManager.drawHighlightedLinksInRange(g2);
 			}
 		}
+		
+		if(drawLinksOriginatingInRange)
+			linkDisplayManager.drawLinksForFeatureSet(linkDisplayManager.featuresSelectedByRange, g2);
 
 		if (!killMe)
 			drawAllMapColours(g2);
@@ -373,7 +381,7 @@ public class MainCanvas extends JPanel
 
 	//this method sets all the general parameters we need to work out for each drawing operation such as chromosome widths etc
 	private void calcRequiredParams(Graphics2D g2)
-	{
+	{	
 		numMarkersDrawn = 0;
 
 		// get current size of frame

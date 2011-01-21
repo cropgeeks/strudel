@@ -32,6 +32,8 @@ public class LinkDisplayManager
 	// ensure that when *different* lines that map to the same pixel space are
 	// found, only the first instance is actually drawn. This saves time.
 	Hashtable<String, Boolean> linesDrawn = new Hashtable<String, Boolean>();
+	
+	public Vector<Feature> featuresSelectedByRange;
 
 	//	=====================================c'tor==============================================
 
@@ -117,7 +119,6 @@ public class LinkDisplayManager
 	public void drawAllLinks(Graphics2D g2, Boolean killMe, boolean dimNormalLinks)
 	{
 		int numAllLinksDrawn = 0;
-		long startTime = System.currentTimeMillis();
 
 		//only do this if we have at least 2 genomes -- otherwise there are no links to deal with
 		if(Strudel.winMain.dataContainer.gMapSets.size() > 1)
@@ -177,6 +178,7 @@ public class LinkDisplayManager
 						//first check whether both maps are visible
 						boolean bothMapsShowing = targetGMap.isShowingOnCanvas && referenceGMap.isShowingOnCanvas;
 						boolean setDrawnAlready = drawnLinkSets.contains(selectedLinks);
+						//also need to check the two mapset are next each other beacuse we do not want to draw lines across mapsets
 						boolean gMapSetsAdjacent = Utils.areMapSetsAdjacent(targetGMap.owningSet, referenceGMap.owningSet);
 						if (!bothMapsShowing || setDrawnAlready || !gMapSetsAdjacent)
 							continue;
@@ -224,9 +226,6 @@ public class LinkDisplayManager
 				e.printStackTrace();
 			}
 		}
-
-		long endTime = System.currentTimeMillis();
-//		System.out.println("" + numAllLinksDrawn + " links drawn in " + (endTime-startTime) + " ms");
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
@@ -307,7 +306,7 @@ public class LinkDisplayManager
 						g2.setColor(c);
 
 					// draw the link either as a straight line or a curve
-					drawStraightOrCurvedLink(g2, targetChromoX, targetY, referenceChromoX, referenceY);
+					drawSingleLink(g2, targetChromoX, targetY, referenceChromoX, referenceY);
 					numLinksDrawn++;
 				}
 			}
@@ -377,12 +376,65 @@ public class LinkDisplayManager
 		else
 			g2.setColor(linkColor);
 
-		drawStraightOrCurvedLink(g2,targetChromoX, y1, referenceChromoX, y2);
+		drawSingleLink(g2,targetChromoX, y1, referenceChromoX, y2);
 	}
 
 
 	// --------------------------------------------------------------------------------------------------------------------------------
+	
+	public void drawLinksForFeatureSet(Vector<Feature> features, Graphics2D g2)
+	{
+		for(Feature feature : features)
+		{
+			//get the links for this feature
+			Vector<Link> links = feature.getLinks();
+			//for each link
+			for (Link link : links)
+			{
+				//get the homolog
+				Feature homolog;
+				if(link.getFeature1() == feature)
+					homolog = link.getFeature2();
+				else
+					homolog = link.getFeature1();
 
+				//draw the link
+				checkLinkAndDraw(g2, feature, homolog,  link.getBlastScore());
+			}
+		}
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
+	
+	private void checkLinkAndDraw(Graphics2D g2, Feature targetFeature, Feature homolog, double blastScore)
+	{
+		GChromoMap targetGMap = targetFeature.getOwningMap().getGChromoMaps().get(0);
+		
+		//now retrieve the physically closest instance of a GchromoMap associated with this refMap object
+		GChromoMap refGMap = Utils.getClosestGMap(homolog.getOwningMap(), targetGMap);
+		
+		//if visible link filtering is turned on we need to check whether the features for this link are both visible on screen
+		if(Prefs.drawOnlyLinksToVisibleFeatures)
+		{
+			if(!(Utils.checkFeatureVisibility(targetGMap, targetFeature) && Utils.checkFeatureVisibility(refGMap, homolog)))
+				return;
+		}
+		
+		//also need to check the two mapset are next to each other beacuse we do not want to draw lines across mapsets
+		boolean gMapSetsAdjacent = Utils.areMapSetsAdjacent(targetGMap.owningSet, refGMap.owningSet);
+		if (!gMapSetsAdjacent)
+			return;
+		
+		//check the e-Value cutoff
+		if(blastScore > blastThreshold)
+			return;
+		
+		//draw the link
+		drawHighlightedLink(g2, targetFeature, homolog, false, targetGMap, refGMap);
+	}
+	
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
 
 	// Draws the lines between features in a certain range on a chromosome of the target genome and all potential homologues in the compared genome
 	public void drawHighlightedLinksInRange(Graphics2D g2)
@@ -400,23 +452,8 @@ public class LinkDisplayManager
 					{
 						Feature targetFeature = tableEntry.getTargetFeature();
 						Feature homolog = tableEntry.getHomologFeature();
-						GChromoMap targetGMap = targetFeature.getOwningMap().getGChromoMaps().get(0);
-						GChromoMap refGMap = homolog.getOwningMap().getGChromoMaps().get(0);
-
-						//if visible link filtering is turned on we need to check whether the features for this link are both visible on screen
-						if(Prefs.drawOnlyLinksToVisibleFeatures)
-						{
-							if(!(Utils.checkFeatureVisibility(targetGMap, targetFeature) && Utils.checkFeatureVisibility(refGMap, homolog)))
-								continue;
-						}
-
-						//check the e-Value cutoff
 						float eValue = Float.parseFloat(tableEntry.getLinkEValue());
-						if(eValue <= blastThreshold)
-						{
-							//draw the link
-							drawHighlightedLink(g2, targetFeature, homolog, false, targetGMap, refGMap);
-						}
+						checkLinkAndDraw(g2, targetFeature, homolog, eValue);
 					}
 				}
 			}
@@ -529,7 +566,7 @@ public class LinkDisplayManager
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
 	//draws a single link, either as a straight line or a curve depending on the value of the linkCurvatureCoeff set at class level
-	private void drawStraightOrCurvedLink(Graphics2D g2, int startX, int startY, int endX, int endY)
+	private void drawSingleLink(Graphics2D g2, int startX, int startY, int endX, int endY)
 	{
 		//if the linkCurvatureCoeff is 0 then the line will be straight and the control points are simply moved to either end of the line
 		//ctrlx1 - the X coordinate used to set the first control point of this CubicCurve2D
@@ -541,7 +578,7 @@ public class LinkDisplayManager
 		double ctrly1 = startY;
 		double ctrly2 = endY;
 
-		//this is what we do for straight or curved lines
+		//curved lines
 		if(Prefs.linkShape == Constants.LINKTYPE_CURVED)
 		{
 			//if the linkCurvatureCoeff is greater than 0 we make this line into a curve by moving the control points towards the centre
@@ -555,12 +592,12 @@ public class LinkDisplayManager
 			CubicCurve2D curve = new CubicCurve2D.Double();
 			curve.setCurve(startX, startY, ctrlx1, ctrly1, ctrlx2, ctrly2, endX, endY);
 			g2.draw(curve);
-		}
+		}//straight lines
 		else if(Prefs.linkShape == Constants.LINKTYPE_STRAIGHT)
 		{
 			g2.drawLine(startX, startY, endX, endY);
 		}
-		//this is what we do for angled lines
+		//angled lines
 		else if(Prefs.linkShape == Constants.LINKTYPE_ANGLED)
 		{
 			ctrlx1 = startX + ((endX - startX) * linkShapeCoeff);

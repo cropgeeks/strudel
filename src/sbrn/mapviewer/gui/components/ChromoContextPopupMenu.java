@@ -15,7 +15,7 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 	public String showAllLabelsStr = "Show all labels";
 	//	public String hideAllLabelsStr = "Hide all labels";
 	public String addAllFeaturesStr = "Add features in range to results";
-	public String webInfoStr = "Show annotation for features in range";
+	public String showAnnotationStr = "Show annotation for features in range";
 	public String selectAllChromosStr = "Select all chromosomes in genome";
 
 	public JMenuItem invertChromoMenuItem;

@@ -15,7 +15,8 @@ public class CanvasKeyListener implements KeyListener
 		//ESC has been pressed
 		if(e.getKeyCode() == 27)
 		{
-			Strudel.winMain.fatController.hideSelectionRect();
+			Strudel.winMain.fatController.clearSelectionRectangle();
+			Strudel.winMain.mainCanvas.updateCanvas(true);
 		}
 	}
 

@@ -35,7 +35,7 @@ public class FeatureSearchHandler
 
 	public static void findFeaturesInRangeFromCanvasSelection()
 	{
-		Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(true);
+//		Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(true);
 		GChromoMap gMap = Strudel.winMain.fatController.selectionMap;
 		findAndDisplayFeaturesInRange(gMap, gMap.relativeTopY, gMap.relativeBottomY, true);
 	}
@@ -62,18 +62,9 @@ public class FeatureSearchHandler
 				return;
 			}
 
-			//get a list with names for all the features contained in this interval
-			Vector<Feature> containedFeatures = new Vector<Feature>();
-			for(Feature f : chromoMap.getFeatureList())
-			{
-				boolean featureHasLinks = f.getLinks().size() > 0;
-				//add the feature only if it is in the interval and has links or if the number of mapsets loaded is 1
-				if((f.getStart() >= intervalStart) && (f.getStart() <= intervalEnd) && (featureHasLinks || Strudel.winMain.dataContainer.gMapSets.size() == 1))
-				{
-					containedFeatures.add(f);
-					featuresInRange.add(f);
-				}
-			}
+			//get a list with names for all the features contained in this interval		
+			Vector<Feature> containedFeatures = Utils.getFeaturesByInterval(chromoMap,intervalStart, intervalEnd);
+			featuresInRange.addAll(containedFeatures);			
 
 			//if there are actually features contained in this range
 			if (containedFeatures.size() > 0)
@@ -87,7 +78,7 @@ public class FeatureSearchHandler
 				gChromoMap.drawMouseOverFeatures = false;
 
 				//don't draw selection rectangle
-				gChromoMap.drawSelectionRect = false;
+				gChromoMap.drawFeatureSelectionRectangle = false;
 
 				//resize the split pane so we can see the results table
 				Strudel.winMain.splitPane.setDividerSize(Constants.SPLITPANE_DIVIDER_SIZE);

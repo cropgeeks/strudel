@@ -6,7 +6,8 @@ import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.components.WinMain;
 import sbrn.mapviewer.gui.dialog.*;
 import sbrn.mapviewer.gui.handlers.LinkDisplayManager;
-import scri.commons.gui.*;
+
+import scri.commons.gui.TaskDialog;
 
 public class DataLoadUtils
 {

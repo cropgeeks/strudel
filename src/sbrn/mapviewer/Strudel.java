@@ -81,8 +81,8 @@ public class Strudel
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			UIManager.put("TextArea.font", UIManager.get("TextField.font"));
 
-			// Use the office look for Windows (but not for Vista)
-			if (SystemUtils.isWindows() && !SystemUtils.isWindowsVista())
+			// Use the office look for Windows (but not for Vista or 7)
+			if (SystemUtils.isWindows() && !SystemUtils.isWindowsVista() && !SystemUtils.isWindows7())
 				UIManager.setLookAndFeel("org.fife.plaf.Office2003.Office2003LookAndFeel");
 
 			// TODO: Check whether this is needed on all OSs or not
@@ -105,10 +105,7 @@ public class Strudel
 				@Override
 				public void windowClosing(WindowEvent e)
 				{
-					prefs.isFirstRun = false;
-					prefs.savePreferences(prefsFile, Prefs.class);
-
-					System.exit(0);
+					exit();
 				}
 
 				@Override
@@ -149,6 +146,14 @@ public class Strudel
 		{
 			e.printStackTrace();
 		}
+	}
+
+	public static void exit()
+	{
+		prefs.isFirstRun = false;
+		prefs.savePreferences(prefsFile, Prefs.class);
+
+		System.exit(0);
 	}
 
 	private void setColours()

@@ -9,7 +9,7 @@ import javax.swing.table.*;
  */
 public class HomologResultsTableModel extends AbstractTableModel
 {
-	public LinkedList<ResultsTableEntry> tableEntries;
+	public ArrayList<ResultsTableEntry> tableEntries;
 
 	public final static String targetNameColumnLabel =  "Target name";
 	public final static String targetPositionColumnLabel = "Target position";
@@ -27,7 +27,7 @@ public class HomologResultsTableModel extends AbstractTableModel
 
 	public LinkedList<String> columnNameList = new LinkedList<String>();
 
-	public HomologResultsTableModel(LinkedList<ResultsTableEntry> tableEntries)
+	public HomologResultsTableModel(ArrayList<ResultsTableEntry> tableEntries)
 	{
 		super();
 		this.tableEntries = tableEntries;

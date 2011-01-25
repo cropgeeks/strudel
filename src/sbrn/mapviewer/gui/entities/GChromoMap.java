@@ -439,7 +439,7 @@ public class GChromoMap implements Comparable<GChromoMap>
 
 		allFeatures = new Feature[numFeatures];
 		allFeaturePositions = new int[numFeatures];
-		Vector<Feature> featureList = chromoMap.getFeatureList();
+		ArrayList<Feature> featureList = chromoMap.getFeatureList();
 		for (int i = 0, n=featureList.size(); i < n; i++)
 		{
 			Feature f = featureList.get(i);

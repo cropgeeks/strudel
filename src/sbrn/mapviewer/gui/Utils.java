@@ -141,6 +141,22 @@ public class Utils
 
 		return f;
 	}
+	
+	public static ArrayList<Feature> getAllFeatures()
+	{
+		ArrayList<Feature> features = new ArrayList<Feature>();
+		
+		//we need to search all chromomaps in all mapsets for this
+		// for all gmapsets
+		for (GMapSet gMapSet : Strudel.winMain.dataContainer.gMapSets)
+		{
+			// for all gchromomaps within each mapset
+			for (GChromoMap gChromoMap : gMapSet.gMaps)
+				features.addAll(0, gChromoMap.chromoMap.getFeatureList());
+		}
+		
+		return features;
+	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
 

@@ -6,9 +6,9 @@ import sbrn.mapviewer.data.*;
 public class TableEntriesGenerator
 {
 
-	public static LinkedList<ResultsTableEntry> makeTableEntries(Vector<Feature> features)
+	public static ArrayList<ResultsTableEntry> makeTableEntries(ArrayList<Feature> features)
 	{
-		LinkedList<ResultsTableEntry> tableEntries = new LinkedList<ResultsTableEntry>();
+		ArrayList<ResultsTableEntry> tableEntries = new ArrayList<ResultsTableEntry>();
 
 		for (Feature feature : features)
 		{
@@ -47,8 +47,8 @@ public class TableEntriesGenerator
 				//add to our list
 				tableEntries.add(resultsTableEntry);
 			}
-		}
 
+		}
 
 		return tableEntries;
 	}

@@ -21,7 +21,7 @@ public class ChromoMap implements Iterable<Feature>
 	//the graphical object representing this map
 	private LinkedList<GChromoMap> gChromoMaps = new LinkedList<GChromoMap>();
 
-	private final Vector<Feature> features = new Vector<Feature>();
+	private final ArrayList<Feature> features = new ArrayList<Feature>();
 	private final Hashtable<String,Feature> nameLookup = new Hashtable<String,Feature>();
 
 	private float start = Integer.MAX_VALUE, stop = Integer.MIN_VALUE;
@@ -166,9 +166,9 @@ public class ChromoMap implements Iterable<Feature>
 		return nameLookup.containsKey(name);
 	}
 
-	public Vector<Feature> getFeatureList()
+	public ArrayList<Feature> getFeatureList()
 	{
-		return this.features;
+		return features;
 	}
 
 	public LinkedList<GChromoMap> getGChromoMaps()

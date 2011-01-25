@@ -21,7 +21,7 @@ public class Actions
 	public static AbstractAction exit;
 
 	// Explore menu actions
-	public static AbstractAction findFeature;
+	public static AbstractAction showTable;
 	public static AbstractAction exploreRange;
 
 	// View menu actions
@@ -105,9 +105,9 @@ public class Actions
 			}
 		};
 
-		findFeature = new AbstractAction("Find Feature By Name", getIcon("FIND")) {
+		showTable = new AbstractAction("Show Filterable Table", getIcon("FIND")) {
 			public void actionPerformed(ActionEvent e) {
-				winMain.mExplore.findFeature();
+				winMain.mExplore.showTable();
 			}
 		};
 
@@ -229,7 +229,7 @@ public class Actions
 		exportImage.setEnabled(false);
 		saveResults.setEnabled(false);
 
-		findFeature.setEnabled(false);
+		showTable.setEnabled(false);
 		exploreRange.setEnabled(false);
 
 		showOverview.setEnabled(false);
@@ -260,7 +260,7 @@ public class Actions
 		loadExample.setEnabled(true);
 		exportImage.setEnabled(true);
 
-		findFeature.setEnabled(true);
+		showTable.setEnabled(true);
 		exploreRange.setEnabled(true);
 
 		showOverview.setEnabled(true);

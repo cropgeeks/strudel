@@ -1,7 +1,6 @@
 package sbrn.mapviewer.gui.handlers;
 
 import java.util.*;
-import javax.swing.table.*;
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
@@ -35,14 +34,14 @@ public class FeatureSearchHandler
 
 	public static void findFeaturesInRangeFromCanvasSelection()
 	{
-//		Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(true);
+		Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(true);
 		GChromoMap gMap = Strudel.winMain.fatController.selectionMap;
 		findAndDisplayFeaturesInRange(gMap, gMap.relativeTopY, gMap.relativeBottomY, true);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	private  static void findAndDisplayFeaturesInRange(GChromoMap gChromoMap, float intervalStart, float intervalEnd, boolean isCanvasSelection)
+	private static void findAndDisplayFeaturesInRange(GChromoMap gChromoMap, float intervalStart, float intervalEnd, boolean isCanvasSelection)
 	{
 		try
 		{
@@ -62,9 +61,18 @@ public class FeatureSearchHandler
 				return;
 			}
 
-			//get a list with names for all the features contained in this interval		
-			Vector<Feature> containedFeatures = Utils.getFeaturesByInterval(chromoMap,intervalStart, intervalEnd);
-			featuresInRange.addAll(containedFeatures);			
+			//get a list with names for all the features contained in this interval
+			ArrayList<Feature> containedFeatures = new ArrayList<Feature>();
+			for(Feature f : chromoMap.getFeatureList())
+			{
+				boolean featureHasLinks = f.getLinks().size() > 0;
+				//add the feature only if it is in the interval and has links or if the number of mapsets loaded is 1
+				if((f.getStart() >= intervalStart) && (f.getStart() <= intervalEnd) && (featureHasLinks || Strudel.winMain.dataContainer.gMapSets.size() == 1))
+				{
+					containedFeatures.add(f);
+					featuresInRange.add(f);
+				}
+			}
 
 			//if there are actually features contained in this range
 			if (containedFeatures.size() > 0)
@@ -76,9 +84,6 @@ public class FeatureSearchHandler
 
 				//turn off potential mouseover highlight feature label drawing
 				gChromoMap.drawMouseOverFeatures = false;
-
-				//don't draw selection rectangle
-				gChromoMap.drawFeatureSelectionRectangle = false;
 
 				//resize the split pane so we can see the results table
 				Strudel.winMain.splitPane.setDividerSize(Constants.SPLITPANE_DIVIDER_SIZE);
@@ -131,7 +136,7 @@ public class FeatureSearchHandler
 
 	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	public static  void findFeaturesByName(FindFeaturesDialog findFeaturesDialog)
+	public static void findFeaturesByName(FindFeaturesDialog findFeaturesDialog)
 	{
 		try
 		{
@@ -140,17 +145,11 @@ public class FeatureSearchHandler
 			String input =  findFeaturesDialog.ffPanel.getFFTextArea().getText();
 			//parse inputFile
 			allNames = input.split("\n");
+			
+			final String regex = allNames[0];
 
 			//get the corresponding feature objects
-			Vector<Feature> features = new Vector<Feature>(allNames.length);
-			for (int i = 0; i < allNames.length; i++)
-			{
-				Feature f = Utils.getFeatureByName(allNames[i].trim());
-				if(f !=null)
-				{
-					features.add(f);
-				}
-			}
+			ArrayList<Feature> features = Utils.getAllFeatures();
 
 			//we have found features
 			if (features.size() > 0)
@@ -184,12 +183,32 @@ public class FeatureSearchHandler
 		}
 	}
 
+	public static void findAllFeatures()
+	{
+		ArrayList<Feature> features = Utils.getAllFeatures();
+
+		//set the results panel to be visible
+		Strudel.winMain.splitPane.setDividerSize(Constants.SPLITPANE_DIVIDER_SIZE);
+		int newDividerLocation = (int) (Strudel.winMain.getHeight() * 0.66f);
+		Strudel.winMain.splitPane.setDividerLocation(newDividerLocation);
+
+		//now put the results into the JTable held by the results panel
+		updateResultsTable(features);
+
+		//earmark the features for drawing on repaint
+		Strudel.winMain.mainCanvas.drawFeaturesFoundByName = true;
+
+		// validate and repaint the canvas so it knows it has been resized
+		Strudel.winMain.validate();
+		Strudel.winMain.mainCanvas.updateCanvas(true);
+	}
+
 	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	//insert the results into the JTable held by the results panel
-	private static void updateResultsTable(Vector<Feature> features)
+	private static void updateResultsTable(ArrayList<Feature> features)
 	{
-		LinkedList<ResultsTableEntry> tableEntries = TableEntriesGenerator.makeTableEntries(features);
+		ArrayList<ResultsTableEntry> tableEntries = TableEntriesGenerator.makeTableEntries(features);
 		HomologResultsTableModel homologResultsTableModel = new HomologResultsTableModel(tableEntries);
 		ResultsTable resultsTable = (ResultsTable)Strudel.winMain.ffResultsPanel.getFFResultsTable();
 		resultsTable.setModel(homologResultsTableModel);

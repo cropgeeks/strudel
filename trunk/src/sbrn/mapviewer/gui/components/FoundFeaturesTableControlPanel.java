@@ -370,7 +370,7 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel implement
 		}
 
 		if(filterExpression.equals("<none>"))
-			homologFilter = RowFilter.regexFilter(null);
+			homologFilter = null;
 		else
 			homologFilter = RowFilter.regexFilter(expr, 4);
 

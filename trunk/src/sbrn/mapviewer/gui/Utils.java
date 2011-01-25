@@ -87,8 +87,7 @@ public class Utils
 
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	//finds a map by name; if there are multiple instrances of the gmapset the map belongs to, this will return
-	//the first one
+	//finds a map by name in the GMapSet targetSet
 	public static GChromoMap getGMapByNameAndGMapset(String gMapName, GMapSet targetSet)
 	{
 		GChromoMap foundMap = null;
@@ -97,7 +96,7 @@ public class Utils
 		GMapSet foundSet = null;
 		// for all gmapsets
 		for (GMapSet gMapSet : Strudel.winMain.dataContainer.gMapSets)
-		{
+		{			
 			if(gMapSet == targetSet)
 			{
 				foundSet = gMapSet;
@@ -800,16 +799,16 @@ public class Utils
 
 	private static void addFeatureToLookup(GMapSet gMapSet, Feature feature, TreeMap<GChromoMap, LinkedList<Feature>> lookup)
 	{
-		GChromoMap chromoMap = getGMapByNameAndGMapset(feature.getOwningMap().getName(), gMapSet);
-		//check whether its gMap is listed here
-		if(!lookup.keySet().contains(chromoMap))
+		GChromoMap gMap = getGMapByNameAndGMapset(feature.getOwningMap().getName(), gMapSet);
+		//check whether its gMap is listed here		
+		if(!lookup.keySet().contains(gMap))
 		{
 			//if not, add it to the lookup
-			lookup.put(chromoMap, new LinkedList<Feature>());
+			lookup.put(gMap, new LinkedList<Feature>());
 		}
 		//if the feature is not present in the feature list for this gmap, add it
-		if(!lookup.get(chromoMap).contains(feature))
-			lookup.get(chromoMap).add(feature);
+		if(!lookup.get(gMap).contains(feature))
+			lookup.get(gMap).add(feature);
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------

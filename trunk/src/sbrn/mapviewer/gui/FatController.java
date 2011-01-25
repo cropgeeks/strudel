@@ -21,7 +21,7 @@ public class FatController
 	public static GChromoMap invertMap = null;
 
 	//a map we are drawing a selection rectangle over for the purpose of including additional features in a range search
-	public static GChromoMap selectionMap = null;
+	public static GChromoMap selectedMap = null;
 
 	//true if all the components required for showing data have been assembled
 	//we need this flag because initially we have to show the GUI in an incomplete state -- the full set
@@ -30,11 +30,9 @@ public class FatController
 
 	//this boolean indicates whether we load our own data or the example data provided by the application
 	public boolean loadOwnData = false;
-
-	//feature for highlighting and a single homolog for this
-	public Feature highlightFeature, highlightFeatureHomolog;
-	//the corresponding gMap objects
-	public GChromoMap highlightFeatGMap, highlightFeatHomGMap;
+	
+	//results table entries selected for strong emphasis highlighting
+	public LinkedList<ResultsTableEntry> highlightedTableEntries;
 
 	//true if we have requested to find features by name
 	public boolean findFeaturesRequested = false;
@@ -171,17 +169,12 @@ public class FatController
 	public void clearResultsTable()
 	{
 		//hide the found features part of the split pane
-		winMain.hideSplitPaneBottomHalf();
-		winMain.splitPane.setDividerLocation(1.0);
+		winMain.hideBottomPanel();
 
 		//clear the found features
-		clearHighlightFeature();
+		clearHighlightFeatures();
 		if(FeatureSearchHandler.featuresInRange != null)
-		{
 			FeatureSearchHandler.featuresInRange.clear();
-//			Strudel.winMain.fatController.selectionMap = null;
-		}
-		winMain.mainCanvas.drawHighlightFeatures = false;
 		winMain.mainCanvas.drawFoundFeaturesInRange = false;
 		findFeaturesRequested = false;
 		winMain.foundFeaturesTableControlPanel.getGenomeFilterCombo().setSelectedIndex(0);
@@ -280,10 +273,10 @@ public class FatController
 	//repaint needs to be called separately 
 	public void clearSelectionRectangle()
 	{
-		if(Strudel.winMain.fatController.selectionMap != null)
+		if(Strudel.winMain.fatController.selectedMap != null)
 		{
-			Strudel.winMain.fatController.selectionMap.drawFeatureSelectionRectangle = false;
-			Strudel.winMain.fatController.selectionMap = null;
+			Strudel.winMain.fatController.selectedMap.drawFeatureSelectionRectangle = false;
+			Strudel.winMain.fatController.selectedMap = null;
 			//reset any features selected in a range
 			winMain.mainCanvas.drawLinksOriginatingInRange = false;
 			winMain.mainCanvas.linkDisplayManager.featuresSelectedByRange = null;
@@ -322,12 +315,9 @@ public class FatController
 	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	//clears the highlighted feature, its homolog, and associated gMap objects
-	public void clearHighlightFeature()
+	public void clearHighlightFeatures()
 	{
-		highlightFeature = null;
-		highlightFeatureHomolog = null;
-		highlightFeatGMap = null;
-		highlightFeatHomGMap = null;
+		highlightedTableEntries = null;
 	}
 
 	//	--------------------------------------------------------------------------------------------------------------------------------------------------------

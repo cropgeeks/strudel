@@ -134,13 +134,13 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		bSave = (JButton) Utils.getButton(false, "", "Save results table to file", Icons.getIcon("SAVE"), Actions.saveResults);
 
 		//configure find features button
-		bShowTable = (JButton) Utils.getButton(false, "Show Feature Table", "Filterable table of features", Icons.getIcon("FIND"), Actions.showTable);
+		bShowTable = (JButton) Utils.getButton(false, "Search Feature Table", "Filterable table of features", Icons.getIcon("FIND"), Actions.showTable);
 
 		//configure find features in range button
 		bFindFeaturesinRange = (JButton) Utils.getButton(false, "Explore Range", "List features in range", Icons.getIcon("RANGE"), Actions.exploreRange);
 
 		//these buttons have no keyboard shortcuts associated with them as yet -- straightforward config
-		bConfigureGenomes = (JButton) Utils.getButton(false, "Configure datasets", "Configure ordering and visibility of datasets", Icons.getIcon("CONFIGURE"), Actions.configureDatasets);
+		bConfigureGenomes = (JButton) Utils.getButton(false, "Configure Datasets", "Configure ordering and visibility of datasets", Icons.getIcon("CONFIGURE"), Actions.configureDatasets);
 		bOverview = (JToggleButton) Utils.getButton(true, "", "Toggle the overview dialog on or off", Icons.getIcon("OVERVIEW"), Actions.showOverview);
 		bOverview.setSelected(Prefs.guiOverviewVisible);
 		bHelp =  (JButton) Utils.getButton(false, "", "Help", Icons.getIcon("HELP"), Actions.help);

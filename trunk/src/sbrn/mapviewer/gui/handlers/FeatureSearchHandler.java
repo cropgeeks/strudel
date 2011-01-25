@@ -26,7 +26,7 @@ public class FeatureSearchHandler
 		float intervalEnd = ((Number)findFeaturesInRangeDialog.ffInRangePanel.getRangeEndSpinner().getValue()).floatValue();
 
 		GChromoMap gMap = Utils.getGMapByName(chromosome, genome);
-		Strudel.winMain.fatController.selectionMap = gMap;
+		Strudel.winMain.fatController.selectedMap = gMap;
 		findAndDisplayFeaturesInRange(gMap, intervalStart, intervalEnd, false);
 	}
 
@@ -34,8 +34,14 @@ public class FeatureSearchHandler
 
 	public static void findFeaturesInRangeFromCanvasSelection()
 	{
-		Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(true);
-		GChromoMap gMap = Strudel.winMain.fatController.selectionMap;
+		//remember the selected map
+		GChromoMap gMap = Strudel.winMain.fatController.selectedMap;
+		
+		//do not show the selection recatnlge or any links drawn during the preview
+		Strudel.winMain.fatController.selectedMap.drawFeatureSelectionRectangle = false;
+		Strudel.winMain.mainCanvas.drawLinksOriginatingInRange = false;
+		
+		//show the features in range
 		findAndDisplayFeaturesInRange(gMap, gMap.relativeTopY, gMap.relativeBottomY, true);
 	}
 
@@ -85,10 +91,8 @@ public class FeatureSearchHandler
 				//turn off potential mouseover highlight feature label drawing
 				gChromoMap.drawMouseOverFeatures = false;
 
-				//resize the split pane so we can see the results table
-				Strudel.winMain.splitPane.setDividerSize(Constants.SPLITPANE_DIVIDER_SIZE);
-				int newDividerLocation = (int) (Strudel.winMain.getHeight() - Strudel.winMain.foundFeaturesTableControlPanel.getMinimumSize().getHeight());
-				Strudel.winMain.splitPane.setDividerLocation(newDividerLocation);
+				//show the results table
+				Strudel.winMain.showBottomPanel();
 
 				// validate and repaint the canvas so it knows it has been resized
 				Strudel.winMain.validate();
@@ -136,61 +140,12 @@ public class FeatureSearchHandler
 
 	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	public static void findFeaturesByName(FindFeaturesDialog findFeaturesDialog)
-	{
-		try
-		{
-			//this array holds all the names of the features we need to display
-			String [] allNames = new String[0];
-			String input =  findFeaturesDialog.ffPanel.getFFTextArea().getText();
-			//parse inputFile
-			allNames = input.split("\n");
-			
-			final String regex = allNames[0];
-
-			//get the corresponding feature objects
-			ArrayList<Feature> features = Utils.getAllFeatures();
-
-			//we have found features
-			if (features.size() > 0)
-			{
-				//set the results panel to be visible
-				findFeaturesDialog.setVisible(false);
-				Strudel.winMain.splitPane.setDividerSize(Constants.SPLITPANE_DIVIDER_SIZE);
-				int newDividerLocation = (int) (Strudel.winMain.getHeight() * 0.66f);
-				Strudel.winMain.splitPane.setDividerLocation(newDividerLocation);
-
-				//now put the results into the JTable held by the results panel
-				updateResultsTable(features);
-
-				//earmark the features for drawing on repaint
-				Strudel.winMain.mainCanvas.drawFeaturesFoundByName = true;
-
-				// validate and repaint the canvas so it knows it has been resized
-				Strudel.winMain.validate();
-				Strudel.winMain.mainCanvas.updateCanvas(true);
-			}
-			//we have not found any features
-			else
-			{
-				TaskDialog.info("No matches found for the name(s) entered", "Close");
-			}
-
-		}
-		catch (RuntimeException e1)
-		{
-			e1.printStackTrace();
-		}
-	}
-
 	public static void findAllFeatures()
 	{
 		ArrayList<Feature> features = Utils.getAllFeatures();
 
-		//set the results panel to be visible
-		Strudel.winMain.splitPane.setDividerSize(Constants.SPLITPANE_DIVIDER_SIZE);
-		int newDividerLocation = (int) (Strudel.winMain.getHeight() * 0.66f);
-		Strudel.winMain.splitPane.setDividerLocation(newDividerLocation);
+		//show the results table
+		Strudel.winMain.showBottomPanel();
 
 		//now put the results into the JTable held by the results panel
 		updateResultsTable(features);

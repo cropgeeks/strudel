@@ -13,14 +13,12 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 	public String invertChromoStr = "Invert chromosome";
 	public String fitChromoStr = "Fit chromosome on screen";
 	public String showAllLabelsStr = "Show all labels";
-	//	public String hideAllLabelsStr = "Hide all labels";
-	public String addAllFeaturesStr = "Add features in range to results";
 	public String showAnnotationStr = "Show annotation for features in range";
 	public String selectAllChromosStr = "Select all chromosomes in genome";
 
 	public JMenuItem invertChromoMenuItem;
 	public JMenuItem fitChromoMenuItem;
-	public JMenuItem addAllFeaturesItem;
+	public JMenuItem showAnnotationItem;
 	public JCheckBoxMenuItem showAllLabelsItem;
 	public JMenuItem selectAllChromosItem;
 
@@ -35,9 +33,9 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 		fitChromoMenuItem.addActionListener(this);
 		add(fitChromoMenuItem);
 
-		addAllFeaturesItem = new JMenuItem(addAllFeaturesStr);
-		addAllFeaturesItem.addActionListener(this);
-		add(addAllFeaturesItem);
+		showAnnotationItem = new JMenuItem(showAnnotationStr);
+		showAnnotationItem.addActionListener(this);
+		add(showAnnotationItem);
 
 		showAllLabelsItem = new JCheckBoxMenuItem(showAllLabelsStr);
 		showAllLabelsItem.addActionListener(this);
@@ -54,8 +52,7 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 		JMenuItem source = (JMenuItem)(e.getSource());
 
 		//first find out what chromosome this relates to
-		GChromoMap selectedMap = Strudel.winMain.fatController.selectionMap;
-		GMapSet gMapSet = selectedMap.owningSet;
+		GChromoMap selectedMap = Strudel.winMain.fatController.selectedMap;
 
 		if(source.equals(invertChromoMenuItem))
 		{
@@ -67,32 +64,27 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 			ChromoZAxisInversionAnimator chromoInversionAnimator = new ChromoZAxisInversionAnimator(Strudel.winMain.fatController.invertMap, fps, millis);
 			chromoInversionAnimator.start();
 		}
+		
 		else if (source.equals(fitChromoMenuItem))
 		{
 			//fill the screen with the chromosome
 			if (selectedMap != null)
 				Strudel.winMain.mainCanvas.zoomHandler.processClickZoomRequest(selectedMap);
 		}
-		else if(source.equals(addAllFeaturesItem))
+		
+		else if(source.equals(showAnnotationItem))
 		{
-			//add features from the selected region into the results table
+			//display annotation for the range selected
 			if(selectedMap != null)
 			{
-				//check whether we have an existing set of results
-				boolean resultExists = Strudel.winMain.ffResultsPanel.resultsTable.getModel().getRowCount() > 0;
-				//if yes, add the features from the current selection - otherwise make a new results table
-				if(resultExists)
-					Strudel.winMain.ffResultsPanel.resultsTable.addFeaturesFromSelectedMap(selectedMap);
-				else
-					FeatureSearchHandler.findFeaturesInRangeFromCanvasSelection();
-
+				FeatureSearchHandler.findFeaturesInRangeFromCanvasSelection();				
 				//update the label that says how many features are contained in the results table
 				Strudel.winMain.foundFeaturesTableControlPanel.getNumberFeaturesLabel().setText(new Integer(Strudel.winMain.ffResultsPanel.resultsTable.getVisibleEntries().size()).toString());
-			}
-
+			}		
 			//repaint
 			Strudel.winMain.mainCanvas.updateCanvas(true);
 		}
+		
 		else if(source.equals(showAllLabelsItem))
 		{
 			//if the selected map is not currently showing all labels, set its boolean to true and show the item as selected
@@ -107,16 +99,12 @@ public class ChromoContextPopupMenu extends JPopupMenu implements ActionListener
 				selectedMap.alwaysShowAllLabels = false;
 				showAllLabelsItem.setSelected(false);
 			}
-
 			//repaint
 			Strudel.winMain.mainCanvas.updateCanvas(true);
 		}
+		
 		else if (source.equals(selectAllChromosItem))
 		{
-			//reset selected maps
-//			Strudel.winMain.fatController.selectedMaps.clear();
-//			Strudel.winMain.fatController.clearMapHighlighting();
-
 			//set the appropriate flags to indicate what we are doing
 			selectedMap.owningSet.wholeMapsetIsSelected = true;
 			Strudel.winMain.fatController.isCtrlClickSelection = false;

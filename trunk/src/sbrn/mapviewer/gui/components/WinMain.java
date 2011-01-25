@@ -85,7 +85,6 @@ public class WinMain extends JFrame
 	public GenomeLabelPanel genomeLabelPanel;
 
 	//dialogs
-	public FindFeaturesDialog ffDialog;
 	public FindFeaturesInRangeDialog ffInRangeDialog;
 	public OpenFileDialog openFileDialog;
 	public ConfigureViewSettingsDialog configureViewSettingsDialog;
@@ -257,12 +256,11 @@ public class WinMain extends JFrame
 
 			//this splitpane contains the main panel and the bottom panel
 			splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, mainPanel, bottomPanel);
-			splitPane.setOneTouchExpandable(true);
-			//hide the bottom component and any sign of the split pane initially
-			hideSplitPaneBottomHalf();
+			splitPane.setOneTouchExpandable(false);
+			splitPane.setResizeWeight(1.0);
+			splitPane.setDividerSize(0);
 
 			//these dialogs can only be instantiated now because they rely on data having been loaded previously
-			ffDialog = new FindFeaturesDialog();
 			ffInRangeDialog = new FindFeaturesInRangeDialog();
 			ffInRangeDialog.ffInRangePanel.initRemainingComponents();
 			genomeLayoutDialog = new GenomeLayoutDialog();
@@ -282,23 +280,37 @@ public class WinMain extends JFrame
 			bottomPanel.add(bottomPanelContainer,BorderLayout.CENTER);
 
 			add(splitPane, BorderLayout.CENTER);
+			
+			//hide the bottom component and any sign of the split pane initially
+			hideBottomPanel();
 
 			repaint();
+			
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
 	}
+	
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	public void showBottomPanel()
+	{
+		int controlPanelHeight = (int)Strudel.winMain.foundFeaturesTableControlPanel.getMinimumSize().getHeight();	
+		int newDividerLocation = Strudel.winMain.getHeight() - controlPanelHeight;
+		Strudel.winMain.splitPane.setDividerLocation(newDividerLocation);
+		
+		//refresh the main canvas
+		Strudel.winMain.validate();
+		Strudel.winMain.mainCanvas.updateCanvas(true);
+	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	public void hideSplitPaneBottomHalf()
-	{
-		bottomPanel.setMinimumSize(new Dimension(0,0));
-		bottomPanel.setPreferredSize(new Dimension(0,0));
-		splitPane.setResizeWeight(1.0);
-		splitPane.setDividerSize(0);
+	public void hideBottomPanel()
+	{		
+		splitPane.setDividerLocation(1.0);
 
 		//refresh the main canvas
 		Strudel.winMain.validate();

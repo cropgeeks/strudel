@@ -25,7 +25,7 @@ public class FoundFeaturesResultsPanel extends JPanel
 	{
 		super(new BorderLayout());
 
-		String title = "Click on a row to highlight a homolog. Click on a homolog name to show annotation in a web browser: ";
+		String title = "Click on a row to highlight a homolog (multiple selection: Ctrl-click). Click on a homolog name to show annotation in a web browser: ";
 		setBorder(BorderFactory.createTitledBorder(title));
 
 		//this button closes the results table panel and resets the main canvas view to the original settings

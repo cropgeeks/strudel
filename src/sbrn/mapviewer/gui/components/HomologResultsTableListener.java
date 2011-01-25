@@ -2,6 +2,7 @@ package sbrn.mapviewer.gui.components;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 import javax.swing.event.*;
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
@@ -33,7 +34,9 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 
 		if (!resultsTable.isFilterEvent)
 		{
-			highlightFeature();
+			highlightSelectedFeaturesFromTable();
+			//update the canvas
+			Strudel.winMain.mainCanvas.updateCanvas(true);
 		}
 		resultsTable.isFilterEvent = false;
 	}
@@ -42,24 +45,21 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 
 	public void mouseClicked(MouseEvent e)
 	{
-		if (e.isControlDown())
-		{
-			clearTableSelection();
-		}
-		else
+		// check whether we are in any of the cells containing hyperlinks
+		point.setLocation(e.getX(), e.getY());
+		int col = resultsTable.columnAtPoint(point);
+		int row = resultsTable.rowAtPoint(point);
+		
+		// if we are, fire up a web browser with a query for the value in the cell we clicked on
+		HomologResultsTableModel homologResultsTableModel = (HomologResultsTableModel) resultsTable.getModel();
+		if (col == homologResultsTableModel.findColumn(homologResultsTableModel.homologColumnLabel) || col == homologResultsTableModel.findColumn(homologResultsTableModel.targetNameColumnLabel))
 		{
 			//highlight the feature in the row we clicked on
-			highlightFeature();
-			// check whether we are in any of the cells containing hyperlinks
-			point.setLocation(e.getX(), e.getY());
-			int col = resultsTable.columnAtPoint(point);
-			int row = resultsTable.rowAtPoint(point);
-			// if we are, fire up a web browser with a query for the value in the cell we clicked on
-			HomologResultsTableModel homologResultsTableModel = (HomologResultsTableModel) resultsTable.getModel();
-			if (col == homologResultsTableModel.findColumn(homologResultsTableModel.homologColumnLabel) || col == homologResultsTableModel.findColumn(homologResultsTableModel.targetNameColumnLabel))
-			{
-				launchBrowser(row, col);
-			}
+			highlightSelectedFeaturesFromTable();
+			//update the canvas
+			Strudel.winMain.mainCanvas.updateCanvas(true);
+			//launch the web browser
+			launchBrowser(row, col);
 		}
 	}
 
@@ -72,13 +72,16 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 		point.setLocation(e.getX(), e.getY());
 		int row = resultsTable.rowAtPoint(point);
 		int col = resultsTable.columnAtPoint(point);
+		
+		// get the index of the selected row but check for changes due to filtering
+		int modelRow = resultsTable.convertRowIndexToModel(row);
 
 		// if we are, change the cursor to a hand
 		HomologResultsTableModel homologResultsTableModel = (HomologResultsTableModel) resultsTable.getModel();
 		boolean isURLColumn = col == homologResultsTableModel.findColumn(homologResultsTableModel.homologColumnLabel) ||
 		col == homologResultsTableModel.findColumn(homologResultsTableModel.targetNameColumnLabel);
 
-		if (isURLColumn && resultsTable.cellHasURLSet(row, col))
+		if (isURLColumn && resultsTable.cellHasURLSet(modelRow, col))
 		{
 			resultsTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		}
@@ -113,6 +116,8 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 			// extract the value of the cell clicked on
 			String featureName = (String) homologResultsTableModel.getValueAt(modelRow, selectedCol);
 			Feature feature = Utils.getFeatureByName(featureName);
+			if(feature == null)
+				return;
 			MapSet 	mapSet = feature.getOwningMapSet();
 
 			if(mapSet.getURL() != null)
@@ -126,100 +131,48 @@ public class HomologResultsTableListener implements ListSelectionListener, Mouse
 
 	private void clearTableSelection()
 	{
-		FatController fatController = Strudel.winMain.fatController;
-		MainCanvas mainCanvas = Strudel.winMain.mainCanvas;
-
 		// clear the highlight features
-		fatController.highlightFeature = null;
-		fatController.highlightFeatGMap = null;
-		fatController.highlightFeatureHomolog = null;
-		fatController.highlightFeatHomGMap = null;
-		mainCanvas.drawHighlightFeatures = false;
-
-		//update the canvas
-		mainCanvas.updateCanvas(true);
+		Strudel.winMain.fatController.clearHighlightFeatures();
 	}
-
+	
 	// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	private void highlightFeature()
+	//this checks which rows are currently selected in our results table and then earmarks them for
+	//being drawn as highlighted features with links and labels
+	private void highlightSelectedFeaturesFromTable()
 	{
-		FatController fatController = Strudel.winMain.fatController;
-		MainCanvas mainCanvas = Strudel.winMain.mainCanvas;
-
 		HomologResultsTableModel homologResultsTableModel = null;
 		try
 		{
 			homologResultsTableModel = (HomologResultsTableModel) resultsTable.getModel();
 		}
 		catch (ClassCastException e){}
-
-		// get the index of the selected row but check for changes due to filtering
-		int modelRow = -1;
-		if (resultsTable.getSelectedRow() >= 0)
+		
+		//here we store the selected features
+		LinkedList<ResultsTableEntry> selectedTableEntries = new LinkedList<ResultsTableEntry>();
+		
+		//get the table indices of the selected rows
+		int [] selectedRows = resultsTable.getSelectedRows();
+		for (int i = 0; i < selectedRows.length; i++)
 		{
-			modelRow = resultsTable.convertRowIndexToModel(resultsTable.getSelectedRow());
-		}
-		else
-		{
-			return;
-		}
-		if (homologResultsTableModel.getColumnCount() > 0)
-		{
+			// get the index of the selected row but check for changes due to filtering
+			int modelRow = resultsTable.convertRowIndexToModel(selectedRows[i]);
+			
 			//retrieve the target feature
-			Feature targetFeature = homologResultsTableModel.tableEntries.get(modelRow).getTargetFeature();
-			//find out whether we have a homolog for this feature
-			Feature homolog = homologResultsTableModel.tableEntries.get(modelRow).getHomologFeature();
-
-			//find out the target and ref map
-			GChromoMap targetGMap = null;
-			GChromoMap refMap = null;
-			//if we got here because of a range selection event we need to use the selected map as the target map
-			if(!fatController.findFeaturesRequested)
-			{
-				targetGMap = Strudel.winMain.fatController.selectionMap;
-			}
-			//else we need to use the instance of target map that is closest to the reference map
-			else
-			{
-				targetGMap = targetFeature.getOwningMap().getGChromoMaps().get(0);
-			}
-
-			//either way we need to pick the ref map that is closest
-			if(homolog != null)
-			{
-				refMap = Utils.getClosestGMap(homolog.getOwningMap(), targetGMap);
-			}
-
-			//if we got here because we requested features through the find features by name dialog then we
-			//want to zoom out fully so we can see them in the broadest possible context
-			//if we got here through a range request we do nothing
-			if(fatController.findFeaturesRequested)
-			{
-				mainCanvas.zoomHandler.processZoomResetRequest(targetGMap.owningSet);
-				if(homolog != null)
-					mainCanvas.zoomHandler.processZoomResetRequest(refMap.owningSet);
-			}
-
-			// highlight the feature on the canvas
-			fatController.highlightFeature = targetFeature;
-			fatController.highlightFeatGMap = targetGMap;
-			if(homolog != null)
-			{
-				fatController.highlightFeatureHomolog = homolog;
-				fatController.highlightFeatHomGMap = refMap;
-			}
-			else
-			{
-				fatController.highlightFeatureHomolog = null;
-				fatController.highlightFeatHomGMap = null;
-			}
-			mainCanvas.drawHighlightFeatures = true;
-
-			//update the canvas
-			mainCanvas.updateCanvas(false);
+			ResultsTableEntry entry = homologResultsTableModel.tableEntries.get(modelRow);
+			//add it to our vector
+			selectedTableEntries.add(entry);
 		}
+		
+		//now highlight the features we have selected
+		Strudel.winMain.fatController.highlightedTableEntries = selectedTableEntries;	
+		
+//		System.out.println("currently selected features:");
+//		for (ResultsTableEntry resultsTableEntry : selectedTableEntries)
+//			System.out.println(resultsTableEntry.getTargetFeature().getName());
+			
 	}
+
 
 	// ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

@@ -26,7 +26,6 @@ public class ResultsTable extends JTable
 	{
 		//configure table for selections
 		setRowSelectionAllowed(true);
-		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		//for centering text in table
 		setDefaultRenderer(String.class, new LeftAlignedRenderer());
@@ -52,6 +51,9 @@ public class ResultsTable extends JTable
 	public TableCellRenderer getCellRenderer(int row, int column)
 	{
 		HomologResultsTableModel model = (HomologResultsTableModel)getModel();
+		
+		// get the index of the selected row but check for changes due to filtering
+		int modelRow = convertRowIndexToModel(row);
 
 		//find out whether user clicked on column potentially containing a URL
 		boolean isURLColumn = false;
@@ -59,47 +61,10 @@ public class ResultsTable extends JTable
 						column == (model.findColumn(HomologResultsTableModel.targetNameColumnLabel)))
 			isURLColumn = true;
 
-		if(isURLColumn && cellHasURLSet(row, column))
+		if(isURLColumn && cellHasURLSet(modelRow, column))
 			return hyperlinkCellRenderer;
 
-		return super.getCellRenderer(row, column);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-	public void addFeaturesFromSelectedMap(GChromoMap selectedMap)
-	{
-		//extract the list of features we need to insert
-		ArrayList<Feature> newFeatures = new ArrayList<Feature>();
-
-		//the table's model
-		HomologResultsTableModel homologResultsTableModel = (HomologResultsTableModel)getModel();
-
-		//now find all features on the map that occur in the interval between these two coords
-		for (Feature f : selectedMap.chromoMap.getFeatureList())
-		{
-			if(f.getStart() > selectedMap.relativeTopY && f.getStart() < selectedMap.relativeBottomY)
-			{
-				boolean featureExists = false;
-				//first check this feature is not already contained in the table
-				for(ResultsTableEntry  resultsTableEntry : homologResultsTableModel.tableEntries)
-				{
-					if(f == resultsTableEntry.getTargetFeature())
-						featureExists = true;
-				}
-
-				//if the feature is not in the table yet
-				if(!featureExists)
-					newFeatures.add(f);
-			}
-
-		}
-
-		//add the new features/links to the table's data model
-		homologResultsTableModel.tableEntries.addAll(0, TableEntriesGenerator.makeTableEntries(newFeatures));
-
-		//now fire a table change event to update the table
-		homologResultsTableModel.fireTableRowsInserted(0, newFeatures.size()-1);
+		return super.getCellRenderer(modelRow, column);
 	}
 
 
@@ -169,10 +134,6 @@ public class ResultsTable extends JTable
 	}
 
 
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-	
-
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -224,7 +185,7 @@ public class ResultsTable extends JTable
 
 	//checks whether mapset with feature in cell in this table at row,column has a URL or not
 	public boolean cellHasURLSet(int row, int column)
-	{
+	{	
 		HomologResultsTableModel model = (HomologResultsTableModel)getModel();
 
 		//get the feature that was clicked on

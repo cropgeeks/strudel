@@ -425,7 +425,7 @@ public class GChromoMap implements Comparable<GChromoMap>
 	{
 		if (mouseOverFeatures.size() > 0 && drawMouseOverFeatures)
 		{
-			LabelDisplayManager.drawFeatureLabelsInRange(this, g2, mouseOverFeatures, true, null);
+			LabelDisplayManager.drawFeatureLabelsInRange(this, g2, mouseOverFeatures, true, null, false);
 		}
 	}
 

@@ -29,14 +29,6 @@ public class MainCanvas extends JPanel
 	// do we need to draw links?
 	public boolean drawLinks = false;
 
-	// if true, antialias everything
-	//this is a flag set by code within the application
-	//	public boolean antiAlias = false;
-	//in addition we have a flag set by the user (through a button) -- userPrefAntialias
-	//stored in the Prefs
-	//this overrides the local flag if it is set to false
-	//otherwise we ignore it
-
 	// if true, paint a rectangle to indicate the fact that we are panning over a region we want to select for zooming in to
 	public boolean drawZoomSelectionRectangle = false;
 	//these are the relevant coordinates for this
@@ -62,7 +54,7 @@ public class MainCanvas extends JPanel
 	private boolean redraw = true;
 
 	//true if we want to display individual features the user has searched for with the find dialog
-	public boolean drawHighlightFeatures = false;
+//	public boolean drawHighlightFeatures = false;
 
 	//true if we want to display features within a certain range the user has searched for with the range dialog
 	public boolean drawFoundFeaturesInRange = false;
@@ -126,7 +118,7 @@ public class MainCanvas extends JPanel
 	@Override
 	public void paintComponent(Graphics graphics)
 	{
-//		System.out.println("=====main canvas paintComponent " + System.currentTimeMillis());
+//		System.out.println("\n=====main canvas paintComponent " + System.currentTimeMillis());
 
 		super.paintComponent(graphics);
 
@@ -180,10 +172,6 @@ public class MainCanvas extends JPanel
 		//this draws the distance markers and mouseover labels on all genomes
 		drawMouseOverLabels(g);
 
-		//this just draws a label and, where required, a link for a single highlighted features -- need to be drawn at the very end to be on top of everything else
-		if (drawHighlightFeatures)
-			drawHighlightFeatures(g);
-
 		//update the hint panel
 		HintPanel.upDate();
 	}
@@ -231,31 +219,6 @@ public class MainCanvas extends JPanel
 
 	//------------------------------------------------------------------------------------------------------------------------------------------------
 
-	//draws labels and optionally links for a single feature or a feature pair we want to highlight
-	private void drawHighlightFeatures(Graphics2D g2)
-	{
-		if(winMain.fatController.highlightFeatureHomolog != null)
-		{
-			//we also want to check whether there are any links to display that are to be highlighted after a name based search for
-			//features and links originating from them
-			linkDisplayManager.drawHighlightedLink(g2, winMain.fatController.highlightFeature, winMain.fatController.highlightFeatureHomolog, true,
-							winMain.fatController.highlightFeatGMap, winMain.fatController.highlightFeatHomGMap);
-			//label for the target feature
-			LabelDisplayManager.drawHighlightedFeatureLabel(g2, winMain.fatController.highlightFeature,
-							winMain.fatController.highlightFeatureHomolog, winMain.fatController.highlightFeatGMap, winMain.fatController.highlightFeatHomGMap);
-			//label for the homolog
-			LabelDisplayManager.drawHighlightedFeatureLabel(g2, winMain.fatController.highlightFeatureHomolog,
-							winMain.fatController.highlightFeature, winMain.fatController.highlightFeatHomGMap, winMain.fatController.highlightFeatGMap);
-		}
-		else
-		{
-			//just draw the feature label
-			LabelDisplayManager.drawHighlightedFeatureLabel(g2, winMain.fatController.highlightFeature, null, winMain.fatController.highlightFeatGMap, null);
-		}
-	}
-
-	//------------------------------------------------------------------------------------------------------------------------------------------------
-
 	// paint the genomes or portions thereof onto this canvas
 	public void paintCanvas(Graphics2D g2, Boolean killMe)
 	{
@@ -296,25 +259,22 @@ public class MainCanvas extends JPanel
 			linkDisplayManager.drawAllLinks(g2, killMe, dimNormalLinks);
 		}
 
-		//we also want to check whether there are any links to display that are to be highlighted after a name based search for
-		//features and links originating from them
-		if (!killMe && drawHighlightFeatures && winMain.fatController.highlightFeatureHomolog != null && Strudel.winMain.dataContainer.gMapSets.size() > 1)
-		{
-			linkDisplayManager.drawHighlightedLink(g2, winMain.fatController.highlightFeature, winMain.fatController.highlightFeatureHomolog, true, winMain.fatController.highlightFeatGMap, winMain.fatController.highlightFeatHomGMap);
-		}
-
-
 		//this draws homologies for features in a contiguous range on a chromosome
 		if ((drawFoundFeaturesInRange || drawFeaturesFoundByName) && !killMe)
 		{
 			if (Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().isSelected() || Strudel.winMain.foundFeaturesTableControlPanel.getShowHomologsCheckbox().isSelected())
 			{
-				linkDisplayManager.drawHighlightedLinksInRange(g2);
+				linkDisplayManager.drawHighlightedLinksInRange(g2, winMain.fatController.selectedMap);
 			}
 		}
 		
+		//this dynamically draws any links in a range that we are highlighting with a mouse action
 		if(drawLinksOriginatingInRange)
-			linkDisplayManager.drawLinksForFeatureSet(linkDisplayManager.featuresSelectedByRange, g2);
+			linkDisplayManager.drawLinksForFeatureSet(linkDisplayManager.featuresSelectedByRange, g2, false, winMain.fatController.selectedMap);
+
+		//distance markers along the maps
+		if (!killMe && Prefs.showDistanceMarkers)
+			drawDistanceMarkers(g2);
 
 		if (!killMe)
 			drawAllMapColours(g2);
@@ -323,12 +283,16 @@ public class MainCanvas extends JPanel
 		//need to do this in this order so things are drawn on top of each other in the right sequence
 		if (!killMe && (drawFoundFeaturesInRange || drawFeaturesFoundByName) && (Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().isSelected() || Strudel.winMain.foundFeaturesTableControlPanel.getShowLabelsCheckbox().isSelected()))
 		{
-			LabelDisplayManager.drawLabelsForFoundFeatures(g2);
-		}
-
-		//distance markers along the maps
-		if (!killMe && Prefs.showDistanceMarkers)
-			drawDistanceMarkers(g2);
+			LabelDisplayManager.drawLabelsForFoundFeatures(g2, winMain.fatController.selectedMap);
+		}			
+		
+		//we also want to check whether there are any links to display that are to be highlighted after a name based search for
+		//features and links originating from them
+		if (!killMe && winMain.fatController.highlightedTableEntries != null && Strudel.winMain.dataContainer.gMapSets.size() > 1)
+		{
+			linkDisplayManager.drawHighlightedLinksForTableEntries(winMain.fatController.highlightedTableEntries, g2, winMain.fatController.selectedMap);
+			LabelDisplayManager.drawLabelsForTableEntries(winMain.fatController.highlightedTableEntries,g2, true, winMain.fatController.selectedMap);
+		}	
 
 		//last we want to draw the chromosome indexes so they are painted on top of all other stuff
 		if (!killMe)

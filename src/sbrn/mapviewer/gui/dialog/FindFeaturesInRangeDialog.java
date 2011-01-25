@@ -62,7 +62,7 @@ public class FindFeaturesInRangeDialog extends JDialog implements ActionListener
 			//hide the find dialog
 			setVisible(false);
 			//clear the highlighted features
-			Strudel.winMain.fatController.clearHighlightFeature();
+			Strudel.winMain.fatController.clearHighlightFeatures();
 		}
 	}
 

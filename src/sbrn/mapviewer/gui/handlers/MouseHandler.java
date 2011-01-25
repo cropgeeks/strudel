@@ -250,20 +250,12 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 				
 				//need to check here whether we are dragging to select a second map accidentally
 				//we can only ever have one of these rectangles at any one time
-				if(Strudel.winMain.fatController.selectionMap != null && Strudel.winMain.fatController.selectionMap != selectedMap)
+				if(Strudel.winMain.fatController.selectedMap != null && Strudel.winMain.fatController.selectedMap != selectedMap)
 					return;
 
-				Strudel.winMain.fatController.selectionMap = selectedMap;
+				Strudel.winMain.fatController.selectedMap = selectedMap;
 				//let the MAP draw this rectangle -- we want to have this rect associated with the map and redrawn when the map is rendered
 				selectedMap.drawFeatureSelectionRectangle = true;
-
-				//update the context menus according to what we intend to do with this selection rectangle
-				//if we have an existing results set we want to add the features in the rectangle to this
-				//otherwise we want to create a new results table
-				if(Strudel.winMain.ffResultsPanel.getFFResultsTable().getModel().getRowCount() > 0)
-					Strudel.winMain.chromoContextPopupMenu.addAllFeaturesItem.setText(Strudel.winMain.chromoContextPopupMenu.addAllFeaturesStr);
-				else
-					Strudel.winMain.chromoContextPopupMenu.addAllFeaturesItem.setText(Strudel.winMain.chromoContextPopupMenu.showAnnotationStr);
 				
 				//draw links as we select
 				float intervalStart = Utils.pixelsOnChromoToFeaturePositionOnChromomap(selectedMap, (int)selectedMap.selectionRectTopY);
@@ -387,19 +379,19 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		Strudel.winMain.mainCanvas.updateCanvas(true);
 
 		winMain.fatController.invertMap = selectedMap;
-		winMain.fatController.selectionMap = selectedMap;
+		winMain.fatController.selectedMap = selectedMap;
 
 		//if we have got here because we had first drawn a selection rectangle for including all features in a range for inclusion
 		//in the results table, then we want the context menu to only have the option for this, and not inverting chromos etc
 		if(selectedMap.drawFeatureSelectionRectangle)
 		{
-			winMain.chromoContextPopupMenu.addAllFeaturesItem.setVisible(true);
+			winMain.chromoContextPopupMenu.showAnnotationItem.setVisible(true);
 			winMain.chromoContextPopupMenu.invertChromoMenuItem.setVisible(false);
 			winMain.chromoContextPopupMenu.fitChromoMenuItem.setVisible(false);
 		}
 		else
 		{
-			winMain.chromoContextPopupMenu.addAllFeaturesItem.setVisible(false);
+			winMain.chromoContextPopupMenu.showAnnotationItem.setVisible(false);
 			winMain.chromoContextPopupMenu.invertChromoMenuItem.setVisible(true);
 			winMain.chromoContextPopupMenu.fitChromoMenuItem.setVisible(true);
 		}

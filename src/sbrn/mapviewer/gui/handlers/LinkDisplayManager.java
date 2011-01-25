@@ -368,9 +368,6 @@ public class LinkDisplayManager
 		// draw the link either as a straight line or a curve
 		if(strongEmphasis)
 			g2.setColor(Colors.strongEmphasisLinkColour);
-//		else
-//			g2.setColor(Colors.mildEmphasisLinkColour);
-
 		else if (Prefs.highlightHomologiesInWhite)
 			g2.setColor(Color.white);
 		else
@@ -378,11 +375,32 @@ public class LinkDisplayManager
 
 		drawSingleLink(g2,targetChromoX, y1, referenceChromoX, y2);
 	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
+	
+	// draws links for features in rows are currently selected in our results table 
+	public void drawHighlightedLinksForTableEntries(LinkedList<ResultsTableEntry> tableEntries, Graphics2D g2, GChromoMap selectedMap)
+	{
+		for (ResultsTableEntry resultsTableEntry : tableEntries)
+		{
+			//draw a link but only if the entry on the table is not just a feature on its own but there is a homolog too
+			if(resultsTableEntry.getHomologFeature() != null)
+			{
+				//if the selectedMap is null here that means we have got here not through a mouse based selection event but through displaying the feature table
+				//in that case we can just use the first instance of a map that contains the target feature
+				if(selectedMap == null)
+					selectedMap = resultsTableEntry.getTargetFeature().getOwningMap().getGChromoMaps().get(0);
+				
+				checkLinkAndDraw(g2, resultsTableEntry.getTargetFeature(), resultsTableEntry.getHomologFeature(), Float.parseFloat(resultsTableEntry.getLinkEValue()), true, selectedMap);
+			}
+		}
+	}
 
 
 	// --------------------------------------------------------------------------------------------------------------------------------
 	
-	public void drawLinksForFeatureSet(Vector<Feature> features, Graphics2D g2)
+	//draws links for a given set of features and their homologs
+	public void drawLinksForFeatureSet(Vector<Feature> features, Graphics2D g2, boolean strongEmphasis, GChromoMap selectedMap)
 	{
 		for(Feature feature : features)
 		{
@@ -399,16 +417,16 @@ public class LinkDisplayManager
 					homolog = link.getFeature1();
 
 				//draw the link
-				checkLinkAndDraw(g2, feature, homolog,  link.getBlastScore());
+				checkLinkAndDraw(g2, feature, homolog,  link.getBlastScore(), strongEmphasis, selectedMap);
 			}
 		}
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
 	
-	private void checkLinkAndDraw(Graphics2D g2, Feature targetFeature, Feature homolog, double blastScore)
+	private void checkLinkAndDraw(Graphics2D g2, Feature targetFeature, Feature homolog, double blastScore, boolean strongEmphasis, GChromoMap selectedMap)
 	{
-		GChromoMap targetGMap = targetFeature.getOwningMap().getGChromoMaps().get(0);
+		GChromoMap targetGMap = selectedMap;
 		
 		//now retrieve the physically closest instance of a GchromoMap associated with this refMap object
 		GChromoMap refGMap = Utils.getClosestGMap(homolog.getOwningMap(), targetGMap);
@@ -430,14 +448,14 @@ public class LinkDisplayManager
 			return;
 		
 		//draw the link
-		drawHighlightedLink(g2, targetFeature, homolog, false, targetGMap, refGMap);
+		drawHighlightedLink(g2, targetFeature, homolog, strongEmphasis, targetGMap, refGMap);
 	}
 	
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
 
 	// Draws the lines between features in a certain range on a chromosome of the target genome and all potential homologues in the compared genome
-	public void drawHighlightedLinksInRange(Graphics2D g2)
+	public void drawHighlightedLinksInRange(Graphics2D g2, GChromoMap selectedMap)
 	{
 		//only do this if we have at least 2 genomes -- otherwise there are no links to deal with
 		if(Strudel.winMain.dataContainer.gMapSets.size() > 1)
@@ -453,7 +471,7 @@ public class LinkDisplayManager
 						Feature targetFeature = tableEntry.getTargetFeature();
 						Feature homolog = tableEntry.getHomologFeature();
 						float eValue = Float.parseFloat(tableEntry.getLinkEValue());
-						checkLinkAndDraw(g2, targetFeature, homolog, eValue);
+						checkLinkAndDraw(g2, targetFeature, homolog, eValue, false, selectedMap);
 					}
 				}
 			}

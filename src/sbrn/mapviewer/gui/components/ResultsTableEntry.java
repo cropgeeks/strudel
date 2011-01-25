@@ -5,8 +5,8 @@ import sbrn.mapviewer.data.*;
 public class ResultsTableEntry
 {
 
-	public Feature targetFeature;
-	public Feature homologFeature;
+	public Feature targetFeature = null;
+	public Feature homologFeature = null;
 	private Link link;
 
 

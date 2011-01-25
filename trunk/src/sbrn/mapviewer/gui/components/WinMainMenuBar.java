@@ -103,7 +103,7 @@ public class WinMainMenuBar extends JMenuBar
 		mExplore = new JMenu("Explore");
 		mExplore.setMnemonic('E');
 
-		mfindFeature = getItem(Actions.findFeature, "Find features by name", KeyEvent.VK_F, Strudel.ctrlMenuShortcut);
+		mfindFeature = getItem(Actions.showTable, "Show filterable table", KeyEvent.VK_F, Strudel.ctrlMenuShortcut);
 		mExploreRange = getItem(Actions.exploreRange, "Explore range", KeyEvent.VK_R, Strudel.ctrlMenuShortcut);
 
 		mExplore.add(mfindFeature);

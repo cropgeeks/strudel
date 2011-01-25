@@ -19,7 +19,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 	public JLabel blastLabel;
 	public JSpinner eValueSpinner;
 	FormattedTextFieldVerifier eValueSpinnerInputVerifier;
-	public JButton bFindFeatures;
+	public JButton bShowTable;
 	public JButton bFindFeaturesinRange;
 	public JButton bResetAll;
 	//	public JToggleButton bDistMarkers;
@@ -54,7 +54,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		add(bConfigureGenomes);
 
 		addSeparator(true);
-		add(bFindFeatures);
+		add(bShowTable);
 		add(bFindFeaturesinRange);
 
 		addSeparator(true);
@@ -134,7 +134,7 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		bSave = (JButton) Utils.getButton(false, "", "Save results table to file", Icons.getIcon("SAVE"), Actions.saveResults);
 
 		//configure find features button
-		bFindFeatures = (JButton) Utils.getButton(false, "Find", "Find features by name", Icons.getIcon("FIND"), Actions.findFeature);
+		bShowTable = (JButton) Utils.getButton(false, "Show Feature Table", "Filterable table of features", Icons.getIcon("FIND"), Actions.showTable);
 
 		//configure find features in range button
 		bFindFeaturesinRange = (JButton) Utils.getButton(false, "Explore Range", "List features in range", Icons.getIcon("RANGE"), Actions.exploreRange);

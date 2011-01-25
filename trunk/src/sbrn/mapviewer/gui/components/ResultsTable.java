@@ -70,7 +70,7 @@ public class ResultsTable extends JTable
 	public void addFeaturesFromSelectedMap(GChromoMap selectedMap)
 	{
 		//extract the list of features we need to insert
-		Vector<Feature> newFeatures = new Vector<Feature>();
+		ArrayList<Feature> newFeatures = new ArrayList<Feature>();
 
 		//the table's model
 		HomologResultsTableModel homologResultsTableModel = (HomologResultsTableModel)getModel();
@@ -171,32 +171,8 @@ public class ResultsTable extends JTable
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	//applies a regular epxression based filter to the results table
-	@SuppressWarnings({"unchecked"})
-	public void newFilter(String filterExpression, int index)
-	{
-		isFilterEvent = true;
+	
 
-		RowFilter<TableModel, Object> rf = null;
-		String expr = "^" + filterExpression;
-
-		try
-		{
-			rf = RowFilter.regexFilter(expr, index);
-		}
-		catch (java.util.regex.PatternSyntaxException e)
-		{
-			return;
-		}
-
-		if(filterExpression.equals("<none>"))
-			((DefaultRowSorter<TableModel, Integer>) getRowSorter()).setRowFilter(null);
-		else
-			((DefaultRowSorter<TableModel, Integer>) getRowSorter()).setRowFilter(rf);
-
-		//update the label that says how many features are contained in the results table
-		Strudel.winMain.foundFeaturesTableControlPanel.getNumberFeaturesLabel().setText(new Integer(getVisibleEntries().size()).toString());
-	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

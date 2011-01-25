@@ -2,6 +2,7 @@ package sbrn.mapviewer.gui;
 
 import sbrn.mapviewer.Strudel;
 import sbrn.mapviewer.gui.dialog.FindFeaturesInRangeDialog;
+import sbrn.mapviewer.gui.handlers.FeatureSearchHandler;
 
 /**
  * Stores the methods which carry out the actions which are fired whenever the
@@ -9,19 +10,13 @@ import sbrn.mapviewer.gui.dialog.FindFeaturesInRangeDialog;
  */
 public class MenuExplore
 {
-	public void findFeature()
+	public void showTable()
 	{
 		//reset the main canvas
 		Strudel.winMain.fatController.resetMainCanvasView();
 		Strudel.winMain.fatController.findFeaturesRequested = true;
 
-		//clear the find dialog
-		Strudel.winMain.ffDialog.ffPanel.getFFTextArea().setText("");
-
-		//show the find dialog
-		Strudel.winMain.ffDialog.setLocationRelativeTo(Strudel.winMain);
-		Strudel.winMain.ffDialog.setVisible(true);
-		Strudel.winMain.ffDialog.ffPanel.getFFTextArea().requestFocusInWindow();
+		FeatureSearchHandler.findAllFeatures();
 	}
 
 	public void exploreRange()

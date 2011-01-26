@@ -94,6 +94,8 @@ public class WinMain extends JFrame
 
 	//this panel displays hints for the user as to what to do in a given context
 	public static HintPanel hintPanel;
+	
+	public static boolean hideBottomPanel = true;
 
 	//	=================================================curve'tor=====================================
 
@@ -257,7 +259,7 @@ public class WinMain extends JFrame
 			//this splitpane contains the main panel and the bottom panel
 			splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, mainPanel, bottomPanel);
 			splitPane.setOneTouchExpandable(false);
-			splitPane.setResizeWeight(1.0);
+//			splitPane.setResizeWeight(1.0);
 			splitPane.setDividerSize(0);
 
 			//these dialogs can only be instantiated now because they rely on data having been loaded previously
@@ -297,6 +299,8 @@ public class WinMain extends JFrame
 
 	public void showBottomPanel()
 	{
+		Strudel.winMain.hideBottomPanel = false;
+		
 		int controlPanelHeight = (int)Strudel.winMain.foundFeaturesTableControlPanel.getMinimumSize().getHeight();	
 		int newDividerLocation = Strudel.winMain.getHeight() - controlPanelHeight;
 		Strudel.winMain.splitPane.setDividerLocation(newDividerLocation);
@@ -309,8 +313,9 @@ public class WinMain extends JFrame
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void hideBottomPanel()
-	{		
+	{			
 		splitPane.setDividerLocation(1.0);
+		Strudel.winMain.hideBottomPanel = true;
 
 		//refresh the main canvas
 		Strudel.winMain.validate();

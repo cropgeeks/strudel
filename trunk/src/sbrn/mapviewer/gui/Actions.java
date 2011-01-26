@@ -35,6 +35,7 @@ public class Actions
 	public static AbstractAction antialiasedDraw;
 	public static AbstractAction filterLinks;
 	public static AbstractAction showDistanceMarkers;
+	public static AbstractAction showFullFeatureInfo;
 	// Link shape menu actions
 	public static AbstractAction linkShape;
 	public static AbstractAction linkCurved;
@@ -152,6 +153,12 @@ public class Actions
 				winMain.mView.showDistanceMarkers();
 			}
 		};
+		
+		showFullFeatureInfo = new AbstractAction("Show full feature info on mouseover") {
+			public void actionPerformed(ActionEvent e) {
+				winMain.mView.showFullFeatureInfoOnMouseover();
+			}
+		};
 
 		linkCurved = new AbstractAction("Curved") {
 			public void actionPerformed(ActionEvent e) {
@@ -213,6 +220,7 @@ public class Actions
 		antialiasedDraw.putValue(SELECTED_KEY, Prefs.userPrefAntialias);
 		showDistanceMarkers.putValue(SELECTED_KEY, Prefs.showDistanceMarkers);
 		filterLinks.putValue(SELECTED_KEY, Prefs.drawOnlyLinksToVisibleFeatures);
+		showFullFeatureInfo.putValue(SELECTED_KEY, Prefs.showFullFeatureInfoOnMouseOver);
 
 		linkCurved.putValue(SELECTED_KEY, Prefs.linkShape == Constants.LINKTYPE_CURVED);
 		linkStraight.putValue(SELECTED_KEY, Prefs.linkShape == Constants.LINKTYPE_STRAIGHT);
@@ -239,6 +247,7 @@ public class Actions
 		showHint.setEnabled(false);
 		antialiasedDraw.setEnabled(false);
 		filterLinks.setEnabled(false);
+		showFullFeatureInfo.setEnabled(false);
 		showDistanceMarkers.setEnabled(false);
 		linkCurved.setEnabled(false);
 		linkStraight.setEnabled(false);
@@ -270,6 +279,7 @@ public class Actions
 		showHint.setEnabled(true);
 		antialiasedDraw.setEnabled(true);
 		filterLinks.setEnabled(true);
+		showFullFeatureInfo.setEnabled(true);
 		showDistanceMarkers.setEnabled(true);
 		linkCurved.setEnabled(true);
 		linkStraight.setEnabled(true);

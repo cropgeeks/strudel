@@ -40,6 +40,7 @@ public class WinMainMenuBar extends JMenuBar
 	private JMenuItem mAntialiasedDraw;
 	private JMenuItem mFilterLinks;
 	private JMenuItem mShowDistanceMarkers;
+	private JMenuItem mShowFullFeatureInfo;
 	// The components of the link shape sub-menu
 	private JMenu mLinkShape;
 	private JMenuItem mCurved;
@@ -103,7 +104,7 @@ public class WinMainMenuBar extends JMenuBar
 		mExplore = new JMenu("Explore");
 		mExplore.setMnemonic('E');
 
-		mfindFeature = getItem(Actions.showTable, "Show filterable table", KeyEvent.VK_F, Strudel.ctrlMenuShortcut);
+		mfindFeature = getItem(Actions.showTable, "Search Features Table", KeyEvent.VK_F, Strudel.ctrlMenuShortcut);
 		mExploreRange = getItem(Actions.exploreRange, "Explore range", KeyEvent.VK_R, Strudel.ctrlMenuShortcut);
 
 		mExplore.add(mfindFeature);
@@ -132,6 +133,7 @@ public class WinMainMenuBar extends JMenuBar
 		mAntialiasedDraw = getCheckedItem(Actions.antialiasedDraw, "Draw antialiased", KeyEvent.VK_A, Strudel.ctrlMenuShortcut);
 		mFilterLinks = getCheckedItem(Actions.filterLinks, "Filter links", 0, 0);
 		mShowDistanceMarkers = getCheckedItem(Actions.showDistanceMarkers, "Show distance markers", KeyEvent.VK_D, Strudel.ctrlMenuShortcut);
+		mShowFullFeatureInfo = getCheckedItem(Actions.showFullFeatureInfo, "Show full feature info on mouseover", KeyEvent.VK_F, Strudel.ctrlMenuShortcut);
 
 		mLinkShape = new JMenu(Actions.linkShape);
 		mLinkShape.setMnemonic('L');
@@ -152,6 +154,7 @@ public class WinMainMenuBar extends JMenuBar
 		mViewSettings.add(mAntialiasedDraw);
 		mViewSettings.add(mFilterLinks);
 		mViewSettings.add(mShowDistanceMarkers);
+		mViewSettings.add(mShowFullFeatureInfo);
 		mView.add(mLinkShape);
 
 		ButtonGroup grp = new ButtonGroup();
@@ -247,4 +250,7 @@ public class WinMainMenuBar extends JMenuBar
 
 	public JMenuItem getMAntialiasedDraw()
 		{	return mAntialiasedDraw;	}
+	
+	public JMenuItem getmShowFullFeatureInfo()
+	{  return mShowFullFeatureInfo;}
 }

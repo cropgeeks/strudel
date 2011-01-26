@@ -7,6 +7,7 @@ import java.lang.reflect.*;
 import java.net.*;
 import java.text.*;
 import java.util.*;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -833,6 +834,8 @@ public class Utils
 
 		return new Color(link.r, link.g, link.b);
 	}
+	
+	//------------------------------------------------------------------------------------------------------------------------------------
 
 	public static Color getChromosomeColor(ChromoMap cMap)
 	{
@@ -841,4 +844,52 @@ public class Utils
 
 		return new Color(cMap.r, cMap.g, cMap.b);
 	}
+	
+	//------------------------------------------------------------------------------------------------------------------------------------
+	
+	public static String formatFeaturePosition(float pos)
+	{
+		// need to format the number appropriately
+		NumberFormat nf = NumberFormat.getInstance();
+
+		// check first whether we are dealing with ints or floating point numbers for the chromosome distances
+		if (pos % 1 == 0) // this is an int
+		{
+			nf.setMaximumFractionDigits(0);
+		}
+		else// it's a float
+		{
+			// we want two decimals here
+			nf.setMaximumFractionDigits(2);
+			nf.setMinimumFractionDigits(2);
+		}
+		return String.valueOf(nf.format(pos));
+	}
+	
+	//------------------------------------------------------------------------------------------------------------------------------------
+	
+	public static int getMaxStringWidthForFeatureLabels(List<Feature> features, FontMetrics fm, boolean strongEmphasis, boolean isMouseOver)
+	{
+		//we use this value to make all the labels the same (maximum) width
+		int maxStringWidth = 0;
+		
+		// for all features in our list
+		for (Feature f : features)
+		{
+			if (f != null)
+			{
+				//the width of the label to display
+				int stringWidth = fm.stringWidth(f.getMouseOverDisplayLabel(strongEmphasis, isMouseOver));
+				
+				//check if we have a new record
+				if(stringWidth > maxStringWidth)
+					maxStringWidth = stringWidth;
+			}
+		}
+		
+		return maxStringWidth;
+	}
+	
+	//------------------------------------------------------------------------------------------------------------------------------------
+	
 }

@@ -38,6 +38,9 @@ public class Prefs extends XMLPreferences
 
 	//do we want to show the distance markers
 	public static boolean showDistanceMarkers = false;
+	
+	//when mousing over features, should the labels displayed contain the full info on a feature
+	public static boolean showFullFeatureInfoOnMouseOver = false;
 
 	// should all "highlighted" homologies be drawn in white
 	public static boolean highlightHomologiesInWhite = true;

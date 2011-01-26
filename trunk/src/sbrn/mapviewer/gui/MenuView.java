@@ -39,16 +39,12 @@ public class MenuView
 			winMain.hintPanel.setVisible(true);
 		else
 			winMain.hintPanel.setVisible(false);
-		winMain.mainCanvas.updateCanvas(true);
-
-		winMain.menuBar.getMShowHint().setSelected(Prefs.showHintPanel);
-		Strudel.winMain.configureViewSettingsDialog.viewSettingsPanel.getHintPanelCheckBox().setSelected(Prefs.showHintPanel);
+		winMain.mainCanvas.updateCanvas(true);;
 	}
 
 	public void antialiasedDraw()
 	{
 		Prefs.userPrefAntialias = !Prefs.userPrefAntialias;
-		winMain.menuBar.getMAntialiasedDraw().setSelected(Prefs.userPrefAntialias);
 		Strudel.winMain.mainCanvas.updateCanvas(true);
 	}
 
@@ -62,6 +58,11 @@ public class MenuView
 	{
 		Prefs.showDistanceMarkers = !Prefs.showDistanceMarkers;
 		Strudel.winMain.mainCanvas.updateCanvas(true);
+	}
+	
+	public void showFullFeatureInfoOnMouseover()
+	{
+		Prefs.showFullFeatureInfoOnMouseOver = !Prefs.showFullFeatureInfoOnMouseOver;
 	}
 
 	public void linkShape(int shape)

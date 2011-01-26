@@ -236,6 +236,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 			if(Strudel.winMain.fatController.selectedMap == null)
 				Strudel.winMain.fatController.selectedMap = mouseOverMap;
 
+			//if a map is selected
 			if(Strudel.winMain.fatController.selectedMap != null)
 			{
 				// +ve y

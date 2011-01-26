@@ -44,10 +44,10 @@ public class LabelDisplayManager
 		HashMap<GMapSet, LinkedList<Feature>> lookup = new HashMap<GMapSet, LinkedList<Feature>>();
 		
 		for (ResultsTableEntry tableEntry : tableEntries)
-		{		
+		{				
 			//if the selectedMap is null here that means we have got here not through a mouse based selection event but through displaying the feature table
 			//in that case we can just use the first instance of a map that contains the target feature
-			if(selectedMap == null)
+			if(Strudel.winMain.fatController.selectedMap == null)
 				selectedMap = tableEntry.getTargetFeature().getOwningMap().getGChromoMaps().get(0);
 			
 			//get the feature for this entry and add it to the lookup

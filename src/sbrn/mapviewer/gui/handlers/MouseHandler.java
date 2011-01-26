@@ -196,9 +196,6 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		int index = Utils.getSelectedSetIndex(e);
 		GMapSet gMapSet = Strudel.winMain.dataContainer.gMapSets.get(index);
 
-		//the chromosome -- if any - this event pertains to (i.e. where on the canvas on y are we)
-		GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, (int)(gMapSet.xPosition), y);
-
 		//mouse is getting dragged without shift held down -- scroll the canvas up or down
 		if (!e.isShiftDown())
 		{
@@ -231,37 +228,44 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		//this is what we do for drawing a selection rectangle
 		if(e.isShiftDown() && isMetaClick(e))
 		{	
-			if(selectedMap != null)
+			//the chromosome -- if any - this event pertains to (i.e. where on the canvas on y are we)
+			GChromoMap mouseOverMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, (int)(gMapSet.xPosition), y);
+
+			//this is what we need to do the first time we select a map in this current round
+			//if nothing is selected we assume we want to select the map we are current mousing over
+			if(Strudel.winMain.fatController.selectedMap == null)
+				Strudel.winMain.fatController.selectedMap = mouseOverMap;
+
+			if(Strudel.winMain.fatController.selectedMap != null)
 			{
 				// +ve y
 				if (y > mousePressedY)
 				{
-					selectedMap.selectionRectTopY = mousePressedY - selectedMap.boundingRectangle.y;
-					selectedMap.selectionRectBottomY = y - selectedMap.boundingRectangle.y;
-					selectedMap.chromoHeightOnSelection = selectedMap.boundingRectangle.height;
+					Strudel.winMain.fatController.selectedMap.selectionRectTopY = mousePressedY - Strudel.winMain.fatController.selectedMap.boundingRectangle.y;
+					Strudel.winMain.fatController.selectedMap.selectionRectBottomY = y - Strudel.winMain.fatController.selectedMap.boundingRectangle.y;
+					Strudel.winMain.fatController.selectedMap.chromoHeightOnSelection = Strudel.winMain.fatController.selectedMap.boundingRectangle.height;
 				}
 				// -ve y
 				else if (y <= mousePressedY)
 				{
-					selectedMap.selectionRectTopY = y - selectedMap.boundingRectangle.y;
-					selectedMap.selectionRectBottomY = mousePressedY - selectedMap.boundingRectangle.y;
-					selectedMap.chromoHeightOnSelection = selectedMap.boundingRectangle.height;
-				}
-				
+					Strudel.winMain.fatController.selectedMap.selectionRectTopY = y - Strudel.winMain.fatController.selectedMap.boundingRectangle.y;
+					Strudel.winMain.fatController.selectedMap.selectionRectBottomY = mousePressedY - Strudel.winMain.fatController.selectedMap.boundingRectangle.y;
+					Strudel.winMain.fatController.selectedMap.chromoHeightOnSelection = Strudel.winMain.fatController.selectedMap.boundingRectangle.height;
+				}				
+
 				//need to check here whether we are dragging to select a second map accidentally
 				//we can only ever have one of these rectangles at any one time
-				if(Strudel.winMain.fatController.selectedMap != null && Strudel.winMain.fatController.selectedMap != selectedMap)
+				if(Strudel.winMain.fatController.selectedMap != null && mouseOverMap != null && Strudel.winMain.fatController.selectedMap != mouseOverMap)
 					return;
 
-				Strudel.winMain.fatController.selectedMap = selectedMap;
 				//let the MAP draw this rectangle -- we want to have this rect associated with the map and redrawn when the map is rendered
-				selectedMap.drawFeatureSelectionRectangle = true;
+				Strudel.winMain.fatController.selectedMap.drawFeatureSelectionRectangle = true;
 				
 				//draw links as we select
-				float intervalStart = Utils.pixelsOnChromoToFeaturePositionOnChromomap(selectedMap, (int)selectedMap.selectionRectTopY);
-				float intervalEnd = Utils.pixelsOnChromoToFeaturePositionOnChromomap(selectedMap, (int)selectedMap.selectionRectBottomY);
+				float intervalStart = Utils.pixelsOnChromoToFeaturePositionOnChromomap(Strudel.winMain.fatController.selectedMap, (int)Strudel.winMain.fatController.selectedMap.selectionRectTopY);
+				float intervalEnd = Utils.pixelsOnChromoToFeaturePositionOnChromomap(Strudel.winMain.fatController.selectedMap, (int)Strudel.winMain.fatController.selectedMap.selectionRectBottomY);
 				Strudel.winMain.mainCanvas.drawLinksOriginatingInRange = true;
-				Vector<Feature> selectedFeatures = Utils.getFeaturesByInterval(selectedMap.chromoMap, intervalStart, intervalEnd);
+				Vector<Feature> selectedFeatures = Utils.getFeaturesByInterval(Strudel.winMain.fatController.selectedMap.chromoMap, intervalStart, intervalEnd);
 				Strudel.winMain.mainCanvas.linkDisplayManager.featuresSelectedByRange = selectedFeatures;
 				
 				//redraw
@@ -306,7 +310,6 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		// update the current drag positions
 		mouseDragPosX = e.getX();
 		mouseDragPosY = e.getY();
-
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------

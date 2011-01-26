@@ -108,10 +108,6 @@ public class GChromoMap implements Comparable<GChromoMap>
 
 	//a boolean to indicate whether we should always display labels, regardless of zoom factor
 	public boolean alwaysShowAllLabels = false;
-//
-//	//this is the y coord for the top left corner of this map on the canvas (not screen!)
-//	//may be off the visible screen
-//	public int yOnCanvas;
 
 
 	// ============================curve'tors==================================

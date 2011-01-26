@@ -800,6 +800,7 @@ public class Utils
 	private static void addFeatureToLookup(GMapSet gMapSet, Feature feature, TreeMap<GChromoMap, LinkedList<Feature>> lookup)
 	{
 		GChromoMap gMap = getGMapByNameAndGMapset(feature.getOwningMap().getName(), gMapSet);
+		
 		//check whether its gMap is listed here		
 		if(!lookup.keySet().contains(gMap))
 		{

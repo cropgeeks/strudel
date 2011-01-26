@@ -2,6 +2,7 @@ package sbrn.mapviewer.gui.handlers;
 
 import java.awt.*;
 import java.awt.geom.*;
+import java.text.*;
 import java.util.*;
 import java.util.List;
 import javax.swing.table.*;
@@ -86,38 +87,6 @@ public class LabelDisplayManager
 	}
 	
 	
-	//------------------------------------------------------------------------------------------------------------------------------------
-	
-	//this just draws a label for a single highlighted feature
-	public static void drawHighlightedFeatureLabel(Graphics2D g2, Feature f, GChromoMap gMap, GChromoMap refMap)
-	{
-		// the usual font stuff
-		g2.setFont(new Font("Sans-serif", Font.PLAIN, fontHeight));
-		FontMetrics fm = g2.getFontMetrics();
-		
-		// we need these for working out the y positions
-		ChromoMap chromoMap = f.getOwningMap();
-		float mapEnd = chromoMap.getStop();
-		// this factor normalises the position to a value between 0 and 100
-		float scalingFactor = gMap.height / mapEnd;
-		
-		// the y position of the feature itself
-		int featureY;
-		if (f.getStart() == 0.0f)
-		{
-			featureY = gMap.y;
-		}
-		else
-		{
-			featureY = Math.round(gMap.y + gMap.currentY + (f.getStart() * scalingFactor));
-		}
-		
-		//the y position of the feature label
-		int labelY = featureY + (fontHeight/2);
-		
-		drawFeatureLabel(g2, f, gMap, refMap, true, true, false, labelY, featureY,fm);
-	}
-	
 	//	------------------------------------------------------------------------------------------------------------------------------------
 	
 	// draws labels next to found features in a specified range only
@@ -145,11 +114,14 @@ public class LabelDisplayManager
 			//then work out the actual positions after correction for collision of labels
 			laidoutPositions = calculateLabelPositionsOnScreen(features, featurePositions);
 			
+			//we use this value to make all the labels the same (maximum) width
+			int maxStringWidth = Utils.getMaxStringWidthForFeatureLabels(features, fm, strongEmphasis, isMouseOver);
+			
 			// for all features in our list
 			for (Feature f : features)
 			{
 				if (f != null)
-				{
+				{			
 					// this is where the label goes
 					int labelY = laidoutPositions.get(f);
 					int featureY = featurePositions.get(f);
@@ -160,8 +132,8 @@ public class LabelDisplayManager
 					{
 						gMap = Utils.getGMapByNameAndGMapset(f.getOwningMap().getName(), gMapSet);
 					}
-					
-					drawFeatureLabel(g2, f, gMap, null, true, strongEmphasis,isMouseOver, labelY, featureY, fm);
+										
+					drawFeatureLabel(g2, f, gMap, null, true, strongEmphasis,isMouseOver, labelY, featureY, maxStringWidth, f.getMouseOverDisplayLabel(strongEmphasis,isMouseOver));
 				}
 			}
 		}
@@ -170,18 +142,14 @@ public class LabelDisplayManager
 			e.printStackTrace();
 		}
 	}
-	
-	
+		
 	//------------------------------------------------------------------------------------------------------------------------------------
 	
 	//this draws a label for a single feature
 	public static void drawFeatureLabel(Graphics2D g2, Feature f, GChromoMap gMap, GChromoMap refMap, boolean labelOnRight,
-					boolean highlight, boolean isMouseOver, int labelY, int featureY,FontMetrics fm)
+					boolean highlight, boolean isMouseOver, int labelY, int featureY, int stringWidth, String featureInfo)
 	{
-		// get the name of the feature
-		String featureName = f.getName() + " (" + f.getType() + ")";
-		int stringWidth = fm.stringWidth(featureName);
-		
+	
 		// next decide where to place the label on x
 		int lineLength = 30; // the amount by which we want to move the label end away from the chromosome (in pixels)
 		int labelX = -1; // this is where the label is drawn from
@@ -195,25 +163,6 @@ public class LabelDisplayManager
 		if(genomeIndex == (Strudel.winMain.dataContainer.gMapSets.size()-1))
 		{
 			labelOnRight = false;
-		}
-		
-		//if we do have a homolog we need to work out where it is in relation to this feature and place the label out of the way of the link line
-		if(highlight && refMap != null)
-		{
-			int targetGenomeIndex = Strudel.winMain.dataContainer.gMapSets.indexOf(gMap.owningSet);
-			int referenceGenomeIndex = Strudel.winMain.dataContainer.gMapSets.indexOf(refMap.owningSet);
-			
-			//we want the label on the right if the target genome is to the right of the reference but only if this is not the last genome on the right
-			if((targetGenomeIndex > referenceGenomeIndex) && !(targetGenomeIndex == (Strudel.winMain.dataContainer.gMapSets.size()-1)))
-			{
-				//place label to the right of the chromo
-				labelOnRight = true;
-			}
-			//otherwise put the label on the left but only if this is not the leftmost genome
-			else if(targetGenomeIndex != 0)
-			{
-				labelOnRight = false;
-			}
 		}
 		
 		//this is what we do if the label needs to be on the right
@@ -258,7 +207,7 @@ public class LabelDisplayManager
 			g2.setColor(Colors.featureLabelColour);
 		
 		// draw the label
-		g2.drawString(featureName, labelX, labelY);
+		g2.drawString(featureInfo, labelX, labelY);
 		
 		//if necessary draw a highlighted line for the marker on the chromosome itself
 		if(highlight)

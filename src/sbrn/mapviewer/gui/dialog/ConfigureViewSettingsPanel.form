@@ -20,7 +20,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <EmptySpace min="0" pref="365" max="32767" attributes="0"/>
+          <EmptySpace min="0" pref="389" max="32767" attributes="0"/>
           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace min="0" pref="9" max="32767" attributes="0"/>
@@ -32,7 +32,7 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <EmptySpace min="0" pref="210" max="32767" attributes="0"/>
+          <EmptySpace min="0" pref="256" max="32767" attributes="0"/>
           <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace min="0" pref="7" max="32767" attributes="0"/>
@@ -56,23 +56,29 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="331" max="32767" attributes="0"/>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="linkShapeCurvedRButton" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="linkShapeStraightRButton" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="linkShapeAngledRButton" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Component id="linkShapeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace pref="160" max="32767" attributes="0"/>
+              </Group>
               <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="linkShapeCurvedRButton" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="linkShapeStraightRButton" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="linkShapeAngledRButton" min="-2" max="-2" attributes="0"/>
-                          </Group>
                           <Component id="hintPanelCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="antialiasCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="linkFilterCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="distanceMarkerCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="linkShapeLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="fullFeatureInfoCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="64" max="32767" attributes="0"/>
                   </Group>
@@ -81,7 +87,17 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="165" max="32767" attributes="0"/>
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace pref="143" max="32767" attributes="0"/>
+                  <Component id="linkShapeLabel" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="linkShapeCurvedRButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="linkShapeStraightRButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="linkShapeAngledRButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+              </Group>
               <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
@@ -93,14 +109,8 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="distanceMarkerCheckbox" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="linkShapeLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="linkShapeCurvedRButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="linkShapeStraightRButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="linkShapeAngledRButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace pref="25" max="32767" attributes="0"/>
+                      <Component id="fullFeatureInfoCheckbox" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="93" max="32767" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -197,6 +207,18 @@
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JRadioButton(Actions.linkAngled);"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="fullFeatureInfoCheckbox">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Show full feature info on mouseover"/>
+            <Property name="actionCommand" type="java.lang.String" value="Show full feature info on mouseover"/>
+          </Properties>
+          <Events>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="fullFeatureInfoCheckboxstateChanged"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JCheckBox(Actions.showDistanceMarkers);"/>
           </AuxValues>
         </Component>
       </SubComponents>

@@ -1,6 +1,7 @@
 package sbrn.mapviewer.data;
 
 import java.util.*;
+import sbrn.mapviewer.gui.*;
 
 /**
  * Class that represents a feature on a map. This is rather abstract for now, so
@@ -146,5 +147,26 @@ public class Feature implements Comparable<Feature>
 			return 1;
 
 		return 0;
+	}
+	
+	public String getFullFeatureInfo()
+	{
+		// get the feature info to display
+		String featureInfo = name + " | " + type + " | " + "Pos:" + Utils.formatFeaturePosition(start) + "-" + Utils.formatFeaturePosition(stop);
+		
+		if(annotation != null)
+			featureInfo += " | " + annotation;	
+		
+		return featureInfo;
+	}
+	
+	public String getMouseOverDisplayLabel(boolean strongEmphasis, boolean isMouseOver)
+	{
+		String label = null;
+		if(Prefs.showFullFeatureInfoOnMouseOver && !strongEmphasis && isMouseOver)
+			label = getFullFeatureInfo();
+		else
+			label = name;		
+		return label;
 	}
 }

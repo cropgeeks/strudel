@@ -56,8 +56,8 @@ public class FeatureSearchHandler
 			//we need to check that we have not exceeded the maximum value of the positions on the chromosome
 			if(intervalEnd > chromoMap.getStop())
 			{
-				TaskDialog.error("The range end value exceeds the maximum position value on the chromosome.", "Close");
-				return;
+				//if we have drawn beyond the end of the chromosome we just reset this value to the chromosome end value
+				intervalEnd = chromoMap.getStop();
 			}
 
 			//also check the range start is less than the range end
@@ -71,9 +71,9 @@ public class FeatureSearchHandler
 			ArrayList<Feature> containedFeatures = new ArrayList<Feature>();
 			for(Feature f : chromoMap.getFeatureList())
 			{
-				boolean featureHasLinks = f.getLinks().size() > 0;
+//				boolean featureHasLinks = f.getLinks().size() > 0;
 				//add the feature only if it is in the interval and has links or if the number of mapsets loaded is 1
-				if((f.getStart() >= intervalStart) && (f.getStart() <= intervalEnd) && (featureHasLinks || Strudel.winMain.dataContainer.gMapSets.size() == 1))
+				if((f.getStart() >= intervalStart) && (f.getStart() <= intervalEnd))
 				{
 					containedFeatures.add(f);
 					featuresInRange.add(f);

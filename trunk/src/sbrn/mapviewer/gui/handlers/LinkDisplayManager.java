@@ -388,7 +388,7 @@ public class LinkDisplayManager
 			{
 				//if the selectedMap is null here that means we have got here not through a mouse based selection event but through displaying the feature table
 				//in that case we can just use the first instance of a map that contains the target feature
-				if(selectedMap == null)
+				if(Strudel.winMain.fatController.selectedMap == null)
 					selectedMap = resultsTableEntry.getTargetFeature().getOwningMap().getGChromoMaps().get(0);
 				
 				checkLinkAndDraw(g2, resultsTableEntry.getTargetFeature(), resultsTableEntry.getHomologFeature(), Float.parseFloat(resultsTableEntry.getLinkEValue()), true, selectedMap);

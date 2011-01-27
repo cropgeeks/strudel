@@ -129,9 +129,8 @@ public class Strudel
 				{
 					if (dataLoaded)
 					{
-						winMain.validate();
-						winMain.mainCanvas.updateCanvas(true);
-						winMain.fatController.initialisePositionArrays();
+						winMain.mainCanvas.updateCanvas(true);	
+						winMain.fatController.initialisePositionArrays();			
 					}
 				}
 

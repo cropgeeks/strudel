@@ -94,8 +94,6 @@ public class WinMain extends JFrame
 
 	//this panel displays hints for the user as to what to do in a given context
 	public static HintPanel hintPanel;
-	
-	public static boolean hideBottomPanel = true;
 
 	//	=================================================curve'tor=====================================
 
@@ -222,7 +220,10 @@ public class WinMain extends JFrame
 			foundFeaturesTableControlPanel = new FoundFeaturesTableControlPanel();
 
 			//this panel contains the zoom controls and the search results panel below it
-			bottomPanel = new JPanel(new BorderLayout());
+			bottomPanel = new JPanel(new BorderLayout());	
+			//for some reason we need to set the bottom panel size to 0 to hide it
+			bottomPanel.setMinimumSize(new Dimension(0,0));
+			bottomPanel.setPreferredSize(new Dimension(0,0));
 
 			//the popup menu we use when are over a chromosome
 			chromoContextPopupMenu  = new ChromoContextPopupMenu();
@@ -258,9 +259,11 @@ public class WinMain extends JFrame
 
 			//this splitpane contains the main panel and the bottom panel
 			splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, mainPanel, bottomPanel);
+			//don't want the divider visible as we want to control this splitpane programmatically only
 			splitPane.setOneTouchExpandable(false);
-//			splitPane.setResizeWeight(1.0);
 			splitPane.setDividerSize(0);
+			//when we resize, give the extra weight to the top component (the canvas)
+			splitPane.setResizeWeight(1.0);			
 
 			//these dialogs can only be instantiated now because they rely on data having been loaded previously
 			ffInRangeDialog = new FindFeaturesInRangeDialog();
@@ -299,27 +302,24 @@ public class WinMain extends JFrame
 
 	public void showBottomPanel()
 	{
-		Strudel.winMain.hideBottomPanel = false;
-		
+		//we want the results table's control panel to be fully visible
 		int controlPanelHeight = (int)Strudel.winMain.foundFeaturesTableControlPanel.getMinimumSize().getHeight();	
 		int newDividerLocation = Strudel.winMain.getHeight() - controlPanelHeight;
-		Strudel.winMain.splitPane.setDividerLocation(newDividerLocation);
+		Strudel.winMain.splitPane.setDividerLocation(newDividerLocation);		
 		
 		//refresh the main canvas
-		Strudel.winMain.validate();
-		Strudel.winMain.mainCanvas.updateCanvas(true);
+		validate();
+		mainCanvas.updateCanvas(true);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void hideBottomPanel()
 	{			
-		splitPane.setDividerLocation(1.0);
-		Strudel.winMain.hideBottomPanel = true;
-
+		splitPane.setDividerLocation(1.0f);
 		//refresh the main canvas
-		Strudel.winMain.validate();
-		Strudel.winMain.mainCanvas.updateCanvas(true);
+		validate();
+		mainCanvas.updateCanvas(true);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------

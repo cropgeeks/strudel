@@ -159,8 +159,8 @@ public class LabelDisplayManager
 		//we need to work out whether the label should go on the right or the left
 		//by default we can have them on the right but if the genome is the last one to the right the label text may extend off screen
 		//check for this and place the label to the left if this is the case
-		int genomeIndex = Strudel.winMain.dataContainer.gMapSets.indexOf(gMap.owningSet);
-		if(genomeIndex == (Strudel.winMain.dataContainer.gMapSets.size()-1))
+		int genomeIndex = Strudel.winMain.dataSet.gMapSets.indexOf(gMap.owningSet);
+		if(genomeIndex == (Strudel.winMain.dataSet.gMapSets.size()-1))
 		{
 			labelOnRight = false;
 		}

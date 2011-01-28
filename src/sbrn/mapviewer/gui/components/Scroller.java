@@ -20,7 +20,7 @@ public class Scroller extends JScrollBar implements AdjustmentListener
 
 	public void adjustmentValueChanged(AdjustmentEvent e)
 	{
-		for (GMapSet gMapSet : Strudel.winMain.dataContainer.gMapSets)
+		for (GMapSet gMapSet : Strudel.winMain.dataSet.gMapSets)
 		{
 			//work out the new scroller position and the corresponding position on the mapset's genome in y
 			int newCenterPoint = (int) (gMapSet.totalY * (e.getValue()/100.0f));

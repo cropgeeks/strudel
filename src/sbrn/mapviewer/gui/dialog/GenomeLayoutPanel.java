@@ -74,18 +74,18 @@ public class GenomeLayoutPanel extends JPanel
 //		{
 //			datasetNames[i] = Strudel.winMain.dataContainer.gMapSets.get(i).name;
 //		}
-		int numDatasets = Strudel.winMain.dataContainer.allMapSets.size();
+		int numDatasets = Strudel.winMain.dataSet.allMapSets.size();
 		datasetNames = new String[numDatasets];
 		for (int i = 0; i < datasetNames.length; i++)
 		{
-			datasetNames[i] = Strudel.winMain.dataContainer.allMapSets.get(i).getName();
+			datasetNames[i] = Strudel.winMain.dataSet.allMapSets.get(i).getName();
 		}
 
 		//restore the dialog box to its initial size before we start adding boxes
 		genomeLayoutDialog.restoreInitialSize();
 
 		//add as many comboboxes as we have gmapsets
-		for (int i = 0; i < Strudel.winMain.dataContainer.gMapSets.size(); i++)
+		for (int i = 0; i < Strudel.winMain.dataSet.gMapSets.size(); i++)
 		{
 			addComboBox(i);
 		}
@@ -102,7 +102,7 @@ public class GenomeLayoutPanel extends JPanel
 		JComboBox jCombo = new JComboBox();
 		FontMetrics fm = jCombo.getFontMetrics(jCombo.getFont());
 
-		for(MapSet mapset : Strudel.winMain.dataContainer.allMapSets)
+		for(MapSet mapset : Strudel.winMain.dataSet.allMapSets)
 		{
 			int stringWidth = fm.stringWidth(mapset.getName());
 			if(stringWidth > maxWidth)
@@ -122,7 +122,7 @@ public class GenomeLayoutPanel extends JPanel
 		JComboBox comboBox = new JComboBox(datasetNames);
 		comboBox.setMaximumSize(comboSize);
 		comboBox.setMinimumSize(comboSize);
-		if(selectedIndex < Strudel.winMain.dataContainer.allMapSets.size())
+		if(selectedIndex < Strudel.winMain.dataSet.allMapSets.size())
 			comboBox.setSelectedIndex(selectedIndex);
 		comboPanel.add(comboBox);
 		comboBoxes.add(comboBox);

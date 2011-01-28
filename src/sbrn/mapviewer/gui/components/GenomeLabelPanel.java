@@ -32,14 +32,14 @@ public class GenomeLabelPanel extends JPanel
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
 		//work out label spacing
-		int numGenomes = Strudel.winMain.dataContainer.gMapSets.size();
+		int numGenomes = Strudel.winMain.dataSet.gMapSets.size();
 		int labelInterval = getWidth() / numGenomes;
 		int spacerLeft = labelInterval / 2;
 
 		// draw the labels
 		for (int i = 0; i < numGenomes; i++)
 		{
-			String genomeName = Strudel.winMain.dataContainer.gMapSets.get(i).name;
+			String genomeName = Strudel.winMain.dataSet.gMapSets.get(i).name;
 			int stringWidth = fm.stringWidth(genomeName);
 			int x = (labelInterval * i) + spacerLeft - (stringWidth / 2);
 			int y = (getHeight() / 2) + (fontHeight / 2);

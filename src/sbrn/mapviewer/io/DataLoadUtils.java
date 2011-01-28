@@ -34,12 +34,31 @@ public class DataLoadUtils
 			String fileSep = System.getProperty("file.separator");
 			inputFileName = workingDir + fileSep + Constants.exampleDataAllInOne;
 		}
+		
+		//work out the file format and set up a parser for it
+		TrackableReader fileImporter = null;
+		StrudelFile strudelFile = new StrudelFile(inputFileName);
+		int fileFormat = -1;
+		try
+		{
+			fileFormat = FileFormatDetector.detectFileFormat(strudelFile.getFile());
+		}
+		catch (FileNotFoundException e)
+		{
+			TaskDialog.error("File not found", "Close");
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		if(fileFormat == FileFormatDetector.FILEFORMAT_STRUDEL)
+			fileImporter = new StrudelFormatParser();
+		else if(fileFormat == FileFormatDetector.FILEFORMAT_MAF)
+			fileImporter = new MAFParser();		
+		fileImporter.setInput(strudelFile);
 
-		SingleFileImporter singleFileImporter = new SingleFileImporter();
-		StrudelFile file = new StrudelFile(inputFileName);
-		singleFileImporter.setInput(file);
-
-		ProgressDialog dialog = new ProgressDialog(singleFileImporter, "Data loading", "Data loading - please wait...");
+		//set up the progress dialog for the data load
+		ProgressDialog dialog = new ProgressDialog(fileImporter, "Data loading", "Data loading - please wait...");
 		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
 		{
 			if (dialog.getResult() == ProgressDialog.JOB_FAILED)
@@ -75,7 +94,7 @@ public class DataLoadUtils
 
 		// check if we need to enable some functionality -- depends on the number of genomes loaded
 		// cannot do comparative stuff if user one loaded one (target) genome
-		if (Strudel.winMain.dataContainer.gMapSets.size() == 1)
+		if (Strudel.winMain.dataSet.gMapSets.size() == 1)
 		{
 			//enables toolbar controls selectively
 			Strudel.winMain.toolbar.enableControls(true);

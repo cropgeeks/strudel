@@ -53,7 +53,9 @@ public abstract class TrackableReader extends SimpleJob
 		throws IOException
 	{
 		lineCount++;
-		return in.readLine();
+		String line = in.readLine();
+//		System.out.println("line = " + line);
+		return line;
 	}
 
 	@Override

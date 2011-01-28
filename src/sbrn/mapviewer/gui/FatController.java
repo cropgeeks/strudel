@@ -122,7 +122,7 @@ public class FatController
 	public void initialisePositionArrays()
 	{
 		// for all gmapsets
-		for (GMapSet gMapSet : winMain.dataContainer.gMapSets)
+		for (GMapSet gMapSet : winMain.dataSet.gMapSets)
 		{
 			// for all gchromomaps within each mapset
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
@@ -188,7 +188,7 @@ public class FatController
 	//without clearing any results
 	public void clearMouseOverLabels()
 	{
-		for(GMapSet gMapSet : winMain.dataContainer.gMapSets)
+		for(GMapSet gMapSet : winMain.dataSet.gMapSets)
 		{
 			//for all maps within mapset
 			for(GChromoMap gMap: gMapSet.gMaps)
@@ -208,7 +208,7 @@ public class FatController
 	//without clearing any results
 	public void resetViewOnly()
 	{
-		for(GMapSet gMapSet : winMain.dataContainer.gMapSets)
+		for(GMapSet gMapSet : winMain.dataSet.gMapSets)
 		{
 			//reset zoom on all mapsets
 			winMain.mainCanvas.zoomHandler.processZoomResetRequest(gMapSet);
@@ -299,7 +299,7 @@ public class FatController
 	//without clearing any results
 	public void clearMapHighlighting()
 	{
-		for(GMapSet gMapSet : winMain.dataContainer.gMapSets)
+		for(GMapSet gMapSet : winMain.dataSet.gMapSets)
 		{
 			gMapSet.wholeMapsetIsSelected = false;
 

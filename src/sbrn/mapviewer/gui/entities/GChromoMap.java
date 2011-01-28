@@ -323,10 +323,10 @@ public class GChromoMap implements Comparable<GChromoMap>
 			// decide where to place the label on x
 			// on the leftmost genome we want the label on the left, rightmost genome on the right
 			boolean labelOnRight = false;
-			int genomeIndex = Strudel.winMain.dataContainer.gMapSets.indexOf(owningSet);
+			int genomeIndex = Strudel.winMain.dataSet.gMapSets.indexOf(owningSet);
 
 			//we want the label on the right if the owning genome is  the last genome on the right
-			if(genomeIndex == (Strudel.winMain.dataContainer.gMapSets.size()-1))
+			if(genomeIndex == (Strudel.winMain.dataSet.gMapSets.size()-1))
 			{
 				labelOnRight = true;
 			}

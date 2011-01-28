@@ -72,7 +72,7 @@ public class CMapLinkImporter
 			e.printStackTrace();
 		}
 
-		if(linkSet.size() == 0 && Strudel.winMain.dataContainer.gMapSets.size() > 1)
+		if(linkSet.size() == 0 && Strudel.winMain.dataSet.gMapSets.size() > 1)
 		{
 			String message = "Linkset does not contain any links between the genomes specified.\n ";
 			throw new Exception(message);

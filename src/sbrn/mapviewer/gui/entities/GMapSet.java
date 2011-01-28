@@ -79,6 +79,9 @@ public class GMapSet
 		this.mapSet = mapSet;
 		this.name = mapSet.getName();
 		numMaps = mapSet.size();
+		
+		//also set the mapset's gmapset to this
+		mapSet.gMapSet = this;
 
 		// init the list of maps contained in this genome
 		initialise();

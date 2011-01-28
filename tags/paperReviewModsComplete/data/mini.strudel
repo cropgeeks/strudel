@@ -1,0 +1,28 @@
+feature	genome1	1_1	feat1_1_1	SNP	0
+feature	genome1	1_1	feat1_1_2	SNP	46
+feature	genome1	1_1	feat1_1_3	SNP	97
+feature	genome1	1_2	feat1_2_1	SNP	2
+feature	genome1	1_2	feat1_2_2	SNP	12
+feature	genome1	1_2	feat1_2_3	SNP	123
+feature	genome2	2_1	feat2_1_1	SNP	12
+feature	genome2	2_1	feat2_1_2	SNP	13
+feature	genome2	2_1	feat2_1_3	SNP	123
+feature	genome2	2_2	feat2_2_1	SNP	4
+feature	genome2	2_2	feat2_2_2	SNP	2
+feature	genome2	2_2	feat2_2_3	SNP	111
+feature	genome3	3_1	feat3_1_1	SNP	34
+feature	genome3	3_1	feat3_1_2	SNP	56
+feature	genome3	3_1	feat3_1_3	SNP	78
+feature	genome3	3_2	feat3_2_1	SNP	456
+feature	genome3	3_2	feat3_2_2	SNP	123
+feature	genome3	3_2	feat3_2_3	SNP	789
+homolog	genome1	feat1_1_1	genome2	feat2_2_1	0.00E+00		#00FF00
+homolog	genome3	feat3_2_1	genome2	feat2_2_2	0.00E+00		#00FF00
+homolog	genome2	feat2_2_3	genome3	feat3_1_2	0.00E+00
+homolog	genome1	feat1_1_2	genome3	feat3_1_3	0.00E+00
+homolog	genome3	feat3_2_1	genome1	feat1_1_2	0.00E+00
+homolog	genome2	feat2_1_3	genome1	feat1_2_3	0.00E+00
+homolog	genome1	feat1_1_3	genome3	feat3_2_3	0.00E+00
+homolog	genome3	feat3_2_2	genome2	feat2_1_1	0.00E+00
+homolog	genome2	feat2_2_3	genome1	feat1_2_1	0.00E+00
+chromosome	genome1	1_1	#593423

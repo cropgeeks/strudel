@@ -183,7 +183,7 @@ public class MainCanvas extends JPanel
 	{
 		//now we need to draw the rest of the things relating to the map
 		//this needs to be done after drawing the links so it is all visible on top of the links
-		for (GMapSet gMapSet : winMain.dataContainer.gMapSets)
+		for (GMapSet gMapSet : winMain.dataSet.gMapSets)
 		{
 			// for each chromosome in the genome
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
@@ -204,7 +204,7 @@ public class MainCanvas extends JPanel
 	{
 		//now we need to draw the rest of the things relating to the map
 		//this needs to be done after drawing the links so it is all visible on top of the links
-		for (GMapSet gMapSet : winMain.dataContainer.gMapSets)
+		for (GMapSet gMapSet : winMain.dataSet.gMapSets)
 		{
 			// for each chromosome in the genome
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
@@ -226,17 +226,17 @@ public class MainCanvas extends JPanel
 		calcRequiredParams(g2);
 
 		//for all mapsets
-		for (GMapSet gMapSet : winMain.dataContainer.gMapSets)
+		for (GMapSet gMapSet : winMain.dataSet.gMapSets)
 		{
 			if (killMe) return;
 
 			checkMarkerPaintingThresholds(gMapSet);
 
 			//calculate the x position for this genome
-			int numGenomes = winMain.dataContainer.gMapSets.size();
+			int numGenomes = winMain.dataSet.gMapSets.size();
 			int genomeInterval = getWidth()/numGenomes;
 			int spacerLeft = genomeInterval/2;
-			gMapSet.xPosition = (genomeInterval * winMain.dataContainer.gMapSets.indexOf(gMapSet)) + spacerLeft - chromoWidth/2;
+			gMapSet.xPosition = (genomeInterval * winMain.dataSet.gMapSets.indexOf(gMapSet)) + spacerLeft - chromoWidth/2;
 
 			// work out the other coordinates needed
 			// these are genome specific because we can have a different zoom factor for each genome
@@ -288,7 +288,7 @@ public class MainCanvas extends JPanel
 		
 		//we also want to check whether there are any links to display that are to be highlighted after a name based search for
 		//features and links originating from them
-		if (!killMe && winMain.fatController.highlightedTableEntries != null && Strudel.winMain.dataContainer.gMapSets.size() > 1)
+		if (!killMe && winMain.fatController.highlightedTableEntries != null && Strudel.winMain.dataSet.gMapSets.size() > 1)
 		{
 			linkDisplayManager.drawHighlightedLinksForTableEntries(winMain.fatController.highlightedTableEntries, g2, winMain.fatController.selectedMap);
 			LabelDisplayManager.drawLabelsForTableEntries(winMain.fatController.highlightedTableEntries,g2, true, winMain.fatController.selectedMap);
@@ -314,7 +314,7 @@ public class MainCanvas extends JPanel
 		if (gMapSet.zoomFactor == 1)
 		{
 			// the height of a chromosome
-			gMapSet.chromoHeight = (availableSpaceVertically - allSpacers) / winMain.dataContainer.maxChromos;
+			gMapSet.chromoHeight = (availableSpaceVertically - allSpacers) / winMain.dataSet.maxChromos;
 			initialChromoHeight = gMapSet.chromoHeight;
 			initialCanvasHeight = canvasHeight;
 
@@ -366,7 +366,7 @@ public class MainCanvas extends JPanel
 		// the total amount of space we have for drawing on vertically, in pixels
 		availableSpaceVertically = canvasHeight - (chromoSpacing * 2);
 		// the combined height of all the vertical spaces between chromosomes
-		allSpacers = chromoSpacing * (winMain.dataContainer.maxChromos - 1);
+		allSpacers = chromoSpacing * (winMain.dataSet.maxChromos - 1);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
@@ -389,7 +389,7 @@ public class MainCanvas extends JPanel
 
 		//ideally we want something like at least 4 times the chromowidth between genomes or else the links get awfully cluttered
 		//if we have so many genomes that this is impossible then we have to reduce this or else go for the minimum width
-		int numGenomes = winMain.dataContainer.gMapSets.size();
+		int numGenomes = winMain.dataSet.gMapSets.size();
 		//the multiplier we use for this
 		int multiplier = 4;
 		int combinedWidthAllGenomes = numGenomes*chromoWidth;
@@ -473,7 +473,7 @@ public class MainCanvas extends JPanel
 	private void drawAllMapIndices(Graphics2D g2)
 	{
 		//last we want to draw the chromosome indexes so they are painted on top of all other stuff
-		for (GMapSet gMapSet : winMain.dataContainer.gMapSets)
+		for (GMapSet gMapSet : winMain.dataSet.gMapSets)
 		{
 			// for each chromosome in the genome
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
@@ -499,7 +499,7 @@ public class MainCanvas extends JPanel
 		g2.setFont(mapLabelFont);
 		int fontHeight = g2.getFontMetrics().getHeight()-4;
 
-		for (GMapSet gMapSet : winMain.dataContainer.gMapSets)
+		for (GMapSet gMapSet : winMain.dataSet.gMapSets)
 		{
 			// for each chromosome in the genome
 			for (GChromoMap gChromoMap : gMapSet.gMaps)

@@ -35,7 +35,7 @@ public class MTFindFeaturesInRangePanel extends javax.swing.JPanel implements Ac
 	{
 		//set up the combo boxes with their data models
 		Vector<String> genomes = new Vector<String>();
-		for (MapSet mapSet : Strudel.winMain.dataContainer.allMapSets)
+		for (MapSet mapSet : Strudel.winMain.dataSet.allMapSets)
 		{
 			genomes.add(mapSet.getName());
 		}

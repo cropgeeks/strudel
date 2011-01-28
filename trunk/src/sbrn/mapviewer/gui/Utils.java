@@ -46,7 +46,7 @@ public class Utils
 		MapSet foundSet = null;
 
 		// for all mapsets
-		for (MapSet mapSet : Strudel.winMain.dataContainer.allMapSets)
+		for (MapSet mapSet : Strudel.winMain.dataSet.allMapSets)
 		{
 			if(mapSet.getName().equals(name))
 				foundSet = mapSet;
@@ -67,7 +67,7 @@ public class Utils
 		//we need to search all chromomaps in all mapsets for this
 		GMapSet foundSet = null;
 		// for all gmapsets
-		for (GMapSet gMapSet : Strudel.winMain.dataContainer.gMapSets)
+		for (GMapSet gMapSet : Strudel.winMain.dataSet.gMapSets)
 		{
 			if(gMapSet.name.equals(gMapSetName))
 			{
@@ -96,7 +96,7 @@ public class Utils
 		//we need to search all chromomaps in all mapsets for this
 		GMapSet foundSet = null;
 		// for all gmapsets
-		for (GMapSet gMapSet : Strudel.winMain.dataContainer.gMapSets)
+		for (GMapSet gMapSet : Strudel.winMain.dataSet.gMapSets)
 		{			
 			if(gMapSet == targetSet)
 			{
@@ -124,7 +124,7 @@ public class Utils
 
 		//we need to search all chromomaps in all mapsets for this
 		// for all gmapsets
-		for (GMapSet gMapSet : Strudel.winMain.dataContainer.gMapSets)
+		for (GMapSet gMapSet : Strudel.winMain.dataSet.gMapSets)
 		{
 			// for all gchromomaps within each mapset
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
@@ -148,7 +148,7 @@ public class Utils
 		
 		//we need to search all chromomaps in all mapsets for this
 		// for all gmapsets
-		for (GMapSet gMapSet : Strudel.winMain.dataContainer.gMapSets)
+		for (GMapSet gMapSet : Strudel.winMain.dataSet.gMapSets)
 		{
 			// for all gchromomaps within each mapset
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
@@ -192,46 +192,6 @@ public class Utils
 
 	// --------------------------------------------------------------------------------------------------------------------------------
 
-	public static void addLinkToLinkset(LinkSet linkSet, Feature feature1, Feature feature2, String blastScoreStr, String linkAnnotation, Color color)
-	{
-		// Pair up every instance of f1 with f2
-		Link link = new Link(feature1, feature2);
-		linkSet.addLink(link);
-
-		// We also add the Link to each Feature so the Feature
-		// itself knows about the links it has with others
-		feature1.getLinks().add(link);
-		feature2.getLinks().add(link);
-
-		//add the BLAST score as evidence
-		try
-		{
-			DecimalFormat df = new DecimalFormat("0.###E0");
-			Number blastScore = df.parse(blastScoreStr);
-			link.setBlastScore(blastScore.doubleValue());
-		}
-		catch (ParseException e)
-		{
-			throw new NumberFormatException("The homology between " + feature1 + " and " + feature2 + " contains an invalid e-Value. ");
-		}
-
-		//add the annotation, if there is any
-		if(linkAnnotation != null)
-			link.setAnnotation(linkAnnotation);
-
-		//add the color, if there is one
-		if (color != null)
-		{
-			link.r = color.getRed();
-			link.g = color.getGreen();
-			link.b = color.getBlue();
-		}
-
-		// TODO: Do we want to add a list of references Features to the Feature object itself, so it knows who it links to?
-		// If so, how do we deal with, eg removing MapSets andkeeping these lists (and the LinkSet!) up to date.
-
-	}
-	// --------------------------------------------------------------------------------------------------------------------------------
 
 	// Searches over single MapSet to find a feature whose name matches the one given.
 	public static Feature getFeatureByName(String name, MapSet mapSet ) throws Exception
@@ -246,7 +206,6 @@ public class Utils
 				if(checkFeature != null)
 					feature = checkFeature;
 			}
-
 		}
 		catch (Exception e)
 		{
@@ -296,7 +255,7 @@ public class Utils
 		{
 			boolean featureHasLinks = f.getLinks().size() > 0;
 			//add the feature only if it is in the interval and has links or if the number of mapsets loaded is 1
-			if((f.getStart() >= intervalStart) && (f.getStart() <= intervalEnd) && (featureHasLinks || Strudel.winMain.dataContainer.gMapSets.size() == 1))
+			if((f.getStart() >= intervalStart) && (f.getStart() <= intervalEnd) && (featureHasLinks || Strudel.winMain.dataSet.gMapSets.size() == 1))
 				containedFeatures.add(f);
 		}
 		return containedFeatures;
@@ -368,7 +327,7 @@ public class Utils
 
 		// check whether the point x,y lies within one of the bounding rectangles of our chromosomes
 		// for each chromosome in each genome
-		for (GMapSet gMapSet : Strudel.winMain.dataContainer.gMapSets)
+		for (GMapSet gMapSet : Strudel.winMain.dataSet.gMapSets)
 		{
 			for (GChromoMap gChromoMap : gMapSet.gMaps)
 			{
@@ -416,7 +375,7 @@ public class Utils
 		GChromoMap selectedMap = null;
 
 		//the number of genomes we have loaded
-		int numGenomes = Strudel.winMain.dataContainer.gMapSets.size();
+		int numGenomes = Strudel.winMain.dataSet.gMapSets.size();
 		//the size of the sectors occupied by each of the genomes on the main canvas
 		int interValSize = Math.round(Strudel.winMain.mainCanvas.getWidth() / numGenomes);
 
@@ -426,7 +385,7 @@ public class Utils
 		Rectangle intersectLine = new Rectangle(xLeft, y, interValSize, 1);
 
 		//now check all the chromosomes' bounding rectangles in this mapset for intersection
-		for (GChromoMap gChromoMap : Strudel.winMain.dataContainer.gMapSets.get(gMapSetIndex).gMaps)
+		for (GChromoMap gChromoMap : Strudel.winMain.dataSet.gMapSets.get(gMapSetIndex).gMaps)
 		{
 			// check whether the hit falls within its current bounding rectangle
 			if (gChromoMap.boundingRectangle.intersects(intersectLine))
@@ -447,7 +406,7 @@ public class Utils
 		//the index of the mapset in the list kept by the DataContainer object
 		int index = -1;
 		//the number of genomes we have loaded
-		int numGenomes = Strudel.winMain.dataContainer.gMapSets.size();
+		int numGenomes = Strudel.winMain.dataSet.gMapSets.size();
 		//the size of the sectors occupied by each of the genomes on the main canvas
 		int interValSize = Math.round(Strudel.winMain.mainCanvas.getWidth() / numGenomes);
 		//where we had our mouse hit
@@ -725,8 +684,8 @@ public class Utils
 	//checks whether two gmapsets are next to each other, in either direction
 	public static boolean areMapSetsAdjacent(GMapSet set1, GMapSet set2)
 	{
-		int index1 = Strudel.winMain.dataContainer.gMapSets.indexOf(set1);
-		int index2 = Strudel.winMain.dataContainer.gMapSets.indexOf(set2);
+		int index1 = Strudel.winMain.dataSet.gMapSets.indexOf(set1);
+		int index2 = Strudel.winMain.dataSet.gMapSets.indexOf(set2);
 		return Math.abs(index1 - index2) == 1;
 	}
 
@@ -739,12 +698,12 @@ public class Utils
 	{
 		GChromoMap closestMap = null;
 
-		int targetIndex = Strudel.winMain.dataContainer.gMapSets.indexOf(targetGMap.owningSet);
+		int targetIndex = Strudel.winMain.dataSet.gMapSets.indexOf(targetGMap.owningSet);
 		int leastDistance = Integer.MAX_VALUE;
 
 		for(GChromoMap refGMap : refMap.getGChromoMaps())
 		{
-			int refIndex = Strudel.winMain.dataContainer.gMapSets.indexOf(refGMap.owningSet);
+			int refIndex = Strudel.winMain.dataSet.gMapSets.indexOf(refGMap.owningSet);
 			int dist = Math.abs(refIndex - targetIndex);
 
 			if(dist < leastDistance)

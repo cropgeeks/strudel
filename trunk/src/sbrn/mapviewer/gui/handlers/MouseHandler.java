@@ -57,7 +57,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		//double click means zoom into single chromo so it fills the screen
 		if (e.getClickCount() == 2)
 		{
-			GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, e.getX(),
+			GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.dataSet.gMapSets, e.getX(),
 							e.getY());
 
 			if (selectedMap != null)
@@ -92,7 +92,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		lastMouseDragYPos = e.getY();
 		timeOfMouseDown = System.currentTimeMillis();
 
-		GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, e.getX(), e.getY());
+		GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.dataSet.gMapSets, e.getX(), e.getY());
 		
 		//check whether this is a popup request -- needs to be done both in mousePressed and in mouseReleased due to platform dependent nonsense
 		if (e.isPopupTrigger())
@@ -154,7 +154,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		//check whether this is a popup request -- needs to be done both in mousePressed and in mouseReleased due to platform dependent nonsense
 		if (e.isPopupTrigger())
 		{
-			GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, e.getX(), e.getY());
+			GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.dataSet.gMapSets, e.getX(), e.getY());
 			//this is for bringing up a context menu when the mouse is over a chromosome
 			if(selectedMap != null)
 			{
@@ -194,7 +194,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 
 		// figure out which genome this event pertains to (i.e. which section of the canvas on x are we in)
 		int index = Utils.getSelectedSetIndex(e);
-		GMapSet gMapSet = Strudel.winMain.dataContainer.gMapSets.get(index);
+		GMapSet gMapSet = Strudel.winMain.dataSet.gMapSets.get(index);
 
 		//mouse is getting dragged without shift held down -- scroll the canvas up or down
 		if (!e.isShiftDown())
@@ -229,7 +229,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		if(e.isShiftDown() && isMetaClick(e))
 		{	
 			//the chromosome -- if any - this event pertains to (i.e. where on the canvas on y are we)
-			GChromoMap mouseOverMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, (int)(gMapSet.xPosition), y);
+			GChromoMap mouseOverMap = Utils.getSelectedMap(Strudel.winMain.dataSet.gMapSets, (int)(gMapSet.xPosition), y);
 
 			//this is what we need to do the first time we select a map in this current round
 			//if nothing is selected we assume we want to select the map we are current mousing over
@@ -327,7 +327,7 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	{
 		// figure out which genome we are moving
 		int index = Utils.getSelectedSetIndex(e);
-		GMapSet selectedSet = Strudel.winMain.dataContainer.gMapSets.get(index);
+		GMapSet selectedSet = Strudel.winMain.dataSet.gMapSets.get(index);
 
 		//this moves the genome center point up and down
 		int newCenterPoint = -1;

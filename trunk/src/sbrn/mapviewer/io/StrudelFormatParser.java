@@ -11,7 +11,7 @@ import sbrn.mapviewer.gui.dialog.*;
 /**
  * Used for importing data in the single file Strudel format. For example see data/singleLineFileFormatExample.xlsx.
  */
-public class SingleFileImporter extends TrackableReader
+public class StrudelFormatParser extends TrackableReader
 {
 	//==========================================methods==================================================
 
@@ -37,7 +37,7 @@ public class SingleFileImporter extends TrackableReader
 	//the file format has a single line entry for either a feature, homology or URL
 	//the first field says which type it is
 	//features are expected first in the file, then links
-	public void parseCombinedFile() throws Exception
+	public void parseStrudelFile() throws Exception
 	{
 		int lineCount = 1;
 
@@ -90,7 +90,9 @@ public class SingleFileImporter extends TrackableReader
 			sortFeatures();
 
 			//set up the mapsets
-			Strudel.winMain.dataContainer.setUpGMapSets(allLinkSets, allMapSets);
+			DataSet dataSet = new DataSet();
+			dataSet.setUpGMapSets(allLinkSets, allMapSets);
+			Strudel.winMain.dataSet = dataSet;
 
 			Strudel.dataLoaded = true;
 		}
@@ -295,30 +297,7 @@ public class SingleFileImporter extends TrackableReader
 		{
 			missingFeatures.add(featureName2);
 		}
-
-		LinkSet linkSet = null;
-		//check whether a linkset between these two genomes exists already
-		for (LinkSet ls : allLinkSets)
-		{
-			if(ls.getMapSets().size() == 0 || ls.getMapSets() == null)
-				throw new Exception("Homology cannot be processed - check the features involved have feature entries in the file.");
-
-			String mapset1 = ls.getMapSets().get(0).getName();
-			String mapset2 = ls.getMapSets().get(1).getName();
-
-			if ((mapset1.equalsIgnoreCase(genome1Name) && mapset2.equalsIgnoreCase(genome2Name)) ||
-							(mapset1.equalsIgnoreCase(genome2Name) && mapset2.equalsIgnoreCase(genome1Name)))
-			{
-				linkSet = ls;
-			}
-		}
-		//if not, make a new linkset and add it to our local list
-		if(linkSet == null)
-		{
-			linkSet = new LinkSet();
-			allLinkSets.add(linkSet);
-		}
-
+		
 		//the last token in the array contains the annotation but for the user's convenience this may just be left blank
 		//need to check for this
 		String annotation = null;
@@ -334,10 +313,8 @@ public class SingleFileImporter extends TrackableReader
 		Color color = null;
 		if (tokens.length >= 8)
 			color = Color.decode(tokens[7]);
-
-		//this method adds the link between the two features to the linkset
-		if(linkSet != null && feature1 != null && feature2 != null)
-			Utils.addLinkToLinkset(linkSet, feature1, feature2, eValueStr, annotation, color);
+		
+		IOUtils.addLinkToLinkSet(genome1Name, genome2Name, allLinkSets, feature1, feature2, eValueStr, annotation, color);
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -419,7 +396,8 @@ public class SingleFileImporter extends TrackableReader
 	public void runJob() throws Exception
 	{
 		in = new BufferedReader(new InputStreamReader(getInputStream(true), "ASCII"));
-		parseCombinedFile();
+		parseStrudelFile();
+		in.close();
 	}
 
 	@Override

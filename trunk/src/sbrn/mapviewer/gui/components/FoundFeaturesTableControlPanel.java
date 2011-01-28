@@ -190,7 +190,7 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel implement
 		//set up the combo box with its data model
 		Vector<String> genomes = new Vector<String>();
 		genomes.add("<none>");
-		for (MapSet mapSet : Strudel.winMain.dataContainer.allMapSets)
+		for (MapSet mapSet : Strudel.winMain.dataSet.allMapSets)
 		{
 			genomes.add(mapSet.getName());
 		}

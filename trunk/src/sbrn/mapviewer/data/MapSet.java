@@ -2,6 +2,7 @@ package sbrn.mapviewer.data;
 
 import java.util.*;
 import sbrn.mapviewer.*;
+import sbrn.mapviewer.gui.entities.*;
 
 /**
  * A MapSet holds a collection of chromosome map (ChromoMap) objects.
@@ -17,6 +18,9 @@ public class MapSet implements Iterable<ChromoMap>
 
 	// Holds a list of all the maps in this set
 	private final Vector<ChromoMap> maps = new Vector<ChromoMap>();
+	
+	//the mapset's graphical representation
+	public GMapSet gMapSet;
 
 	/**
 	 * Constructs a new map set.

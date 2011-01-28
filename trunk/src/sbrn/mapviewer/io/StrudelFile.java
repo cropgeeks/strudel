@@ -28,6 +28,11 @@ public class StrudelFile
 	{
 		return filename;
 	}
+	
+	public File getFile()
+	{
+		return file;
+	}
 
 	public String getName()
 	{

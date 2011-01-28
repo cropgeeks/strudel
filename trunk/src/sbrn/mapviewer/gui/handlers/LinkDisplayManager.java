@@ -51,7 +51,7 @@ public class LinkDisplayManager
 		Vector<GChromoMap> selectedMaps = Strudel.winMain.fatController.selectedMaps;
 
 		//only do this if we have reference genomes -- otherwise there are no links
-		if(Strudel.winMain.dataContainer.gMapSets.size() > 1)
+		if(Strudel.winMain.dataSet.gMapSets.size() > 1)
 		{
 			// the click has hit a chromosome
 			if (selectedMap != null)
@@ -121,7 +121,7 @@ public class LinkDisplayManager
 		int numAllLinksDrawn = 0;
 
 		//only do this if we have at least 2 genomes -- otherwise there are no links to deal with
-		if(Strudel.winMain.dataContainer.gMapSets.size() > 1)
+		if(Strudel.winMain.dataSet.gMapSets.size() > 1)
 		{
 			try
 			{
@@ -200,13 +200,13 @@ public class LinkDisplayManager
 						int referenceChromoX = 0;
 						//need to adjust the x positions of the links here
 						//if the reference genome is one position to the right of the target genome (indicated by their positions in the list of mapsets held in the datacontainer)
-						if (Strudel.winMain.dataContainer.gMapSets.indexOf(targetGMapSet) == (Strudel.winMain.dataContainer.gMapSets.indexOf(referenceGMapSet)-1))
+						if (Strudel.winMain.dataSet.gMapSets.indexOf(targetGMapSet) == (Strudel.winMain.dataSet.gMapSets.indexOf(referenceGMapSet)-1))
 						{
 							targetChromoX = Math.round(targetGMapSet.xPosition + targetGMapSet.gMaps.get(0).width) + 1;
 							referenceChromoX = Math.round(referenceGMapSet.xPosition) -1;
 						}
 						//the ref genome is one position to the left of the target genome
-						else if (Strudel.winMain.dataContainer.gMapSets.indexOf(targetGMapSet) == (Strudel.winMain.dataContainer.gMapSets.indexOf(referenceGMapSet)+1))
+						else if (Strudel.winMain.dataSet.gMapSets.indexOf(targetGMapSet) == (Strudel.winMain.dataSet.gMapSets.indexOf(referenceGMapSet)+1))
 						{
 							// we want the referenceChromoX to be the mapsets x plus its width
 							referenceChromoX = Math.round(referenceGMapSet.xPosition + referenceGMapSet.gMaps.get(0).width) + 1;
@@ -328,7 +328,7 @@ public class LinkDisplayManager
 
 		//need to adjust the x positions of the links here
 		//if the reference genome is to the right of the target genome (indicated by their positions in the list of mapsets held inthe datacontainer)
-		if (Strudel.winMain.dataContainer.gMapSets.indexOf(targetGMapSet) < Strudel.winMain.dataContainer.gMapSets.indexOf(referenceGMapSet) )
+		if (Strudel.winMain.dataSet.gMapSets.indexOf(targetGMapSet) < Strudel.winMain.dataSet.gMapSets.indexOf(referenceGMapSet) )
 		{
 			targetChromoX = Math.round(targetGMapSet.xPosition + targetGMapSet.gMaps.get(0).width);
 			referenceChromoX = Math.round(referenceGMapSet.xPosition);
@@ -458,7 +458,7 @@ public class LinkDisplayManager
 	public void drawHighlightedLinksInRange(Graphics2D g2, GChromoMap selectedMap)
 	{
 		//only do this if we have at least 2 genomes -- otherwise there are no links to deal with
-		if(Strudel.winMain.dataContainer.gMapSets.size() > 1)
+		if(Strudel.winMain.dataSet.gMapSets.size() > 1)
 		{
 			//get the entries from the results table
 			TableModel model = Strudel.winMain.ffResultsPanel.resultsTable.getModel();
@@ -492,7 +492,7 @@ public class LinkDisplayManager
 			int numEntriesMade = 0;
 
 			//for each genome
-			for(MapSet mapset : Strudel.winMain.dataContainer.allMapSets)
+			for(MapSet mapset : Strudel.winMain.dataSet.allMapSets)
 			{
 				//for each map
 				for(ChromoMap cMap : mapset)

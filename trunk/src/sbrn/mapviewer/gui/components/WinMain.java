@@ -23,8 +23,8 @@ public class WinMain extends JFrame
 
 	//	=================================================vars=====================================
 
-	//this is where we hold the genome data
-	public DataContainer dataContainer = new DataContainer();
+	//this is where we hold all  our data from the current dataset
+	public DataSet dataSet = null;
 
 	//a list of the zoom control panels
 	public LinkedList<ZoomControlPanel> zoomControlPanels = new LinkedList<ZoomControlPanel>();
@@ -376,7 +376,7 @@ public class WinMain extends JFrame
 	private void initOverviewDialog()
 	{
 		//the overviews for the genomes
-		for (GMapSet gMapSet : dataContainer.gMapSets)
+		for (GMapSet gMapSet : dataSet.gMapSets)
 		{
 			OverviewCanvas overviewCanvas = new OverviewCanvas(this,gMapSet);
 			overviewCanvas.setPreferredSize(new Dimension(0,250));
@@ -390,12 +390,12 @@ public class WinMain extends JFrame
 
 	private void initZoomControls()
 	{
-		zoomControlContainerPanel = new JPanel(new GridLayout(1, dataContainer.gMapSets.size()));
+		zoomControlContainerPanel = new JPanel(new GridLayout(1, dataSet.gMapSets.size()));
 
 		//if there is only one genome showing, we want a shorter zoom control that does not fill the width of  the entire canvas
-		if(dataContainer.gMapSets.size() == 1)
+		if(dataSet.gMapSets.size() == 1)
 		{
-			ZoomControlPanel zoomControlPanel = new ZoomControlPanel(this, dataContainer.gMapSets.get(0), true);
+			ZoomControlPanel zoomControlPanel = new ZoomControlPanel(this, dataSet.gMapSets.get(0), true);
 			zoomControlPanel.zoomSlider.setMaximumSize(new Dimension(500, Short.MAX_VALUE));
 			zoomControlContainerPanel.add(zoomControlPanel);
 			zoomControlPanels.add(zoomControlPanel);
@@ -403,7 +403,7 @@ public class WinMain extends JFrame
 		else
 		{
 			//the panels with the zoom control sliders
-			for (GMapSet gMapSet : dataContainer.gMapSets)
+			for (GMapSet gMapSet : dataSet.gMapSets)
 			{
 				ZoomControlPanel zoomControlPanel = new ZoomControlPanel(this, gMapSet, false);
 				zoomControlContainerPanel.add(zoomControlPanel);

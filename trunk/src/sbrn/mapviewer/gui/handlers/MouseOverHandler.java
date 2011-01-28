@@ -36,7 +36,7 @@ public class MouseOverHandler
 		try
 		{
 			// first figure out which chromosome we are in
-			selectedMap = Utils.getSelectedMap(Strudel.winMain.dataContainer.gMapSets, x, y);
+			selectedMap = Utils.getSelectedMap(Strudel.winMain.dataSet.gMapSets, x, y);
 
 			//update the hint panel
 			HintPanel.upDate();

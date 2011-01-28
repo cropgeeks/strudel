@@ -68,7 +68,7 @@ public class OverviewDialog extends JDialog
 
 	void createLayout()
 	{
-		setLayout(new GridLayout(1, Strudel.winMain.dataContainer.gMapSets.size()));
+		setLayout(new GridLayout(1, Strudel.winMain.dataSet.gMapSets.size()));
 	}
 
 }

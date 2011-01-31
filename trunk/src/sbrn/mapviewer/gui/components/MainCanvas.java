@@ -10,6 +10,7 @@ import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
 import sbrn.mapviewer.gui.entities.*;
 import sbrn.mapviewer.gui.handlers.*;
+import scri.commons.gui.*;
 
 public class MainCanvas extends JPanel
 {
@@ -24,7 +25,7 @@ public class MainCanvas extends JPanel
 	public int canvasWidth;
 
 	// space the chromosomes vertically by this fixed amount
-	public int chromoSpacing = 15;
+	public static int chromoSpacing = 15;
 
 	// do we need to draw links?
 	public boolean drawLinks = false;
@@ -87,6 +88,7 @@ public class MainCanvas extends JPanel
 	public int numMarkersDrawn = 0;
 
 	Rectangle canvasBounds = null;
+	
 
 	// ============================curve'tor==================================
 

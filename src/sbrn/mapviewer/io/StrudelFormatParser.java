@@ -11,7 +11,7 @@ import sbrn.mapviewer.gui.dialog.*;
 /**
  * Used for importing data in the single file Strudel format. For example see data/singleLineFileFormatExample.xlsx.
  */
-public class StrudelFormatParser extends TrackableReader
+public class StrudelFormatParser extends AbtractFileParser
 {
 	//==========================================methods==================================================
 
@@ -30,6 +30,8 @@ public class StrudelFormatParser extends TrackableReader
 	//this is used to check whether the file contains any more features after the homologs
 	boolean firstFeatureParsed = false;
 	boolean allFeaturesParsed = false;
+	
+
 
 	//==========================================methods==================================================
 
@@ -37,7 +39,7 @@ public class StrudelFormatParser extends TrackableReader
 	//the file format has a single line entry for either a feature, homology or URL
 	//the first field says which type it is
 	//features are expected first in the file, then links
-	public void parseStrudelFile() throws Exception
+	public void parseFile() throws Exception
 	{
 		int lineCount = 1;
 
@@ -92,6 +94,7 @@ public class StrudelFormatParser extends TrackableReader
 			//set up the mapsets
 			DataSet dataSet = new DataSet();
 			dataSet.setUpGMapSets(allLinkSets, allMapSets);
+			dataSet.fileName = getFile().getName();
 			Strudel.winMain.dataSet = dataSet;
 
 			Strudel.dataLoaded = true;
@@ -392,28 +395,6 @@ public class StrudelFormatParser extends TrackableReader
 		}
 	}
 
-	@Override
-	public void runJob() throws Exception
-	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(true), "ASCII"));
-		parseStrudelFile();
-		in.close();
-	}
 
-	@Override
-	public String getMessage()
-	{
-		String blah = getTransferRate();
-		return "Loading at: " + blah;
-	}
-
-	@Override
-	public int getJobCount()
-	{
-		return 1;
-	}
-
-
-	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 }

@@ -150,4 +150,9 @@ public class ProgressDialog extends JDialog implements Runnable, ActionListener
 	{
 		return nbPanel.mainLabel;
 	}
+	
+	public NBProgressPanel getProgressPanel()
+	{
+		return nbPanel;
+	}
 }

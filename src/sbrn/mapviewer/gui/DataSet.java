@@ -21,6 +21,9 @@ public class DataSet
 
 	// the maximum number of chromos in any one of the genomes involved
 	public int maxChromos;
+	
+	//the name of the file associated with this dataset
+	public String fileName;
 
 	// ============================================methods==========================================
 

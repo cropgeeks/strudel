@@ -147,4 +147,9 @@ public abstract class TrackableReader extends SimpleJob
 
 		return df.format(kbPerSec) + " KB/sec";
 	}
+	
+	public StrudelFile getFile()
+	{
+		return file;
+	}
 }

@@ -3,20 +3,24 @@ package sbrn.mapviewer.io;
 import java.io.*;
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
-import sbrn.mapviewer.gui.components.WinMain;
+import sbrn.mapviewer.gui.components.*;
 import sbrn.mapviewer.gui.dialog.*;
+import sbrn.mapviewer.gui.entities.*;
 import sbrn.mapviewer.gui.handlers.LinkDisplayManager;
 
 import scri.commons.gui.TaskDialog;
 
 public class DataLoadUtils
 {
+	
+	//the minimum chromosome height we will allow
+	final static int minimumChromosomeHeight = 5;
 
 	public static void loadDataInThread(String inputFileName, boolean commandLineLoad)
 	{
 		//first check that we have at least one pointer at a file with target feature data -- the bare minimum to run this application
 		//missing target data file
-
+		
 		//if the user wants to load their own data we need to check they have provided the correct file combination
 		if(Strudel.winMain.fatController.loadOwnData)
 		{
@@ -46,6 +50,7 @@ public class DataLoadUtils
 		catch (FileNotFoundException e)
 		{
 			TaskDialog.error("File not found", "Close");
+			return;
 		}
 		catch (IOException e)
 		{
@@ -70,14 +75,21 @@ public class DataLoadUtils
 			return;
 		}
 		else if(dialog.getResult() == ProgressDialog.JOB_COMPLETED)
-			checkLoadCompleted(inputFileName);
+		{
+			//store the input file in the recent files list
+			File inputFile = new File(inputFileName);
+			Prefs.setRecentDocument(inputFile.getAbsolutePath());
+		}
 	}
 
-	private static void checkLoadCompleted(String inputFileName)
+	public static boolean setUpViewAfterDataLoading()
 	{
-		File inputFile = new File(inputFileName);
-		//store the input file in the recent files list
-		Prefs.setRecentDocument(inputFile.getAbsolutePath());
+		//this checks whether we have too many maps to display
+		boolean mapNumbersOK = checkMapNumbers();
+		if(!mapNumbersOK)
+			return false;
+		
+		LinkDisplayManager.initLinkSetLookup();
 
 		// build the rest of the GUI as required
 		if (!Strudel.winMain.fatController.guiFullyAssembled)
@@ -90,7 +102,7 @@ public class DataLoadUtils
 		}
 
 		//display the name of the current dataset in the window title bar
-		Strudel.winMain.setTitle(inputFile.getName() + " -- Strudel " + Install4j.VERSION);
+		Strudel.winMain.setTitle(Strudel.winMain.dataSet.fileName + " -- Strudel " + Install4j.VERSION);
 
 		// check if we need to enable some functionality -- depends on the number of genomes loaded
 		// cannot do comparative stuff if user one loaded one (target) genome
@@ -113,7 +125,7 @@ public class DataLoadUtils
 			Strudel.winMain.foundFeaturesTableControlPanel.getShowHomologsCheckbox().setEnabled(true);
 
 			// also need a new link display manager because it holds the precomputed links
-			WinMain.mainCanvas.linkDisplayManager = new LinkDisplayManager(WinMain.mainCanvas);
+			WinMain.mainCanvas.linkDisplayManager = new LinkDisplayManager();
 		}
 
 		// hide the start panel if it is still showing
@@ -132,6 +144,45 @@ public class DataLoadUtils
 		Strudel.winMain.requestFocus();
 
 		Strudel.winMain.fatController.recentFileLoad = false;
+		
+		return true;
+	}
+	
+	// ----------------------------------------------------------------------------------------------------------------------------------------------
+	
+	public static int calculateNumberOfSupportedMaps()
+	{
+		// the total amount of space we have for drawing on vertically, in pixels
+		int availableSpaceVertically = Strudel.winMain.getHeight() - (MainCanvas.chromoSpacing * 2);
+		
+		return (availableSpaceVertically / (minimumChromosomeHeight  + MainCanvas.chromoSpacing));
+	}
+	
+	// ----------------------------------------------------------------------------------------------------------------------------------------------
+	
+	private static boolean checkMapNumbers()
+	{
+		boolean mapNumbersOK = true;
+
+		// the total amount of space we have for drawing on vertically, in pixels
+		int availableSpaceVertically = Strudel.winMain.getHeight() - (MainCanvas.chromoSpacing * 2);
+		// the combined height of all the vertical spaces between chromosomes
+		int allSpacers = MainCanvas.chromoSpacing * (Strudel.winMain.dataSet.maxChromos - 1);
+		
+		//for all mapsets
+		for (GMapSet gMapSet : Strudel.winMain.dataSet.gMapSets)
+		{
+			// the height of a chromosome
+			gMapSet.chromoHeight = (availableSpaceVertically - allSpacers) / Strudel.winMain.dataSet.maxChromos;
+			
+			//here we need to check whether this is smaller than a minimum chromosome height we defined
+			//if it is, we do not support the data because it has too many chromsomes
+			//need to display an error message to that effect
+			if(gMapSet.chromoHeight < minimumChromosomeHeight)	
+				mapNumbersOK = false;
+		}
+		
+		return mapNumbersOK;
 	}
 
 

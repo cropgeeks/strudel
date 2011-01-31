@@ -5,7 +5,7 @@ package sbrn.mapviewer.gui.dialog;
 
 import sbrn.mapviewer.gui.ITrackableJob;
 
-class NBProgressPanel extends javax.swing.JPanel
+public class NBProgressPanel extends javax.swing.JPanel
 {
 	NBProgressPanel(ITrackableJob job, String labelString)
 	{
@@ -19,7 +19,7 @@ class NBProgressPanel extends javax.swing.JPanel
 		pBar.setIndeterminate(job.isIndeterminate());
 	}
 
-	void setMessage(String message)
+	public void setMessage(String message)
 	{
 		msgLabel.setText(message);
 	}
@@ -86,4 +86,8 @@ class NBProgressPanel extends javax.swing.JPanel
     javax.swing.JProgressBar pBar;
     // End of variables declaration//GEN-END:variables
 
+    public javax.swing.JProgressBar getProgressBar()
+    {
+	    return pBar;
+    }
 }

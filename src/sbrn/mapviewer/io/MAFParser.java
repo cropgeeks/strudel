@@ -43,17 +43,18 @@ s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA
 The MAF files contain multiple blocks of alignments, each one representing a separate feature/region, and each one consisting
 of several lines each of which represents a genome.
  */
-public class MAFParser extends TrackableReader
+public class MAFParser extends AbtractFileParser
 {
 	
 	//this is where we store the data
 	DataSet dataSet = new DataSet();
 	
 	int alignmentCount = 0;
+	
 
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------------	
 	
-	public void parseMAFFile()
+	public void parseFile() throws Exception
 	{
 		try
 		{
@@ -69,6 +70,7 @@ public class MAFParser extends TrackableReader
 			}
 
 			dataSet.setUpGMapSets(dataSet.allLinkSets, dataSet.allMapSets);
+			dataSet.fileName = getFile().getName();
 			Strudel.winMain.dataSet = dataSet;
 						
 //			System.out.println("done parsing maf file");
@@ -82,6 +84,8 @@ public class MAFParser extends TrackableReader
 		catch (Exception e)
 		{
 			e.printStackTrace();
+			String errorMessage = "Error reading line " + lineCount + ".\n" + e.getMessage();
+			throw  new IOException(errorMessage);
 		} 
 	}
 	
@@ -103,8 +107,7 @@ public class MAFParser extends TrackableReader
 	 */
 	private void parseAlignmentBlock(String line) throws Exception
 	{
-//		System.out.println("\n\nfound new alignment");
-		
+	
 		//parse the header line
 		//looks like this: a score=6636.0
 		String [] headerTokens = line.split(" ");
@@ -121,7 +124,6 @@ public class MAFParser extends TrackableReader
 				break;			
 			else if(line.startsWith("s "))
 			{
-//				System.out.println("new sequence found");
 				Feature feature = parseSequenceLine(line);
 				featuresInAlignment.add(feature);
 			}
@@ -224,28 +226,4 @@ public class MAFParser extends TrackableReader
 		return feature;
 	}
 	
-	
-	//-----------------------------------------------------------------------------------------------------------------------------------------------------------
-
-	
-	@Override
-	public void runJob() throws Exception
-	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(true), "ASCII"));
-		parseMAFFile();
-		in.close();
-	}
-
-	@Override
-	public String getMessage()
-	{
-		String blah = getTransferRate();
-		return "Loading at: " + blah;
-	}
-
-	@Override
-	public int getJobCount()
-	{
-		return 1;
-	}
 }

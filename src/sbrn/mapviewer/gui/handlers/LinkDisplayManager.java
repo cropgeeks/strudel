@@ -16,12 +16,10 @@ public class LinkDisplayManager
 {
 	//	====================================vars===============================================
 
-	MainCanvas mainCanvas;
-
 	// a hashtable that contains chromomaps from both genomes as keys and Vector objects as values, which in
 	// turn hold a list of LinkSet objects each, where each Linkset represents the links between the chromomap and a
 	// chromomap in the respectively other genome
-	Hashtable<ChromoMap, Vector<LinkSet>> linkSetLookup;
+	static Hashtable<ChromoMap, Vector<LinkSet>> linkSetLookup;
 
 	private static double blastThreshold = 1;
 
@@ -37,10 +35,9 @@ public class LinkDisplayManager
 
 	//	=====================================c'tor==============================================
 
-	public LinkDisplayManager(MainCanvas mainCanvas)
+	public LinkDisplayManager()
 	{
-		this.mainCanvas = mainCanvas;
-		initLinkSetLookup();
+
 	}
 
 	//	=====================================methods===========================================
@@ -94,18 +91,18 @@ public class LinkDisplayManager
 					selectedMaps.add(selectedMap);
 					selectedMap.highlight = true;
 
-					mainCanvas.drawLinks = true;
+					Strudel.winMain.mainCanvas.drawLinks = true;
 				}
 
 				// now check whether we have selected chromosomes in the target genome
 				if (selectedMaps.size() > 0)
 				{
-					mainCanvas.drawLinks = true;
+					Strudel.winMain.mainCanvas.drawLinks = true;
 				}
 				// if not, we don't want to draw links, just display the selected outlines of the reference genome chromosomes
 				else
 				{
-					mainCanvas.drawLinks = false;
+					Strudel.winMain.mainCanvas.drawLinks = false;
 				}
 			}
 		}
@@ -288,7 +285,7 @@ public class LinkDisplayManager
 				boolean drawLink = false;
 				//there is a user preference for filtering the number of links by whether their originating feature is visible on canvas or not (Prefs.drawOnlyLinksToVisibleFeatures)
 				//if that is set to true we only want to draw the links that fall within the canvas boundaries
-				if ((Prefs.drawOnlyLinksToVisibleFeatures && (referenceY > 0 && referenceY < mainCanvas.getHeight()) && (targetY > 0 && targetY < mainCanvas.getHeight())) || !Prefs.drawOnlyLinksToVisibleFeatures)
+				if ((Prefs.drawOnlyLinksToVisibleFeatures && (referenceY > 0 && referenceY < Strudel.winMain.mainCanvas.getHeight()) && (targetY > 0 && targetY < Strudel.winMain.mainCanvas.getHeight())) || !Prefs.drawOnlyLinksToVisibleFeatures)
 				{
 					drawLink = true;
 				}
@@ -482,7 +479,7 @@ public class LinkDisplayManager
 	/**
 	 * This method precomputes subsets of links between each target chromosome and each reference genome so that drawing them is quicker.
 	 */
-	public void initLinkSetLookup()
+	public static void initLinkSetLookup()
 	{
 		try
 		{
@@ -556,7 +553,7 @@ public class LinkDisplayManager
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
-	private LinkSet searchLinkSetLookup(ChromoMap cMap, ChromoMap otherMap)
+	private static LinkSet searchLinkSetLookup(ChromoMap cMap, ChromoMap otherMap)
 	{
 		LinkSet linkSet = null;
 		if (linkSetLookup.get(cMap)!=null)

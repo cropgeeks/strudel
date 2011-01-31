@@ -224,6 +224,8 @@ public class WinMain extends JFrame
 			//for some reason we need to set the bottom panel size to 0 to hide it
 			bottomPanel.setMinimumSize(new Dimension(0,0));
 			bottomPanel.setPreferredSize(new Dimension(0,0));
+			//we also need to initially hide it because otherwise it keeps flashing up for a few seconds before the main canvas has been repainted
+			bottomPanel.setVisible(false);
 
 			//the popup menu we use when are over a chromosome
 			chromoContextPopupMenu  = new ChromoContextPopupMenu();
@@ -263,7 +265,8 @@ public class WinMain extends JFrame
 			splitPane.setOneTouchExpandable(false);
 			splitPane.setDividerSize(0);
 			//when we resize, give the extra weight to the top component (the canvas)
-			splitPane.setResizeWeight(1.0);			
+			splitPane.setResizeWeight(0.5);	
+			splitPane.setDividerLocation(1.0f);
 
 			//these dialogs can only be instantiated now because they rely on data having been loaded previously
 			ffInRangeDialog = new FindFeaturesInRangeDialog();
@@ -286,10 +289,11 @@ public class WinMain extends JFrame
 
 			add(splitPane, BorderLayout.CENTER);
 			
-			//hide the bottom component and any sign of the split pane initially
-			hideBottomPanel();
-
+			validate();
 			repaint();
+			
+			//now we can allow the bottom panel to be visible, although it has to stay hidden until we move the splitpane's divider location
+			bottomPanel.setVisible(true);
 			
 		}
 		catch (Exception e)

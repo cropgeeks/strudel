@@ -78,7 +78,6 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 	public void mouseExited(MouseEvent e)
 	{
 		Strudel.winMain.fatController.clearMouseOverLabels();
-
 		HintPanel.clearLabel();
 	}
 

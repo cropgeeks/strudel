@@ -152,13 +152,13 @@ public class PanZoomAnimator extends Thread implements ItemListener
 							(int) (finalChromoHeight - (initialDistFromTopProportion * finalChromoHeight)));
 		}
 
-		//now update the arrays with the position data
-		Strudel.winMain.fatController.initialisePositionArrays();
+		//set this flag to update the position lookup arrays for mouseover
+		selectedSet.mapSetZoomed = true;
+		
 		//update zoom control position
 		Strudel.winMain.fatController.updateAllZoomControls();
 
 		//repaint
-		// TODO: AA check
 		Strudel.winMain.mainCanvas.updateCanvas(true);
 
 		zoomHandler.isPanZoomRequest = false;

@@ -156,13 +156,6 @@ public class WinMain extends JFrame
 				}
 				else
 					Prefs.guiWinMainMaximized = true;
-
-				if(mainCanvas !=null)
-				{
-					//refresh the main canvas
-					Strudel.winMain.validate();
-					mainCanvas.setRedraw(true);
-				}
 			}
 
 			@Override
@@ -230,15 +223,6 @@ public class WinMain extends JFrame
 			//the popup menu we use when are over a chromosome
 			chromoContextPopupMenu  = new ChromoContextPopupMenu();
 
-			//the hint panel
-			hintPanel = new HintPanel();
-			mainPanel.add(hintPanel, BorderLayout.NORTH);
-			hintPanel.setIcons(Icons.getIcon("HELP12"), Icons.getIcon("FILECLOSEHIGHLIGHTED"), Icons.getIcon("FILECLOSE"));
-			if(Prefs.showHintPanel)
-				hintPanel.setVisible(true);
-			else
-				hintPanel.setVisible(false);
-
 			//this is the main canvas which we render the genomes on
 			mainCanvas = new MainCanvas();
 			mainPanel.add(mainCanvas, BorderLayout.CENTER);
@@ -265,13 +249,22 @@ public class WinMain extends JFrame
 			splitPane.setOneTouchExpandable(false);
 			splitPane.setDividerSize(0);
 			//when we resize, give the extra weight to the top component (the canvas)
-			splitPane.setResizeWeight(0.5);	
+			splitPane.setResizeWeight(1.0);	
 			splitPane.setDividerLocation(1.0f);
 
 			//these dialogs can only be instantiated now because they rely on data having been loaded previously
 			ffInRangeDialog = new FindFeaturesInRangeDialog();
 			ffInRangeDialog.ffInRangePanel.initRemainingComponents();
-			genomeLayoutDialog = new GenomeLayoutDialog();
+			genomeLayoutDialog = new GenomeLayoutDialog();			
+
+			//the hint panel
+			hintPanel = new HintPanel();
+			mainPanel.add(hintPanel, BorderLayout.NORTH);
+			hintPanel.setIcons(Icons.getIcon("HELP12"), Icons.getIcon("FILECLOSEHIGHLIGHTED"), Icons.getIcon("FILECLOSE"));
+			if(Prefs.showHintPanel)
+				hintPanel.setVisible(true);
+			else
+				hintPanel.setVisible(false);
 
 			//assemble everything
 
@@ -304,26 +297,29 @@ public class WinMain extends JFrame
 	
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	public void showBottomPanel()
+	public void showBottomPanel(boolean repaintAndIndex)
 	{
 		//we want the results table's control panel to be fully visible
-		int controlPanelHeight = (int)Strudel.winMain.foundFeaturesTableControlPanel.getMinimumSize().getHeight();	
-		int newDividerLocation = Strudel.winMain.getHeight() - controlPanelHeight;
-		Strudel.winMain.splitPane.setDividerLocation(newDividerLocation);		
+		int controlPanelHeight = (int)foundFeaturesTableControlPanel.getMinimumSize().getHeight();	
+		int newDividerLocation = getHeight() - controlPanelHeight;
+		splitPane.setDividerLocation(newDividerLocation);		
 		
 		//refresh the main canvas
-		validate();
-		mainCanvas.updateCanvas(true);
+		if(repaintAndIndex)
+		{
+			validate();
+			mainCanvas.updateCanvas(true);		
+		}
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	public void hideBottomPanel()
+	public void hideBottomPanel(boolean repaintAndIndex)
 	{			
 		splitPane.setDividerLocation(1.0f);
-		//refresh the main canvas
-		validate();
-		mainCanvas.updateCanvas(true);
+		if(repaintAndIndex)
+			mainCanvas.updateCanvas(true);		
+
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------

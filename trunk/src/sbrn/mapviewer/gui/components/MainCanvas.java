@@ -1,6 +1,7 @@
 package sbrn.mapviewer.gui.components;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -87,10 +88,18 @@ public class MainCanvas extends JPanel
 
 	public int numMarkersDrawn = 0;
 
-	Rectangle canvasBounds = null;
+	Rectangle canvasBounds = null;	
+	
+	//don't let the font size for the chromo index go above this value
+	int maxFontSize = 12;
+	
+	boolean canvasResized = false;
+	
+	final int minimumChromosomeHeight = 5;
 	
 
-	// ============================curve'tor==================================
+
+	// ============================c'tor==================================
 
 	public MainCanvas()
 	{
@@ -104,6 +113,8 @@ public class MainCanvas extends JPanel
 		// Prepare the background threads that will do the main painting
 		executor = Executors.newFixedThreadPool(cores);
 		tasks = new Future[cores];
+		
+		addListeners();
 	}
 
 	// ============================methods==================================
@@ -224,6 +235,7 @@ public class MainCanvas extends JPanel
 	// paint the genomes or portions thereof onto this canvas
 	public void paintCanvas(Graphics2D g2, Boolean killMe)
 	{
+		
 		//work out general position and colour parameters
 		calcRequiredParams(g2);
 
@@ -245,12 +257,23 @@ public class MainCanvas extends JPanel
 			// currentY is the y position at which we start drawing the genome, chromo by chromo, top to bottom
 			// this may be off the visible canvas in a northerly direction
 			int currentY = calcMapSetSpecificParams(gMapSet);
+			
+			//if the canvas has been resized we need to re-initialise all the feature positions on all mapsets
+			//we also need to do this when a mapset has been scrolled or zoomed
+			if(canvasResized || gMapSet.mapSetScrolled || gMapSet.mapSetZoomed)
+			{
+				gMapSet.initialisePositionArraysForMapSet();
+				//if we have re-initialised the feature positions we can reset the flags
+				gMapSet.mapSetScrolled = false;
+				gMapSet.mapSetZoomed = false;
+			}
 
 			// now paint the chromosomes in this genome
-			// for each chromosome in the genome
 			drawMaps(gMapSet,g2, currentY);
-
 		}
+		
+		//if we have re-initialised the feature positions we can reset this flag
+		canvasResized = false;
 
 		boolean dimNormalLinks = Strudel.winMain.foundFeaturesTableControlPanel.getShowHomologsCheckbox().isSelected()
 			&& (drawFoundFeaturesInRange || drawFeaturesFoundByName);
@@ -321,7 +344,15 @@ public class MainCanvas extends JPanel
 			initialCanvasHeight = canvasHeight;
 
 			//the zoom factor at which we would fit a single chromosome (but nothing else) on the visible portion of the canvas
-			gMapSet.singleChromoViewZoomFactor = canvasHeight / gMapSet.chromoHeight;
+			//if the chromosome height goes to zero we get an ArithmeticException here but we can just ignore this
+			//this happens because the canvas has been resized to the extent that chromosomes have disappeared
+			//it just has to be made bigger again and that should be fairly obvious
+			try
+			{
+				gMapSet.singleChromoViewZoomFactor = canvasHeight / gMapSet.chromoHeight;
+			}
+			catch (ArithmeticException e){}
+
 			gMapSet.thresholdAllMarkerPainting = gMapSet.singleChromoViewZoomFactor;
 
 			// the total vertical extent of the genome, excluding top and bottom spacers
@@ -351,7 +382,7 @@ public class MainCanvas extends JPanel
 		numMarkersDrawn = 0;
 
 		// get current size of frame
-		canvasHeight = getHeight();
+		canvasHeight = getHeight();	
 		canvasWidth = getWidth();
 
 		// create a bounding rectangle the size of the currently visible canvas
@@ -537,6 +568,15 @@ public class MainCanvas extends JPanel
 	{
 		//font stuff - also see drawAllMapColours() above if changing this code!
 		int fontSize = Math.round(WinMain.mainCanvas.getHeight() / 40);
+		//check the font size is not greater than the chromosome height
+		if(gChromoMap.owningSet.chromoHeight < fontSize)
+			fontSize = gChromoMap.owningSet.chromoHeight -1;
+		
+		//don't let the font size go above this value
+		if(fontSize > maxFontSize)
+			fontSize = maxFontSize;
+
+		//set the font
 		Font mapLabelFont = new Font("Arial", Font.BOLD, fontSize);
 		g2.setFont(mapLabelFont);
 		g2.setColor(Colors.chromosomeIndexColour);
@@ -554,7 +594,8 @@ public class MainCanvas extends JPanel
 
 		//draw the label
 		String indexLabel = gChromoMap.name;
-		g2.drawString(indexLabel, gChromoMap.x + gChromoMap.width + 10, labelY);
+		int distanceFromChromo = 6;
+		g2.drawString(indexLabel, gChromoMap.x + gChromoMap.width + distanceFromChromo, labelY);
 
 		//turn text antialiasing off again
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
@@ -575,8 +616,8 @@ public class MainCanvas extends JPanel
 		//update overviews
 		winMain.fatController.updateOverviewCanvases();
 
-		//now update the arrays with the position data
-		Strudel.winMain.fatController.initialisePositionArrays();
+		//set this flag to update the position lookup arrays for mouseover
+		gMapSet.mapSetScrolled = true;
 
 		//repaint
 		updateCanvas(true);
@@ -630,6 +671,25 @@ public class MainCanvas extends JPanel
 		this.redraw = redraw;
 	}
 
+	//----------------------------------------------------------------------------------------------------------------------------------------
+
+	private void addListeners()
+	{
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e)
+			{
+				if(Strudel.dataLoaded)
+				{	
+					//if the canvas has been resized we need to re-initialise all the feature positions on all mapsets
+					//need to set this flag to enable that
+					canvasResized = true;
+					updateCanvas(true);		
+				}
+			}
+		});
+	}
+	
 	//----------------------------------------------------------------------------------------------------------------------------------------
 
 

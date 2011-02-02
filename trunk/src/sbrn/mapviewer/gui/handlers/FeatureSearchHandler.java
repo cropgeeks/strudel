@@ -92,11 +92,7 @@ public class FeatureSearchHandler
 				gChromoMap.drawMouseOverFeatures = false;
 
 				//show the results table
-				Strudel.winMain.showBottomPanel();
-
-				// validate and repaint the canvas so it knows it has been resized
-				Strudel.winMain.validate();
-				Strudel.winMain.mainCanvas.updateCanvas(true);
+				Strudel.winMain.showBottomPanel(false);
 
 				//now zoom into that range on the chromosome
 				Strudel.winMain.mainCanvas.zoomHandler.zoomIntoRange(gChromoMap, intervalStart, intervalEnd, false);
@@ -144,18 +140,14 @@ public class FeatureSearchHandler
 	{
 		ArrayList<Feature> features = Utils.getAllFeatures();
 
-		//show the results table
-		Strudel.winMain.showBottomPanel();
-
 		//now put the results into the JTable held by the results panel
 		updateResultsTable(features);
 
 		//earmark the features for drawing on repaint
-		Strudel.winMain.mainCanvas.drawFeaturesFoundByName = true;
+		Strudel.winMain.mainCanvas.drawFeaturesFoundByName = true;		
 
-		// validate and repaint the canvas so it knows it has been resized
-		Strudel.winMain.validate();
-		Strudel.winMain.mainCanvas.updateCanvas(true);
+		//show the results table and repaint
+		Strudel.winMain.showBottomPanel(true);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

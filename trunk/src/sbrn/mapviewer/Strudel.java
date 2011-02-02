@@ -121,21 +121,6 @@ public class Strudel
 
 			});
 
-
-			winMain.addComponentListener(new ComponentAdapter()
-			{
-				@Override
-				public void componentResized(ComponentEvent e)
-				{
-					if (dataLoaded)
-					{
-						winMain.mainCanvas.updateCanvas(true);	
-						winMain.fatController.initialisePositionArrays();			
-					}
-				}
-
-			});
-
 			//set up the colour scheme the user had last selected
 			setColours();
 

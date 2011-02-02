@@ -12,6 +12,8 @@ public class MenuExplore
 {
 	public void showTable()
 	{
+		System.out.println("show table");
+		
 		//reset the main canvas
 		Strudel.winMain.fatController.resetMainCanvasView();
 		Strudel.winMain.fatController.findFeaturesRequested = true;

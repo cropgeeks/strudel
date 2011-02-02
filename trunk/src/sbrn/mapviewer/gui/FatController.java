@@ -2,6 +2,7 @@ package sbrn.mapviewer.gui;
 
 import java.awt.*;
 import java.util.*;
+import javax.swing.*;
 import javax.swing.table.*;
 
 import sbrn.mapviewer.*;
@@ -115,23 +116,6 @@ public class FatController
 		winMain.mainCanvas.updateCanvas(true);
 	}
 
-	// --------------------------------------------------------------------------------------------------------------------------------------------------------
-
-	//updates the positions of all features of all chromosomes
-	//this is necessary because zooming changes the actual position values as the canvas grows
-	public void initialisePositionArrays()
-	{
-		// for all gmapsets
-		for (GMapSet gMapSet : winMain.dataSet.gMapSets)
-		{
-			// for all gchromomaps within each mapset
-			for (GChromoMap gChromoMap : gMapSet.gMaps)
-			{
-				gChromoMap.initArrays();
-			}
-		}
-	}
-
 
 	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -139,8 +123,6 @@ public class FatController
 	//this includes clearing any results of feature searches
 	public void resetMainCanvasView()
 	{
-		resetViewOnly();
-
 		 clearResultsTable();
 
 		//disable the button that allows export of this data to file
@@ -156,11 +138,7 @@ public class FatController
 			zoomControlPanel.overrideMarkersAutoDisplayButton.setSelected(false);
 		}
 
-		//repaint
-		winMain.mainCanvas.updateCanvas(true);
-			
-		//this reinitialises the position arrays
-		initialisePositionArrays();
+		resetViewOnly();
 	}
 
 	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -168,9 +146,6 @@ public class FatController
 	//hides the results table at the bottom of the main canvas and clears its table model etc
 	public void clearResultsTable()
 	{
-		//hide the found features part of the split pane
-		winMain.hideBottomPanel();
-
 		//clear the found features
 		clearHighlightFeatures();
 		if(FeatureSearchHandler.featuresInRange != null)
@@ -180,6 +155,9 @@ public class FatController
 		winMain.foundFeaturesTableControlPanel.getGenomeFilterCombo().setSelectedIndex(0);
 		//clear the table model for the found features
 		winMain.ffResultsPanel.getFFResultsTable().setModel(new DefaultTableModel());
+		
+		//hide the found features part of the split pane
+		winMain.hideBottomPanel(false);
 	}
 
 	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -250,11 +228,9 @@ public class FatController
 		//clear the zoom selection rectangle
 		winMain.mainCanvas.drawZoomSelectionRectangle = false;
 		
-		//reinitialise the positions of our features
-		initialisePositionArrays();
-
 		//repaint
 		winMain.mainCanvas.updateCanvas(true);
+
 	}
 
 	//	--------------------------------------------------------------------------------------------------------------------------------------------------------

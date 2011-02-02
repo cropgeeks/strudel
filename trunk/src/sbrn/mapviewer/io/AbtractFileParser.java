@@ -16,16 +16,18 @@ public abstract class AbtractFileParser extends TrackableReader
 	{
 		in = new BufferedReader(new InputStreamReader(getInputStream(true), "ASCII"));
 		parseFile();
-		isIndeterminate = true;		
-		boolean mapNumbersOK = DataLoadUtils.setUpViewAfterDataLoading();
-		in.close();
-		if(!mapNumbersOK)
+		if (okToRun)
 		{
-			resetDataLoadingFlags();		
-			int numMapsSupported = DataLoadUtils.calculateNumberOfSupportedMaps();
-			String errorMessage = "\nOne or more mapsets contain more chromosomes than can be rendered on the available canvas." + 
-			"\nThe number of maps supported at the current canvas size is " + numMapsSupported + ".";
-			throw new Exception(errorMessage);
+			isIndeterminate = true;
+			boolean mapNumbersOK = DataLoadUtils.setUpViewAfterDataLoading();
+			in.close();
+			if (!mapNumbersOK)
+			{
+				resetDataLoadingFlags();
+				int numMapsSupported = DataLoadUtils.calculateNumberOfSupportedMaps();
+				String errorMessage = "\nOne or more mapsets contain more chromosomes than can be rendered on the available canvas." + "\nThe number of maps supported at the current canvas size is " + numMapsSupported + ".";
+				throw new Exception(errorMessage);
+			}
 		}
 	}
 	

@@ -55,6 +55,8 @@ public class ProgressDialog extends JDialog implements Runnable, ActionListener
 		nbPanel.bCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cancelJob();
+				setVisible(false);
+				TaskDialog.info("Data import canceled.", "Close");
 			}
 		});
 

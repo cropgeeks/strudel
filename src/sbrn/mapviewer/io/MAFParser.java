@@ -60,7 +60,7 @@ public class MAFParser extends AbtractFileParser
 		{
 			//parse the file
 			String line = null;
-			while((line = readLine()) != null)
+			while((line = readLine()) != null && okToRun)
 			{
 				if(line.startsWith("a "))
 				{
@@ -72,13 +72,6 @@ public class MAFParser extends AbtractFileParser
 			dataSet.setUpGMapSets(dataSet.allLinkSets, dataSet.allMapSets);
 			dataSet.fileName = getFile().getName();
 			Strudel.winMain.dataSet = dataSet;
-						
-//			System.out.println("done parsing maf file");
-//			System.out.println("# alignments found = " + alignmentCount);
-//			System.out.println("# mapsets made = " + dataSet.allMapSets.size());
-//			System.out.println("#maps in each:");			
-//			for(MapSet mapset : dataSet.allMapSets)
-//				System.out.println(mapset.getName() + ":" + mapset.getMaps().size());
 			
 		}
 		catch (Exception e)

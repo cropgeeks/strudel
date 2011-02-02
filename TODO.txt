@@ -102,6 +102,5 @@ BUGS to fix:
 - hovering the mouse over some of the table components (mainly in the left hand panel) causes repaints that don't need to happen.
 - scaling down the screen size doesn't result in the labels keeping "expected" sizes. Especially noticable with genomes with just one or two chromosomes.
 - if you have show all labels active, then invert a chromosome, when you mouse over a feature-group the list of labels is now in reverse order compared to what's already on screen
-- cancel button on data load dialog does nothing
 - scrolling by mouse drag is unreliable - disable altogether and replace with scroll buttons
 

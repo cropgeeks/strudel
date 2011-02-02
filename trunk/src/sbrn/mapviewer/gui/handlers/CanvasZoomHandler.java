@@ -72,9 +72,6 @@ public class CanvasZoomHandler
 
 		//update zoom control position
 		Strudel.winMain.fatController.updateAllZoomControls();
-
-		//check whether we want to let the user switch on the distance markers
-		checkZoomForDistMarkerButton(selectedSet);
 		
 		//set this flag to update the position lookup arrays for mouseover
 		selectedSet.mapSetZoomed = true;
@@ -116,8 +113,8 @@ public class CanvasZoomHandler
 		float finalZoomFactor = mainCanvas.getHeight() / mainCanvas.initialChromoHeight;
 
 		//make sure this does not exceed the max zoom factor
-		if(finalZoomFactor > Constants.MAX_ZOOM_FACTOR)
-			finalZoomFactor = Constants.MAX_ZOOM_FACTOR;
+		if(finalZoomFactor > selectedSet.maxZoomFactor)
+			finalZoomFactor = selectedSet.maxZoomFactor;
 
 		// work out the chromo height and total genome height for when the new zoom factor will have been applied
 		int finalChromoHeight = (int) (mainCanvas.initialChromoHeight * finalZoomFactor);
@@ -194,9 +191,6 @@ public class CanvasZoomHandler
 			mainCanvas.checkMarkerPaintingThresholds(selectedSet);
 		}
 
-		//check whether we want to let the user switch on the distance markers
-		checkZoomForDistMarkerButton(selectedSet);
-
 		// repaint the canvas
 		mainCanvas.updateCanvas(true);
 	}
@@ -222,18 +216,6 @@ public class CanvasZoomHandler
 						bottomY, animate);
 	}
 
-
-	// -----------------------------------------------------------------------------------------------------------------------------------
-
-	//check whether we want to let the user switch on the distance markers
-	//the button for this should be disabled unless we are zoomed in beyond the level at which a chromosome fills the screen
-	private void checkZoomForDistMarkerButton(GMapSet selectedSet)
-	{
-//		if(selectedSet.zoomFactor >= selectedSet.singleChromoViewZoomFactor)
-//			Strudel.winMain.toolbar.bDistMarkers.setEnabled(true);
-//		else
-//			Strudel.winMain.toolbar.bDistMarkers.setEnabled(false);
-	}
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
 

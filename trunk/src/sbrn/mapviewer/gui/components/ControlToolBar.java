@@ -152,35 +152,6 @@ public class ControlToolBar extends JToolBar implements ActionListener
 
 	public void actionPerformed(ActionEvent e)
 	{
-//		if (e.getSource() == bOverview)
-//			toggleOverviewDialog();
-//
-//		//reset the main canvas view and deselect all features
-//		else if (e.getSource() == bResetAll)
-//			Strudel.winMain.fatController.resetMainCanvasView();
-//
-//		//help menu
-//		else if (e.getSource() == bHelp)
-//		{
-//			String url = Constants.strudelManualPage;
-//
-//			Utils.visitURL(url);
-//		}
-//
-//		//"about" dialog
-//		else if(e.getSource() == bInfo)
-//		{
-//			Strudel.winMain.aboutDialog.setLocationRelativeTo(Strudel.winMain);
-//			Strudel.winMain.aboutDialog.setVisible(true);
-//		}
-//
-//		//configure visible datasets
-//		else if(e.getSource() == bColours)
-//		{
-//			Strudel.winMain.colorChooserDialog.setLocationRelativeTo(Strudel.winMain);
-//			Strudel.winMain.colorChooserDialog.setVisible(true);
-//		}
-
 		if(e.getSource() == bConfigureView)
 		{
 			Strudel.winMain.configureViewSettingsDialog.setLocationRelativeTo(Strudel.winMain);

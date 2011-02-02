@@ -3,6 +3,7 @@ package sbrn.mapviewer.gui.entities;
 import java.awt.*;
 import java.util.*;
 
+import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.components.*;
 
@@ -72,8 +73,19 @@ public class GMapSet
 	//true if all the chromosomes belonging to this mapset have been selected
 	public boolean wholeMapsetIsSelected = false;
 	
+	//flags used for feature position indexing
 	public boolean mapSetScrolled = false;
 	public boolean mapSetZoomed = false;
+	
+	//true while we are scrolling
+	public boolean isScrolling = false;
+
+	//this indicates whether this map set has been scrolled at all
+	//we need so we know whether to recenter the mapset when fully zoomed out
+//	public boolean hasBeenScrolled = false;
+	
+	//the max zoom factor for this mapset -- can be overridden by the user with the spinner control at the bottom of the screen
+	public int maxZoomFactor = Constants.MAX_ZOOM_FACTOR;
 	
 
 	// ====================================c'tor========================================

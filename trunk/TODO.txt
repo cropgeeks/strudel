@@ -95,12 +95,10 @@ BUGS to fix:
 
 - entering into the selectable area of either of the two checkboxes on the results control panel triggers a change event even if there are no mouse clicks, despite there not being a mouselistener registered on the component
 - When "Load own data" is selected and no data file is available, the resulting error dialog does not close when its close button is pressed. 
-- click-and drag scrolling is very sketchy at the extreme ends of mapsets
 - selected (highlighted) individual links from the results table do not always clear when another link is selected
 - When results table is open and a single link is highlighted, inverting the chromosome the homolog is on causes the permanently displayed label for the homolog to appear in the old (uninverted) position.
 - selecting the option to open a file, not picking one, but hitting Load anyway causing a warning message as expected but when you close it, the same message then appears for a second time.
 - hovering the mouse over some of the table components (mainly in the left hand panel) causes repaints that don't need to happen.
 - scaling down the screen size doesn't result in the labels keeping "expected" sizes. Especially noticable with genomes with just one or two chromosomes.
 - if you have show all labels active, then invert a chromosome, when you mouse over a feature-group the list of labels is now in reverse order compared to what's already on screen
-- scrolling by mouse drag is unreliable - disable altogether and replace with scroll buttons
 

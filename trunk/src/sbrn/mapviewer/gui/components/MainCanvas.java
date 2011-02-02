@@ -357,6 +357,12 @@ public class MainCanvas extends JPanel
 
 			// the total vertical extent of the genome, excluding top and bottom spacers
 			gMapSet.totalY = (gMapSet.numMaps * gMapSet.chromoHeight) + ((gMapSet.numMaps - 1) * chromoSpacing);
+			
+			if(!gMapSet.isScrolling)
+			{
+				gMapSet.centerPoint = Math.round(gMapSet.totalY / 2.0f);
+			}
+			
 			gMapSet.centerPoint = Math.round(gMapSet.totalY / 2.0f);
 			// the space at the top and bottom -- should be equal
 			topBottomSpacer = (canvasHeight - gMapSet.totalY) / 2;
@@ -602,16 +608,46 @@ public class MainCanvas extends JPanel
 	}
 
 
+	// --------------------------------------------------------------------------------------------------------------------------------
+
+	//moves the genome viewport for the psecified mapset either up or down by the specified increment
+	public void scroll(boolean up, GMapSet gMapSet,  int scrollIncrement)
+	{
+		//this is where we are moving the center of the genome (vertically) to
+		int newCenterPoint = -1;
+
+		//scrolling up
+		if (up)
+		{
+			newCenterPoint = gMapSet.centerPoint  - scrollIncrement;
+			//don't let the genome disappear completely
+			if(newCenterPoint < 0)
+				newCenterPoint = 0;
+		}
+		//scrolling down
+		else
+		{
+			newCenterPoint = gMapSet.centerPoint  + scrollIncrement;
+			//don't let the genome disappear completely
+			if(newCenterPoint > gMapSet.totalY)
+				newCenterPoint = gMapSet.totalY;
+		}
+
+		//move the genome viewport
+		winMain.mainCanvas.moveGenomeViewPort(gMapSet, newCenterPoint);
+	}
+	
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
+	
 	// used to scroll up and down the canvas
 	public void moveGenomeViewPort(GMapSet gMapSet, int newCenterPoint)
 	{
+		
 		//the center point is an absolute value in pixels which is the offset from the top of the genome to the current
 		//point in the center of the screen on y
 		//update the centerpoint to the new value
 		gMapSet.centerPoint = newCenterPoint;
-		updateCanvas(true);
 
 		//update overviews
 		winMain.fatController.updateOverviewCanvases();

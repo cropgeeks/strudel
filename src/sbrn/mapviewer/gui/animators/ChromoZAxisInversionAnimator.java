@@ -79,10 +79,10 @@ public class ChromoZAxisInversionAnimator extends Thread
 			invertMap.inversionInProgress = false;
 
 			//update the position lookup arrays for mouseover
-			Strudel.winMain.fatController.initialisePositionArrays();
+			//set this flag to update the position lookup arrays for mouseover
+			invertMap.owningSet.mapSetZoomed = true;
 
 			//repaint
-			// TODO: AA check
 			Strudel.winMain.mainCanvas.updateCanvas(true);
 		}
 		catch (RuntimeException e)

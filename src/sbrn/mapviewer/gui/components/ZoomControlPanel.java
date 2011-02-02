@@ -85,7 +85,6 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		add(zoomSlider);
 		add(resetButton);
 		add(overrideMarkersAutoDisplayButton);
-//		add(alwaysShowAllLabelsButton);
 		add(new JLabel("   "));
 
 		//we need the filler when this toolbar is the only one

@@ -78,13 +78,13 @@ public class ClickZoomAnimator extends Thread
 
 			// the new total Y extent of the genome in pixels
 			int newTotalY = Math.round(selectedSet.totalY + totalYIncrement);
+			
+			//set this flag to update the position lookup arrays for mouseover
+			selectedSet.mapSetZoomed = true;
 
 			// adjust the zoom
 			// this call includes the redraw of the main canvas
 			zoomHandler.adjustZoom(selectedMap, newTotalY, newChromoHeight, distFromBottom);
-
-			//update the arrays with the position data
-			Strudel.winMain.fatController.initialisePositionArrays();
 
 			//update zoom control position
 			Strudel.winMain.fatController.updateAllZoomControls();
@@ -111,8 +111,8 @@ public class ClickZoomAnimator extends Thread
 		//update zoom control position
 		Strudel.winMain.fatController.updateAllZoomControls();
 
-		//now update the arrays with the position data
-		Strudel.winMain.fatController.initialisePositionArrays();
+		//set this flag to update the position lookup arrays for mouseover
+		selectedSet.mapSetZoomed = true;
 
 		//enable drawing of markers providing we have zoomed in, not out
 		if (selectedSet.zoomFactor > 1)

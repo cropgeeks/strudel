@@ -71,6 +71,10 @@ public class GMapSet
 
 	//true if all the chromosomes belonging to this mapset have been selected
 	public boolean wholeMapsetIsSelected = false;
+	
+	public boolean mapSetScrolled = false;
+	public boolean mapSetZoomed = false;
+	
 
 	// ====================================c'tor========================================
 
@@ -100,6 +104,17 @@ public class GMapSet
 			GChromoMap gMap = new GChromoMap(cMap.getName(), i, this);
 			gMaps.add(gMap);
 		}
+	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	//updates the positions of all features of all chromosomes
+	//this is necessary because zooming and scrolling changes the actual position values
+	public void initialisePositionArraysForMapSet()
+	{		
+			// for all gchromomaps within each mapset
+			for (GChromoMap gChromoMap : gMaps)
+				gChromoMap.initArrays();
 	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------------------------------

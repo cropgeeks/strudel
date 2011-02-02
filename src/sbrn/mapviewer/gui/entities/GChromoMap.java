@@ -129,6 +129,13 @@ public class GChromoMap implements Comparable<GChromoMap>
 	 */
 	public void paintMap(Graphics g)
 	{
+//		if(name.equals("4H"))
+//		{
+//			System.out.println("paintMap for " + name);
+//			System.out.println("map height = " + height);
+//			System.out.println("canvas height = " + Strudel.winMain.mainCanvas.getHeight());
+//		}
+		
 		try
 		{
 			Graphics2D g2 = (Graphics2D) g;
@@ -465,7 +472,15 @@ public class GChromoMap implements Comparable<GChromoMap>
 	// draw the markers for the features
 	private void drawAllFeatures(Graphics2D g2)
 	{
-
+		
+//		if(name.equals("4H"))
+//		{
+//			System.out.println("drawAllFeatures for " + name);
+//			System.out.println("map height = " + height);
+//			System.out.println("canvas height = " + Strudel.winMain.mainCanvas.getHeight());
+//		}
+		
+		
 		int lastY = -1;
 		int numMarkersDrawn = 0;
 

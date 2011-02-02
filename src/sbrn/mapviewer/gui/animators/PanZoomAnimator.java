@@ -104,7 +104,7 @@ public class PanZoomAnimator extends Thread implements ItemListener
 
 				// set the new zoom factor
 				//if this does not exceed the max zoom factor
-				if (selectedSet.zoomFactor < Constants.MAX_ZOOM_FACTOR)
+				if (selectedSet.zoomFactor < selectedSet.maxZoomFactor)
 					selectedSet.zoomFactor += zoomFactorIncrement;
 				//if this DOES exceed the max zoom factor
 				else

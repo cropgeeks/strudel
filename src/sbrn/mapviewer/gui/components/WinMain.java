@@ -239,9 +239,8 @@ public class WinMain extends JFrame
 			//the panel with the genome labels
 			genomeLabelPanel = new GenomeLabelPanel();
 
-			//initialise the zoom controls and the overview dialog
+			//initialise the zoom controls 
 			initZoomControls();
-			initOverviewDialog();
 
 			//this splitpane contains the main panel and the bottom panel
 			splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, mainPanel, bottomPanel);
@@ -287,6 +286,9 @@ public class WinMain extends JFrame
 			
 			//now we can allow the bottom panel to be visible, although it has to stay hidden until we move the splitpane's divider location
 			bottomPanel.setVisible(true);
+			
+			//this inits the overview dialog
+			initOverviewDialog();
 			
 		}
 		catch (Exception e)

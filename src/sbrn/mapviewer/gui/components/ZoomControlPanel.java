@@ -16,7 +16,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 	// ===============================================vars=======================================
 
 	WinMain winMain;
-	JLabel label;
+	JLabel zoomIcon;
 	public JSlider zoomSlider;
 	JButton resetButton;
 	GMapSet gMapSet;
@@ -25,7 +25,10 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 	JSpinner maxZoomSpinner;
 	FormattedTextFieldVerifier maxZoomSpinnerInputVerifier;
 
-
+	public int componentsTotalWidth = 0;
+	public int maxComponentHeight = 0;
+	public int maxComponentWidth = 0;
+	
 	// ===================================================curve'tor====================================
 
 	public ZoomControlPanel(WinMain winMain,GMapSet gMapSet, boolean addFiller)
@@ -37,7 +40,12 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		gMapSet.zoomControlPanel = this;
 
 		setFloatable(false);
-		setBorderPainted(false);
+		setBorderPainted(true);
+		
+//		setBorder(BorderFactory.createLineBorder(Color.black));
+
+		
+		setLayout(new FlowLayout());
 
 		setupComponents(addFiller);
 	}
@@ -52,7 +60,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		int sliderInitialVal = 1;
 
 		//label
-		label = new JLabel(Icons.getIcon("ZOOM"));
+		zoomIcon = new JLabel(Icons.getIcon("ZOOM"));
 
 		//zoom slider
 		zoomSlider = new JSlider(sliderMin, sliderMax, sliderInitialVal);
@@ -64,6 +72,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		zoomSlider.setPaintTicks(true);
 		zoomSlider.setMinorTickSpacing(sliderMax/20);
 		zoomSlider.setMajorTickSpacing(sliderMax/10);
+		zoomSlider.setPreferredSize(new Dimension(60,40));
 		
 		//this control allows users to choose their own max zoom value
 		maxZoomSpinner = new JSpinner();
@@ -108,28 +117,63 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 
 		//add the components
 		//all of these are zoom related
-		add(new JLabel("   "));
-		add(label);
-		add(new JLabel("  Max: "));
-		add(maxZoomSpinner);
-		add(new JLabel("   "));
+		add(zoomIcon);
 		add(zoomSlider);
-		add(new JLabel("   "));
+		add(new JLabel("Max:"));
+		add(maxZoomSpinner);
 		add(resetButton);
 		//the rest of the components
 		add(overrideMarkersAutoDisplayButton);
 		add(scrollUpButton);
 		add(scrollDownButton);
-		//add a separator at the end but only if this is not the last genome on the right
-		int mapsetIndex = Strudel.winMain.dataSet.gMapSets.indexOf(gMapSet);
-		if(mapsetIndex != (Strudel.winMain.dataSet.gMapSets.size()-1))
-			addSeparator(true);
+//		//add a separator at the end but only if this is not the last genome on the right
+//		int mapsetIndex = Strudel.winMain.dataSet.gMapSets.indexOf(gMapSet);
+//		if(mapsetIndex != (Strudel.winMain.dataSet.gMapSets.size()-1))
+//			addSeparator(true);
 
 		//we need the filler when this toolbar is the only one
 		//this is to stop it from filling the whole width of the frame
 		if(addFiller)
 			add(Box.createHorizontalGlue());
 
+		componentsTotalWidth = calcTotalRequiredWidth();
+		findMaxComponentDimensions();
+	}
+	
+	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	private void findMaxComponentDimensions()
+	{
+		Component [] components = getComponents();
+		
+		for (int i = 0; i < components.length; i++)
+		{
+			//check for the height
+			int compHeight = (int)components[i].getPreferredSize().getHeight();
+			if(compHeight > maxComponentHeight)
+				maxComponentHeight = compHeight;
+			//and the same for the width
+			int compWidth = (int)components[i].getPreferredSize().getWidth();
+			if(compWidth > maxComponentWidth)
+				maxComponentWidth = compWidth;
+			
+		}
+
+	}
+	
+	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	private int calcTotalRequiredWidth()
+	{
+		Component [] components = getComponents();
+		int totalWidth = 0;
+		
+		for (int i = 0; i < components.length; i++)
+		{
+			totalWidth += components[i].getPreferredSize().getWidth();
+		}
+		
+		return totalWidth;
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------

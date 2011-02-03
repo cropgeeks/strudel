@@ -270,7 +270,7 @@ public class WinMain extends JFrame
 			//this panel contains the genome labels and the zoom controls
 			zoomControlAndGenomelabelContainer = new JPanel(new BorderLayout());
 			zoomControlAndGenomelabelContainer.add(genomeLabelPanel,BorderLayout.NORTH);
-			zoomControlAndGenomelabelContainer.add(zoomControlContainerPanel, BorderLayout.SOUTH);
+			zoomControlAndGenomelabelContainer.add(zoomControlContainerPanel, BorderLayout.CENTER);
 			mainPanel.add(zoomControlAndGenomelabelContainer, BorderLayout.SOUTH);
 
 			//this panel contains the results table and its control panel
@@ -393,6 +393,33 @@ public class WinMain extends JFrame
 	private void initZoomControls()
 	{
 		zoomControlContainerPanel = new JPanel(new GridLayout(1, dataSet.gMapSets.size()));
+
+		zoomControlContainerPanel.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e)
+			{
+				if(Strudel.dataLoaded)
+				{	
+					//get the required width of the components in one of the zoomControlPanels
+					int maxCompWidth = zoomControlPanels.get(0).maxComponentWidth;
+					int totalCompWidth = zoomControlPanels.get(0).componentsTotalWidth;
+					int requiredWidth = totalCompWidth + maxCompWidth;
+					//do all the components still fit on without wrapping?
+					int zoomCtrlWidth = zoomControlPanels.get(0).getWidth();
+					
+					//how high are the zoom controls?
+					int zoomCtrlHeight = zoomControlPanels.get(0).maxComponentHeight;					
+					//how many rows do we need at the current width?
+					int numRowsRequired = (int) Math.ceil(requiredWidth/(float)zoomCtrlWidth);
+					//this is the new height for the container panel
+					int newPanelHeight = (int)(numRowsRequired*(zoomCtrlHeight *1.1f));		
+					
+					//size their container panel so that the components in the toolbar can wrap around over several lines if need be						
+					zoomControlContainerPanel.setPreferredSize(new Dimension(0,newPanelHeight));
+					validate();				
+				}
+			}
+		});
 
 		//if there is only one genome showing, we want a shorter zoom control that does not fill the width of  the entire canvas
 		if(dataSet.gMapSets.size() == 1)

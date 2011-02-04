@@ -78,10 +78,7 @@ public class FatController
 	//update visible zoom info
 	public void updateAllZoomControls()
 	{
-		for (ZoomControlPanel zoomControlPanel : winMain.zoomControlPanels)
-		{
-			zoomControlPanel.updateSlider();
-		}
+		Strudel.winMain.zoomControlPanel.updateSlider();
 	}
 
 
@@ -132,11 +129,8 @@ public class FatController
 		LinkDisplayManager.setBlastThreshold(1);
 		Strudel.winMain.toolbar.eValueSpinner.setValue(0);
 
-		//deselect the buttons on the zoom control panels
-		for (ZoomControlPanel zoomControlPanel : winMain.zoomControlPanels)
-		{
-			zoomControlPanel.overrideMarkersAutoDisplayButton.setSelected(false);
-		}
+		//deselect the button on the zoom control panel
+		Strudel.winMain.zoomControlPanel.overrideMarkersAutoDisplayButton.setSelected(false);
 
 		resetViewOnly();
 	}
@@ -186,6 +180,7 @@ public class FatController
 	//without clearing any results
 	public void resetViewOnly()
 	{
+
 		for(GMapSet gMapSet : winMain.dataSet.gMapSets)
 		{
 			//reset zoom on all mapsets
@@ -197,6 +192,9 @@ public class FatController
 			//marker and label display overrides
 			gMapSet.overrideMarkersAutoDisplay = false;
 			winMain.chromoContextPopupMenu.showAllLabelsItem.setText(winMain.chromoContextPopupMenu.showAllLabelsStr);
+			
+			//max zoom factor
+			gMapSet.maxZoomFactor = Constants.MAX_ZOOM_FACTOR;
 
 			//for all maps within mapset
 			for(GChromoMap gMap: gMapSet.gMaps)
@@ -221,6 +219,15 @@ public class FatController
 			}
 
 		}
+		
+		//clear any highlighting of genome labels
+		winMain.genomeLabelPanel.resetSelectedMapset();
+		winMain.zoomControlPanel.selectedSet = null;
+		//and reset the zoom spinner
+		//need to flag up the fact that this is done from within code to suppress warnings to the user
+		winMain.zoomControlPanel.programmaticZoomSpinnerChange = true;
+		winMain.zoomControlPanel.maxZoomSpinner.setValue(Constants.MAX_ZOOM_FACTOR);
+		winMain.zoomControlPanel.programmaticZoomSpinnerChange = false;		
 
 		//clear the feature selection rectangle
 		clearSelectionRectangle();

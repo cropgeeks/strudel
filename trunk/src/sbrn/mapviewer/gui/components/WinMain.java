@@ -26,8 +26,8 @@ public class WinMain extends JFrame
 	//this is where we hold all  our data from the current dataset
 	public DataSet dataSet = null;
 
-	//a list of the zoom control panels
-	public LinkedList<ZoomControlPanel> zoomControlPanels = new LinkedList<ZoomControlPanel>();
+	//the zoom control panels
+	public ZoomControlPanel zoomControlPanel =  null;
 
 	//++++++++++Swing components that make up the GUI: +++++++++++++
 
@@ -201,7 +201,7 @@ public class WinMain extends JFrame
 		setDropTarget(new DropTarget(this, dropAdapter));
 		
 		//tool tip delay
-		ToolTipManager.sharedInstance().setInitialDelay(0);
+		ToolTipManager.sharedInstance().setInitialDelay(200);
 
 	}
 
@@ -273,7 +273,7 @@ public class WinMain extends JFrame
 			//this panel contains the genome labels and the zoom controls
 			zoomControlAndGenomelabelContainer = new JPanel(new BorderLayout());
 			zoomControlAndGenomelabelContainer.add(genomeLabelPanel,BorderLayout.NORTH);
-			zoomControlAndGenomelabelContainer.add(zoomControlContainerPanel, BorderLayout.CENTER);
+			zoomControlAndGenomelabelContainer.add(zoomControlContainerPanel, BorderLayout.SOUTH);
 			mainPanel.add(zoomControlAndGenomelabelContainer, BorderLayout.SOUTH);
 
 			//this panel contains the results table and its control panel
@@ -334,24 +334,17 @@ public class WinMain extends JFrame
 	public void reinitialiseDependentComponents()
 	{
 		//remove existing components
-		zoomControlAndGenomelabelContainer.remove(zoomControlContainerPanel);
 		for(OverviewCanvas overviewCanvas : overviewCanvases)
 		{
 			overviewDialog.remove(overviewCanvas);
 		}
 
 		//clear lists with the corresponding objects
-		zoomControlPanels.clear();
 		overviewCanvases.clear();
 
 		//reinstate everything
-		//the panels with the zoom control sliders
-		initZoomControls();
 		foundFeaturesTableControlPanel.setupGenomeFilterCombo();
-		zoomControlAndGenomelabelContainer.add(zoomControlContainerPanel, BorderLayout.CENTER);
-
 		initOverviewDialog();
-
 		Strudel.winMain.ffInRangeDialog.ffInRangePanel.initRemainingComponents();
 
 		//the labels with the genome names need to be updated
@@ -366,13 +359,11 @@ public class WinMain extends JFrame
 		if(showStartPanel)
 		{
 			navPanel.setVisible(true);
-//			logoPanel.setVisible(true);
 			mainCanvas.setVisible(false);
 		}
 		else
 		{
 			navPanel.setVisible(false);
-//			logoPanel.setVisible(false);
 			mainCanvas.setVisible(true);
 		}
 	}
@@ -395,55 +386,15 @@ public class WinMain extends JFrame
 
 	private void initZoomControls()
 	{
-		zoomControlContainerPanel = new JPanel(new GridLayout(1, dataSet.gMapSets.size()));
-
-		zoomControlContainerPanel.addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentResized(ComponentEvent e)
-			{
-				if(Strudel.dataLoaded)
-				{	
-					//get the required width of the components in one of the zoomControlPanels
-					int maxCompWidth = zoomControlPanels.get(0).maxComponentWidth;
-					int totalCompWidth = zoomControlPanels.get(0).componentsTotalWidth;
-					int requiredWidth = totalCompWidth + maxCompWidth;
-					//do all the components still fit on without wrapping?
-					int zoomCtrlWidth = zoomControlPanels.get(0).getWidth();
-					
-					//how high are the zoom controls?
-					int zoomCtrlHeight = zoomControlPanels.get(0).maxComponentHeight;					
-					//how many rows do we need at the current width?
-					int numRowsRequired = (int) Math.ceil(requiredWidth/(float)zoomCtrlWidth);
-					//this is the new height for the container panel
-					int newPanelHeight = (int)(numRowsRequired*zoomCtrlHeight);		
-					
-					//size their container panel so that the components in the toolbar can wrap around over several lines if need be						
-					zoomControlContainerPanel.setPreferredSize(new Dimension(0,newPanelHeight));
-					validate();				
-				}
-			}
-		});
-
-		//if there is only one genome showing, we want a shorter zoom control that does not fill the width of  the entire canvas
-		if(dataSet.gMapSets.size() == 1)
-		{
-			ZoomControlPanel zoomControlPanel = new ZoomControlPanel(this, dataSet.gMapSets.get(0), true);
-			zoomControlPanel.zoomSlider.setMaximumSize(new Dimension(500, Short.MAX_VALUE));
-			zoomControlContainerPanel.add(zoomControlPanel);
-			zoomControlPanels.add(zoomControlPanel);
-		}
-		else
-		{
-			//the panels with the zoom control sliders
-			for (GMapSet gMapSet : dataSet.gMapSets)
-			{
-				ZoomControlPanel zoomControlPanel = new ZoomControlPanel(this, gMapSet, false);
-				zoomControlContainerPanel.add(zoomControlPanel);
-				zoomControlPanels.add(zoomControlPanel);
-			}
-		}
-
-
+		zoomControlContainerPanel = new JPanel();
+		
+		String instructions = "Click on a genome name to apply these controls:";
+		zoomControlContainerPanel.setBorder(BorderFactory.createTitledBorder(instructions));
+		
+		//we want a shorter zoom control that does not fill the width of  the entire canvas
+		zoomControlPanel = new ZoomControlPanel();
+		zoomControlPanel.zoomSlider.setMaximumSize(new Dimension(500, Short.MAX_VALUE));
+		zoomControlContainerPanel.add(zoomControlPanel);		
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------

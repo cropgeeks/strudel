@@ -598,7 +598,7 @@ public class MainCanvas extends JPanel
 		labelY = chromoCenterPos;
 		
 		//decide where to place the label on x
-		int distanceFromChromo = 3;
+		int distanceFromChromo = 5;
 		int labelX = gChromoMap.x + gChromoMap.width + distanceFromChromo;
 		//check whether this label is now actually closer to the next chromosome to the right than to the one it belongs to
 		//if that is the case we need to start painting the label right on top of the chromosome to make sure there is no ambiguity

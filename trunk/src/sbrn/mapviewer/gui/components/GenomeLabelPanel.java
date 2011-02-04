@@ -1,23 +1,28 @@
 package sbrn.mapviewer.gui.components;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.util.*;
 import javax.swing.*;
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.gui.*;
+import sbrn.mapviewer.gui.entities.*;
 
-public class GenomeLabelPanel extends JPanel
+public class GenomeLabelPanel extends JPanel implements MouseListener
 {
 
-	int fontHeight = 11;
+	int fontHeight = 13;
 	BufferedImage exportBuffer;
+	LinkedList<JLabel> labels = new LinkedList<JLabel>();
+	public GMapSet selectedSet = null;
 
 	public GenomeLabelPanel()
 	{
 		setBackground(Colors.genomeLabelPanelColour);
-		setPreferredSize(new Dimension(10, 20));
+		setPreferredSize(new Dimension(10, 30));
 		
-		initComponents();
+		initComponents();		
 	}
 	
 	public void initComponents()
@@ -33,14 +38,21 @@ public class GenomeLabelPanel extends JPanel
 			String genomeName = Strudel.winMain.dataSet.gMapSets.get(i).name;
 			JLabel label = new JLabel(genomeName);
 			add(label);
+			
 			label.setToolTipText(genomeName);
 			label.setFont(font);
 			label.setHorizontalAlignment(SwingConstants.CENTER);
+			label.setBorder(BorderFactory.createLineBorder(new Color(150, 150, 150), 1));
+			
+			label.addMouseListener(this);
+			
+			labels.add(label);
 		}
 	}
 	
 	public void reinititalise()
 	{
+		labels = new LinkedList<JLabel>();
 		removeAll();
 		initComponents();
 		repaint();
@@ -61,4 +73,56 @@ public class GenomeLabelPanel extends JPanel
 		setBackground(Colors.genomeLabelPanelColour);
 		return exportBuffer;
 	}
+	
+	public void resetSelectedMapset()
+	{
+		//un-highlight all labels
+		for(JLabel label : labels)
+			label.setForeground(Color.BLACK);
+		selectedSet = null;
+		Strudel.winMain.zoomControlPanel.selectedSet = null;
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e)
+	{
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e)
+	{
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e)
+	{
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e)
+	{		
+		//find out which label was clicked
+		JLabel  labelClicked =  (JLabel)e.getComponent();
+		
+		//un-highlight all labels
+		resetSelectedMapset();
+		
+		//highlight  the selected label
+		labelClicked.setForeground(Color.RED);
+		
+		//retrieve the mapset object
+		int selectedIndex = labels.indexOf(labelClicked);
+		selectedSet = Strudel.winMain.dataSet.gMapSets.get(selectedIndex);
+		
+		//update the zoom control panel
+		Strudel.winMain.zoomControlPanel.updateControlsToMapsetSettings(selectedSet);
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e)
+	{	
+	}
+
+
 }

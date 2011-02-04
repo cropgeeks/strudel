@@ -16,47 +16,39 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 {
 	// ===============================================vars=======================================
 
-	WinMain winMain;
 	JLabel zoomIcon;
 	public JSlider zoomSlider;
 	JButton resetButton;
-	GMapSet gMapSet;
+	public GMapSet selectedSet;
 	public JToggleButton overrideMarkersAutoDisplayButton;
 	JButton scrollUpButton, scrollDownButton;
-	JSpinner maxZoomSpinner;
+	public JSpinner maxZoomSpinner;
 	FormattedTextFieldVerifier maxZoomSpinnerInputVerifier;
 
 	public int componentsTotalWidth = 0;
 	public int maxComponentHeight = 0;
 	public int maxComponentWidth = 0;
 	
+	public boolean programmaticZoomSpinnerChange = false;
+	
 	// ===================================================curve'tor====================================
 
-	public ZoomControlPanel(WinMain winMain,GMapSet gMapSet, boolean addFiller)
+	public ZoomControlPanel()
 	{
 		super();
 
-		this.winMain = winMain;
-		this.gMapSet = gMapSet;
-		gMapSet.zoomControlPanel = this;
-
 		setFloatable(false);
 		setBorderPainted(true);
-		
-//		setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
 
-		
-		setLayout(new FlowLayout());
-
-		setupComponents(addFiller);
+		setupComponents();
 	}
 
 	// ==============================================methods====================================
 
-	private void setupComponents(boolean addFiller)
+	private void setupComponents()
 	{
 		//settings for the slider
-		int sliderMax = gMapSet.maxZoomFactor;
+		int sliderMax = Constants.MAX_ZOOM_FACTOR;
 		int sliderMin = 1;
 		int sliderInitialVal = 1;
 
@@ -73,11 +65,10 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		zoomSlider.setPaintTicks(true);
 		zoomSlider.setMinorTickSpacing(sliderMax/20);
 		zoomSlider.setMajorTickSpacing(sliderMax/10);
-		zoomSlider.setPreferredSize(new Dimension(60,(int)zoomSlider.getPreferredSize().getHeight()));
 		
 		//this control allows users to choose their own max zoom value
 		maxZoomSpinner = new JSpinner();
-		maxZoomSpinner.setValue(gMapSet.maxZoomFactor);
+		maxZoomSpinner.setValue(Constants.MAX_ZOOM_FACTOR);
 		maxZoomSpinner.setMaximumSize(new Dimension(100, 20));
 
 		maxZoomSpinnerInputVerifier = new FormattedTextFieldVerifier("The value entered here must be positive.",0, false);
@@ -100,81 +91,41 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 
 		//scroll buttons
 		scrollUpButton = new JButton(Icons.getIcon("UPARROW"));
-		scrollUpButton.setToolTipText("Scroll up by one screen or hold for continuous fast scrolling");
+		scrollUpButton.setToolTipText("Scroll up by one screen");
 		scrollUpButton.addActionListener(this);
 		if (scri.commons.gui.SystemUtils.isMacOS() == false)
 			scrollUpButton.setMargin(new Insets(2, 1, 2, 1));
 
 		scrollDownButton = new JButton(Icons.getIcon("DOWNARROW"));
-		scrollDownButton.setToolTipText("Scroll down by one screen or hold for continuous fast scrolling");
+		scrollDownButton.setToolTipText("Scroll down by one screen");
 		scrollDownButton.addActionListener(this);
 		if (scri.commons.gui.SystemUtils.isMacOS() == false)
 			scrollDownButton.setMargin(new Insets(2, 1, 2, 1));
 		
 		//we need the filler when this toolbar is the only one
 		//this is to stop it from filling the whole width of the frame
-		if(addFiller)
-			add(Box.createHorizontalGlue());
+		add(Box.createHorizontalGlue());
 
 		//add the components
 		//all of these are zoom related
 		add(zoomIcon);
+		add(new JLabel("  "));
 		add(zoomSlider);
-		add(new JLabel("Max:"));
+		add(new JLabel("  "));
+		add(new JLabel("Max. zoom factor:"));
 		add(maxZoomSpinner);
+		add(new JLabel("  "));
 		add(resetButton);
 		//the rest of the components
+		add(new JLabel("  "));
 		add(overrideMarkersAutoDisplayButton);
+		add(new JLabel("  "));
 		add(scrollUpButton);
 		add(scrollDownButton);
-//		//add a separator at the end but only if this is not the last genome on the right
-//		int mapsetIndex = Strudel.winMain.dataSet.gMapSets.indexOf(gMapSet);
-//		if(mapsetIndex != (Strudel.winMain.dataSet.gMapSets.size()-1))
-//			addSeparator(true);
 
 		//we need the filler when this toolbar is the only one
 		//this is to stop it from filling the whole width of the frame
-		if(addFiller)
-			add(Box.createHorizontalGlue());
-
-		componentsTotalWidth = calcTotalRequiredWidth();
-		findMaxComponentDimensions();
-	}
-	
-	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
-	private void findMaxComponentDimensions()
-	{
-		Component [] components = getComponents();
-		
-		for (int i = 0; i < components.length; i++)
-		{
-			//check for the height
-			int compHeight = (int)components[i].getPreferredSize().getHeight();
-			if(compHeight > maxComponentHeight)
-				maxComponentHeight = compHeight;
-			//and the same for the width
-			int compWidth = (int)components[i].getPreferredSize().getWidth();
-			if(compWidth > maxComponentWidth)
-				maxComponentWidth = compWidth;
-			
-		}
-
-	}
-	
-	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
-	private int calcTotalRequiredWidth()
-	{
-		Component [] components = getComponents();
-		int totalWidth = 0;
-		
-		for (int i = 0; i < components.length; i++)
-		{
-			totalWidth += components[i].getPreferredSize().getWidth();
-		}
-		
-		return totalWidth;
+		add(Box.createHorizontalGlue());
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -182,66 +133,107 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 	//called when the zoom slider has been moved
 	public void stateChanged(ChangeEvent e)
 	{
-		JSlider source = (JSlider) e.getSource();
-		if (source.equals(zoomSlider) && !winMain.mainCanvas.zoomHandler.isClickZoomRequest && !winMain.mainCanvas.zoomHandler.isPanZoomRequest)
+		if(selectedSet == null)
 		{
-			winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(source.getValue(), 0, gMapSet, true);
+			if(zoomSlider.isFocusOwner())
+				TaskDialog.info("Please select a genome", "Close");	
+			return;
+		}
+			
+		JSlider source = (JSlider) e.getSource();
+		if (source.equals(zoomSlider) && !Strudel.winMain.mainCanvas.zoomHandler.isClickZoomRequest && !Strudel.winMain.mainCanvas.zoomHandler.isPanZoomRequest)
+		{
+			Strudel.winMain.mainCanvas.zoomHandler.processContinuousZoomRequest(source.getValue(), 0, selectedSet, true);
+			updateSlider();
+		}	
+	}
+
+	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	//updates the zoom controls to relfect the fact that we have selected a different mapset by clicking on a genome label
+	public void updateControlsToMapsetSettings(GMapSet selectedSet)
+	{
+		this.selectedSet = selectedSet;
+		//also update the max zoom factor spinner
+		//we need to flag up the fact that this is done from within the code rather than the spinner itself
+		programmaticZoomSpinnerChange = true;
+		maxZoomSpinner.setValue(selectedSet.maxZoomFactor);
+		programmaticZoomSpinnerChange = false;
+		//need to update the zoom slider to reflect the current zoom factor of the now selected mapset
+		updateSlider();
+	}
+	
+	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	//called when the zoom value spinner has been used
+	private void maxZoomSpinnerStateChanged(javax.swing.event.ChangeEvent e)
+	{
+		if(!programmaticZoomSpinnerChange)
+		{
+			if(selectedSet == null)
+			{
+				TaskDialog.info("Please select a genome", "Close");	
+				return;
+			}
+			
+			JSpinner source = (JSpinner) e.getSource();
+			selectedSet.maxZoomFactor = (Integer)source.getValue();
+			zoomSlider.setMaximum(selectedSet.maxZoomFactor);
 			updateSlider();
 		}
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	//called when the zoom value spinner has been used
-	private void maxZoomSpinnerStateChanged(javax.swing.event.ChangeEvent e)
-	{
-		JSpinner source = (JSpinner) e.getSource();
-		gMapSet.maxZoomFactor = (Integer)source.getValue();
-		zoomSlider.setMaximum(gMapSet.maxZoomFactor);
-		updateSlider();
-	}
-
-	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 	public void updateSlider()
 	{
-		//update the slider
-		zoomSlider.setValue(Math.round(gMapSet.zoomFactor));
+		if (selectedSet != null)
+		{
+			//update the slider
+			zoomSlider.setValue(Math.round(selectedSet.zoomFactor));
+		}
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void actionPerformed(ActionEvent e)
 	{
+		
+		if(selectedSet == null)
+		{
+			TaskDialog.info("Please select a genome", "Close");	
+			return;
+		}
+		
 		if(e.getSource()==resetButton)
 		{
-			winMain.mainCanvas.zoomHandler.processZoomResetRequest(gMapSet);
+			Strudel.winMain.mainCanvas.zoomHandler.processZoomResetRequest(selectedSet);
 		}
 		else if(e.getSource() == overrideMarkersAutoDisplayButton)
 		{
 			if(overrideMarkersAutoDisplayButton.isSelected())
-				gMapSet.overrideMarkersAutoDisplay = true;
+				selectedSet.overrideMarkersAutoDisplay = true;
 			else
-				gMapSet.overrideMarkersAutoDisplay = false;
+				selectedSet.overrideMarkersAutoDisplay = false;
 
 			Strudel.winMain.mainCanvas.updateCanvas(true);
 		}
 		else if(e.getSource() == scrollUpButton)
 		{
-			//check whether all maps in the mapset are visible -- if yes, do not scroll
-			if(gMapSet.getVisibleMaps().size() < gMapSet.gMaps.size())
+			//check whether we are fully zoomed out if yes, do not scroll
+			if(selectedSet.zoomFactor > 1)
 			{
 				int scrollIncrement = Strudel.winMain.mainCanvas.getHeight();
-				Strudel.winMain.mainCanvas.scroll(true, gMapSet, scrollIncrement);
+				Strudel.winMain.mainCanvas.scroll(true, selectedSet, scrollIncrement);
 			}
 		}
 		else if(e.getSource() == scrollDownButton)
 		{
-			//check whether all maps in the mapset are visible -- if yes, do not scroll
-			if(gMapSet.getVisibleMaps().size() < gMapSet.gMaps.size())
+			//check whether we are fully zoomed out if yes, do not scroll
+			if(selectedSet.zoomFactor > 1)
 			{
 				int scrollIncrement = Strudel.winMain.mainCanvas.getHeight();
-				Strudel.winMain.mainCanvas.scroll(false, gMapSet, scrollIncrement);
+				Strudel.winMain.mainCanvas.scroll(false, selectedSet, scrollIncrement);
 			}
 		}
 	}
@@ -259,20 +251,5 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 	public void mouseExited(MouseEvent e){}
 	public void mousePressed(MouseEvent e){}
 
-
-
-
-	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	private void addSeparator(boolean separator)
-	{
-		if (SystemUtils.isMacOS())
-		{
-			add(new JLabel(" "));
-			if (separator)
-				add(new JLabel(" "));
-		}
-		else if (separator)
-			addSeparator();
-	}
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 }

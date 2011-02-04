@@ -199,6 +199,9 @@ public class WinMain extends JFrame
 		//drag and drop support
 		FileDropAdapter dropAdapter = new FileDropAdapter(this);
 		setDropTarget(new DropTarget(this, dropAdapter));
+		
+		//tool tip delay
+		ToolTipManager.sharedInstance().setInitialDelay(0);
 
 	}
 
@@ -412,7 +415,7 @@ public class WinMain extends JFrame
 					//how many rows do we need at the current width?
 					int numRowsRequired = (int) Math.ceil(requiredWidth/(float)zoomCtrlWidth);
 					//this is the new height for the container panel
-					int newPanelHeight = (int)(numRowsRequired*(zoomCtrlHeight *1.1f));		
+					int newPanelHeight = (int)(numRowsRequired*zoomCtrlHeight);		
 					
 					//size their container panel so that the components in the toolbar can wrap around over several lines if need be						
 					zoomControlContainerPanel.setPreferredSize(new Dimension(0,newPanelHeight));

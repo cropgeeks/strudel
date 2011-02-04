@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
+import javax.swing.border.*;
 import javax.swing.event.*;
 
 import sbrn.mapviewer.*;
@@ -42,7 +43,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		setFloatable(false);
 		setBorderPainted(true);
 		
-//		setBorder(BorderFactory.createLineBorder(Color.black));
+//		setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
 
 		
 		setLayout(new FlowLayout());
@@ -72,7 +73,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		zoomSlider.setPaintTicks(true);
 		zoomSlider.setMinorTickSpacing(sliderMax/20);
 		zoomSlider.setMajorTickSpacing(sliderMax/10);
-		zoomSlider.setPreferredSize(new Dimension(60,40));
+		zoomSlider.setPreferredSize(new Dimension(60,(int)zoomSlider.getPreferredSize().getHeight()));
 		
 		//this control allows users to choose their own max zoom value
 		maxZoomSpinner = new JSpinner();

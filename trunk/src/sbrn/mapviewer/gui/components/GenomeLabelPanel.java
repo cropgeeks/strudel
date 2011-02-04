@@ -17,10 +17,10 @@ public class GenomeLabelPanel extends JPanel
 		setBackground(Colors.genomeLabelPanelColour);
 		setPreferredSize(new Dimension(10, 20));
 		
-		addComponents();
+		initComponents();
 	}
 	
-	private void addComponents()
+	public void initComponents()
 	{
 		int numGenomes = Strudel.winMain.dataSet.gMapSets.size();
 		
@@ -37,6 +37,13 @@ public class GenomeLabelPanel extends JPanel
 			label.setFont(font);
 			label.setHorizontalAlignment(SwingConstants.CENTER);
 		}
+	}
+	
+	public void reinititalise()
+	{
+		removeAll();
+		initComponents();
+		repaint();
 	}
 
 

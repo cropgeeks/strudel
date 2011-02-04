@@ -355,7 +355,7 @@ public class WinMain extends JFrame
 		Strudel.winMain.ffInRangeDialog.ffInRangePanel.initRemainingComponents();
 
 		//the labels with the genome names need to be updated
-		genomeLabelPanel.repaint();
+		genomeLabelPanel.reinititalise();
 	}
 
 

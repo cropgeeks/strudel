@@ -572,6 +572,8 @@ public class MainCanvas extends JPanel
 	// draw the index of the map in the genome
 	private void drawMapIndex(Graphics2D g2, GChromoMap gChromoMap)
 	{
+		String fontLabel = gChromoMap.name;
+		
 		//font stuff - also see drawAllMapColours() above if changing this code!
 		int fontSize = Math.round(WinMain.mainCanvas.getHeight() / 40);
 		//check the font size is not greater than the chromosome height
@@ -592,16 +594,25 @@ public class MainCanvas extends JPanel
 		//position of index with this var is in the center of the chromosome regardless of chromo position
 		int chromoCenterPos = gChromoMap.y + Math.round(gChromoMap.height / 2.0f) + (fontSize/2);
 
-		//draw the index in the center of each chromosome
+		//draw the index at the vertical center of each chromosome
 		labelY = chromoCenterPos;
+		
+		//decide where to place the label on x
+		int distanceFromChromo = 3;
+		int labelX = gChromoMap.x + gChromoMap.width + distanceFromChromo;
+		//check whether this label is now actually closer to the next chromosome to the right than to the one it belongs to
+		//if that is the case we need to start painting the label right on top of the chromosome to make sure there is no ambiguity
+		FontMetrics fm = g2.getFontMetrics(mapLabelFont);
+		int stringWidth = fm.stringWidth(fontLabel);
+		int distanceToNextGenome = (getWidth()/Strudel.winMain.dataSet.gMapSets.size()) - gChromoMap.width;
+		if((distanceToNextGenome - stringWidth) <= distanceFromChromo)
+			labelX = gChromoMap.x;
 
 		//turn text antialiasing on
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
 		//draw the label
-		String indexLabel = gChromoMap.name;
-		int distanceFromChromo = 6;
-		g2.drawString(indexLabel, gChromoMap.x + gChromoMap.width + distanceFromChromo, labelY);
+		g2.drawString(fontLabel, labelX, labelY);
 
 		//turn text antialiasing off again
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);

@@ -62,6 +62,10 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 
 			if (selectedMap != null)
 				winMain.mainCanvas.zoomHandler.processClickZoomRequest(selectedMap);
+			
+			//make this map's mapset the selected set and update the zoom control panel
+			Strudel.winMain.genomeLabelPanel.selectGMapSet(selectedMap.owningSet);
+			
 			return;
 		}
 	}
@@ -92,6 +96,10 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		timeOfMouseDown = System.currentTimeMillis();
 
 		GChromoMap selectedMap = Utils.getSelectedMap(Strudel.winMain.dataSet.gMapSets, e.getX(), e.getY());
+		
+		//make this mapset the selected set and update the zoom control panel
+		if(selectedMap != null)
+			Strudel.winMain.genomeLabelPanel.selectGMapSet(selectedMap.owningSet);
 		
 		//check whether this is a popup request -- needs to be done both in mousePressed and in mouseReleased due to platform dependent nonsense
 		if (e.isPopupTrigger())
@@ -193,7 +201,10 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 
 		// figure out which genome this event pertains to (i.e. which section of the canvas on x are we in)
 		int index = Utils.getSelectedSetIndex(e);
-		GMapSet gMapSet = Strudel.winMain.dataSet.gMapSets.get(index);
+		GMapSet gMapSet = Strudel.winMain.dataSet.gMapSets.get(index);		
+		
+		//make this mapset the selected set and update the zoom control panel
+		Strudel.winMain.genomeLabelPanel.selectGMapSet(gMapSet);
 
 		// mouse is getting dragged  with SHIFT or CTRL-SHIFT down -- draw a rectangle for  selection (zooming/range selection)
 		
@@ -300,6 +311,9 @@ public class MouseHandler implements MouseInputListener, MouseWheelListener
 		// figure out which genome we are moving
 		int index = Utils.getSelectedSetIndex(e);
 		GMapSet selectedSet = Strudel.winMain.dataSet.gMapSets.get(index);
+		
+		//make this mapset the selected set and update the zoom control panel
+		Strudel.winMain.genomeLabelPanel.selectGMapSet(selectedSet);
 
 		// work out in which direction we have moved the mouse
 		int notches = e.getWheelRotation();

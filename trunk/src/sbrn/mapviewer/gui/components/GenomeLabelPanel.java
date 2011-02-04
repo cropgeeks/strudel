@@ -15,7 +15,6 @@ public class GenomeLabelPanel extends JPanel implements MouseListener
 	int fontHeight = 13;
 	BufferedImage exportBuffer;
 	LinkedList<JLabel> labels = new LinkedList<JLabel>();
-	public GMapSet selectedSet = null;
 
 	public GenomeLabelPanel()
 	{
@@ -79,7 +78,6 @@ public class GenomeLabelPanel extends JPanel implements MouseListener
 		//un-highlight all labels
 		for(JLabel label : labels)
 			label.setForeground(Color.BLACK);
-		selectedSet = null;
 		Strudel.winMain.zoomControlPanel.selectedSet = null;
 	}
 
@@ -104,19 +102,12 @@ public class GenomeLabelPanel extends JPanel implements MouseListener
 	{		
 		//find out which label was clicked
 		JLabel  labelClicked =  (JLabel)e.getComponent();
-		
-		//un-highlight all labels
-		resetSelectedMapset();
-		
-		//highlight  the selected label
-		labelClicked.setForeground(Color.RED);
-		
+
 		//retrieve the mapset object
 		int selectedIndex = labels.indexOf(labelClicked);
-		selectedSet = Strudel.winMain.dataSet.gMapSets.get(selectedIndex);
+		GMapSet selectedSet = Strudel.winMain.dataSet.gMapSets.get(selectedIndex);
 		
-		//update the zoom control panel
-		Strudel.winMain.zoomControlPanel.updateControlsToMapsetSettings(selectedSet);
+		selectGMapSet(selectedSet);
 	}
 
 	@Override
@@ -124,5 +115,24 @@ public class GenomeLabelPanel extends JPanel implements MouseListener
 	{	
 	}
 
-
+	public void selectGMapSet(GMapSet selectedSet)
+	{
+		//un-highlight all labels
+		resetSelectedMapset();
+		
+		JLabel selectedLabel = null;
+		//highlight  the selected label
+		for(JLabel label : labels)
+		{
+			if(label.getText().equals(selectedSet.name))
+			{
+				selectedLabel = label;
+				break;
+			}
+		}
+		selectedLabel.setForeground(Color.RED);
+		
+		//update the zoom control panel
+		Strudel.winMain.zoomControlPanel.updateControlsToMapsetSettings(selectedSet);
+	}
 }

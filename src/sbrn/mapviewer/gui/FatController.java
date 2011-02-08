@@ -35,9 +35,6 @@ public class FatController
 	//results table entries selected for strong emphasis highlighting
 	public LinkedList<ResultsTableEntry> highlightedTableEntries;
 
-	//true if we have requested to find features by name
-	public boolean findFeaturesRequested = false;
-
 	public boolean dataLoadCancelled = false;
 
 	//true if we are using drag and drop to specify the input file
@@ -145,7 +142,7 @@ public class FatController
 		if(FeatureSearchHandler.featuresInRange != null)
 			FeatureSearchHandler.featuresInRange.clear();
 		winMain.mainCanvas.drawFoundFeaturesInRange = false;
-		findFeaturesRequested = false;
+
 		winMain.foundFeaturesTableControlPanel.getGenomeFilterCombo().setSelectedIndex(0);
 		//clear the table model for the found features
 		winMain.ffResultsPanel.getFFResultsTable().setModel(new DefaultTableModel());

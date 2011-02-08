@@ -1,6 +1,7 @@
 package sbrn.mapviewer.gui.handlers;
 
 import java.util.*;
+import javax.swing.*;
 import sbrn.mapviewer.*;
 import sbrn.mapviewer.data.*;
 import sbrn.mapviewer.gui.*;
@@ -27,7 +28,7 @@ public class FeatureSearchHandler
 
 		GChromoMap gMap = Utils.getGMapByName(chromosome, genome);
 		Strudel.winMain.fatController.selectedMap = gMap;
-		findAndDisplayFeaturesInRange(gMap, intervalStart, intervalEnd, false);
+		findAndDisplayFeaturesInRange(gMap, intervalStart, intervalEnd);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -37,20 +38,31 @@ public class FeatureSearchHandler
 		//remember the selected map
 		GChromoMap gMap = Strudel.winMain.fatController.selectedMap;
 		
-		//do not show the selection recatnlge or any links drawn during the preview
+		//do not show the selection rectangle or any links drawn during the preview
 		Strudel.winMain.fatController.selectedMap.drawFeatureSelectionRectangle = false;
 		Strudel.winMain.mainCanvas.drawLinksOriginatingInRange = false;
 		
-		//show the features in range
-		findAndDisplayFeaturesInRange(gMap, gMap.relativeTopY, gMap.relativeBottomY, true);
+		//reset the zoom
+		Strudel.winMain.mainCanvas.zoomHandler.processZoomResetRequest(gMap.owningSet);
+
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run()
+			{
+				GChromoMap gMap = Strudel.winMain.fatController.selectedMap;
+				//show the features in range
+				findAndDisplayFeaturesInRange(gMap, gMap.relativeTopY, gMap.relativeBottomY);
+			}
+		});
+		
+
 	}
 
 	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	private static void findAndDisplayFeaturesInRange(GChromoMap gChromoMap, float intervalStart, float intervalEnd, boolean isCanvasSelection)
+	private static void findAndDisplayFeaturesInRange(GChromoMap gChromoMap, float intervalStart, float intervalEnd)
 	{
 		try
-		{
+		{			
 			ChromoMap chromoMap = gChromoMap.chromoMap;
 
 			//we need to check that we have not exceeded the maximum value of the positions on the chromosome
@@ -83,19 +95,27 @@ public class FeatureSearchHandler
 			//if there are actually features contained in this range
 			if (containedFeatures.size() > 0)
 			{
+				//earmark the features for drawing on repaint
+				Strudel.winMain.mainCanvas.drawFoundFeaturesInRange = true;
+				
 				//highlight the region specified
 				gChromoMap.highlightedRegionStart = intervalStart;
 				gChromoMap.highlightedRegionEnd = intervalEnd;
 				gChromoMap.highlightChromomapRegion = true;
 
 				//turn off potential mouseover highlight feature label drawing
-				gChromoMap.drawMouseOverFeatures = false;
+				gChromoMap.drawMouseOverFeatures = false;				
 
 				//show the results table
-				Strudel.winMain.showBottomPanel(false);
+				Strudel.winMain.showBottomPanel(true);
+				
+				//enable the search related checkboxes
+				Strudel.winMain.foundFeaturesTableControlPanel.getShowLabelsCheckbox().setEnabled(true);
+				Strudel.winMain.foundFeaturesTableControlPanel.getShowHomologsCheckbox().setEnabled(true);
+				Strudel.winMain.foundFeaturesTableControlPanel.getHighlightWhiteCheckbox().setEnabled(true);
 
 				//now zoom into that range on the chromosome
-				Strudel.winMain.mainCanvas.zoomHandler.zoomIntoRange(gChromoMap, intervalStart, intervalEnd, false);
+				Strudel.winMain.mainCanvas.zoomHandler.zoomIntoRange(gChromoMap, intervalStart, intervalEnd, false);				
 
 				//we also need to set the labels on the control panel for the results to have the appropriate text
 				FoundFeaturesTableControlPanel controlPanel = Strudel.winMain.foundFeaturesTableControlPanel;
@@ -110,8 +130,6 @@ public class FeatureSearchHandler
 				controlPanel.getShowLabelsCheckbox().setSelected(Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().isSelected());
 				controlPanel.getShowHomologsCheckbox().setSelected(Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().isSelected());
 
-				//earmark the features for drawing on repaint
-				Strudel.winMain.mainCanvas.drawFoundFeaturesInRange = true;
 				//repaint the canvas so we can see the highlighted region which should then be coloured in differently
 				Strudel.winMain.mainCanvas.updateCanvas(true);
 

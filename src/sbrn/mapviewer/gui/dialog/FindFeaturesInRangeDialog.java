@@ -25,7 +25,7 @@ public class FindFeaturesInRangeDialog extends JDialog implements ActionListener
 
 		setLocationRelativeTo(Strudel.winMain);
 		pack();
-		setResizable(true);
+		setResizable(false);
 
 	}
 

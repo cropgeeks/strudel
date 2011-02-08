@@ -14,8 +14,15 @@ public class MenuExplore
 	{
 		//reset the main canvas
 		Strudel.winMain.fatController.resetMainCanvasView();
-		Strudel.winMain.fatController.findFeaturesRequested = true;
 
+		//if we don't have features to show from a name or egion based search we do not want the checkboxes enabled
+		if (!Strudel.winMain.mainCanvas.drawFoundFeaturesInRange)
+		{
+			Strudel.winMain.foundFeaturesTableControlPanel.getShowLabelsCheckbox().setEnabled(false);
+			Strudel.winMain.foundFeaturesTableControlPanel.getShowHomologsCheckbox().setEnabled(false);
+			Strudel.winMain.foundFeaturesTableControlPanel.getHighlightWhiteCheckbox().setEnabled(false);
+		}
+		
 		FeatureSearchHandler.findAllFeatures();
 	}
 

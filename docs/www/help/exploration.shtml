@@ -11,7 +11,7 @@
 
 	</head>
 	<body>
-	<a name="top"></a>
+		<a name="top"></a>
 
 		<!--#include virtual="header.shtml" -->
 
@@ -22,80 +22,106 @@
 
 		<ul>
 			<li>
-				<a href="#findFeatures">Finding one or more features by their name</a>
+				<a href="#findFeatures">Finding one or more features by their name or annotation</a>
 			</li>
 			<li>
-				<a href="#exploreRange">Discovering features in a given range on a chromosome</a>
+				<a href="#exploreRange">Defining a range of interest by position</a>
 			</li>
 			<li>
-				<a href="#addFeatures">Adding features from a user defined region into the results table</a>
+				<a href="#rangeMouseSelection">Defining a range of interest with the mouse</a>
+			</li>
+			<li>
+				<a href="#featureTable">The feature/results table</a>
 			</li>
 		</ul>
 
 
 		<!-- --------------------------------------------- -->
+
 		<h4>
 			Finding one or more features by their name:
 			<a name="findFeatures"></a>
 		</h4>
-		Click on the find features button
-		<img src="../images/find.png">
-		on the toolbar. Enter one or more feature names (one per line) and click the “Find” button in the dialog. A table with
-		features found will display at the bottom of the screen. Click rows in the table to display the features on the
-		canvas.
+
 		<p>
-			Currently this feature only supports exact name matches.
-		<p>
-			<a href="#top">Back to top</a>
+			Click on the "Search Feature Table" button
+			<img src="../images/find.png">
+			on the toolbar. A table with all features in the dataset will be displayed at the bottom of the window (see
+			<a href="#featureTable">table section below</a>). Enter a feature name or annotation search term and the features
+			that don't match will be filtered out of the table as you type. You can also enter just a part of a feature name or
+			annotation term -- wildcard characters are not required. This search is case-sensitive.
 		</p>
+		<a href="#top">Back to top</a>
+
 
 		<!-- --------------------------------------------- -->
+
 		<h4>
-			Discovering features in a given range on a chromosome:
+			Defining a range of interest by position:
 			<a name="exploreRange"></a>
 		</h4>
-		Click on the range button
-		<img src="../images/range.png">
-		on the toolbar. A dialog will appear where you can specify a genome, chromosome and range end points for a range you
-		want to explore. Click the “Find” button in the dialog and a results table will appear at the bottom of the window.
-		Click rows in the table to display the features on the canvas.
+
 		<p>
-			You can filter the results in the list by genome by using the drop-down menu in the results table’s control panel at
-			the bottom left. You can also click the checkboxes to display labels and links for the features in the range.
-			Clicking on the feature name hyperlinks will bring up a web browser with annotation information if a target URL for the genome in question
-			was specified in your data file. The feature name is appended to the URL and a web
-			browser will open with the corresponding page loaded. Sort the table by clicking on one header at a time.
-		<p>
-			Results tables from this procedure and the find features by name procedure can be saved to a tab delimited text file
-			by clicking the save
-			<img src="../images/save.png">
-			button on the toolbar, which opens a file save dialog.
-			<p>
-			A region for displaying all features can also be defined through the view itself. Hold down the Ctrl and Shift keys together, 
-			then click and drag next to a chromosome along the region of interest. This will draw a selection rectangle. Right-click and 
-			choose "Show annotation for features in range" from the context menu. This will bring up a results table such as the one 
-			 described above.
-		<p>
-			<a href="#top">Back to top</a>
+			Click on the "Explore Range" button
+			<img src="../images/range.png">
+			on the toolbar. A dialog will appear where you can specify a genome, chromosome and start/end positions for a range
+			you want to explore. Click the “Find” button in the dialog and a results table will appear at the bottom of the
+			window (see
+			<a href="#featureTable">table section below</a>).
 		</p>
+		<a href="#top">Back to top</a>
 
 		<!-- --------------------------------------------- -->
+
 		<h4>
-			Adding features from a user defined region into the results table:
-			<a name="addFeatures"></a>
+			Defining a range of interest with the mouse:
+			<a name="rangeMouseSelection"></a>
 		</h4>
-		When displaying more than one genome, Strudel only displays markers that have links associated with them. 
-		However, there are situations where it is desirable to display all available features from a genome in the context of the results table.
-		This is done by holding down
-		Ctrl and Shift together and left-clicking and dragging down next to a chromosome. This draws a slightly opaque box
-		around the region of interest. Right-click within the selected area and select “Add features in range to results” from
-		the context menu that appears. This will add all available features in the range (not just those with homologs) to the
-		results table which can then be filtered, sorted and explored as required. Please note that there is currently no
-		support for drawing all of the additional features on the canvas simultaneously – with very dense maps this would make
-		the display all but unusable.
 		<p>
-			<a href="#top">Back to top</a>
+			A region for displaying all features can also be defined through the view itself. Hold down the Ctrl and Shift keys
+			together, then click and drag next to a chromosome along the region of interest. This will draw a selection
+			rectangle. Selecting a region with the mouse will also highlight all the homologies originating in this region in real time. 
+			Right-click and choose "Show annotation for features in range" from the context menu. This will display
+			the results table (see
+			<a href="#featureTable">table section below</a>).
 		</p>
+		<p>
+			Press the ESC key to undo the selection and start over again.
+		</p>
+
+
+		<a href="#top">Back to top</a>
+
+		<!-- --------------------------------------------- -->
+
+		<h4>
+			The feature/results table:
+			<a name="featureTable"></a>
+		</h4>
+
+		<p>
+			The table at the bottom of the Strudel canvas either displays the full set of features in the currently loaded
+			dataset or a subset thereof, depending on how it was invoked (see above).
+		</p>
+		<p>
+			Click one or more (Ctrl-click) rows in the table to display the features on the canvas. The results in
+			the list can be filtered by genome by using the drop-down menu in the results table’s control panel at the bottom left. 
+			One can also click the checkboxes to display labels and links for features if  a range was specified either through the dialog or with the mouse. 
+			Sort the table by clicking on one header at a time.
+		</p>
+		<p>
+			Clicking on the feature name hyperlinks will bring up a web browser with annotation information if a target URL for
+			the genome in question was specified in the data file. The feature name is appended to the URL and a web browser
+			will open with the corresponding page loaded.
+		</p>
+		<p>
+			Results tables can be saved to a tab delimited text file by clicking the save
+			<img src="../images/save.png">
+			button on the toolbar, which opens a file save dialog.
+		</p>
+
+		<a href="#top">Back to top</a>
+
 
 		<!-- --------------------------------------------- -->
 

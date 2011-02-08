@@ -1,111 +1,370 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 
 <html>
-<head>
-<meta http-equiv="Content-Language" content="en-gb">
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<head>
+		<meta http-equiv="Content-Language" content="en-gb">
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
 
-<link rel="stylesheet" href="../stylesheet/styles.css" type="text/css">
+		<link rel="stylesheet" href="../stylesheet/styles.css" type="text/css">
 
-<title>What's new in Strudel</title>
+		<title>What's new in Strudel</title>
 
-</head>
-<body>
+	</head>
+	<body>
 
-<!--#include virtual="header.shtml" -->
+		<!--#include virtual="header.shtml" -->
 
-<h3>Please note: with effect from the official release date of Strudel (version 1.10.01.05 onwards) the Strudel data format has changed.
- Earlier input files will no longer be compatible and you must reformat these to match the current format. See 
- <a href="http://bioinf.scri.ac.uk/strudel/help/data.shtml">the manual</a> for instructions and examples.</h3>
- 
-  <h2>New in release 1.10.03.09:</h2>
-  <h3>New features:</h3>
-<ul>
- <li>Added a hint panel for displaying interactive messages.</li>
- <li>Colour Scheme support has been added, as well as support for custom colour schemes.</li>
- <li>Added a ProgressDialog for tracking data import.</li>
-</ul>
+		<h2>
+			New in release 1.11.02.09:
+		</h2>
+		<h3>
+			New features:
+		</h3>
+		<ul>
+			<li>
+				Zooming now supported by Ctrl+scroll.
+			</li>
+			<li>
+				Added individual maximum zoom value spinners for genomes so that each genome can have a separate maximum value.
+			</li>
+			<li>
+				Have added a check for unsupported numbers of maps within genomes (at the time of data loading). If this fails the
+				data load is aborted with an error message to that extent.
+			</li>
+			<li>
+				Basic support for the MAF format added. New parser and some modifications to existing data loading code which will
+				allow additional file formats to be added in the future more easily.
+			</li>
+			<li>
+				Have added the option to display full feature information on mouseover. This is controlled as usual through a
+				checkbox in the settings panel and through a menu item. This applies only to mouseover situations -- in all other
+				instances of label display only feature names are used.
+			</li>
+			<li>
+				Multiple entries in the results table can now be selected and highlighted simultaneously.
+			</li>
+			<li>
+				Altered find feature by name functionality so that it now uses a "Show Feature Table" button to bring up a table of
+				all the features, the controls for which contain a textbox which will filter on names and annotations.
+			</li>
+			<li>
+				A few alterations to the background feature code to (potentially) speed things up a little.
+			</li>
+			<li>
+				Have added the option for real time discovery of links by mouse drag. This has been implemented on the back of
+				current functionality for exploring features in a range by selecting a region on a map with the mouse. When
+				Ctrl+Shift are pressed the user can now drag on or near a map and links are being drawn as the mouse is dragged.
+				When the mouse is released, the green selection rectangle persists and the user can right click as before and select
+				"Show annotation for features in range". Press ESC to clear the current selection.
+			</li>
+			<li>
+				Added an Exit option to the File menu.
+			</li>
+			<li>
+				Added support for defining a "chromosome" in the file format, that allows it to be given a specific colour.
+			</li>
+			<li>
+				Chromosome colours - if they exist - are now painted on the canvas a little boxes next to the actual chromosome (on
+				the opposite side from its label).
+			</li>
+			<li>
+				Updated the Ant build file to be compatible with Ant 1.8.
+			</li>
+			<li>
+				Links can now have specific colours defined for them in the .strudel file format. The colours are optional, and
+				Strudel will fall-back on its default link colour (grey) if one isn't found.
+			</li>
+			<li>
+				Added an option to the FoundFeaturesTableControlPanel to force all highlighted homologies to be displayed in white.
+			</li>
+			<li>
+				Other (non-highlighted) homologies will now appear "dim" when highlighted ones are being drawn too.
+			</li>
+			<li>
+				The multiple zoom control panels below the genomes have been replaced with a single panel for better scalability
+				with larger genomes numbers. This panel is associated with a genome by clicking on its name label.
+			</li>
+			<li>
+				Have added automatic selection of genomes as the active genome in the zoom control panel. This is based on mouse
+				clicks on maps and even on mouseover.
+			</li>
+			<li>
+				Have disabled Alt-click functionality for filling the screen with a chromosome as this was apparently interfering
+				with the focus subsystem and causing problems with subsequent mouse clicks. Instead users can now double click on a
+				chromosome to achieve the same thing.
+			</li>
 
- 
-   <h3>Other changes/bug fixes:</h3>
-<ul>
- <li>- CHG: Removed several buttons from toolbar and put replacement controls into a dialog for view settings. </li>
- <li>- CHG: Export Image code updated to include the GenomeLabelPanel.</li>
- <li>- BUG: A bug in the multi-core link drawing code was stopping some links from being displayed.</li>
- <li>- BUG: Linksets to maps that were offscreen were drawn unnecessarily. Have added extra check to prevent this. Link drawing performance has improved as a result of this.</li> 
- <li>- BUG: Duplicate links were being added to the precomputed linksets for each gChromoMap. Links are now being tracked in hashtable to prevent duplicate entries. </li>
-</ul>
- 
- 
- 
-  <h2>New in release 1.10.01.20:</h2>
-  This is a bug fix release with two minor fixes. 
-  <ul>
-  <li>BUG: Cmd-click on Mac was not working.</li>
-  <li>BUG: Link positions during chromosome inversion were being drawn in the wrong places.</li>
-  <li>BUG: When a genome was removed from view using the Configure Genomes dialog, the link display for the remaining 
-  genomes was not working properly.</li>
-  </ul>
- 
- 
- 
- 
- <h2>New in release 1.10.01.19:</h2>
- 
- <h3>New features:</h3>
-<ul>
-<li>There is now functionality to configure the visible datasets so that multiple instances of a given set are visible, to allow all-by-all comparisons.
- Please refer to the <a href="./data.shtml#layout">manual</a> page for instructions on how to use this feature. 
-</li>
-<li>The control panel on the results table is now also displayed when features are listed that were found through a name search.
-This allows users to visualize all features and homologs discovered by this route.</li>
-</ul>
- 
-  <h3>Other changes/bug fixes:</h3>
-<ul>
-<li> CHG: Have put a check into GChromoMap.drawLinkedFeatures() to see whether features actually need drawn or are whether they are offscreen. </li>
-<li> CHG: Refactored drawing code in MainCanvas.</li>
-<li> CHG: Installer updated. Redirection to the what's new page is now done through the install4j installer rather than in-code. Banner, watermark and licence file added.</li>
-<li> BUG: State of antialias and distance marker buttons was not being stored in preferences correctly. </li>
-<li> CHG: Label drawing code refactored to use a single method for all label drawing. </li>
-<li> CHG: Labels are now drawn inwards from genomes at either end to prevent label text falling off the edge of the canvas.</li>
-<li> CHG: Reinstated the antialias button. When selected the antialiasing behaviour is still controlled by the application, i.e. antialias is off during animation and navigation but delayed antialiased repaint threads kick in when the user has stopped making inputs to the application.</li>
-<li> BUG: Import of the mini example file from the Strudel website (strudelFileFormatExample.txt) was failing. Have removed headers from this and have also removed the check in the file parser that throws the error if the line does not start with one of the permitted flags. </li>
-<li> NEW: Updated website header file to include link to usage map. </li>
-<li> CHG: Changed code for drawing all labels on chromosome so that each chromosome has its own flag for whether all labels should be drawn or not. This now allows multiple chromosomes in a genome to be selected for this at the same time.</li> 
-<li> BUG: When Ctrl-click-selecting individual chromosomes, not all selections resulted in link set drawing -- now fixed.</li>
-<li> CHG: Removed homologs containing unknown features from the example dataset.</li>
-<li> BUG: Features were being drawn twice when chromosomes were ctrl-click selected in pairs.</li>
-<li> BUG: Linksets were being created in duplicate during initing of linkset lookup. </li>
-<li> CHG: Refactored code in initLinkSetLookup() in LinkDisplayManager.</li>
-<li> BUG: Removed unnecessary repaint in MouseHandler.mouseReleased().</li>
-</ul>
+		</ul>
+		<h3>
+			Other changes/bug fixes:
+		</h3>
+		<ul>
+
+			<li>
+				CHG: Have added check to make sure that map index labels are not drawn closer to adjacent maps than to the owning
+				map when screen space is limited.
+			</li>
+			<li>
+				CHG: Have changed the genome label panel to use JLabels instead of painted Strings so that we can have automated
+				name truncation and tool tips when there are too many labels to fit on the available canvas.
+			</li>
+			<li>
+				CHG: Mouse-drag scrolling has been replaced by scroll buttons (on the right of the zoom control panel).
+			</li>
+			<li>
+				CHG: Have changed the font size handling of the chromosome index to allow for greater numbers of genomes to be
+				accommodated.
+			</li>
+			<li>
+				CHG: Have extended use of the data loading progress dialog to inform the user that the canvas view is being
+				prepared. This takes some time for large datasets and the progress bar now goes into indeterminate mode during this
+				phase and remains like this until the view has been built and the linksets have been initialized (the latter
+				consumes most of this time).
+			</li>
+			<li>
+				CHG: Have removed functionality to add features to result set as this is now redundant.
+			</li>
+			<li>
+				CHG: If running on Vista or Windows 7, the blue (OfficeLook&Feel) scheme is no longer used.
+			</li>
+			<li>
+				CHG: All features are now being shown whenever features are visible. Previously
+				only features that have links associated with them were shown but this is unintuitive and was causing problems with
+				the feature display.
+			</li>
+			<li>
+				CHG: Have modified handling of chromosome width to accommodate larger numbers of genomes more comfortably. 
+			</li>
+			<li>
+				BUG: Cancel button on data import progress dialog was not actually killing the job -- now fixed.
+			</li>
+			<li>
+				BUG: Have fixed a bug that was causing feature positions to initially be painted in the wrong position after window
+				resizing. This was due to the feature position arrays not being initialised under these circumstances, and a check
+				has now been built into MainCanvas.paintCanvas() to ensure that this happens whenever appropriate.
+			</li>
+			<li>
+				BUG: Fixed bug that was causing the results table to be displayed when the main window was being resized.
+			</li>
+			<li>
+				BUG: Fixed bug in multiple row selection of table.
+			</li>
+			<li>
+				BUG: Fixed bug that was preventing full range selection at end of chromosome with Ctrl-Shift mouse drag.
+			</li>
+			<li>
+				BUG: Fixed bug in MouseOverHandler.detectMouseOver() which was causing unnecessary repaints.
+			</li>
+			<li>
+				BUG: Made some changes to the dimmed link drawing because it wasn't resetting after closing the results table.
+			</li>
+
+		</ul>
+
+	<hr/>
+
+		<h3>
+			Please note: with effect from the official release date of Strudel (version 1.10.01.05 onwards) the Strudel data
+			format has changed. Earlier input files will no longer be compatible and you must reformat these to match the current
+			format. See
+			<a href="http://bioinf.scri.ac.uk/strudel/help/data.shtml">the manual</a> for instructions and examples.
+		</h3>
+		
+		<hr/>
+
+		<h2>
+			New in release 1.10.03.09:
+		</h2>
+		<h3>
+			New features:
+		</h3>
+		<ul>
+			<li>
+				Added a hint panel for displaying interactive messages.
+			</li>
+			<li>
+				Colour Scheme support has been added, as well as support for custom colour schemes.
+			</li>
+			<li>
+				Added a ProgressDialog for tracking data import.
+			</li>
+		</ul>
+
+
+		<h3>
+			Other changes/bug fixes:
+		</h3>
+		<ul>
+			<li>
+				- CHG: Removed several buttons from toolbar and put replacement controls into a dialog for view settings.
+			</li>
+			<li>
+				- CHG: Export Image code updated to include the GenomeLabelPanel.
+			</li>
+			<li>
+				- BUG: A bug in the multi-core link drawing code was stopping some links from being displayed.
+			</li>
+			<li>
+				- BUG: Linksets to maps that were offscreen were drawn unnecessarily. Have added extra check to prevent this. Link
+				drawing performance has improved as a result of this.
+			</li>
+			<li>
+				- BUG: Duplicate links were being added to the precomputed linksets for each gChromoMap. Links are now being tracked
+				in hashtable to prevent duplicate entries.
+			</li>
+		</ul>
+
+
+
+		<h2>
+			New in release 1.10.01.20:
+		</h2>
+		This is a bug fix release with two minor fixes.
+		<ul>
+			<li>
+				BUG: Cmd-click on Mac was not working.
+			</li>
+			<li>
+				BUG: Link positions during chromosome inversion were being drawn in the wrong places.
+			</li>
+			<li>
+				BUG: When a genome was removed from view using the Configure Genomes dialog, the link display for the remaining
+				genomes was not working properly.
+			</li>
+		</ul>
 
 
 
 
-<h2>New in release 1.10.01.05:</h2>
-<ul>
-<li>NEW: Added an annotation URL for Brachypodium in the example dataset.</li>
-<li>CHG: Changed 'Publication' label on front page to 'Coming soon'.</li>
-<li>BUG: Export of results table data was misformatted.</li>
-</ul>
+		<h2>
+			New in release 1.10.01.19:
+		</h2>
+
+		<h3>
+			New features:
+		</h3>
+		<ul>
+			<li>
+				There is now functionality to configure the visible datasets so that multiple instances of a given set are visible,
+				to allow all-by-all comparisons. Please refer to the
+				<a href="./data.shtml#layout">manual</a> page for instructions on how to use this feature.
+			</li>
+			<li>
+				The control panel on the results table is now also displayed when features are listed that were found through a name
+				search. This allows users to visualize all features and homologs discovered by this route.
+			</li>
+		</ul>
+
+		<h3>
+			Other changes/bug fixes:
+		</h3>
+		<ul>
+			<li>
+				CHG: Have put a check into GChromoMap.drawLinkedFeatures() to see whether features actually need drawn or are
+				whether they are offscreen.
+			</li>
+			<li>
+				CHG: Refactored drawing code in MainCanvas.
+			</li>
+			<li>
+				CHG: Installer updated. Redirection to the what's new page is now done through the install4j installer rather than
+				in-code. Banner, watermark and licence file added.
+			</li>
+			<li>
+				BUG: State of antialias and distance marker buttons was not being stored in preferences correctly.
+			</li>
+			<li>
+				CHG: Label drawing code refactored to use a single method for all label drawing.
+			</li>
+			<li>
+				CHG: Labels are now drawn inwards from genomes at either end to prevent label text falling off the edge of the
+				canvas.
+			</li>
+			<li>
+				CHG: Reinstated the antialias button. When selected the antialiasing behaviour is still controlled by the
+				application, i.e. antialias is off during animation and navigation but delayed antialiased repaint threads kick in
+				when the user has stopped making inputs to the application.
+			</li>
+			<li>
+				BUG: Import of the mini example file from the Strudel website (strudelFileFormatExample.txt) was failing. Have
+				removed headers from this and have also removed the check in the file parser that throws the error if the line does
+				not start with one of the permitted flags.
+			</li>
+			<li>
+				NEW: Updated website header file to include link to usage map.
+			</li>
+			<li>
+				CHG: Changed code for drawing all labels on chromosome so that each chromosome has its own flag for whether all
+				labels should be drawn or not. This now allows multiple chromosomes in a genome to be selected for this at the same
+				time.
+			</li>
+			<li>
+				BUG: When Ctrl-click-selecting individual chromosomes, not all selections resulted in link set drawing -- now fixed.
+			</li>
+			<li>
+				CHG: Removed homologs containing unknown features from the example dataset.
+			</li>
+			<li>
+				BUG: Features were being drawn twice when chromosomes were ctrl-click selected in pairs.
+			</li>
+			<li>
+				BUG: Linksets were being created in duplicate during initing of linkset lookup.
+			</li>
+			<li>
+				CHG: Refactored code in initLinkSetLookup() in LinkDisplayManager.
+			</li>
+			<li>
+				BUG: Removed unnecessary repaint in MouseHandler.mouseReleased().
+			</li>
+		</ul>
 
 
 
 
-<h2>New in release 0.09.12.21:</h2>
-<ul>
-<li>- NEW: Have added colour for selected inverted chromosomes.</li>
-<li>- BUG: Needed to clear results when new data is being loaded and results table is still up -- fixed.</li>
-<li>- BUG: Restored code for changing cursor in results table.</li>
-<li>- CHG: Online help files updated.</li>
-<li>- CHG: Outline highlighting of chromosomes in the overview canvas disabled.</li>
-<li>- NEW: File name is now displayed in winMain title bar.</li>
-</ul>
+		<h2>
+			New in release 1.10.01.05:
+		</h2>
+		<ul>
+			<li>
+				NEW: Added an annotation URL for Brachypodium in the example dataset.
+			</li>
+			<li>
+				CHG: Changed 'Publication' label on front page to 'Coming soon'.
+			</li>
+			<li>
+				BUG: Export of results table data was misformatted.
+			</li>
+		</ul>
 
 
-<!--#include virtual="footer.html" -->
 
-</body>
+
+		<h2>
+			New in release 0.09.12.21:
+		</h2>
+		<ul>
+			<li>
+				- NEW: Have added colour for selected inverted chromosomes.
+			</li>
+			<li>
+				- BUG: Needed to clear results when new data is being loaded and results table is still up -- fixed.
+			</li>
+			<li>
+				- BUG: Restored code for changing cursor in results table.
+			</li>
+			<li>
+				- CHG: Online help files updated.
+			</li>
+			<li>
+				- CHG: Outline highlighting of chromosomes in the overview canvas disabled.
+			</li>
+			<li>
+				- NEW: File name is now displayed in winMain title bar.
+			</li>
+		</ul>
+
+
+		<!--#include virtual="footer.html" -->
+
+	</body>
 </html>

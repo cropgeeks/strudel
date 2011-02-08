@@ -212,6 +212,7 @@ public class CanvasZoomHandler
 		int buffer = 4;
 		int topY = relativeTopY + gChromoMap.y - buffer;
 		int bottomY = relativeBottomY + gChromoMap.y + buffer;
+		
 		Strudel.winMain.mainCanvas.zoomHandler.processPanZoomRequest(gChromoMap, topY,
 						bottomY, animate);
 	}

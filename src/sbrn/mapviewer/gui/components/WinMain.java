@@ -312,7 +312,6 @@ public class WinMain extends JFrame
 		//refresh the main canvas
 		if(repaintAndIndex)
 		{
-			validate();
 			mainCanvas.updateCanvas(true);		
 		}
 	}

@@ -537,6 +537,9 @@ public class MainCanvas extends JPanel
 		Font mapLabelFont = new Font("Arial", Font.BOLD, fontSize);
 		g2.setFont(mapLabelFont);
 		int fontHeight = g2.getFontMetrics().getHeight()-4;
+		
+		//distance from chromosome to coloured rectangle
+		int distFromChromo = 5;
 
 		for (GMapSet gMapSet : winMain.dataSet.gMapSets)
 		{
@@ -547,12 +550,15 @@ public class MainCanvas extends JPanel
 				if (gChromoMap.isShowingOnCanvas && !gChromoMap.inversionInProgress)
 				{
 					// decide where to place the label on y
-					int labelY = 0;
+					int rectY = 0;
 					//position of index with this var is in the center of the chromosome regardless of chromo position
 					int chromoCenterPos = gChromoMap.y + Math.round(gChromoMap.height / 2.0f) + (fontSize/2);
 
-					//draw the index in the center of each chromosome
-					labelY = chromoCenterPos;
+					//draw the index in the center of each chromosome but below the name label so they don't overlap
+					rectY = chromoCenterPos + 5;
+					
+					//this is where we draw the rect on x
+					int rectX = gChromoMap.x + gChromoMap.width + distFromChromo;
 
 					// Does it have a custom colour? If so, mark it next to the label
 					if (gChromoMap.chromoMap.r != -1)
@@ -560,9 +566,9 @@ public class MainCanvas extends JPanel
 						Color c = Utils.getChromosomeColor(gChromoMap.chromoMap);
 
 						g2.setColor(c);
-						g2.fillRect(gChromoMap.x -25, labelY-fontHeight, 15, fontHeight);
+						g2.fillRect(rectX, rectY, 15, fontHeight);
 						g2.setColor(Color.white);
-						g2.drawRect(gChromoMap.x -25, labelY-fontHeight, 15, fontHeight);
+						g2.drawRect(rectX, rectY, 15, fontHeight);
 					}
 				}
 			}
@@ -727,7 +733,7 @@ public class MainCanvas extends JPanel
 			public void componentResized(ComponentEvent e)
 			{
 				if(Strudel.dataLoaded)
-				{	
+				{					
 					//if the canvas has been resized we need to re-initialise all the feature positions on all mapsets
 					//need to set this flag to enable that
 					canvasResized = true;

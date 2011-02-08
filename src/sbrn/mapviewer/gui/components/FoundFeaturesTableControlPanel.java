@@ -163,26 +163,29 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel implement
 	
 	private void showHomologsCheckboxStateChanged(javax.swing.event.ChangeEvent evt)
 	{
-		//synchronise this checkbox with the corresponding one in the find features in range panel
-		if (showHomologsCheckbox.isSelected())
-			Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().setSelected(true);
-		else
-			Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().setSelected(false);
-		
-		highlightWhiteCheckbox.setEnabled(showHomologsCheckbox.isSelected());
-		
-		Strudel.winMain.mainCanvas.updateCanvas(true);
+		if (Strudel.winMain.mainCanvas.drawFoundFeaturesInRange)
+		{
+			//synchronise this checkbox with the corresponding one in the find features in range panel
+			if (showHomologsCheckbox.isSelected())
+				Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().setSelected(true);
+			else
+				Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayHomologsCheckBox().setSelected(false);
+			highlightWhiteCheckbox.setEnabled(showHomologsCheckbox.isSelected());
+			Strudel.winMain.mainCanvas.updateCanvas(true);
+		}
 	}
 	
 	private void showLabelsCheckboxStateChanged(javax.swing.event.ChangeEvent evt)
 	{
-		//synchronise this checkbox with the corresponding one in the find features in range panel
-		if (showLabelsCheckbox.isSelected())
-			Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(true);
-		else
-			Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(false);
-		
-		Strudel.winMain.mainCanvas.updateCanvas(true);
+		if (Strudel.winMain.mainCanvas.drawFoundFeaturesInRange)
+		{
+			//synchronise this checkbox with the corresponding one in the find features in range panel
+			if (showLabelsCheckbox.isSelected())
+				Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(true);
+			else
+				Strudel.winMain.ffInRangeDialog.ffInRangePanel.getDisplayLabelsCheckbox().setSelected(false);
+			Strudel.winMain.mainCanvas.updateCanvas(true);
+		}
 	}
 	
 	public void setupGenomeFilterCombo()
@@ -343,6 +346,11 @@ public class FoundFeaturesTableControlPanel extends javax.swing.JPanel implement
 		
 		//update the label that says how many features are contained in the results table
 		Strudel.winMain.foundFeaturesTableControlPanel.getNumberFeaturesLabel().setText(new Integer(Strudel.winMain.ffResultsPanel.resultsTable.getVisibleEntries().size()).toString());
+	}
+	
+	public JCheckBox getHighlightWhiteCheckbox()
+	{
+		return highlightWhiteCheckbox;
 	}
 	
 }

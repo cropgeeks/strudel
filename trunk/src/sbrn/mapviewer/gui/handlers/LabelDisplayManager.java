@@ -49,7 +49,7 @@ public class LabelDisplayManager
 			//if the selectedMap is null here that means we have got here not through a mouse based selection event but through displaying the feature table
 			//in that case we can just use the first instance of a map that contains the target feature
 			if(Strudel.winMain.fatController.selectedMap == null)
-				selectedMap = tableEntry.getTargetFeature().getOwningMap().getGChromoMaps().get(0);
+				selectedMap = Utils.getAdjacentPairOfGMaps(tableEntry.getTargetFeature(), tableEntry.getHomologFeature());
 			
 			//get the feature for this entry and add it to the lookup
 			addFeatureToLookup(tableEntry.getTargetFeature(), lookup, selectedMap);

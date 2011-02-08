@@ -1,5 +1,5 @@
-<project name="MapViewer" default="compile" basedir=".">
-	<description>MapViewer Ant Build Script</description>
+<project name="Strudel" default="compile" basedir=".">
+	<description>Strudel Ant Build Script</description>
 
 	<property name="src" location="src"/>
 	<property name="res" location="res"/>
@@ -7,7 +7,7 @@
 	<property name="lib" location="lib"/>
 
 	<property name="mapviewer.jar" value="${lib}/mapviewer.jar"/>
-	<property name="i4j" value="C:\Program Files\install4j\bin\ant.jar"/>
+	<property name="i4j" value="C:\Program Files\install4j5\bin\ant.jar"/>
 
 
 	<path id="project.classpath">
@@ -63,17 +63,15 @@
 
 
 	<target name="install4j" depends="getversion, jar">
-		<taskdef name="install4j"
-		classname="com.install4j.Install4JTask"
-		classpath="${i4j}"/>
-
+		<taskdef name="install4j" classname="com.install4j.Install4JTask" classpath="${i4j}"/>
 		<delete>
 			<fileset dir="installer" includes="**/*.exe"/>
 			<fileset dir="installer" includes="**/*.sh"/>
 			<fileset dir="installer" includes="**/*.dmg"/>
 		</delete>
-		<install4j projectfile="installer/strudel.install4j" release="${version}"/>
+		<install4j projectfile="installer/strudel.install4j" release="${i4j.version}"/>
 	</target>
+
 
 	<target name="javadoc">
 		<javadoc destdir="docs/api" author="true" version="true" use="true">

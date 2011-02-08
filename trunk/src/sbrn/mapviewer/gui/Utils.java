@@ -688,6 +688,50 @@ public class Utils
 		int index2 = Strudel.winMain.dataSet.gMapSets.indexOf(set2);
 		return Math.abs(index1 - index2) == 1;
 	}
+	
+	// --------------------------------------------------------------------------------------------------------------------------------
+
+	//if we want to highlight a pair of homologs and draw a line between them we need to check that we have two adjacent mapsets for this 
+	//otherwise we would have to draw across genomes and Strudel will never do that
+	//if there is more than one graphical instance of our target feature's mapset, we need to at least attempt to pair it up with
+	//an adjacent mapset that has the homolog on it
+	public static GChromoMap getAdjacentPairOfGMaps(Feature targetFeature, Feature homologFeature)
+	{
+		GChromoMap selectedMap = null;
+		
+		//get a list of the graphical instances of the map that our target feature is on
+		LinkedList<GChromoMap> targetFeatureGMaps = targetFeature.getOwningMap().getGChromoMaps();
+		
+		//if we have more than one instance, try out all possible permutations of graphical instances of both the target and the
+		//reference mapset until we have one where they are adjacent
+		if(targetFeatureGMaps.size() > 1)
+		{
+			//get a list of the graphical instances of the map that our reference feature is on
+			LinkedList<GChromoMap> referenceGMaps = homologFeature.getOwningMap().getGChromoMaps();
+			
+			//for all instances of our target map
+			for(GChromoMap targetGMap : targetFeatureGMaps)
+			{
+				//for all instances of our reference map
+				for(GChromoMap refMap : referenceGMaps)
+				{
+					//if we find two that are adjacent, return the current targetGMap
+					if(Utils.areMapSetsAdjacent(targetGMap.owningSet, refMap.owningSet))
+					{
+						selectedMap = targetGMap;
+						break;
+					}
+				}
+			}
+		}
+		//if we have one instance only we need to return this instead
+		else
+		{
+			selectedMap = targetFeatureGMaps.get(0);
+		}
+		
+		return selectedMap;
+	}
 
 	// --------------------------------------------------------------------------------------------------------------------------------
 

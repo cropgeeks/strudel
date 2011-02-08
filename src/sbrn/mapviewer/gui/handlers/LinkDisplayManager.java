@@ -386,7 +386,12 @@ public class LinkDisplayManager
 				//if the selectedMap is null here that means we have got here not through a mouse based selection event but through displaying the feature table
 				//in that case we can just use the first instance of a map that contains the target feature
 				if(Strudel.winMain.fatController.selectedMap == null)
-					selectedMap = resultsTableEntry.getTargetFeature().getOwningMap().getGChromoMaps().get(0);
+				{
+					//we need to check that we have two adjacent mapsets for this though
+					//if there is more than one graphical instance of our target feature's mapset, we need to at least attempt to pair it up with
+					//an adjacent mapset that has the homolog on it
+					selectedMap = Utils.getAdjacentPairOfGMaps(resultsTableEntry.getTargetFeature(), resultsTableEntry.getHomologFeature());
+				}
 				
 				checkLinkAndDraw(g2, resultsTableEntry.getTargetFeature(), resultsTableEntry.getHomologFeature(), Float.parseFloat(resultsTableEntry.getLinkEValue()), true, selectedMap, false);
 			}

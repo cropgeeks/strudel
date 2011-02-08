@@ -8,7 +8,10 @@
       </Border>
     </Property>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[10, 350]"/>
+      <Dimension value="[0, 0]"/>
+    </Property>
+    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+      <Dimension value="[300, 400]"/>
     </Property>
   </Properties>
   <AuxValues>
@@ -42,11 +45,11 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="numberFeaturesLabel" min="-2" max="-2" attributes="1"/>
-                          <Component id="regionEndLabel" pref="104" max="32767" attributes="1"/>
-                          <Component id="regionStartLabel" pref="104" max="32767" attributes="1"/>
-                          <Component id="chromoLabel" pref="104" max="32767" attributes="1"/>
-                          <Component id="genomeLabel" alignment="0" pref="104" max="32767" attributes="1"/>
-                          <Component id="genomeFilterCombo" alignment="0" pref="104" max="32767" attributes="0"/>
+                          <Component id="regionEndLabel" pref="125" max="32767" attributes="1"/>
+                          <Component id="regionStartLabel" pref="125" max="32767" attributes="1"/>
+                          <Component id="chromoLabel" pref="125" max="32767" attributes="1"/>
+                          <Component id="genomeLabel" alignment="0" pref="125" max="32767" attributes="1"/>
+                          <Component id="genomeFilterCombo" alignment="0" pref="125" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Component id="showLabelsCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -58,7 +61,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="txtFilter" pref="97" max="32767" attributes="0"/>
+                      <Component id="txtFilter" pref="118" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -108,7 +111,7 @@
                   <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtFilter" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="81" max="32767" attributes="0"/>
+              <EmptySpace pref="31" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>

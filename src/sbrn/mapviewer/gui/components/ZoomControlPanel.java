@@ -38,7 +38,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		super();
 
 		setFloatable(false);
-		setBorderPainted(true);
+//		setBorderPainted(true);
 
 		setupComponents();
 	}
@@ -104,7 +104,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		
 		//we need the filler when this toolbar is the only one
 		//this is to stop it from filling the whole width of the frame
-		add(Box.createHorizontalGlue());
+//		add(Box.createHorizontalGlue());
 
 		//add the components
 		//all of these are zoom related
@@ -125,7 +125,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 
 		//we need the filler when this toolbar is the only one
 		//this is to stop it from filling the whole width of the frame
-		add(Box.createHorizontalGlue());
+//		add(Box.createHorizontalGlue());
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------

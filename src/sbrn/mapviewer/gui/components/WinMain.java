@@ -217,11 +217,6 @@ public class WinMain extends JFrame
 
 			//this panel contains the zoom controls and the search results panel below it
 			bottomPanel = new JPanel(new BorderLayout());	
-			//for some reason we need to set the bottom panel size to 0 to hide it
-			bottomPanel.setMinimumSize(new Dimension(0,0));
-			bottomPanel.setPreferredSize(new Dimension(0,0));
-			//we also need to initially hide it because otherwise it keeps flashing up for a few seconds before the main canvas has been repainted
-			bottomPanel.setVisible(false);
 
 			//the popup menu we use when are over a chromosome
 			chromoContextPopupMenu  = new ChromoContextPopupMenu();
@@ -246,13 +241,8 @@ public class WinMain extends JFrame
 			initZoomControls();
 
 			//this splitpane contains the main panel and the bottom panel
-			splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, mainPanel, bottomPanel);
-			//don't want the divider visible as we want to control this splitpane programmatically only
+			splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);//, mainPanel, bottomPanel);
 			splitPane.setOneTouchExpandable(false);
-			splitPane.setDividerSize(0);
-			//when we resize, give the extra weight to the top component (the canvas)
-			splitPane.setResizeWeight(1.0);	
-			splitPane.setDividerLocation(1.0f);
 
 			//these dialogs can only be instantiated now because they rely on data having been loaded previously
 			ffInRangeDialog = new FindFeaturesInRangeDialog();
@@ -277,18 +267,20 @@ public class WinMain extends JFrame
 			mainPanel.add(zoomControlAndGenomelabelContainer, BorderLayout.SOUTH);
 
 			//this panel contains the results table and its control panel
-			bottomPanelContainer = new JPanel(new BorderLayout());
-			bottomPanelContainer.add(foundFeaturesTableControlPanel, BorderLayout.WEST);
-			bottomPanelContainer.add(ffResultsPanel, BorderLayout.CENTER);
-			bottomPanel.add(bottomPanelContainer,BorderLayout.CENTER);
+			bottomPanel.add(foundFeaturesTableControlPanel, BorderLayout.WEST);
+			bottomPanel.add(ffResultsPanel, BorderLayout.CENTER);
 
 			add(splitPane, BorderLayout.CENTER);
-			
+			splitPane.setTopComponent(mainPanel);
+			splitPane.setBottomComponent(bottomPanel);
+			//when we resize, give the extra weight to the top component (the canvas)
+			bottomPanel.setMinimumSize(new Dimension(0,0));
+
+			splitPane.setResizeWeight(1.0);	
+	
 			validate();
+			splitPane.setDividerLocation(1.0);
 			repaint();
-			
-			//now we can allow the bottom panel to be visible, although it has to stay hidden until we move the splitpane's divider location
-			bottomPanel.setVisible(true);
 			
 			//this inits the overview dialog
 			initOverviewDialog();
@@ -305,7 +297,7 @@ public class WinMain extends JFrame
 	public void showBottomPanel(boolean repaintAndIndex)
 	{
 		//we want the results table's control panel to be fully visible
-		int controlPanelHeight = (int)foundFeaturesTableControlPanel.getMinimumSize().getHeight();	
+		int controlPanelHeight = (int)foundFeaturesTableControlPanel.getPreferredSize().getHeight();	
 		int newDividerLocation = getHeight() - controlPanelHeight;
 		splitPane.setDividerLocation(newDividerLocation);		
 		
@@ -320,10 +312,9 @@ public class WinMain extends JFrame
 
 	public void hideBottomPanel(boolean repaintAndIndex)
 	{			
-		splitPane.setDividerLocation(1.0f);
+		splitPane.setDividerLocation(1.0);
 		if(repaintAndIndex)
 			mainCanvas.updateCanvas(true);		
-
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -385,14 +376,10 @@ public class WinMain extends JFrame
 
 	private void initZoomControls()
 	{
-		zoomControlContainerPanel = new JPanel();
-		
+		zoomControlContainerPanel = new JPanel();		
 		String instructions = "Click on a genome name to apply these controls:";
 		zoomControlContainerPanel.setBorder(BorderFactory.createTitledBorder(instructions));
-		
-		//we want a shorter zoom control that does not fill the width of  the entire canvas
 		zoomControlPanel = new ZoomControlPanel();
-		zoomControlPanel.zoomSlider.setMaximumSize(new Dimension(500, Short.MAX_VALUE));
 		zoomControlContainerPanel.add(zoomControlPanel);		
 	}
 

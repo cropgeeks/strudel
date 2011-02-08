@@ -49,9 +49,9 @@
 		Click the overview button
 		<img src="../images/overview.png">
 		on the toolbar (this is a toggle button which shows/hides the overview). A separate window with a miniature version of
-		the main canvas will appear. When one or more of the genomes are zoomed in, a slightly opaque red rectangle will be
-		visible on top of the corresponding genome in the overview window and this can be moved up and down with the mouse to
-		move the genome on the main canvas up and down. It also lets the user see at a glance which chromosome of the genome
+		the main canvas will appear. When a genome is zoomed in, a slightly opaque red rectangle will be
+		visible on top of its representation in the overview window and this can be moved up and down with the mouse to
+		scroll the genome on the main canvas up and down. It also lets the user see at a glance which chromosome of the genome
 		is currently showing on the main canvas.
 		<br>
 		<br>
@@ -64,7 +64,7 @@
 			<a name="filterByEvalue"></a>
 		</h4>
 		Using the BLAST cut-off spinner on the toolbar, users can set a threshold for the BLAST e-value for homologies above
-		which they will not be shown. Links will be filtered synchronously as the spinner value is changed with the up and
+		which they will not be shown. Links will be filtered in real-time as the spinner value is changed with the up and
 		down arrows or by entering a new value and pressing Enter.
 		<br>
 		<br>
@@ -77,9 +77,9 @@
 			<a name="featureLabelDisplay"></a>
 		</h4>
 		In order to control clutter on screen Strudel automatically controls when it displays features.
-		This behaviour can be overridden by the user with the help of the show all markers button <img src="../images/showmarkers.png"> 
-		which is specific to each genome and is found next to the zoom controls at the bottom of the main canvas. When selected, this button 
-		forces the permanent display of features at all times. 
+		This behaviour can be overridden by the user with the help of the "Always show all features" button <img src="../images/showmarkers.png"> 
+		which is found next to the zoom control at the bottom of the main canvas. When selected, this button 
+		forces the permanent display of features at all times for the currently selected genome. 
 		<p>To force the continuous display of all feature labels, right click over a chromosome and select the "Show all labels" item 
 		from the context menu. This toggles the display of all labels for this chromosome on and off. Only one chromosome per genome can 
 		be selected for this at any one time. 
@@ -161,6 +161,10 @@
 				"Show distance markers" checkbox: This toggles distance markers on the chromosomes on and off (for all genomes). Please note
 				that even when these are set to ‘on’ they will only show when a zoom level has been reached where a chromosome
 				just fills the screen, or greater.
+			</li>
+			<li>
+				"Show full feature info on mouseover" checkbox: This allows the display of all the information associated with a feature 
+				when the mouse is over it. This includes the feature name, type, position and annotation.
 			</li>
 			<li>
 				"Link shape" radio buttons: Here the user can choose between curved, straight and angled link shapes.

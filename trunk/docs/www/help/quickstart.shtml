@@ -21,9 +21,9 @@
 <ol>
 <li>On the front page, click the link "Open example dataset".</li>
 <li>Click on a chromosome. The homologies with the features on this chromosome are displayed as lines. Clicking on the background makes them disappear.</li>
-<li>Hold down the Alt key and click on a chromosome. This zooms in on the selected chromosome until it fills the screen.</li>
+<li>Double click on a chromosome. This zooms in on the selected chromosome until it fills the screen.</li>
 <li>Hold down the Shift key and click and drag across a region on the zoomed in chromosome. This zooms in on the outlined region.</li>
-<li>Scroll with the mouse wheel to move up and down in the chromosome or click and drag up and down next to it.</li>
+<li>Scroll with the mouse wheel to move up and down in the chromosome or use the blue scroll arrows at the bottom of the window.</li>
 <li>Move the mouse over the features on the chromosome. Their names will be displayed as you hover over them.</li>
 <li>Click the "Explore range" button on the toolbar and fill in the dialog to see features listed from a given region (e.g. a QTL). When 
 you press the "Find" button a table is displayed at the bottom of the screen which lists all the features contained in the region. </li>

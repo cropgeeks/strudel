@@ -17,13 +17,14 @@
 
 
 		<h2>
-			General controls
+			Controls
 		</h2>
 
 		<ul>
 		<li><a href="#mouseControls">Mouse controls</a></li>
 		<li><a href="#resetButtons">Reset buttons</a></li>
 		<li><a href="#invertChromos">Inverting chromosomes</a></li>
+		<li><a href="#zoomControls">Zoom control panel</a></li>
 		</ul>
 
 
@@ -51,7 +52,7 @@
 					Single-click chromosome with Ctrl (Mac: Cmd) down
 				</td>
 				<td class="outline">
-					Select this chromosome for homology display (links -- if applicable -- show when two or more chromosomes selected)
+					Select this chromosome for homology display (links -- if available -- show when two or more chromosomes selected)
 				</td>
 			</tr>
 
@@ -66,7 +67,7 @@
 
 			<tr>
 				<td class="outline">
-					Single-click chromosome with Alt down (Linux: Alt + Ctrl)
+					Double-click chromosome
 				</td>
 				<td class="outline">
 					Expand chromosome to fill the screen vertically
@@ -84,19 +85,28 @@
 
 			<tr>
 				<td class="outline">
-					Mouse drag on or next to chromosome
+					Hold down Shift and Ctrl and mouse drag on or next to chromosome
 				</td>
 				<td class="outline">
-					Move canvas up or down (slow)
+					Highlight region of interest and display links in real-time (press ESC to start over)
 				</td>
 			</tr>
 
 			<tr>
 				<td class="outline">
-					Scroll wheel
+					Scroll mouse wheel with pointer over a genome
 				</td>
 				<td class="outline">
-					Move canvas up or down (fast)
+					Scroll genome up or down
+				</td>
+			</tr>
+			
+			<tr>
+				<td class="outline">
+					Scroll mouse wheel with Ctrl key held down
+				</td>
+				<td class="outline">
+					Zoom in /out
 				</td>
 			</tr>
 
@@ -125,8 +135,8 @@
 		The main reset button on the toolbar
 		<img src="../images/reset.png">
 		resets the zoom factor for all genomes to a value of 1 and restores the original view as seen after loading the data
-		(i.e. without any links or results showing). The individual reset buttons next to the zoom sliders below the main
-		canvas reset the zoom only without removing results or links, and only do so for one genome at a time.
+		(i.e. without any links or results showing). The reset button next to the zoom slider below the main
+		canvas resets the zoom for the currently selected genome only, without removing results or links.
 		<br>
 		<br>
 		<a href="#top">Back to top</a>
@@ -142,6 +152,31 @@
 		selected) and choose “Invert chromosome” from the context menu.
 		<br>
 		<br>
+		<a href="#top">Back to top</a>
+
+
+		<!-- --------------------------------------------- -->
+		
+				<h4>
+			Zoom control panel:
+			<a name="zoomControls"></a>
+		</h4>
+		At the bottom of the main window there is a panel that contains controls which are applied to the currently selected genome. 
+		A genome is either selected automatically, through any operation involving clicking or mouseover on chromosomes in that genome, 
+		or manually by clicking on the genome's name in the name panel above the zoom control panel. The selected genome's name 
+		will be highlighted in red. 
+		<p>
+		The controls in this panel include:
+		</p>
+		<ul>
+		<li>a zoom slider</li>
+		<li>a spinner control for entering/modifying the maximum zoom factor</li>
+		<li>a zoom reset button which resets the zoom only for the selected genome</li>
+		<li>the "Always show all features" button which overrides the automatic suppression of features getting drawn at low zoom levels 
+		 (see <a href="view.shtml#featureLabelDisplay" target="new">the view page</a> for details)</li>
+		 <li>scroll buttons for scrolling the selected genome up and down</li>
+		</ul>
+
 		<a href="#top">Back to top</a>
 
 

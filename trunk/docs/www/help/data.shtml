@@ -11,7 +11,7 @@
 
 	</head>
 	<body>
-	<a name="top"></a>
+		<a name="top"></a>
 
 		<!--#include virtual="header.shtml" -->
 
@@ -21,28 +21,40 @@
 		</h2>
 
 		<ul>
-			<li><a href="#dataFormat">Input data format</a></li>
-			<li><a href="#layout">Ordering of genomes</a></li>
-			<li><a href="#openingFiles">Opening files</a></li>
-			<li><a href="#exampleData">Example data</a></li>
+			<li>
+				<a href="#strudelFormat">Strudel data format</a>
+			</li>
+			<li>
+				<a href="#mafFormat">MAF data format</a>
+			</li>
+			<li>
+				<a href="#layout">Ordering of genomes</a>
+			</li>
+			<li>
+				<a href="#openingFiles">Opening files</a>
+			</li>
+			<li>
+				<a href="#exampleData">Example data</a>
+			</li>
 		</ul>
 
-
-
-		<!-- --------------------------------------------- -->
-		<h4>
-			Input data format:
-			<a name="dataFormat"></a>
-		</h4>
-
 		<p>
-			Strudel can visualize data from potentially any number of genomes but including a large number of genomes
-			may adversely affect performance.
+			Strudel can visualize data from potentially any number of genomes but this is obviously limited by the amount of
+			available screen space. Including a large number of genomes may also adversely affect performance.
 		</p>
 		<p>
 
-			Currently users can provide their own data only in tab delimited text files. We are planning to have future
-			extensions that allow import of data from live databases and other data sources as requested by users.
+			Currently users can provide their own data either in tab delimited text files in the proprietary Strudel format, or
+			in Multiple Alignment Format (MAF) files (see
+			<a href="#mafFormat">section below on MAF</a>).
+		</p>
+
+		<!-- --------------------------------------------- -->
+		<h4>
+			Strudel data format:
+			<a name="strudelFormat"></a>
+		</h4>
+
 		<ul>
 			<li>
 				The Strudel data format is tab delimited text with all features, homologs and potential reference URLs included in
@@ -59,7 +71,8 @@
 			</li>
 		</ul>
 
-		A simple <b><a href="strudelFileFormatExample.txt">example is available here</a>.</b>
+		A simple
+		<b><a href="strudelFileFormatExample.txt">example is available here</a>.</b>
 		<p>
 			A feature entry contains the following columns:
 		</p>
@@ -72,12 +85,14 @@
 		</p>
 		<p>
 			A homolog entry contains the following columns:
+		</p>
 		<p>
-			"homolog" label -- genome name feat.1 -- feat.1 name -- genome name feat.2 -- feat.2 name -- BLAST eValue --
+			"homolog" label -- genome name for feat.1 -- feat.1 name -- genome name for feat.2 -- feat.2 name -- BLAST eValue --
 			annotation -- colour
 		</p>
 		<p>
-			The annotation and colour fields can be blank. A homolog's colour should be defined using hex, eg #0000FF for blue.
+			The annotation and colour fields can be blank. A homolog's colour must be defined using hexadecimal format, e.g.
+			#0000FF for blue.
 		</p>
 
 		<p>
@@ -90,12 +105,50 @@
 			A URL entry contains the following fields:
 		</p>
 		<p>
-			"URL" label -- genome Name -- the URL itself
+			"URL" label -- genome name -- the URL itself
 
 		</p>
 
+		<p>
+			Optionally, users can also specify annotation colours for individual chromosomes in the data file. A chromosome entry
+			contains the following columns:
+		</p>
+		"chromosome" label -- genome name -- chromosome name -- colour in hexadecimal format, e.g. #0000FF for blue.
+		<p>
+			This will not change the colour of the chromosome itself, however, as this is used for other purposes, e.g.
+			highlighting inversion etc. Instead, a small coloured rectangle will be displayed next to the chromosome.
+		</p>
+
 		<a href="#top">Back to top</a>
-		
+
+		<!-- --------------------------------------------- -->
+		<h4>
+			MAF data format:
+			<a name="mafFormat"></a>
+		</h4>
+
+		<p>
+			Multiple Alignment Format (MAF) is normally a format used to align sequences between taxa, but in this context we use
+			it to display synteny between features. MAF supports multiple blocks of alignments in the same file, and each of
+			these blocks represents a feature for the purpose of Strudel. The taxa contributing to the alignments in the file
+			become the set of genomes displayed, and where multiple taxa are involved in an alignment the start position of the
+			feature is added as a feature to each genome, and homologies are then established between the features involved.
+		</p>
+
+		<p>
+			Part of the MAF naming convention is to -- optionally -- separate the organism name from the chromosome name with a
+			full stop ("."). Where this is encountered in MAF files, Strudel will parse the source name into these two components
+			and instantiate separate chromosomes within a genome. Where this convention is not followed, Strudel will assume that
+			all features are located on a single map for this genome.
+		</p>
+
+		<p>
+			For full details on the MAF format please refer to the
+			<a href="http://genome.ucsc.edu/FAQ/FAQformat#format5" target="new"> MAF online documentation</a>.
+		</p>
+
+		<a href="#top">Back to top</a>
+
 		<!-- --------------------------------------------- -->
 		<h4>
 			Ordering of genomes:
@@ -109,19 +162,23 @@
 		</p>
 		<p>
 			Users can configure the ordering and number of instances of genomes on screen by clicking the "Configure datasets"
-			button <img src="../images/configure.png"> on the toolbar. This brings up the following dialog:
+			button
+			<img src="../images/configure.png">
+			on the toolbar. This brings up the following dialog:
 		</p>
 		<p>
 			<img class="capture" src="../images/configGenomesDialog.png" alt="Config Genomes Dialog">
 		</p>
 		<p>
-		You can choose the order of the genomes on screen (left to right) by selecting genome names from the drop-down menus
-		 in top to bottom order. Clicking the "Add" and "Remove" buttons will add and remove a drop-down menu at a time, respectively. 
-		 Click the "OK" button to confirm the new layout. This will reset the view in the process, and result sets generated previously 
-		 will be cleared.</p>
-		 <p>
-		 You can use this feature to add additional instances of a genome to allow all-by-all comparisons without links being drawn 
-		 across genomes.</p>
+			You can choose the order of the genomes on screen (left to right) by selecting genome names from the drop-down menus
+			in top to bottom order. Clicking the "Add" and "Remove" buttons will add and remove a drop-down menu at a time,
+			respectively. Click the "OK" button to confirm the new layout. This will reset the view in the process, and result
+			sets generated previously will be cleared.
+		</p>
+		<p>
+			You can use this feature to add additional instances of a genome to allow all-by-all comparisons without links being
+			drawn across genomes.
+		</p>
 		<a href="#top">Back to top</a>
 
 
@@ -135,13 +192,14 @@
 		button on the toolbar.
 		<p>
 			In the Load Data dialog shown below, click on "Load own data files" and then browse for the appropriate files as
-			required. 
+			required.
 		</p>
 		<p>
 			<img class="capture" src="../images/dataLoadDialog.png" alt="Load Data Dialog">
 		</p>
 		<p>
-		You can also drag and drop files onto the Strudel canvas to open them.</p>
+			You can also drag and drop files onto the Strudel canvas to open them.
+		</p>
 		<a href="#top">Back to top</a>
 
 		<!-- --------------------------------------------- -->
@@ -153,8 +211,11 @@
 		An example data set is also provided with Strudel. This can be loaded by clicking the "Load Data" button on the
 		toolbar, and then accepting the default option on the Load Data dialog. Currently this consists of a comparison of the
 		genomes of
-		<i>Brachypodium distachyon</i>, barley (<i>Hordeum vulgare</i>) and rice (<i>Oryza sativa</i>). Click the info button
-		<img src="../images/info.png"> on the toolbar, then the "Example Data Sets" tab to see more detail.
+		<i>Brachypodium distachyon</i>, barley (
+		<i>Hordeum vulgare</i>) and rice (
+		<i>Oryza sativa</i>). Click the info button
+		<img src="../images/info.png">
+		on the toolbar, then the "Example Data Sets" tab to see more detail.
 		<p>
 			<a href="#top">Back to top</a>
 		</p>

@@ -295,7 +295,7 @@ public class MainCanvas extends JPanel
 		
 		//this dynamically draws any links in a range that we are highlighting with a mouse action
 		if(drawLinksOriginatingInRange)
-			linkDisplayManager.drawLinksForFeatureSet(linkDisplayManager.featuresSelectedByRange, g2, false, winMain.fatController.selectedMap);
+			linkDisplayManager.drawLinksForFeatureSet(linkDisplayManager.featuresSelectedByRange, g2, false, winMain.fatController.selectedMap, true);
 
 		//distance markers along the maps
 		if (!killMe && Prefs.showDistanceMarkers)

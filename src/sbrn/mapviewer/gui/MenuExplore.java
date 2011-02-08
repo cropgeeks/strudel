@@ -12,8 +12,6 @@ public class MenuExplore
 {
 	public void showTable()
 	{
-		//reset the main canvas
-		Strudel.winMain.fatController.resetMainCanvasView();
 
 		//if we don't have features to show from a name or egion based search we do not want the checkboxes enabled
 		if (!Strudel.winMain.mainCanvas.drawFoundFeaturesInRange)
@@ -23,6 +21,10 @@ public class MenuExplore
 			Strudel.winMain.foundFeaturesTableControlPanel.getHighlightWhiteCheckbox().setEnabled(false);
 		}
 		
+		//reset the main canvas
+		Strudel.winMain.fatController.resetMainCanvasView();
+		
+		//display all the features
 		FeatureSearchHandler.findAllFeatures();
 	}
 

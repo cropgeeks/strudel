@@ -161,9 +161,6 @@ public class FeatureSearchHandler
 		//now put the results into the JTable held by the results panel
 		updateResultsTable(features);
 
-		//earmark the features for drawing on repaint
-		Strudel.winMain.mainCanvas.drawFeaturesFoundByName = true;		
-
 		//show the results table and repaint
 		Strudel.winMain.showBottomPanel(true);
 	}

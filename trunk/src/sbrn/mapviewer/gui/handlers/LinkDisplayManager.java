@@ -314,7 +314,7 @@ public class LinkDisplayManager
 
 	// --------------------------------------------------------------------------------------------------------------------------------
 
-	public void drawHighlightedLink(Graphics2D g2, Feature f1, Feature f2, boolean strongEmphasis, GChromoMap gMap1, GChromoMap gMap2)
+	public void drawHighlightedLink(Graphics2D g2, Feature f1, Feature f2, boolean strongEmphasis, GChromoMap gMap1, GChromoMap gMap2, boolean highlight)
 	{
 		GMapSet targetGMapSet = gMap1.owningSet;
 		GMapSet referenceGMapSet = gMap2.owningSet;
@@ -365,7 +365,7 @@ public class LinkDisplayManager
 		// draw the link either as a straight line or a curve
 		if(strongEmphasis)
 			g2.setColor(Colors.strongEmphasisLinkColour);
-		else if (Prefs.highlightHomologiesInWhite)
+		else if (Prefs.highlightHomologiesInWhite || highlight)
 			g2.setColor(Color.white);
 		else
 			g2.setColor(linkColor);
@@ -388,7 +388,7 @@ public class LinkDisplayManager
 				if(Strudel.winMain.fatController.selectedMap == null)
 					selectedMap = resultsTableEntry.getTargetFeature().getOwningMap().getGChromoMaps().get(0);
 				
-				checkLinkAndDraw(g2, resultsTableEntry.getTargetFeature(), resultsTableEntry.getHomologFeature(), Float.parseFloat(resultsTableEntry.getLinkEValue()), true, selectedMap);
+				checkLinkAndDraw(g2, resultsTableEntry.getTargetFeature(), resultsTableEntry.getHomologFeature(), Float.parseFloat(resultsTableEntry.getLinkEValue()), true, selectedMap, false);
 			}
 		}
 	}
@@ -397,7 +397,7 @@ public class LinkDisplayManager
 	// --------------------------------------------------------------------------------------------------------------------------------
 	
 	//draws links for a given set of features and their homologs
-	public void drawLinksForFeatureSet(Vector<Feature> features, Graphics2D g2, boolean strongEmphasis, GChromoMap selectedMap)
+	public void drawLinksForFeatureSet(Vector<Feature> features, Graphics2D g2, boolean strongEmphasis, GChromoMap selectedMap, boolean highlight)
 	{
 		for(Feature feature : features)
 		{
@@ -414,14 +414,14 @@ public class LinkDisplayManager
 					homolog = link.getFeature1();
 
 				//draw the link
-				checkLinkAndDraw(g2, feature, homolog,  link.getBlastScore(), strongEmphasis, selectedMap);
+				checkLinkAndDraw(g2, feature, homolog,  link.getBlastScore(), strongEmphasis, selectedMap, highlight);
 			}
 		}
 	}
 	
 	// --------------------------------------------------------------------------------------------------------------------------------
 	
-	private void checkLinkAndDraw(Graphics2D g2, Feature targetFeature, Feature homolog, double blastScore, boolean strongEmphasis, GChromoMap selectedMap)
+	private void checkLinkAndDraw(Graphics2D g2, Feature targetFeature, Feature homolog, double blastScore, boolean strongEmphasis, GChromoMap selectedMap, boolean highlight)
 	{
 		GChromoMap targetGMap = selectedMap;
 		
@@ -445,7 +445,7 @@ public class LinkDisplayManager
 			return;
 		
 		//draw the link
-		drawHighlightedLink(g2, targetFeature, homolog, strongEmphasis, targetGMap, refGMap);
+		drawHighlightedLink(g2, targetFeature, homolog, strongEmphasis, targetGMap, refGMap, highlight);
 	}
 	
 	
@@ -468,7 +468,7 @@ public class LinkDisplayManager
 						Feature targetFeature = tableEntry.getTargetFeature();
 						Feature homolog = tableEntry.getHomologFeature();
 						float eValue = Float.parseFloat(tableEntry.getLinkEValue());
-						checkLinkAndDraw(g2, targetFeature, homolog, eValue, false, selectedMap);
+						checkLinkAndDraw(g2, targetFeature, homolog, eValue, false, selectedMap, false);
 					}
 				}
 			}

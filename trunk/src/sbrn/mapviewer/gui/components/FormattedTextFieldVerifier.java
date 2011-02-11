@@ -7,16 +7,19 @@ import javax.swing.JFormattedTextField.*;
 import sbrn.mapviewer.*;
 import scri.commons.gui.*;
 
+/**
+ * Checks that the user has entered a value into a textfield that exceeds the specified threshold
+ */
 public class FormattedTextFieldVerifier extends InputVerifier
 {
 
-	private final String negNumberMessage;
+	private final String errorMessage;
 	private final float threshold;
 	private final boolean isUpperThreshold;
 
-	public FormattedTextFieldVerifier(String negNumberMessage, float threshold, boolean isUpperThreshold)
+	public FormattedTextFieldVerifier(String errorMessage, float threshold, boolean isUpperThreshold)
 	{
-		this.negNumberMessage = negNumberMessage;
+		this.errorMessage = errorMessage;
 		this.threshold = threshold;
 		this.isUpperThreshold = isUpperThreshold;
 	}
@@ -30,7 +33,6 @@ public class FormattedTextFieldVerifier extends InputVerifier
 			AbstractFormatter formatter = ftf.getFormatter();
 			if (formatter != null)
 			{
-
 				NumberFormat nf = NumberFormat.getInstance(Locale.getDefault());
 				float value = 0;
 				try
@@ -47,7 +49,7 @@ public class FormattedTextFieldVerifier extends InputVerifier
 				else if(isUpperThreshold && (value <= threshold))
 					return true;
 
-				TaskDialog.error(negNumberMessage, "Close");
+				TaskDialog.error(errorMessage, "Close");
 				return false;
 			}
 		}

@@ -2,6 +2,7 @@ package sbrn.mapviewer.gui.components;
 
 import java.util.*;
 import javax.swing.table.*;
+import sbrn.mapviewer.*;
 
 /**
  * Table model to be used for results table when we are dealing with more than one genome
@@ -18,7 +19,7 @@ public class HomologResultsTableModel extends AbstractTableModel
 	public final static String homologGenomeColumnLabel = "Homolog genome";
 	public final static String homologChromosomeColumnLabel = "Homolog chromosome";
 	public final static String homologPositionColumnLabel = "Homolog position";
-	public final static String eValueColumnLabel = "BLAST e-value";
+	public static String eValueColumnLabel = "Homology score";
 	public final static String homologAnnotationColumnLabel = "Homolog annotation";
 
 	private final String[] columnNames =
@@ -31,6 +32,7 @@ public class HomologResultsTableModel extends AbstractTableModel
 	{
 		super();
 		this.tableEntries = tableEntries;
+		
 		for (int i = 0; i < columnNames.length; i++)
 		{
 			columnNameList.add(columnNames[i]);

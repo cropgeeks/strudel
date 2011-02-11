@@ -21,7 +21,7 @@ public class LinkDisplayManager
 	// chromomap in the respectively other genome
 	static Hashtable<ChromoMap, Vector<LinkSet>> linkSetLookup;
 
-	private static double blastThreshold = 1;
+	public static double homologyScoreThreshold;
 
 	//degree of link curvature
 	public float linkShapeCoeff = Constants.MAX_CURVEDLINK_COEFF;
@@ -140,6 +140,9 @@ public class LinkDisplayManager
 
 					// get all the linksets between the selected chromosome and the reference maps selected
 					Vector<LinkSet> linkSets = linkSetLookup.get(selectedChromoMap);
+					
+					if(linkSets == null)
+						continue;
 
 					// for each set of links between the selected chromosome and a reference map
 					for (LinkSet selectedLinks : linkSets)
@@ -230,7 +233,7 @@ public class LinkDisplayManager
 	//draws a single linkset which conssts of all links between a pair of chromosomes
 	private int drawLinkSet(LinkSet selectedLinks, Graphics2D g2, Boolean killMe, GChromoMap targetGMap,
 					GChromoMap referenceGMap,int targetChromoX, int referenceChromoX, boolean dimNormalLinks)
-	{
+	{	
 		int numLinksDrawn = 0;
 
 		// for each link in the linkset
@@ -241,13 +244,20 @@ public class LinkDisplayManager
 
 			Link link = selectedLinks.getLinks().get(li);
 
-			// we only want to draw this link if it has a BLAST e-value smaller than the cut-off currently selected by the user
-			if (link.getBlastScore() <= blastThreshold)
+			// we only want to draw this link if it has a BLAST e-value smaller than the cut-off currently selected by the user, or
+			//if we are dealing with MAF data the score needs to be greater than the threshold
+			boolean draw = (Strudel.winMain.dataSet.dataFormat == Constants.FILEFORMAT_STRUDEL) && (link.getScore() <= homologyScoreThreshold) ||
+			(Strudel.winMain.dataSet.dataFormat == Constants.FILEFORMAT_MAF) && (link.getScore() >= homologyScoreThreshold);
+			
+//			System.out.println("\nlink.getScore() = " + link.getScore());
+//			System.out.println("homologyScoreThreshold = " + homologyScoreThreshold);
+//			System.out.println("draw = " + draw);
+//			
+			if (draw)
 			{
 				//we can't make any assumptions about the ordering of the links because we use the same link to
 				//display homologies going either way
 				//so we need to figure out here which is the target feature and which the reference
-
 				Feature targetFeature, referenceFeature;
 				//if feature 1 is on the target map
 				if (link.getFeature1().getOwningMap() == targetGMap.chromoMap)
@@ -419,7 +429,7 @@ public class LinkDisplayManager
 					homolog = link.getFeature1();
 
 				//draw the link
-				checkLinkAndDraw(g2, feature, homolog,  link.getBlastScore(), strongEmphasis, selectedMap, highlight);
+				checkLinkAndDraw(g2, feature, homolog,  link.getScore(), strongEmphasis, selectedMap, highlight);
 			}
 		}
 	}
@@ -445,8 +455,13 @@ public class LinkDisplayManager
 		if (!gMapSetsAdjacent)
 			return;
 		
-		//check the e-Value cutoff
-		if(blastScore > blastThreshold)
+		//check the score cutoff
+		// we only want to draw this link if it has a BLAST e-value smaller than the cut-off currently selected by the user, or
+		//if we are dealing with MAF data the score needs to be greater than the threshold
+		boolean draw = (Strudel.winMain.dataSet.dataFormat == Constants.FILEFORMAT_STRUDEL) && (blastScore <= homologyScoreThreshold) ||
+		(Strudel.winMain.dataSet.dataFormat == Constants.FILEFORMAT_MAF) && (blastScore >= homologyScoreThreshold);
+		
+		if(!draw)
 			return;
 		
 		//draw the link
@@ -629,19 +644,19 @@ public class LinkDisplayManager
 		}
 	}
 
-	public static double getBlastThresholdExponent()
+	public static double getScoreThresholdExponent()
 	{
-		return Math.log(blastThreshold);
+		return Math.log(homologyScoreThreshold);
 	}
 
-	public static void setBlastThresholdWithExponent(int exponent )
+	public static void setScoreThresholdWithExponent(int exponent )
 	{
 		DecimalFormat df = new DecimalFormat("0.##E0");
 		Number score;
 		try
 		{
 			score = df.parse("1.00E" + exponent);
-			blastThreshold = score.doubleValue();
+			homologyScoreThreshold = score.doubleValue();
 		}
 		catch (ParseException e)
 		{
@@ -650,9 +665,9 @@ public class LinkDisplayManager
 		}
 	}
 
-	public static void setBlastThreshold(double blastThreshold)
+	public static void setScoreThreshold(double scoreThreshold)
 	{
-		LinkDisplayManager.blastThreshold = blastThreshold;
+		LinkDisplayManager.homologyScoreThreshold = scoreThreshold;
 	}
 
 

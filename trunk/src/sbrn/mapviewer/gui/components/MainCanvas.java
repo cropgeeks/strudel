@@ -145,8 +145,6 @@ public class MainCanvas extends JPanel
 		{
 			if (buffer == null || buffer.getWidth() != w || buffer.getHeight() != h)
 			{
-//				buffer = (BufferedImage) createImage(w, h);
-//				aaBuffer = (BufferedImage) createImage(w, h);
 				buffer = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
 				aaBuffer = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
 			}
@@ -256,7 +254,23 @@ public class MainCanvas extends JPanel
 			// these are genome specific because we can have a different zoom factor for each genome
 			// currentY is the y position at which we start drawing the genome, chromo by chromo, top to bottom
 			// this may be off the visible canvas in a northerly direction
-			int currentY = calcMapSetSpecificParams(gMapSet);
+			int currentY = -1;
+			try
+			{
+				currentY = calcMapSetSpecificParams(gMapSet);
+			}
+			//this exception gets thrown when we have insufficient vertical canvas space left to actually render chromosomes
+			//draw a message on the canvas to that extent
+			catch (ChromosomeHeightException e)
+			{
+				g2.setColor(Color.RED);
+				String message = "Insufficient vertical screen space for rendering chromosomes";
+				FontMetrics fm = g2.getFontMetrics(g2.getFont());
+				int stringWidth = fm.stringWidth(message) ;
+				g2.drawString(message, (getWidth()/2) - (stringWidth/2), getHeight()/2);
+				killMe = true;
+				break;
+			}
 			
 			//if the canvas has been resized we need to re-initialise all the feature positions on all mapsets
 			//we also need to do this when a mapset has been scrolled or zoomed
@@ -332,7 +346,7 @@ public class MainCanvas extends JPanel
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
 	//this method sets all the mapset specific parameters we need to work out for each drawing operation
-	private int calcMapSetSpecificParams(GMapSet gMapSet)
+	private int calcMapSetSpecificParams(GMapSet gMapSet) throws ChromosomeHeightException
 	{
 		int currentY = 0;
 		// this is what we do at a zoom factor of 1 (at startup but also after zoom reset)
@@ -340,6 +354,10 @@ public class MainCanvas extends JPanel
 		{
 			// the height of a chromosome
 			gMapSet.chromoHeight = (availableSpaceVertically - allSpacers) / winMain.dataSet.maxChromos;
+			//if this goes to 0 or negative we throw an Exception here which is getting caught and dealt with in paintCanvas()
+			if(gMapSet.chromoHeight <= 0)
+				throw new ChromosomeHeightException();
+			
 			initialChromoHeight = gMapSet.chromoHeight;
 			initialCanvasHeight = canvasHeight;
 
@@ -347,11 +365,7 @@ public class MainCanvas extends JPanel
 			//if the chromosome height goes to zero we get an ArithmeticException here but we can just ignore this
 			//this happens because the canvas has been resized to the extent that chromosomes have disappeared
 			//it just has to be made bigger again and that should be fairly obvious
-			try
-			{
-				gMapSet.singleChromoViewZoomFactor = canvasHeight / gMapSet.chromoHeight;
-			}
-			catch (ArithmeticException e){}
+			gMapSet.singleChromoViewZoomFactor = canvasHeight / gMapSet.chromoHeight;
 
 			gMapSet.thresholdAllMarkerPainting = gMapSet.singleChromoViewZoomFactor;
 

@@ -177,6 +177,9 @@ public class FeatureSearchHandler
 
 		//size the columns and the dialog containing the table appropriately
 		((ResultsTable)Strudel.winMain.ffResultsPanel.getFFResultsTable()).initColumnSizes();
+		
+		((ResultsTable)Strudel.winMain.ffResultsPanel.getFFResultsTable()).validate();
+		((ResultsTable)Strudel.winMain.ffResultsPanel.getFFResultsTable()).repaint();
 
 		//enable the button that allows export of this data to file
 		Actions.saveResults.setEnabled(true);

@@ -85,7 +85,7 @@
 
 			<tr>
 				<td class="outline">
-					Hold down Shift and Ctrl and mouse drag on or next to chromosome
+					Hold down Shift and Ctrl (Mac: Shift + Cmd) and mouse drag on or next to chromosome
 				</td>
 				<td class="outline">
 					Highlight region of interest and display links in real-time (press ESC to start over)

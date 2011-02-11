@@ -29,12 +29,12 @@ public class Link
 	public String toString()
 		{ return feature1 + " and " + feature2; }
 
-	public double getBlastScore()
+	public double getScore()
 	{
 		return blastScore;
 	}
 
-	public void setBlastScore(double blastScore)
+	public void setScore(double blastScore)
 	{
 		this.blastScore = blastScore;
 	}

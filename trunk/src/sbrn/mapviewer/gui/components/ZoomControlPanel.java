@@ -58,6 +58,7 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		//zoom slider
 		zoomSlider = new JSlider(sliderMin, sliderMax, sliderInitialVal);
 		zoomSlider.setToolTipText("Zoom this genome in or out");
+		zoomSlider.setMaximumSize(new Dimension(150,50));
 		zoomSlider.addChangeListener(this);
 		//we need the mouse listener so we can have the canvas repainted with antialias on when the mouse button is released
 		//this is the way it happens for all other cases where we need a pretty repaint
@@ -101,31 +102,25 @@ public class ZoomControlPanel extends JToolBar implements ChangeListener, Action
 		scrollDownButton.addActionListener(this);
 		if (scri.commons.gui.SystemUtils.isMacOS() == false)
 			scrollDownButton.setMargin(new Insets(2, 1, 2, 1));
-		
-		//we need the filler when this toolbar is the only one
-		//this is to stop it from filling the whole width of the frame
-//		add(Box.createHorizontalGlue());
 
 		//add the components
-		//all of these are zoom related
+		//need glue so things are centered
+		add(Box.createHorizontalGlue());
+		add(new JLabel("Max. zoom factor:"));
+		add(maxZoomSpinner);
+		add(new JLabel("  "));
 		add(zoomIcon);
 		add(new JLabel("  "));
 		add(zoomSlider);
 		add(new JLabel("  "));
-		add(new JLabel("Max. zoom factor:"));
-		add(maxZoomSpinner);
-		add(new JLabel("  "));
 		add(resetButton);
-		//the rest of the components
 		add(new JLabel("  "));
 		add(overrideMarkersAutoDisplayButton);
 		add(new JLabel("  "));
 		add(scrollUpButton);
 		add(scrollDownButton);
+		add(Box.createHorizontalGlue());
 
-		//we need the filler when this toolbar is the only one
-		//this is to stop it from filling the whole width of the frame
-//		add(Box.createHorizontalGlue());
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------------------------------------------------------

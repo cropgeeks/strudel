@@ -37,10 +37,6 @@ public class MouseOverHandler
 		{
 			// first figure out which chromosome we are in
 			selectedMap = Utils.getSelectedMap(Strudel.winMain.dataSet.gMapSets, x, y);
-			
-			//make this mapset the selected set and update the zoom control panel
-			if(selectedMap != null)
-				Strudel.winMain.genomeLabelPanel.selectGMapSet(selectedMap.owningSet);
 
 			//update the hint panel
 			HintPanel.upDate();

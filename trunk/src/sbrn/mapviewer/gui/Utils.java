@@ -177,7 +177,7 @@ public class Utils
 				//add the BLAST score as evidence
 				DecimalFormat df = new DecimalFormat("0.###E0");
 				Number blastScore = df.parse(blastScoreStr);
-				link.setBlastScore(blastScore.doubleValue());
+				link.setScore(blastScore.doubleValue());
 
 				//add the annotation, if there is any
 				if(linkAnnotation != null)
@@ -847,6 +847,7 @@ public class Utils
 
 		return new Color(cMap.r, cMap.g, cMap.b);
 	}
+
 	
 	//------------------------------------------------------------------------------------------------------------------------------------
 	
@@ -894,5 +895,13 @@ public class Utils
 	}
 	
 	//------------------------------------------------------------------------------------------------------------------------------------
+	
+	public static int getExponentFromDecimalFormat(Number num)
+	{
+		    NumberFormat formatter = new DecimalFormat("0.##E0");
+		    String scientificNotation = formatter.format(num);
+		    int exponent = Integer.parseInt(scientificNotation.substring(scientificNotation.indexOf("E")+1));
+		    return exponent;
+	}
 	
 }

@@ -144,7 +144,8 @@
 
 		<p>
 			For full details on the MAF format please refer to the
-			<a href="http://genome.ucsc.edu/FAQ/FAQformat#format5" target="new"> MAF online documentation</a>.
+			<a href="http://genome.ucsc.edu/FAQ/FAQformat#format5" target="new"> MAF online documentation</a>. 
+			A simple <b><a href="MAFExample.maf">MAF example file is available here</a>.</b>
 		</p>
 
 		<a href="#top">Back to top</a>

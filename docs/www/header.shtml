@@ -35,7 +35,6 @@ pageTracker._trackPageview();
   <li><a href="help/quickstart.shtml">Manual</a></li>
   <li><a href="people.shtml">People</a></li>
     <li><a href="publications.shtml">Publications</a></li>
-    <li><a href="map.shtml">Usage Map</a></li>
        <li><a href="help/whatsnew.shtml">What's new in Strudel</a></li>
 </ul>
 

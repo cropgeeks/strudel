@@ -60,12 +60,15 @@
 
 		<!-- --------------------------------------------- -->
 		<h4>
-			Filtering homology links by BLAST e-value:
+			Filtering homology links by score (e.g. BLAST e-value):
 			<a name="filterByEvalue"></a>
 		</h4>
-		Using the BLAST cut-off spinner on the toolbar, users can set a threshold for the BLAST e-value for homologies above
+		Using the score cut-off spinner on the toolbar, users can set a threshold for the homology score in use beyond
 		which they will not be shown. Links will be filtered in real-time as the spinner value is changed with the up and
 		down arrows or by entering a new value and pressing Enter.
+		<p>In Strudel format datasets it is expected that the score is a BLAST generated e-Value. For MAF format this is the score that
+		 accompanies each block of alignments. 
+		</p>
 		<br>
 		<br>
 		<a href="#top">Back to top</a>

@@ -6,10 +6,15 @@ import sbrn.mapviewer.*;
 public abstract class AbtractFileParser extends TrackableReader
 {
 	
+	//indeterminate progress bar mode
 	boolean isIndeterminate = false;
 	
 	//any inheriting parsers must implement this method and instantiate a new dataset in it
 	public abstract void parseFile() throws Exception;
+	
+	double minimumScore = Double.MAX_VALUE;
+	double maximumScore = Double.MIN_VALUE;
+	
 	
 	@Override
 	public void runJob() throws Exception

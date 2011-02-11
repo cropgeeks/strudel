@@ -16,8 +16,8 @@ public class ControlToolBar extends JToolBar implements ActionListener
 	public JButton bExport;
 	public JToggleButton bOverview;
 	public JButton bHelp;
-	public JLabel blastLabel;
-	public JSpinner eValueSpinner;
+	public JLabel scoreLabel;
+	public JSpinner scoreSpinner;
 	FormattedTextFieldVerifier eValueSpinnerInputVerifier;
 	public JButton bShowTable;
 	public JButton bFindFeaturesinRange;
@@ -70,8 +70,8 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		add(bConfigureView);
 
 		addSeparator(true);
-		add(blastLabel);
-		add(eValueSpinner);
+		add(scoreLabel);
+		add(scoreSpinner);
 
 		addSeparator(true);
 		add(bHelp);
@@ -84,20 +84,26 @@ public class ControlToolBar extends JToolBar implements ActionListener
 
 	private void createControls()
 	{
-		blastLabel = new JLabel("BLAST Cut-off: 1.00E");
-		eValueSpinner = new JSpinner();
-		eValueSpinner.setValue(LinkDisplayManager.getBlastThresholdExponent());
-		eValueSpinner.setMaximumSize(new Dimension(60, 20));
+		//the score spinner
+		scoreLabel = new JLabel("Score Cut-off: ");
+		scoreSpinner = new JSpinner();
+		scoreSpinner.setValue(LinkDisplayManager.getScoreThresholdExponent());
+		scoreSpinner.setMaximumSize(new Dimension(100, 20));
+//		//Tweak the spinner's formatted text field.
+//		JFormattedTextField ftf = getTextField(scoreSpinner);
+//		if (ftf != null)
+//		{
+//			ftf.setColumns(8); // specify the number of columns we need
+//		}
 
-		eValueSpinnerInputVerifier = new FormattedTextFieldVerifier("The e-value exponent must be 0 or less.",0, true);
-		((JSpinner.DefaultEditor) eValueSpinner.getEditor()).getTextField().setInputVerifier(eValueSpinnerInputVerifier);
-		eValueSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
+		//add the change listener to the score spinner
+		scoreSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
 			public void stateChanged(javax.swing.event.ChangeEvent evt) {
 				eValueSpinnerStateChanged(evt);
 			}
 		});
 
-		eValueSpinner.addMouseListener(new MouseAdapter() {
+		scoreSpinner.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
@@ -118,11 +124,8 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		});
 
 		//disable the BLAST slider and label on startup initially
-		blastLabel.setEnabled(false);
-		eValueSpinner.setEnabled(false);
-
-		//for a few of the buttons we want Ctrl based keyboard shortcuts
-		//this requires some crazy configuration code, sadly
+		scoreLabel.setEnabled(false);
+		scoreSpinner.setEnabled(false);
 
 		//configure open file dialog button
 		bOpen = (JButton) Utils.getButton(false, "Load Data", "Load data into Strudel", Icons.getIcon("FILEOPEN"), Actions.loadData);
@@ -182,27 +185,88 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		bOverview.setSelected(Prefs.guiOverviewVisible);
 		winMain.overviewDialog.setVisible(Prefs.guiOverviewVisible);
 	}
+	
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	public void initScoreSpinner()
+	{
+		DataSet dataSet = Strudel.winMain.dataSet;
+		
+		//set the value of the score spinner to the worst value for the current dataset so no link filtering happens
+		if(dataSet.dataFormat == Constants.FILEFORMAT_STRUDEL)
+		{
+			scoreLabel.setText("E-value Cut-off: 1.00E");
+		
+			//make a new datamodel with default settings
+			scoreSpinner.setModel(new SpinnerNumberModel());
+			
+			//init the spinner value
+			initScoreSpinnerForEValues();
+		}
+		else if(dataSet.dataFormat == Constants.FILEFORMAT_MAF)
+		{
+			scoreLabel.setText("Score Cut-off: ");
+			
+			//make a new datamodel based on the max and min values we have in this dataset
+			int stepsize = 10000;
+			SpinnerNumberModel model =  new SpinnerNumberModel(
+							dataSet.minimumScore - stepsize, //initial value
+							dataSet.minimumScore - stepsize, //min
+							dataSet.maximumScore + stepsize, //max
+							stepsize);                //step
+			scoreSpinner.setModel(model);
+			
+			//init the spinner value
+			initScoreSpinnerForIntegerScores();
+		}		
+	}
+	
+	//	--------------------------------------------------------------------------------------------------------------------------------------------------------	
+	
+	public void initScoreSpinnerForIntegerScores()
+	{
+		//for this type of score, smallest are worst, and we want these because then no links get filtered out initially
+		LinkDisplayManager.homologyScoreThreshold = Strudel.winMain.dataSet.minimumScore;
+		scoreSpinner.setValue(((SpinnerNumberModel)scoreSpinner.getModel()).getMinimum());
+	}
+	
+	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	public void initScoreSpinnerForEValues()
+	{
+		//init the spinner value		
+		int adjustedExponent = 0;
+		if(Strudel.winMain.dataSet.worstScoreExponent > 0)
+			adjustedExponent = Strudel.winMain.dataSet.worstScoreExponent + 1;
+		else if(Strudel.winMain.dataSet.worstScoreExponent < 0)
+			adjustedExponent = Strudel.winMain.dataSet.worstScoreExponent - 1;
+		
+		LinkDisplayManager.setScoreThresholdWithExponent(adjustedExponent);
+		Strudel.winMain.toolbar.scoreSpinner.setValue(adjustedExponent);
+	}
+	
+	//	--------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+
 
 	private void eValueSpinnerStateChanged(javax.swing.event.ChangeEvent e)
 	{
 		JSpinner source = (JSpinner) e.getSource();
+		Number spinnerValue = (Number)source.getValue();
 
-		//convert the value selected to the exponent of a small decimal and set this as
-		//the new BLAST threshold (which is a double)
-		int exponent = (Integer)source.getValue();
-
-		eValueSpinnerInputVerifier.verify(source);
-
-		if(exponent > 0)
+		if(Strudel.winMain.dataSet.dataFormat == Constants.FILEFORMAT_STRUDEL)
 		{
-			TaskDialog.error("BLAST threshold exponent must be 0 or less.", "Close");
-			source.setValue(0);
-			return;
+			//convert the value selected to the exponent of a small decimal and set this as
+			//the new BLAST threshold (which is a double)			
+			LinkDisplayManager.setScoreThresholdWithExponent(spinnerValue.intValue());
 		}
-
-		LinkDisplayManager.setBlastThresholdWithExponent(exponent);
-		winMain.mainCanvas.updateCanvas(true);
-
+		else if(Strudel.winMain.dataSet.dataFormat == Constants.FILEFORMAT_MAF)
+		{
+			LinkDisplayManager.homologyScoreThreshold = spinnerValue.doubleValue();
+		}
+		
+		if(winMain.mainCanvas != null)
+			winMain.mainCanvas.updateCanvas(true);
 	}
 
 	public void enableControls(boolean singleGenomeMode)
@@ -211,16 +275,16 @@ public class ControlToolBar extends JToolBar implements ActionListener
 		{
 			if(singleGenomeMode)
 			{
-				blastLabel.setEnabled(false);
-				eValueSpinner.setEnabled(false);
+				scoreLabel.setEnabled(false);
+				scoreSpinner.setEnabled(false);
 				bResetAll.setEnabled(true);
 				bConfigureGenomes.setEnabled(false);
 				Actions.openedData();
 			}
 			else
 			{
-				blastLabel.setEnabled(true);
-				eValueSpinner.setEnabled(true);
+				scoreLabel.setEnabled(true);
+				scoreSpinner.setEnabled(true);
 				bResetAll.setEnabled(true);
 				//this button we want to be always disabled at the lowest zoom level as we don't want markers displayed then
 				//it becomes enabled when a chromosome is fitted on screen

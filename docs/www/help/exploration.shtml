@@ -79,7 +79,7 @@
 		</h4>
 		<p>
 			A region for displaying all features can also be defined through the view itself. Hold down the Ctrl and Shift keys
-			together, then click and drag next to a chromosome along the region of interest. This will draw a selection
+			together (Mac: Shift + Cmd), then click and drag next to a chromosome along the region of interest. This will draw a selection
 			rectangle. Selecting a region with the mouse will also highlight all the homologies originating in this region in real time. 
 			Right-click and choose "Show annotation for features in range" from the context menu. This will display
 			the results table (see

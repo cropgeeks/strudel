@@ -71,6 +71,9 @@ public class MAFParser extends AbtractFileParser
 
 			dataSet.setUpGMapSets(dataSet.allLinkSets, dataSet.allMapSets);
 			dataSet.fileName = getFile().getName();
+			dataSet.dataFormat = Constants.FILEFORMAT_MAF;
+			dataSet.maximumScore = maximumScore;
+			dataSet.minimumScore = minimumScore;
 			Strudel.winMain.dataSet = dataSet;
 			
 		}
@@ -108,6 +111,12 @@ public class MAFParser extends AbtractFileParser
 		//new alignment 
 		float score = Float.parseFloat(headerTokens[1].substring(6));
 		LinkedList<Feature> featuresInAlignment = new LinkedList<Feature>();
+
+		//compare to our current min and max
+		if(score < minimumScore)
+			minimumScore = score;
+		if(score > maximumScore)
+			maximumScore = score;
 				
 		//read on and parse the individual sequence lines
 		while(line!= null)
@@ -145,7 +154,7 @@ public class MAFParser extends AbtractFileParser
 					continue;
 				//make a new link and add it to both features
 				IOUtils.addLinkToLinkSet(targetFeature.getOwningMapSet().getName(), refFeature.getOwningMapSet().getName(), dataSet.allLinkSets, 
-								targetFeature, refFeature,"0", "", Colors.linkColour);
+								targetFeature, refFeature, score, "", Colors.linkColour);
 			}
 			
 			count++;

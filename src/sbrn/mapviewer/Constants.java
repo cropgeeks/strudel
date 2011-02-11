@@ -44,4 +44,9 @@ public class Constants
 	public static final String manual1 = "http://bioinf.scri.ac.uk/strudel/help/controls.shtml";
 	public static final String manual2 = "http://bioinf.scri.ac.uk/strudel/help/view.shtml";
 	public static final String manual3= "http://bioinf.scri.ac.uk/strudel/help/exploration.shtml";
+	
+	//file formats
+	public static final int FILEFORMAT_STRUDEL = 1;
+	public static final int FILEFORMAT_MAF = 2;
+	
 }

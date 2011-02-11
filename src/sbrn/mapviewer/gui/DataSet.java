@@ -24,7 +24,15 @@ public class DataSet
 	
 	//the name of the file associated with this dataset
 	public String fileName;
+	
+	//the file format the dataset came in
+	public int dataFormat;
 
+	//the min and max scores and their exponents
+	public double minimumScore, maximumScore;
+	public int worstScoreExponent, bestScoreExponent;
+
+	
 	// ============================================methods==========================================
 
 	public void reconfigureGMapSets(LinkedList<String> gMapsetNames)

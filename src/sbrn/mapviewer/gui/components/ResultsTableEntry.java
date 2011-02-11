@@ -62,7 +62,7 @@ public class ResultsTableEntry
 	{
 		if(link != null)
 		{
-			return String.valueOf(link.getBlastScore());
+			return String.valueOf(link.getScore());
 		}
 
 		return "";

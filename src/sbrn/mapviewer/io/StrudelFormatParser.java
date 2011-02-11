@@ -95,9 +95,14 @@ public class StrudelFormatParser extends AbtractFileParser
 			DataSet dataSet = new DataSet();
 			dataSet.setUpGMapSets(allLinkSets, allMapSets);
 			dataSet.fileName = getFile().getName();
+			dataSet.dataFormat = Constants.FILEFORMAT_STRUDEL;
+			//this is potentially confusing but we use exponents, rather than the scores themselves, for filtering
+			//this means smaller exponents mean better (greater) scores
+			dataSet.bestScoreExponent = Utils.getExponentFromDecimalFormat(minimumScore);
+			dataSet.worstScoreExponent = Utils.getExponentFromDecimalFormat(maximumScore);
 			Strudel.winMain.dataSet = dataSet;
 
-			Strudel.dataLoaded = true;
+			Strudel.dataLoaded = true;			
 		}
 		catch (Exception e)
 		{
@@ -311,13 +316,23 @@ public class StrudelFormatParser extends AbtractFileParser
 		String eValueStr = tokens[5].trim();
 		if(eValueStr.equals(""))
 			throw new IOException("Missing e-Value in homology.");
+		double eValue = Double.parseDouble(eValueStr);
+		//compare to our current min and max
+		if(eValue < minimumScore)
+		{
+			minimumScore = eValue;
+		}
+		else if(eValue > maximumScore)
+		{
+			maximumScore = eValue;
+		}
 
 		// Link color
 		Color color = null;
 		if (tokens.length >= 8)
 			color = Color.decode(tokens[7]);
 		
-		IOUtils.addLinkToLinkSet(genome1Name, genome2Name, allLinkSets, feature1, feature2, eValueStr, annotation, color);
+		IOUtils.addLinkToLinkSet(genome1Name, genome2Name, allLinkSets, feature1, feature2, eValue, annotation, color);
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------

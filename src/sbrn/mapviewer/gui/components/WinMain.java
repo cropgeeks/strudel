@@ -69,7 +69,7 @@ public class WinMain extends JFrame
 	public JPanel mainPanel;
 
 	//a panel for the zoom controls
-	public JPanel zoomControlContainerPanel;
+//	public JPanel zoomControlContainerPanel;
 
 	//this panel contains the genome labels and the zoom controls
 	public JPanel zoomControlAndGenomelabelContainer;
@@ -204,6 +204,8 @@ public class WinMain extends JFrame
 		ToolTipManager.sharedInstance().setInitialDelay(200);
 
 	}
+	
+
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -212,6 +214,8 @@ public class WinMain extends JFrame
 	{
 		try
 		{
+			toolbar.initScoreSpinner();
+			
 			//control panel for found features
 			foundFeaturesTableControlPanel = new FoundFeaturesTableControlPanel();
 
@@ -238,7 +242,8 @@ public class WinMain extends JFrame
 			genomeLabelPanel = new GenomeLabelPanel();
 
 			//initialise the zoom controls 
-			initZoomControls();
+			zoomControlPanel = new ZoomControlPanel();
+			zoomControlPanel.setAlignmentX(0.5f);
 
 			//this splitpane contains the main panel and the bottom panel
 			splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);//, mainPanel, bottomPanel);
@@ -263,7 +268,7 @@ public class WinMain extends JFrame
 			//this panel contains the genome labels and the zoom controls
 			zoomControlAndGenomelabelContainer = new JPanel(new BorderLayout());
 			zoomControlAndGenomelabelContainer.add(genomeLabelPanel,BorderLayout.NORTH);
-			zoomControlAndGenomelabelContainer.add(zoomControlContainerPanel, BorderLayout.SOUTH);
+			zoomControlAndGenomelabelContainer.add(zoomControlPanel, BorderLayout.SOUTH);
 			mainPanel.add(zoomControlAndGenomelabelContainer, BorderLayout.SOUTH);
 
 			//this panel contains the results table and its control panel
@@ -273,9 +278,8 @@ public class WinMain extends JFrame
 			add(splitPane, BorderLayout.CENTER);
 			splitPane.setTopComponent(mainPanel);
 			splitPane.setBottomComponent(bottomPanel);
-			//when we resize, give the extra weight to the top component (the canvas)
 			bottomPanel.setMinimumSize(new Dimension(0,0));
-
+			//when we resize, give the extra weight to the top component (the canvas)
 			splitPane.setResizeWeight(1.0);	
 	
 			validate();
@@ -299,7 +303,10 @@ public class WinMain extends JFrame
 		//we want the results table's control panel to be fully visible
 		int controlPanelHeight = (int)foundFeaturesTableControlPanel.getPreferredSize().getHeight();	
 		int newDividerLocation = getHeight() - controlPanelHeight;
-		splitPane.setDividerLocation(newDividerLocation);		
+		splitPane.setDividerLocation(newDividerLocation);	
+		
+		//select the controls tab of the control panel, rather than displaying the less important info tab
+		foundFeaturesTableControlPanel.getTabbedPane().setSelectedIndex(1);
 		
 		//refresh the main canvas
 		if(repaintAndIndex)
@@ -339,6 +346,8 @@ public class WinMain extends JFrame
 
 		//the labels with the genome names need to be updated
 		genomeLabelPanel.reinititalise();
+		
+		toolbar.initScoreSpinner();
 	}
 
 
@@ -370,17 +379,6 @@ public class WinMain extends JFrame
 			overviewCanvases.add(overviewCanvas);
 		}
 		overviewDialog.setVisible(Prefs.guiOverviewVisible);
-	}
-
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-	private void initZoomControls()
-	{
-		zoomControlContainerPanel = new JPanel();		
-		String instructions = "Click on a genome name to apply these controls:";
-		zoomControlContainerPanel.setBorder(BorderFactory.createTitledBorder(instructions));
-		zoomControlPanel = new ZoomControlPanel();
-		zoomControlContainerPanel.add(zoomControlPanel);		
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------

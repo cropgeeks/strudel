@@ -10,7 +10,7 @@ import sbrn.mapviewer.gui.*;
 public class IOUtils
 {
 	public static void addLinkToLinkSet(String genome1Name, String genome2Name, LinkedList<LinkSet> allLinkSets, Feature feature1, Feature feature2,
-					String eValueStr, String annotation, Color color) throws Exception
+					double score, String annotation, Color color) throws Exception
 	{
 		LinkSet linkSet = null;
 		//check whether a linkset between these two genomes exists already
@@ -37,12 +37,12 @@ public class IOUtils
 
 		//this method adds the link between the two features to the linkset
 		if(linkSet != null && feature1 != null && feature2 != null)
-			addLinkToLinkset(linkSet, feature1, feature2, eValueStr, annotation, color);
+			addLinkToLinkset(linkSet, feature1, feature2, score, annotation, color);
 	}
 	
 	//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	public static void addLinkToLinkset(LinkSet linkSet, Feature feature1, Feature feature2, String blastScoreStr, String linkAnnotation, Color color)
+	public static void addLinkToLinkset(LinkSet linkSet, Feature feature1, Feature feature2, double score, String linkAnnotation, Color color)
 	{
 		// Pair up every instance of f1 with f2
 		Link link = new Link(feature1, feature2);
@@ -54,16 +54,7 @@ public class IOUtils
 		feature2.getLinks().add(link);
 
 		//add the BLAST score as evidence
-		try
-		{
-			DecimalFormat df = new DecimalFormat("0.###E0");
-			Number blastScore = df.parse(blastScoreStr);
-			link.setBlastScore(blastScore.doubleValue());
-		}
-		catch (ParseException e)
-		{
-			throw new NumberFormatException("The homology between " + feature1 + " and " + feature2 + " contains an invalid e-Value. ");
-		}
+		link.setScore(score);
 
 		//add the annotation, if there is any
 		if(linkAnnotation != null)

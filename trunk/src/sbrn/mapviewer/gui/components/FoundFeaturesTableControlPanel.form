@@ -11,7 +11,7 @@
       <Dimension value="[0, 0]"/>
     </Property>
     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[300, 290]"/>
+      <Dimension value="[310, 310]"/>
     </Property>
   </Properties>
   <AuxValues>
@@ -31,7 +31,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="tabbedPane" pref="297" max="32767" attributes="0"/>
+              <Component id="tabbedPane" pref="264" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -74,10 +74,10 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="numberFeaturesLabel" min="-2" max="-2" attributes="1"/>
-                          <Component id="regionEndLabel" pref="165" max="32767" attributes="1"/>
-                          <Component id="regionStartLabel" pref="165" max="32767" attributes="1"/>
-                          <Component id="chromoLabel" pref="165" max="32767" attributes="1"/>
-                          <Component id="genomeLabel" alignment="0" pref="165" max="32767" attributes="1"/>
+                          <Component id="regionEndLabel" pref="132" max="32767" attributes="1"/>
+                          <Component id="regionStartLabel" pref="132" max="32767" attributes="1"/>
+                          <Component id="chromoLabel" pref="132" max="32767" attributes="1"/>
+                          <Component id="genomeLabel" alignment="0" pref="132" max="32767" attributes="1"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -202,7 +202,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="filterLabel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="genomeFilterCombo" pref="119" max="32767" attributes="0"/>
+                              <Component id="genomeFilterCombo" pref="86" max="32767" attributes="0"/>
                           </Group>
                           <Component id="showLabelsCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="showHomologsCheckbox" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -213,7 +213,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="txtFilter" pref="110" max="32767" attributes="0"/>
+                              <Component id="txtFilter" pref="77" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>

@@ -2,6 +2,8 @@
 
 features to implement -- general:
 
+- request from Delphine Fleury [delphine.fleury@acpfg.com.au]: save project state (current view -- selected chromos, zoom factor etc)
+- request from Gowthaman Ramasamy [gowthaman.ramasamy@seattlebiomed.org]: remove chromosome number limit and allow flipping of canvas to horizontal layout
 - use hash map of line positions to store int instead of hash of coords, then use int to colour lines according to how many are covered by the same position/line
 - visualize paralogs within genomes by drawing arcs back onto the genome itself
 - include Sorghum in example dataset and rebuild dataset from scratch, including BLAST hits in both directions, removing duplicates, and removing duff homologs between features that are not listed

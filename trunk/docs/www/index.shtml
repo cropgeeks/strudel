@@ -29,7 +29,7 @@ It is built using Java 1.6 and ships with its own JRE, so there is no need for u
 <p>This application is free to download and use but no warranty is given as to
 its correct functioning. </p>
 
-<p>Features: </p>
+<p>Features: </p> 
 
 <ul>
 <li>Visualize multiple genomes and thousands of homologies interactively and in real time</li>
@@ -40,6 +40,15 @@ its correct functioning. </p>
 <li>Single genome mode also supported</li>
 <li>Ships with example dataset to facilitate familiarization with the software</li>
 </ul>
+
+<a name="useCases"></a>
+<h3>Application use cases</h3>
+<p>
+We are aiming to release a number of successful use cases of Strudel here as they develop. The first of these relates to the 
+investigation of the Intermedium-C gene in barley which lead to a publication in Nature Genetics (Ramsay et al 2011 Nature Genetics 43(2) 169-172 
+) and involved the use of Strudel for the investigation of homologous regions in rice and in Brachypodium distachyon. This is 
+available here as a <a href="intC.pdf">pdf formatted presentation</a>.
+</p>
 
 <!--#include virtual="footer.html" -->
 

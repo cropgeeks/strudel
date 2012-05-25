@@ -13,6 +13,15 @@
 	<body>
 
 		<!--#include virtual="header.shtml" -->
+		
+		<h2>
+			New in release 1.12.03.20:
+		</h2>
+			<ul>
+			<li>Added a vmoptions file in the install directory to support increased memory and therefore larger files.</li>
+			<li>Added 64 bit installers for the Windows and Linux platforms.</li>		
+			</ul>
+		
 
 		<h2>
 			New in release 1.11.02.11:

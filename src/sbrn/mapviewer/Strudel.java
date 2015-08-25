@@ -51,7 +51,7 @@ public class Strudel
 	{
 		//logging stuff
 		ConsoleHandler consoleHandler = new ConsoleHandler();
-		consoleHandler.setFormatter(FormatterFactory.getBasicFormatter());
+		consoleHandler.setFormatter(new BasicFormatter());
 		consoleHandler.setLevel(logLevel);
 		logger.setLevel(logLevel);
 		logger.addHandler(consoleHandler);
@@ -72,6 +72,14 @@ public class Strudel
 
 		new Strudel();
 
+	}
+
+	private static class BasicFormatter extends Formatter
+	{
+		public String format(LogRecord record)
+		{
+			return record.getMessage() + "\n";
+		}
 	}
 
 	Strudel()

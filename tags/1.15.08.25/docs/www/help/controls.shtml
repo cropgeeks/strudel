@@ -1,0 +1,188 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+	<head>
+		<meta http-equiv="Content-Language" content="en-gb">
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+		<link rel="stylesheet" href="../stylesheet/styles.css" type="text/css">
+
+		<title>Strudel Manual</title>
+
+	</head>
+	<body>
+	<a name="top"></a>
+
+		<!--#include virtual="header.shtml" -->
+
+
+		<h2>
+			Controls
+		</h2>
+
+		<ul>
+		<li><a href="#mouseControls">Mouse controls</a></li>
+		<li><a href="#resetButtons">Reset buttons</a></li>
+		<li><a href="#invertChromos">Inverting chromosomes</a></li>
+		<li><a href="#zoomControls">Zoom control panel</a></li>
+		</ul>
+
+
+		</p>
+
+		<!-- --------------------------------------------- -->
+		<h4>
+			Mouse controls:
+			<a name="mouseControls"></a>
+		</h4>
+
+		<table class="outline" cellpadding="5">
+
+			<tr>
+				<td class="outline">
+					Single-click chromosome
+				</td>
+				<td class="outline">
+					Display all the homologies of this chromosome
+				</td>
+			</tr>			
+			
+			<tr>
+				<td class="outline">
+					Single-click chromosome with Ctrl (Mac: Cmd) down
+				</td>
+				<td class="outline">
+					Select this chromosome for homology display (links -- if available -- show when two or more chromosomes selected)
+				</td>
+			</tr>
+
+			<tr>
+				<td class="outline">
+					Single-click background
+				</td>
+				<td class="outline">
+					Hide all homologies
+				</td>
+			</tr>
+
+			<tr>
+				<td class="outline">
+					Double-click chromosome
+				</td>
+				<td class="outline">
+					Expand chromosome to fill the screen vertically
+				</td>
+			</tr>
+
+			<tr>
+				<td class="outline">
+					Hold down Shift and drag mouse, then release
+				</td>
+				<td class="outline">
+					Zoom in on region outlined by panning
+				</td>
+			</tr>
+
+			<tr>
+				<td class="outline">
+					Hold down Shift and Ctrl (Mac: Shift + Cmd) and mouse drag on or next to chromosome
+				</td>
+				<td class="outline">
+					Highlight region of interest and display links in real-time (press ESC to start over)
+				</td>
+			</tr>
+
+			<tr>
+				<td class="outline">
+					Scroll mouse wheel with pointer over a genome
+				</td>
+				<td class="outline">
+					Scroll genome up or down
+				</td>
+			</tr>
+			
+			<tr>
+				<td class="outline">
+					Scroll mouse wheel with Ctrl key held down
+				</td>
+				<td class="outline">
+					Zoom in /out
+				</td>
+			</tr>
+
+			<tr>
+				<td class="outline">
+					Mouse over feature on chromosome
+				</td>
+				<td class="outline">
+					Display names of features mapped to this location
+				</td>
+			</tr>
+
+		</table>
+
+
+		<br>
+		<a href="#top">Back to top</a>
+
+
+		<!-- --------------------------------------------- -->
+
+		<h4>
+			Reset buttons:
+			<a name="resetButtons"></a>
+		</h4>
+		The main reset button on the toolbar
+		<img src="../images/reset.png">
+		resets the zoom factor for all genomes to a value of 1 and restores the original view as seen after loading the data
+		(i.e. without any links or results showing). The reset button next to the zoom slider below the main
+		canvas resets the zoom for the currently selected genome only, without removing results or links.
+		<br>
+		<br>
+		<a href="#top">Back to top</a>
+
+
+		<!-- --------------------------------------------- -->
+		<h4>
+			Inverting chromosomes:
+			<a name="invertChromos"></a>
+		</h4>
+		In cases where there are large scale inversions, inverting a chromosome can be useful for providing a better view of
+		the synteny between a pair of chromosomes. To do this, right-click over the chromosome (with or without links
+		selected) and choose “Invert chromosome” from the context menu.
+		<br>
+		<br>
+		<a href="#top">Back to top</a>
+
+
+		<!-- --------------------------------------------- -->
+		
+				<h4>
+			Zoom control panel:
+			<a name="zoomControls"></a>
+		</h4>
+		At the bottom of the main window there is a panel that contains controls which are applied to the currently selected genome. 
+		A genome is either selected automatically, through any operation involving clicking or mouseover on chromosomes in that genome, 
+		or manually by clicking on the genome's name in the name panel above the zoom control panel. The selected genome's name 
+		will be highlighted in red. 
+		<p>
+		The controls in this panel include:
+		</p>
+		<ul>
+		<li>a zoom slider</li>
+		<li>a spinner control for entering/modifying the maximum zoom factor</li>
+		<li>a zoom reset button which resets the zoom only for the selected genome</li>
+		<li>the "Always show all features" button which overrides the automatic suppression of features getting drawn at low zoom levels 
+		 (see <a href="view.shtml#featureLabelDisplay" target="new">the view page</a> for details)</li>
+		 <li>scroll buttons for scrolling the selected genome up and down</li>
+		</ul>
+
+		<a href="#top">Back to top</a>
+
+
+		<!-- --------------------------------------------- -->
+
+		<!--#include virtual="footer.html" -->
+
+	</body>
+</html>

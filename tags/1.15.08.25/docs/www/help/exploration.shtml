@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+	<head>
+		<meta http-equiv="Content-Language" content="en-gb">
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+		<link rel="stylesheet" href="../stylesheet/styles.css" type="text/css">
+
+		<title>Strudel Manual</title>
+
+	</head>
+	<body>
+		<a name="top"></a>
+
+		<!--#include virtual="header.shtml" -->
+
+
+		<h2>
+			Feature exploration
+		</h2>
+
+		<ul>
+			<li>
+				<a href="#findFeatures">Finding one or more features by their name or annotation</a>
+			</li>
+			<li>
+				<a href="#exploreRange">Defining a range of interest by position</a>
+			</li>
+			<li>
+				<a href="#rangeMouseSelection">Defining a range of interest with the mouse</a>
+			</li>
+			<li>
+				<a href="#featureTable">The feature/results table</a>
+			</li>
+		</ul>
+
+
+		<!-- --------------------------------------------- -->
+
+		<h4>
+			Finding one or more features by their name:
+			<a name="findFeatures"></a>
+		</h4>
+
+		<p>
+			Click on the "Search Feature Table" button
+			<img src="../images/find.png">
+			on the toolbar. A table with all features in the dataset will be displayed at the bottom of the window (see
+			<a href="#featureTable">table section below</a>). Enter a feature name or annotation search term and the features
+			that don't match will be filtered out of the table as you type. You can also enter just a part of a feature name or
+			annotation term -- wildcard characters are not required. This search is case-sensitive.
+		</p>
+		<a href="#top">Back to top</a>
+
+
+		<!-- --------------------------------------------- -->
+
+		<h4>
+			Defining a range of interest by position:
+			<a name="exploreRange"></a>
+		</h4>
+
+		<p>
+			Click on the "Explore Range" button
+			<img src="../images/range.png">
+			on the toolbar. A dialog will appear where you can specify a genome, chromosome and start/end positions for a range
+			you want to explore. Click the “Find” button in the dialog and a results table will appear at the bottom of the
+			window (see
+			<a href="#featureTable">table section below</a>).
+		</p>
+		<a href="#top">Back to top</a>
+
+		<!-- --------------------------------------------- -->
+
+		<h4>
+			Defining a range of interest with the mouse:
+			<a name="rangeMouseSelection"></a>
+		</h4>
+		<p>
+			A region for displaying all features can also be defined through the view itself. Hold down the Ctrl and Shift keys
+			together (Mac: Shift + Cmd), then click and drag next to a chromosome along the region of interest. This will draw a selection
+			rectangle. Selecting a region with the mouse will also highlight all the homologies originating in this region in real time. 
+			Right-click and choose "Show annotation for features in range" from the context menu. This will display
+			the results table (see
+			<a href="#featureTable">table section below</a>).
+		</p>
+		<p>
+			Press the ESC key to undo the selection and start over again.
+		</p>
+
+
+		<a href="#top">Back to top</a>
+
+		<!-- --------------------------------------------- -->
+
+		<h4>
+			The feature/results table:
+			<a name="featureTable"></a>
+		</h4>
+
+		<p>
+			The table at the bottom of the Strudel canvas either displays the full set of features in the currently loaded
+			dataset or a subset thereof, depending on how it was invoked (see above).
+		</p>
+		<p>
+			Click one or more (Ctrl-click) rows in the table to display the features on the canvas. The results in
+			the list can be filtered by genome by using the drop-down menu in the results table’s control panel at the bottom left. 
+			One can also click the checkboxes to display labels and links for features if  a range was specified either through the dialog or with the mouse. 
+			Sort the table by clicking on one header at a time.
+		</p>
+		<p>
+			Clicking on the feature name hyperlinks will bring up a web browser with annotation information if a target URL for
+			the genome in question was specified in the data file. The feature name is appended to the URL and a web browser
+			will open with the corresponding page loaded.
+		</p>
+		<p>
+			Results tables can be saved to a tab delimited text file by clicking the save
+			<img src="../images/save.png">
+			button on the toolbar, which opens a file save dialog.
+		</p>
+
+		<a href="#top">Back to top</a>
+
+
+		<!-- --------------------------------------------- -->
+
+		<!--#include virtual="footer.html" -->
+	</body>
+</html>

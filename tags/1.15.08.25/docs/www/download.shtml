@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<link rel="stylesheet" href="stylesheet/styles.css" type="text/css">
+
+<title>Download Strudel</title>
+
+</head>
+<body>
+
+<!--#include virtual="header.shtml" -->
+
+
+<h2>Download Strudel</h2>
+
+<!-- <p>The most recent release of Strudel is:
+<b></b> </p>
+
+<p>Please use the links below to download the Strudel installer most suitable
+for your operating system. All installers come bundled with a Java Runtime Environment (JRE) and have no dependencies on any third
+party libraries. </p>
+-->
+
+<p>Strudel is available for the following platforms:</p>
+
+<table border="0">
+<tr>
+	<td>&nbsp;&nbsp;&nbsp;</td>
+	<td><img src="images/icon_windows.gif" alt="Windows 32 bit"></td>
+	<td>
+
+		<a href="installers/strudel_windows_1_12_03_20.exe">Microsoft Windows 32 bit</a>
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;&nbsp;&nbsp;</td>
+	<td><img src="images/icon_windows.gif" alt="Windows 64 bit"></td>
+	<td>
+
+		<a href="installers/strudel_windows_x64_1_12_03_20.exe">Microsoft Windows 64 bit </a>
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;&nbsp;&nbsp;</td>
+	<td><img src="images/icon_osx.gif" alt="OS X"></td>
+	<td>
+
+		<a href="installers/strudel_macos_1_12_03_20.dmg">Apple Mac OS X</a>
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;&nbsp;&nbsp;</td>
+	<td><img src="images/icon_linux.gif" alt="Linux 32 bit"></td>
+	<td>
+
+		<a href="installers/strudel_linux_1_12_03_20.sh">Linux 32 bit</a>
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;&nbsp;&nbsp;</td>
+	<td><img src="images/icon_linux.gif" alt="Linux 64 bit"></td>
+	<td>
+
+		<a href="installers/strudel_linux_x64_1_12_03_20.sh">Linux 64 bit</a>
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;&nbsp;&nbsp;</td>
+	<td><img src="images/icon_solaris.gif" alt="Solaris"></td>
+	<td>
+
+		<a href="installers/strudel_solaris_1_12_03_20.sh">Solaris (sparc)</a>
+	</td>
+</tr>
+</table>
+
+<p>Follow the instructions provided by the graphical installer to install Strudel.</p>
+
+<p>Strudel is developed on Windows 7 (64bit), and gets additional regular
+testing on OS X 10.6 (64bit), Ubuntu Linux 7.10 (32bit), and Centos 5.2
+(32bit).</p>
+
+
+<!--#include virtual="footer.html" -->
+
+</body>
+</html>

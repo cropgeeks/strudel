@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<link rel="stylesheet" href="stylesheet/styles.css" type="text/css">
+
+<title>Strudel - Comparative Map Viewer</title>
+
+</head>
+<body>
+
+<!--#include virtual="header.shtml" -->
+
+
+<h2>Strudel - Comparative Map Viewer</h2>
+
+<p>Strudel is our graphical tool for visualizing genetic and physical maps of genomes for comparative purposes.
+The application aims to let the user examine their data at a variety of different levels of resolution, from entire maps to individual markers,
+and explore syntenic relationships between genomes.
+All browsing and interaction with Strudel happens in real-time - there is no need to wait while the maps are generated.
+It is built using Java 1.6 and ships with its own JRE, so there is no need for users to install or update Java.
+</p>
+
+<img class="capture" src="images/screenshot3_small.png" alt="Strudel Screenshot">
+
+<p>This application is free to download and use but no warranty is given as to
+its correct functioning. </p>
+
+<p>Features: </p> 
+
+<ul>
+<li>Visualize multiple genomes and thousands of homologies interactively and in real time</li>
+<li>Continuous zoom ranging from entire genome views to singles features</li>
+<li>Explore intervals such as QTLs and list annotation for features</li>
+<li>Search for features by name</li>
+<li>Filter homologies on display by BLAST e-value</li>
+<li>Single genome mode also supported</li>
+<li>Ships with example dataset to facilitate familiarization with the software</li>
+</ul>
+
+<a name="useCases"></a>
+<h3>Application use cases</h3>
+<p>
+We are aiming to release a number of successful use cases of Strudel here as they develop. The first of these relates to the 
+investigation of the Intermedium-C gene in barley which lead to a publication in Nature Genetics (Ramsay et al 2011 Nature Genetics 43(2) 169-172 
+) and involved the use of Strudel for the investigation of homologous regions in rice and in Brachypodium distachyon. This is 
+available here as a <a href="intC.pdf">pdf formatted presentation</a>.
+</p>
+
+<!--#include virtual="footer.html" -->
+
+</body>
+</html>
